@@ -152,43 +152,35 @@ const Bridge <Test::I1>::EPV Skeleton <S, Test::I1>::sm_epv = {
 
 template <class S>
 class Servant <S, Test::I1> :
-	public Implementation <S, Test::I1, Object>
+	public Implementation <S, Test::I1, BaseImpl <S, Object>>
 {};
 
-}
-}
-/*
-namespace Test {
+// POA implementation
 
-using namespace CORBA;
-
-// Portable implementation
-class POA_I1 :
-	public virtual PortableServer::ServantBase,
-	public ::PortableServer::Nirvana::InterfaceImpl <POA_I1, I1>,
-	public ::PortableServer::Nirvana::Implementation <POA_I1>
+template <>
+class ServantPOA <Test::I1> :
+	public Implementation <ServantPOA <Test::I1>, Test::I1, BaseImplPOA <>>
 {
 public:
-	typedef I1 _PrimaryInterface;
-
-	I1_ptr _this ()
-	{
-		return this;
-	}
-
 	virtual Long op1 (Long p1) = 0;
 
 	virtual Boolean _is_a (const Char* type_id)
 	{
-		return Nirvana::Bridge <I1>::___is_a (type_id);
+		return Bridge <Test::I1>::___is_a (type_id);
 	}
 
 protected:
-	virtual Nirvana::Bridge <Nirvana::Interface>* _POA_find_interface (const Char* id)
+	virtual Bridge <Interface>* _POA_find_interface (const Char* id)
 	{
-		return ::PortableServer::Nirvana::Skeleton <POA_I1, I1>::_find_interface ((POA_I1&)*this, id);
+		return Skeleton <ServantPOA <Test::I1>, Test::I1>::_find_interface (*this, id);
 	}
 };
 
 }
-*/
+}
+
+namespace Test {
+
+typedef PortableServer::Nirvana::ServantPOA <I1> POA_I1;
+
+}

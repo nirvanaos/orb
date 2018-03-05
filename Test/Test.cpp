@@ -79,12 +79,12 @@ void TestORB::test (I1_ptr p, Long val)
 TEST_F (TestORB, Dynamic)
 {
 	// Dynamic implementation
-	class I1_dynamic :
-		public ::PortableServer::Nirvana::Servant <I1_dynamic, ::Test::I1>,
+	class Servant :
+		public ::PortableServer::Nirvana::Servant <Servant, I1>,
 		public Instance
 	{
 	public:
-		I1_dynamic (Long addendum) :
+		Servant (Long addendum) :
 			m_addendum (addendum)
 		{}
 
@@ -97,7 +97,32 @@ TEST_F (TestORB, Dynamic)
 		Long m_addendum;
 	};
 
-	I1_dynamic* servant = new I1_dynamic (2);
+	Servant* servant = new Servant (2);
+	test (servant->_this (), 2);
+}
+
+TEST_F (TestORB, Portable)
+{
+	// Portable implementation
+	class Servant :
+		public POA_I1,
+		public Instance
+	{
+	public:
+		Servant (Long addendum) :
+			m_addendum (addendum)
+		{}
+
+		virtual Long op1 (Long p1)
+		{
+			return p1 + m_addendum;
+		}
+
+	private:
+		Long m_addendum;
+	};
+
+	Servant* servant = new Servant (2);
 	test (servant->_this (), 2);
 }
 

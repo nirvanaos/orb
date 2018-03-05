@@ -72,6 +72,7 @@ public:
 }
 
 namespace PortableServer {
+
 namespace Nirvana {
 
 using namespace CORBA;
@@ -155,10 +156,15 @@ class AbstractBaseImpl :
 	public RefCountBase
 {};
 
-template <class S, class I, class ... Base>
-class Implementation :
+template <class S, class ... I>
+class BaseImpl :
 	public AbstractBaseImpl <S>,
-	public InterfaceImpl <S, Base> ...,
+	public InterfaceImpl <S, I> ...
+{};
+
+template <class S, class I, class Bases>
+class Implementation :
+	public Bases,
 	public InterfaceImpl <S, I>
 {
 public:
@@ -176,10 +182,10 @@ public:
 		return _implementation (*bridge);
 	}
 
-	template <class I>
-	static S& _implementation (Bridge <I>& bridge)
+	template <class B>
+	static S& _implementation (B& b)
 	{
-		return static_cast <S&> (bridge);
+		return static_cast <S&> (b);
 	}
 
 	template <class I>

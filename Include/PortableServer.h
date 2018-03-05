@@ -44,4 +44,17 @@ protected:
 	virtual Bridge <Interface>* _POA_find_interface (const Char* id);
 };
 
+namespace Nirvana {
+
+// POA implementation
+
+template <class I> class ServantPOA;
+
+template <class ... I>
+class BaseImplPOA :
+	public virtual ServantBase,
+	public virtual ServantPOA <I> ...
+{};
+
+}
 }
