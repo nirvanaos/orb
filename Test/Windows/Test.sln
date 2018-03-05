@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test.vcxproj", "{6C9B8D04-D2C7-48F8-A1CE-339E44F9C7F0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ORB", "..\..\Source\Windows\ORB.vcxproj", "{11CC69AA-ABA7-40E5-A5B5-FA0DC3E705A1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C9B8D04-D2C7-48F8-A1CE-339E44F9C7F0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6C9B8D04-D2C7-48F8-A1CE-339E44F9C7F0}.Debug|Win32.Build.0 = Debug|Win32
+		{6C9B8D04-D2C7-48F8-A1CE-339E44F9C7F0}.Release|Win32.ActiveCfg = Release|Win32
+		{6C9B8D04-D2C7-48F8-A1CE-339E44F9C7F0}.Release|Win32.Build.0 = Release|Win32
+		{11CC69AA-ABA7-40E5-A5B5-FA0DC3E705A1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{11CC69AA-ABA7-40E5-A5B5-FA0DC3E705A1}.Debug|Win32.Build.0 = Debug|Win32
+		{11CC69AA-ABA7-40E5-A5B5-FA0DC3E705A1}.Release|Win32.ActiveCfg = Release|Win32
+		{11CC69AA-ABA7-40E5-A5B5-FA0DC3E705A1}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
