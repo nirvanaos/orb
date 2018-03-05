@@ -57,13 +57,7 @@ private:
 
 class RefCountBase
 {
-protected:
-	RefCountBase ()
-	{}
-
-	virtual ~RefCountBase ()
-	{}
-
+public:
 	void _add_ref ()
 	{
 		m_ref_count.increment ();
@@ -79,6 +73,13 @@ protected:
 	{
 		return m_ref_count;
 	}
+
+protected:
+	RefCountBase ()
+	{}
+
+	virtual ~RefCountBase ()
+	{}
 
 private:
 	RefCount m_ref_count;

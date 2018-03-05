@@ -32,7 +32,7 @@ public:
 
 	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
 	{
-		return _implementation (base)._POA_find_interface (base, id);
+		return _implementation (base)._POA_find_interface (id);
 	}
 
 	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, Environment* env);
@@ -41,7 +41,7 @@ protected:
 	ServantBase ()
 	{}
 
-	virtual Bridge <Interface>* _POA_find_interface (Bridge <AbstractBase>& base, const Char* id);
+	virtual Bridge <Interface>* _POA_find_interface (const Char* id);
 };
 
 }

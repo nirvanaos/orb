@@ -31,11 +31,30 @@ protected:
 	{
 		// Code here will be called immediately after each test (right
 		// before the destructor).
+		ASSERT_EQ (sm_inst_cnt, 0);
 	}
 
 	// Objects declared here can be used by all tests in the test case.
 	static void test (I1_ptr, Long val);
+
+	class Instance
+	{
+	protected:
+		Instance ()
+		{
+			++sm_inst_cnt;
+		}
+
+		~Instance ()
+		{
+			--sm_inst_cnt;
+		}
+	};
+
+	static int sm_inst_cnt;
 };
+
+int TestORB::sm_inst_cnt = 0;
 
 void TestORB::test (I1_ptr p, Long val)
 {
@@ -61,7 +80,8 @@ TEST_F (TestORB, Dynamic)
 {
 	// Dynamic implementation
 	class I1_dynamic :
-		public ::PortableServer::Nirvana::Servant <I1_dynamic, ::Test::I1>
+		public ::PortableServer::Nirvana::Servant <I1_dynamic, ::Test::I1>,
+		public Instance
 	{
 	public:
 		I1_dynamic (Long addendum) :

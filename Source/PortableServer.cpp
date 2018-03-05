@@ -1,6 +1,7 @@
 #include "PortableServer.h"
 
 namespace PortableServer {
+
 using namespace CORBA;
 
 POA_ptr ServantBase::_default_POA ()
@@ -28,7 +29,7 @@ Boolean ServantBase::__is_a (Bridge <Object>* obj, const Char* type_id, Environm
 
 Boolean ServantBase::_is_a (const Char* type_id)
 {
-	return CORBA::Nirvana::Bridge <Object>::___is_a (type_id);
+	return Nirvana::Bridge <Object>::___is_a (type_id);
 }
 
 Boolean ServantBase::_non_existent ()
@@ -51,9 +52,9 @@ ULong ServantBase::_refcount_value ()
 	return Base::_refcount_value ();
 }
 
-Bridge <Interface>* ServantBase::_POA_find_interface (Bridge <AbstractBase>& base, const Char* id)
+Bridge <Interface>* ServantBase::_POA_find_interface (const Char* id)
 {
-	return Nirvana::Skeleton <ServantBase, Object>::_find_interface (base, id);
+	return Nirvana::Skeleton <ServantBase, Object>::_find_interface (*this, id);
 }
 
 }

@@ -198,7 +198,8 @@ class Skeleton <S, Object> :
 public:
 	static const typename Bridge <Object>::EPV sm_epv;
 
-	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
+	template <class Base>
+	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
 		if (RepositoryId::compatible (Bridge <Object>::_primary_interface (), id))
 			return &S::_narrow	<Object> (base);
@@ -271,18 +272,8 @@ const Bridge <Object>::EPV Skeleton <S, Object>::sm_epv = {
 // Standard implementation
 template <class S>
 class Servant <S, Object> :
-	public AbstractBaseImpl <S>,
-	// public InterfaceImpl <S, Derived>, ...
-	public InterfaceImpl <S, Object>
-{
-public:
-	typedef Object _PrimaryInterface;
-
-	Object_ptr _this ()
-	{
-		return this;
-	}
-};
+	public Implementation <S, Object>
+{};
 
 // Virtual implementation
 template <>

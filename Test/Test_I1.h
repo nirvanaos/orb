@@ -1,5 +1,4 @@
 #pragma once
-
 #include "PortableServer.h"
 
 namespace Test {
@@ -112,14 +111,15 @@ class Skeleton <S, Test::I1>
 public:
 	static const typename Bridge <Test::I1>::EPV sm_epv;
 
-	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
+	template <class Base>
+	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
 		if (RepositoryId::compatible (Bridge <Test::I1>::_primary_interface (), id))
 			return &S::_narrow <Test::I1> (base);
 		else
 			return Skeleton <S, Object>::_find_interface (base, id);
 	}
-	
+
 protected:
 	static Long _op1 (Bridge <Test::I1>* _b, Long p1, Environment* _env)
 	{
@@ -152,18 +152,43 @@ const Bridge <Test::I1>::EPV Skeleton <S, Test::I1>::sm_epv = {
 
 template <class S>
 class Servant <S, Test::I1> :
-	public AbstractBaseImpl <S>,
-	public InterfaceImpl <S, Object>,
-	public InterfaceImpl <S, Test::I1>
+	public Implementation <S, Test::I1, Object>
+{};
+
+}
+}
+/*
+namespace Test {
+
+using namespace CORBA;
+
+// Portable implementation
+class POA_I1 :
+	public virtual PortableServer::ServantBase,
+	public ::PortableServer::Nirvana::InterfaceImpl <POA_I1, I1>,
+	public ::PortableServer::Nirvana::Implementation <POA_I1>
 {
 public:
-	typedef Test::I1 _PrimaryInterface;
+	typedef I1 _PrimaryInterface;
 
-	Test::I1_ptr _this ()
+	I1_ptr _this ()
 	{
 		return this;
+	}
+
+	virtual Long op1 (Long p1) = 0;
+
+	virtual Boolean _is_a (const Char* type_id)
+	{
+		return Nirvana::Bridge <I1>::___is_a (type_id);
+	}
+
+protected:
+	virtual Nirvana::Bridge <Nirvana::Interface>* _POA_find_interface (const Char* id)
+	{
+		return ::PortableServer::Nirvana::Skeleton <POA_I1, I1>::_find_interface ((POA_I1&)*this, id);
 	}
 };
 
 }
-}
+*/

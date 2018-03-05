@@ -130,7 +130,7 @@ template <class S> class AbstractBaseStatic;
 template <class S, class I> class InterfaceStatic;
 template <class S, class I> class ServantStatic;
 
-// Standard interface implementation
+// Standard Nirvana interface implementation
 
 template <class S, class I>
 class InterfaceImpl :
@@ -153,8 +153,35 @@ template <class S>
 class AbstractBaseImpl :
 	public InterfaceImpl <S, AbstractBase>,
 	public RefCountBase
+{};
+
+template <class S, class I, class ... Base>
+class Implementation :
+	public AbstractBaseImpl <S>,
+	public InterfaceImpl <S, Base> ...,
+	public InterfaceImpl <S, I>
 {
 public:
+	typedef I _PrimaryInterface;
+
+	T_ptr <I> _this ()
+	{
+		return InterfaceImpl <S, I>::_this ();
+	}
+
+	template <class I>
+	static S& _implementation (Bridge <I>* bridge)
+	{
+		_check_pointer (bridge, Skeleton <S, I>::sm_epv.interface);
+		return _implementation (*bridge);
+	}
+
+	template <class I>
+	static S& _implementation (Bridge <I>& bridge)
+	{
+		return static_cast <S&> (bridge);
+	}
+
 	template <class I>
 	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, Environment* env)
 	{
@@ -177,21 +204,8 @@ public:
 		}
 	}
 
-	template <class I>
-	static S& _implementation (Bridge <I>* bridge)
-	{
-		_check_pointer (bridge, Skeleton <S, I>::sm_epv.interface);
-		return _implementation (*bridge);
-	}
-
-	template <class I>
-	static S& _implementation (Bridge <I>& bridge)
-	{
-		return static_cast <S&> (bridge);
-	}
-
-	template <class I>
-	static Bridge<I>& _narrow (Bridge <AbstractBase>& base)
+	template <class I, class B>
+	static Bridge<I>& _narrow (B& base)
 	{
 		return static_cast <Bridge <I>&> (_implementation (base));
 	}
@@ -419,8 +433,8 @@ public:
 		return (S*)0;
 	}
 
-	template <class I>
-	static Bridge <I>& _narrow (Bridge <AbstractBase>&)
+	template <class I, class B>
+	static Bridge <I>& _narrow (B&)
 	{
 		return InterfaceStatic <S, I>::_this ();
 	}
