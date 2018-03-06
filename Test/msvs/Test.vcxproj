@@ -19,7 +19,7 @@
     <ClInclude Include="..\Test_I1.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Source\Windows\ORB.vcxproj">
+    <ProjectReference Include="..\..\Source\msvs\ORB.vcxproj">
       <Project>{11cc69aa-aba7-40e5-a5b5-fa0dc3e705a1}</Project>
     </ProjectReference>
   </ItemGroup>
