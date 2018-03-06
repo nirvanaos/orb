@@ -222,14 +222,14 @@ protected:
 
 	static InterfaceDef_ptr _get_interface ()
 	{
-		return ObjectBase::_get_interface (Bridge <S::_PrimaryInterface>::_primary_interface ());
+		return ObjectBase::_get_interface (S::_primary_interface ());
 	}
 
 	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, Environment* env)
 	{
 		try {
 			_check_pointer (type_id);
-			return Bridge <S::_PrimaryInterface>::___is_a (type_id);
+			return S::___is_a (type_id);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {

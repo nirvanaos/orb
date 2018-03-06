@@ -5,9 +5,111 @@ using namespace std;
 using namespace CORBA;
 using namespace Test;
 
+class Instance
+{
+public:
+	static int count ()
+	{
+		return sm_count;
+	}
+
+protected:
+	Instance ()
+	{
+		++sm_count;
+	}
+
+	~Instance ()
+	{
+		--sm_count;
+	}
+
+private:
+	static int sm_count;
+};
+
+int Instance::sm_count;
+
+const Long MAGIC_CONST = 1963;
+
+// Dynamic implementation
+class Dynamic :
+	public ::PortableServer::Nirvana::Servant <Dynamic, ::Test::I1>,
+	public Instance
+{
+public:
+	Dynamic (Long addendum) :
+		m_addendum (addendum)
+	{}
+
+	Long op1 (Long p1) const
+	{
+		return p1 + m_addendum;
+	}
+
+	static ::Test::I1_ptr incarnate ()
+	{
+		return (new Dynamic (MAGIC_CONST))->_this ();
+	}
+
+private:
+	Long m_addendum;
+};
+
+// Portable implementation
+class Portable :
+	public POA_I1,
+	public Instance
+{
+public:
+	Portable (Long addendum) :
+		m_addendum (addendum)
+	{}
+
+	virtual Long op1 (Long p1)
+	{
+		return p1 + m_addendum;
+	}
+
+	static ::Test::I1_ptr incarnate ()
+	{
+		return (new Portable (MAGIC_CONST))->_this ();
+	}
+
+private:
+	Long m_addendum;
+};
+
+typedef ::testing::Types <Dynamic, Portable> ServantTypes;
+
+void test_interface (I1_ptr p)
+{
+	ASSERT_FALSE (is_nil (p));
+	ASSERT_FALSE (p->_non_existent ());
+	ASSERT_EQ (p->op1 (1), MAGIC_CONST + 1);
+	Object_ptr object = p;
+	ASSERT_FALSE (is_nil (object));
+	ASSERT_FALSE (object->_non_existent ());
+	AbstractBase_ptr ab = object;
+	ASSERT_FALSE (is_nil (ab));
+	Object_ptr o1 = ab->_to_object ();
+	ASSERT_FALSE (is_nil (o1));
+	ASSERT_FALSE (o1->_non_existent ());
+	I1_ptr p1 = I1::_narrow (object);
+	ASSERT_FALSE (is_nil (p1));
+	ASSERT_FALSE (p1->_non_existent ());
+	ASSERT_EQ (p1->op1 (1), MAGIC_CONST + 1);
+	release (p1);
+	ASSERT_FALSE (p->_non_existent ());
+	ASSERT_TRUE (p->_is_a ("IDL:omg.org/CORBA/Object:1.0"));
+	ASSERT_TRUE (p->_is_a ("IDL:Test/I1:1.0"));
+	release (p);
+}
+
 namespace unittests {
 
 // The fixture for testing BPMXConverterBase functions.
+template <class Servant>
 class TestORB :
 	public ::testing::Test
 {
@@ -31,99 +133,15 @@ protected:
 	{
 		// Code here will be called immediately after each test (right
 		// before the destructor).
-		ASSERT_EQ (sm_inst_cnt, 0);
+		ASSERT_EQ (Instance::count (), 0);
 	}
-
-	// Objects declared here can be used by all tests in the test case.
-	static void test (I1_ptr, Long val);
-
-	class Instance
-	{
-	protected:
-		Instance ()
-		{
-			++sm_inst_cnt;
-		}
-
-		~Instance ()
-		{
-			--sm_inst_cnt;
-		}
-	};
-
-	static int sm_inst_cnt;
 };
 
-int TestORB::sm_inst_cnt = 0;
+TYPED_TEST_CASE ( TestORB, ServantTypes );
 
-void TestORB::test (I1_ptr p, Long val)
+TYPED_TEST (TestORB, Inteface)
 {
-	ASSERT_FALSE (is_nil (p));
-	Object_ptr object = p;
-	ASSERT_FALSE (is_nil (object));
-	AbstractBase_ptr ab = object;
-	ASSERT_FALSE (is_nil (ab));
-	Object_ptr o1 = ab->_to_object ();
-	ASSERT_FALSE (is_nil (o1));
-	I1_ptr p1 = I1::_narrow (object);
-	ASSERT_FALSE (is_nil (p1));
-	release (p1);
-	ASSERT_FALSE (p->_non_existent ());
-	ASSERT_TRUE (p->_is_a ("IDL:omg.org/CORBA/Object:1.0"));
-	ASSERT_TRUE (p->_is_a ("IDL:Test/I1:1.0"));
-	Long res = p->op1 (1);
-	ASSERT_EQ (res, val + 1);
-	release (p);
-}
-
-TEST_F (TestORB, Dynamic)
-{
-	// Dynamic implementation
-	class Servant :
-		public ::PortableServer::Nirvana::Servant <Servant, I1>,
-		public Instance
-	{
-	public:
-		Servant (Long addendum) :
-			m_addendum (addendum)
-		{}
-
-		Long op1 (Long p1) const
-		{
-			return p1 + m_addendum;
-		}
-
-	private:
-		Long m_addendum;
-	};
-
-	Servant* servant = new Servant (2);
-	test (servant->_this (), 2);
-}
-
-TEST_F (TestORB, Portable)
-{
-	// Portable implementation
-	class Servant :
-		public POA_I1,
-		public Instance
-	{
-	public:
-		Servant (Long addendum) :
-			m_addendum (addendum)
-		{}
-
-		virtual Long op1 (Long p1)
-		{
-			return p1 + m_addendum;
-		}
-
-	private:
-		Long m_addendum;
-	};
-
-	Servant* servant = new Servant (2);
-	test (servant->_this (), 2);
+	test_interface (TypeParam::incarnate ());
 }
 
 }

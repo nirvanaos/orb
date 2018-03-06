@@ -96,7 +96,7 @@ protected:
 		try {
 			_check_pointer (base, sm_epv.interface);
 			_check_pointer (id);
-			return Skeleton <S, S::_PrimaryInterface>::_find_interface (*base, id);
+			return S::_find_interface (*base, id);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
@@ -169,6 +169,22 @@ class Implementation :
 {
 public:
 	typedef I _PrimaryInterface;
+
+	static const Char* _primary_interface ()
+	{
+		return InterfaceImpl <S, I>::_primary_interface ();
+	}
+
+	template <class Base>
+	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
+	{
+		return InterfaceImpl <S, I>::_find_interface (base, id);
+	}
+
+	static Boolean ___is_a (const Char* type_id)
+	{
+		return InterfaceImpl <S, I>::___is_a (type_id);
+	}
 
 	T_ptr <I> _this ()
 	{
