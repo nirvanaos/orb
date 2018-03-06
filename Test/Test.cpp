@@ -28,7 +28,7 @@ private:
 	static int sm_count;
 };
 
-int Instance::sm_count;
+int Instance::sm_count = 0;
 
 const Long MAGIC_CONST = 1963;
 
@@ -92,17 +92,29 @@ void test_interface (I1_ptr p)
 	ASSERT_FALSE (object->_non_existent ());
 	AbstractBase_ptr ab = object;
 	ASSERT_FALSE (is_nil (ab));
-	Object_ptr o1 = ab->_to_object ();
-	ASSERT_FALSE (is_nil (o1));
-	ASSERT_FALSE (o1->_non_existent ());
-	I1_ptr p1 = I1::_narrow (object);
-	ASSERT_FALSE (is_nil (p1));
-	ASSERT_FALSE (p1->_non_existent ());
-	ASSERT_EQ (p1->op1 (1), MAGIC_CONST + 1);
-	release (p1);
+	{
+		Object_ptr o1 = ab->_to_object ();
+		ASSERT_FALSE (is_nil (o1));
+		ASSERT_FALSE (o1->_non_existent ());
+		release (o1);
+	}
+	{
+		I1_ptr p1 = I1::_narrow (object);
+		ASSERT_FALSE (is_nil (p1));
+		ASSERT_FALSE (p1->_non_existent ());
+		ASSERT_EQ (p1->op1 (1), MAGIC_CONST + 1);
+		release (p1);
+	}
 	ASSERT_FALSE (p->_non_existent ());
 	ASSERT_TRUE (p->_is_a ("IDL:omg.org/CORBA/Object:1.0"));
 	ASSERT_TRUE (p->_is_a ("IDL:Test/I1:1.0"));
+	release (p);
+}
+
+void test_performance (I1_ptr p)
+{
+	for (int i = 0; i < 1000000; ++i)
+		p->op1 (2);
 	release (p);
 }
 
@@ -137,11 +149,16 @@ protected:
 	}
 };
 
-TYPED_TEST_CASE ( TestORB, ServantTypes );
+TYPED_TEST_CASE (TestORB, ServantTypes);
 
 TYPED_TEST (TestORB, Inteface)
 {
 	test_interface (TypeParam::incarnate ());
+}
+
+TYPED_TEST (TestORB, Performance)
+{
+	test_performance (TypeParam::incarnate ());
 }
 
 }

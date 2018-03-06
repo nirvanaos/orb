@@ -153,7 +153,7 @@ public:
 
 inline Object_ptr AbstractBase::_to_object ()
 {
-	return static_cast <Bridge <Object>*> (_find_interface (Bridge <Object>::_primary_interface ()));
+	return Object::_duplicate (static_cast <Bridge <Object>*> (_find_interface (Bridge <Object>::_primary_interface ())));
 }
 
 namespace Nirvana {
