@@ -1,4 +1,6 @@
-#pragma once
+#ifndef NIRVANA_ORB_T_PTR_H_
+#define NIRVANA_ORB_T_PTR_H_
+
 #include <cassert>
 
 namespace CORBA {
@@ -90,3 +92,5 @@ private:
 
 }
 }
+
+#endif

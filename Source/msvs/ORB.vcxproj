@@ -22,6 +22,8 @@
     <ClInclude Include="..\..\Include\BasicTypes.h" />
     <ClInclude Include="..\..\Include\Environment.h" />
     <ClInclude Include="..\..\Include\Exception.h" />
+    <ClInclude Include="..\..\Include\Implementation.h" />
+    <ClInclude Include="..\..\Include\ImplementationStatic.h" />
     <ClInclude Include="..\..\Include\Interface.h" />
     <ClInclude Include="..\..\Include\Object.h" />
     <ClInclude Include="..\..\Include\PortableServer.h" />
@@ -33,18 +35,19 @@
     <ProjectGuid>{11CC69AA-ABA7-40E5-A5B5-FA0DC3E705A1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ORB</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>

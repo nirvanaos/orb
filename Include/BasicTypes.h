@@ -1,8 +1,8 @@
 // Nirvana project
 // BasicTypes - CORBA basic data types
 
-#ifndef _CORBA_BASIC_TYPES_H_
-#define _CORBA_BASIC_TYPES_H_
+#ifndef NIRVANA_ORB_BASICTYPES_H_
+#define NIRVANA_ORB_BASICTYPES_H_
 
 namespace CORBA {
 

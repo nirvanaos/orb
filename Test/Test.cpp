@@ -58,7 +58,7 @@ private:
 
 // Portable implementation
 class Portable :
-	public POA_I1,
+	public POA_Test::I1,
 	public Instance
 {
 public:

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef NIRVANA_ORB_INTERFACE_H_
+#define NIRVANA_ORB_INTERFACE_H_
+
 #include "Environment.h"
 #include "T_ptr.h"
 #include "RepositoryId.h"
@@ -121,7 +123,9 @@ bool is_nil (Nirvana::T_ptr <T> obj)
 template <class T>
 void release (Nirvana::T_ptr <T> obj)
 {
-	Interface::__release (obj.m_p);
+	Nirvana::Interface::__release (obj.m_p);
 }
 
 }
+
+#endif

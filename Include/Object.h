@@ -1,5 +1,8 @@
-#pragma once
-#include "AbstractBase.h"
+#ifndef NIRVANA_ORB_OBJECT_H_
+#define NIRVANA_ORB_OBJECT_H_
+
+#include "Implementation.h"
+#include "ImplementationStatic.h"
 
 namespace CORBA {
 
@@ -329,3 +332,5 @@ public:
 
 }
 }
+
+#endif

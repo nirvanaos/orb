@@ -22,13 +22,13 @@ public:
 
 		struct
 		{
-			Bridge <Object>* (*CORBA_Object) (Bridge <Test::I1>*, Environment*);
+			Bridge <Object>* (*CORBA_Object) (Bridge <::Test::I1>*, Environment*);
 		}
 		base;
 
 		struct
 		{
-			Long (*op1) (Bridge <Test::I1>*, Long p1, Environment*);
+			Long (*op1) (Bridge <::Test::I1>*, Long p1, Environment*);
 		}
 		epv;
 	};
@@ -61,18 +61,18 @@ protected:
 };
 
 template <class T>
-class Client <T, Test::I1> :
-	public ClientBase <T, Test::I1>
+class Client <T, ::Test::I1> :
+	public ClientBase <T, ::Test::I1>
 {
 public:
 	Long op1 (Long p1);
 };
 
 template <class T>
-Long Client <T, Test::I1>::op1 (Long p1)
+Long Client <T, ::Test::I1>::op1 (Long p1)
 {
 	Environment _env;
-	Bridge <Test::I1>& _b = _bridge ();
+	Bridge <::Test::I1>& _b = _bridge ();
 	Long _ret = (_b._epv ().epv.op1) (&_b, p1, &_env);
 	_env.check ();
 	return _ret;
@@ -106,22 +106,22 @@ namespace PortableServer {
 namespace Nirvana {
 
 template <class S>
-class Skeleton <S, Test::I1>
+class Skeleton <S, ::Test::I1>
 {
 public:
-	static const typename Bridge <Test::I1>::EPV sm_epv;
+	static const typename Bridge <::Test::I1>::EPV sm_epv;
 
 	template <class Base>
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
-		if (RepositoryId::compatible (Bridge <Test::I1>::_primary_interface (), id))
-			return &S::_narrow <Test::I1> (base);
+		if (RepositoryId::compatible (Bridge <::Test::I1>::_primary_interface (), id))
+			return &S::_narrow <::Test::I1> (base);
 		else
 			return Skeleton <S, Object>::_find_interface (base, id);
 	}
 
 protected:
-	static Long _op1 (Bridge <Test::I1>* _b, Long p1, Environment* _env)
+	static Long _op1 (Bridge <::Test::I1>* _b, Long p1, Environment* _env)
 	{
 		try {
 			return S::_implementation (_b).op1 (p1);
@@ -135,13 +135,13 @@ protected:
 };
 
 template <class S>
-const Bridge <Test::I1>::EPV Skeleton <S, Test::I1>::sm_epv = {
+const Bridge <Test::I1>::EPV Skeleton <S, ::Test::I1>::sm_epv = {
 	{ // interface
-		S::_duplicate <Test::I1>,
-		S::_release <Test::I1>
+		S::_duplicate <::Test::I1>,
+		S::_release <::Test::I1>
 	},
 	{ // base
-		S::_wide <Object, Test::I1>
+		S::_wide <Object, ::Test::I1>
 	},
 	{ // epv
 		S::_op1
@@ -151,36 +151,36 @@ const Bridge <Test::I1>::EPV Skeleton <S, Test::I1>::sm_epv = {
 // Standard implementation
 
 template <class S>
-class Servant <S, Test::I1> :
-	public Implementation <S, Test::I1, BaseImpl <S, Object>>
+class Servant <S, ::Test::I1> :
+	public Implementation <S, ::Test::I1, BaseImpl <S, Object>>
 {};
 
 // POA implementation
 
 template <>
-class ServantPOA <Test::I1> :
-	public Implementation <ServantPOA <Test::I1>, Test::I1, BaseImplPOA <>>
+class ServantPOA <::Test::I1> :
+	public Implementation <ServantPOA <::Test::I1>, ::Test::I1, BaseImplPOA <>>
 {
 public:
 	virtual Long op1 (Long p1) = 0;
 
 	virtual Boolean _is_a (const Char* type_id)
 	{
-		return Bridge <Test::I1>::___is_a (type_id);
+		return ___is_a (type_id);
 	}
 
 protected:
 	virtual Bridge <Interface>* _POA_find_interface (const Char* id)
 	{
-		return Skeleton <ServantPOA <Test::I1>, Test::I1>::_find_interface (*this, id);
+		return _find_interface (*this, id);
 	}
 };
 
 }
 }
 
-namespace Test {
+namespace POA_Test {
 
-typedef PortableServer::Nirvana::ServantPOA <I1> POA_I1;
+typedef PortableServer::Nirvana::ServantPOA <::Test::I1> I1;
 
 }

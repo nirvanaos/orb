@@ -1,4 +1,6 @@
-#pragma once
+#ifndef NIRVANA_ORB_ABSTRACTBASE_H_
+#define NIRVANA_ORB_ABSTRACTBASE_H_
+
 #include "Interface.h"
 #include "RefCount.h"
 
@@ -119,132 +121,9 @@ const Bridge <AbstractBase>::EPV Skeleton <S, AbstractBase>::sm_epv = {
 
 // Implementation
 
-template <class S> class AbstractBaseImpl;
-template <class S, class I> class InterfaceImpl;
-template <class S, class I> class Servant;
-
 template <class S> class AbstractBaseVirtual;
 template <class I> class InterfaceVirtual;
 template <class S, class I> class ServantVirtual;
-
-template <class S> class AbstractBaseStatic;
-template <class S, class I> class InterfaceStatic;
-template <class S, class I> class ServantStatic;
-
-// Standard Nirvana interface implementation
-
-template <class S, class I>
-class InterfaceImpl :
-	public Bridge <I>,
-	public Skeleton <S, I>
-{
-public:
-	T_ptr <I> _this ()
-	{
-		return this;
-	}
-
-protected:
-	InterfaceImpl () :
-		Bridge <I> (sm_epv)
-	{}
-};
-
-template <class S>
-class AbstractBaseImpl :
-	public InterfaceImpl <S, AbstractBase>,
-	public RefCountBase
-{};
-
-template <class S, class ... I>
-class BaseImpl :
-	public AbstractBaseImpl <S>,
-	public InterfaceImpl <S, I> ...
-{};
-
-template <class S, class I, class Bases>
-class Implementation :
-	public Bases,
-	public InterfaceImpl <S, I>
-{
-public:
-	typedef I _PrimaryInterface;
-
-	static const Char* _primary_interface ()
-	{
-		return InterfaceImpl <S, I>::_primary_interface ();
-	}
-
-	template <class Base>
-	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
-	{
-		return InterfaceImpl <S, I>::_find_interface (base, id);
-	}
-
-	static Boolean ___is_a (const Char* type_id)
-	{
-		return InterfaceImpl <S, I>::___is_a (type_id);
-	}
-
-	T_ptr <I> _this ()
-	{
-		return InterfaceImpl <S, I>::_this ();
-	}
-
-	template <class I>
-	static S& _implementation (Bridge <I>* bridge)
-	{
-		_check_pointer (bridge, Skeleton <S, I>::sm_epv.interface);
-		return _implementation (*bridge);
-	}
-
-	template <class B>
-	static S& _implementation (B& b)
-	{
-		return static_cast <S&> (b);
-	}
-
-	template <class I>
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, Environment* env)
-	{
-		try {
-			_implementation (static_cast <Bridge <I>*> (itf))._add_ref ();
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return itf;
-	}
-
-	template <class I>
-	static void _release (Bridge <Interface>* itf)
-	{
-		try {
-			_implementation (static_cast <Bridge <I>*> (itf))._remove_ref ();
-		} catch (...) {
-		}
-	}
-
-	template <class I, class B>
-	static Bridge<I>& _narrow (B& base)
-	{
-		return static_cast <Bridge <I>&> (_implementation (base));
-	}
-
-	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, Environment* env)
-	{
-		try {
-			return static_cast <Bridge <Base>*> (&_implementation (derived));
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return 0;
-	}
-};
 
 // Virtual implementation
 
@@ -409,64 +288,7 @@ protected:
 	{}
 };
 
-// Static implementation
-
-template <class S, class I>
-class InterfaceStatic :
-	public Skeleton <S, I>
-{
-	InterfaceStatic ();	// Never be instantiated
-public:
-	static T_ptr <I> _this ()
-	{
-		return (Bridge <I>*)&sm_bridge;
-	}
-
-private:
-	static const typename Bridge <I>::EPV& sm_bridge;
-};
-
-template <class S, class I>
-const typename Bridge <I>::EPV& InterfaceStatic<S, I>::sm_bridge = sm_epv;
-
-class LifeCycleStatic
-{
-public:
-	template <class I>
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, Environment*)
-	{
-		return itf;
-	}
-
-	template <class I>
-	static void _release (Bridge <Interface>*)
-	{}
-};
-
-template <class S>
-class AbstractBaseStatic :
-	public InterfaceStatic <S, AbstractBase>,
-	public LifeCycleStatic
-{
-public:
-	template <class I>
-	static S& _implementation (Bridge <I>* bridge)
-	{
-		return (S*)0;
-	}
-
-	template <class I, class B>
-	static Bridge <I>& _narrow (B&)
-	{
-		return InterfaceStatic <S, I>::_this ();
-	}
-
-	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>*, Environment*)
-	{
-		return InterfaceStatic <S, Base>::_this ();
-	}
-};
-
 }
 }
+
+#endif

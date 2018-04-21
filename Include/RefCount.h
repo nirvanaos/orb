@@ -1,4 +1,6 @@
-#pragma once
+#ifndef NIRVANA_ORB_REFCOUNT_H_
+#define NIRVANA_ORB_REFCOUNT_H_
+
 #include "BasicTypes.h"
 
 #ifdef _MSC_VER
@@ -87,3 +89,5 @@ private:
 
 }
 }
+
+#endif

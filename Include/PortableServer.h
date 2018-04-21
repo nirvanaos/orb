@@ -1,4 +1,6 @@
-#pragma once
+#ifndef NIRVANA_ORB_PORTABLESERVER_H_
+#define NIRVANA_ORB_PORTABLESERVER_H_
+
 #include "Object.h"
 
 namespace PortableServer {
@@ -32,7 +34,7 @@ public:
 
 	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
 	{
-		return _implementation (base)._POA_find_interface (id);
+		return static_cast <ServantBase&> (base)._POA_find_interface (id);
 	}
 
 	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, Environment* env);
@@ -58,3 +60,5 @@ class BaseImplPOA :
 
 }
 }
+
+#endif

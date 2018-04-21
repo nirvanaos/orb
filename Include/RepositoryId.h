@@ -1,4 +1,6 @@
-#pragma once
+#ifndef NIRVANA_ORB_REPOSITORYID_H_
+#define NIRVANA_ORB_REPOSITORYID_H_
+
 #include "BasicTypes.h"
 
 namespace CORBA {
@@ -17,3 +19,5 @@ private:
 
 }
 }
+
+#endif
