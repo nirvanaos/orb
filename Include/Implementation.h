@@ -34,6 +34,13 @@ class AbstractBaseImpl :
 {
 public:
 	template <class I>
+	static S& _implementation (Bridge <I>* bridge)
+	{
+		_check_pointer (bridge, Skeleton <S, I>::sm_epv.interface);
+		return static_cast <S&> (*bridge);
+	}
+
+	template <class I>
 	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, Environment* env)
 	{
 		try {
@@ -108,13 +115,6 @@ public:
 	T_ptr <Primary> _this ()
 	{
 		return InterfaceImpl <S, Primary>::_this ();
-	}
-
-	template <class I>
-	static S& _implementation (Bridge <I>* bridge)
-	{
-		_check_pointer (bridge, Skeleton <S, I>::sm_epv.interface);
-		return static_cast <S&> (*bridge);
 	}
 };
 

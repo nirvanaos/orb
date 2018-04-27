@@ -156,6 +156,7 @@ class Servant <S, ::Test::I1> :
 {};
 
 // POA implementation
+#ifdef ORB_TEST_POA
 
 template <>
 class ServantPOA <::Test::I1> :
@@ -176,11 +177,17 @@ protected:
 	}
 };
 
+#endif
+
 }
 }
 
 namespace POA_Test {
 
+#ifdef ORB_TEST_POA
+
 typedef PortableServer::Nirvana::ServantPOA <::Test::I1> I1;
+
+#endif
 
 }
