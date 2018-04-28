@@ -3,6 +3,7 @@
 
 #include "Implementation.h"
 #include "ImplementationStatic.h"
+#include "ImplementationPOA.h"
 
 namespace CORBA {
 
@@ -171,6 +172,11 @@ T_ptr <I> ClientInterface <I>::_narrow (T_ptr <Object> obj)
 }
 
 namespace PortableServer {
+
+class POA;
+//typedef CORBA::Nirvana::T_ptr <POA> POA_ptr;
+typedef CORBA::Nirvana::Bridge<POA>* POA_ptr; // Not defined yet
+
 namespace Nirvana {
 
 using namespace CORBA;
@@ -180,6 +186,11 @@ using namespace CORBA::Nirvana;
 class ObjectBase
 {
 public:
+	static POA_ptr _default_POA ()
+	{
+		return 0;
+	}
+
 	static Bridge <ImplementationDef>* __get_implementation (Bridge <Object>* obj, Environment* env);
 	static Boolean __is_equivalent (Bridge <Object>* obj, Bridge <Object>* other_object, Environment* env);
 
@@ -194,6 +205,7 @@ public:
 	}
 };
 
+// Object skeleton
 template <class S>
 class Skeleton <S, Object> :
 	public ObjectBase
@@ -273,10 +285,64 @@ const Bridge <Object>::EPV Skeleton <S, Object>::sm_epv = {
 };
 
 // Standard implementation
+
 template <class S>
 class Servant <S, Object> :
 	public Implementation <S, Object>
 {};
+
+// POA implementation
+
+template <>
+class ServantPOA <::CORBA::Object> :
+	public ImplementationPOA <::CORBA::Object>
+{
+public:
+	virtual POA_ptr _default_POA ()
+	{
+		return ObjectBase::_default_POA ();
+	}
+
+	virtual InterfaceDef_ptr _get_interface ()
+	{
+		return ObjectBase::_get_interface (_primary_interface ());
+	}
+
+	virtual Boolean _non_existent ()
+	{
+		return ObjectBase::_non_existent ();
+	}
+
+	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, Environment* env)
+	{
+		try {
+			_check_pointer (type_id);
+			return _implementation (obj)._is_a (type_id);
+		} catch (const Exception& e) {
+			env->set_exception (e);
+		} catch (...) {
+			env->set_unknown_exception ();
+		}
+		return 0;
+	}
+};
+
+// Static implementation
+
+template <class S>
+class ServantStatic <S, Object> :
+	public AbstractBaseStatic <S>,
+	// public InterfaceStatic <S, Derived>, ...
+	public InterfaceStatic <S, Object>
+{
+public:
+	typedef Object _PrimaryInterface;
+
+	static Object_ptr _this ()
+	{
+		return InterfaceStatic <S, Object>::_this ();
+	}
+};
 
 // Virtual implementation
 template <>
@@ -312,22 +378,6 @@ public:
 		AbstractBaseVirtual (implementation),
 		InterfaceVirtual <Object> (Skeleton <S, Object>::sm_epv)
 	{}
-};
-
-// Static implementation
-template <class S>
-class ServantStatic <S, Object> :
-	public AbstractBaseStatic <S>,
-	// public InterfaceStatic <S, Derived>, ...
-	public InterfaceStatic <S, Object>
-{
-public:
-	typedef Object _PrimaryInterface;
-
-	static Object_ptr _this ()
-	{
-		return InterfaceStatic <S, Object>::_this ();
-	}
 };
 
 }

@@ -68,5 +68,8 @@
     <ClInclude Include="..\..\Include\ImplementationStatic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Include\ImplementationPOA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
