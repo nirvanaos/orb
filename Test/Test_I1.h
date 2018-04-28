@@ -160,7 +160,7 @@ class Servant <S, ::Test::I1> :
 
 template <>
 class ServantPOA <::Test::I1> :
-	public Implementation <ServantPOA <::Test::I1>, ::Test::I1, BaseImplPOA <>>
+	public Implementation <ServantPOA <::Test::I1>, ::Test::I1, BaseImplPOA <Object>>
 {
 public:
 	virtual Long op1 (Long p1) = 0;
@@ -171,9 +171,9 @@ public:
 	}
 
 protected:
-	virtual Bridge <Interface>* _POA_find_interface (const Char* id)
+	virtual Bridge <::CORBA::Nirvana::Interface>* _find_interface (const Char* id)
 	{
-		return _find_interface (*this, id);
+		return Skeleton <ServantPOA <::Test::I1>, ::Test::I1>::_find_interface (*this, id);
 	}
 };
 

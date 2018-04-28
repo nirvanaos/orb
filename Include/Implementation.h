@@ -63,7 +63,7 @@ public:
 	}
 
 	template <class I, class B>
-	static Bridge<I>& _narrow (B& base)
+	static Bridge <I>& _narrow (B& base)
 	{
 		return static_cast <Bridge <I>&> (static_cast <S&> (base));
 	}
@@ -122,4 +122,3 @@ public:
 }
 
 #endif
-
