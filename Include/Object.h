@@ -275,7 +275,7 @@ const Bridge <Object>::EPV Skeleton <S, Object>::sm_epv = {
 // Standard implementation
 template <class S>
 class Servant <S, Object> :
-	public Implementation <S, Object, BaseImpl <S>>
+	public Implementation <S, Object>
 {};
 
 // Virtual implementation

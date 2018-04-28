@@ -57,7 +57,6 @@ private:
 };
 
 // Portable implementation
-#ifdef ORB_TEST_POA
 
 class Portable :
 	public POA_Test::I1,
@@ -82,13 +81,7 @@ private:
 	Long m_addendum;
 };
 
-#endif
-
-typedef ::testing::Types <Dynamic
-#ifdef ORB_TEST_POA
-	, Portable
-#endif
-> ServantTypes;
+typedef ::testing::Types <Dynamic, Portable> ServantTypes;
 
 void test_interface (I1_ptr p)
 {

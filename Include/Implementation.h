@@ -62,8 +62,8 @@ public:
 		}
 	}
 
-	template <class I, class B>
-	static Bridge <I>& _narrow (B& base)
+	template <class I>
+	static Bridge <I>& _narrow (Bridge <AbstractBase>& base)
 	{
 		return static_cast <Bridge <I>&> (static_cast <S&> (base));
 	}
@@ -82,15 +82,10 @@ public:
 	}
 };
 
-template <class S, class ... I>
-class BaseImpl :
-	public AbstractBaseImpl <S>,
-	public InterfaceImpl <S, I> ...
-{};
-
-template <class S, class Primary, class Bases>
+template <class S, class Primary, class ... Base>
 class Implementation :
-	public Bases,
+	public AbstractBaseImpl <S>,
+	public InterfaceImpl <S, Base> ...,
 	public InterfaceImpl <S, Primary>
 {
 public:
@@ -101,8 +96,7 @@ public:
 		return InterfaceImpl <S, Primary>::_primary_interface ();
 	}
 
-	template <class Base>
-	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
+	static ::CORBA::Nirvana::Bridge <::CORBA::Nirvana::Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
 	{
 		return InterfaceImpl <S, Primary>::_find_interface (base, id);
 	}

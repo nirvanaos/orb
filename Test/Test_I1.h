@@ -152,42 +152,24 @@ const Bridge <Test::I1>::EPV Skeleton <S, ::Test::I1>::sm_epv = {
 
 template <class S>
 class Servant <S, ::Test::I1> :
-	public Implementation <S, ::Test::I1, BaseImpl <S, Object>>
+	public Implementation <S, ::Test::I1, ::CORBA::Object>
 {};
 
 // POA implementation
-#ifdef ORB_TEST_POA
 
 template <>
 class ServantPOA <::Test::I1> :
-	public Implementation <ServantPOA <::Test::I1>, ::Test::I1, BaseImplPOA <Object>>
+	public ImplementationPOA <::Test::I1, Object>
 {
 public:
 	virtual Long op1 (Long p1) = 0;
-
-	virtual Boolean _is_a (const Char* type_id)
-	{
-		return ___is_a (type_id);
-	}
-
-protected:
-	virtual Bridge <::CORBA::Nirvana::Interface>* _find_interface (const Char* id)
-	{
-		return Skeleton <ServantPOA <::Test::I1>, ::Test::I1>::_find_interface (*this, id);
-	}
 };
-
-#endif
 
 }
 }
 
 namespace POA_Test {
 
-#ifdef ORB_TEST_POA
-
 typedef PortableServer::Nirvana::ServantPOA <::Test::I1> I1;
-
-#endif
 
 }

@@ -53,10 +53,10 @@ public:
 		}
 	}
 
-	template <class I, class Primary>
-	static Bridge <I>& _narrow (ServantPOA <Primary>& base)
+	template <class I>
+	static Bridge <I>& _narrow (Bridge <I>& base)
 	{
-		return static_cast <Bridge <I>&> (base);
+		return base;
 	}
 
 	template <class Base, class Derived>
@@ -105,16 +105,40 @@ protected:
 	virtual Bridge <::CORBA::Nirvana::Interface>* _find_interface (const Char* id) = 0;
 };
 
-// Base interfaces
-template <class ... I> // Only directly derived interface must be listed
-class BaseImplPOA :
+template <class Primary, class ... Base>
+class ImplementationPOA :
 	public virtual ServantPOA <AbstractBase>,
-	public virtual ServantPOA <I> ...
-{};
+	public virtual ServantPOA <Base> ...,
+	public InterfaceImpl <ServantPOA <Primary>, Primary>
+{
+public:
+	typedef Primary _PrimaryInterface;
+
+	static const Char* _primary_interface ()
+	{
+		return InterfaceImpl <ServantPOA <Primary>, Primary>::_primary_interface ();
+	}
+
+	virtual ::CORBA::Nirvana::Bridge <::CORBA::Nirvana::Interface>* _find_interface (const Char* id)
+	{
+		return InterfaceImpl <ServantPOA <Primary>, Primary>::_find_interface (*this, id);
+	}
+
+	virtual Boolean _is_a (const Char* type_id)
+	{
+		return InterfaceImpl <ServantPOA <Primary>, Primary>::___is_a (type_id);
+	}
+
+	T_ptr <Primary> _this ()
+	{
+		return InterfaceImpl <ServantPOA <Primary>, Primary>::_this ();
+	}
+};
+
 
 template <>
 class ServantPOA <::CORBA::Object> :
-	public Implementation <ServantPOA <::CORBA::Object>, ::CORBA::Object, BaseImplPOA <>>
+	public ImplementationPOA <::CORBA::Object>
 {
 public:
 	virtual POA_ptr _default_POA ()
@@ -125,11 +149,6 @@ public:
 	virtual InterfaceDef_ptr _get_interface ()
 	{
 		return ObjectBase::_get_interface (_primary_interface ());
-	}
-
-	virtual Boolean _is_a (const Char* type_id)
-	{
-		return ___is_a (type_id);
 	}
 
 	virtual Boolean _non_existent ()
@@ -148,12 +167,6 @@ public:
 			env->set_unknown_exception ();
 		}
 		return 0;
-	}
-
-protected:
-	virtual Bridge <::CORBA::Nirvana::Interface>* _find_interface (const Char* id)
-	{
-		return Skeleton <ServantPOA <::CORBA::Object>, ::CORBA::Object>::_find_interface (*this, id);
 	}
 };
 
