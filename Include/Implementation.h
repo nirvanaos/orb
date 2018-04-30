@@ -82,7 +82,7 @@ public:
 	}
 };
 
-template <class S, class Primary, class ... Base>
+template <class S, class Primary, class ... Base> // Base includes all derived interfaces, directly and indirectly
 class Implementation :
 	public AbstractBaseImpl <S>,
 	public InterfaceImpl <S, Base> ...,
@@ -93,7 +93,7 @@ public:
 
 	static const Char* _primary_interface ()
 	{
-		return InterfaceImpl <S, Primary>::_primary_interface ();
+		return Bridge <Primary>::_primary_interface ();
 	}
 
 	static ::CORBA::Nirvana::Bridge <::CORBA::Nirvana::Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
@@ -103,7 +103,7 @@ public:
 
 	static Boolean ___is_a (const Char* type_id)
 	{
-		return InterfaceImpl <S, Primary>::___is_a (type_id);
+		return Bridge <Primary>::___is_a (type_id);
 	}
 
 	T_ptr <Primary> _this ()

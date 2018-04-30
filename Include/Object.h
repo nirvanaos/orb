@@ -331,18 +331,8 @@ public:
 
 template <class S>
 class ServantStatic <S, Object> :
-	public AbstractBaseStatic <S>,
-	// public InterfaceStatic <S, Derived>, ...
-	public InterfaceStatic <S, Object>
-{
-public:
-	typedef Object _PrimaryInterface;
-
-	static Object_ptr _this ()
-	{
-		return InterfaceStatic <S, Object>::_this ();
-	}
-};
+	public ImplementationStatic <S, Object>
+{};
 
 // Virtual implementation
 template <>

@@ -165,6 +165,13 @@ public:
 	virtual Long op1 (Long p1) = 0;
 };
 
+// Static implementation
+
+template <class S>
+class ServantStatic <S, ::Test::I1> :
+	public ImplementationStatic <S, ::Test::I1, ::CORBA::Object>
+{};
+
 }
 }
 

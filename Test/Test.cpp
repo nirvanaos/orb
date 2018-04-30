@@ -33,6 +33,7 @@ int Instance::sm_count = 0;
 const Long MAGIC_CONST = 1963;
 
 // Dynamic implementation
+
 class Dynamic :
 	public ::PortableServer::Nirvana::Servant <Dynamic, ::Test::I1>,
 	public Instance
@@ -81,7 +82,25 @@ private:
 	Long m_addendum;
 };
 
-typedef ::testing::Types <Dynamic, Portable> ServantTypes;
+// Static implementation
+
+class Static :
+	public ::PortableServer::Nirvana::ServantStatic <Static, ::Test::I1>,
+	public Instance
+{
+public:
+	static Long op1 (Long p1)
+	{
+		return p1 + MAGIC_CONST;
+	}
+
+	static ::Test::I1_ptr incarnate ()
+	{
+		return _this ();
+	}
+};
+
+typedef ::testing::Types <Dynamic, Portable, Static> ServantTypes;
 
 void test_interface (I1_ptr p)
 {

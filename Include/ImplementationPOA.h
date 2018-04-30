@@ -97,7 +97,7 @@ protected:
 	virtual Bridge <::CORBA::Nirvana::Interface>* _find_interface (const Char* id) = 0;
 };
 
-template <class Primary, class ... Base>
+template <class Primary, class ... Base> // Base includes only directly derived interfaces
 class ImplementationPOA :
 	public virtual ServantPOA <AbstractBase>,
 	public virtual ServantPOA <Base> ...,
@@ -108,7 +108,7 @@ public:
 
 	static const Char* _primary_interface ()
 	{
-		return InterfaceImpl <ServantPOA <Primary>, Primary>::_primary_interface ();
+		return Bridge <Primary>::_primary_interface ();
 	}
 
 	virtual ::CORBA::Nirvana::Bridge <::CORBA::Nirvana::Interface>* _find_interface (const Char* id)
@@ -118,7 +118,7 @@ public:
 
 	virtual Boolean _is_a (const Char* type_id)
 	{
-		return InterfaceImpl <ServantPOA <Primary>, Primary>::___is_a (type_id);
+		return Bridge <Primary>::___is_a (type_id);
 	}
 
 	T_ptr <Primary> _this ()
