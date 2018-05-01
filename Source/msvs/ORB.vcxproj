@@ -12,6 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\AbstractBase.cpp" />
+    <ClCompile Include="..\ImplementationTied.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Interface.cpp" />
     <ClCompile Include="..\Object.cpp" />
     <ClCompile Include="..\PortableServer.cpp" />
@@ -25,6 +28,7 @@
     <ClInclude Include="..\..\Include\Implementation.h" />
     <ClInclude Include="..\..\Include\ImplementationPOA.h" />
     <ClInclude Include="..\..\Include\ImplementationStatic.h" />
+    <ClInclude Include="..\..\Include\ImplementationTied.h" />
     <ClInclude Include="..\..\Include\Interface.h" />
     <ClInclude Include="..\..\Include\Object.h" />
     <ClInclude Include="..\..\Include\PortableServer.h" />

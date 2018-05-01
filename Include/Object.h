@@ -4,6 +4,7 @@
 #include "Implementation.h"
 #include "ImplementationStatic.h"
 #include "ImplementationPOA.h"
+#include "ImplementationTied.h"
 
 namespace CORBA {
 
@@ -334,11 +335,12 @@ class ServantStatic <S, Object> :
 	public ImplementationStatic <S, Object>
 {};
 
-// Virtual implementation
+// Tied implementation
+
 template <>
-class InterfaceVirtual <Object> :
+class InterfaceTied <Object> :
 	// public virtual InterfaceVirtual <Derived>, ...
-	public InterfaceVirtualBase <Object>
+	public InterfaceTiedBase <Object>
 {
 	typedef Object _PrimaryInterface;
 
@@ -348,25 +350,25 @@ class InterfaceVirtual <Object> :
 	}
 
 protected:
-	InterfaceVirtual (const Bridge <Object>::EPV& epv) :
-		InterfaceVirtualBase <Object> (epv)
+	InterfaceTied (const Bridge <Object>::EPV& epv) :
+		InterfaceTiedBase <Object> (epv)
 	{}
 
-	InterfaceVirtual ()
+	InterfaceTied ()
 	{}
 };
 
 template <class S>
-class ServantVirtual <S, Object> :
-	public AbstractBaseVirtual <S>,
-	// public ServantVirtual <S, Derived>, ...
-	public virtual InterfaceVirtual <Object>,
+class ServantTied <S, Object> :
+	public AbstractBaseTied <S>,
+	// public ServantTied <S, Derived>, ...
+	public virtual InterfaceTied <Object>,
 	public Skeleton <S, Object>
 {
 public:
-	ServantVirtual (S& implementation) :
-		AbstractBaseVirtual (implementation),
-		InterfaceVirtual <Object> (Skeleton <S, Object>::sm_epv)
+	ServantTied (S& implementation) :
+		AbstractBaseTied (implementation),
+		InterfaceTied <Object> (Skeleton <S, Object>::sm_epv)
 	{}
 };
 

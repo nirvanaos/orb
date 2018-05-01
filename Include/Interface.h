@@ -50,23 +50,6 @@ private:
 	const EPV* m_epv;
 };
 
-class DerivedInterface;
-template <>
-class Bridge <DerivedInterface> :
-	public Bridge <Interface>
-{
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
-	};
-
-	const EPV& _epv () const
-	{
-		return (EPV&)Bridge <Interface>::_epv ();
-	}
-};
-
 //! ClientBase - How client obtains pointer to Bridge
 template <class T, class I>
 class ClientBase
