@@ -181,17 +181,9 @@ class ServantTied <T, ::Test::I1>	:
 	public ImplementationTied <T, ::Test::I1, ::CORBA::Object>
 {
 public:
-	ServantTied (T& t) :
-		ImplementationTied (&t, FALSE)
-	{}
-	
-	ServantTied (T& t, POA_ptr poa);	// TODO: Implement
-
-	ServantTied (T* tp, Boolean release = TRUE) :
+	ServantTied (T* tp, Boolean release) :
 		ImplementationTied (tp, release)
 	{}
-
-	ServantTied (T* tp, POA_ptr poa, Boolean release = TRUE);	// TODO: Implement
 };
 
 }
@@ -202,7 +194,22 @@ namespace POA_Test {
 typedef ::CORBA::Nirvana::ServantPOA <::Test::I1> I1;
 
 template <class T>
-using I1_tie = ::CORBA::Nirvana::ServantTied <T, ::Test::I1>;
+class I1_tie :
+	public ::CORBA::Nirvana::ServantTied <T, ::Test::I1>
+{
+public:
+	I1_tie (T& t) :
+		ServantTied <T, ::Test::I1> (&t, FALSE)
+	{}
+
+	I1_tie (T& t, ::PortableServer::POA_ptr poa);	// Generate only if Object is derived
+
+	I1_tie (T* tp, ::CORBA::Boolean release = TRUE) :
+		ServantTied <T, ::Test::I1> (tp, release)
+	{}
+
+	I1_tie (T* tp, ::PortableServer::POA_ptr poa, ::CORBA::Boolean release = TRUE);	// Generate only if Object is derived
+};
 
 }
 
