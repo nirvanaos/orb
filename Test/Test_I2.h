@@ -1,12 +1,12 @@
-#ifndef NIRVANA_ORB_TEST_I1_H_
-#define NIRVANA_ORB_TEST_I1_H_
+#ifndef NIRVANA_ORB_TEST_I2_H_
+#define NIRVANA_ORB_TEST_I2_H_
 
 #include "PortableServer.h"
 
 namespace Test {
 
-class I1;
-typedef ::CORBA::Nirvana::T_ptr <I1> I1_ptr;
+class I2;
+typedef ::CORBA::Nirvana::T_ptr <I2> I2_ptr;
 
 }
 
@@ -14,7 +14,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <>
-class Bridge <::Test::I1> :
+class Bridge <::Test::I2> :
 	public Bridge <Interface>
 {
 public:
@@ -24,13 +24,13 @@ public:
 
 		struct
 		{
-			Bridge <Object>* (*CORBA_Object) (Bridge <::Test::I1>*, Environment*);
+			Bridge <Object>* (*CORBA_Object) (Bridge <::Test::I2>*, Environment*);
 		}
 		base;
 
 		struct
 		{
-			Long (*op1) (Bridge <::Test::I1>*, Long p1, Environment*);
+			Long (*op2) (Bridge <::Test::I2>*, Long p1, Environment*);
 		}
 		epv;
 	};
@@ -42,7 +42,7 @@ public:
 
 	static const Char* _primary_interface ()
 	{
-		return "IDL:Test/I1:1.0";
+		return "IDL:Test/I2:1.0";
 	}
 
 	static Boolean ___is_a (const Char* id)
@@ -63,19 +63,19 @@ protected:
 };
 
 template <class T>
-class Client <T, ::Test::I1> :
-	public ClientBase <T, ::Test::I1>
+class Client <T, ::Test::I2> :
+	public ClientBase <T, ::Test::I2>
 {
 public:
-	Long op1 (Long p1);
+	Long op2 (Long p1);
 };
 
 template <class T>
-Long Client <T, ::Test::I1>::op1 (Long p1)
+Long Client <T, ::Test::I2>::op2 (Long p1)
 {
 	Environment _env;
-	Bridge <::Test::I1>& _b = _bridge ();
-	Long _ret = (_b._epv ().epv.op1) (&_b, p1, &_env);
+	Bridge <::Test::I2>& _b = _bridge ();
+	Long _ret = (_b._epv ().epv.op2) (&_b, p1, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -85,9 +85,9 @@ Long Client <T, ::Test::I1>::op1 (Long p1)
 
 namespace Test {
 
-class I1 :
-	public CORBA::Nirvana::ClientInterface <I1>,
-	public CORBA::Nirvana::Client <I1, ::CORBA::Object>
+class I2 :
+	public CORBA::Nirvana::ClientInterface <I2>,
+	public CORBA::Nirvana::Client <I2, ::CORBA::Object>
 {
 public:
 	typedef I1_ptr _ptr_type;
@@ -108,25 +108,25 @@ namespace CORBA {
 namespace Nirvana {
 
 template <class S>
-class Skeleton <S, ::Test::I1>
+class Skeleton <S, ::Test::I2>
 {
 public:
-	static const typename Bridge <::Test::I1>::EPV sm_epv;
+	static const typename Bridge <::Test::I2>::EPV sm_epv;
 
 	template <class Base>
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
-		if (RepositoryId::compatible (Bridge <::Test::I1>::_primary_interface (), id))
-			return &S::_narrow <::Test::I1> (base);
+		if (RepositoryId::compatible (Bridge <::Test::I2>::_primary_interface (), id))
+			return &S::_narrow <::Test::I2> (base);
 		else
 			return Skeleton <S, Object>::_find_interface (base, id);
 	}
 
 protected:
-	static Long _op1 (Bridge <::Test::I1>* _b, Long p1, Environment* _env)
+	static Long _op2 (Bridge <::Test::I2>* _b, Long p1, Environment* _env)
 	{
 		try {
-			return S::_implementation (_b).op1 (p1);
+			return S::_implementation (_b).op2 (p1);
 		} catch (const Exception& e) {
 			_env->set_exception (e);
 		} catch (...) {
@@ -137,48 +137,48 @@ protected:
 };
 
 template <class S>
-const Bridge <::Test::I1>::EPV Skeleton <S, ::Test::I1>::sm_epv = {
+const Bridge <::Test::I2>::EPV Skeleton <S, ::Test::I2>::sm_epv = {
 	{ // interface
-		S::_duplicate <::Test::I1>,
-		S::_release <::Test::I1>
+		S::_duplicate <::Test::I2>,
+		S::_release <::Test::I2>
 	},
 	{ // base
-		S::_wide <Object, ::Test::I1>
+		S::_wide <Object, ::Test::I2>
 	},
 	{ // epv
-		S::_op1
+		S::_op2
 	}
 };
 
 // Standard implementation
 
 template <class S>
-class Servant <S, ::Test::I1> :
-	public Implementation <S, ::Test::I1, ::CORBA::Object>
+class Servant <S, ::Test::I2> :
+	public Implementation <S, ::Test::I2, ::CORBA::Object>
 {};
 
 // POA implementation
 
 template <>
-class ServantPOA <::Test::I1> :
-	public ImplementationPOA <::Test::I1, Object>
+class ServantPOA <::Test::I2> :
+	public ImplementationPOA <::Test::I2, Object>
 {
 public:
-	virtual Long op1 (Long p1) = 0;
+	virtual Long op2 (Long p1) = 0;
 };
 
 // Static implementation
 
 template <class S>
-class ServantStatic <S, ::Test::I1> :
-	public ImplementationStatic <S, ::Test::I1, ::CORBA::Object>
+class ServantStatic <S, ::Test::I2> :
+	public ImplementationStatic <S, ::Test::I2, ::CORBA::Object>
 {};
 
 // Tied implementation
 
 template <class T>
-class ServantTied <T, ::Test::I1>	: 
-	public ImplementationTied <T, ::Test::I1, ::CORBA::Object>
+class ServantTied <T, ::Test::I2>	: 
+	public ImplementationTied <T, ::Test::I2, ::CORBA::Object>
 {
 public:
 	ServantTied (T& t) :
@@ -199,10 +199,10 @@ public:
 
 namespace POA_Test {
 
-typedef ::CORBA::Nirvana::ServantPOA <::Test::I1> I1;
+typedef ::CORBA::Nirvana::ServantPOA <::Test::I2> I2;
 
 template <class T>
-using I1_tie = ::CORBA::Nirvana::ServantTied <T, ::Test::I1>;
+using I2_tie = ::CORBA::Nirvana::ServantTied <T, ::Test::I2>;
 
 }
 

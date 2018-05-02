@@ -1,4 +1,4 @@
-#include "Test_I1.h"
+#include "Test_I3.h"
 #include <gtest/gtest.h>
 
 using namespace std;
@@ -34,12 +34,12 @@ const Long MAGIC_CONST = 1963;
 
 // Dynamic implementation
 
-class Dynamic :
-	public ::CORBA::Nirvana::Servant <Dynamic, ::Test::I1>,
+class DynamicI1 :
+	public ::CORBA::Nirvana::Servant <DynamicI1, ::Test::I1>,
 	public Instance
 {
 public:
-	Dynamic (Long addendum) :
+	DynamicI1 (Long addendum) :
 		m_addendum (addendum)
 	{}
 
@@ -50,7 +50,40 @@ public:
 
 	static ::Test::I1_ptr incarnate ()
 	{
-		return (new Dynamic (MAGIC_CONST))->_this ();
+		return (new DynamicI1 (MAGIC_CONST))->_this ();
+	}
+
+private:
+	Long m_addendum;
+};
+
+class DynamicI3 :
+	public ::CORBA::Nirvana::Servant <DynamicI3, ::Test::I3>,
+	public Instance
+{
+public:
+	DynamicI3 (Long addendum) :
+		m_addendum (addendum)
+	{}
+
+	Long op1 (Long p1) const
+	{
+		return p1 + m_addendum;
+	}
+
+	Long op2 (Long p1) const
+	{
+		return p1 + 2 * m_addendum;
+	}
+
+	Long op3 (Long p1) const
+	{
+		return p1 + 3 * m_addendum;
+	}
+
+	static ::Test::I3_ptr incarnate ()
+	{
+		return (new DynamicI3 (MAGIC_CONST))->_this ();
 	}
 
 private:
@@ -59,12 +92,12 @@ private:
 
 // Portable implementation
 
-class Portable :
+class PortableI1 :
 	public POA_Test::I1,
 	public Instance
 {
 public:
-	Portable (Long addendum) :
+	PortableI1 (Long addendum) :
 		m_addendum (addendum)
 	{}
 
@@ -75,7 +108,40 @@ public:
 
 	static ::Test::I1_ptr incarnate ()
 	{
-		return (new Portable (MAGIC_CONST))->_this ();
+		return (new PortableI1 (MAGIC_CONST))->_this ();
+	}
+
+private:
+	Long m_addendum;
+};
+
+class PortableI3 :
+	public POA_Test::I3,
+	public Instance
+{
+public:
+	PortableI3 (Long addendum) :
+		m_addendum (addendum)
+	{}
+
+	virtual Long op1 (Long p1)
+	{
+		return p1 + m_addendum;
+	}
+
+	virtual Long op2 (Long p1)
+	{
+		return p1 + 2 * m_addendum;
+	}
+
+	virtual Long op3 (Long p1)
+	{
+		return p1 + 3 * m_addendum;
+	}
+
+	static ::Test::I3_ptr incarnate ()
+	{
+		return (new PortableI3 (MAGIC_CONST))->_this ();
 	}
 
 private:
@@ -84,8 +150,8 @@ private:
 
 // Static implementation
 
-class Static :
-	public ::CORBA::Nirvana::ServantStatic <Static, ::Test::I1>,
+class StaticI1 :
+	public ::CORBA::Nirvana::ServantStatic <StaticI1, ::Test::I1>,
 	public Instance
 {
 public:
@@ -100,13 +166,39 @@ public:
 	}
 };
 
+class StaticI3 :
+	public ::CORBA::Nirvana::ServantStatic <StaticI3, ::Test::I3>,
+	public Instance
+{
+public:
+	static Long op1 (Long p1)
+	{
+		return p1 + MAGIC_CONST;
+	}
+
+	static Long op2 (Long p1)
+	{
+		return p1 + 2 * MAGIC_CONST;
+	}
+
+	static Long op3 (Long p1)
+	{
+		return p1 + 3 * MAGIC_CONST;
+	}
+
+	static ::Test::I3_ptr incarnate ()
+	{
+		return _this ();
+	}
+};
+
 // Tied implementation
 
-class Tied :
+class TiedI1 :
 	public Instance
 {
 public:
-	Tied (Long addendum) :
+	TiedI1 (Long addendum) :
 		m_addendum (addendum)
 	{}
 
@@ -117,20 +209,18 @@ public:
 
 	static ::Test::I1_ptr incarnate ()
 	{
-		return (new POA_Test::I1_tie <Tied> (new Tied (MAGIC_CONST)))->_this ();
+		return (new POA_Test::I1_tie <TiedI1> (new TiedI1 (MAGIC_CONST)))->_this ();
 	}
 
 private:
 	Long m_addendum;
 };
 
-class TiedDerived :
-	public POA_Test::I1_tie <TiedDerived>,
+class TiedI3 :
 	public Instance
 {
 public:
-	TiedDerived (Long addendum) :
-		POA_Test::I1_tie <TiedDerived> (*this),
+	TiedI3 (Long addendum) :
 		m_addendum (addendum)
 	{}
 
@@ -139,22 +229,68 @@ public:
 		return p1 + m_addendum;
 	}
 
-	static ::Test::I1_ptr incarnate ()
+	Long op2 (Long p1) const
 	{
-		return (new TiedDerived (MAGIC_CONST))->_this ();
+		return p1 + 2 * m_addendum;
+	}
+
+	Long op3 (Long p1) const
+	{
+		return p1 + 3 * m_addendum;
+	}
+
+	static ::Test::I3_ptr incarnate ()
+	{
+		return (new POA_Test::I3_tie <TiedI3> (new TiedI3 (MAGIC_CONST)))->_this ();
 	}
 
 private:
 	Long m_addendum;
 };
 
-typedef ::testing::Types <Dynamic, Portable, Static, Tied, TiedDerived> ServantTypes;
+class TiedDerivedI1 :
+	public POA_Test::I1_tie <TiedI1>,
+	public TiedI1
+{
+public:
+	TiedDerivedI1 (Long addendum) :
+		TiedI1 (addendum),
+		POA_Test::I1_tie <TiedI1> (static_cast <TiedI1&> (*this))
+	{}
+
+	static ::Test::I1_ptr incarnate ()
+	{
+		return (new TiedDerivedI1 (MAGIC_CONST))->_this ();
+	}
+
+private:
+	Long m_addendum;
+};
+
+class TiedDerivedI3 :
+	public POA_Test::I3_tie <TiedI3>,
+	public TiedI3
+{
+public:
+	TiedDerivedI3 (Long addendum) :
+		TiedI3 (addendum),
+		POA_Test::I3_tie <TiedI3> (static_cast <TiedI3&> (*this))
+	{}
+
+	static ::Test::I3_ptr incarnate ()
+	{
+		return (new TiedDerivedI3 (MAGIC_CONST))->_this ();
+	}
+
+private:
+	Long m_addendum;
+};
 
 void test_interface (I1_ptr p)
 {
 	ASSERT_FALSE (is_nil (p));
 	ASSERT_FALSE (p->_non_existent ());
-	ASSERT_EQ (p->op1 (1), MAGIC_CONST + 1);
+	EXPECT_EQ (p->op1 (1), MAGIC_CONST + 1);
 	Object_ptr object = p;
 	ASSERT_FALSE (is_nil (object));
 	ASSERT_FALSE (object->_non_existent ());
@@ -170,12 +306,12 @@ void test_interface (I1_ptr p)
 		I1_ptr p1 = I1::_narrow (object);
 		ASSERT_FALSE (is_nil (p1));
 		ASSERT_FALSE (p1->_non_existent ());
-		ASSERT_EQ (p1->op1 (1), MAGIC_CONST + 1);
+		EXPECT_EQ (p1->op1 (1), MAGIC_CONST + 1);
 		release (p1);
 	}
 	ASSERT_FALSE (p->_non_existent ());
-	ASSERT_TRUE (p->_is_a ("IDL:omg.org/CORBA/Object:1.0"));
-	ASSERT_TRUE (p->_is_a ("IDL:Test/I1:1.0"));
+	EXPECT_TRUE (p->_is_a ("IDL:omg.org/CORBA/Object:1.0"));
+	EXPECT_TRUE (p->_is_a ("IDL:Test/I1:1.0"));
 	release (p);
 }
 
@@ -188,16 +324,19 @@ void test_performance (I1_ptr p)
 
 namespace unittests {
 
-// The fixture for testing BPMXConverterBase functions.
+// The fixture for testing simple interface.
+
+typedef ::testing::Types <DynamicI1, PortableI1, StaticI1, TiedI1, TiedDerivedI1> ServantTypesI1;
+
 template <class Servant>
-class TestORB :
+class TestI1 :
 	public ::testing::Test
 {
 protected:
-	TestORB ()
+	TestI1 ()
 	{}
 
-	virtual ~TestORB ()
+	virtual ~TestI1 ()
 	{}
 
 	// If the constructor and destructor are not enough for setting up
@@ -217,16 +356,71 @@ protected:
 	}
 };
 
-TYPED_TEST_CASE (TestORB, ServantTypes);
+TYPED_TEST_CASE (TestI1, ServantTypesI1);
 
-TYPED_TEST (TestORB, Inteface)
+TYPED_TEST (TestI1, Inteface)
 {
 	test_interface (TypeParam::incarnate ());
 }
 
-TYPED_TEST (TestORB, Performance)
+TYPED_TEST (TestI1, Performance)
 {
 	test_performance (TypeParam::incarnate ());
+}
+
+// The fixture for testing complex interface.
+
+typedef ::testing::Types <DynamicI3, PortableI3, StaticI3, TiedI3, TiedDerivedI3> ServantTypesI3;
+
+template <class Servant>
+class TestI3 :
+	public ::testing::Test
+{
+protected:
+	TestI3 ()
+	{}
+
+	virtual ~TestI3 ()
+	{}
+
+	// If the constructor and destructor are not enough for setting up
+	// and cleaning up each test, you can define the following methods:
+
+	virtual void SetUp ()
+	{
+		// Code here will be called immediately after the constructor (right
+		// before each test).
+	}
+
+	virtual void TearDown ()
+	{
+		// Code here will be called immediately after each test (right
+		// before the destructor).
+		EXPECT_EQ (Instance::count (), 0);
+	}
+};
+
+TYPED_TEST_CASE (TestI3, ServantTypesI3);
+
+TYPED_TEST (TestI3, Inteface)
+{
+	test_interface (TypeParam::incarnate ());
+}
+
+TYPED_TEST (TestI3, Performance)
+{
+	test_performance (TypeParam::incarnate ());
+}
+
+TYPED_TEST (TestI3, MultiInherit)
+{
+	I3_ptr p = TypeParam::incarnate ();
+
+	EXPECT_EQ (p->op1 (1), MAGIC_CONST + 1);
+	EXPECT_EQ (p->op2 (1), 2 * MAGIC_CONST + 1);
+	EXPECT_EQ (p->op3 (1), 3 * MAGIC_CONST + 1);
+
+	release (p);
 }
 
 }

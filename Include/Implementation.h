@@ -98,7 +98,7 @@ public:
 
 	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
 	{
-		return InterfaceImpl <S, Primary>::_find_interface (base, id);
+		return Skeleton <S, Primary>::_find_interface (base, id);
 	}
 
 	static Boolean ___is_a (const Char* type_id)
