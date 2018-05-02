@@ -420,6 +420,38 @@ TYPED_TEST (TestI3, MultiInherit)
 	EXPECT_EQ (p->op2 (1), 2 * MAGIC_CONST + 1);
 	EXPECT_EQ (p->op3 (1), 3 * MAGIC_CONST + 1);
 
+	{
+		I1_ptr p1 = p;
+		EXPECT_EQ (p1->op1 (1), MAGIC_CONST + 1);
+		I3_ptr p3 = I3::_narrow (p1);
+		ASSERT_FALSE (is_nil (p3));
+		EXPECT_EQ (p3->op3 (1), 3 * MAGIC_CONST + 1);
+		release (p3);
+	}
+
+	{
+		I2_ptr p2 = p;
+		EXPECT_EQ (p2->op2 (1), 2 * MAGIC_CONST + 1);
+		I3_ptr p3 = I3::_narrow (p2);
+		ASSERT_FALSE (is_nil (p3));
+		EXPECT_EQ (p3->op3 (1), 3 * MAGIC_CONST + 1);
+		release (p3);
+	}
+
+	{
+		Object_ptr obj = p;
+		ASSERT_FALSE (is_nil (obj));
+		I1_ptr p1 = I1::_narrow (obj);
+		ASSERT_FALSE (is_nil (p1));
+		I2_ptr p2 = I2::_narrow (obj);
+		ASSERT_FALSE (is_nil (p2));
+		I3_ptr p3 = I3::_narrow (obj);
+		ASSERT_FALSE (is_nil (p3));
+		release (p1);
+		release (p2);
+		release (p3);
+	}
+
 	release (p);
 }
 
