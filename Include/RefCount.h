@@ -59,6 +59,10 @@ private:
 
 class RefCountBase
 {
+	// Copy prohibited.
+	RefCountBase (const RefCountBase&);
+	RefCountBase& operator = (const RefCountBase&);
+
 public:
 	void _add_ref ()
 	{

@@ -13,6 +13,7 @@ namespace Nirvana {
 template <class I> class InterfaceTiedBase;
 template <class S, class I> class InterfaceTied;
 template <class T, class I> class ServantTied;
+template <class T, class S> class AbstractBaseTied;
 
 // Abstract base implementation
 
@@ -34,25 +35,6 @@ public:
 	template <>
 	static void _release <AbstractBase> (Bridge <Interface>* itf);
 
-	virtual Bridge <Interface>* _find_interface (const Char* id) = 0;
-
-	void* _implementation () const
-	{
-		assert (m_implementation);
-		return m_implementation;
-	}
-
-	void* _tied_object () const
-	{
-		return m_implementation;
-	}
-
-	void _tied_object (void* obj, Boolean release)
-	{
-		m_implementation = obj;
-		m_release = release;
-	}
-
 	Boolean _is_owner () const
 	{
 		return m_release;
@@ -70,6 +52,29 @@ protected:
 	AbstractBase_ptr _this ()
 	{
 		return this;
+	}
+
+protected:
+	template <class T, class S>
+	friend class AbstractBaseTied;
+
+	virtual Bridge <Interface>* _find_interface (const Char* id) = 0;
+
+	void* _implementation () const
+	{
+		assert (m_implementation);
+		return m_implementation;
+	}
+
+	void* _tied_object () const
+	{
+		return m_implementation;
+	}
+
+	void _tied_object (void* obj, Boolean release)
+	{
+		m_implementation = obj;
+		m_release = release;
 	}
 
 private:
