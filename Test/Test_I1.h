@@ -172,11 +172,26 @@ class ServantStatic <S, ::Test::I1> :
 	public ImplementationStatic <S, ::Test::I1, ::CORBA::Object>
 {};
 
+// Tied implementation
+
+template <class T>
+class ServantTied <T, ::Test::I1>	: 
+	public ImplementationTied <T, ::Test::I1, ::CORBA::Object>
+{
+public:
+	ServantTied (T* tp, Boolean release = TRUE) :
+		InterfaceTiedBase <AbstractBase> (Skeleton <ServantTied <T, ::Test::I1>, AbstractBase>::sm_epv, tp, release)
+	{}
+};
+
 }
 }
 
 namespace POA_Test {
 
 typedef PortableServer::Nirvana::ServantPOA <::Test::I1> I1;
+
+template <class T>
+using I1_tie = PortableServer::Nirvana::ServantTied <T, ::Test::I1>;
 
 }

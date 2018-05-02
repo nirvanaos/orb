@@ -100,7 +100,31 @@ public:
 	}
 };
 
-typedef ::testing::Types <Dynamic, Portable, Static> ServantTypes;
+// Tied implementation
+
+class Tied :
+	public Instance
+{
+public:
+	Tied (Long addendum) :
+		m_addendum (addendum)
+	{}
+
+	Long op1 (Long p1) const
+	{
+		return p1 + m_addendum;
+	}
+
+	static ::Test::I1_ptr incarnate ()
+	{
+		return (new POA_Test::I1_tie <Tied> (new Tied (MAGIC_CONST)))->_this ();
+	}
+
+private:
+	Long m_addendum;
+};
+
+typedef ::testing::Types <Dynamic, Portable, Static, Tied> ServantTypes;
 
 void test_interface (I1_ptr p)
 {

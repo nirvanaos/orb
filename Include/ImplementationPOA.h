@@ -8,6 +8,8 @@
 namespace PortableServer {
 namespace Nirvana {
 
+using namespace ::CORBA::Nirvana;
+
 template <class I> class ServantPOA;
 
 template <>

@@ -27,7 +27,9 @@ public:
 namespace PortableServer {
 namespace Nirvana {
 
-InterfaceTied <AbstractBase>& InterfaceTied <AbstractBase>::_get_base (Bridge <Interface>* itf)
+using namespace ::CORBA::Nirvana;
+
+InterfaceTiedBase <AbstractBase>& InterfaceTiedBase <AbstractBase>::_get_base (Bridge <Interface>* itf)
 {
 	_check_pointer (itf);
 	Bridge <DerivedInterface>* pb = static_cast <Bridge <DerivedInterface>*> (itf);
@@ -36,10 +38,10 @@ InterfaceTied <AbstractBase>& InterfaceTied <AbstractBase>::_get_base (Bridge <I
 	return *p;
 }
 
-InterfaceTied <AbstractBase>& InterfaceTied <AbstractBase>::_get_base (Bridge <AbstractBase>* itf)
+InterfaceTiedBase <AbstractBase>& InterfaceTiedBase <AbstractBase>::_get_base (Bridge <AbstractBase>* itf)
 {
 	_check_pointer (itf);
-	InterfaceTied <AbstractBase>* p = static_cast <InterfaceTied <AbstractBase>*> (itf);
+	InterfaceTiedBase <AbstractBase>* p = static_cast <InterfaceTiedBase <AbstractBase>*> (itf);
 	_check_pointer (itf, p->_epv ().interface);
 	return *p;
 }

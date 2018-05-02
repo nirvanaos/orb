@@ -227,7 +227,7 @@ protected:
 	static Bridge <InterfaceDef>* __get_interface (Bridge <Object>* obj, Environment* env)
 	{
 		try {
-			return S::_implementation (obj)._get_interface ();
+			return S::_object (obj)._get_interface ();
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
@@ -257,7 +257,7 @@ protected:
 	static Boolean __non_existent (Bridge <Object>* obj, Environment* env)
 	{
 		try {
-			return S::_implementation (obj)._non_existent ();
+			return S::_object (obj)._non_existent ();
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
@@ -288,6 +288,29 @@ const Bridge <Object>::EPV Skeleton <S, Object>::sm_epv = {
 // Standard implementation
 
 template <class S>
+class InterfaceImpl <S, Object> :
+	public Bridge <Object>,
+	public Skeleton <S, Object>
+{
+public:
+	T_ptr <Object> _this ()
+	{
+		return this;
+	}
+
+	static S& _object (Bridge <Object>* bridge)
+	{
+		_check_pointer (bridge, sm_epv.interface);
+		return static_cast <S&> (*bridge);
+	}
+
+protected:
+	InterfaceImpl () :
+		Bridge <Object> (sm_epv)
+	{}
+};
+
+template <class S>
 class Servant <S, Object> :
 	public Implementation <S, Object>
 {};
@@ -299,6 +322,11 @@ class ServantPOA <::CORBA::Object> :
 	public ImplementationPOA <::CORBA::Object>
 {
 public:
+	static ServantPOA <Object>& _object (Bridge <Object>* bridge)
+	{
+		return _implementation (bridge);
+	}
+
 	virtual POA_ptr _default_POA ()
 	{
 		return ObjectBase::_default_POA ();
@@ -331,44 +359,70 @@ public:
 // Static implementation
 
 template <class S>
+class InterfaceStatic <S, Object> :
+	public Skeleton <S, Object>
+{
+	InterfaceStatic ();	// Never be instantiated
+public:
+	static T_ptr <Object> _this ()
+	{
+		return _bridge ();
+	}
+
+	static Bridge <Object>* _bridge ()
+	{
+		return (Bridge <Object>*)&sm_bridge;
+	}
+
+	static S& _object (Bridge <Object>* bridge)
+	{
+		return *(S*)0;
+	}
+
+private:
+	static const typename Bridge <Object>::EPV* sm_bridge;
+};
+
+template <class S>
+const typename Bridge <Object>::EPV* InterfaceStatic<S, Object>::sm_bridge = &sm_epv;
+
+template <class S>
 class ServantStatic <S, Object> :
 	public ImplementationStatic <S, Object>
 {};
 
 // Tied implementation
 
-template <>
-class InterfaceTied <Object> :
-	// public virtual InterfaceVirtual <Derived>, ...
-	public InterfaceTiedBase <Object>
-{
-	typedef Object _PrimaryInterface;
-
-	Object_ptr _this ()
-	{
-		return this;
-	}
-
-protected:
-	InterfaceTied (const Bridge <Object>::EPV& epv) :
-		InterfaceTiedBase <Object> (epv)
-	{}
-
-	InterfaceTied ()
-	{}
-};
-
 template <class S>
-class ServantTied <S, Object> :
-	public AbstractBaseTied <S>,
-	// public ServantTied <S, Derived>, ...
-	public virtual InterfaceTied <Object>,
+class InterfaceTied <S, Object> :
+	public InterfaceTiedBase <Object>,
 	public Skeleton <S, Object>
 {
 public:
-	ServantTied (S& implementation) :
-		AbstractBaseTied (implementation),
-		InterfaceTied <Object> (Skeleton <S, Object>::sm_epv)
+	static S& _object (Bridge <Object>* bridge)
+	{
+		_check_pointer (bridge, sm_epv.interface);
+		return static_cast <S&> (*bridge);
+	}
+
+	Boolean _non_existent () const
+	{
+		return !static_cast <const S&> (*this)._tied_object ();
+	}
+
+protected:
+	InterfaceTied <S, Object> () :
+		InterfaceTiedBase <Object> (sm_epv)
+	{}
+};
+
+template <class T>
+class ServantTied <T, Object> :
+	public ImplementationTied <T, Object>
+{
+public:
+	ServantTied (T* implementation) :
+		InterfaceTiedBase <AbstractBase> (Skeleton <ServantTied <S, Object>, AbstractBase>::sm_epv, implementation)
 	{}
 };
 
