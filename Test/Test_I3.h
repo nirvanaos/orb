@@ -167,8 +167,8 @@ protected:
 template <class S>
 const Bridge <::Test::I3>::EPV Skeleton <S, ::Test::I3>::sm_epv = {
 	{ // interface
-		S::_duplicate <::Test::I2>,
-		S::_release <::Test::I2>
+		S::_duplicate <::Test::I3>,
+		S::_release <::Test::I3>
 	},
 	{ // base
 		S::_wide <Object, ::Test::I3>,
