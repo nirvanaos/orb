@@ -410,20 +410,20 @@ public:
 		return !static_cast <const S&> (*this)._tied_object ();
 	}
 
+	POA_ptr _default_POA () const
+	{
+		return 0;	// TODO: Implement.
+	}
+
+	void _default_POA (POA_ptr);	// TODO: Implement.
+
 protected:
 	InterfaceTied <S, Object> () :
-		InterfaceTiedBase <Object> (sm_epv)
+		InterfaceTiedBase <Object> (sm_epv),
+		m_poa (0)
 	{}
-};
 
-template <class T>
-class ServantTied <T, Object> :
-	public ImplementationTied <T, Object>
-{
-public:
-	ServantTied (T* implementation) :
-		InterfaceTiedBase <AbstractBase> (Skeleton <ServantTied <S, Object>, AbstractBase>::sm_epv, implementation)
-	{}
+	POA_ptr m_poa;
 };
 
 }

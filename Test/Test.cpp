@@ -124,7 +124,31 @@ private:
 	Long m_addendum;
 };
 
-typedef ::testing::Types <Dynamic, Portable, Static, Tied> ServantTypes;
+class TiedDerived :
+	public POA_Test::I1_tie <TiedDerived>,
+	public Instance
+{
+public:
+	TiedDerived (Long addendum) :
+		POA_Test::I1_tie <TiedDerived> (*this),
+		m_addendum (addendum)
+	{}
+
+	Long op1 (Long p1) const
+	{
+		return p1 + m_addendum;
+	}
+
+	static ::Test::I1_ptr incarnate ()
+	{
+		return (new TiedDerived (MAGIC_CONST))->_this ();
+	}
+
+private:
+	Long m_addendum;
+};
+
+typedef ::testing::Types <Dynamic, Portable, Static, Tied, TiedDerived> ServantTypes;
 
 void test_interface (I1_ptr p)
 {

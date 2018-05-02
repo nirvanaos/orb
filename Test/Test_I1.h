@@ -179,9 +179,17 @@ class ServantTied <T, ::Test::I1>	:
 	public ImplementationTied <T, ::Test::I1, ::CORBA::Object>
 {
 public:
-	ServantTied (T* tp, Boolean release = TRUE) :
-		InterfaceTiedBase <AbstractBase> (Skeleton <ServantTied <T, ::Test::I1>, AbstractBase>::sm_epv, tp, release)
+	ServantTied (T& t) :
+		ImplementationTied (&t, FALSE)
 	{}
+	
+	ServantTied (T& t, POA_ptr poa);	// TODO: Implement
+
+	ServantTied (T* tp, Boolean release = TRUE) :
+		ImplementationTied (tp, release)
+	{}
+
+	ServantTied (T* tp, POA_ptr poa, Boolean release = TRUE);	// TODO: Implement
 };
 
 }

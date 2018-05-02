@@ -39,14 +39,9 @@ protected:
 	{}
 
 	Bridge ()
-	{
-#ifdef _DEBUG
-		assert (false);
-		m_epv = 0;
-#endif
-	}
+	{}
 
-private:
+protected:
 	const EPV* m_epv;
 };
 

@@ -66,20 +66,8 @@ public:
 	}
 
 protected:
-	InterfaceTiedBase (const EPV& epv, void* implementation, Boolean release) :
-		Bridge <AbstractBase> (epv),
-		m_implementation (implementation),
-		m_release (release)
+	InterfaceTiedBase ()
 	{}
-
-	InterfaceTiedBase () :
-		m_implementation (0),
-		m_release (FALSE)
-	{
-#ifdef _DEBUG
-		assert (FALSE);
-#endif
-	}
 
 	AbstractBase_ptr _this ()
 	{
@@ -235,6 +223,12 @@ public:
 	}
 
 protected:
+	AbstractBaseTied (T* obj, Boolean release)
+	{
+		m_epv = &sm_epv.interface;
+		_tied_object (obj, release);
+	}
+
 	~AbstractBaseTied ()
 	{
 		if (_is_owner ())
@@ -270,6 +264,11 @@ public:
 	{
 		return InterfaceTiedBase <Primary>::_this ();
 	}
+
+protected:
+	ImplementationTied (T* obj, Boolean release) :
+		AbstractBaseTied (obj, release)
+	{}
 };
 
 }
