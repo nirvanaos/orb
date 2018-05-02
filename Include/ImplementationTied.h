@@ -8,8 +8,6 @@
 namespace PortableServer {
 namespace Nirvana {
 
-using namespace ::CORBA::Nirvana;
-
 // Forward declarations
 
 template <class I> class InterfaceTiedBase;

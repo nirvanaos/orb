@@ -8,8 +8,6 @@
 namespace PortableServer {
 namespace Nirvana {
 
-using namespace ::CORBA::Nirvana;
-
 template <class I> class ServantPOA;
 
 template <>
@@ -96,7 +94,7 @@ public:
 	}
 
 protected:
-	virtual Bridge <::CORBA::Nirvana::Interface>* _find_interface (const Char* id) = 0;
+	virtual Bridge <Interface>* _find_interface (const Char* id) = 0;
 };
 
 template <class Primary, class ... Base> // Base includes only directly derived interfaces
@@ -113,7 +111,7 @@ public:
 		return Bridge <Primary>::_primary_interface ();
 	}
 
-	virtual ::CORBA::Nirvana::Bridge <::CORBA::Nirvana::Interface>* _find_interface (const Char* id)
+	virtual Bridge <Interface>* _find_interface (const Char* id)
 	{
 		return InterfaceImpl <ServantPOA <Primary>, Primary>::_find_interface (*this, id);
 	}

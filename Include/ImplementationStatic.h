@@ -86,7 +86,7 @@ public:
 		return Bridge <Primary>::_primary_interface ();
 	}
 
-	static ::CORBA::Nirvana::Bridge <::CORBA::Nirvana::Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
+	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
 	{
 		return InterfaceStatic <S, Primary>::_find_interface (base, id);
 	}
