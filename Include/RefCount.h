@@ -10,7 +10,6 @@
 #endif
 
 namespace CORBA {
-
 namespace Nirvana {
 
 class RefCount

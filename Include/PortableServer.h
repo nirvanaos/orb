@@ -5,7 +5,7 @@
 
 namespace PortableServer {
 
-typedef Nirvana::ServantPOA <::CORBA::Object> ServantBase;
+typedef ::CORBA::Nirvana::ServantPOA <::CORBA::Object> ServantBase;
 
 }
 

@@ -71,13 +71,7 @@ public:
 	inline Object_ptr _to_object ();
 };
 
-}
-
-namespace PortableServer {
 namespace Nirvana {
-
-using namespace CORBA;
-using namespace CORBA::Nirvana;
 
 extern void _check_pointer (const void* p);
 extern void _check_pointer (const Bridge <Interface>* obj, const Bridge <Interface>::EPV& epv);

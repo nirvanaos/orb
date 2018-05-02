@@ -35,7 +35,7 @@ const Long MAGIC_CONST = 1963;
 // Dynamic implementation
 
 class Dynamic :
-	public ::PortableServer::Nirvana::Servant <Dynamic, ::Test::I1>,
+	public ::CORBA::Nirvana::Servant <Dynamic, ::Test::I1>,
 	public Instance
 {
 public:
@@ -85,7 +85,7 @@ private:
 // Static implementation
 
 class Static :
-	public ::PortableServer::Nirvana::ServantStatic <Static, ::Test::I1>,
+	public ::CORBA::Nirvana::ServantStatic <Static, ::Test::I1>,
 	public Instance
 {
 public:

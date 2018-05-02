@@ -5,7 +5,7 @@
 
 #include "AbstractBase.h"
 
-namespace PortableServer {
+namespace CORBA {
 namespace Nirvana {
 
 template <class S, class I> class ServantStatic;

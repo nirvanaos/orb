@@ -5,7 +5,7 @@
 
 #include "AbstractBase.h"
 
-namespace PortableServer {
+namespace CORBA {
 namespace Nirvana {
 
 template <class S, class I> class Servant;
@@ -96,7 +96,7 @@ public:
 		return Bridge <Primary>::_primary_interface ();
 	}
 
-	static ::CORBA::Nirvana::Bridge <::CORBA::Nirvana::Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
+	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
 	{
 		return InterfaceImpl <S, Primary>::_find_interface (base, id);
 	}

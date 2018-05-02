@@ -17,7 +17,6 @@
     </ClCompile>
     <ClCompile Include="..\Interface.cpp" />
     <ClCompile Include="..\Object.cpp" />
-    <ClCompile Include="..\PortableServer.cpp" />
     <ClCompile Include="..\RepositoryId.cpp" />
   </ItemGroup>
   <ItemGroup>

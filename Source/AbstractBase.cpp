@@ -1,6 +1,6 @@
 #include "AbstractBase.h"
 
-namespace PortableServer {
+namespace CORBA {
 namespace Nirvana {
 
 void _check_pointer (const void* p)

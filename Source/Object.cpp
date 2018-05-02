@@ -1,6 +1,6 @@
 #include "Object.h"
 
-namespace PortableServer {
+namespace CORBA {
 namespace Nirvana {
 
 Bridge <ImplementationDef>* ObjectBase::__get_implementation (Bridge <Object>* obj, Environment* env)

@@ -5,7 +5,7 @@
 
 #include "AbstractBase.h"
 
-namespace PortableServer {
+namespace CORBA {
 namespace Nirvana {
 
 // Forward declarations
@@ -253,7 +253,7 @@ public:
 		return Bridge <Primary>::_primary_interface ();
 	}
 
-	virtual ::CORBA::Nirvana::Bridge <::CORBA::Nirvana::Interface>* _find_interface (const Char* id)
+	virtual Bridge <Interface>* _find_interface (const Char* id)
 	{
 		return Skeleton <ServantPOA <Primary>, Primary>::_find_interface (*this, id);
 	}

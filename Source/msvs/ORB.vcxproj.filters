@@ -24,9 +24,6 @@
     <ClCompile Include="..\Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\PortableServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\RepositoryId.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

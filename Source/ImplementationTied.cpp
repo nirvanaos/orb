@@ -21,14 +21,6 @@ public:
 	}
 };
 
-}
-}
-
-namespace PortableServer {
-namespace Nirvana {
-
-using namespace ::CORBA::Nirvana;
-
 InterfaceTiedBase <AbstractBase>& InterfaceTiedBase <AbstractBase>::_get_base (Bridge <Interface>* itf)
 {
 	_check_pointer (itf);

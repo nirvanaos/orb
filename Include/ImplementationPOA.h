@@ -5,7 +5,7 @@
 
 #include "Implementation.h"
 
-namespace PortableServer {
+namespace CORBA {
 namespace Nirvana {
 
 template <class I> class ServantPOA;

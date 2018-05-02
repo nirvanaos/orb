@@ -6,6 +6,13 @@
 #include "ImplementationPOA.h"
 #include "ImplementationTied.h"
 
+namespace PortableServer {
+
+class POA;
+//typedef CORBA::Nirvana::T_ptr <POA> POA_ptr;
+typedef CORBA::Nirvana::Bridge<POA>* POA_ptr; // Not defined yet
+}
+
 namespace CORBA {
 
 class ImplementationDef;
@@ -17,6 +24,8 @@ class InterfaceDef;
 typedef Nirvana::Bridge <InterfaceDef>* InterfaceDef_ptr; // Not defined yet
 
 namespace Nirvana {
+
+using PortableServer::POA_ptr;
 
 template <>
 class Bridge <Object> :
@@ -168,20 +177,6 @@ T_ptr <I> ClientInterface <I>::_narrow (T_ptr <Object> obj)
 {
 	return _duplicate (static_cast <Bridge <I>*> (obj->_find_interface (Bridge <I>::_primary_interface ())));
 }
-
-}
-}
-
-namespace PortableServer {
-
-class POA;
-//typedef CORBA::Nirvana::T_ptr <POA> POA_ptr;
-typedef CORBA::Nirvana::Bridge<POA>* POA_ptr; // Not defined yet
-
-namespace Nirvana {
-
-using namespace CORBA;
-using namespace CORBA::Nirvana;
 
 // Default implementation of Object interface
 class ObjectBase

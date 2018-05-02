@@ -4,7 +4,7 @@
 namespace Test {
 
 class I1;
-typedef CORBA::Nirvana::T_ptr <I1> I1_ptr;
+typedef ::CORBA::Nirvana::T_ptr <I1> I1_ptr;
 
 }
 
@@ -12,7 +12,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <>
-class Bridge <Test::I1> :
+class Bridge <::Test::I1> :
 	public Bridge <Interface>
 {
 public:
@@ -102,7 +102,7 @@ public:
 
 }
 
-namespace PortableServer {
+namespace CORBA {
 namespace Nirvana {
 
 template <class S>
@@ -197,9 +197,9 @@ public:
 
 namespace POA_Test {
 
-typedef PortableServer::Nirvana::ServantPOA <::Test::I1> I1;
+typedef ::CORBA::Nirvana::ServantPOA <::Test::I1> I1;
 
 template <class T>
-using I1_tie = PortableServer::Nirvana::ServantTied <T, ::Test::I1>;
+using I1_tie = ::CORBA::Nirvana::ServantTied <T, ::Test::I1>;
 
 }
