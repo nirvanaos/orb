@@ -11,8 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\googletest\googletest\src\gtest-all.cc" />
-    <ClCompile Include="..\..\..\googletest\googletest\src\gtest_main.cc" />
+    <ClCompile Include="..\..\..\googletest\googletest\src\gtest-all.cc">
+      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ConformanceMode>
+      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ConformanceMode>
+    </ClCompile>
+    <ClCompile Include="..\..\..\googletest\googletest\src\gtest_main.cc">
+      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ConformanceMode>
+      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ConformanceMode>
+    </ClCompile>
     <ClCompile Include="..\Test.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +81,8 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\Include;..\..\..\googletest\googletest;..\..\..\googletest\googletest\include;</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -89,6 +101,8 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\Include;..\..\..\googletest\googletest;..\..\..\googletest\googletest\include;</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

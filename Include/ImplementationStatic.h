@@ -31,7 +31,7 @@ private:
 };
 
 template <class S, class I>
-const typename Bridge <I>::EPV* InterfaceStatic<S, I>::sm_bridge = &sm_epv;
+const typename Bridge <I>::EPV* InterfaceStatic<S, I>::sm_bridge = &InterfaceStatic<S, I>::sm_epv;
 
 class LifeCycleStatic
 {

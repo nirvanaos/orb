@@ -79,7 +79,7 @@ template <class T>
 Long Client <T, ::Test::I3>::op3 (Long p1)
 {
 	Environment _env;
-	Bridge <::Test::I3>& _b = _bridge ();
+	Bridge <::Test::I3>& _b = ClientBase <T, ::Test::I3>::_bridge ();
 	Long _ret = (_b._epv ().epv.op3) (&_b, p1, &_env);
 	_env.check ();
 	return _ret;
@@ -212,7 +212,7 @@ class ServantTied <T, ::Test::I3> :
 {
 public:
 	ServantTied (T* tp, Boolean release) :
-		ImplementationTied (tp, release)
+		ImplementationTied <T, ::Test::I3, ::Test::I2, ::Test::I1, ::CORBA::Object> (tp, release)
 	{}
 };
 
@@ -229,13 +229,13 @@ class I3_tie :
 {
 public:
 	I3_tie (T& t) :
-		ServantTied <T, ::Test::I3> (&t, FALSE)
+		::CORBA::Nirvana::ServantTied <T, ::Test::I3> (&t, FALSE)
 	{}
 
 	I3_tie (T& t, ::PortableServer::POA_ptr poa);	// Generate only if Object is derived
 
 	I3_tie (T* tp, ::CORBA::Boolean release = TRUE) :
-		ServantTied <T, ::Test::I3> (tp, release)
+		::CORBA::Nirvana::ServantTied <T, ::Test::I3> (tp, release)
 	{}
 
 	I3_tie (T* tp, ::PortableServer::POA_ptr poa, ::CORBA::Boolean release = TRUE);	// Generate only if Object is derived

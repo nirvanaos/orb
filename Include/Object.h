@@ -98,7 +98,7 @@ template <class T>
 ImplementationDef_ptr Client <T, Object>::_get_implementation ()
 {
 	Environment _env;
-	Bridge <Object>& _b = _bridge ();
+	Bridge <Object>& _b = ClientBase <T, Object>::_bridge ();
 	ImplementationDef_ptr _ret ((_b._epv ().epv.get_implementation) (&_b, &_env));
 	_env.check ();
 	return _ret;
@@ -108,7 +108,7 @@ template <class T>
 InterfaceDef_ptr Client <T, Object>::_get_interface ()
 {
 	Environment _env;
-	Bridge <Object>& _b = _bridge ();
+	Bridge <Object>& _b = ClientBase <T, Object>::_bridge ();
 	InterfaceDef_ptr _ret ((_b._epv ().epv.get_interface) (&_b, &_env));
 	_env.check ();
 	return _ret;
@@ -118,7 +118,7 @@ template <class T>
 Boolean Client <T, Object>::_is_a (const Char* type_id)
 {
 	Environment _env;
-	Bridge <Object>& _b = _bridge ();
+	Bridge <Object>& _b = ClientBase <T, Object>::_bridge ();
 	Boolean _ret = (_b._epv ().epv.is_a) (&_b, type_id, &_env);
 	_env.check ();
 	return _ret;
@@ -128,7 +128,7 @@ template <class T>
 Boolean Client <T, Object>::_non_existent ()
 {
 	Environment _env;
-	Bridge <Object>& _b = _bridge ();
+	Bridge <Object>& _b = ClientBase <T, Object>::_bridge ();
 	Boolean _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
 	_env.check ();
 	return _ret;
@@ -138,7 +138,7 @@ template <class T>
 Boolean Client <T, Object>::_is_equivalent (Object_ptr other_object)
 {
 	Environment _env;
-	Bridge <Object>& _b = _bridge ();
+	Bridge <Object>& _b = ClientBase <T, Object>::_bridge ();
 	Boolean _ret = (_b._epv ().epv.is_equivalent) (&_b, other_object, &_env);
 	_env.check ();
 	return _ret;
@@ -295,13 +295,13 @@ public:
 
 	static S& _object (Bridge <Object>* bridge)
 	{
-		_check_pointer (bridge, sm_epv.interface);
+		_check_pointer (bridge, Skeleton <S, Object>::sm_epv.interface);
 		return static_cast <S&> (*bridge);
 	}
 
 protected:
 	InterfaceImpl () :
-		Bridge <Object> (sm_epv)
+		Bridge <Object> (Skeleton <S, Object>::sm_epv)
 	{}
 };
 
@@ -379,7 +379,7 @@ private:
 };
 
 template <class S>
-const typename Bridge <Object>::EPV* InterfaceStatic<S, Object>::sm_bridge = &sm_epv;
+const typename Bridge <Object>::EPV* InterfaceStatic<S, Object>::sm_bridge = &InterfaceStatic<S, Object>::sm_epv;
 
 template <class S>
 class ServantStatic <S, Object> :
@@ -396,7 +396,7 @@ class InterfaceTied <S, Object> :
 public:
 	static S& _object (Bridge <Object>* bridge)
 	{
-		_check_pointer (bridge, sm_epv.interface);
+		_check_pointer (bridge, Skeleton <S, Object>::sm_epv.interface);
 		return static_cast <S&> (*bridge);
 	}
 
@@ -414,7 +414,7 @@ public:
 
 protected:
 	InterfaceTied <S, Object> () :
-		InterfaceTiedBase <Object> (sm_epv),
+		InterfaceTiedBase <Object> (Skeleton <S, Object>::sm_epv),
 		m_poa (0)
 	{}
 

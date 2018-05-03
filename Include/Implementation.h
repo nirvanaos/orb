@@ -23,7 +23,7 @@ public:
 
 protected:
 	InterfaceImpl () :
-		Bridge <I> (sm_epv)
+		Bridge <I> (Skeleton <S, I>::sm_epv)
 	{}
 };
 

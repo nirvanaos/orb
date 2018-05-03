@@ -54,7 +54,7 @@ template <class T>
 Bridge <Interface>* Client <T, AbstractBase>::_find_interface (const Char* type_id)
 {
 	Environment env;
-	Bridge <AbstractBase>& bridge = _bridge ();
+	Bridge <AbstractBase>& bridge = ClientBase <T, AbstractBase>::_bridge ();
 	Bridge <Interface>* ret = (bridge._epv ().epv.find_interface) (&bridge, type_id, &env);
 	env.check ();
 	return ret;
@@ -104,8 +104,8 @@ protected:
 template <class S>
 const Bridge <AbstractBase>::EPV Skeleton <S, AbstractBase>::sm_epv = {
 	{	// interface
-		S::_duplicate <AbstractBase>,
-		S::_release <AbstractBase>
+		S::template _duplicate <AbstractBase>,
+		S::template _release <AbstractBase>
 	},
 	{	// epv
 		S::__find_interface
