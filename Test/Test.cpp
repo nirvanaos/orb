@@ -364,6 +364,41 @@ void test_performance (I1_ptr p)
 
 namespace unittests {
 
+class Test :
+	public ::testing::Test
+{
+protected:
+	Test ()
+	{}
+
+	virtual ~Test ()
+	{}
+
+	// If the constructor and destructor are not enough for setting up
+	// and cleaning up each test, you can define the following methods:
+
+	virtual void SetUp ()
+	{
+		// Code here will be called immediately after the constructor (right
+		// before each test).
+	}
+
+	virtual void TearDown ()
+	{
+		// Code here will be called immediately after each test (right
+		// before the destructor).
+	}
+};
+
+TEST (Test, RepositoryId)
+{
+	EXPECT_TRUE (Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/type:1.0"));
+	EXPECT_TRUE (Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.1", "IDL:aaa/bbb/type:1.0"));
+	EXPECT_FALSE (Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/type:1.1"));
+	EXPECT_FALSE (Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/other:1.0"));
+	EXPECT_FALSE (Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "aaa/bbb/type:1.0"));
+}
+
 // The fixture for testing simple interface.
 
 typedef ::testing::Types <DynamicI1, PortableI1, StaticI1, TiedI1, TiedDerivedI1> ServantTypesI1;
