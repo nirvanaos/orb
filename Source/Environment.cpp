@@ -7,7 +7,7 @@ namespace Nirvana {
 void EnvironmentBridge::set_exception (const Exception& e)
 {
 	if (this) // Client can pass NULL environment in special cases.
-		(m_epv->set_exception) (this, e.__code (), e._name (), e.__data ());
+		(m_epv->set_exception) (this, e.__code (), e._rep_id (), e.__data ());
 }
 
 void EnvironmentBridge::set_unknown_exception ()

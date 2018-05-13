@@ -31,6 +31,7 @@ public:
 		struct
 		{
 			Long (*op1) (Bridge <::Test::I1>*, Long p1, EnvironmentBridge*);
+			void (*throw_NO_IMPLEMENT) (Bridge <::Test::I1>*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -68,6 +69,7 @@ class Client <T, ::Test::I1> :
 {
 public:
 	Long op1 (Long p1);
+	void throw_NO_IMPLEMENT ();
 };
 
 template <class T>
@@ -78,6 +80,15 @@ Long Client <T, ::Test::I1>::op1 (Long p1)
 	Long _ret = (_b._epv ().epv.op1) (&_b, p1, &_env);
 	_env.check ();
 	return _ret;
+}
+
+template <class T>
+void Client <T, ::Test::I1>::throw_NO_IMPLEMENT ()
+{
+	Environment _env;
+	Bridge <::Test::I1>& _b = ClientBase <T, ::Test::I1>::_bridge ();
+	(_b._epv ().epv.throw_NO_IMPLEMENT) (&_b, &_env);
+	_env.check ();
 }
 
 }
@@ -134,6 +145,17 @@ protected:
 		}
 		return 0;
 	}
+
+	static void _throw_NO_IMPLEMENT (Bridge <::Test::I1>* _b, EnvironmentBridge* _env)
+	{
+		try {
+			S::_implementation (_b).throw_NO_IMPLEMENT ();
+		} catch (const Exception& e) {
+			_env->set_exception (e);
+		} catch (...) {
+			_env->set_unknown_exception ();
+		}
+	}
 };
 
 template <class S>
@@ -146,7 +168,8 @@ const Bridge <::Test::I1>::EPV Skeleton <S, ::Test::I1>::sm_epv = {
 		S::_wide <Object, ::Test::I1>
 	},
 	{ // epv
-		S::_op1
+		S::_op1,
+		S::_throw_NO_IMPLEMENT
 	}
 };
 
@@ -165,6 +188,7 @@ class ServantPOA <::Test::I1> :
 {
 public:
 	virtual Long op1 (Long p1) = 0;
+	virtual void throw_NO_IMPLEMENT () = 0;
 };
 
 // Static implementation

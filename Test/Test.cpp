@@ -48,6 +48,11 @@ public:
 		return p1 + m_addendum;
 	}
 
+	static void throw_NO_IMPLEMENT ()
+	{
+		throw NO_IMPLEMENT ();
+	}
+
 	static ::Test::I1_ptr incarnate ()
 	{
 		return (new DynamicI1 (MAGIC_CONST))->_this ();
@@ -69,6 +74,11 @@ public:
 	Long op1 (Long p1) const
 	{
 		return p1 + m_addendum;
+	}
+
+	static void throw_NO_IMPLEMENT ()
+	{
+		throw NO_IMPLEMENT ();
 	}
 
 	Long op2 (Long p1) const
@@ -106,6 +116,11 @@ public:
 		return p1 + m_addendum;
 	}
 
+	virtual void throw_NO_IMPLEMENT ()
+	{
+		throw NO_IMPLEMENT ();
+	}
+
 	static ::Test::I1_ptr incarnate ()
 	{
 		return (new PortableI1 (MAGIC_CONST))->_this ();
@@ -127,6 +142,11 @@ public:
 	virtual Long op1 (Long p1)
 	{
 		return p1 + m_addendum;
+	}
+
+	virtual void throw_NO_IMPLEMENT ()
+	{
+		throw NO_IMPLEMENT ();
 	}
 
 	virtual Long op2 (Long p1)
@@ -160,6 +180,11 @@ public:
 		return p1 + MAGIC_CONST;
 	}
 
+	static void throw_NO_IMPLEMENT ()
+	{
+		throw NO_IMPLEMENT ();
+	}
+
 	static ::Test::I1_ptr incarnate ()
 	{
 		return _this ();
@@ -174,6 +199,11 @@ public:
 	static Long op1 (Long p1)
 	{
 		return p1 + MAGIC_CONST;
+	}
+
+	static void throw_NO_IMPLEMENT ()
+	{
+		throw NO_IMPLEMENT ();
 	}
 
 	static Long op2 (Long p1)
@@ -207,6 +237,11 @@ public:
 		return p1 + m_addendum;
 	}
 
+	void throw_NO_IMPLEMENT ()
+	{
+		throw NO_IMPLEMENT ();
+	}
+
 	static ::Test::I1_ptr incarnate ()
 	{
 		return (new POA_Test::I1_tie <TiedI1> (new TiedI1 (MAGIC_CONST)))->_this ();
@@ -227,6 +262,11 @@ public:
 	Long op1 (Long p1) const
 	{
 		return p1 + m_addendum;
+	}
+
+	void throw_NO_IMPLEMENT ()
+	{
+		throw NO_IMPLEMENT ();
 	}
 
 	Long op2 (Long p1) const
@@ -366,6 +406,13 @@ TYPED_TEST (TestI1, Inteface)
 TYPED_TEST (TestI1, Performance)
 {
 	test_performance (TypeParam::incarnate ());
+}
+
+TYPED_TEST (TestI1, Exception)
+{
+	I1_ptr p = TypeParam::incarnate ();
+	EXPECT_THROW (p->throw_NO_IMPLEMENT (), NO_IMPLEMENT);
+	release (p);
 }
 
 // The fixture for testing complex interface.
