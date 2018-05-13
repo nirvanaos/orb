@@ -1,5 +1,6 @@
+// Nirvana project
+// Object Request Broker
 // Static interface implementation
-
 #ifndef NIRVANA_ORB_IMPLEMENTATIONSTATIC_H_
 #define NIRVANA_ORB_IMPLEMENTATIONSTATIC_H_
 
@@ -37,7 +38,7 @@ class LifeCycleStatic
 {
 public:
 	template <class I>
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, Environment*)
+	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, EnvironmentBridge*)
 	{
 		return itf;
 	}
@@ -66,7 +67,7 @@ public:
 	}
 
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>*, Environment*)
+	static Bridge <Base>* _wide (Bridge <Derived>*, EnvironmentBridge*)
 	{
 		return InterfaceStatic <S, Base>::_bridge ();
 	}

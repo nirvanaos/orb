@@ -12,6 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\AbstractBase.cpp" />
+    <ClCompile Include="..\Environment.cpp" />
+    <ClCompile Include="..\Exception.cpp" />
     <ClCompile Include="..\ImplementationTied.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>

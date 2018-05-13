@@ -21,7 +21,7 @@ bool RepositoryId::compatible (const Char* current, const Char* requested)
 			if (minor - current == r_minor - requested && equal (current, minor, requested))
 				return minor_number (minor) >= minor_number (r_minor);
 			else
-				return false;	// Major versions differ
+				return false;	// Type or major versions differ
 		} else
 			return false;
 	}

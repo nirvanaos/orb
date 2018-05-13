@@ -1,5 +1,6 @@
+// Nirvana project
+// Object Request Broker
 // Standard Nirvana interface implementation
-
 #ifndef NIRVANA_ORB_IMPLEMENTATION_H_
 #define NIRVANA_ORB_IMPLEMENTATION_H_
 
@@ -41,7 +42,7 @@ public:
 	}
 
 	template <class I>
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, Environment* env)
+	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
 	{
 		try {
 			S::_implementation (static_cast <Bridge <I>*> (itf))._add_ref ();
@@ -69,7 +70,7 @@ public:
 	}
 
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, Environment* env)
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, EnvironmentBridge* env)
 	{
 		try {
 			return static_cast <Bridge <Base>*> (&S::_implementation (derived));

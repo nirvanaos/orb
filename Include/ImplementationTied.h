@@ -1,5 +1,6 @@
+// Nirvana project
+// Object Request Broker
 // Tied interface implementation
-
 #ifndef NIRVANA_ORB_IMPLEMENTATIONTIED_H_
 #define NIRVANA_ORB_IMPLEMENTATIONTIED_H_
 
@@ -24,10 +25,10 @@ class InterfaceTiedBase <AbstractBase> :
 {
 public:
 	template <class I>
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, Environment* env);
+	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, EnvironmentBridge* env);
 
 	template <>
-	static Bridge <Interface>* _duplicate <AbstractBase> (Bridge <Interface>* itf, Environment* env);
+	static Bridge <Interface>* _duplicate <AbstractBase> (Bridge <Interface>* itf, EnvironmentBridge* env);
 
 	template <class I>
 	static void _release (Bridge <Interface>* itf);
@@ -87,7 +88,7 @@ private:
 };
 
 template <class I>
-Bridge <Interface>* InterfaceTiedBase <AbstractBase>::_duplicate (Bridge <Interface>* itf, Environment* env)
+Bridge <Interface>* InterfaceTiedBase <AbstractBase>::_duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
 {
 	try {
 		_get_base (itf)._add_ref ();
@@ -100,7 +101,7 @@ Bridge <Interface>* InterfaceTiedBase <AbstractBase>::_duplicate (Bridge <Interf
 }
 
 template <>
-Bridge <Interface>* InterfaceTiedBase <AbstractBase>::_duplicate <AbstractBase> (Bridge <Interface>* itf, Environment* env)
+Bridge <Interface>* InterfaceTiedBase <AbstractBase>::_duplicate <AbstractBase> (Bridge <Interface>* itf, EnvironmentBridge* env)
 {
 	try {
 		_get_base (static_cast <Bridge <AbstractBase>*> (itf))._add_ref ();
@@ -186,7 +187,7 @@ public:
 	}
 
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* itf, Environment* env)
+	static Bridge <Base>* _wide (Bridge <Derived>* itf, EnvironmentBridge* env)
 	{
 		try {
 			_check_pointer (itf, Skeleton <S, Derived>::sm_epv.interface);
@@ -199,7 +200,7 @@ public:
 		return 0;
 	}
 
-	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, Environment* env)
+	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
 	{
 		try {
 			_check_pointer (base, Skeleton <S, AbstractBase>::sm_epv.interface);

@@ -3,6 +3,8 @@
 
 #include "BasicTypes.h"
 
+#define CORBA_REPOSITORY_ID(t) "IDL:omg.org/CORBA/" #t ":1.0"
+
 namespace CORBA {
 namespace Nirvana {
 

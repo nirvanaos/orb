@@ -1,34 +1,67 @@
-#pragma once
+#ifndef NIRVANA_ORB_ENVIRONMENT_H_
+#define NIRVANA_ORB_ENVIRONMENT_H_
+
 #include "Exception.h"
 
 namespace CORBA
 {
 
-class Environment
+namespace Nirvana {
+
+class EnvironmentBridge
 {
 public:
-	Environment () :
-		m_code (0)
+	void set_exception (const Exception& e);
+	void set_unknown_exception ();
+
+protected:
+	struct EPV
+	{
+		void (*set_exception) (EnvironmentBridge*, Long code, const char* rep_id, const void* param);
+	};
+
+	EnvironmentBridge (const EPV& epv) :
+		m_epv (&epv)
 	{}
 
-	void set_exception (const Exception& e)
-	{
-		if (this) // Client can pass NULL environment in special cases.
-			m_code = e.code ();
-	}
-
-	void set_unknown_exception ()
-	{
-		m_code = -1;
-	}
-
-	void check () const
-	{
-		if (m_code)
-			throw Exception (m_code);
-	}
 private:
-	int m_code;
+	const EPV* m_epv;
 };
 
 }
+
+class Environment :
+	public Nirvana::EnvironmentBridge
+{
+public:
+	Environment (const Nirvana::ExceptionEntry* const* exceptions = 0);
+	~Environment ();
+
+	void exception (Exception* e);
+
+	Exception* exception () const
+	{
+		return m_exception;
+	}
+
+	void clear ();
+
+	void check () const
+	{
+		if (m_exception)
+			m_exception->_raise ();
+	}
+
+private:
+	static void __set_exception (EnvironmentBridge* bridge, Long code, const char* rep_id, const void* param);
+
+private:
+	const Nirvana::ExceptionEntry* const* m_user_exceptions;
+	Exception* m_exception;
+
+	static const EPV sm_epv;
+};
+
+}
+
+#endif

@@ -23,7 +23,7 @@ public:
 
 		struct
 		{
-			Bridge <Interface>* (*find_interface) (Bridge <AbstractBase>*, const Char*, Environment*);
+			Bridge <Interface>* (*find_interface) (Bridge <AbstractBase>*, const Char*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -86,7 +86,7 @@ public:
 	static const typename Bridge <AbstractBase>::EPV sm_epv;
 
 protected:
-	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, Environment* env)
+	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
 	{
 		try {
 			_check_pointer (base, sm_epv.interface);

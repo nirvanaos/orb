@@ -24,13 +24,13 @@ public:
 
 		struct
 		{
-			Bridge <Object>* (*CORBA_Object) (Bridge <::Test::I2>*, Environment*);
+			Bridge <Object>* (*CORBA_Object) (Bridge <::Test::I2>*, EnvironmentBridge*);
 		}
 		base;
 
 		struct
 		{
-			Long (*op2) (Bridge <::Test::I2>*, Long p1, Environment*);
+			Long (*op2) (Bridge <::Test::I2>*, Long p1, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -123,7 +123,7 @@ public:
 	}
 
 protected:
-	static Long _op2 (Bridge <::Test::I2>* _b, Long p1, Environment* _env)
+	static Long _op2 (Bridge <::Test::I2>* _b, Long p1, EnvironmentBridge* _env)
 	{
 		try {
 			return S::_implementation (_b).op2 (p1);

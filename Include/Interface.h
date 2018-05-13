@@ -1,3 +1,5 @@
+// Nirvana project
+// Object Request Broker
 #ifndef NIRVANA_ORB_INTERFACE_H_
 #define NIRVANA_ORB_INTERFACE_H_
 
@@ -23,7 +25,7 @@ class Bridge <Interface>
 public:
 	struct EPV
 	{
-		Bridge <Interface>* (*duplicate) (Bridge <Interface>*, Environment*);
+		Bridge <Interface>* (*duplicate) (Bridge <Interface>*, EnvironmentBridge*);
 		void (*release) (Bridge <Interface>*);
 	};
 

@@ -1,5 +1,6 @@
+// Nirvana project
+// Object Request Broker
 // POA Nirvana interface implementation
-
 #ifndef NIRVANA_ORB_IMPLEMENTATIONPOA_H_
 #define NIRVANA_ORB_IMPLEMENTATIONPOA_H_
 
@@ -24,7 +25,7 @@ public:
 	}
 
 	template <class I>
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, Environment* env)
+	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
 	{
 		try {
 			_implementation (static_cast <Bridge <I>*> (itf))._add_ref ();
@@ -52,7 +53,7 @@ public:
 	}
 
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, Environment* env)
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, EnvironmentBridge* env)
 	{
 		try {
 			return static_cast <Bridge <Base>*> (&_implementation (derived));
@@ -64,7 +65,7 @@ public:
 		return 0;
 	}
 
-	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, Environment* env)
+	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
 	{
 		try {
 			_check_pointer (base, sm_epv.interface);

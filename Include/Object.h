@@ -1,3 +1,6 @@
+// Nirvana project
+// Object Request Broker
+// CORBA::Object interface
 #ifndef NIRVANA_ORB_OBJECT_H_
 #define NIRVANA_ORB_OBJECT_H_
 
@@ -38,17 +41,17 @@ public:
 
 		struct
 		{
-			Bridge <AbstractBase>* (*AbstractBase) (Bridge <Object>*, Environment*);
+			Bridge <AbstractBase>* (*AbstractBase) (Bridge <Object>*, EnvironmentBridge*);
 		}
 		base;
 
 		struct
 		{
-			Bridge <ImplementationDef>* (*get_implementation) (Bridge <Object>*, Environment*);
-			Bridge <InterfaceDef>* (*get_interface) (Bridge <Object>*, Environment*);
-			Boolean (*is_a) (Bridge <Object>*, const Char* type_id, Environment*);
-			Boolean (*non_existent) (Bridge <Object>*, Environment*);
-			Boolean (*is_equivalent) (Bridge <Object>*, Bridge <Object>*, Environment*);
+			Bridge <ImplementationDef>* (*get_implementation) (Bridge <Object>*, EnvironmentBridge*);
+			Bridge <InterfaceDef>* (*get_interface) (Bridge <Object>*, EnvironmentBridge*);
+			Boolean (*is_a) (Bridge <Object>*, const Char* type_id, EnvironmentBridge*);
+			Boolean (*non_existent) (Bridge <Object>*, EnvironmentBridge*);
+			Boolean (*is_equivalent) (Bridge <Object>*, Bridge <Object>*, EnvironmentBridge*);
 			// TODO: Other Object operations shall be here...
 		}
 		epv;
@@ -61,7 +64,7 @@ public:
 
 	static const Char* _primary_interface ()
 	{
-		return "IDL:omg.org/CORBA/Object:1.0";
+		return CORBA_REPOSITORY_ID (Object);
 	}
 
 	static Boolean ___is_a (const Char* type_id)
@@ -187,8 +190,8 @@ public:
 		return 0;
 	}
 
-	static Bridge <ImplementationDef>* __get_implementation (Bridge <Object>* obj, Environment* env);
-	static Boolean __is_equivalent (Bridge <Object>* obj, Bridge <Object>* other_object, Environment* env);
+	static Bridge <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env);
+	static Boolean __is_equivalent (Bridge <Object>* obj, Bridge <Object>* other_object, EnvironmentBridge* env);
 
 	static Bridge <InterfaceDef>* _get_interface (const Char* type_id)
 	{
@@ -219,7 +222,7 @@ public:
 	}
 
 protected:
-	static Bridge <InterfaceDef>* __get_interface (Bridge <Object>* obj, Environment* env)
+	static Bridge <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_object (obj)._get_interface ();
@@ -236,7 +239,7 @@ protected:
 		return ObjectBase::_get_interface (S::_primary_interface ());
 	}
 
-	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, Environment* env)
+	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
 			_check_pointer (type_id);
@@ -249,7 +252,7 @@ protected:
 		return 0;
 	}
 
-	static Boolean __non_existent (Bridge <Object>* obj, Environment* env)
+	static Boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_object (obj)._non_existent ();
@@ -337,7 +340,7 @@ public:
 		return ObjectBase::_non_existent ();
 	}
 
-	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, Environment* env)
+	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
 			_check_pointer (type_id);
