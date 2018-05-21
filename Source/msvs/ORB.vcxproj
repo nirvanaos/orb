@@ -41,6 +41,7 @@
     <ClInclude Include="..\..\Include\ImplementationTied.h" />
     <ClInclude Include="..\..\Include\Interface.h" />
     <ClInclude Include="..\..\Include\Object.h" />
+    <ClInclude Include="..\..\Include\ORB.h" />
     <ClInclude Include="..\..\Include\PortableServer.h" />
     <ClInclude Include="..\..\Include\RefCount.h" />
     <ClInclude Include="..\..\Include\RepositoryId.h" />

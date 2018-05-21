@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_TEST_I2_H_
 #define NIRVANA_ORB_TEST_I2_H_
 
-#include "PortableServer.h"
+#include <ORB.h>
 
 namespace Test {
 

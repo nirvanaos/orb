@@ -4,6 +4,8 @@
 #ifndef NIRVANA_ORB_BASICTYPES_H_
 #define NIRVANA_ORB_BASICTYPES_H_
 
+#include <stdint.h>
+
 namespace CORBA {
 
 // Primitive types
@@ -11,13 +13,13 @@ namespace CORBA {
 typedef bool Boolean;
 typedef char Char;
 typedef wchar_t WChar;
-typedef unsigned char Octet;
-typedef short Short;
-typedef unsigned short UShort;
-typedef long Long;
-typedef __int64 LongLong;
-typedef unsigned long ULong;
-typedef unsigned __int64 ULongLong;
+typedef uint8_t Octet;
+typedef int16_t Short;
+typedef uint16_t UShort;
+typedef int32_t Long;
+typedef int64_t LongLong;
+typedef uint32_t ULong;
+typedef uint64_t ULongLong;
 typedef float Float;
 typedef double Double;
 typedef long double LongDouble;
@@ -44,6 +46,15 @@ typedef Long Flags;
 #ifndef TRUE
 #define TRUE true
 #endif
+
+// Native types
+namespace Nirvana {
+
+typedef void* Pointer;
+typedef size_t UWord;
+typedef ptrdiff_t Word;
+
+}
     
 } // namespace CORBA
 
