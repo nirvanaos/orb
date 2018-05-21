@@ -41,7 +41,7 @@ public:
 
 		struct
 		{
-			Bridge <AbstractBase>* (*AbstractBase) (Bridge <Object>*, EnvironmentBridge*);
+			Bridge <AbstractBase>* (*CORBA_AbstractBase) (Bridge <Object>*, EnvironmentBridge*);
 		}
 		base;
 
@@ -161,7 +161,7 @@ public:
 	operator AbstractBase& ()
 	{
 		Environment _env;
-		AbstractBase* _ret = static_cast <AbstractBase*> ((_epv ().base.AbstractBase) (this, &_env));
+		AbstractBase* _ret = static_cast <AbstractBase*> ((_epv ().base.CORBA_AbstractBase) (this, &_env));
 		_env.check ();
 		assert (_ret);
 		return *_ret;
