@@ -390,7 +390,7 @@ protected:
 	}
 };
 
-TEST (Test, RepositoryId)
+TEST_F (Test, RepositoryId)
 {
 	EXPECT_TRUE (Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/type:1.0"));
 	EXPECT_TRUE (Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.1", "IDL:aaa/bbb/type:1.0"));
