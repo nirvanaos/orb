@@ -14,7 +14,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <>
-class Bridge <::Test::I1> :
+class Bridge < ::Test::I1> :
 	public Bridge <Interface>
 {
 public:
@@ -24,14 +24,14 @@ public:
 
 		struct
 		{
-			Bridge <Object>* (*CORBA_Object) (Bridge <::Test::I1>*, EnvironmentBridge*);
+			Bridge <Object>* (*CORBA_Object) (Bridge < ::Test::I1>*, EnvironmentBridge*);
 		}
 		base;
 
 		struct
 		{
-			Long (*op1) (Bridge <::Test::I1>*, Long p1, EnvironmentBridge*);
-			void (*throw_NO_IMPLEMENT) (Bridge <::Test::I1>*, EnvironmentBridge*);
+			Long (*op1) (Bridge < ::Test::I1>*, Long p1, EnvironmentBridge*);
+			void (*throw_NO_IMPLEMENT) (Bridge < ::Test::I1>*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -76,7 +76,7 @@ template <class T>
 Long Client <T, ::Test::I1>::op1 (Long p1)
 {
 	Environment _env;
-	Bridge <::Test::I1>& _b = ClientBase <T, ::Test::I1>::_bridge ();
+	Bridge < ::Test::I1>& _b = ClientBase <T, ::Test::I1>::_bridge ();
 	Long _ret = (_b._epv ().epv.op1) (&_b, p1, &_env);
 	_env.check ();
 	return _ret;
@@ -86,7 +86,7 @@ template <class T>
 void Client <T, ::Test::I1>::throw_NO_IMPLEMENT ()
 {
 	Environment _env;
-	Bridge <::Test::I1>& _b = ClientBase <T, ::Test::I1>::_bridge ();
+	Bridge < ::Test::I1>& _b = ClientBase <T, ::Test::I1>::_bridge ();
 	(_b._epv ().epv.throw_NO_IMPLEMENT) (&_b, &_env);
 	_env.check ();
 }
@@ -106,7 +106,7 @@ public:
 	operator ::CORBA::Object& ()
 	{
 		::CORBA::Environment _env;
-		::CORBA::Object* _ret = static_cast <::CORBA::Object*> ((_epv ().base.CORBA_Object) (this, &_env));
+		::CORBA::Object* _ret = static_cast < ::CORBA::Object*> ((_epv ().base.CORBA_Object) (this, &_env));
 		_env.check ();
 		assert (_ret);
 		return *_ret;
@@ -122,19 +122,19 @@ template <class S>
 class Skeleton <S, ::Test::I1>
 {
 public:
-	static const typename Bridge <::Test::I1>::EPV sm_epv;
+	static const typename Bridge < ::Test::I1>::EPV sm_epv;
 
 	template <class Base>
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
-		if (RepositoryId::compatible (Bridge <::Test::I1>::_primary_interface (), id))
-			return &S::_narrow <::Test::I1> (base);
+		if (RepositoryId::compatible (Bridge < ::Test::I1>::_primary_interface (), id))
+			return &S::template _narrow < ::Test::I1> (base);
 		else
 			return Skeleton <S, Object>::_find_interface (base, id);
 	}
 
 protected:
-	static Long _op1 (Bridge <::Test::I1>* _b, Long p1, EnvironmentBridge* _env)
+	static Long _op1 (Bridge < ::Test::I1>* _b, Long p1, EnvironmentBridge* _env)
 	{
 		try {
 			return S::_implementation (_b).op1 (p1);
@@ -146,7 +146,7 @@ protected:
 		return 0;
 	}
 
-	static void _throw_NO_IMPLEMENT (Bridge <::Test::I1>* _b, EnvironmentBridge* _env)
+	static void _throw_NO_IMPLEMENT (Bridge < ::Test::I1>* _b, EnvironmentBridge* _env)
 	{
 		try {
 			S::_implementation (_b).throw_NO_IMPLEMENT ();
@@ -159,13 +159,13 @@ protected:
 };
 
 template <class S>
-const Bridge <::Test::I1>::EPV Skeleton <S, ::Test::I1>::sm_epv = {
+const Bridge < ::Test::I1>::EPV Skeleton <S, ::Test::I1>::sm_epv = {
 	{ // interface
-		S::_duplicate <::Test::I1>,
-		S::_release <::Test::I1>
+		S::template _duplicate < ::Test::I1>,
+		S::template _release < ::Test::I1>
 	},
 	{ // base
-		S::_wide <Object, ::Test::I1>
+		S::template _wide <Object, ::Test::I1>
 	},
 	{ // epv
 		S::_op1,
@@ -183,8 +183,8 @@ class Servant <S, ::Test::I1> :
 // POA implementation
 
 template <>
-class ServantPOA <::Test::I1> :
-	public ImplementationPOA <::Test::I1, Object>
+class ServantPOA < ::Test::I1> :
+	public ImplementationPOA < ::Test::I1, Object>
 {
 public:
 	virtual Long op1 (Long p1) = 0;
@@ -215,7 +215,7 @@ public:
 
 namespace POA_Test {
 
-typedef ::CORBA::Nirvana::ServantPOA <::Test::I1> I1;
+typedef ::CORBA::Nirvana::ServantPOA < ::Test::I1> I1;
 
 template <class T>
 class I1_tie :

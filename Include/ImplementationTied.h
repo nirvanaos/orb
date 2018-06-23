@@ -176,7 +176,7 @@ public:
 
 	static T& _implementation (Bridge <AbstractBase>* bridge)
 	{
-		_check_pointer (bridge, sm_epv.interface);
+		_check_pointer (bridge, Skeleton <S, AbstractBase>::sm_epv.interface);
 		return *reinterpret_cast <S*> (static_cast <InterfaceTiedBase <AbstractBase>&> (*bridge)._implementation ());
 	}
 
@@ -240,6 +240,8 @@ protected:
 	}
 };
 
+template <class I> class ServantPOA;
+
 template <class T, class Primary, class ... Base> // Base includes all derived interfaces, directly and indirectly
 class ImplementationTied :
 	public AbstractBaseTied <T, ServantTied <T, Primary> >,
@@ -255,7 +257,7 @@ public:
 	}
 
 	virtual Bridge <Interface>* _find_interface (const Char* id)
-	{
+	{ // Why we use ServantPOA here???
 		return Skeleton <ServantPOA <Primary>, Primary>::_find_interface (*this, id);
 	}
 

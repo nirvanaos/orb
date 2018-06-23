@@ -14,7 +14,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <>
-class Bridge <::Test::I2> :
+class Bridge < ::Test::I2> :
 	public Bridge <Interface>
 {
 public:
@@ -24,13 +24,13 @@ public:
 
 		struct
 		{
-			Bridge <Object>* (*CORBA_Object) (Bridge <::Test::I2>*, EnvironmentBridge*);
+			Bridge <Object>* (*CORBA_Object) (Bridge < ::Test::I2>*, EnvironmentBridge*);
 		}
 		base;
 
 		struct
 		{
-			Long (*op2) (Bridge <::Test::I2>*, Long p1, EnvironmentBridge*);
+			Long (*op2) (Bridge < ::Test::I2>*, Long p1, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -74,7 +74,7 @@ template <class T>
 Long Client <T, ::Test::I2>::op2 (Long p1)
 {
 	Environment _env;
-	Bridge <::Test::I2>& _b = ClientBase <T, ::Test::I2>::_bridge ();
+	Bridge < ::Test::I2>& _b = ClientBase <T, ::Test::I2>::_bridge ();
 	Long _ret = (_b._epv ().epv.op2) (&_b, p1, &_env);
 	_env.check ();
 	return _ret;
@@ -95,7 +95,7 @@ public:
 	operator ::CORBA::Object& ()
 	{
 		::CORBA::Environment _env;
-		::CORBA::Object* _ret = static_cast <::CORBA::Object*> ((_epv ().base.CORBA_Object) (this, &_env));
+		::CORBA::Object* _ret = static_cast < ::CORBA::Object*> ((_epv ().base.CORBA_Object) (this, &_env));
 		_env.check ();
 		assert (_ret);
 		return *_ret;
@@ -111,19 +111,19 @@ template <class S>
 class Skeleton <S, ::Test::I2>
 {
 public:
-	static const typename Bridge <::Test::I2>::EPV sm_epv;
+	static const typename Bridge < ::Test::I2>::EPV sm_epv;
 
 	template <class Base>
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
-		if (RepositoryId::compatible (Bridge <::Test::I2>::_primary_interface (), id))
-			return &S::_narrow <::Test::I2> (base);
+		if (RepositoryId::compatible (Bridge < ::Test::I2>::_primary_interface (), id))
+			return &S::template _narrow < ::Test::I2> (base);
 		else
 			return Skeleton <S, Object>::_find_interface (base, id);
 	}
 
 protected:
-	static Long _op2 (Bridge <::Test::I2>* _b, Long p1, EnvironmentBridge* _env)
+	static Long _op2 (Bridge < ::Test::I2>* _b, Long p1, EnvironmentBridge* _env)
 	{
 		try {
 			return S::_implementation (_b).op2 (p1);
@@ -137,13 +137,13 @@ protected:
 };
 
 template <class S>
-const Bridge <::Test::I2>::EPV Skeleton <S, ::Test::I2>::sm_epv = {
+const Bridge < ::Test::I2>::EPV Skeleton <S, ::Test::I2>::sm_epv = {
 	{ // interface
-		S::_duplicate <::Test::I2>,
-		S::_release <::Test::I2>
+		S::template _duplicate < ::Test::I2>,
+		S::template _release < ::Test::I2>
 	},
 	{ // base
-		S::_wide <Object, ::Test::I2>
+		S::template _wide <Object, ::Test::I2>
 	},
 	{ // epv
 		S::_op2
@@ -160,8 +160,8 @@ class Servant <S, ::Test::I2> :
 // POA implementation
 
 template <>
-class ServantPOA <::Test::I2> :
-	public ImplementationPOA <::Test::I2, Object>
+class ServantPOA < ::Test::I2> :
+	public ImplementationPOA < ::Test::I2, Object>
 {
 public:
 	virtual Long op2 (Long p1) = 0;
@@ -182,7 +182,7 @@ class ServantTied <T, ::Test::I2>	:
 {
 public:
 	ServantTied (T* tp, Boolean release) :
-		ImplementationTied (tp, release)
+		ImplementationTied <T, ::Test::I2, ::CORBA::Object> (tp, release)
 	{}
 };
 
@@ -191,7 +191,7 @@ public:
 
 namespace POA_Test {
 
-typedef ::CORBA::Nirvana::ServantPOA <::Test::I2> I2;
+typedef ::CORBA::Nirvana::ServantPOA < ::Test::I2> I2;
 
 template <class T>
 class I2_tie :
@@ -199,13 +199,13 @@ class I2_tie :
 {
 public:
 	I2_tie (T& t) :
-		ServantTied <T, ::Test::I2> (&t, FALSE)
+		::CORBA::Nirvana::ServantTied <T, ::Test::I2> (&t, FALSE)
 	{}
 
 	I2_tie (T& t, ::PortableServer::POA_ptr poa);	// Generate only if Object is derived
 
 	I2_tie (T* tp, ::CORBA::Boolean release = TRUE) :
-		ServantTied <T, ::Test::I2> (tp, release)
+		::CORBA::Nirvana::ServantTied <T, ::Test::I2> (tp, release)
 	{}
 
 	I2_tie (T* tp, ::PortableServer::POA_ptr poa, ::CORBA::Boolean release = TRUE);	// Generate only if Object is derived

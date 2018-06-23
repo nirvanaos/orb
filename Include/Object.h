@@ -97,6 +97,32 @@ public:
 	// TODO: Other Object operations shall be here...
 };
 
+}
+
+class Object :
+	public Nirvana::ClientInterface <Object>,
+	public Nirvana::Client <Object, AbstractBase>
+{
+public:
+	typedef Object_ptr _ptr_type;
+
+	operator AbstractBase& ()
+	{
+		Environment _env;
+		AbstractBase* _ret = static_cast <AbstractBase*> ((_epv ().base.CORBA_AbstractBase) (this, &_env));
+		_env.check ();
+		assert (_ret);
+		return *_ret;
+	}
+};
+
+inline Object_ptr AbstractBase::_to_object ()
+{
+	return Object::_duplicate (static_cast <Bridge <Object>*> (_find_interface (Bridge <Object>::_primary_interface ())));
+}
+
+namespace Nirvana {
+
 template <class T>
 ImplementationDef_ptr Client <T, Object>::_get_implementation ()
 {
@@ -149,32 +175,6 @@ Boolean Client <T, Object>::_is_equivalent (Object_ptr other_object)
 
 // TODO: Other Object operations shall be here...
 
-}
-
-class Object :
-	public Nirvana::ClientInterface <Object>,
-	public Nirvana::Client <Object, AbstractBase>
-{
-public:
-	typedef Object_ptr _ptr_type;
-
-	operator AbstractBase& ()
-	{
-		Environment _env;
-		AbstractBase* _ret = static_cast <AbstractBase*> ((_epv ().base.CORBA_AbstractBase) (this, &_env));
-		_env.check ();
-		assert (_ret);
-		return *_ret;
-	}
-};
-
-inline Object_ptr AbstractBase::_to_object ()
-{
-	return Object::_duplicate (static_cast <Bridge <Object>*> (_find_interface (Bridge <Object>::_primary_interface ())));
-}
-
-namespace Nirvana {
-
 template <class I>
 T_ptr <I> ClientInterface <I>::_narrow (T_ptr <Object> obj)
 {
@@ -216,7 +216,7 @@ public:
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
 		if (RepositoryId::compatible (Bridge <Object>::_primary_interface (), id))
-			return &S::_narrow	<Object> (base);
+			return &S::template _narrow	<Object> (base);
 		else
 			return nullptr;
 	}
@@ -268,11 +268,11 @@ protected:
 template <class S>
 const Bridge <Object>::EPV Skeleton <S, Object>::sm_epv = {
 	{ // interface
-		S::_duplicate <Object>,
-		S::_release <Object>
+		S::template _duplicate <Object>,
+		S::template _release <Object>
 	},
 	{ // base
-		S::_wide <AbstractBase, Object>
+		S::template _wide <AbstractBase, Object>
 	},
 	{ // epv
 		S::__get_implementation,
@@ -316,8 +316,8 @@ class Servant <S, Object> :
 // POA implementation
 
 template <>
-class ServantPOA <::CORBA::Object> :
-	public ImplementationPOA <::CORBA::Object>
+class ServantPOA < ::CORBA::Object> :
+	public ImplementationPOA < ::CORBA::Object>
 {
 public:
 	static ServantPOA <Object>& _object (Bridge <Object>* bridge)
