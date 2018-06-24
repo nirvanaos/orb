@@ -11,6 +11,8 @@ namespace CORBA {
 
 class Object;
 typedef Nirvana::T_ptr <Object> Object_ptr;
+typedef Nirvana::T_var <Object> Object_var;
+typedef Nirvana::T_out <Object> Object_out;
 
 namespace Nirvana {
 

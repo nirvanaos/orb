@@ -496,7 +496,7 @@ TYPED_TEST (TestI3, Performance)
 
 TYPED_TEST (TestI3, MultiInherit)
 {
-	I3_ptr p = TypeParam::incarnate ();
+	I3_var p = TypeParam::incarnate ();
 
 	EXPECT_EQ (p->op1 (1), MAGIC_CONST + 1);
 	EXPECT_EQ (p->op2 (1), 2 * MAGIC_CONST + 1);
@@ -534,7 +534,7 @@ TYPED_TEST (TestI3, MultiInherit)
 		release (p3);
 	}
 
-	release (p);
+	// release (p) must be called automatically.
 }
 
 }

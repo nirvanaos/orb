@@ -7,6 +7,8 @@ namespace Test {
 
 class I1;
 typedef ::CORBA::Nirvana::T_ptr <I1> I1_ptr;
+typedef ::CORBA::Nirvana::T_var <I1> I1_var;
+typedef ::CORBA::Nirvana::T_out <I1> I1_out;
 
 }
 

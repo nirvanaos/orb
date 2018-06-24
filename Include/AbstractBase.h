@@ -7,6 +7,8 @@
 namespace CORBA {
 
 typedef Nirvana::T_ptr <AbstractBase> AbstractBase_ptr;
+typedef Nirvana::T_var <AbstractBase> AbstractBase_var;
+typedef Nirvana::T_out <AbstractBase> AbstractBase_out;
 
 namespace Nirvana {
 
