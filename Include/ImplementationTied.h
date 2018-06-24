@@ -46,6 +46,12 @@ public:
 		m_release = rel;
 	}
 
+	template <class I, class S>
+	static Bridge <I>& _narrow (S& servant)
+	{
+		return static_cast <Bridge <I>&> (servant);
+	}
+
 protected:
 	InterfaceTiedBase ()
 	{}
@@ -159,6 +165,11 @@ protected:
 	InterfaceTied () :
 		InterfaceTiedBase <I> (Skeleton <S, I>::sm_epv)
 	{}
+
+	static Bridge <Interface>* _find_interface (S& servant, const Char* id)
+	{
+		return Skeleton <S, I>::_find_interface (servant, id);
+	}
 };
 
 template <class T, class S>
@@ -178,12 +189,6 @@ public:
 	{
 		_check_pointer (bridge, Skeleton <S, AbstractBase>::sm_epv.interface);
 		return *reinterpret_cast <S*> (static_cast <InterfaceTiedBase <AbstractBase>&> (*bridge)._implementation ());
-	}
-
-	template <class I>
-	static Bridge <I>& _narrow (S& servant)
-	{
-		static_cast <Bridge <I>&> (servant);
 	}
 
 	template <class Base, class Derived>
@@ -240,8 +245,6 @@ protected:
 	}
 };
 
-template <class I> class ServantPOA;
-
 template <class T, class Primary, class ... Base> // Base includes all derived interfaces, directly and indirectly
 class ImplementationTied :
 	public AbstractBaseTied <T, ServantTied <T, Primary> >,
@@ -257,8 +260,8 @@ public:
 	}
 
 	virtual Bridge <Interface>* _find_interface (const Char* id)
-	{ // Why we use ServantPOA here???
-		return Skeleton <ServantPOA <Primary>, Primary>::_find_interface (*this, id);
+	{
+		return InterfaceTied <ServantTied <T, Primary>, Primary>::_find_interface (static_cast <ServantTied <T, Primary>&> (*this), id);
 	}
 
 	static Boolean ___is_a (const Char* type_id)
