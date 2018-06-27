@@ -47,15 +47,6 @@ typedef Long Flags;
 #define TRUE true
 #endif
 
-// Native types
-namespace Nirvana {
-
-typedef void* Pointer;
-typedef size_t UWord;
-typedef ptrdiff_t Word;
-
-}
-    
 } // namespace CORBA
 
 #endif
