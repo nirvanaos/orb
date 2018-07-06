@@ -1,13 +1,16 @@
 #include "Exception.h"
 #include "RepositoryId.h"
 
-#define DEFINE_SYSTEM_EXCEPTION(e)\
+#define DEFINE_EXCEPTION(MID, e)\
 void e::_raise () const { throw *this; }\
 const char* e::_name () const { return #e; }\
-const char* e::_rep_id () const { return CORBA_REPOSITORY_ID (e); }\
+const char* e::_rep_id () const { return MID (e); }\
 Long e::__code () const { return EC_##e; }\
 const e* e::_downcast (const Exception* ep) { return (ep && (EC_##e == ep->__code ())) ? static_cast <const e*> (ep) : 0; }\
 Exception* e::_create (const void* data) { return new e ((Data*)data); }
+
+#define DEFINE_SYSTEM_EXCEPTION(e) DEFINE_EXCEPTION(CORBA_REPOSITORY_ID, e)
+#define DEFINE_NIRVANA_EXCEPTION(e) DEFINE_EXCEPTION(NIRVANA_REPOSITORY_ID, e)
 
 #define EX_TABLE_ENTRY(e) { CORBA_REPOSITORY_ID (e), e::_create }
 
@@ -45,6 +48,16 @@ const ExceptionEntry SystemException::sm_create_table [SystemException::KNOWN_SY
 	EX_TABLE_ENTRY (TRANSACTION_REQUIRED), // transaction required
 	EX_TABLE_ENTRY (TRANSACTION_ROLLEDBACK), // transaction rolled back
 	EX_TABLE_ENTRY (INVALID_TRANSACTION), // invalid transaction
+	EX_TABLE_ENTRY (INV_POLICY), // invalid policy
+	EX_TABLE_ENTRY (CODESET_INCOMPATIBLE), // incompatible code set
+	EX_TABLE_ENTRY (REBIND), // rebind needed
+	EX_TABLE_ENTRY (TIMEOUT), // operation timed out
+	EX_TABLE_ENTRY (TRANSACTION_UNAVAILABLE), // no transaction
+	EX_TABLE_ENTRY (TRANSACTION_MODE), // invalid transaction mode
+	EX_TABLE_ENTRY (BAD_QOS), // bad quality of service
+
+	EX_TABLE_ENTRY (MEM_NOT_COMMITTED), // memory is not committed
+	EX_TABLE_ENTRY (MEM_NOT_ALLOCATED) // memory is not allocated
 };
 
 Exception* SystemException::_create (const char* rep_id, const void* data, int hint)
@@ -94,5 +107,15 @@ DEFINE_SYSTEM_EXCEPTION (OBJECT_NOT_EXIST) // non-existent object, delete refere
 DEFINE_SYSTEM_EXCEPTION (TRANSACTION_REQUIRED) // transaction required
 DEFINE_SYSTEM_EXCEPTION (TRANSACTION_ROLLEDBACK) // transaction rolled back
 DEFINE_SYSTEM_EXCEPTION (INVALID_TRANSACTION) // invalid transaction
+DEFINE_SYSTEM_EXCEPTION (INV_POLICY) // invalid policy
+DEFINE_SYSTEM_EXCEPTION (CODESET_INCOMPATIBLE) // incompatible code set
+DEFINE_SYSTEM_EXCEPTION (REBIND) // rebind needed
+DEFINE_SYSTEM_EXCEPTION (TIMEOUT) // operation timed out
+DEFINE_SYSTEM_EXCEPTION (TRANSACTION_UNAVAILABLE) // no transaction
+DEFINE_SYSTEM_EXCEPTION (TRANSACTION_MODE) // invalid transaction mode
+DEFINE_SYSTEM_EXCEPTION (BAD_QOS) // bad quality of service
+
+DEFINE_NIRVANA_EXCEPTION (MEM_NOT_COMMITTED) // memory is not committed
+DEFINE_NIRVANA_EXCEPTION (MEM_NOT_ALLOCATED) // memory is not allocated
 
 }
