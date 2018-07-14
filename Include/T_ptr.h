@@ -85,10 +85,9 @@ protected:
 	}
 
 private:
-	template <class T1>
-	friend class T_ptr;
-	
+	template <class T1> friend class T_ptr;
 	friend class ClientInterface <T>;
+	template <class S, class I> friend class Skeleton;
 
   friend void CORBA::release <T> (T_ptr <T>);
 	friend bool CORBA::is_nil <T> (T_ptr <T>);
