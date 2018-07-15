@@ -5,6 +5,8 @@ using namespace std;
 using namespace CORBA;
 using namespace Test;
 
+namespace TestORB {
+
 class Instance
 {
 public:
@@ -361,8 +363,6 @@ void test_performance (I1_ptr p)
 		p->op1 (2);
 	release (p);
 }
-
-namespace unittests {
 
 class Test :
 	public ::testing::Test
