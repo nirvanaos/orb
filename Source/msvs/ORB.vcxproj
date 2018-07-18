@@ -45,7 +45,10 @@
     <ClInclude Include="..\..\Include\PortableServer.h" />
     <ClInclude Include="..\..\Include\RefCount.h" />
     <ClInclude Include="..\..\Include\RepositoryId.h" />
+    <ClInclude Include="..\..\Include\sequence.h" />
     <ClInclude Include="..\..\Include\T_ptr.h" />
+    <ClInclude Include="..\giop.h" />
+    <ClInclude Include="..\iop.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{11CC69AA-ABA7-40E5-A5B5-FA0DC3E705A1}</ProjectGuid>

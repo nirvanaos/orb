@@ -83,5 +83,14 @@
     <ClInclude Include="..\..\Include\ORB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\giop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\iop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\sequence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
