@@ -364,14 +364,14 @@ void test_performance (I1_ptr p)
 	release (p);
 }
 
-class Test :
+class TestORB :
 	public ::testing::Test
 {
 protected:
-	Test ()
+	TestORB ()
 	{}
 
-	virtual ~Test ()
+	virtual ~TestORB ()
 	{}
 
 	// If the constructor and destructor are not enough for setting up
@@ -390,7 +390,7 @@ protected:
 	}
 };
 
-TEST_F (Test, RepositoryId)
+TEST_F (TestORB, RepositoryId)
 {
 	EXPECT_TRUE (Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/type:1.0"));
 	EXPECT_TRUE (Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.1", "IDL:aaa/bbb/type:1.0"));
@@ -404,14 +404,14 @@ TEST_F (Test, RepositoryId)
 typedef ::testing::Types <DynamicI1, PortableI1, StaticI1, TiedI1, TiedDerivedI1> ServantTypesI1;
 
 template <class Servant>
-class TestI1 :
+class TestORB_I1 :
 	public ::testing::Test
 {
 protected:
-	TestI1 ()
+	TestORB_I1 ()
 	{}
 
-	virtual ~TestI1 ()
+	virtual ~TestORB_I1 ()
 	{}
 
 	// If the constructor and destructor are not enough for setting up
@@ -431,19 +431,19 @@ protected:
 	}
 };
 
-TYPED_TEST_CASE (TestI1, ServantTypesI1);
+TYPED_TEST_CASE (TestORB_I1, ServantTypesI1);
 
-TYPED_TEST (TestI1, Inteface)
+TYPED_TEST (TestORB_I1, Inteface)
 {
 	test_interface (TypeParam::incarnate ());
 }
 
-TYPED_TEST (TestI1, Performance)
+TYPED_TEST (TestORB_I1, Performance)
 {
 	test_performance (TypeParam::incarnate ());
 }
 
-TYPED_TEST (TestI1, Exception)
+TYPED_TEST (TestORB_I1, Exception)
 {
 	I1_ptr p = TypeParam::incarnate ();
 	EXPECT_THROW (p->throw_NO_IMPLEMENT (), NO_IMPLEMENT);
@@ -455,14 +455,14 @@ TYPED_TEST (TestI1, Exception)
 typedef ::testing::Types <DynamicI3, PortableI3, StaticI3, TiedI3, TiedDerivedI3> ServantTypesI3;
 
 template <class Servant>
-class TestI3 :
+class TestORB_I3 :
 	public ::testing::Test
 {
 protected:
-	TestI3 ()
+	TestORB_I3 ()
 	{}
 
-	virtual ~TestI3 ()
+	virtual ~TestORB_I3 ()
 	{}
 
 	// If the constructor and destructor are not enough for setting up
@@ -482,19 +482,19 @@ protected:
 	}
 };
 
-TYPED_TEST_CASE (TestI3, ServantTypesI3);
+TYPED_TEST_CASE (TestORB_I3, ServantTypesI3);
 
-TYPED_TEST (TestI3, Inteface)
+TYPED_TEST (TestORB_I3, Inteface)
 {
 	test_interface (TypeParam::incarnate ());
 }
 
-TYPED_TEST (TestI3, Performance)
+TYPED_TEST (TestORB_I3, Performance)
 {
 	test_performance (TypeParam::incarnate ());
 }
 
-TYPED_TEST (TestI3, MultiInherit)
+TYPED_TEST (TestORB_I3, MultiInherit)
 {
 	I3_var p = TypeParam::incarnate ();
 
