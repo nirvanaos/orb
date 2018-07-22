@@ -369,7 +369,7 @@ public:
 
 	static Bridge <Object>* _bridge ()
 	{
-		return (Bridge <Object>*)&sm_bridge;
+		return (Bridge <Object>*)&bridge_;
 	}
 
 	static S& _object (Bridge <Object>* bridge)
@@ -378,11 +378,11 @@ public:
 	}
 
 private:
-	static const typename Bridge <Object>::EPV* sm_bridge;
+	static const typename Bridge <Object>::EPV* bridge_;
 };
 
 template <class S>
-const typename Bridge <Object>::EPV* InterfaceStatic<S, Object>::sm_bridge = &InterfaceStatic<S, Object>::epv_;
+const typename Bridge <Object>::EPV* InterfaceStatic<S, Object>::bridge_ = &InterfaceStatic<S, Object>::epv_;
 
 template <class S>
 class ServantStatic <S, Object> :
