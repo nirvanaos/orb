@@ -24,15 +24,15 @@ public:
 
 	static Bridge <I>* _bridge ()
 	{
-		return (Bridge <I>*)&sm_bridge;
+		return (Bridge <I>*)&bridge_;
 	}
 
 private:
-	static const typename Bridge <I>::EPV* sm_bridge;
+	static const typename Bridge <I>::EPV* bridge_;
 };
 
 template <class S, class I>
-const typename Bridge <I>::EPV* InterfaceStatic<S, I>::sm_bridge = &InterfaceStatic<S, I>::sm_epv;
+const typename Bridge <I>::EPV* InterfaceStatic<S, I>::bridge_ = &InterfaceStatic<S, I>::epv_;
 
 class LifeCycleStatic
 {

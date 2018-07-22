@@ -85,13 +85,13 @@ template <class S>
 class Skeleton <S, AbstractBase>
 {
 public:
-	static const typename Bridge <AbstractBase>::EPV sm_epv;
+	static const typename Bridge <AbstractBase>::EPV epv_;
 
 protected:
 	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
 	{
 		try {
-			_check_pointer (base, sm_epv.interface);
+			_check_pointer (base, epv_.interface);
 			_check_pointer (id);
 			return S::_find_interface (*base, id);
 		} catch (const Exception& e) {
@@ -104,7 +104,7 @@ protected:
 };
 
 template <class S>
-const Bridge <AbstractBase>::EPV Skeleton <S, AbstractBase>::sm_epv = {
+const Bridge <AbstractBase>::EPV Skeleton <S, AbstractBase>::epv_ = {
 	{	// interface
 		S::template _duplicate <AbstractBase>,
 		S::template _release <AbstractBase>

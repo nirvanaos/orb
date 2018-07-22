@@ -16,43 +16,43 @@ class RefCount
 {
 public:
 	RefCount () :
-		m_refcnt (1)
+		refcnt_ (1)
 	{}
 
 	operator ULong () const
 	{
-		return m_refcnt;
+		return refcnt_;
 	}
 
 #ifdef _MSC_VER
 
 	void increment ()
 	{
-		_InterlockedIncrement ((long*)&m_refcnt);
+		_InterlockedIncrement ((long*)&refcnt_);
 	}
 
 	ULong decrement ()
 	{
-		return _InterlockedDecrement ((long*)&m_refcnt);
+		return _InterlockedDecrement ((long*)&refcnt_);
 	}
 
 private:
-	ULong m_refcnt;
+	ULong refcnt_;
 
 #else
 
 	void increment ()
 	{
-		++m_refcnt;
+		++refcnt_;
 	}
 
 	ULong decrement ()
 	{
-		return --m_refcnt;
+		return --refcnt_;
 	}
 
 private:
-	std::atomic <ULong> m_refcnt;
+	std::atomic <ULong> refcnt_;
 #endif
 };
 
@@ -65,18 +65,18 @@ class RefCountBase
 public:
 	void _add_ref ()
 	{
-		m_ref_count.increment ();
+		ref_count_.increment ();
 	}
 
 	void _remove_ref ()
 	{
-		if (!m_ref_count.decrement ())
+		if (!ref_count_.decrement ())
 			delete this;
 	}
 
 	ULong _refcount_value () const
 	{
-		return m_ref_count;
+		return ref_count_;
 	}
 
 protected:
@@ -87,7 +87,7 @@ protected:
 	{}
 
 private:
-	RefCount m_ref_count;
+	RefCount ref_count_;
 };
 
 }

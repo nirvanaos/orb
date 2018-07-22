@@ -33,20 +33,20 @@ public:
 
 	const EPV& _epv () const
 	{
-		assert (m_epv);
-		return *m_epv;
+		assert (epv_ptr_);
+		return *epv_ptr_;
 	}
 
 protected:
 	Bridge (const EPV& epv) :
-		m_epv (&epv)
+		epv_ptr_ (&epv)
 	{}
 
 	Bridge ()
 	{}
 
 protected:
-	const EPV* m_epv;
+	const EPV* epv_ptr_;
 };
 
 //! ClientBase - How client obtains pointer to Bridge
@@ -99,13 +99,13 @@ public:
 template <class T>
 bool is_nil (Nirvana::T_ptr <T> obj)
 {
-	return !obj.m_p;
+	return !obj.p_;
 }
 
 template <class T>
 void release (Nirvana::T_ptr <T> obj)
 {
-	Nirvana::Interface::__release (obj.m_p);
+	Nirvana::Interface::__release (obj.p_);
 }
 
 }

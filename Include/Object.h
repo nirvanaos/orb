@@ -210,7 +210,7 @@ class Skeleton <S, Object> :
 	public ObjectBase
 {
 public:
-	static const typename Bridge <Object>::EPV sm_epv;
+	static const typename Bridge <Object>::EPV epv_;
 
 	template <class Base>
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
@@ -266,7 +266,7 @@ protected:
 };
 
 template <class S>
-const Bridge <Object>::EPV Skeleton <S, Object>::sm_epv = {
+const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 	{ // interface
 		S::template _duplicate <Object>,
 		S::template _release <Object>
@@ -298,13 +298,13 @@ public:
 
 	static S& _object (Bridge <Object>* bridge)
 	{
-		_check_pointer (bridge, Skeleton <S, Object>::sm_epv.interface);
+		_check_pointer (bridge, Skeleton <S, Object>::epv_.interface);
 		return static_cast <S&> (*bridge);
 	}
 
 protected:
 	InterfaceImpl () :
-		Bridge <Object> (Skeleton <S, Object>::sm_epv)
+		Bridge <Object> (Skeleton <S, Object>::epv_)
 	{}
 };
 
@@ -382,7 +382,7 @@ private:
 };
 
 template <class S>
-const typename Bridge <Object>::EPV* InterfaceStatic<S, Object>::sm_bridge = &InterfaceStatic<S, Object>::sm_epv;
+const typename Bridge <Object>::EPV* InterfaceStatic<S, Object>::sm_bridge = &InterfaceStatic<S, Object>::epv_;
 
 template <class S>
 class ServantStatic <S, Object> :
@@ -399,7 +399,7 @@ class InterfaceTied <S, Object> :
 public:
 	static S& _object (Bridge <Object>* bridge)
 	{
-		_check_pointer (bridge, Skeleton <S, Object>::sm_epv.interface);
+		_check_pointer (bridge, Skeleton <S, Object>::epv_.interface);
 		return static_cast <S&> (*bridge);
 	}
 
@@ -417,11 +417,11 @@ public:
 
 protected:
 	InterfaceTied <S, Object> () :
-		InterfaceTiedBase <Object> (Skeleton <S, Object>::sm_epv),
-		m_poa (0)
+		InterfaceTiedBase <Object> (Skeleton <S, Object>::epv_),
+		poa_ (0)
 	{}
 
-	POA_ptr m_poa;
+	POA_ptr poa_;
 };
 
 }

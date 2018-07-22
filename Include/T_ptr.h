@@ -44,29 +44,29 @@ public:
 	{}
 
 	T_ptr (Bridge <T>* p) :
-		m_p (static_cast <T*> (p))
+		p_ (static_cast <T*> (p))
 	{}
 
 	template <class T1>
 	T_ptr (T_ptr <T1> src) :
-		m_p (&static_cast <T&> (static_cast <Bridge <T>&> (*src.m_p)))
+		p_ (&static_cast <T&> (static_cast <Bridge <T>&> (*src.p_)))
 	{}
 
 	template <class T1>
 	T_ptr& operator = (T_ptr <T1> src)
 	{
-		m_p = &static_cast <T&> (static_cast <Bridge <T>&> (*src.m_p));
+		p_ = &static_cast <T&> (static_cast <Bridge <T>&> (*src.p_));
 		return *this;
 	}
 
 	T* operator -> () const
 	{
-		return m_p;
+		return p_;
 	}
 
 	operator bool () const
 	{
-		return m_p != 0;
+		return p_ != 0;
 	}
 
 	static T_ptr nil ()
@@ -76,12 +76,12 @@ public:
 
 protected:
 	T_ptr (T* p) :
-		m_p (p)
+		p_ (p)
 	{}
 
 	operator T* () const
 	{
-		return m_p;
+		return p_;
 	}
 
 private:
@@ -93,7 +93,7 @@ private:
 	friend bool CORBA::is_nil <T> (T_ptr <T>);
 
 private:
-	T* m_p;
+	T* p_;
 };
 
 // T_var helper class
@@ -137,12 +137,12 @@ public:
 /*
 	T* operator -> ()
 	{
-		return m_ptr;
+		return ptr_;
 	}
 
 	const T* operator -> () const
 	{
-		return m_ptr;
+		return ptr_;
 	}
 */
 	T_ptr <T> in () const
@@ -176,48 +176,48 @@ class T_out
 {
 public:
 	T_out (T_ptr <T>& p)
-		: m_ptr (p)
+		: ptr_ (p)
 	{
-		m_ptr = 0;
+		ptr_ = 0;
 	}
 
 	T_out (T_var <T>& p)
-		: m_ptr (p.out ())
+		: ptr_ (p.out ())
 	{}
 
 	T_out (const T_out& p)
-		: m_ptr (p.m_ptr)
+		: ptr_ (p.ptr_)
 	{}
 
 	T_out <T>& operator = (T_out <T>& p)
 	{
-		m_ptr = p.m_ptr;
+		ptr_ = p.ptr_;
 		return *this;
 	}
 
 	T_out <T>& operator = (T_ptr <T> p)
 	{
-		m_ptr = p;
+		ptr_ = p;
 		return *this;
 	}
 
 	operator T*& ()
 	{
-		return m_ptr;
+		return ptr_;
 	}
 
 	T*& ptr ()
 	{
-		return m_ptr;
+		return ptr_;
 	}
 
 	T* operator -> ()
 	{
-		return m_ptr;
+		return ptr_;
 	}
 
 private:
-	T_ptr <T>& m_ptr;
+	T_ptr <T>& ptr_;
 	// assignment from T_var is not allowed
 	void operator = (const T_var <T> &);
 };

@@ -138,7 +138,7 @@ template <class S>
 class Skeleton <S, ::Test::I3>
 {
 public:
-	static const typename Bridge < ::Test::I3>::EPV sm_epv;
+	static const typename Bridge < ::Test::I3>::EPV epv_;
 
 	template <class Base>
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
@@ -167,7 +167,7 @@ protected:
 };
 
 template <class S>
-const Bridge < ::Test::I3>::EPV Skeleton <S, ::Test::I3>::sm_epv = {
+const Bridge < ::Test::I3>::EPV Skeleton <S, ::Test::I3>::epv_ = {
 	{ // interface
 		S::template _duplicate < ::Test::I3>,
 		S::template _release < ::Test::I3>

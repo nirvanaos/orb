@@ -21,11 +21,11 @@ protected:
 	};
 
 	EnvironmentBridge (const EPV& epv) :
-		m_epv (&epv)
+		epv_ptr_ (&epv)
 	{}
 
 private:
-	const EPV* m_epv;
+	const EPV* epv_ptr_;
 };
 
 }
@@ -41,25 +41,25 @@ public:
 
 	Exception* exception () const
 	{
-		return m_exception;
+		return exception_;
 	}
 
 	void clear ();
 
 	void check () const
 	{
-		if (m_exception)
-			m_exception->_raise ();
+		if (exception_)
+			exception_->_raise ();
 	}
 
 private:
 	static void __set_exception (EnvironmentBridge* bridge, Long code, const char* rep_id, const void* param);
 
 private:
-	const Nirvana::ExceptionEntry* const* m_user_exceptions;
-	Exception* m_exception;
+	const Nirvana::ExceptionEntry* const* user_exceptions_;
+	Exception* exception_;
 
-	static const EPV sm_epv;
+	static const EPV epv_;
 };
 
 }

@@ -24,7 +24,7 @@ public:
 
 protected:
 	InterfaceImpl () :
-		Bridge <I> (Skeleton <S, I>::sm_epv)
+		Bridge <I> (Skeleton <S, I>::epv_)
 	{}
 };
 
@@ -37,7 +37,7 @@ public:
 	template <class I>
 	static S& _implementation (Bridge <I>* bridge)
 	{
-		_check_pointer (bridge, Skeleton <S, I>::sm_epv.interface);
+		_check_pointer (bridge, Skeleton <S, I>::epv_.interface);
 		return static_cast <S&> (*bridge);
 	}
 

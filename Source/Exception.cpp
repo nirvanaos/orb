@@ -18,7 +18,7 @@ namespace CORBA {
 
 using namespace Nirvana;
 
-const ExceptionEntry SystemException::sm_create_table [SystemException::KNOWN_SYSTEM_EXCEPTIONS] = {
+const ExceptionEntry SystemException::creators_ [SystemException::KNOWN_SYSTEM_EXCEPTIONS] = {
 	EX_TABLE_ENTRY (UNKNOWN), // the unknown exception
 	EX_TABLE_ENTRY (BAD_PARAM), // an invalid parameter was passed
 	EX_TABLE_ENTRY (NO_MEMORY), // dynamic memory allocation failure
@@ -63,10 +63,10 @@ const ExceptionEntry SystemException::sm_create_table [SystemException::KNOWN_SY
 Exception* SystemException::_create (const char* rep_id, const void* data, int hint)
 {
 	const ExceptionEntry* entry = 0;
-	if (hint >= 0 && hint < KNOWN_SYSTEM_EXCEPTIONS && Nirvana::RepositoryId::compatible (sm_create_table [hint].rep_id, rep_id))
-		entry = sm_create_table + hint;
+	if (hint >= 0 && hint < KNOWN_SYSTEM_EXCEPTIONS && Nirvana::RepositoryId::compatible (creators_ [hint].rep_id, rep_id))
+		entry = creators_ + hint;
 	else {
-		for (const ExceptionEntry* pe = sm_create_table; pe != sm_create_table + KNOWN_SYSTEM_EXCEPTIONS; ++pe)
+		for (const ExceptionEntry* pe = creators_; pe != creators_ + KNOWN_SYSTEM_EXCEPTIONS; ++pe)
 			if (Nirvana::RepositoryId::compatible (pe->rep_id, rep_id)) {
 				entry = pe;
 				break;

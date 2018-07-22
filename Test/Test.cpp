@@ -12,25 +12,25 @@ class Instance
 public:
 	static int count ()
 	{
-		return sm_count;
+		return count_;
 	}
 
 protected:
 	Instance ()
 	{
-		++sm_count;
+		++count_;
 	}
 
 	~Instance ()
 	{
-		--sm_count;
+		--count_;
 	}
 
 private:
-	static int sm_count;
+	static int count_;
 };
 
-int Instance::sm_count = 0;
+int Instance::count_ = 0;
 
 const Long MAGIC_CONST = 1963;
 
@@ -42,12 +42,12 @@ class DynamicI1 :
 {
 public:
 	DynamicI1 (Long addendum) :
-		m_addendum (addendum)
+		addendum_ (addendum)
 	{}
 
 	Long op1 (Long p1) const
 	{
-		return p1 + m_addendum;
+		return p1 + addendum_;
 	}
 
 	static void throw_NO_IMPLEMENT ()
@@ -61,7 +61,7 @@ public:
 	}
 
 private:
-	Long m_addendum;
+	Long addendum_;
 };
 
 class DynamicI3 :
@@ -70,12 +70,12 @@ class DynamicI3 :
 {
 public:
 	DynamicI3 (Long addendum) :
-		m_addendum (addendum)
+		addendum_ (addendum)
 	{}
 
 	Long op1 (Long p1) const
 	{
-		return p1 + m_addendum;
+		return p1 + addendum_;
 	}
 
 	static void throw_NO_IMPLEMENT ()
@@ -85,12 +85,12 @@ public:
 
 	Long op2 (Long p1) const
 	{
-		return p1 + 2 * m_addendum;
+		return p1 + 2 * addendum_;
 	}
 
 	Long op3 (Long p1) const
 	{
-		return p1 + 3 * m_addendum;
+		return p1 + 3 * addendum_;
 	}
 
 	static ::Test::I3_ptr incarnate ()
@@ -99,7 +99,7 @@ public:
 	}
 
 private:
-	Long m_addendum;
+	Long addendum_;
 };
 
 // Portable implementation
@@ -110,12 +110,12 @@ class PortableI1 :
 {
 public:
 	PortableI1 (Long addendum) :
-		m_addendum (addendum)
+		addendum_ (addendum)
 	{}
 
 	virtual Long op1 (Long p1)
 	{
-		return p1 + m_addendum;
+		return p1 + addendum_;
 	}
 
 	virtual void throw_NO_IMPLEMENT ()
@@ -129,7 +129,7 @@ public:
 	}
 
 private:
-	Long m_addendum;
+	Long addendum_;
 };
 
 class PortableI3 :
@@ -138,12 +138,12 @@ class PortableI3 :
 {
 public:
 	PortableI3 (Long addendum) :
-		m_addendum (addendum)
+		addendum_ (addendum)
 	{}
 
 	virtual Long op1 (Long p1)
 	{
-		return p1 + m_addendum;
+		return p1 + addendum_;
 	}
 
 	virtual void throw_NO_IMPLEMENT ()
@@ -153,12 +153,12 @@ public:
 
 	virtual Long op2 (Long p1)
 	{
-		return p1 + 2 * m_addendum;
+		return p1 + 2 * addendum_;
 	}
 
 	virtual Long op3 (Long p1)
 	{
-		return p1 + 3 * m_addendum;
+		return p1 + 3 * addendum_;
 	}
 
 	static ::Test::I3_ptr incarnate ()
@@ -167,7 +167,7 @@ public:
 	}
 
 private:
-	Long m_addendum;
+	Long addendum_;
 };
 
 // Static implementation
@@ -231,12 +231,12 @@ class TiedI1 :
 {
 public:
 	TiedI1 (Long addendum) :
-		m_addendum (addendum)
+		addendum_ (addendum)
 	{}
 
 	Long op1 (Long p1) const
 	{
-		return p1 + m_addendum;
+		return p1 + addendum_;
 	}
 
 	void throw_NO_IMPLEMENT ()
@@ -250,7 +250,7 @@ public:
 	}
 
 private:
-	Long m_addendum;
+	Long addendum_;
 };
 
 class TiedI3 :
@@ -258,12 +258,12 @@ class TiedI3 :
 {
 public:
 	TiedI3 (Long addendum) :
-		m_addendum (addendum)
+		addendum_ (addendum)
 	{}
 
 	Long op1 (Long p1) const
 	{
-		return p1 + m_addendum;
+		return p1 + addendum_;
 	}
 
 	void throw_NO_IMPLEMENT ()
@@ -273,12 +273,12 @@ public:
 
 	Long op2 (Long p1) const
 	{
-		return p1 + 2 * m_addendum;
+		return p1 + 2 * addendum_;
 	}
 
 	Long op3 (Long p1) const
 	{
-		return p1 + 3 * m_addendum;
+		return p1 + 3 * addendum_;
 	}
 
 	static ::Test::I3_ptr incarnate ()
@@ -287,7 +287,7 @@ public:
 	}
 
 private:
-	Long m_addendum;
+	Long addendum_;
 };
 
 class TiedDerivedI1 :
@@ -306,7 +306,7 @@ public:
 	}
 
 private:
-	Long m_addendum;
+	Long addendum_;
 };
 
 class TiedDerivedI3 :
@@ -325,7 +325,7 @@ public:
 	}
 
 private:
-	Long m_addendum;
+	Long addendum_;
 };
 
 void test_interface (I1_ptr p)

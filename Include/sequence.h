@@ -35,9 +35,9 @@ public:
   const T* get_buffer () const;
   
 private:
-  T* m_data;
-  ULong m_len;
-  ULong m_max;
+  T* data_;
+  ULong len_;
+  ULong max_;
 };
   
 template <typename T, ULong S>
@@ -66,8 +66,8 @@ public:
   const T* get_buffer () const;
   
 private:
-  T* m_data;
-  ULong m_len;
+  T* data_;
+  ULong len_;
 };
 
 } // namespace CORBA

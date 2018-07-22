@@ -38,12 +38,12 @@ public:
 
 	Boolean _is_owner () const
 	{
-		return m_release;
+		return release_;
 	}
 
 	void _is_owner (Boolean rel)
 	{
-		m_release = rel;
+		release_ = rel;
 	}
 
 	template <class I, class S>
@@ -69,19 +69,19 @@ protected:
 
 	void* _implementation () const
 	{
-		assert (m_implementation);
-		return m_implementation;
+		assert (implementation_);
+		return implementation_;
 	}
 
 	void* _tied_object () const
 	{
-		return m_implementation;
+		return implementation_;
 	}
 
 	void _tied_object (void* obj, Boolean release)
 	{
-		m_implementation = obj;
-		m_release = release;
+		implementation_ = obj;
+		release_ = release;
 	}
 
 private:
@@ -89,8 +89,8 @@ private:
 	static InterfaceTiedBase <AbstractBase>& _get_base (Bridge <AbstractBase>* itf);
 
 private:
-	void* m_implementation;
-	Boolean m_release;
+	void* implementation_;
+	Boolean release_;
 };
 
 template <class I>
@@ -163,7 +163,7 @@ class InterfaceTied :
 {
 protected:
 	InterfaceTied () :
-		InterfaceTiedBase <I> (Skeleton <S, I>::sm_epv)
+		InterfaceTiedBase <I> (Skeleton <S, I>::epv_)
 	{}
 
 	static Bridge <Interface>* _find_interface (S& servant, const Char* id)
@@ -181,13 +181,13 @@ public:
 	template <class I>
 	static T& _implementation (Bridge <I>* bridge)
 	{
-		_check_pointer (bridge, Skeleton <S, I>::sm_epv.interface);
+		_check_pointer (bridge, Skeleton <S, I>::epv_.interface);
 		return *reinterpret_cast <T*> (static_cast <InterfaceTiedBase <I>&> (*bridge)._implementation ());
 	}
 
 	static T& _implementation (Bridge <AbstractBase>* bridge)
 	{
-		_check_pointer (bridge, Skeleton <S, AbstractBase>::sm_epv.interface);
+		_check_pointer (bridge, Skeleton <S, AbstractBase>::epv_.interface);
 		return *reinterpret_cast <S*> (static_cast <InterfaceTiedBase <AbstractBase>&> (*bridge)._implementation ());
 	}
 
@@ -195,7 +195,7 @@ public:
 	static Bridge <Base>* _wide (Bridge <Derived>* itf, EnvironmentBridge* env)
 	{
 		try {
-			_check_pointer (itf, Skeleton <S, Derived>::sm_epv.interface);
+			_check_pointer (itf, Skeleton <S, Derived>::epv_.interface);
 			return static_cast <Bridge <Base>*> (static_cast <S*> (itf));
 		} catch (const Exception& e) {
 			env->set_exception (e);
@@ -208,7 +208,7 @@ public:
 	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
 	{
 		try {
-			_check_pointer (base, Skeleton <S, AbstractBase>::sm_epv.interface);
+			_check_pointer (base, Skeleton <S, AbstractBase>::epv_.interface);
 			_check_pointer (id);
 			return static_cast <InterfaceTiedBase <AbstractBase>&> (*base)._find_interface (id);
 		} catch (const Exception& e) {
@@ -234,7 +234,7 @@ public:
 protected:
 	AbstractBaseTied (T* obj, Boolean release)
 	{
-		m_epv = &Skeleton <S, AbstractBase>::sm_epv.interface;
+		epv_ptr_ = &Skeleton <S, AbstractBase>::epv_.interface;
 		_tied_object (obj, release);
 	}
 

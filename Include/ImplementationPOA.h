@@ -20,7 +20,7 @@ public:
 	template <class I>
 	static ServantPOA <I>& _implementation (Bridge <I>* bridge)
 	{
-		_check_pointer (bridge, Skeleton <ServantPOA <I>, I>::sm_epv.interface);
+		_check_pointer (bridge, Skeleton <ServantPOA <I>, I>::epv_.interface);
 		return static_cast <ServantPOA <I>&> (*bridge);
 	}
 
@@ -68,7 +68,7 @@ public:
 	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
 	{
 		try {
-			_check_pointer (base, sm_epv.interface);
+			_check_pointer (base, epv_.interface);
 			_check_pointer (id);
 			return static_cast <ServantPOA <AbstractBase>&> (*base)._find_interface (id);
 		} catch (const Exception& e) {

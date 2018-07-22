@@ -66,22 +66,22 @@ public:
 
 	ULong minor () const
 	{
-		return m_data.minor;
+		return data_.minor;
 	}
 
 	void minor (ULong minor)
 	{
-		m_data.minor = minor;
+		data_.minor = minor;
 	}
 
 	CompletionStatus completed () const
 	{
-		return m_data.completed;
+		return data_.completed;
 	}
 
 	void completed (CompletionStatus status)
 	{
-		m_data.completed = status;
+		data_.completed = status;
 	}
 
 	virtual void _raise () const = 0;
@@ -111,33 +111,33 @@ public:
 protected:
 	SystemException ()
 	{
-		m_data.minor = 0;
-		m_data.completed = COMPLETED_NO;
+		data_.minor = 0;
+		data_.completed = COMPLETED_NO;
 	}
 
 	SystemException (const SystemException& src) :
-		m_data (src.m_data)
+		data_ (src.data_)
 	{}
 
 	SystemException (ULong minor, CompletionStatus status = COMPLETED_NO)
 	{
-		m_data.minor = minor;
-		m_data.completed = status;
+		data_.minor = minor;
+		data_.completed = status;
 	}
 
 	SystemException (const Data* data)
 	{
 		if (data)
-			m_data = *data;
+			data_ = *data;
 		else {
-			m_data.minor = 0;
-			m_data.completed = COMPLETED_NO;
+			data_.minor = 0;
+			data_.completed = COMPLETED_NO;
 		}
 	}
 
 	SystemException& operator = (const SystemException& src)
 	{
-		m_data = src.m_data;
+		data_ = src.data_;
 		return *this;
 	}
 
@@ -188,9 +188,9 @@ protected:
 	};
 
 private:
-	Data m_data;
+	Data data_;
 
-	static const Nirvana::ExceptionEntry sm_create_table [KNOWN_SYSTEM_EXCEPTIONS];
+	static const Nirvana::ExceptionEntry creators_ [KNOWN_SYSTEM_EXCEPTIONS];
 };
 
 #define DECLARE_SYSTEM_EXCEPTION(e) class e : public SystemException {\

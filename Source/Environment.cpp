@@ -7,7 +7,7 @@ namespace Nirvana {
 void EnvironmentBridge::set_exception (const Exception& e)
 {
 	if (this) // Client can pass NULL environment in special cases.
-		(m_epv->set_exception) (this, e.__code (), e._rep_id (), e.__data ());
+		(epv_ptr_->set_exception) (this, e.__code (), e._rep_id (), e.__data ());
 }
 
 void EnvironmentBridge::set_unknown_exception ()
@@ -19,29 +19,29 @@ void EnvironmentBridge::set_unknown_exception ()
 
 using namespace Nirvana;
 
-const Nirvana::EnvironmentBridge::EPV Environment::sm_epv = { __set_exception };
+const Nirvana::EnvironmentBridge::EPV Environment::epv_ = { __set_exception };
 
 Environment::Environment (const ExceptionEntry* const* exceptions) :
-	Nirvana::EnvironmentBridge (sm_epv),
-	m_user_exceptions (exceptions),
-	m_exception (0)
+	Nirvana::EnvironmentBridge (epv_),
+	user_exceptions_ (exceptions),
+	exception_ (0)
 {}
 
 Environment::~Environment ()
 {
-	delete m_exception;
+	delete exception_;
 }
 
 void Environment::exception (Exception* e)
 {
-	delete m_exception;
-	m_exception = e;
+	delete exception_;
+	exception_ = e;
 }
 
 void Environment::clear ()
 {
-	delete m_exception;
-	m_exception = 0;
+	delete exception_;
+	exception_ = 0;
 }
 
 void Environment::__set_exception (EnvironmentBridge* bridge, Long code, const char* rep_id, const void* param)
@@ -53,8 +53,8 @@ void Environment::__set_exception (EnvironmentBridge* bridge, Long code, const c
 		try {
 			if (code >= 0)
 				e = SystemException::_create (rep_id, param, code);
-			else if (_this->m_user_exceptions) {
-				for (const ExceptionEntry* const* p = _this->m_user_exceptions; *p; ++p)
+			else if (_this->user_exceptions_) {
+				for (const ExceptionEntry* const* p = _this->user_exceptions_; *p; ++p)
 					if (RepositoryId::compatible ((*p)->rep_id, rep_id)) {
 						e = ((*p)->create) (param);
 						break;
@@ -64,7 +64,7 @@ void Environment::__set_exception (EnvironmentBridge* bridge, Long code, const c
 			}
 		} catch (...) {
 		}
-		_this->m_exception = e;
+		_this->exception_ = e;
 	}
 }
 
