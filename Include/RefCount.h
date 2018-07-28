@@ -2,12 +2,7 @@
 #define NIRVANA_ORB_REFCOUNT_H_
 
 #include "BasicTypes.h"
-
-#ifdef _MSC_VER
-#include <intrin.h>
-#else
 #include <atomic>
-#endif
 
 namespace CORBA {
 namespace Nirvana {
@@ -24,23 +19,6 @@ public:
 		return refcnt_;
 	}
 
-#ifdef _MSC_VER
-
-	void increment ()
-	{
-		_InterlockedIncrement ((long*)&refcnt_);
-	}
-
-	ULong decrement ()
-	{
-		return _InterlockedDecrement ((long*)&refcnt_);
-	}
-
-private:
-	ULong refcnt_;
-
-#else
-
 	void increment ()
 	{
 		++refcnt_;
@@ -53,7 +31,6 @@ private:
 
 private:
 	std::atomic <ULong> refcnt_;
-#endif
 };
 
 class RefCountBase
