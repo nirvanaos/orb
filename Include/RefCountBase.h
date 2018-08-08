@@ -1,8 +1,7 @@
 #ifndef NIRVANA_ORB_REFCOUNTBASE_H_
 #define NIRVANA_ORB_REFCOUNTBASE_H_
 
-#include <InterlockedCounter.h>
-#include <atomic>
+#include <AtomicCounter.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -39,7 +38,7 @@ protected:
 	{}
 
 private:
-	::Nirvana::InterlockedCounter ref_count_;
+	::Nirvana::AtomicCounter ref_count_;
 };
 
 }
