@@ -1,37 +1,11 @@
-#ifndef NIRVANA_ORB_REFCOUNT_H_
-#define NIRVANA_ORB_REFCOUNT_H_
+#ifndef NIRVANA_ORB_REFCOUNTBASE_H_
+#define NIRVANA_ORB_REFCOUNTBASE_H_
 
-#include "BasicTypes.h"
+#include <InterlockedCounter.h>
 #include <atomic>
 
 namespace CORBA {
 namespace Nirvana {
-
-class RefCount
-{
-public:
-	RefCount () :
-		refcnt_ (1)
-	{}
-
-	operator ULong () const
-	{
-		return refcnt_;
-	}
-
-	void increment ()
-	{
-		++refcnt_;
-	}
-
-	ULong decrement ()
-	{
-		return --refcnt_;
-	}
-
-private:
-	std::atomic <ULong> refcnt_;
-};
 
 class RefCountBase
 {
@@ -57,14 +31,15 @@ public:
 	}
 
 protected:
-	RefCountBase ()
+	RefCountBase () :
+		ref_count_ (1)
 	{}
 
 	virtual ~RefCountBase ()
 	{}
 
 private:
-	RefCount ref_count_;
+	::Nirvana::InterlockedCounter ref_count_;
 };
 
 }
