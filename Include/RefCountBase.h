@@ -30,18 +30,19 @@ public:
 	}
 
 protected:
-	RefCountBase () :
-		ref_count_ (1)
+	RefCountBase ()
 	{}
 
 	virtual ~RefCountBase ()
 	{}
 
 private:
-	::Nirvana::AtomicCounter ref_count_;
+	::Nirvana::RefCounter ref_count_;
 };
 
 }
 }
+
+#undef USE_INTRINSIC_ATOMIC
 
 #endif
