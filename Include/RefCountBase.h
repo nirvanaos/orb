@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_REFCOUNTBASE_H_
 #define NIRVANA_ORB_REFCOUNTBASE_H_
 
-#include <AtomicCounter.h>
+#include "../../core/Source/AtomicCounter.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -37,7 +37,7 @@ protected:
 	{}
 
 private:
-	::Nirvana::RefCounter ref_count_;
+	::Nirvana::Core::RefCounter ref_count_;
 };
 
 }
