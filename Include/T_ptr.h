@@ -1,10 +1,7 @@
 #ifndef NIRVANA_ORB_T_PTR_H_
 #define NIRVANA_ORB_T_PTR_H_
 
-#include <cassert>
-
 namespace CORBA {
-
 namespace Nirvana {
 
 //! General T_ptr template
