@@ -84,6 +84,7 @@ protected:
 private:
 	template <class T1> friend class T_ptr;
 	friend class ClientInterface <T>;
+	template <class T1, class I> friend class Client;
 	template <class S, class I> friend class Skeleton;
 
   friend void CORBA::release <T> (T_ptr <T>);
