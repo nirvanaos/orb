@@ -101,7 +101,7 @@ class T_var : public T_ptr <T>
 {
 public:
 	T_var () :
-		T_ptr <T> (0)
+		T_ptr <T> ((T*)nullptr)
 	{}
 
 	T_var (T_ptr <T> p) :
