@@ -1,6 +1,6 @@
-// Nirvana project
-// Object Request Broker
-// Standard Nirvana interface implementation
+// The Nirvana project.
+// Object Request Broker.
+// Standard Nirvana interface implementation.
 #ifndef NIRVANA_ORB_IMPLEMENTATION_H_
 #define NIRVANA_ORB_IMPLEMENTATION_H_
 
@@ -66,7 +66,9 @@ public:
 	template <class I>
 	static Bridge <I>& _narrow (Bridge <AbstractBase>& base)
 	{
-		return static_cast <Bridge <I>&> (static_cast <S&> (base));
+		S& servant = static_cast <S&> (base);
+		servant._add_ref ();
+		return static_cast <Bridge <I>&> (servant);
 	}
 
 	template <class Base, class Derived>

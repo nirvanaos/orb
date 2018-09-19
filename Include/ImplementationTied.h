@@ -49,6 +49,7 @@ public:
 	template <class I, class S>
 	static Bridge <I>& _narrow (S& servant)
 	{
+		servant._add_ref ();
 		return static_cast <Bridge <I>&> (servant);
 	}
 

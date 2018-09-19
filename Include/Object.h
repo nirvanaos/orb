@@ -118,7 +118,7 @@ public:
 
 inline Object_ptr AbstractBase::_to_object ()
 {
-	return Object::_duplicate (static_cast <Bridge <Object>*> (_find_interface (Bridge <Object>::_primary_interface ())));
+	return static_cast <Bridge <Object>*> (_find_interface (Bridge <Object>::_primary_interface ()));
 }
 
 namespace Nirvana {
@@ -178,7 +178,7 @@ Boolean Client <T, Object>::_is_equivalent (Object_ptr other_object)
 template <class I>
 T_ptr <I> ClientInterface <I>::_narrow (T_ptr <Object> obj)
 {
-	return _duplicate (static_cast <Bridge <I>*> (obj->_find_interface (Bridge <I>::_primary_interface ())));
+	return static_cast <Bridge <I>*> (obj->_find_interface (Bridge <I>::_primary_interface ()));
 }
 
 // Default implementation of Object interface
@@ -242,8 +242,16 @@ protected:
 	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
-			_check_pointer (type_id);
-			return S::___is_a (type_id);
+			Boolean ret = FALSE;
+			Bridge <AbstractBase>* base = (obj->_epv ().base.CORBA_AbstractBase) (obj, env);
+			if (base) {
+				Bridge <Interface>* itf = base->_epv ().epv.find_interface (base, type_id, env);
+				if (itf) {
+					ret = TRUE;
+					itf->_epv ().release (itf);
+				}
+			}
+			return ret;
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {

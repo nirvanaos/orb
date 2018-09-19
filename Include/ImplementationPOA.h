@@ -49,6 +49,7 @@ public:
 	template <class I>
 	static Bridge <I>& _narrow (Bridge <I>& base)
 	{
+		static_cast <ServantPOA <I>&> (base)._add_ref ();
 		return base;
 	}
 

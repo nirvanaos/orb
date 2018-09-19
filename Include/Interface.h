@@ -17,11 +17,11 @@ typedef Nirvana::T_out <Object> Object_out;
 
 namespace Nirvana {
 
-//! All interfaces derived from Interface class.
-//! This class provides life-cycle management and pointer to entry-point vector (EPV).
+/// All interfaces derived from Interface class.
+/// This class provides life-cycle management and pointer to entry-point vector (EPV).
 class Interface;
 
-//! All bridges should be derived from Bridge <Interface>.
+/// All bridges should be derived from `Bridge <Interface>`.
 template <>
 class Bridge <Interface>
 {
