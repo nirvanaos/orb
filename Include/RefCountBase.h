@@ -21,7 +21,7 @@ public:
 	void _remove_ref ()
 	{
 		if (!ref_count_.decrement ())
-			delete this;
+			final_release ();
 	}
 
 	ULong _refcount_value () const
@@ -35,6 +35,11 @@ protected:
 
 	virtual ~RefCountBase ()
 	{}
+
+	virtual void final_release ()
+	{
+		delete this;
+	}
 
 private:
 	::Nirvana::Core::RefCounter ref_count_;
