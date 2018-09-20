@@ -118,11 +118,6 @@ public:
 		return InterfaceImpl <ServantPOA <Primary>, Primary>::_find_interface (*this, id);
 	}
 
-	virtual Boolean _is_a (const Char* type_id)
-	{
-		return Bridge <Primary>::___is_a (type_id);
-	}
-
 	T_ptr <Primary> _this ()
 	{
 		return InterfaceImpl <ServantPOA <Primary>, Primary>::_this ();

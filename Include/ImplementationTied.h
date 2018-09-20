@@ -265,11 +265,6 @@ public:
 		return InterfaceTied <ServantTied <T, Primary>, Primary>::_find_interface (static_cast <ServantTied <T, Primary>&> (*this), id);
 	}
 
-	static Boolean ___is_a (const Char* type_id)
-	{
-		return Bridge <Primary>::___is_a (type_id);
-	}
-
 	T_ptr <Primary> _this ()
 	{
 		return InterfaceTiedBase <Primary>::_this ();

@@ -67,11 +67,6 @@ public:
 		return CORBA_REPOSITORY_ID (Object);
 	}
 
-	static Boolean ___is_a (const Char* type_id)
-	{
-		return RepositoryId::compatible(_primary_interface (), type_id);
-	}
-
 protected:
 	friend class CORBA::AbstractBase;
 
@@ -202,6 +197,8 @@ public:
 	{
 		return FALSE;
 	}
+
+	static Boolean _is_a (AbstractBase_ptr base, const char* type_id);
 };
 
 // Object skeleton
@@ -242,22 +239,19 @@ protected:
 	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
-			Boolean ret = FALSE;
-			Bridge <AbstractBase>* base = (obj->_epv ().base.CORBA_AbstractBase) (obj, env);
-			if (base) {
-				Bridge <Interface>* itf = base->_epv ().epv.find_interface (base, type_id, env);
-				if (itf) {
-					ret = TRUE;
-					itf->_epv ().release (itf);
-				}
-			}
-			return ret;
+			return S::_object (obj)._is_a (type_id);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
 			env->set_unknown_exception ();
 		}
 		return 0;
+	}
+
+	Boolean _is_a (const Char* type_id)
+	{
+		Object_ptr obj = static_cast <S*> (this)->_this ();
+		return ObjectBase::_is_a (obj, type_id);
 	}
 
 	static Boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
@@ -348,17 +342,9 @@ public:
 		return ObjectBase::_non_existent ();
 	}
 
-	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
+	virtual Boolean _is_a (const Char* type_id)
 	{
-		try {
-			_check_pointer (type_id);
-			return _implementation (obj)._is_a (type_id);
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return 0;
+		return Skeleton <ServantPOA < ::CORBA::Object>, ::CORBA::Object>::_is_a (type_id);
 	}
 };
 

@@ -92,11 +92,6 @@ public:
 		return InterfaceStatic <S, Primary>::_find_interface (base, id);
 	}
 
-	static Boolean ___is_a (const Char* type_id)
-	{
-		return Bridge <Primary>::___is_a (type_id);
-	}
-
 	static T_ptr <Primary> _this ()
 	{
 		return InterfaceStatic <S, Primary>::_this ();

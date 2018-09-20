@@ -50,16 +50,6 @@ public:
 		return "IDL:Test/I3:1.0";
 	}
 
-	static Boolean ___is_a (const Char* id)
-	{
-		if (RepositoryId::compatible (_primary_interface (), id))
-			return TRUE;
-		// Here we must call all direct base classes
-		if (Bridge < ::Test::I1>::___is_a (id))
-			return TRUE;
-		return Bridge < ::Test::I2>::___is_a (id);
-	}
-
 protected:
 	Bridge (const EPV& epv) :
 		Bridge <Interface> (epv.interface)

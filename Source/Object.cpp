@@ -13,5 +13,15 @@ Boolean ObjectBase::__is_equivalent (Bridge <Object>* obj, Bridge <Object>* othe
 	return obj == other_object;
 }
 
+Boolean ObjectBase::_is_a (AbstractBase_ptr base, const char* type_id)
+{
+	Bridge <Interface>* itf = base->_find_interface (type_id);
+	if (itf) {
+		(itf->_epv ().release) (itf);
+		return TRUE;
+	} else
+		return FALSE;
+}
+
 }
 }

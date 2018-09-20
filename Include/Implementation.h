@@ -99,21 +99,19 @@ public:
 		return Bridge <Primary>::_primary_interface ();
 	}
 
-	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
-	{
-		return Skeleton <S, Primary>::_find_interface (base, id);
-	}
-
-	static Boolean ___is_a (const Char* type_id)
-	{
-		return Bridge <Primary>::___is_a (type_id);
-	}
+	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id);
 
 	T_ptr <Primary> _this ()
 	{
 		return InterfaceImpl <S, Primary>::_this ();
 	}
 };
+
+template <class S, class Primary, class ... Base>
+Bridge <Interface>* Implementation <S, Primary, Base...>::_find_interface (Bridge <AbstractBase>& base, const Char* id)
+{
+	return Skeleton <S, Primary>::_find_interface (base, id);
+}
 
 }
 }
