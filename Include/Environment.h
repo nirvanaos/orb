@@ -44,6 +44,13 @@ public:
 		return exception_;
 	}
 
+	Exception* detach ()
+	{
+		Exception* ret = exception_;
+		exception_ = nullptr;
+		return ret;
+	}
+
 	void clear ();
 
 	void check () const

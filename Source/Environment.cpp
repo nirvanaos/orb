@@ -24,7 +24,7 @@ const Nirvana::EnvironmentBridge::EPV Environment::epv_ = { __set_exception };
 Environment::Environment (const ExceptionEntry* const* exceptions) :
 	Nirvana::EnvironmentBridge (epv_),
 	user_exceptions_ (exceptions),
-	exception_ (0)
+	exception_ (nullptr)
 {}
 
 Environment::~Environment ()
@@ -41,7 +41,7 @@ void Environment::exception (Exception* e)
 void Environment::clear ()
 {
 	delete exception_;
-	exception_ = 0;
+	exception_ = nullptr;
 }
 
 void Environment::__set_exception (EnvironmentBridge* bridge, Long code, const char* rep_id, const void* param)
