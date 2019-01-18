@@ -3,7 +3,7 @@
 #ifndef NIRVANA_ORB_INTERFACE_H_
 #define NIRVANA_ORB_INTERFACE_H_
 
-#include <Nirvana.h>
+#include <Nirvana/Nirvana.h>
 #include "Environment.h"
 #include "T_ptr.h"
 #include "RepositoryId.h"
