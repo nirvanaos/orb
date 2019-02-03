@@ -2,7 +2,6 @@
 #define NIRVANA_ORB_ABSTRACTBASE_H_
 
 #include "Interface.h"
-#include "RefCountBase.h"
 
 namespace CORBA {
 

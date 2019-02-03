@@ -5,6 +5,7 @@
 #define NIRVANA_ORB_IMPLEMENTATIONTIED_H_
 
 #include "AbstractBase.h"
+#include "RefCountBase.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -150,11 +151,6 @@ protected:
 
 	InterfaceTiedBase ()
 	{}
-
-	T_ptr <I> _this ()
-	{
-		return static_cast <Bridge <I>*> (this);
-	}
 };
 
 template <class S, class I>

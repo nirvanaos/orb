@@ -41,6 +41,8 @@ class DynamicI1 :
 	public Instance
 {
 public:
+	typedef ::Test::I1 _PrimaryInterface;
+
 	DynamicI1 (Long addendum) :
 		addendum_ (addendum)
 	{}
@@ -103,6 +105,7 @@ private:
 };
 
 // Portable implementation
+#ifndef TEST_NO_POA
 
 class PortableI1 :
 	public POA_Test::I1,
@@ -169,9 +172,10 @@ public:
 private:
 	Long addendum_;
 };
+#endif
 
 // Static implementation
-
+#ifndef TEST_NO_STATIC
 class StaticI1 :
 	public ::CORBA::Nirvana::ServantStatic <StaticI1, ::Test::I1>,
 	public Instance
@@ -223,9 +227,10 @@ public:
 		return _this ();
 	}
 };
+#endif
 
 // Tied implementation
-
+#ifndef TEST_NO_TIED
 class TiedI1 :
 	public Instance
 {
@@ -327,6 +332,7 @@ public:
 private:
 	Long addendum_;
 };
+#endif
 
 void test_interface (I1_ptr p)
 {
@@ -401,7 +407,18 @@ TEST_F (TestORB, RepositoryId)
 
 // The fixture for testing simple interface.
 
-typedef ::testing::Types <DynamicI1, PortableI1, StaticI1, TiedI1, TiedDerivedI1> ServantTypesI1;
+typedef ::testing::Types <DynamicI1
+#ifndef TEST_NO_POA
+	,PortableI1
+#endif
+#ifndef TEST_NO_STATIC
+	,StaticI1
+#endif
+#ifndef TEST_NO_TIED
+	,TiedI1
+	,TiedDerivedI1
+#endif
+> ServantTypesI1;
 
 template <class Servant>
 class TestORB_I1 :
@@ -452,7 +469,18 @@ TYPED_TEST (TestORB_I1, Exception)
 
 // The fixture for testing complex interface.
 
-typedef ::testing::Types <DynamicI3, PortableI3, StaticI3, TiedI3, TiedDerivedI3> ServantTypesI3;
+typedef ::testing::Types <DynamicI3
+#ifndef TEST_NO_POA
+	,PortableI3
+#endif
+#ifndef TEST_NO_STATIC
+	,StaticI3
+#endif
+#ifndef TEST_NO_TIED
+	,TiedI3
+	,TiedDerivedI3
+#endif
+> ServantTypesI3;
 
 template <class Servant>
 class TestORB_I3 :

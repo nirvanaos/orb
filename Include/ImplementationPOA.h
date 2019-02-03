@@ -11,6 +11,8 @@ namespace Nirvana {
 
 template <class I> class ServantPOA;
 
+// Virtual implementation of AbstractBase
+
 template <>
 class ServantPOA <AbstractBase> :
 	public InterfaceImpl <ServantPOA <AbstractBase>, AbstractBase>,
@@ -46,18 +48,18 @@ public:
 		}
 	}
 
-	template <class I>
-	static Bridge <I>& _narrow (Bridge <I>& base)
+	template <class I, class S>
+	static Bridge <I>& _narrow (S& servant)
 	{
-		static_cast <ServantPOA <I>&> (base)._add_ref ();
-		return base;
+		servant._add_ref ();
+		return static_cast <Bridge <I>&> (servant);
 	}
 
 	template <class Base, class Derived>
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, EnvironmentBridge* env)
 	{
 		try {
-			return static_cast <Bridge <Base>*> (&_implementation (derived));
+			return &static_cast <Bridge <Base>&> (_implementation (derived));
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
@@ -99,30 +101,72 @@ protected:
 	virtual Bridge <Interface>* _find_interface (const Char* id) = 0;
 };
 
-template <class Primary, class ... Base> // Base includes only directly derived interfaces
-class ImplementationPOA :
+typedef ServantPOA <AbstractBase> AbstractBasePOA;
+
+// Virtual implementation of ServantBase
+
+template <>
+class ServantPOA <ServantBase> :
 	public virtual ServantPOA <AbstractBase>,
-	public virtual ServantPOA <Base> ...,
-	public InterfaceImpl <ServantPOA <Primary>, Primary>
+	public InterfaceImpl <ServantPOA <ServantBase>, ServantBase>,
+	public ServantBaseImpl
 {
 public:
-	typedef Primary _PrimaryInterface;
+	// ServantBase operations
 
-	static const Char* _primary_interface ()
+	virtual POA_ptr _default_POA ()
 	{
-		return Bridge <Primary>::_primary_interface ();
+		return ServantBaseImpl::_default_POA ();
+	}
+
+	virtual InterfaceDef_ptr _get_interface ()
+	{
+		return ServantBaseImpl::_get_interface ();
+	}
+
+	virtual Boolean _is_a (const Char* type_id)
+	{
+		return ServantBaseImpl::_is_a (type_id);
+	}
+
+	virtual Boolean _non_existent ()
+	{
+		return ServantBaseImpl::_non_existent ();
+	}
+
+protected:
+	ServantPOA () :
+		ServantBaseImpl (this, _primary_interface ())
+	{}
+protected:
+	virtual const Char* _primary_interface () = 0;
+};
+
+template <>
+class ServantPOA <Object> :
+	public ServantPOA <ServantBase>
+{
+public:
+	// For _narrow() and _wide() operations
+	operator Bridge <Object>& ()
+	{
+		_activate ();
+		return *servant_links_->object;
+	}
+
+protected:
+	virtual const Char* _primary_interface ()
+	{
+		return Bridge <Object>::interface_id_;
 	}
 
 	virtual Bridge <Interface>* _find_interface (const Char* id)
 	{
-		return InterfaceImpl <ServantPOA <Primary>, Primary>::_find_interface (*this, id);
-	}
-
-	T_ptr <Primary> _this ()
-	{
-		return InterfaceImpl <ServantPOA <Primary>, Primary>::_this ();
+		return Skeleton <ServantPOA <Object>, Object>::_find_interface (*this, id);
 	}
 };
+
+typedef ServantPOA <Object> ObjectPOA;
 
 }
 }

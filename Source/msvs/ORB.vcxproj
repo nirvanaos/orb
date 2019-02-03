@@ -23,29 +23,32 @@
     <ClCompile Include="..\Environment.cpp" />
     <ClCompile Include="..\Exception.cpp" />
     <ClCompile Include="..\ImplementationTied.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Interface.cpp" />
-    <ClCompile Include="..\Object.cpp" />
     <ClCompile Include="..\RepositoryId.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\AbstractBase.h" />
+    <ClInclude Include="..\..\Include\Any.h" />
     <ClInclude Include="..\..\Include\BasicTypes.h" />
     <ClInclude Include="..\..\Include\Environment.h" />
     <ClInclude Include="..\..\Include\Exception.h" />
+    <ClInclude Include="..\..\Include\Fixed.h" />
     <ClInclude Include="..\..\Include\Implementation.h" />
     <ClInclude Include="..\..\Include\ImplementationPOA.h" />
     <ClInclude Include="..\..\Include\ImplementationStatic.h" />
     <ClInclude Include="..\..\Include\ImplementationTied.h" />
     <ClInclude Include="..\..\Include\Interface.h" />
     <ClInclude Include="..\..\Include\Object.h" />
+    <ClInclude Include="..\..\Include\ObjectAdapter.h" />
     <ClInclude Include="..\..\Include\ORB.h" />
     <ClInclude Include="..\..\Include\PortableServer.h" />
     <ClInclude Include="..\..\Include\RefCountBase.h" />
     <ClInclude Include="..\..\Include\RepositoryId.h" />
     <ClInclude Include="..\..\Include\sequence.h" />
+    <ClInclude Include="..\..\Include\ServantBase.h" />
     <ClInclude Include="..\..\Include\T_ptr.h" />
     <ClInclude Include="..\giop.h" />
     <ClInclude Include="..\iop.h" />

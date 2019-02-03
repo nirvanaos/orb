@@ -64,10 +64,7 @@ protected:
 //! Interface - All client interfaces derive this
 class Interface
 {
-protected:
-	template <class I>
-	friend void CORBA::release (T_ptr <I>);
-
+public:
 	static Bridge <Interface>* __duplicate (Bridge <Interface>* p);
 	static void __release (Bridge <Interface>* p);
 };
@@ -87,6 +84,7 @@ public:
 		return static_cast <Bridge <I>*> (__duplicate (obj));
 	}
 
+	// For the definition of this method see Object.h
 	static T_ptr <I> _narrow (T_ptr <Object> obj);
 
 	static T_ptr <I> _nil ()

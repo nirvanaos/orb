@@ -45,10 +45,7 @@ public:
 		return (EPV&)Bridge <Interface>::_epv ();
 	}
 
-	static const Char* _primary_interface ()
-	{
-		return "IDL:Test/I3:1.0";
-	}
+	static const Char interface_id_ [];
 
 protected:
 	Bridge (const EPV& epv) :
@@ -58,6 +55,8 @@ protected:
 	Bridge ()
 	{}
 };
+
+const Char Bridge < ::Test::I3>::interface_id_ [] = "IDL:Test/I3:1.0";
 
 template <class T>
 class Client <T, ::Test::I3> :
@@ -134,7 +133,7 @@ public:
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
 		Bridge <Interface>* itf;
-		if (RepositoryId::compatible (Bridge < ::Test::I3>::_primary_interface (), id))
+		if (RepositoryId::compatible (Bridge < ::Test::I3>::interface_id_, id))
 			itf = &S::template _narrow < ::Test::I3> (base);
 		// Call all direct bases
 		else if (!(itf = Skeleton <S, ::Test::I2>::_find_interface (base, id)))
@@ -176,28 +175,68 @@ const Bridge < ::Test::I3>::EPV Skeleton <S, ::Test::I3>::epv_ = {
 
 template <class S>
 class Servant <S, ::Test::I3> :
-	public Implementation <S, ::Test::I3, ::Test::I2, ::Test::I1, ::CORBA::Object>
-{};
-
-// POA implementation
-
-template <>
-class ServantPOA < ::Test::I3> :
-	public ImplementationPOA < ::Test::I3, ::Test::I2, ::Test::I1>
+	public AbstractBaseImpl <S>,
+	public ObjectImpl <S, ::Test::I3>,
+	public InterfaceImpl <S, ::Test::I3>,
+	public InterfaceImpl <S, ::Test::I2>,
+	public InterfaceImpl <S, ::Test::I1>
 {
 public:
-	virtual Long op3 (Long p1) = 0;
+	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
+	{
+		return Skeleton <S, ::Test::I3>::_find_interface (base, id);
+	}
 };
 
-// Static implementation
+// POA implementation
+#ifndef TEST_NO_POA
+template <>
+class ServantPOA < ::Test::I3> :
+	public virtual ServantPOA < ::Test::I1>,
+	public virtual ServantPOA < ::Test::I2>,
+	public InterfaceImpl <ServantPOA < ::Test::I3>, ::Test::I3>
+{
+public:
+	virtual const Char* _primary_interface ()
+	{
+		return Bridge < ::Test::I3>::interface_id_;
+	}
 
+	virtual Bridge <Interface>* _find_interface (const Char* id)
+	{
+		return Skeleton <ServantPOA < ::Test::I3>, ::Test::I3>::_find_interface (*this, id);
+	}
+
+	T_ptr < ::Test::I3> _this ()
+	{
+		ServantBaseImpl::_activate ();
+		return this;
+	}
+
+	virtual Long op3 (Long p1) = 0;
+};
+#endif
+
+// Static implementation
+#ifndef TEST_NO_STATIC
 template <class S>
 class ServantStatic <S, ::Test::I3> :
-	public ImplementationStatic <S, ::Test::I3, ::Test::I2, ::Test::I1, ::CORBA::Object>
-{};
+	public AbstractBaseStatic <S>,
+	public ObjectStatic <S, ::Test::I3>,
+	public InterfaceStatic <S, ::Test::I3>,
+	public InterfaceStatic <S, ::Test::I2>,
+	public InterfaceStatic <S, ::Test::I1>
+{
+public:
+	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
+	{
+		return Skeleton <S, ::Test::I3>::_find_interface (base, id);
+	}
+};
+#endif
 
 // Tied implementation
-
+#ifndef TEST_NO_TIED
 template <class T>
 class ServantTied <T, ::Test::I3> :
 	public ImplementationTied <T, ::Test::I3, ::Test::I2, ::Test::I1, ::CORBA::Object>
@@ -207,14 +246,18 @@ public:
 		ImplementationTied <T, ::Test::I3, ::Test::I2, ::Test::I1, ::CORBA::Object> (tp, release)
 	{}
 };
+#endif
 
 }
 }
 
 namespace POA_Test {
 
+#ifndef TEST_NO_POA
 typedef ::CORBA::Nirvana::ServantPOA < ::Test::I3> I3;
+#endif
 
+#ifndef TEST_NO_TIED
 template <class T>
 class I3_tie :
 	public ::CORBA::Nirvana::ServantTied <T, ::Test::I3>
@@ -232,6 +275,7 @@ public:
 
 	I3_tie (T* tp, ::PortableServer::POA_ptr poa, ::CORBA::Boolean release = TRUE);	// Generate only if Object is derived
 };
+#endif
 
 }
 
