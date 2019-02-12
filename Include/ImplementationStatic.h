@@ -4,7 +4,9 @@
 #ifndef NIRVANA_ORB_IMPLEMENTATIONSTATIC_H_
 #define NIRVANA_ORB_IMPLEMENTATIONSTATIC_H_
 
-#include "ServantBase.h"
+#include "ObjectAdapter_c.h"
+#include "AbstractBase_s.h"
+#include "ServantBase_s.h"
 
 namespace CORBA {
 namespace Nirvana {

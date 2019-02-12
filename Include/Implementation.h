@@ -5,6 +5,8 @@
 #define NIRVANA_ORB_IMPLEMENTATION_H_
 
 #include "ObjectAdapter_c.h"
+#include "AbstractBase_s.h"
+#include "ServantBase_s.h"
 #include "RefCountBase.h"
 
 namespace CORBA {

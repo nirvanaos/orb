@@ -1,4 +1,6 @@
-#include "Test_I3_c.h"
+#include "Test_I1_s.h"
+#include "Test_I2_s.h"
+#include "Test_I3_s.h"
 #include <gtest/gtest.h>
 
 using namespace std;

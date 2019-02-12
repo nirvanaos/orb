@@ -65,5 +65,17 @@
     <ClInclude Include="..\Test_I3_c.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Test_I1_s.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Test_I2_s.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Server.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Test_I3_s.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

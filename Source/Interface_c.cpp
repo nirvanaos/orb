@@ -1,4 +1,4 @@
-#include "Interface.h"
+#include "Interface_c.h"
 
 namespace CORBA {
 namespace Nirvana {
