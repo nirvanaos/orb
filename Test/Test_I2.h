@@ -53,8 +53,6 @@ protected:
 	{}
 };
 
-const Char Bridge < ::Test::I2>::interface_id_ [] = "IDL:Test/I2:1.0";
-
 template <class T>
 class Client <T, ::Test::I2> :
 	public ClientBase <T, ::Test::I2>
@@ -83,7 +81,7 @@ class I2 :
 	public CORBA::Nirvana::Client <I2, ::CORBA::Object>
 {
 public:
-	typedef I1_ptr _ptr_type;
+	typedef I2_ptr _ptr_type;
 
 	operator ::CORBA::Object& ()
 	{
@@ -110,7 +108,7 @@ public:
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
 		if (RepositoryId::compatible (Bridge < ::Test::I2>::interface_id_, id))
-			return &S::template _narrow < ::Test::I2> (base);
+			return &static_cast <Bridge < ::Test::I2>&> (base);
 		else
 			return Skeleton <S, Object>::_find_interface (base, id);
 	}
@@ -132,8 +130,8 @@ protected:
 template <class S>
 const Bridge < ::Test::I2>::EPV Skeleton <S, ::Test::I2>::epv_ = {
 	{ // interface
-		S::template _duplicate < ::Test::I2>,
-		S::template _release < ::Test::I2>
+		S::template __duplicate < ::Test::I2>,
+		S::template __release < ::Test::I2>
 	},
 	{ // base
 		S::template _wide <Object, ::Test::I2>
@@ -147,14 +145,13 @@ const Bridge < ::Test::I2>::EPV Skeleton <S, ::Test::I2>::epv_ = {
 
 template <class S>
 class Servant <S, ::Test::I2> :
-	public AbstractBaseImpl <S>,
-	public ObjectImpl <S, ::Test::I2>,
+	public ServantBaseImpl <S, ::Test::I2>,
 	public InterfaceImpl <S, ::Test::I2>
 {
 public:
-	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
+	Bridge <Interface>* _find_interface (const Char* id)
 	{
-		return Skeleton <S, ::Test::I2>::_find_interface (base, id);
+		return Skeleton <S, ::Test::I2>::_find_interface (*this, id);
 	}
 };
 
@@ -190,14 +187,13 @@ public:
 #ifndef TEST_NO_STATIC
 template <class S>
 class ServantStatic <S, ::Test::I2> :
-	public AbstractBaseStatic <S>,
-	public ObjectStatic <S, ::Test::I2>,
+	public ServantBaseStatic <S, ::Test::I2>,
 	public InterfaceStatic <S, ::Test::I2>
 {
 public:
-	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
+	static Bridge <Interface>* _find_interface (const Char* id)
 	{
-		return Skeleton <S, ::Test::I2>::_find_interface (base, id);
+		return Skeleton <S, ::Test::I2>::_find_interface (*(S*)nullptr, id);
 	}
 };
 #endif

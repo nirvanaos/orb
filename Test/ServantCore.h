@@ -7,7 +7,7 @@ namespace CORBA {
 namespace Nirvana {
 
 class ServantCore :
-	public AbstractBaseNoRefCnt <ServantCore>,
+	public AbstractBaseImplNoRefCnt <ServantCore>,
 	public InterfaceImpl <ServantCore, ServantBase>
 {
 public:
@@ -16,10 +16,12 @@ public:
 		interface_id_ (interface_id)
 	{}
 
-	static void _add_ref ()
-	{}
+	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf)
+	{
+		return itf;
+	}
 
-	static void _remove_ref ()
+	static void _release (Bridge <Interface>* itf)
 	{}
 
 	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)

@@ -51,12 +51,7 @@ public:
 	{
 		return (EPV&)Bridge <Interface>::_epv ();
 	}
-/* ??? Is this necessary?
-	static const Char* _primary_interface ()
-	{
-		return NIRVANA_REPOSITORY_ID (ServantBase);
-	}
-*/
+
 protected:
 	Bridge (const EPV& epv) :
 		Bridge <Interface> (epv.interface)
@@ -194,8 +189,8 @@ protected:
 template <class S>
 const Bridge <ServantBase>::EPV Skeleton <S, ServantBase>::epv_ = {
 	{ // interface
-		S::template _duplicate <ServantBase>,
-		S::template _release <ServantBase>
+		S::template __duplicate <ServantBase>,
+		S::template __release <ServantBase>
 	},
 	{ // base
 		S::template _wide <::CORBA::AbstractBase, ServantBase>

@@ -125,7 +125,7 @@ public:
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
 		if (RepositoryId::compatible (Bridge <ObjectAdapter>::_primary_interface (), id))
-			return &S::template _narrow	<ObjectAdapter> (base);
+			return &static_cast <Bridge <ObjectAdapter>&> (base);
 		else
 			return nullptr;
 	}

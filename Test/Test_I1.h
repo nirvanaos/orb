@@ -54,8 +54,6 @@ protected:
 	{}
 };
 
-const Char Bridge < ::Test::I1>::interface_id_ [] = "IDL:Test/I1:1.0";
-
 template <class T>
 class Client <T, ::Test::I1> :
 	public ClientBase <T, ::Test::I1>
@@ -121,7 +119,7 @@ public:
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
 		if (RepositoryId::compatible (Bridge < ::Test::I1>::interface_id_, id))
-			return &S::template _narrow < ::Test::I1> (base);
+			return &static_cast <Bridge < ::Test::I1>&> (base);
 		else
 			return Skeleton <S, Object>::_find_interface (base, id);
 	}
@@ -154,8 +152,8 @@ protected:
 template <class S>
 const Bridge < ::Test::I1>::EPV Skeleton <S, ::Test::I1>::epv_ = {
 	{ // interface
-		S::template _duplicate < ::Test::I1>,
-		S::template _release < ::Test::I1>
+		S::template __duplicate < ::Test::I1>,
+		S::template __release < ::Test::I1>
 	},
 	{ // base
 		S::template _wide <Object, ::Test::I1>
@@ -170,14 +168,13 @@ const Bridge < ::Test::I1>::EPV Skeleton <S, ::Test::I1>::epv_ = {
 
 template <class S>
 class Servant <S, ::Test::I1> :
-	public AbstractBaseImpl <S>,
-	public ObjectImpl <S, ::Test::I1>,
+	public ServantBaseImpl <S, ::Test::I1>,
 	public InterfaceImpl <S, ::Test::I1>
 {
 public:
-	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
+	Bridge <Interface>* _find_interface (const Char* id)
 	{
-		return Skeleton <S, ::Test::I1>::_find_interface (base, id);
+		return Skeleton <S, ::Test::I1>::_find_interface (*this, id);
 	}
 };
 
@@ -214,14 +211,13 @@ public:
 #ifndef TEST_NO_STATIC
 template <class S>
 class ServantStatic <S, ::Test::I1> :
-	public AbstractBaseStatic <S>,
-	public ObjectStatic <S, ::Test::I1>,
+	public ServantBaseStatic <S, ::Test::I1>,
 	public InterfaceStatic <S, ::Test::I1>
 {
 public:
-	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
+	static Bridge <Interface>* _find_interface (const Char* id)
 	{
-		return Skeleton <S, ::Test::I1>::_find_interface (base, id);
+		return Skeleton <S, ::Test::I1>::_find_interface (*(S*)nullptr, id);
 	}
 };
 #endif

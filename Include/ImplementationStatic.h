@@ -26,12 +26,17 @@ class InterfaceStatic :
 {
 	InterfaceStatic ();	// Never be instantiated
 public:
-	static Bridge <I>* _bridge ()
+	operator Bridge <I>& () const
 	{
-		return (Bridge <I>*)&bridge_;
+		return *_bridge ();
 	}
 
-private:
+	static Bridge <I>* _bridge ()
+	{
+		return reinterpret_cast <Bridge <I>*> (&bridge_);
+	}
+
+protected:
 	static const typename Bridge <I>::EPV* bridge_;
 };
 
@@ -40,24 +45,9 @@ const typename Bridge <I>::EPV* InterfaceStatic<S, I>::bridge_ = &InterfaceStati
 
 // Static implementation of CORBA::AbstractBase
 
-class LifeCycleStatic
-{
-public:
-	template <class I>
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, EnvironmentBridge*)
-	{
-		return itf;
-	}
-
-	template <class I>
-	static void _release (Bridge <Interface>*)
-	{}
-};
-
 template <class S>
 class AbstractBaseStatic :
-	public InterfaceStatic <S, AbstractBase>,
-	public LifeCycleStatic
+	public InterfaceStatic <S, AbstractBase>
 {
 public:
 	template <class I>
@@ -66,30 +56,42 @@ public:
 		return *(S*)0;
 	}
 
-	template <class I, class B>
-	static Bridge <I>& _narrow (B&)
+	template <class I>
+	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge*)
 	{
-		return *InterfaceStatic <S, I>::_bridge ();
+		return itf;
 	}
 
+	template <class I>
+	static void __release (Bridge <Interface>*)
+	{}
+
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>*, EnvironmentBridge*)
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, EnvironmentBridge* env)
 	{
-		return InterfaceStatic <S, Base>::_bridge ();
+		try {
+			_check_pointer (derived, Skeleton <S, Derived>::epv_.interface);
+			return &static_cast <Bridge <Base>&> (*(S*)nullptr);
+		} catch (const Exception& e) {
+			env->set_exception (e);
+		} catch (...) {
+			env->set_unknown_exception ();
+		}
+		return nullptr;
 	}
 };
 
-// Static implementation of CORBA::Object
+// Static implementation of CORBA::Nirvana::ServantBase
 
-template <class S>
-class InterfaceStatic <S, Object> :
-	public InterfaceStatic <S, ServantBase>
+template <class Primary>
+class StaticObject :
+	public InterfaceStatic <StaticObject <Primary>, ServantBase>
 {
-	InterfaceStatic ();	// Never be instantiated
+	StaticObject ();	// Never be instantiated
 public:
-	static Bridge <Object>* _bridge ()
+	operator Bridge <Object>& () const
 	{
-		return servant_links_->object;
+		return *servant_links_->object;
 	}
 
 	// ServantBase operations
@@ -114,25 +116,25 @@ public:
 		return ServantBase_ptr (servant_links_->servant_base)->_non_existent ();
 	}
 
-	static const ServantLinks* servant_links_;
+protected:
+	static const ServantLinks* const servant_links_;
+	static const OLF_ObjectInfo object_info_;
 };
 
+template <class Primary>
+const OLF_ObjectInfo StaticObject <Primary>::object_info_ = {reinterpret_cast <Bridge <ServantBase>*> (&StaticObject <Primary>::bridge_), Primary::object_id_};
+
 template <class S, class Primary>
-class ObjectStatic :
-	public InterfaceStatic <S, Object>
+class ServantBaseStatic :
+	public AbstractBaseStatic <S>,
+	public StaticObject <Primary>
 {
-	ObjectStatic ();	// Never be instantiated
 public:
 	static T_ptr <Primary> _this ()
 	{
 		return InterfaceStatic <S, Primary>::_bridge ();
 	}
-
-	static const OLF_ObjectInfo object_info_;
 };
-
-template <class S, class Primary>
-const OLF_ObjectInfo ObjectStatic <S, Primary>::object_info_ = {(Bridge <ServantBase>*)&InterfaceStatic <S, Object>::servant_base_bridge_, Primary::object_id_};
 
 }
 }

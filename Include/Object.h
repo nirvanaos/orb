@@ -64,8 +64,6 @@ protected:
 	{}
 };
 
-const Char Bridge <Object>::interface_id_ [] = CORBA_REPOSITORY_ID (Object);
-
 template <class T>
 class Client <T, Object> :
 	public ClientBase <T, Object>
@@ -185,7 +183,7 @@ public:
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
 		if (RepositoryId::compatible (Bridge <Object>::interface_id_, id))
-			return &S::template _narrow	<Object> (base);
+			return &static_cast <Bridge <Object>&> (base);
 		else
 			return nullptr;
 	}

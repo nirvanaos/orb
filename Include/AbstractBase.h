@@ -72,12 +72,13 @@ public:
 	inline Object_ptr _to_object ();
 };
 
+// Servant part of an interface
+
 namespace Nirvana {
 
 extern void _check_pointer (const void* p);
 extern void _check_pointer (const Bridge <Interface>* obj, const Bridge <Interface>::EPV& epv);
 
-//! Servant part of an interface
 template <class S, class I> class Skeleton;
 
 template <class S>
@@ -89,27 +90,53 @@ public:
 protected:
 	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
 	{
+		Bridge <Interface>* ret = nullptr;
 		try {
-			_check_pointer (base, epv_.interface);
-			_check_pointer (id);
-			return S::_find_interface (*base, id);
+			ret = S::_implementation (base)._find_interface (id);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
 			env->set_unknown_exception ();
 		}
-		return 0;
+		if (ret)
+			ret = (ret->_epv ().duplicate) (ret, env);
+		return ret;
+	}
+
+public:
+	template <class I>
+	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
+	{
+		try {
+			_check_pointer (itf, Skeleton <S, I>::epv_.interface);
+			return S::_duplicate (static_cast <Bridge <I>*> (itf));
+		} catch (const Exception& e) {
+			env->set_exception (e);
+		} catch (...) {
+			env->set_unknown_exception ();
+		}
+		return nullptr;
+	}
+
+	template <class I>
+	static void __release (Bridge <Interface>* itf)
+	{
+		try {
+			_check_pointer (itf, Skeleton <S, I>::epv_.interface);
+			S::_release (static_cast <Bridge <I>*> (itf));
+		} catch (...) {
+		}
 	}
 };
 
 template <class S>
 const Bridge <AbstractBase>::EPV Skeleton <S, AbstractBase>::epv_ = {
 	{	// interface
-		S::template _duplicate <AbstractBase>,
-		S::template _release <AbstractBase>
+		&(S::template __duplicate <AbstractBase>),
+		&(S::template __release <AbstractBase>)
 	},
 	{	// epv
-		S::__find_interface
+		&S::__find_interface
 	}
 };
 

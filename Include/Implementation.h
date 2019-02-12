@@ -28,7 +28,7 @@ protected:
 // Standard implementation of CORBA::AbstractBase
 
 template <class S>
-class AbstractBaseNoRefCnt :
+class AbstractBaseImplNoRefCnt :
 	public InterfaceImpl <S, AbstractBase>
 {
 public:
@@ -39,61 +39,54 @@ public:
 		return static_cast <S&> (*bridge);
 	}
 
-	template <class I>
-	static Bridge <I>& _narrow (Bridge <AbstractBase>& base)
-	{
-		S& servant = static_cast <S&> (base);
-		servant._add_ref ();
-		return static_cast <Bridge <I>&> (servant);
-	}
-
 	template <class Base, class Derived>
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, EnvironmentBridge* env)
 	{
 		try {
-			return &static_cast <Bridge <Base>&> (S::_implementation (derived));
+			_check_pointer (derived, Skeleton <S, Derived>::epv_.interface);
+			return &static_cast <Bridge <Base>&> (*static_cast <S*> (derived));
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
 			env->set_unknown_exception ();
 		}
-		return 0;
-	}
-
-	template <class I>
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
-	{
-		try {
-			S::_implementation (static_cast <Bridge <I>*> (itf))._add_ref ();
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return itf;
-	}
-
-	template <class I>
-	static void _release (Bridge <Interface>* itf)
-	{
-		try {
-			S::_implementation (static_cast <Bridge <I>*> (itf))._remove_ref ();
-		} catch (...) {
-		}
+		return nullptr;
 	}
 };
 
 template <class S>
 class AbstractBaseImpl :
-	public AbstractBaseNoRefCnt <S>,
+	public AbstractBaseImplNoRefCnt <S>,
 	public RefCountBase
-{};
-
-// Standard implementation of CORBA::Object
-
-class ServantBaseImpl
 {
 public:
+	template <class I>
+	static Bridge <I>* _duplicate (Bridge <I>* itf)
+	{
+		if (itf)
+			static_cast <S*> (itf)->_add_ref ();
+		return itf;
+	}
+
+	template <class I>
+	static void _release (Bridge <I>* itf)
+	{
+		if (itf)
+			static_cast <S*> (itf)->_remove_ref ();
+	}
+};
+
+// Standard implementation of CORBA::Nirvana::ServantBase
+
+class ServantBaseLinks
+{
+public:
+	operator Bridge <Object>& ()
+	{
+		_activate ();
+		return *servant_links_->object;
+	}
+
 	// ServantBase operations
 
 	POA_ptr _default_POA ()
@@ -117,11 +110,11 @@ public:
 	}
 
 protected:
-	ServantBaseImpl (Bridge <ServantBase>* servant, const Char* primary_interface) :
+	ServantBaseLinks (Bridge <ServantBase>* servant, const Char* primary_interface) :
 		servant_links_ (g_system->create_servant (servant, primary_interface))
 	{}
 
-	~ServantBaseImpl ()
+	~ServantBaseLinks ()
 	{
 		g_system->destroy_servant (servant_links_);
 	}
@@ -135,39 +128,22 @@ protected:
 	ServantLinks* servant_links_;
 };
 
-template <class S>
-class InterfaceImpl <S, Object> :
-	public InterfaceImpl <S, ServantBase>,
-	public ServantBaseImpl
-{
-public:
-	// For _narrow() and _wide() operations
-	operator Bridge <Object>& ()
-	{
-		_activate ();
-		return *servant_links_->object;
-	}
-
-protected:
-	InterfaceImpl (const Char* primary_interface) :
-		ServantBaseImpl (this, primary_interface)
-	{}
-};
-
 template <class S, class Primary>
-class ObjectImpl :
-	public InterfaceImpl <S, Object>
+class ServantBaseImpl :
+	public AbstractBaseImpl <S>,
+	public InterfaceImpl <S, ServantBase>,
+	public ServantBaseLinks
 {
 public:
 	T_ptr <Primary> _this ()
 	{
-		ServantBaseImpl::_activate ();
+		ServantBaseLinks::_activate ();
 		return &static_cast <Bridge <Primary>&> (static_cast <S&> (*this));
 	}
 
 protected:
-	ObjectImpl () :
-		InterfaceImpl <S, Object> (Primary::interface_id_)
+	ServantBaseImpl () :
+		ServantBaseLinks (this, Primary::interface_id_)
 	{}
 };
 
