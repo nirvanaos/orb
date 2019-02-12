@@ -67,9 +67,9 @@
     <ClInclude Include="..\ObjectCore.h" />
     <ClInclude Include="..\ServantCore.h" />
     <ClInclude Include="..\ServantLinksCore.h" />
-    <ClInclude Include="..\Test_I1.h" />
-    <ClInclude Include="..\Test_I2.h" />
-    <ClInclude Include="..\Test_I3.h" />
+    <ClInclude Include="..\Test_I1_c.h" />
+    <ClInclude Include="..\Test_I2_c.h" />
+    <ClInclude Include="..\Test_I3_c.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Source\msvs\ORB.vcxproj">

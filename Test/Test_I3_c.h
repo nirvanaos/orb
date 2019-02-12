@@ -1,8 +1,8 @@
 #ifndef NIRVANA_ORB_TEST_I3_H_
 #define NIRVANA_ORB_TEST_I3_H_
 
-#include "Test_I1.h"
-#include "Test_I2.h"
+#include "Test_I1_c.h"
+#include "Test_I2_c.h"
 
 namespace Test {
 

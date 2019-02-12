@@ -4,7 +4,7 @@
 #ifndef NIRVANA_ORB_OBJECT_H_
 #define NIRVANA_ORB_OBJECT_H_
 
-#include "AbstractBase.h"
+#include "AbstractBase_c.h"
 
 namespace CORBA {
 

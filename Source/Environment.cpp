@@ -1,7 +1,6 @@
-#include "AbstractBase.h"
+#include "AbstractBase_c.h"
 
 namespace CORBA {
-
 namespace Nirvana {
 
 void EnvironmentBridge::set_exception (const Exception& e)

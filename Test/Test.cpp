@@ -1,4 +1,4 @@
-#include "Test_I3.h"
+#include "Test_I3_c.h"
 #include <gtest/gtest.h>
 
 using namespace std;

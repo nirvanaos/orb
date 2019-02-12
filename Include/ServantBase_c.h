@@ -1,8 +1,8 @@
 // ServantBase interface.
-#ifndef NIRVANA_ORB_SERVANTBASE_H_
-#define NIRVANA_ORB_SERVANTBASE_H_
+#ifndef NIRVANA_ORB_SERVANTBASE_C_H_
+#define NIRVANA_ORB_SERVANTBASE_C_H_
 
-#include "Object.h"
+#include "Object_c.h"
 
 namespace PortableServer {
 

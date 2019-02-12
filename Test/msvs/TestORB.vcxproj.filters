@@ -44,15 +44,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Test_I1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Test_I2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Test_I3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\ObjectCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -63,6 +54,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ObjectAdapterCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Test_I1_c.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Test_I2_c.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Test_I3_c.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

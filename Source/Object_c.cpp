@@ -1,4 +1,4 @@
-#include "Object.h"
+#include "Object_c.h"
 
 namespace CORBA {
 namespace Nirvana {

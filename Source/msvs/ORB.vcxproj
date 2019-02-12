@@ -31,7 +31,7 @@
     <ClCompile Include="..\RepositoryId.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Include\AbstractBase.h" />
+    <ClInclude Include="..\..\Include\AbstractBase_c.h" />
     <ClInclude Include="..\..\Include\Any.h" />
     <ClInclude Include="..\..\Include\BasicTypes.h" />
     <ClInclude Include="..\..\Include\Environment.h" />
@@ -42,8 +42,8 @@
     <ClInclude Include="..\..\Include\ImplementationStatic.h" />
     <ClInclude Include="..\..\Include\ImplementationTied.h" />
     <ClInclude Include="..\..\Include\Interface.h" />
-    <ClInclude Include="..\..\Include\Object.h" />
-    <ClInclude Include="..\..\Include\ObjectAdapter.h" />
+    <ClInclude Include="..\..\Include\Object_c.h" />
+    <ClInclude Include="..\..\Include\ObjectAdapter_c.h" />
     <ClInclude Include="..\..\Include\ORB.h" />
     <ClInclude Include="..\..\Include\PortableServer.h" />
     <ClInclude Include="..\..\Include\RefCountBase.h" />
