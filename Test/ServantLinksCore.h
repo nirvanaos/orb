@@ -2,6 +2,7 @@
 #define NIRVANA_ORB_TEST_SERVANTLINKSCORE_H_
 
 #include "ServantCore.h"
+#include "ObjectCore.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -11,21 +12,16 @@ class ServantLinksCore :
 {
 public:
 	ServantLinksCore (ServantBase_ptr servant, const Char* type_id) :
-		servant_ (servant),
-		servant_core_ (servant, type_id)
+		servant_core_ (servant, type_id),
+		object_core_ (servant)
 	{
-		object = nullptr;
+		object = &object_core_;
 		servant_base = &servant_core_;
 	}
 
-	ServantBase_ptr servant () const
-	{
-		return servant_;
-	}
-
 private:
-	ServantBase_ptr servant_;
 	ServantCore servant_core_;
+	ObjectCore object_core_;
 };
 
 }

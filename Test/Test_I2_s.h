@@ -58,7 +58,7 @@ class Servant <S, ::Test::I2> :
 	public InterfaceImpl <S, ::Test::I2>
 {
 public:
-	Bridge <Interface>* _find_interface (const Char* id)
+	Interface_ptr _find_interface (const Char* id)
 	{
 		return Skeleton <S, ::Test::I2>::_find_interface (*this, id);
 	}
@@ -77,7 +77,7 @@ public:
 		return Bridge < ::Test::I2>::interface_id_;
 	}
 
-	virtual Bridge <Interface>* _find_interface (const Char* id)
+	virtual Interface_ptr _find_interface (const Char* id)
 	{
 		return Skeleton <ServantPOA < ::Test::I2>, ::Test::I2>::_find_interface (*this, id);
 	}
@@ -100,7 +100,7 @@ class ServantStatic <S, ::Test::I2> :
 	public InterfaceStatic <S, ::Test::I2>
 {
 public:
-	static Bridge <Interface>* _find_interface (const Char* id)
+	static Interface_ptr _find_interface (const Char* id)
 	{
 		return Skeleton <S, ::Test::I2>::_find_interface (*(S*)nullptr, id);
 	}

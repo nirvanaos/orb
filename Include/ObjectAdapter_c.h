@@ -45,10 +45,7 @@ public:
 		return (EPV&)Bridge <Interface>::_epv ();
 	}
 
-	static const Char* _primary_interface ()
-	{
-		return NIRVANA_REPOSITORY_ID (ObjectAdapter);
-	}
+	static const Char interface_id_ [];
 
 protected:
 	Bridge (const EPV& epv) :

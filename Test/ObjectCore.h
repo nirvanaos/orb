@@ -3,8 +3,8 @@
 #ifndef NIRVANA_ORB_TEST_OBJECTCORE_H_
 #define NIRVANA_ORB_TEST_OBJECTCORE_H_
 
-#include <ORB.h>
-#include "../../core/Source/AtomicCounter.h"
+#include <Object_s.h>
+#include <Implementation.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -15,45 +15,51 @@ class ObjectCore :
 	public Skeleton <ObjectCore, Object>
 {
 public:
-	ObjectCore (ServantBase_ptr servant, Bridge <Object>** active_object = nullptr) :
-		servant_ (servant),
-		active_object_ (active_object)
+	ObjectCore (ServantBase_ptr servant) :
+		servant_ (servant)
 	{}
 
-	void _add_ref ();
-	void _remove_ref ();
-
-	static Bridge <Interface>* _find_interface (Bridge <AbstractBase>& base, const Char* id)
+	template <class I>
+	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
 	{
-		ServantBase_var servant = static_cast <ObjectCore&> (base).servant_;
-		if (servant)
-			return servant->_find_interface (id);
-		else
-			return Skeleton <ObjectCore, Object>::_find_interface (base, id);
+		Interface_ptr servant = _implementation (static_cast <Bridge <I>*> (itf)).servant_;
+		return (servant->_epv ().duplicate) (servant, env);
 	}
 
-	void deactivate ()
+	template <class I>
+	static void __release (Bridge <Interface>* itf)
 	{
+		Interface_ptr servant = _implementation (static_cast <Bridge <I>*> (itf)).servant_;
+		return (servant->_epv ().release) (servant);
 	}
 
-	static ImplementationDef_ptr _get_implementation ()
+	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
+	{
+		AbstractBase_ptr servant = _implementation (base).servant_;
+		return (servant->_epv ().epv.find_interface) (servant, id, env);
+	}
+
+	static Bridge <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		return nullptr;
 	}
 
-	InterfaceDef_ptr __get_interface () const
+	static Bridge <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
-		return servant_->_get_interface ();
+		ServantBase_ptr servant = _implementation (obj).servant_;
+		return (servant->_epv ().epv.get_interface) (servant, env);
 	}
 
-	Boolean _is_a (const Char* type_id) const
+	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
 	{
-		return servant_->_is_a (type_id);
+		ServantBase_ptr servant = _implementation (obj).servant_;
+		return (servant->_epv ().epv.is_a) (servant, type_id, env);
 	}
 
-	Boolean _non_existent () const
+	static Boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
-		return servant_->_non_existent ();
+		ServantBase_ptr servant = _implementation (obj).servant_;
+		return (servant->_epv ().epv.non_existent) (servant, env);
 	}
 
 	static Boolean __is_equivalent (Bridge <Object>* obj, Bridge <Object>* other, EnvironmentBridge*)
@@ -69,7 +75,6 @@ public:
 
 private:
 	ServantBase_ptr servant_;
-	Bridge <Object>** active_object_;
 };
 
 }

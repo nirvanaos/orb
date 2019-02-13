@@ -1,4 +1,5 @@
-#include "Object_c.h"
+#include <Object_c.h>
+#include <RepositoryId.h>
 
 namespace CORBA {
 namespace Nirvana {

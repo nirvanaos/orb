@@ -6,7 +6,6 @@
 #include <Nirvana/Nirvana.h>
 #include "Environment.h"
 #include "T_ptr.h"
-#include "RepositoryId.h"
 
 namespace CORBA {
 
@@ -17,14 +16,12 @@ typedef Nirvana::T_out <Object> Object_out;
 
 namespace Nirvana {
 
-/// All interfaces derived from Interface class.
-/// This class provides life-cycle management and pointer to entry-point vector (EPV).
-class Interface;
-
-/// All bridges should be derived from `Bridge <Interface>`.
+/// All bridges should be derived from `Bridge &lt;Interface&gt`.
 template <>
 class Bridge <Interface>
 {
+	Bridge (const Bridge&) = delete;
+	Bridge& operator = (const Bridge&) = delete;
 public:
 	struct EPV
 	{
@@ -50,6 +47,20 @@ protected:
 	const EPV* epv_ptr_;
 };
 
+//! Interface - All client interfaces can be widened to it.
+class Interface :
+	public Bridge <Interface>
+{
+public:
+	static Interface_ptr _duplicate (Interface_ptr itf);
+	static void _release (Interface_ptr itf);
+
+	static Interface_ptr _nil ()
+	{
+		return Interface_ptr::nil ();
+	}
+};
+
 //! ClientBase - How client obtains pointer to Bridge
 template <class T, class I>
 class ClientBase
@@ -61,27 +72,23 @@ protected:
 	}
 };
 
-//! Interface - All client interfaces derive this
-class Interface
-{
-public:
-	static Bridge <Interface>* __duplicate (Bridge <Interface>* p);
-	static void __release (Bridge <Interface>* p);
-};
-
 //! ClientInterface - Base template for all client interfaces
 template <class T, class I> class Client;
 
 template <class I>
 class ClientInterface :
 	public Bridge <I>,
-	public Client <I, I>,
-	public Interface
+	public Client <I, I>
 {
 public:
+	operator Interface& ()
+	{
+		return static_cast <Interface&> (static_cast <Bridge <Interface>&> (*this));
+	}
+
 	static T_ptr <I> _duplicate (T_ptr <I> obj)
 	{
-		return static_cast <Bridge <I>*> (__duplicate (obj));
+		return static_cast <Bridge <I>*> (static_cast <Bridge <Interface>*> (Interface::_duplicate (obj)));
 	}
 
 	// For the definition of this method see Object.h
@@ -95,16 +102,14 @@ public:
 
 }
 
-template <class T>
-bool is_nil (Nirvana::T_ptr <T> obj)
+inline bool is_nil (Nirvana::Interface_ptr itf)
 {
-	return !obj.p_;
+	return !static_cast <Nirvana::Bridge <Nirvana::Interface>*> (itf);
 }
 
-template <class T>
-void release (Nirvana::T_ptr <T> obj)
+inline void release (Nirvana::Interface_ptr itf)
 {
-	Nirvana::Interface::__release (obj.p_);
+	Nirvana::Interface::_release (itf);
 }
 
 }

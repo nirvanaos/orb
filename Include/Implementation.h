@@ -30,7 +30,7 @@ protected:
 // Standard implementation of CORBA::AbstractBase
 
 template <class S>
-class AbstractBaseImplNoRefCnt :
+class AbstractBaseNoRefCnt :
 	public InterfaceImpl <S, AbstractBase>
 {
 public:
@@ -58,7 +58,7 @@ public:
 
 template <class S>
 class AbstractBaseImpl :
-	public AbstractBaseImplNoRefCnt <S>,
+	public AbstractBaseNoRefCnt <S>,
 	public RefCountBase
 {
 public:

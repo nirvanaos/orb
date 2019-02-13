@@ -7,7 +7,7 @@ namespace CORBA {
 namespace Nirvana {
 
 class ServantCore :
-	public AbstractBaseImplNoRefCnt <ServantCore>,
+	public AbstractBaseNoRefCnt <ServantCore>,
 	public InterfaceImpl <ServantCore, ServantBase>
 {
 public:
@@ -16,12 +16,14 @@ public:
 		interface_id_ (interface_id)
 	{}
 
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf)
+	template <class I>
+	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge*)
 	{
 		return itf;
 	}
 
-	static void _release (Bridge <Interface>* itf)
+	template <class I>
+	static void __release (Bridge <Interface>* itf)
 	{}
 
 	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
@@ -36,14 +38,15 @@ public:
 
 	InterfaceDef_ptr _get_interface () const
 	{
-		return nullptr;
+		return nullptr;	// TODO: Implement
 	}
 
-	Boolean _is_a (const Char* type_id) const
+	static Boolean __is_a (Bridge <ServantBase>* obj, const Char* type_id, EnvironmentBridge* env)
 	{
-		Bridge <Interface>* itf = abstract_base_->_find_interface (type_id);
+		AbstractBase_ptr base = _implementation (obj).abstract_base_;
+		Bridge <Interface>* itf = (base->_epv ().epv.find_interface) (base, type_id, env);
 		if (itf) {
-			Interface::__release (itf);
+			(itf->_epv ().release) (itf);
 			return true;
 		} else
 			return false;

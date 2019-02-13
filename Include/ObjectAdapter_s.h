@@ -17,7 +17,7 @@ public:
 	template <class Base>
 	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
 	{
-		if (RepositoryId::compatible (Bridge <ObjectAdapter>::_primary_interface (), id))
+		if (RepositoryId::compatible (Bridge <ObjectAdapter>::interface_id_, id))
 			return &static_cast <Bridge <ObjectAdapter>&> (base);
 		else
 			return nullptr;
@@ -62,8 +62,8 @@ protected:
 template <class S>
 const Bridge <ObjectAdapter>::EPV Skeleton <S, ObjectAdapter>::epv_ = {
 	{ // interface
-		S::template _duplicate <ObjectAdapter>,
-		S::template _release <ObjectAdapter>
+		S::template __duplicate <ObjectAdapter>,
+		S::template __release <ObjectAdapter>
 	},
 	{ // base
 		S::template _wide <AbstractBase, ObjectAdapter>

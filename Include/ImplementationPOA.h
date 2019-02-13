@@ -27,7 +27,7 @@ public:
 	}
 
 	template <class I>
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
+	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
 	{
 		try {
 			_implementation (static_cast <Bridge <I>*> (itf))._add_ref ();
@@ -40,7 +40,7 @@ public:
 	}
 
 	template <class I>
-	static void _release (Bridge <Interface>* itf)
+	static void __release (Bridge <Interface>* itf)
 	{
 		try {
 			_implementation (static_cast <Bridge <I>*> (itf))._remove_ref ();

@@ -161,7 +161,7 @@ public:
 
 inline Object_ptr AbstractBase::_to_object ()
 {
-	return static_cast <Bridge <Object>*> (_find_interface (Bridge <Object>::interface_id_));
+	return static_cast <Nirvana::Bridge <Object>*> (static_cast <Nirvana::Bridge <Nirvana::Interface>*> (_find_interface (Nirvana::Bridge <Object>::interface_id_)));
 }
 
 namespace Nirvana {
@@ -169,7 +169,7 @@ namespace Nirvana {
 template <class I>
 T_ptr <I> ClientInterface <I>::_narrow (T_ptr <Object> obj)
 {
-	return static_cast <Bridge <I>*> (obj->_find_interface (Bridge <I>::interface_id_));
+	return static_cast <Bridge <I>*> (static_cast <Bridge <Interface>*> (obj->_find_interface (Bridge <I>::interface_id_)));
 }
 
 }

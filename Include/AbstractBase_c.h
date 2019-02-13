@@ -5,6 +5,7 @@
 
 namespace CORBA {
 
+class AbstractBase;
 typedef Nirvana::T_ptr <AbstractBase> AbstractBase_ptr;
 typedef Nirvana::T_var <AbstractBase> AbstractBase_var;
 typedef Nirvana::T_out <AbstractBase> AbstractBase_out;
@@ -48,15 +49,15 @@ class Client <T, AbstractBase> :
 	public ClientBase <T, AbstractBase>
 {
 public:
-	Bridge <Interface>* _find_interface (const Char* type_id);
+	Interface_ptr _find_interface (const Char* type_id);
 };
 
 template <class T>
-Bridge <Interface>* Client <T, AbstractBase>::_find_interface (const Char* type_id)
+Interface_ptr Client <T, AbstractBase>::_find_interface (const Char* type_id)
 {
 	Environment env;
 	Bridge <AbstractBase>& bridge = ClientBase <T, AbstractBase>::_bridge ();
-	Bridge <Interface>* ret = (bridge._epv ().epv.find_interface) (&bridge, type_id, &env);
+	Interface_ptr ret = (bridge._epv ().epv.find_interface) (&bridge, type_id, &env);
 	env.check ();
 	return ret;
 }

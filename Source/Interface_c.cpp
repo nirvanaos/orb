@@ -3,20 +3,20 @@
 namespace CORBA {
 namespace Nirvana {
 
-Bridge <Interface>* Interface::__duplicate (Bridge <Interface>* p)
+Interface_ptr Interface::_duplicate (Interface_ptr itf)
 {
-	if (p) {
+	if (!is_nil (itf)) {
 		Environment env;
-		p = (p->_epv ().duplicate) (p, &env);
+		itf = (itf->_epv ().duplicate) (itf, &env);
 		env.check ();
 	}
-	return p;
+	return itf;
 }
 
-void Interface::__release (Bridge <Interface>* p)
+void Interface::_release (Interface_ptr itf)
 {
-	if (p)
-		(p->_epv ().release) (p);
+	if (!is_nil (itf))
+		(itf->_epv ().release) (itf);
 }
 
 }

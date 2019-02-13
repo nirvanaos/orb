@@ -100,8 +100,8 @@ protected:
 template <class S>
 const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 	{ // interface
-		S::template _duplicate <Object>,
-		S::template _release <Object>
+		S::template __duplicate <Object>,
+		S::template __release <Object>
 	},
 	{ // base
 		S::template _wide <AbstractBase, Object>

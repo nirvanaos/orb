@@ -13,21 +13,6 @@ template <class T> class T_var;
 //! General T_out template
 template <class T> class T_out;
 
-}
-
-class AbstractBase;
-
-template <class I>
-void release (Nirvana::T_ptr <I>);
-
-template <class I>
-bool is_nil (Nirvana::T_ptr <I>);
-
-namespace Nirvana {
-
-//! Client part of an interface 
-template <class I> class ClientInterface;
-
 //! Intermediate part of an interface
 template <class I> class Bridge;
 
@@ -46,14 +31,19 @@ public:
 
 	template <class T1>
 	T_ptr (T_ptr <T1> src) :
-		p_ (&static_cast <T&> (static_cast <Bridge <T>&> (*src.p_)))
+		p_ (&static_cast <T&> (*src.p_))
 	{}
 
 	template <class T1>
 	T_ptr& operator = (T_ptr <T1> src)
 	{
-		p_ = &static_cast <T&> (static_cast <Bridge <T>&> (*src.p_));
+		p_ = &static_cast <T&> (*src.p_);
 		return *this;
+	}
+
+	operator Bridge <T>* () const
+	{
+		return static_cast <Bridge <T>*> (p_);
 	}
 
 	T* operator -> () const
@@ -71,28 +61,24 @@ public:
 		return T_ptr ((T*)0);
 	}
 
-protected:
-	T_ptr (T* p) :
-		p_ (p)
-	{}
-
-	operator T* () const
-	{
-		return p_;
-	}
-
 private:
 	template <class T1> friend class T_ptr;
-	friend class ClientInterface <T>;
-	template <class T1, class I> friend class Client;
-	template <class S, class I> friend class Skeleton;
-
-  friend void CORBA::release <T> (T_ptr <T>);
-	friend bool CORBA::is_nil <T> (T_ptr <T>);
 
 private:
 	T* p_;
 };
+
+/// All interfaces derived from Interface class.
+/// This class provides life-cycle management and pointer to entry-point vector (EPV).
+class Interface;
+typedef ::CORBA::Nirvana::T_ptr <Interface> Interface_ptr;
+
+}
+
+inline bool is_nil (Nirvana::Interface_ptr itf);
+inline void release (Nirvana::Interface_ptr itf);
+
+namespace Nirvana {
 
 // T_var helper class
 
