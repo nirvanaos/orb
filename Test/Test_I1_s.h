@@ -7,20 +7,25 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <>
+class FindInterface < ::Test::I1>
+{
+public:
+	template <class S>
+	static Bridge <Interface>* find (S& servant, const Char* id)
+	{
+		if (RepositoryId::compatible (Bridge < ::Test::I1>::interface_id_, id))
+			return &static_cast <Bridge < ::Test::I1>&> (servant);
+		else
+			return FindInterface <Object>::find (servant, id);
+	}
+};
+
 template <class S>
 class Skeleton <S, ::Test::I1>
 {
 public:
 	static const typename Bridge < ::Test::I1>::EPV epv_;
-
-	template <class Base>
-	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
-	{
-		if (RepositoryId::compatible (Bridge < ::Test::I1>::interface_id_, id))
-			return &static_cast <Bridge < ::Test::I1>&> (base);
-		else
-			return Skeleton <S, Object>::_find_interface (base, id);
-	}
 
 protected:
 	static Long _op1 (Bridge < ::Test::I1>* _b, Long p1, EnvironmentBridge* _env)
@@ -72,7 +77,7 @@ class Servant <S, ::Test::I1> :
 public:
 	Interface_ptr _find_interface (const Char* id)
 	{
-		return Skeleton <S, ::Test::I1>::_find_interface (*this, id);
+		return FindInterface < ::Test::I1>::find (*this, id);
 	}
 };
 
@@ -121,29 +126,19 @@ typedef ::CORBA::Nirvana::ServantPOA < ::Test::I1> I1;
 
 // Static implementation
 #ifndef TEST_NO_STATIC
-namespace POA_Test {
-class I1_static;
-}
 
 namespace CORBA {
 namespace Nirvana {
 
-template <>
-class StaticObjectImpl <::Test::I1>
-{
-public:
-	typedef POA_Test::I1_static Implementation;
-};
-
-template <>
-class ServantStatic < ::Test::I1> :
-	public ServantBaseStatic < ::Test::I1>,
-	public InterfaceStatic < typename StaticObjectImpl < ::Test::I1>::Implementation, ::Test::I1>
+template <class S>
+class ServantStatic <S, ::Test::I1> :
+	public ServantBaseStatic <S, ::Test::I1>,
+	public InterfaceStatic <S, ::Test::I1>
 {
 public:
 	static Interface_ptr _find_interface (const Char* id)
 	{
-		return Skeleton < ServantType, ::Test::I1>::_find_interface (*(ServantType*)nullptr, id);
+		return FindInterface < ::Test::I1>::find (*(S*)nullptr, id);
 	}
 };
 

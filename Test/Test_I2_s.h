@@ -7,20 +7,25 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <>
+class FindInterface < ::Test::I2>
+{
+public:
+	template <class S>
+	static Bridge <Interface>* find (S& servant, const Char* id)
+	{
+		if (RepositoryId::compatible (Bridge < ::Test::I2>::interface_id_, id))
+			return &static_cast <Bridge < ::Test::I2>&> (servant);
+		else
+			return FindInterface <Object>::find (servant, id);
+	}
+};
+
 template <class S>
 class Skeleton <S, ::Test::I2>
 {
 public:
 	static const typename Bridge < ::Test::I2>::EPV epv_;
-
-	template <class Base>
-	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
-	{
-		if (RepositoryId::compatible (Bridge < ::Test::I2>::interface_id_, id))
-			return &static_cast <Bridge < ::Test::I2>&> (base);
-		else
-			return Skeleton <S, Object>::_find_interface (base, id);
-	}
 
 protected:
 	static Long _op2 (Bridge < ::Test::I2>* _b, Long p1, EnvironmentBridge* _env)
@@ -60,7 +65,7 @@ class Servant <S, ::Test::I2> :
 public:
 	Interface_ptr _find_interface (const Char* id)
 	{
-		return Skeleton <S, ::Test::I2>::_find_interface (*this, id);
+		return FindInterface < ::Test::I2>::find (*this, id);
 	}
 };
 
@@ -107,19 +112,9 @@ typedef ::CORBA::Nirvana::ServantPOA < ::Test::I2> I2;
 
 // Static implementation
 #ifndef TEST_NO_STATIC
-namespace POA_Test {
-class I2_static;
-}
 
 namespace CORBA {
 namespace Nirvana {
-
-template <>
-class StaticObjectImpl <::Test::I2>
-{
-public:
-	typedef POA_Test::I2_static Implementation;
-};
 
 template <class S>
 class ServantStatic <S, ::Test::I2> :
@@ -129,7 +124,7 @@ class ServantStatic <S, ::Test::I2> :
 public:
 	static Interface_ptr _find_interface (const Char* id)
 	{
-		return Skeleton <S, ::Test::I2>::_find_interface (*(S*)nullptr, id);
+		return FindInterface < ::Test::I2>::find (*(S*)nullptr, id);
 	}
 };
 

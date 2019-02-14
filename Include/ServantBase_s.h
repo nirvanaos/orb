@@ -8,6 +8,7 @@ namespace CORBA {
 namespace Nirvana {
 
 // ServantBase skeleton
+
 template <class S>
 class Skeleton <S, ServantBase>
 {

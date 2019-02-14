@@ -7,6 +7,7 @@
 namespace TestORB {
 
 using namespace CORBA;
+using namespace Test;
 
 // Dynamic implementation
 

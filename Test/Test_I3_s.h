@@ -9,23 +9,28 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <>
+class FindInterface < ::Test::I3>
+{
+public:
+	template <class S>
+	static Bridge <Interface>* find (S& servant, const Char* id)
+	{
+		Bridge <Interface>* itf;
+		if (RepositoryId::compatible (Bridge < ::Test::I3>::interface_id_, id))
+			itf = &static_cast <Bridge < ::Test::I3>&> (servant);
+		// Call all direct bases
+		else if (!(itf = FindInterface < ::Test::I2>::find (servant, id)))
+			itf = FindInterface < ::Test::I1>::find (servant, id);
+		return itf;
+	}
+};
+
 template <class S>
 class Skeleton <S, ::Test::I3>
 {
 public:
 	static const typename Bridge < ::Test::I3>::EPV epv_;
-
-	template <class Base>
-	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
-	{
-		Bridge <Interface>* itf;
-		if (RepositoryId::compatible (Bridge < ::Test::I3>::interface_id_, id))
-			itf = &static_cast <Bridge < ::Test::I3>&> (base);
-		// Call all direct bases
-		else if (!(itf = Skeleton <S, ::Test::I2>::_find_interface (base, id)))
-			itf = Skeleton <S, ::Test::I1>::_find_interface (base, id);
-		return itf;
-	}
 
 protected:
 	static Long _op3 (Bridge < ::Test::I3>* _b, Long p1, EnvironmentBridge* _env)
@@ -69,7 +74,7 @@ class Servant <S, ::Test::I3> :
 public:
 	Interface_ptr _find_interface (const Char* id)
 	{
-		return Skeleton <S, ::Test::I3>::_find_interface (*this, id);
+		return FindInterface < ::Test::I3>::find (*this, id);
 	}
 };
 
@@ -117,19 +122,9 @@ typedef ::CORBA::Nirvana::ServantPOA < ::Test::I3> I3;
 
 // Static implementation
 #ifndef TEST_NO_STATIC
-namespace POA_Test {
-class I3_static;
-}
 
 namespace CORBA {
 namespace Nirvana {
-
-template <>
-class StaticObjectImpl <::Test::I3>
-{
-public:
-	typedef POA_Test::I3_static Implementation;
-};
 
 template <class S>
 class ServantStatic <S, ::Test::I3> :
@@ -141,7 +136,7 @@ class ServantStatic <S, ::Test::I3> :
 public:
 	static Interface_ptr _find_interface (const Char* id)
 	{
-		return Skeleton <S, ::Test::I3>::_find_interface (*(S*)nullptr, id);
+		return FindInterface < ::Test::I3>::find (*(ServantStatic < ::Test::I3>*)nullptr, id);
 	}
 };
 

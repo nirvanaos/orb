@@ -4,11 +4,10 @@
 #include "Test_I1_s.h"
 #include "Test.h"
 
-namespace POA_Test {
+namespace TestORB {
 
 using namespace CORBA;
 using namespace Test;
-using namespace TestORB;
 
 // Dynamic implementation
 
@@ -76,8 +75,8 @@ private:
 // Static implementation
 #ifndef TEST_NO_STATIC
 
-class I1_static :
-	public ::CORBA::Nirvana::ServantStatic < ::Test::I1>,
+class StaticI1 :
+	public ::CORBA::Nirvana::ServantStatic <StaticI1, ::Test::I1>,
 	public Instance
 {
 public:

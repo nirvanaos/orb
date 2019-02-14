@@ -9,22 +9,25 @@ namespace Nirvana {
 
 // Object skeleton
 
-template <class S>
-Bridge <Object>* find_interface <S, Object> (S& obj)
+template <>
+class FindInterface <Object>
+{
+public:
+	template <class S>
+	static Bridge <Interface>* find (S& servant, const Char* id)
+	{
+		if (RepositoryId::compatible (Bridge <Object>::interface_id_, id))
+			return &static_cast <Bridge <Object>&> (servant);
+		else
+			return nullptr;
+	}
+};
+
 template <class S>
 class Skeleton <S, Object>
 {
 public:
 	static const typename Bridge <Object>::EPV epv_;
-
-	template <class Base>
-	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
-	{
-		if (RepositoryId::compatible (Bridge <Object>::interface_id_, id))
-			return &static_cast <Bridge <Object>&> (base);
-		else
-			return nullptr;
-	}
 
 protected:
 	static Bridge <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)

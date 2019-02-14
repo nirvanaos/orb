@@ -4,24 +4,31 @@
 #include "ObjectAdapter_c.h"
 #include "Interface_s.h"
 
+// ObjectAdapter skeleton
+
 namespace CORBA {
 namespace Nirvana {
 
-// ObjectAdapter skeleton
+template <>
+class FindInterface <ObjectAdapter>
+{
+public:
+public:
+	template <class S>
+	static Bridge <Interface>* find (S& servant, const Char* id)
+	{
+		if (RepositoryId::compatible (Bridge <ObjectAdapter>::interface_id_, id))
+			return &static_cast <Bridge <ObjectAdapter>&> (servant);
+		else
+			return nullptr;
+	}
+};
+
 template <class S>
 class Skeleton <S, ObjectAdapter>
 {
 public:
 	static const typename Bridge <ObjectAdapter>::EPV epv_;
-
-	template <class Base>
-	static Bridge <Interface>* _find_interface (Base& base, const Char* id)
-	{
-		if (RepositoryId::compatible (Bridge <ObjectAdapter>::interface_id_, id))
-			return &static_cast <Bridge <ObjectAdapter>&> (base);
-		else
-			return nullptr;
-	}
 
 protected:
 	static ServantLinks* _create_servant (Bridge <ObjectAdapter>* obj, Bridge <ServantBase>* servant, const Char* type_id, EnvironmentBridge* env)

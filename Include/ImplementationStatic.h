@@ -18,8 +18,7 @@ struct OLF_ObjectInfo
 	const Char* primary_interface;
 };
 
-template <class S, class I> class ServantStaticAbstract;
-template <class I> class ServantStatic;
+template <class S, class I> class ServantStatic;
 
 // Static interface implementation
 
@@ -44,7 +43,7 @@ protected:
 };
 
 template <class S, class I>
-const typename Bridge <I>::EPV* InterfaceStatic<S, I>::bridge_ = &InterfaceStatic<S, I>::epv_;
+const typename Bridge <I>::EPV* InterfaceStatic <S, I>::bridge_ = &InterfaceStatic <S, I>::epv_;
 
 // Static implementation of CORBA::AbstractBase
 
@@ -85,11 +84,9 @@ public:
 
 // Static implementation of CORBA::Nirvana::ServantBase
 
-template <class Primary> class StaticObjectImpl;
-
-template <class Primary>
+template <class S, class Primary>
 class StaticObject :
-	public InterfaceStatic <typename StaticObjectImpl <Primary>::Implementation, ServantBase>
+	public InterfaceStatic <S, ServantBase>
 {
 	StaticObject ();	// Never be instantiated
 public:
@@ -125,18 +122,18 @@ protected:
 	static const OLF_ObjectInfo object_info_;
 };
 
-template <class Primary>
-const OLF_ObjectInfo StaticObject <Primary>::object_info_ = {reinterpret_cast <Bridge <ServantBase>*> (&StaticObject <Primary>::bridge_), Primary::object_id_};
+template <class S, class Primary>
+const OLF_ObjectInfo StaticObject <S, Primary>::object_info_ = {reinterpret_cast <Bridge <ServantBase>*> (&StaticObject <S, Primary>::bridge_), Primary::object_id_};
 
-template <class Primary>
+template <class S, class Primary>
 class ServantBaseStatic :
-	public AbstractBaseStatic <typename StaticObjectImpl <Primary>::Implementation>,
-	public StaticObject <Primary>
+	public AbstractBaseStatic <S>,
+	public StaticObject <S, Primary>
 {
 public:
 	static T_ptr <Primary> _this ()
 	{
-		return InterfaceStatic <typename StaticObjectImpl <Primary>::Implementation, Primary>::_bridge ();
+		return InterfaceStatic <S, Primary>::_bridge ();
 	}
 };
 

@@ -12,6 +12,8 @@ extern void _check_pointer (const Bridge <Interface>* obj, const Bridge <Interfa
 
 template <class S, class I> class Skeleton;
 
+template <class I> class FindInterface;
+
 }
 }
 
