@@ -66,12 +66,23 @@ const Bridge < ::Test::I3>::EPV Skeleton <S, ::Test::I3>::epv_ = {
 
 template <class S>
 class Servant <S, ::Test::I3> :
-	public ServantBaseImpl <S, ::Test::I3>,
+	public ServantBaseImpl <S>,
 	public InterfaceImpl <S, ::Test::I3>,
 	public InterfaceImpl <S, ::Test::I2>,
 	public InterfaceImpl <S, ::Test::I1>
 {
 public:
+	Servant ()
+	{
+		ServantBaseImpl <S>::_final_construct (Bridge < ::Test::I3>::interface_id_);
+	}
+
+	T_ptr <::Test::I3> _this ()
+	{
+		ServantBaseLinks::_activate ();
+		return this;
+	}
+
 	Interface_ptr _find_interface (const Char* id)
 	{
 		return FindInterface < ::Test::I3>::find (*this, id);
@@ -93,20 +104,20 @@ class ServantPOA < ::Test::I3> :
 	public InterfaceImpl <ServantPOA < ::Test::I3>, ::Test::I3>
 {
 public:
-	virtual const Char* _primary_interface ()
+	ServantPOA ()
 	{
-		return Bridge < ::Test::I3>::interface_id_;
-	}
-
-	virtual Interface_ptr _find_interface (const Char* id)
-	{
-		return Skeleton <ServantPOA < ::Test::I3>, ::Test::I3>::_find_interface (*this, id);
+		_final_construct (Bridge < ::Test::I3>::interface_id_);
 	}
 
 	T_ptr < ::Test::I3> _this ()
 	{
-		ServantBaseImpl::_activate ();
+		_activate ();
 		return this;
+	}
+
+	virtual Interface_ptr _find_interface (const Char* id)
+	{
+		return FindInterface < ::Test::I3>::find (*this, id);
 	}
 
 	virtual Long op3 (Long p1) = 0;

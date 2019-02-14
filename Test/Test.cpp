@@ -6,6 +6,55 @@ using namespace std;
 using namespace CORBA;
 using namespace Test;
 
+// Imitation of the module loader
+namespace CORBA {
+namespace Nirvana {
+template <> const ServantLinks* StaticObject <TestORB::StaticI1, Test::I1>::servant_links_;
+template <> const ServantLinks* StaticObject <TestORB::StaticI3, Test::I3>::servant_links_;
+
+class ModuleLoader
+{
+public:
+	ModuleLoader ()
+	{
+		load_static <TestORB::StaticI1, Test::I1> ();
+		load_static <TestORB::StaticI3, Test::I3> ();
+	}
+
+	~ModuleLoader ()
+	{
+		unload_static <TestORB::StaticI1, Test::I1> ();
+		unload_static <TestORB::StaticI3, Test::I3> ();
+	}
+
+private:
+	void load_static (const OLF_ObjectInfo& oi, const ServantLinks*& sl)
+	{
+		sl = g_system->create_servant (oi.servant, oi.primary_interface);
+		g_system->activate_object (const_cast <ServantLinks*> (sl));
+	}
+
+	void unload_static (const ServantLinks* sl)
+	{
+		g_system->destroy_servant (const_cast <ServantLinks*> (sl));
+	}
+
+	template <class S, class I>
+	void load_static ()
+	{
+		load_static (StaticObject <TestORB::StaticI1, Test::I1>::object_info_, StaticObject <TestORB::StaticI1, Test::I1>::servant_links_);
+	}
+
+	template <class S, class I>
+	void unload_static ()
+	{
+		unload_static (StaticObject <TestORB::StaticI1, Test::I1>::servant_links_);
+	}
+};
+
+}
+}
+
 namespace TestORB {
 
 int Instance::count_ = 0;

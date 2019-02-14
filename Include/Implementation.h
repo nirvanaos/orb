@@ -35,24 +35,16 @@ class AbstractBaseNoRefCnt :
 {
 public:
 	template <class I>
-	static S& _implementation (Bridge <I>* bridge)
+	static S& _servant (Bridge <I>* bridge)
 	{
 		_check_pointer (bridge, Skeleton <S, I>::epv_.interface);
 		return static_cast <S&> (*bridge);
 	}
 
-	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, EnvironmentBridge* env)
+	template <class I>
+	static S& _implementation (Bridge <I>* bridge)
 	{
-		try {
-			_check_pointer (derived, Skeleton <S, Derived>::epv_.interface);
-			return &static_cast <Bridge <Base>&> (*static_cast <S*> (derived));
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return nullptr;
+		return _servant (bridge);
 	}
 };
 
@@ -66,7 +58,7 @@ public:
 	static Bridge <I>* _duplicate (Bridge <I>* itf)
 	{
 		if (itf)
-			static_cast <S*> (itf)->_add_ref ();
+			AbstractBaseNoRefCnt <S>::_servant (itf)._add_ref ();
 		return itf;
 	}
 
@@ -74,7 +66,7 @@ public:
 	static void _release (Bridge <I>* itf)
 	{
 		if (itf)
-			static_cast <S*> (itf)->_remove_ref ();
+			AbstractBaseNoRefCnt <S>::_servant (itf)._remove_ref ();
 	}
 };
 
@@ -112,9 +104,14 @@ public:
 	}
 
 protected:
-	ServantBaseLinks (Bridge <ServantBase>* servant, const Char* primary_interface) :
-		servant_links_ (g_system->create_servant (servant, primary_interface))
+	ServantBaseLinks () :
+		servant_links_ (nullptr)
 	{}
+
+	void _final_construct (Bridge <ServantBase>* servant, const Char* primary_interface)
+	{
+		servant_links_ = g_system->create_servant (servant, primary_interface);
+	}
 
 	~ServantBaseLinks ()
 	{
@@ -130,23 +127,17 @@ protected:
 	ServantLinks* servant_links_;
 };
 
-template <class S, class Primary>
+template <class S>
 class ServantBaseImpl :
 	public AbstractBaseImpl <S>,
 	public InterfaceImpl <S, ServantBase>,
 	public ServantBaseLinks
 {
-public:
-	T_ptr <Primary> _this ()
-	{
-		ServantBaseLinks::_activate ();
-		return &static_cast <Bridge <Primary>&> (static_cast <S&> (*this));
-	}
-
 protected:
-	ServantBaseImpl () :
-		ServantBaseLinks (this, Primary::interface_id_)
-	{}
+	void _final_construct (const Char* primary_interface)
+	{
+		ServantBaseLinks::_final_construct (this, primary_interface);
+	}
 };
 
 }

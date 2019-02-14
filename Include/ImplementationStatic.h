@@ -33,7 +33,7 @@ public:
 		return *_bridge ();
 	}
 
-	static Bridge <I>* _bridge ()
+	static constexpr Bridge <I>* _bridge ()
 	{
 		return reinterpret_cast <Bridge <I>*> (&bridge_);
 	}
@@ -59,6 +59,12 @@ public:
 	}
 
 	template <class I>
+	static S& _servant (Bridge <I>* bridge)
+	{
+		return *(S*)0;
+	}
+
+	template <class I>
 	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge*)
 	{
 		return itf;
@@ -67,19 +73,6 @@ public:
 	template <class I>
 	static void __release (Bridge <Interface>*)
 	{}
-
-	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, EnvironmentBridge* env)
-	{
-		try {
-			return &static_cast <Bridge <Base>&> (*(S*)nullptr);
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return nullptr;
-	}
 };
 
 // Static implementation of CORBA::Nirvana::ServantBase
@@ -117,13 +110,12 @@ public:
 		return ServantBase_ptr (servant_links_->servant_base)->_non_existent ();
 	}
 
-protected:
-	static const ServantLinks* const servant_links_;
 	static const OLF_ObjectInfo object_info_;
+	static const ServantLinks* servant_links_;
 };
 
 template <class S, class Primary>
-const OLF_ObjectInfo StaticObject <S, Primary>::object_info_ = {reinterpret_cast <Bridge <ServantBase>*> (&StaticObject <S, Primary>::bridge_), Primary::object_id_};
+const OLF_ObjectInfo StaticObject <S, Primary>::object_info_ = {StaticObject <S, Primary>::_bridge (), Bridge <Primary>::interface_id_};
 
 template <class S, class Primary>
 class ServantBaseStatic :

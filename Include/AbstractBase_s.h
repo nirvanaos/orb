@@ -21,7 +21,7 @@ protected:
 	{
 		Bridge <Interface>* ret = nullptr;
 		try {
-			ret = S::_implementation (base)._find_interface (id);
+			ret = S::_servant (base)._find_interface (id);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
@@ -33,11 +33,23 @@ protected:
 	}
 
 public:
+	template <class Base, class Derived>
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, EnvironmentBridge* env)
+	{
+		try {
+			return &static_cast <Bridge <Base>&> (S::_servant (derived));
+		} catch (const Exception& e) {
+			env->set_exception (e);
+		} catch (...) {
+			env->set_unknown_exception ();
+		}
+		return nullptr;
+	}
+
 	template <class I>
 	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
 	{
 		try {
-			_check_pointer (itf, Skeleton <S, I>::epv_.interface);
 			return S::_duplicate (static_cast <Bridge <I>*> (itf));
 		} catch (const Exception& e) {
 			env->set_exception (e);
@@ -51,7 +63,6 @@ public:
 	static void __release (Bridge <Interface>* itf)
 	{
 		try {
-			_check_pointer (itf, Skeleton <S, I>::epv_.interface);
 			S::_release (static_cast <Bridge <I>*> (itf));
 		} catch (...) {
 		}

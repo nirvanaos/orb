@@ -1,7 +1,8 @@
 #ifndef NIRVANA_TESTORB_SERVANTCORE_H_
 #define NIRVANA_TESTORB_SERVANTCORE_H_
 
-#include <ORB.h>
+#include <ServantBase_s.h>
+#include <Servant.h>
 
 namespace CORBA {
 namespace Nirvana {

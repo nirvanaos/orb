@@ -71,9 +71,6 @@
     <ClInclude Include="..\..\Include\Exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\ORB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\giop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -120,6 +117,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\ObjectAdapter_s.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Servant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

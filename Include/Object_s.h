@@ -122,33 +122,6 @@ const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 	}
 };
 
-// POA implementation
-/*
-template <>
-class ServantPOA < ::CORBA::Object> :
-	public ImplementationPOA < ::CORBA::Object>
-{
-public:
-	virtual POA_ptr _default_POA ()
-	{
-		return ObjectBase::_default_POA ();
-	}
-
-	virtual InterfaceDef_ptr _get_interface ()
-	{
-		return ObjectBase::_get_interface (_primary_interface ());
-	}
-
-	virtual Boolean _non_existent ()
-	{
-		return ObjectBase::_non_existent ();
-	}
-
-	virtual Boolean _is_a (const Char* type_id)
-	{
-		return Skeleton <ServantPOA < ::CORBA::Object>, ::CORBA::Object>::_is_a (type_id);
-	}
-};
 /*
 // Tied implementation
 

@@ -71,13 +71,24 @@ const Bridge < ::Test::I1>::EPV Skeleton <S, ::Test::I1>::epv_ = {
 
 template <class S>
 class Servant <S, ::Test::I1> :
-	public ServantBaseImpl <S, ::Test::I1>,
+	public ServantBaseImpl <S>,
 	public InterfaceImpl <S, ::Test::I1>
 {
 public:
+	Servant ()
+	{
+		ServantBaseImpl <S>::_final_construct (Bridge < ::Test::I1>::interface_id_);
+	}
+
+	T_ptr <::Test::I1> _this ()
+	{
+		ServantBaseLinks::_activate ();
+		return this;
+	}
+
 	Interface_ptr _find_interface (const Char* id)
 	{
-		return FindInterface < ::Test::I1>::find (*this, id);
+		return FindInterface < ::Test::I1>::find (static_cast <S&> (*this), id);
 	}
 };
 
@@ -91,23 +102,23 @@ namespace Nirvana {
 
 template <>
 class ServantPOA < ::Test::I1> :
-	public virtual ObjectPOA,
+	public virtual ServantPOA <ServantBase>,
 	public InterfaceImpl <ServantPOA < ::Test::I1>, ::Test::I1>
 {
 public:
-	virtual const Char* _primary_interface ()
+	ServantPOA ()
 	{
-		return Bridge < ::Test::I1>::interface_id_;
+		_final_construct (Bridge < ::Test::I1>::interface_id_);
 	}
 
 	virtual Interface_ptr _find_interface (const Char* id)
 	{
-		return Skeleton <ServantPOA < ::Test::I1>, ::Test::I1>::_find_interface (*this, id);
+		return FindInterface < ::Test::I1>::find (*this, id);
 	}
 
 	T_ptr < ::Test::I1> _this ()
 	{
-		ServantBaseImpl::_activate ();
+		_activate ();
 		return this;
 	}
 

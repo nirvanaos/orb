@@ -49,7 +49,7 @@
     <ClInclude Include="..\..\Include\Object_c.h" />
     <ClInclude Include="..\..\Include\ObjectAdapter_c.h" />
     <ClInclude Include="..\..\Include\Object_s.h" />
-    <ClInclude Include="..\..\Include\ORB.h" />
+    <ClInclude Include="..\..\Include\Servant.h" />
     <ClInclude Include="..\..\Include\PortableServer.h" />
     <ClInclude Include="..\..\Include\RefCountBase.h" />
     <ClInclude Include="..\..\Include\RepositoryId.h" />
