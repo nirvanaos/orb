@@ -8,6 +8,9 @@ namespace CORBA {
 namespace Nirvana {
 
 // Object skeleton
+
+template <class S>
+Bridge <Object>* find_interface <S, Object> (S& obj)
 template <class S>
 class Skeleton <S, Object>
 {

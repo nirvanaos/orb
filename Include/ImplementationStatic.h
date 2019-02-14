@@ -18,7 +18,8 @@ struct OLF_ObjectInfo
 	const Char* primary_interface;
 };
 
-template <class S, class I> class ServantStatic;
+template <class S, class I> class ServantStaticAbstract;
+template <class I> class ServantStatic;
 
 // Static interface implementation
 
@@ -72,7 +73,6 @@ public:
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, EnvironmentBridge* env)
 	{
 		try {
-			_check_pointer (derived, Skeleton <S, Derived>::epv_.interface);
 			return &static_cast <Bridge <Base>&> (*(S*)nullptr);
 		} catch (const Exception& e) {
 			env->set_exception (e);
@@ -85,9 +85,11 @@ public:
 
 // Static implementation of CORBA::Nirvana::ServantBase
 
+template <class Primary> class StaticObjectImpl;
+
 template <class Primary>
 class StaticObject :
-	public InterfaceStatic <StaticObject <Primary>, ServantBase>
+	public InterfaceStatic <typename StaticObjectImpl <Primary>::Implementation, ServantBase>
 {
 	StaticObject ();	// Never be instantiated
 public:
@@ -126,15 +128,15 @@ protected:
 template <class Primary>
 const OLF_ObjectInfo StaticObject <Primary>::object_info_ = {reinterpret_cast <Bridge <ServantBase>*> (&StaticObject <Primary>::bridge_), Primary::object_id_};
 
-template <class S, class Primary>
+template <class Primary>
 class ServantBaseStatic :
-	public AbstractBaseStatic <S>,
+	public AbstractBaseStatic <typename StaticObjectImpl <Primary>::Implementation>,
 	public StaticObject <Primary>
 {
 public:
 	static T_ptr <Primary> _this ()
 	{
-		return InterfaceStatic <S, Primary>::_bridge ();
+		return InterfaceStatic <typename StaticObjectImpl <Primary>::Implementation, Primary>::_bridge ();
 	}
 };
 

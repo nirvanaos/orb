@@ -1,5 +1,5 @@
-#ifndef NIRVANA_ORB_TEST_I3_C_H_
-#define NIRVANA_ORB_TEST_I3_C_H_
+#ifndef IDL_TEST_I3_C_H_
+#define IDL_TEST_I3_C_H_
 
 #include "Test_I1_c.h"
 #include "Test_I2_c.h"

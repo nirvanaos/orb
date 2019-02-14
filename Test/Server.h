@@ -1,5 +1,5 @@
-#ifndef NIRVANA_ORB_TEST_SERVER_H_
-#define NIRVANA_ORB_TEST_SERVER_H_
+#ifndef NIRVANA_TESTORB_SERVER_H_
+#define NIRVANA_TESTORB_SERVER_H_
 
 #include <Object_s.h>
 #include <Implementation.h>

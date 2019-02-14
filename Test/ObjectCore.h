@@ -1,7 +1,7 @@
 // Nirvana project.
 // Object server stub implementation.
-#ifndef NIRVANA_ORB_TEST_OBJECTCORE_H_
-#define NIRVANA_ORB_TEST_OBJECTCORE_H_
+#ifndef NIRVANA_TESTORB_OBJECTCORE_H_
+#define NIRVANA_TESTORB_OBJECTCORE_H_
 
 #include <Object_s.h>
 #include <Implementation.h>

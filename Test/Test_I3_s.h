@@ -1,7 +1,9 @@
-#ifndef NIRVANA_ORB_TEST_I3_S_H_
-#define NIRVANA_ORB_TEST_I3_S_H_
+#ifndef IDL_TEST_I3_S_H_
+#define IDL_TEST_I3_S_H_
 
 #include "Test_I3_c.h"
+#include "Test_I1_s.h"
+#include "Test_I2_s.h"
 #include "Server.h"
 
 namespace CORBA {
@@ -71,8 +73,14 @@ public:
 	}
 };
 
+}
+}
+
 // POA implementation
 #ifndef TEST_NO_POA
+namespace CORBA {
+namespace Nirvana {
+
 template <>
 class ServantPOA < ::Test::I3> :
 	public virtual ServantPOA < ::Test::I1>,
@@ -98,10 +106,31 @@ public:
 
 	virtual Long op3 (Long p1) = 0;
 };
+
+}
+}
+
+namespace POA_Test {
+typedef ::CORBA::Nirvana::ServantPOA < ::Test::I3> I3;
+}
 #endif
 
 // Static implementation
 #ifndef TEST_NO_STATIC
+namespace POA_Test {
+class I3_static;
+}
+
+namespace CORBA {
+namespace Nirvana {
+
+template <>
+class StaticObjectImpl <::Test::I3>
+{
+public:
+	typedef POA_Test::I3_static Implementation;
+};
+
 template <class S>
 class ServantStatic <S, ::Test::I3> :
 	public ServantBaseStatic <S, ::Test::I3>,
@@ -115,10 +144,17 @@ public:
 		return Skeleton <S, ::Test::I3>::_find_interface (*(S*)nullptr, id);
 	}
 };
+
+}
+}
+
 #endif
 
 // Tied implementation
 #ifndef TEST_NO_TIED
+namespace CORBA {
+namespace Nirvana {
+
 template <class T>
 class ServantTied <T, ::Test::I3> :
 	public ImplementationTied <T, ::Test::I3, ::Test::I2, ::Test::I1, ::CORBA::Object>
@@ -128,18 +164,11 @@ public:
 		ImplementationTied <T, ::Test::I3, ::Test::I2, ::Test::I1, ::CORBA::Object> (tp, release)
 	{}
 };
-#endif
 
 }
 }
 
 namespace POA_Test {
-
-#ifndef TEST_NO_POA
-typedef ::CORBA::Nirvana::ServantPOA < ::Test::I3> I3;
-#endif
-
-#ifndef TEST_NO_TIED
 template <class T>
 class I3_tie :
 	public ::CORBA::Nirvana::ServantTied <T, ::Test::I3>
@@ -157,8 +186,8 @@ public:
 
 	I3_tie (T* tp, ::PortableServer::POA_ptr poa, ::CORBA::Boolean release = TRUE);	// Generate only if Object is derived
 };
-#endif
-
 }
+
+#endif
 
 #endif

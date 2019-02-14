@@ -13,6 +13,7 @@ template <class S>
 class Skeleton <S, AbstractBase>
 {
 public:
+	typedef S ServantType;
 	static const typename Bridge <AbstractBase>::EPV epv_;
 
 protected:

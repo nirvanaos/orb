@@ -39,6 +39,8 @@
       <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ConformanceMode>
       <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ConformanceMode>
     </ClCompile>
+    <ClCompile Include="..\I1.cpp" />
+    <ClCompile Include="..\I3.cpp" />
     <ClCompile Include="..\ObjectAdapterCore.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -63,11 +65,14 @@
     <ClCompile Include="..\Test_I3_c.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\I1.h" />
+    <ClInclude Include="..\I3.h" />
     <ClInclude Include="..\ObjectAdapterCore.h" />
     <ClInclude Include="..\ObjectCore.h" />
     <ClInclude Include="..\ServantCore.h" />
     <ClInclude Include="..\ServantLinksCore.h" />
     <ClInclude Include="..\Server.h" />
+    <ClInclude Include="..\Test.h" />
     <ClInclude Include="..\Test_I1_c.h" />
     <ClInclude Include="..\Test_I1_s.h" />
     <ClInclude Include="..\Test_I2_c.h" />

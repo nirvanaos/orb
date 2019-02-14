@@ -1,5 +1,5 @@
-#ifndef NIRVANA_ORB_TEST_I1_S_H_
-#define NIRVANA_ORB_TEST_I1_S_H_
+#ifndef IDL_TEST_I1_S_H_
+#define IDL_TEST_I1_S_H_
 
 #include "Test_I1_c.h"
 #include "Server.h"
@@ -76,8 +76,14 @@ public:
 	}
 };
 
+}
+}
+
 // POA implementation
 #ifndef TEST_NO_POA
+namespace CORBA {
+namespace Nirvana {
+
 template <>
 class ServantPOA < ::Test::I1> :
 	public virtual ObjectPOA,
@@ -103,25 +109,54 @@ public:
 	virtual Long op1 (Long p1) = 0;
 	virtual void throw_NO_IMPLEMENT () = 0;
 };
+
+}
+}
+
+namespace POA_Test {
+typedef ::CORBA::Nirvana::ServantPOA < ::Test::I1> I1;
+}
+
 #endif
 
 // Static implementation
 #ifndef TEST_NO_STATIC
-template <class S>
-class ServantStatic <S, ::Test::I1> :
-	public ServantBaseStatic <S, ::Test::I1>,
-	public InterfaceStatic <S, ::Test::I1>
+namespace POA_Test {
+class I1_static;
+}
+
+namespace CORBA {
+namespace Nirvana {
+
+template <>
+class StaticObjectImpl <::Test::I1>
+{
+public:
+	typedef POA_Test::I1_static Implementation;
+};
+
+template <>
+class ServantStatic < ::Test::I1> :
+	public ServantBaseStatic < ::Test::I1>,
+	public InterfaceStatic < typename StaticObjectImpl < ::Test::I1>::Implementation, ::Test::I1>
 {
 public:
 	static Interface_ptr _find_interface (const Char* id)
 	{
-		return Skeleton <S, ::Test::I1>::_find_interface (*(S*)nullptr, id);
+		return Skeleton < ServantType, ::Test::I1>::_find_interface (*(ServantType*)nullptr, id);
 	}
 };
+
+}
+}
+
 #endif
 
 // Tied implementation
 #ifndef TEST_NO_TIED
+namespace CORBA {
+namespace Nirvana {
+
 template <class T>
 class ServantTied <T, ::Test::I1> :
 	public ImplementationTied <T, ::Test::I1, ::CORBA::Object>
@@ -131,18 +166,11 @@ public:
 		ImplementationTied <T, ::Test::I1, ::CORBA::Object> (tp, release)
 	{}
 };
-#endif
 
 }
 }
 
 namespace POA_Test {
-
-#ifndef TEST_NO_POA
-typedef ::CORBA::Nirvana::ServantPOA < ::Test::I1> I1;
-#endif
-
-#ifndef TEST_NO_TIED
 template <class T>
 class I1_tie :
 	public ::CORBA::Nirvana::ServantTied <T, ::Test::I1>
@@ -160,8 +188,7 @@ public:
 
 	I1_tie (T* tp, ::PortableServer::POA_ptr poa, ::CORBA::Boolean release = TRUE);	// Generate only if Object is derived
 };
-#endif
-
 }
+#endif
 
 #endif
