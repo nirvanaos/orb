@@ -4,273 +4,106 @@
 #ifndef NIRVANA_ORB_IMPLEMENTATIONTIED_H_
 #define NIRVANA_ORB_IMPLEMENTATIONTIED_H_
 
-#include "AbstractBase.h"
-#include "RefCountBase.h"
+#include "Implementation.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-// Forward declarations
-
-template <class I> class InterfaceTiedBase;
-template <class S, class I> class InterfaceTied;
-template <class T, class I> class ServantTied;
-template <class T, class S> class AbstractBaseTied;
-
-// Abstract base implementation
-
-template <>
-class InterfaceTiedBase <AbstractBase> :
-	public Bridge <AbstractBase>,
-	public RefCountBase
+template <class T, class I>
+class ServantTied :
+	public Servant <ServantTied <T, I>, I>
 {
+	typedef Servant <ServantTied <T, I>, I> Base;
 public:
-	template <class I>
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf, EnvironmentBridge* env);
-
-	template <>
-	static Bridge <Interface>* _duplicate <AbstractBase> (Bridge <Interface>* itf, EnvironmentBridge* env);
-
-	template <class I>
-	static void _release (Bridge <Interface>* itf);
-
-	template <>
-	static void _release <AbstractBase> (Bridge <Interface>* itf);
-
-	Boolean _is_owner () const
-	{
-		return release_;
-	}
-
-	void _is_owner (Boolean rel)
-	{
-		release_ = rel;
-	}
-
-	template <class I, class S>
-	static Bridge <I>& _narrow (S& servant)
-	{
-		servant._add_ref ();
-		return static_cast <Bridge <I>&> (servant);
-	}
-
-protected:
-	InterfaceTiedBase ()
+	ServantTied (T& t) :
+		ptr_ (&t),
+		poa_ (POA::_nil ()),
+		rel_ (false)
 	{}
 
-	AbstractBase_ptr _this ()
-	{
-		return this;
-	}
-
-protected:
-	template <class T, class S>
-	friend class AbstractBaseTied;
-
-	virtual Bridge <Interface>* _find_interface (const Char* id) = 0;
-
-	void* _implementation () const
-	{
-		assert (implementation_);
-		return implementation_;
-	}
-
-	void* _tied_object () const
-	{
-		return implementation_;
-	}
-
-	void _tied_object (void* obj, Boolean release)
-	{
-		implementation_ = obj;
-		release_ = release;
-	}
-
-private:
-	static InterfaceTiedBase <AbstractBase>& _get_base (Bridge <Interface>* itf);
-	static InterfaceTiedBase <AbstractBase>& _get_base (Bridge <AbstractBase>* itf);
-
-private:
-	void* implementation_;
-	Boolean release_;
-};
-
-template <class I>
-Bridge <Interface>* InterfaceTiedBase <AbstractBase>::_duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
-{
-	try {
-		_get_base (itf)._add_ref ();
-	} catch (const Exception& e) {
-		env->set_exception (e);
-	} catch (...) {
-		env->set_unknown_exception ();
-	}
-	return itf;
-}
-
-template <>
-Bridge <Interface>* InterfaceTiedBase <AbstractBase>::_duplicate <AbstractBase> (Bridge <Interface>* itf, EnvironmentBridge* env)
-{
-	try {
-		_get_base (static_cast <Bridge <AbstractBase>*> (itf))._add_ref ();
-	} catch (const Exception& e) {
-		env->set_exception (e);
-	} catch (...) {
-		env->set_unknown_exception ();
-	}
-	return itf;
-}
-
-template <class I>
-void InterfaceTiedBase <AbstractBase>::_release (Bridge <Interface>* itf)
-{
-	try {
-		_get_base (itf)._remove_ref ();
-	} catch (...) {
-	}
-}
-
-template <>
-void InterfaceTiedBase <AbstractBase>::_release <AbstractBase> (Bridge <Interface>* itf)
-{
-	try {
-		_get_base (static_cast <Bridge <AbstractBase>*> (itf))._remove_ref ();
-	} catch (...) {
-	}
-}
-
-template <class I>
-class InterfaceTiedBase :
-	public Bridge <I>,
-	public virtual InterfaceTiedBase <AbstractBase>
-{
-protected:
-	InterfaceTiedBase (const typename Bridge <I>::EPV& epv) :
-		Bridge <I> (epv)
+	ServantTied (T& t, ::PortableServer::POA_ptr poa) :
+		ptr_ (&t),
+		poa_ (::PortableServer::POA::_duplicate (poa)),
+		rel_ (false)
 	{}
 
-	InterfaceTiedBase ()
-	{}
-};
-
-template <class S, class I>
-class InterfaceTied :
-	public InterfaceTiedBase <I>,
-	public Skeleton <S, I>
-{
-protected:
-	InterfaceTied () :
-		InterfaceTiedBase <I> (Skeleton <S, I>::epv_)
+	ServantTied (T* tp, Boolean release = true) :
+		ptr_ (tp),
+		poa_ (POA::_nil ()),
+		rel_ (release)
 	{}
 
-	static Bridge <Interface>* _find_interface (S& servant, const Char* id)
-	{
-		return Skeleton <S, I>::_find_interface (servant, id);
-	}
-};
+	ServantTied (T* tp, ::PortableServer::POA_ptr poa, Boolean release = true) :
+		ptr_ (tp),
+		poa_ (poa),
+		rel_ (release)
+	{}
 
-template <class T, class S>
-class AbstractBaseTied :
-	public virtual InterfaceTiedBase <AbstractBase>,
-	public Skeleton <S, AbstractBase>
-{
-public:
-	template <class I>
-	static T& _implementation (Bridge <I>* bridge)
+	~ServantTied ()
 	{
-		_check_pointer (bridge, Skeleton <S, I>::epv_.interface);
-		return *reinterpret_cast <T*> (static_cast <InterfaceTiedBase <I>&> (*bridge)._implementation ());
-	}
-
-	static T& _implementation (Bridge <AbstractBase>* bridge)
-	{
-		_check_pointer (bridge, Skeleton <S, AbstractBase>::epv_.interface);
-		return *reinterpret_cast <S*> (static_cast <InterfaceTiedBase <AbstractBase>&> (*bridge)._implementation ());
-	}
-
-	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* itf, EnvironmentBridge* env)
-	{
-		try {
-			_check_pointer (itf, Skeleton <S, Derived>::epv_.interface);
-			return static_cast <Bridge <Base>*> (static_cast <S*> (itf));
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return 0;
-	}
-
-	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
-	{
-		try {
-			_check_pointer (base, Skeleton <S, AbstractBase>::epv_.interface);
-			_check_pointer (id);
-			return static_cast <InterfaceTiedBase <AbstractBase>&> (*base)._find_interface (id);
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return 0;
+		CORBA::release (poa_);
+		if (rel_)
+			delete ptr_;
 	}
 
 	T* _tied_object () const
 	{
-		return reinterpret_cast <T*> (InterfaceTiedBase <AbstractBase>::_tied_object ());
+		return ptr_;
 	}
 
-	void _tied_object (T* obj, Boolean release = TRUE)
+	void _tied_object (T* obj, Boolean release = true)
 	{
-		if (_is_owner ())
-			delete _tied_object ();
-		InterfaceTiedBase <AbstractBase>::_tied_object (obj, release);
+		if (rel_)
+			delete ptr_;
+		ptr_ = obj;
+		rel_ = release;
 	}
 
-protected:
-	AbstractBaseTied (T* obj, Boolean release)
+	Boolean _is_owner () const
 	{
-		epv_ptr_ = &Skeleton <S, AbstractBase>::epv_.interface;
-		_tied_object (obj, release);
+		return rel_;
 	}
 
-	~AbstractBaseTied ()
+	void _is_owner (Boolean b)
 	{
-		if (_is_owner ())
-			delete _tied_object ();
+		rel_ = b;
 	}
+
+	POA_ptr _defauilt_POA ()
+	{
+		if (!is_nil (poa_))
+			return PortableServer::POA::_duplicate (poa_);
+		else
+			return Base::_default_POA ();
+	}
+
+	Boolean _non_existent () const
+	{
+		return !ptr_;
+	}
+
+	static ServantTied <T, I>& _implementation (Bridge <AbstractBase>* itf)
+	{
+		return Base::_servant (itf);
+	}
+
+	static ServantTied <T, I>& _implementation (Bridge <ServantBase>* itf)
+	{
+		return Base::_servant (itf);
+	}
+
+	template <class I>
+	static T& _implementation (Bridge <I>* bridge)
+	{
+		return *(Base::_servant (bridge).ptr_);
+	}
+
+private:
+	T* ptr_;
+	Boolean rel_;
+	::PortableServer::POA_ptr poa_;
 };
 
-template <class T, class Primary, class ... Base> // Base includes all derived interfaces, directly and indirectly
-class ImplementationTied :
-	public AbstractBaseTied <T, ServantTied <T, Primary> >,
-	public InterfaceTied <ServantTied <T, Primary>, Base> ...,
-	public InterfaceTied <ServantTied <T, Primary>, Primary>
-{
-public:
-	typedef Primary _PrimaryInterface;
-
-	static const Char* _primary_interface ()
-	{
-		return Bridge <Primary>::_primary_interface ();
-	}
-
-	virtual Bridge <Interface>* _find_interface (const Char* id)
-	{
-		return InterfaceTied <ServantTied <T, Primary>, Primary>::_find_interface (static_cast <ServantTied <T, Primary>&> (*this), id);
-	}
-
-	T_ptr <Primary> _this ()
-	{
-		return InterfaceTiedBase <Primary>::_this ();
-	}
-
-protected:
-	ImplementationTied (T* obj, Boolean release) :
-		AbstractBaseTied <T, ServantTied <T, Primary> > (obj, release)
-	{}
-};
 
 }
 }

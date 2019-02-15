@@ -2,14 +2,7 @@
 #ifndef NIRVANA_ORB_SERVANTBASE_C_H_
 #define NIRVANA_ORB_SERVANTBASE_C_H_
 
-#include "Object_c.h"
-
-namespace PortableServer {
-
-class POA;
-//typedef CORBA::Nirvana::T_ptr <POA> POA_ptr;
-typedef CORBA::Nirvana::Bridge <POA>* POA_ptr; // Not defined yet
-}
+#include "POA_c.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -55,9 +48,6 @@ public:
 protected:
 	Bridge (const EPV& epv) :
 		Bridge <Interface> (epv.interface)
-	{}
-
-	Bridge ()
 	{}
 };
 

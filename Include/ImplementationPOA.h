@@ -70,8 +70,8 @@ typedef ServantPOA <AbstractBase> AbstractBasePOA;
 template <>
 class ServantPOA <ServantBase> :
 	public virtual ServantPOA <AbstractBase>,
-	public InterfaceImpl <ServantPOA <ServantBase>, ServantBase>,
-	public ServantBaseLinks
+	public ServantBaseLinks,
+	public Skeleton <ServantPOA <ServantBase>, ServantBase>
 {
 public:
 	// ServantBase operations
@@ -97,10 +97,9 @@ public:
 	}
 
 protected:
-	void _final_construct (const Char* primary_interface)
-	{
-		ServantBaseLinks::_final_construct (this, primary_interface);
-	}
+	ServantPOA () :
+		ServantBaseLinks (Skeleton <ServantPOA <ServantBase>, ServantBase>::epv_)
+	{}
 };
 
 }

@@ -122,37 +122,6 @@ const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 	}
 };
 
-/*
-// Tied implementation
-
-template <class S>
-class InterfaceTied <S, Object> :
-	public InterfaceTiedBase <Object>,
-	public Skeleton <S, Object>
-{
-public:
-	Boolean _non_existent () const
-	{
-		return !static_cast <const S&> (*this)._tied_object ();
-	}
-
-	POA_ptr _default_POA () const
-	{
-		return 0;	// TODO: Implement.
-	}
-
-	void _default_POA (POA_ptr);	// TODO: Implement.
-
-protected:
-	InterfaceTied <S, Object> () :
-		InterfaceTiedBase <Object> (Skeleton <S, Object>::epv_),
-		poa_ (0)
-	{}
-
-	POA_ptr poa_;
-};
-*/
-
 }
 }
 

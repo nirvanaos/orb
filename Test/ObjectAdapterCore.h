@@ -27,8 +27,9 @@ public:
 		delete static_cast <ServantLinksCore*> (servant);
 	}
 
-	static void activate_object (ServantLinks* servant)
+	static Object_ptr create_local_object (AbstractBase_ptr base, const Char* type_id)
 	{
+		return Object::_nil ();
 	}
 };
 

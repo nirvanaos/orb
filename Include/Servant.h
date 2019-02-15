@@ -5,6 +5,7 @@
 
 #include "Implementation.h"
 #include "ImplementationStatic.h"
+#include "ImplementationTied.h"
 #include "PortableServer.h"
 //#include "sequence.h"
 

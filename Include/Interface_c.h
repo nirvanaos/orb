@@ -31,20 +31,16 @@ public:
 
 	const EPV& _epv () const
 	{
-		assert (epv_ptr_);
-		return *epv_ptr_;
+		return epv_ref_;
 	}
 
 protected:
 	Bridge (const EPV& epv) :
-		epv_ptr_ (&epv)
-	{}
-
-	Bridge ()
+		epv_ref_ (epv)
 	{}
 
 protected:
-	const EPV* epv_ptr_;
+	const EPV& epv_ref_;
 };
 
 //! Interface - All client interfaces can be widened to it.

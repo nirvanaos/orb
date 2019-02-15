@@ -72,13 +72,19 @@ public:
 
 // Standard implementation of CORBA::Nirvana::ServantBase
 
-class ServantBaseLinks
+class ServantBaseLinks :
+	public Bridge <ServantBase>
 {
 public:
 	operator Bridge <Object>& ()
 	{
 		_activate ();
 		return *servant_links_->object;
+	}
+
+	operator const ServantLinks& () const
+	{
+		return *servant_links_;
 	}
 
 	// ServantBase operations
@@ -104,13 +110,14 @@ public:
 	}
 
 protected:
-	ServantBaseLinks () :
+	ServantBaseLinks (const EPV& epv) :
+		Bridge <ServantBase> (epv),
 		servant_links_ (nullptr)
 	{}
 
-	void _final_construct (Bridge <ServantBase>* servant, const Char* primary_interface)
+	void _final_construct (const Char* primary_interface)
 	{
-		servant_links_ = g_system->create_servant (servant, primary_interface);
+		servant_links_ = g_system->create_servant (this, primary_interface);
 	}
 
 	~ServantBaseLinks ()
@@ -120,7 +127,8 @@ protected:
 
 	void _activate ()
 	{
-		g_system->activate_object (servant_links_);
+		::PortableServer::POA_var poa = ServantBase_ptr (this)->_default_POA ();
+		poa->activate_object (*this);
 	}
 
 protected:
@@ -130,14 +138,13 @@ protected:
 template <class S>
 class ServantBaseImpl :
 	public AbstractBaseImpl <S>,
-	public InterfaceImpl <S, ServantBase>,
-	public ServantBaseLinks
+	public ServantBaseLinks,
+	public Skeleton <S, ServantBase>
 {
 protected:
-	void _final_construct (const Char* primary_interface)
-	{
-		ServantBaseLinks::_final_construct (this, primary_interface);
-	}
+	ServantBaseImpl () :
+		ServantBaseLinks (Skeleton <S, ServantBase>::epv_)
+	{}
 };
 
 }

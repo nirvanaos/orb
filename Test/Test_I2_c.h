@@ -48,9 +48,6 @@ protected:
 	Bridge (const EPV& epv) :
 		Bridge <Interface> (epv.interface)
 	{}
-
-	Bridge ()
-	{}
 };
 
 template <class T>

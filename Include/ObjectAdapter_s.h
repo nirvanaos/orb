@@ -54,15 +54,16 @@ protected:
 		}
 	}
 
-	static void _activate_object (Bridge <ObjectAdapter>* obj, ServantLinks* servant, EnvironmentBridge* env)
+	static Bridge <Object>* _create_local_object (Bridge <ObjectAdapter>* obj, Bridge <AbstractBase>* base, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
-			S::_implementation (obj).activate_object (servant);
+			return S::_implementation (obj).create_local_object (base, type_id);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
 			env->set_unknown_exception ();
 		}
+		return 0;
 	}
 };
 
@@ -78,7 +79,7 @@ const Bridge <ObjectAdapter>::EPV Skeleton <S, ObjectAdapter>::epv_ = {
 	{ // epv
 		S::_create_servant,
 		S::_destroy_servant,
-		S::_activate_object
+		S::_create_local_object
 	}
 };
 

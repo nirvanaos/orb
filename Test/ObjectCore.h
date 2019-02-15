@@ -16,6 +16,7 @@ class ObjectCore :
 {
 public:
 	ObjectCore (ServantBase_ptr servant) :
+		Bridge <Object> (Skeleton <ObjectCore, Object>::epv_),
 		servant_ (servant)
 	{}
 

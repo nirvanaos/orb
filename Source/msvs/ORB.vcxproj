@@ -29,6 +29,7 @@
     <ClCompile Include="..\Interface_c.cpp" />
     <ClCompile Include="..\ObjectAdapter_c.cpp" />
     <ClCompile Include="..\Object_c.cpp" />
+    <ClCompile Include="..\POA_c.cpp" />
     <ClCompile Include="..\RepositoryId.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +50,8 @@
     <ClInclude Include="..\..\Include\Object_c.h" />
     <ClInclude Include="..\..\Include\ObjectAdapter_c.h" />
     <ClInclude Include="..\..\Include\Object_s.h" />
+    <ClInclude Include="..\..\Include\POA_c.h" />
+    <ClInclude Include="..\..\Include\POA_s.h" />
     <ClInclude Include="..\..\Include\Servant.h" />
     <ClInclude Include="..\..\Include\PortableServer.h" />
     <ClInclude Include="..\..\Include\RefCountBase.h" />

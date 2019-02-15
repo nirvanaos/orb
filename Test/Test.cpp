@@ -31,7 +31,7 @@ private:
 	void load_static (const OLF_ObjectInfo& oi, const ServantLinks*& sl)
 	{
 		sl = g_system->create_servant (oi.servant, oi.primary_interface);
-		g_system->activate_object (const_cast <ServantLinks*> (sl));
+		//g_system->activate_object (const_cast <ServantLinks*> (sl));
 	}
 
 	void unload_static (const ServantLinks* sl)
