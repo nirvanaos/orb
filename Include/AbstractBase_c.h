@@ -45,7 +45,9 @@ template <class T>
 class Client <T, AbstractBase> :
 	public ClientBase <T, AbstractBase>
 {
-public:
+protected:
+	template <class I> friend class ClientInterface;
+
 	Interface_ptr _find_interface (const Char* type_id);
 };
 

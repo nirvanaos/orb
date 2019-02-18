@@ -10,7 +10,8 @@ namespace CORBA {
 namespace Nirvana {
 
 template <class S>
-class Skeleton <S, AbstractBase>
+class Skeleton <S, AbstractBase> :
+	public Skeleton <S, Interface>
 {
 public:
 	typedef S ServantType;
@@ -27,8 +28,6 @@ protected:
 		} catch (...) {
 			env->set_unknown_exception ();
 		}
-		if (ret)
-			ret = (ret->_epv ().duplicate) (ret, env);
 		return ret;
 	}
 
@@ -44,28 +43,6 @@ public:
 			env->set_unknown_exception ();
 		}
 		return nullptr;
-	}
-
-	template <class I>
-	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
-	{
-		try {
-			return S::_duplicate (static_cast <Bridge <I>*> (itf));
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return nullptr;
-	}
-
-	template <class I>
-	static void __release (Bridge <Interface>* itf)
-	{
-		try {
-			S::_release (static_cast <Bridge <I>*> (itf));
-		} catch (...) {
-		}
 	}
 };
 

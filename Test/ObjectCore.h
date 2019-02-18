@@ -10,7 +10,7 @@ namespace CORBA {
 namespace Nirvana {
 
 class ObjectCore :
-	public AbstractBaseNoRefCnt <ObjectCore>,
+	public AbstractBaseNoLifeCycle <ObjectCore>,
 	public Bridge <Object>,
 	public Skeleton <ObjectCore, Object>
 {

@@ -8,23 +8,13 @@ namespace CORBA {
 namespace Nirvana {
 
 class ServantCore :
-	public AbstractBaseNoRefCnt <ServantCore>,
+	public LifeCycleStatic<AbstractBaseNoLifeCycle <ServantCore> >,
 	public InterfaceImpl <ServantCore, ServantBase>
 {
 public:
 	ServantCore (AbstractBase_ptr base, const Char* interface_id) :
 		abstract_base_ (base),
 		interface_id_ (interface_id)
-	{}
-
-	template <class I>
-	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge*)
-	{
-		return itf;
-	}
-
-	template <class I>
-	static void __release (Bridge <Interface>* itf)
 	{}
 
 	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)

@@ -47,22 +47,25 @@ const typename Bridge <I>::EPV* InterfaceStatic <S, I>::bridge_ = &InterfaceStat
 
 // Static implementation of CORBA::AbstractBase
 
-class LifeCycleStatic
+template <class Base>
+class LifeCycleStatic :
+	public Base
 {
 public:
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf)
+	template <class I>
+	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge*)
 	{
 		return itf;
 	}
 
-	static void _release (Bridge <Interface>*)
+	template <class I>
+	static void __release (Bridge <Interface>*)
 	{}
 };
 
 template <class S>
 class AbstractBaseStatic :
-	public InterfaceStatic <S, AbstractBase>,
-	public LifeCycleStatic
+	public LifeCycleStatic <InterfaceStatic <S, AbstractBase> >
 {
 public:
 	template <class I>

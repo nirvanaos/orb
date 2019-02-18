@@ -18,7 +18,7 @@ public:
 	{
 		Bridge <Interface>* itf;
 		if (RepositoryId::compatible (Bridge < ::Test::I3>::interface_id_, id))
-			itf = &static_cast <Bridge < ::Test::I3>&> (servant);
+			itf = Interface::_duplicate (&static_cast <Bridge < ::Test::I3>&> (servant));
 		// Call all direct bases
 		else if (!(itf = FindInterface < ::Test::I2>::find (servant, id)))
 			itf = FindInterface < ::Test::I1>::find (servant, id);

@@ -30,7 +30,7 @@ protected:
 // Standard implementation of CORBA::AbstractBase
 
 template <class S>
-class AbstractBaseNoRefCnt :
+class AbstractBaseNoLifeCycle :
 	public InterfaceImpl <S, AbstractBase>
 {
 public:
@@ -48,8 +48,9 @@ public:
 	}
 };
 
-template <class S>
+template <class Base>
 class LifeCycleRefCnt :
+	public Base,
 	public RefCountBase
 {
 public:
@@ -57,7 +58,7 @@ public:
 	static Bridge <I>* _duplicate (Bridge <I>* itf)
 	{
 		if (itf)
-			S::_servant (itf)._add_ref ();
+			Base::ServantType::_servant (itf)._add_ref ();
 		return itf;
 	}
 
@@ -65,14 +66,13 @@ public:
 	static void _release (Bridge <I>* itf)
 	{
 		if (itf)
-			S::_servant (itf)._remove_ref ();
+			Base::ServantType::_servant (itf)._remove_ref ();
 	}
 };
 
 template <class S>
 class AbstractBaseImpl :
-	public AbstractBaseNoRefCnt <S>,
-	public LifeCycleRefCnt <S>
+	public LifeCycleRefCnt <AbstractBaseNoLifeCycle <S> >
 {};
 
 // Standard implementation of CORBA::Nirvana::ServantBase

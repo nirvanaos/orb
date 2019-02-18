@@ -18,7 +18,7 @@ public:
 	static Bridge <Interface>* find (S& servant, const Char* id)
 	{
 		if (RepositoryId::compatible (Bridge <ObjectAdapter>::interface_id_, id))
-			return &static_cast <Bridge <ObjectAdapter>&> (servant);
+			return Interface::_duplicate (&static_cast <Bridge <ObjectAdapter>&> (servant));
 		else
 			return nullptr;
 	}

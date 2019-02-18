@@ -18,7 +18,7 @@ public:
 	static Bridge <Interface>* find (S& servant, const Char* id)
 	{
 		if (RepositoryId::compatible (Bridge < ::PortableServer::POA>::interface_id_, id))
-			return &static_cast <Bridge < ::PortableServer::POA>&> (servant);
+			return Interface::_duplicate (&static_cast <Bridge < ::PortableServer::POA>&> (servant));
 		else
 			return FindInterface < ::CORBA::Object>::find (servant, id);
 	}

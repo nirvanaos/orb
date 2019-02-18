@@ -22,10 +22,6 @@
     <ClCompile Include="..\AbstractBase_s.cpp" />
     <ClCompile Include="..\Environment.cpp" />
     <ClCompile Include="..\Exception.cpp" />
-    <ClCompile Include="..\ImplementationTied.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\Interface_c.cpp" />
     <ClCompile Include="..\ObjectAdapter_c.cpp" />
     <ClCompile Include="..\Object_c.cpp" />

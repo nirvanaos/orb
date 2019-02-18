@@ -18,9 +18,6 @@
     <ClCompile Include="..\RepositoryId.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ImplementationTied.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Environment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
