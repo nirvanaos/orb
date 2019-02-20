@@ -10,8 +10,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <class S>
-class Skeleton <S, AbstractBase> :
-	public Skeleton <S, Interface>
+class Skeleton <S, AbstractBase>
 {
 public:
 	typedef S ServantType;

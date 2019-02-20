@@ -22,6 +22,23 @@ template <class S, class I> class ServantStatic;
 
 // Static interface implementation
 
+template <class S>
+class ImplementationStatic
+{
+public:
+	template <class I>
+	static S& _implementation (Bridge <I>* bridge)
+	{
+		return *(S*)0;
+	}
+
+	template <class I>
+	static S& _servant (Bridge <I>* bridge)
+	{
+		return *(S*)0;
+	}
+};
+
 template <class S, class I>
 class InterfaceStatic :
 	public Skeleton <S, I>
@@ -45,11 +62,7 @@ protected:
 template <class S, class I>
 const typename Bridge <I>::EPV* InterfaceStatic <S, I>::bridge_ = &InterfaceStatic <S, I>::epv_;
 
-// Static implementation of CORBA::AbstractBase
-
-template <class Base>
-class LifeCycleStatic :
-	public Base
+class LifeCycleStatic
 {
 public:
 	template <class I>
@@ -63,23 +76,14 @@ public:
 	{}
 };
 
+// Static implementation of CORBA::AbstractBase
+
 template <class S>
 class AbstractBaseStatic :
-	public LifeCycleStatic <InterfaceStatic <S, AbstractBase> >
-{
-public:
-	template <class I>
-	static S& _implementation (Bridge <I>* bridge)
-	{
-		return *(S*)0;
-	}
-
-	template <class I>
-	static S& _servant (Bridge <I>* bridge)
-	{
-		return *(S*)0;
-	}
-};
+	public InterfaceStatic <S, AbstractBase>,
+	public ImplementationStatic <S>,
+	public LifeCycleStatic
+{};
 
 // Static implementation of CORBA::Nirvana::ServantBase
 

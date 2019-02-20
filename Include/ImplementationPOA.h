@@ -11,12 +11,7 @@ namespace Nirvana {
 
 template <class I> class ServantPOA;
 
-// Virtual implementation of AbstractBase
-
-template <>
-class ServantPOA <AbstractBase> :
-	public InterfaceImpl <ServantPOA <AbstractBase>, AbstractBase>,
-	public RefCountBase
+class ImplementationPOA
 {
 public:
 	template <class I>
@@ -31,19 +26,17 @@ public:
 	{
 		return _servant (bridge);
 	}
+};
 
-	template <class I>
-	static Bridge <I>* _duplicate (Bridge <I>* itf)
-	{
-		_servant (itf)._add_ref ();
-		return itf;
-	}
+// Virtual implementation of AbstractBase
 
-	template <class I>
-	static void _release (Bridge <I>* itf)
-	{
-		_servant (itf)._remove_ref ();
-	}
+template <>
+class ServantPOA <AbstractBase> :
+	public InterfaceImpl <ServantPOA <AbstractBase>, AbstractBase>,
+	public ImplementationPOA,
+	public LifeCycleRefCnt <ServantPOA <AbstractBase> >
+{
+public:
 
 	virtual void _add_ref ()
 	{

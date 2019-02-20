@@ -14,24 +14,10 @@ namespace Nirvana {
 
 template <class S, class I> class Servant;
 
-// Standard single interface implementation
-
-template <class S, class I>
-class InterfaceImpl :
-	public Bridge <I>,
-	public Skeleton <S, I>
-{
-protected:
-	InterfaceImpl () :
-		Bridge <I> (Skeleton <S, I>::epv_)
-	{}
-};
-
-// Standard implementation of CORBA::AbstractBase
+// Standard interface implementation
 
 template <class S>
-class AbstractBaseNoLifeCycle :
-	public InterfaceImpl <S, AbstractBase>
+class Implementation
 {
 public:
 	template <class I>
@@ -48,9 +34,47 @@ public:
 	}
 };
 
-template <class Base>
+template <class S, class I>
+class InterfaceImpl :
+	public Bridge <I>,
+	public Skeleton <S, I>
+{
+protected:
+	InterfaceImpl () :
+		Bridge <I> (Skeleton <S, I>::epv_)
+	{}
+};
+
+template <class S>
+class LifeCycleDynamic
+{
+public:
+	template <class I>
+	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
+	{
+		try {
+			return S::_duplicate (static_cast <Bridge <I>*> (itf));
+		} catch (const Exception& e) {
+			env->set_exception (e);
+		} catch (...) {
+			env->set_unknown_exception ();
+		}
+		return nullptr;
+	}
+
+	template <class I>
+	static void __release (Bridge <Interface>* itf)
+	{
+		try {
+			S::_release (static_cast <Bridge <I>*> (itf));
+		} catch (...) {
+		}
+	}
+};
+
+template <class S>
 class LifeCycleRefCnt :
-	public Base,
+	public LifeCycleDynamic <S>,
 	public RefCountBase
 {
 public:
@@ -58,7 +82,7 @@ public:
 	static Bridge <I>* _duplicate (Bridge <I>* itf)
 	{
 		if (itf)
-			Base::ServantType::_servant (itf)._add_ref ();
+			S::_servant (itf)._add_ref ();
 		return itf;
 	}
 
@@ -66,13 +90,17 @@ public:
 	static void _release (Bridge <I>* itf)
 	{
 		if (itf)
-			Base::ServantType::_servant (itf)._remove_ref ();
+			S::_servant (itf)._remove_ref ();
 	}
 };
 
+// Standard implementation of CORBA::AbstractBase
+
 template <class S>
 class AbstractBaseImpl :
-	public LifeCycleRefCnt <AbstractBaseNoLifeCycle <S> >
+	public InterfaceImpl <S, AbstractBase>,
+	public Implementation <S>,
+	public LifeCycleRefCnt <S>
 {};
 
 // Standard implementation of CORBA::Nirvana::ServantBase
