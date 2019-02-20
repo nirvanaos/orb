@@ -8,12 +8,6 @@
 #include "T_ptr.h"
 
 namespace CORBA {
-
-class Object;
-typedef Nirvana::T_ptr <Object> Object_ptr;
-typedef Nirvana::T_var <Object> Object_var;
-typedef Nirvana::T_out <Object> Object_out;
-
 namespace Nirvana {
 
 /// All bridges should be derived from `Bridge &lt;Interface&gt`.
@@ -58,6 +52,7 @@ public:
 };
 
 //! ClientBase - How client obtains pointer to Bridge
+
 template <class T, class I>
 class ClientBase
 {
@@ -68,11 +63,13 @@ protected:
 	}
 };
 
-//! ClientInterface - Base template for all client interfaces
+//! Client must derive from ClientBase
 template <class T, class I> class Client;
 
+//! ClientInterface - Base template for client interfaces
+
 template <class I>
-class ClientInterface :
+class ClientInterfaceBase :
 	public Bridge <I>,
 	public Client <I, I>
 {
@@ -86,9 +83,6 @@ public:
 	{
 		return static_cast <Bridge <I>*> (static_cast <Bridge <Interface>*> (Interface::_duplicate (obj)));
 	}
-
-	// For the definition of this method see Object.h
-	static T_ptr <I> _narrow (T_ptr <Object> obj);
 
 	static T_ptr <I> _nil ()
 	{

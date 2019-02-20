@@ -10,13 +10,12 @@ namespace CORBA {
 namespace Nirvana {
 
 class ObjectCore :
-	public AbstractBaseNoLifeCycle <ObjectCore>,
-	public Bridge <Object>,
-	public Skeleton <ObjectCore, Object>
+	public Implementation <ObjectCore>,
+	public InterfaceImpl <ObjectCore, AbstractBase>,
+	public InterfaceImpl <ObjectCore, Object>
 {
 public:
 	ObjectCore (ServantBase_ptr servant) :
-		Bridge <Object> (Skeleton <ObjectCore, Object>::epv_),
 		servant_ (servant)
 	{}
 

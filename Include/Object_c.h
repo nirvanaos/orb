@@ -140,7 +140,7 @@ ULong Client <T, Object>::_hash (ULong maximum)
 }
 
 class Object :
-	public Nirvana::ClientInterface <Object>,
+	public Nirvana::ClientInterfaceBase <Object>,
 	public Nirvana::Client <Object, AbstractBase>
 {
 public:
@@ -158,16 +158,35 @@ public:
 
 inline Object_ptr AbstractBase::_to_object ()
 {
-	return static_cast <Nirvana::Bridge <Object>*> (static_cast <Nirvana::Bridge <Nirvana::Interface>*> (_find_interface (Nirvana::Bridge <Object>::interface_id_)));
+	return _find_interface <Object> ();
 }
 
 namespace Nirvana {
 
+
 template <class I>
-T_ptr <I> ClientInterface <I>::_narrow (T_ptr <Object> obj)
+class ClientInterface :
+	public ClientInterfacePseudo <I>
 {
-	return static_cast <Bridge <I>*> (static_cast <Bridge <Interface>*> (obj->_find_interface (Bridge <I>::interface_id_)));
-}
+public:
+	static T_ptr <I> _narrow (Object_ptr obj)
+	{
+		return obj->_find_interface <I> ();
+	}
+};
+
+template <class I>
+class ClientInterfaceAbstract :
+	public ClientInterface <I>
+{
+public:
+	static T_ptr <I> _narrow (Object_ptr obj)
+	{
+		return ClientInterface <I>::_narrow (obj);
+	}
+
+	static T_ptr <I> _narrow (ValueBase*);
+};
 
 }
 }

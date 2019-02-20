@@ -1,4 +1,4 @@
-#include "AbstractBase_s.h"
+#include "Interface_s.h"
 
 namespace CORBA {
 namespace Nirvana {

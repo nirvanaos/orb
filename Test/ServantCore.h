@@ -8,8 +8,10 @@ namespace CORBA {
 namespace Nirvana {
 
 class ServantCore :
-	public LifeCycleStatic<AbstractBaseNoLifeCycle <ServantCore> >,
-	public InterfaceImpl <ServantCore, ServantBase>
+	public Implementation <ServantCore>,
+	public InterfaceImpl <ServantCore, AbstractBase>,
+	public InterfaceImpl <ServantCore, ServantBase>,
+	public LifeCycleStatic
 {
 public:
 	ServantCore (AbstractBase_ptr base, const Char* interface_id) :

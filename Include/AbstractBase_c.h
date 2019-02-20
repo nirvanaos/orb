@@ -10,6 +10,13 @@ typedef Nirvana::T_ptr <AbstractBase> AbstractBase_ptr;
 typedef Nirvana::T_var <AbstractBase> AbstractBase_var;
 typedef Nirvana::T_out <AbstractBase> AbstractBase_out;
 
+class Object;
+typedef Nirvana::T_ptr <Object> Object_ptr;
+typedef Nirvana::T_var <Object> Object_var;
+typedef Nirvana::T_out <Object> Object_out;
+
+class ValueBase;
+
 namespace Nirvana {
 
 // AbstractBase
@@ -48,15 +55,21 @@ class Client <T, AbstractBase> :
 protected:
 	template <class I> friend class ClientInterface;
 
-	Interface_ptr _find_interface (const Char* type_id);
+	Bridge <Interface>* _find_interface (const Char* type_id);
+
+	template <class I>
+	T_ptr <I> _find_interface ()
+	{
+		return static_cast <Bridge <I>*> (_find_interface (Bridge <I>::interface_id_));
+	}
 };
 
 template <class T>
-Interface_ptr Client <T, AbstractBase>::_find_interface (const Char* type_id)
+Bridge <Interface>* Client <T, AbstractBase>::_find_interface (const Char* type_id)
 {
 	Environment env;
 	Bridge <AbstractBase>& bridge = ClientBase <T, AbstractBase>::_bridge ();
-	Interface_ptr ret = (bridge._epv ().epv.find_interface) (&bridge, type_id, &env);
+	Bridge <Interface>* ret = (bridge._epv ().epv.find_interface) (&bridge, type_id, &env);
 	env.check ();
 	return ret;
 }
@@ -64,13 +77,34 @@ Interface_ptr Client <T, AbstractBase>::_find_interface (const Char* type_id)
 }
 
 class AbstractBase :
-	public Nirvana::ClientInterface <AbstractBase>
+	public Nirvana::ClientInterfaceBase <AbstractBase>
 {
 public:
 	typedef AbstractBase_ptr _ptr_type;
 
+	static AbstractBase_ptr _narrow (AbstractBase_ptr obj)
+	{
+		return _duplicate (obj);
+	}
+
 	inline Object_ptr _to_object ();
+	inline ValueBase* _to_value ();
 };
+
+namespace Nirvana {
+
+template <class I>
+class ClientInterfacePseudo :
+	public ClientInterfaceBase <I>
+{
+public:
+	static T_ptr <I> _narrow (AbstractBase_ptr obj)
+	{
+		return obj->_find_interface <I> ();
+	}
+};
+
+}
 
 }
 

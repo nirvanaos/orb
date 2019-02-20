@@ -1,6 +1,6 @@
 // The Nirvana project.
 // Object Request Broker.
-// Standard Nirvana interface implementation.
+// Standard Nirvana servant implementation.
 #ifndef NIRVANA_ORB_IMPLEMENTATION_H_
 #define NIRVANA_ORB_IMPLEMENTATION_H_
 
@@ -12,10 +12,13 @@
 namespace CORBA {
 namespace Nirvana {
 
+/// Standard servant mix-in.
+/// \tparam S Servant class implementing operations. Must derive from this mix-in.
+/// \tparam I Primary interface.
 template <class S, class I> class Servant;
 
-// Standard interface implementation
-
+/// Standard (dynamic) servant implementation.
+/// \tparam S Servant class.
 template <class S>
 class Implementation
 {
@@ -34,6 +37,9 @@ public:
 	}
 };
 
+/// Standard interface implementation
+/// \tparam S Servant class implementing operations. Must derive from this mix-in.
+/// \tparam I Interface.
 template <class S, class I>
 class InterfaceImpl :
 	public Bridge <I>,
@@ -45,6 +51,8 @@ protected:
 	{}
 };
 
+/// Dynamic object life cycle.
+/// \tparam S Class implementing _duplicate() and _release() operations.
 template <class S>
 class LifeCycleDynamic
 {
@@ -72,6 +80,7 @@ public:
 	}
 };
 
+/// Life cycle with reference counting.
 template <class S>
 class LifeCycleRefCnt :
 	public LifeCycleDynamic <S>,
@@ -94,13 +103,12 @@ public:
 	}
 };
 
-// Standard implementation of CORBA::AbstractBase
-
+/// Standard implementation of CORBA::AbstractBase
 template <class S>
 class AbstractBaseImpl :
-	public InterfaceImpl <S, AbstractBase>,
 	public Implementation <S>,
-	public LifeCycleRefCnt <S>
+	public LifeCycleRefCnt <S>,
+	public InterfaceImpl <S, AbstractBase>
 {};
 
 // Standard implementation of CORBA::Nirvana::ServantBase
@@ -168,6 +176,8 @@ protected:
 	ServantLinks* servant_links_;
 };
 
+/// Standard implementation of CORBA::Nirvana::ServantBase
+/// \tparam S Servant class implementing operations.
 template <class S>
 class ServantBaseImpl :
 	public AbstractBaseImpl <S>,

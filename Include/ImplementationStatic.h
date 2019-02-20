@@ -76,13 +76,12 @@ public:
 	{}
 };
 
-// Static implementation of CORBA::AbstractBase
-
+/// Static implementation of CORBA::AbstractBase
 template <class S>
 class AbstractBaseStatic :
-	public InterfaceStatic <S, AbstractBase>,
 	public ImplementationStatic <S>,
-	public LifeCycleStatic
+	public LifeCycleStatic,
+	public InterfaceStatic <S, AbstractBase>
 {};
 
 // Static implementation of CORBA::Nirvana::ServantBase
@@ -127,6 +126,9 @@ public:
 template <class S, class Primary>
 const OLF_ObjectInfo StaticObject <S, Primary>::object_info_ = {StaticObject <S, Primary>::_bridge (), Bridge <Primary>::interface_id_};
 
+/// Static implementation of CORBA::Nirvana::ServantBase
+/// \tparam S Servant class.
+/// \tparam Primary Primary interface.
 template <class S, class Primary>
 class ServantBaseStatic :
 	public AbstractBaseStatic <S>,

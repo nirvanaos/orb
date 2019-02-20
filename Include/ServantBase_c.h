@@ -63,7 +63,7 @@ public:
 };
 
 class ServantBase :
-	public ClientInterface <ServantBase>,
+	public ClientInterfacePseudo <ServantBase>,
 	public Client <ServantBase, ::CORBA::AbstractBase>
 {
 public:
