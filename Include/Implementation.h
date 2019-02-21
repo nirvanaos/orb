@@ -103,6 +103,27 @@ public:
 	}
 };
 
+/// Non copyable reference.
+template <class S>
+class LifeCycleNoCopy
+{
+	template <class I>
+	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
+	{
+		env->set_exception (NO_IMPLEMENT ());
+		return nullptr;
+	}
+
+	template <class I>
+	static void __release (Bridge <Interface>* itf)
+	{
+		try {
+			delete &S::_servant (static_cast <Bridge <I>*> (itf));
+		} catch (...) {
+		}
+	}
+};
+
 /// Standard implementation of CORBA::AbstractBase
 template <class S>
 class AbstractBaseImpl :
