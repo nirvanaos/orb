@@ -19,6 +19,7 @@ class Bridge <Interface>
 public:
 	struct EPV
 	{
+		const Char* interface_id;
 		Bridge <Interface>* (*duplicate) (Bridge <Interface>*, EnvironmentBridge*);
 		void (*release) (Bridge <Interface>*);
 	};
@@ -74,9 +75,21 @@ class ClientInterfaceBase :
 	public Client <I, I>
 {
 public:
+	operator I& ()
+	{
+		if (
+			Bridge <I>::_epv ().interface_id == Bridge <I>::interface_id_
+			||
+			RepositoryId::compatible (Bridge <I>::_epv ().interface_id, Bridge <I>::interface_id_)
+		)
+			return static_cast <I&> (*this);
+		else
+			throw MARSHAL ();
+	}
+
 	operator Interface& ()
 	{
-		return static_cast <Interface&> (static_cast <Bridge <Interface>&> (*this));
+		return *static_cast <Interface*> (static_cast <Bridge <Interface>*> (static_cast <Bridge <I>*>(this)));
 	}
 
 	static T_ptr <I> _duplicate (T_ptr <I> obj)

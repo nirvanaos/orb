@@ -70,6 +70,7 @@ protected:
 template <class S>
 const Bridge <ObjectAdapter>::EPV Skeleton <S, ObjectAdapter>::epv_ = {
 	{ // interface
+		Bridge <ObjectAdapter>::interface_id_,
 		S::template __duplicate <ObjectAdapter>,
 		S::template __release <ObjectAdapter>
 	},

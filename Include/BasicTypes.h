@@ -10,7 +10,9 @@ namespace CORBA {
 
 // Primitive types
 
-typedef bool Boolean;
+/// We can not use `bool' built-in type because it is compiler-specific, but we have to achieve the binary compatibility.
+typedef int Boolean;
+
 typedef char Char;
 typedef wchar_t WChar;
 typedef uint8_t Octet;
@@ -40,11 +42,11 @@ typedef LongDouble& LongDouble_out;
 typedef Long Flags;
   
 #ifndef FALSE
-#define FALSE false
+#define FALSE 0
 #endif
   
 #ifndef TRUE
-#define TRUE true
+#define TRUE 1
 #endif
 
 } // namespace CORBA
