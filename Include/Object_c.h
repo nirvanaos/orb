@@ -146,10 +146,10 @@ class Object :
 public:
 	typedef Object_ptr _ptr_type;
 
-	operator AbstractBase& ()
+	operator Bridge <AbstractBase>& ()
 	{
 		Environment _env;
-		AbstractBase* _ret = static_cast <AbstractBase*> ((_epv ().base.CORBA_AbstractBase) (this, &_env));
+		Bridge <AbstractBase>* _ret = (_epv ().base.CORBA_AbstractBase) (this, &_env);
 		_env.check ();
 		assert (_ret);
 		return *_ret;

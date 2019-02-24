@@ -83,8 +83,7 @@ public:
 
 	T_ptr <::Test::I1> _this ()
 	{
-		ServantBaseLinks::_activate ();
-		return this;
+		return InterfaceImpl <S, ::Test::I1>::_this ();
 	}
 
 	Interface_ptr _find_interface (const Char* id)
@@ -119,8 +118,7 @@ public:
 
 	T_ptr < ::Test::I1> _this ()
 	{
-		_activate ();
-		return this;
+		return InterfaceImpl <ServantPOA < ::Test::I1>, ::Test::I1>::_this ();
 	}
 
 	virtual Long op1 (Long p1) = 0;

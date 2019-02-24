@@ -4,27 +4,12 @@
 #ifndef NIRVANA_ORB_POA_C_H_
 #define NIRVANA_ORB_POA_C_H_
 
-#include "Object_c.h"
-
-namespace PortableServer {
-
-class POA;
-typedef ::CORBA::Nirvana::T_ptr <POA> POA_ptr;
-typedef ::CORBA::Nirvana::T_var <POA> POA_var;
-typedef ::CORBA::Nirvana::T_out <POA> POA_out;
-
-}
+#include "ServantLinks_c.h"
 
 namespace CORBA {
 namespace Nirvana {
 
 class ServantBase;
-
-struct ServantLinks
-{
-	Bridge <ServantBase>* servant_base;
-	Bridge <Object>* object;
-};
 
 template <>
 class Bridge < ::PortableServer::POA> :
@@ -43,7 +28,7 @@ public:
 
 		struct
 		{
-			const Char* (*activate_object) (Bridge < ::PortableServer::POA>*, const ServantLinks*, EnvironmentBridge*);
+			const Char* (*activate_object) (Bridge < ::PortableServer::POA>*, Bridge <ServantLinks>*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -66,15 +51,15 @@ class Client <T, ::PortableServer::POA> :
 	public ClientBase <T, ::PortableServer::POA>
 {
 public:
-	const Char* activate_object (const ServantLinks& servant);
+	const Char* activate_object (ServantLinks_ptr servant);
 };
 
 template <class T>
-const Char* Client <T, ::PortableServer::POA>::activate_object (const ServantLinks& servant)
+const Char* Client <T, ::PortableServer::POA>::activate_object (ServantLinks_ptr servant)
 {
 	Environment _env;
 	Bridge < ::PortableServer::POA>& _b = ClientBase <T, ::PortableServer::POA>::_bridge ();
-	const Char* _ret ((_b._epv ().epv.activate_object) (&_b, &servant, &_env));
+	const Char* _ret = (_b._epv ().epv.activate_object) (&_b, servant, &_env);
 	_env.check ();
 	return _ret;
 }

@@ -65,6 +65,7 @@
     <ClCompile Include="..\Test_I3_c.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Include\ServantLinks_s.h" />
     <ClInclude Include="..\I1.h" />
     <ClInclude Include="..\I3.h" />
     <ClInclude Include="..\ObjectAdapterCore.h" />

@@ -48,7 +48,7 @@ public:
 template <class S>
 const Bridge <AbstractBase>::EPV Skeleton <S, AbstractBase>::epv_ = {
 	{	// interface
-		nullptr,
+		Bridge <AbstractBase>::interface_id_,
 		&S::template __duplicate <AbstractBase>,
 		&S::template __release <AbstractBase>
 	},

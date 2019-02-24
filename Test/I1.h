@@ -43,7 +43,7 @@ private:
 #ifndef TEST_NO_POA
 
 class PortableI1 :
-	public ::POA_Test::I1,
+	public virtual POA_Test::I1,
 	public Instance
 {
 public:

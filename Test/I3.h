@@ -54,7 +54,7 @@ private:
 #ifndef TEST_NO_POA
 
 class PortableI3 :
-	public POA_Test::I3,
+	public virtual POA_Test::I3,
 	public Instance
 {
 public:

@@ -5,6 +5,7 @@
 #define NIRVANA_ORB_IMPLEMENTATION_H_
 
 #include "ObjectAdapter_c.h"
+#include "POA_c.h"
 #include "AbstractBase_s.h"
 #include "ServantBase_s.h"
 #include "RefCountBase.h"
@@ -49,6 +50,11 @@ protected:
 	InterfaceImpl () :
 		Bridge <I> (Skeleton <S, I>::epv_)
 	{}
+
+	operator I& ()
+	{
+		return static_cast <I&> (static_cast <Bridge <I>&> (*this));
+	}
 };
 
 /// Dynamic object life cycle.
@@ -140,36 +146,38 @@ class ServantBaseLinks :
 public:
 	operator Bridge <Object>& ()
 	{
-		_activate ();
-		return *servant_links_->object;
+		_implicitly_activate ();
+		return *servant_links_->object ();
 	}
 
-	operator const ServantLinks& () const
+	operator ServantLinks_ptr () const
 	{
-		return *servant_links_;
+		return servant_links_;
 	}
 
 	// ServantBase operations
 
 	POA_ptr _default_POA ()
 	{
-		return ServantBase_ptr (servant_links_->servant_base)->_default_POA ();
+		return servant_base_->_default_POA ();
 	}
 
 	InterfaceDef_ptr _get_interface ()
 	{
-		return ServantBase_ptr (servant_links_->servant_base)->_get_interface ();
+		return servant_base_->_get_interface ();
 	}
 
 	Boolean _is_a (const Char* type_id)
 	{
-		return ServantBase_ptr (servant_links_->servant_base)->_is_a (type_id);
+		return servant_base_->_is_a (type_id);
 	}
 
 	Boolean _non_existent ()
 	{
-		return ServantBase_ptr (servant_links_->servant_base)->_non_existent ();
+		return servant_base_->_non_existent ();
 	}
+
+	void _implicitly_activate ();
 
 protected:
 	ServantBaseLinks (const EPV& epv) :
@@ -177,29 +185,21 @@ protected:
 		servant_links_ (nullptr)
 	{}
 
-	void _final_construct (const Char* primary_interface)
-	{
-		servant_links_ = g_system->create_servant (this, primary_interface);
-	}
+	void _final_construct (const Char* primary_interface);
 
 	~ServantBaseLinks ()
 	{
-		g_system->destroy_servant (servant_links_);
-	}
-
-	void _activate ()
-	{
-		::PortableServer::POA_var poa = ServantBase_ptr (this)->_default_POA ();
-		poa->activate_object (*this);
+		release (servant_links_);
 	}
 
 protected:
-	ServantLinks* servant_links_;
+	ServantLinks_ptr servant_links_;
+	ServantBase_ptr servant_base_;
 };
 
 /// Standard implementation of CORBA::Nirvana::ServantBase
 /// \tparam S Servant class implementing operations.
-template <class S>
+template <class S, class Primary>
 class ServantBaseImpl :
 	public AbstractBaseImpl <S>,
 	public ServantBaseLinks,
@@ -208,7 +208,20 @@ class ServantBaseImpl :
 protected:
 	ServantBaseImpl () :
 		ServantBaseLinks (Skeleton <S, ServantBase>::epv_)
-	{}
+	{
+		_final_construct (Bridge <Primary>::interface_id_)
+	}
+
+	Interface_ptr _find_interface (const Char* id)
+	{
+		return FindInterface <Primary>::find (static_cast <S&> (*this), id);
+	}
+
+	T_ptr <Primary> _this ()
+	{
+		_implicitly_activate ();
+		return static_cast <Primary*> (static_cast <Bridge <Primary>*> (this));
+	}
 };
 
 }

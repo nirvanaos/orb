@@ -8,6 +8,7 @@ namespace CORBA
 
 namespace Nirvana {
 
+// TODO: Make Bridge <Environment>
 class EnvironmentBridge
 {
 public:

@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\AbstractBase_c.cpp" />
+    <ClCompile Include="..\Implementation.cpp" />
     <ClCompile Include="..\Interface_s.cpp" />
     <ClCompile Include="..\Environment.cpp" />
     <ClCompile Include="..\Exception.cpp" />
@@ -27,6 +29,8 @@
     <ClCompile Include="..\Object_c.cpp" />
     <ClCompile Include="..\POA_c.cpp" />
     <ClCompile Include="..\RepositoryId.cpp" />
+    <ClCompile Include="..\ServantBase_c.cpp" />
+    <ClCompile Include="..\ServantLinks_c.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\AbstractBase_c.h" />
@@ -55,7 +59,8 @@
     <ClInclude Include="..\..\Include\sequence.h" />
     <ClInclude Include="..\..\Include\ServantBase_c.h" />
     <ClInclude Include="..\..\Include\ServantBase_s.h" />
-    <ClInclude Include="..\..\Include\T_ptr.h" />
+    <ClInclude Include="..\..\Include\ServantLinks_c.h" />
+    <ClInclude Include="..\..\Include\ServantLinks_s.h" />
     <ClInclude Include="..\giop.h" />
     <ClInclude Include="..\iop.h" />
   </ItemGroup>

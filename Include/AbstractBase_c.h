@@ -2,6 +2,7 @@
 #define NIRVANA_ORB_ABSTRACTBASE_C_H_
 
 #include "Interface_c.h"
+#include "Environment.h"
 
 namespace CORBA {
 
@@ -42,6 +43,8 @@ public:
 		return (const EPV&)Bridge <Interface>::_epv ();
 	}
 
+	static const Char interface_id_ [];
+
 protected:
 	Bridge (const EPV& epv) :
 		Bridge <Interface> (epv.interface)
@@ -60,7 +63,7 @@ protected:
 	template <class I>
 	T_ptr <I> _find_interface ()
 	{
-		return static_cast <Bridge <I>*> (_find_interface (Bridge <I>::interface_id_));
+		return static_cast <I*> (_find_interface (Bridge <I>::interface_id_));
 	}
 };
 

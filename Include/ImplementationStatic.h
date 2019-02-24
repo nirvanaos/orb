@@ -37,6 +37,9 @@ public:
 	{
 		return *(S*)0;
 	}
+
+	static void _implicitly_activate ()
+	{}
 };
 
 template <class S, class I>
@@ -48,6 +51,11 @@ public:
 	operator Bridge <I>& () const
 	{
 		return *_bridge ();
+	}
+
+	static T_ptr <I> _this ()
+	{
+		return static_cast <I*> (_bridge ());
 	}
 
 	static constexpr Bridge <I>* _bridge ()
@@ -94,7 +102,7 @@ class StaticObject :
 public:
 	operator Bridge <Object>& () const
 	{
-		return *servant_links_->object;
+		return *ServantLinks_ptr (servant_links_)->object ();
 	}
 
 	// ServantBase operations
@@ -120,7 +128,7 @@ public:
 	}
 
 	static const OLF_ObjectInfo object_info_;
-	static const ServantLinks* servant_links_;
+	static Bridge <ServantLinks>* servant_links_;
 };
 
 template <class S, class Primary>
@@ -138,6 +146,11 @@ public:
 	static T_ptr <Primary> _this ()
 	{
 		return InterfaceStatic <S, Primary>::_bridge ();
+	}
+
+	static Interface_ptr _find_interface (const Char* id)
+	{
+		return FindInterface <Primary>::find (*(ServantStatic <Primary>*)nullptr, id);
 	}
 };
 

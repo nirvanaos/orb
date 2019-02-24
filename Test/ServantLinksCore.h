@@ -8,20 +8,29 @@ namespace CORBA {
 namespace Nirvana {
 
 class ServantLinksCore :
-	public ServantLinks
+	public Implementation <ServantLinksCore>,
+	public LifeCycleNoCopy <ServantLinksCore>,
+	public InterfaceImpl <ServantLinksCore, ServantLinks>
 {
 public:
 	ServantLinksCore (ServantBase_ptr servant, const Char* type_id) :
-		servant_core_ (servant, type_id),
-		object_core_ (servant)
+		servant_base_ (servant, type_id),
+		object_ (servant)
+	{}
+
+	ServantBase_ptr servant_base ()
 	{
-		object = &object_core_;
-		servant_base = &servant_core_;
+		return &static_cast <Bridge <ServantBase>&> (servant_base_);
+	}
+
+	Bridge <Object>* object ()
+	{
+		return &object_;
 	}
 
 private:
-	ServantCore servant_core_;
-	ObjectCore object_core_;
+	ServantCore servant_base_;
+	ObjectCore object_;
 };
 
 }
