@@ -9,6 +9,9 @@ using namespace Test;
 // Imitation of the module loader
 namespace CORBA {
 namespace Nirvana {
+
+#ifndef TEST_NO_STATIC
+
 template <> const ServantLinks* StaticObject <TestORB::StaticI1, Test::I1>::servant_links_;
 template <> const ServantLinks* StaticObject <TestORB::StaticI3, Test::I3>::servant_links_;
 
@@ -51,6 +54,8 @@ private:
 		unload_static (StaticObject <TestORB::StaticI1, Test::I1>::servant_links_);
 	}
 };
+
+#endif
 
 }
 }

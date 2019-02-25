@@ -127,7 +127,6 @@ public:
 		return static_cast <Interface*> (bridge);
 	}
 
-protected:
 	static void adopt (const Bridge <Interface>* bridge, const Char* interface_id);
 };
 
@@ -173,7 +172,7 @@ public:
 		T_ptr <I> (I::_nil ())
 	{
 		try {
-			T_ptr::operator = (I::adopt (bridge));
+			T_ptr <I>::operator = (I::adopt (bridge));
 		} catch (...) {
 			Interface::_release (bridge);
 			throw;
@@ -444,7 +443,7 @@ public:
 		return T_ptr <I>::nil ();
 	}
 
-	T_ptr <I> adopt (Bridge <I>* bridge)
+	static T_ptr <I> adopt (Bridge <I>* bridge)
 	{
 		Interface::adopt (bridge, Bridge <I>::interface_id_);
 		return static_cast <I*> (bridge);

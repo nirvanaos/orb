@@ -10,14 +10,18 @@ namespace CORBA {
 namespace Nirvana {
 
 class ObjectCore :
-	public Implementation <ObjectCore>,
-	public InterfaceImpl <ObjectCore, AbstractBase>,
+	public ServantTraits <ObjectCore>,
 	public InterfaceImpl <ObjectCore, Object>
 {
 public:
 	ObjectCore (ServantBase_ptr servant) :
 		servant_ (servant)
 	{}
+
+	operator Bridge <AbstractBase>& ()
+	{
+		servant_->operator Bridge <AbstractBase>& ();
+	}
 
 	template <class I>
 	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
@@ -31,12 +35,6 @@ public:
 	{
 		Interface_ptr servant = _implementation (static_cast <Bridge <I>*> (itf)).servant_;
 		return (servant->_epv ().release) (servant);
-	}
-
-	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
-	{
-		AbstractBase_ptr servant = _implementation (base).servant_;
-		return (servant->_epv ().epv.find_interface) (servant, id, env);
 	}
 
 	static Bridge <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)

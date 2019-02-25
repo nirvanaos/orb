@@ -35,7 +35,7 @@ public:
 
 		struct
 		{
-			Bridge <::CORBA::AbstractBase>* (*CORBA_AbstractBase) (Bridge <ServantBase>*, EnvironmentBridge*);
+			Bridge < ::CORBA::AbstractBase>* (*CORBA_AbstractBase) (Bridge <ServantBase>*, EnvironmentBridge*);
 		}
 		base;
 
@@ -80,10 +80,10 @@ class ServantBase :
 public:
 	typedef ServantBase_ptr _ptr_type;
 
-	operator ::CORBA::AbstractBase& ()
+	operator Bridge < ::CORBA::AbstractBase>& ()
 	{
 		Environment _env;
-		::CORBA::AbstractBase* _ret = static_cast <::CORBA::AbstractBase*> ((_epv ().base.CORBA_AbstractBase) (this, &_env));
+		Bridge < ::CORBA::AbstractBase>* _ret = static_cast <::CORBA::AbstractBase*> ((_epv ().base.CORBA_AbstractBase) (this, &_env));
 		_env.check ();
 		assert (_ret);
 		return *_ret;

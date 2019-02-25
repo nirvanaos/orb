@@ -20,10 +20,9 @@ struct OLF_ObjectInfo
 
 template <class S, class I> class ServantStatic;
 
-// Static interface implementation
-
+/// Static interface traits
 template <class S>
-class ImplementationStatic
+class ServantTraitsStatic
 {
 public:
 	template <class I>
@@ -37,23 +36,36 @@ public:
 	{
 		return *(S*)0;
 	}
+};
 
-	static void _implicitly_activate ()
-	{}
+template <class S>
+class ServantTraitsStaticEx
+{
+public:
+	template <class I>
+	static S _implementation (Bridge <I>* bridge)
+	{
+		return S ();
+	}
+
+	template <class I>
+	static S _servant (Bridge <I>* bridge)
+	{
+		return S ();
+	}
 };
 
 template <class S, class I>
 class InterfaceStatic :
 	public Skeleton <S, I>
 {
-	InterfaceStatic ();	// Never be instantiated
 public:
 	operator Bridge <I>& () const
 	{
 		return *_bridge ();
 	}
-
-	static T_ptr <I> _this ()
+	
+	static T_ptr <I> _get_ptr ()
 	{
 		return static_cast <I*> (_bridge ());
 	}
@@ -85,24 +97,36 @@ public:
 };
 
 /// Static implementation of CORBA::AbstractBase
-template <class S>
+template <class S, class Primary>
 class AbstractBaseStatic :
-	public ImplementationStatic <S>,
+	public ServantTraitsStatic <S>,
 	public LifeCycleStatic,
 	public InterfaceStatic <S, AbstractBase>
-{};
+{
+public:
+	static Interface_ptr _find_interface (const Char* id)
+	{
+		return FindInterface <Primary>::find (*(S*)nullptr, id);
+	}
+};
 
-// Static implementation of CORBA::Nirvana::ServantBase
-
+/// Static implementation of CORBA::Nirvana::ServantBase
+/// \tparam S Servant class.
+/// \tparam Primary Primary interface.
 template <class S, class Primary>
-class StaticObject :
+class ServantBaseStatic :
+	public AbstractBaseStatic <S, Primary>,
 	public InterfaceStatic <S, ServantBase>
 {
-	StaticObject ();	// Never be instantiated
 public:
 	operator Bridge <Object>& () const
 	{
 		return *ServantLinks_ptr (servant_links_)->object ();
+	}
+
+	static T_ptr <Primary> _this ()
+	{
+		return InterfaceStatic <S, Primary>::_get_ptr ();
 	}
 
 	// ServantBase operations
@@ -132,27 +156,28 @@ public:
 };
 
 template <class S, class Primary>
-const OLF_ObjectInfo StaticObject <S, Primary>::object_info_ = {StaticObject <S, Primary>::_bridge (), Bridge <Primary>::interface_id_};
+const OLF_ObjectInfo ServantBaseStatic <S, Primary>::object_info_ = {ServantBaseStatic <S, Primary>::_bridge (), Bridge <Primary>::interface_id_};
 
-/// Static implementation of CORBA::Nirvana::ServantBase
-/// \tparam S Servant class.
-/// \tparam Primary Primary interface.
-template <class S, class Primary>
-class ServantBaseStatic :
-	public AbstractBaseStatic <S>,
-	public StaticObject <S, Primary>
-{
-public:
-	static T_ptr <Primary> _this ()
-	{
-		return InterfaceStatic <S, Primary>::_bridge ();
-	}
+template <class S, class I>
+class ImplementationSingleStatic :
+	public ServantTraitsStatic <S>,
+	public LifeCycleStatic,
+	public InterfaceStatic <S, I>
+{};
 
-	static Interface_ptr _find_interface (const Char* id)
-	{
-		return FindInterface <Primary>::find (*(ServantStatic <Primary>*)nullptr, id);
-	}
-};
+template <class S, class Primary, class ... Bases>
+class ImplementationPseudoStatic :
+	public AbstractBaseStatic <S, Primary>,
+	public InterfaceStatic <S, Bases>...,
+	public InterfaceStatic <S, Primary>
+{};
+
+template <class S, class Primary, class ... Bases>
+class ImplementationStatic :
+	public ServantBaseStatic <S, Primary>,
+	public InterfaceStatic <S, Bases>...,
+	public InterfaceStatic <S, Primary>
+{};
 
 }
 }

@@ -11,7 +11,7 @@ namespace Nirvana {
 
 template <class I> class ServantPOA;
 
-class ImplementationPOA
+class ServantTraitsPOA
 {
 public:
 	template <class I>
@@ -33,7 +33,7 @@ public:
 template <>
 class ServantPOA <AbstractBase> :
 	public InterfaceImpl <ServantPOA <AbstractBase>, AbstractBase>,
-	public ImplementationPOA,
+	public ServantTraitsPOA,
 	public LifeCycleRefCnt <ServantPOA <AbstractBase> >
 {
 public:
@@ -93,6 +93,13 @@ protected:
 	ServantPOA () :
 		ServantBaseLinks (Skeleton <ServantPOA <ServantBase>, ServantBase>::epv_)
 	{}
+};
+
+template <class Primary, class ... Bases>
+class ImplementationPOA :
+	public virtual ... Bases,
+	public InterfaceImpl <ServantPOA < ::Test::I1>, ::Test::I1>
+{
 };
 
 }

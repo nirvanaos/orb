@@ -8,7 +8,7 @@ namespace CORBA {
 namespace Nirvana {
 
 class ServantLinksCore :
-	public Implementation <ServantLinksCore>,
+	public ServantTraits <ServantLinksCore>,
 	public LifeCycleNoCopy <ServantLinksCore>,
 	public InterfaceImpl <ServantLinksCore, ServantLinks>
 {

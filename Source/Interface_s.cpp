@@ -1,4 +1,5 @@
-#include "Interface_s.h"
+#include <Interface_s.h>
+#include <Exception.h>
 
 namespace CORBA {
 namespace Nirvana {

@@ -18,13 +18,22 @@ namespace Nirvana {
 /// \tparam I Primary interface.
 template <class S, class I> class Servant;
 
-/// Standard (dynamic) servant implementation.
-/// \tparam S Servant class.
+/// Standard (dynamic) servant traits.
+/// \tparam S Servant class, derived from this.
 template <class S>
-class Implementation
+class ServantTraits
 {
 public:
 	template <class I>
+
+	/// \fn	static S& ServantTraits::_servant (Bridge <I>* bridge)
+	///
+	/// \brief	Returns the servant from the given bridge pointer.
+	///
+	/// \param [in]	bridge	The bridge pointer.
+	///
+	/// \return	A reference to the servant.
+
 	static S& _servant (Bridge <I>* bridge)
 	{
 		_check_pointer (bridge, Skeleton <S, I>::epv_.interface);
@@ -32,13 +41,22 @@ public:
 	}
 
 	template <class I>
+
+	/// \fn	static S& ServantTraits::_implementation (Bridge <I>* bridge)
+	///
+	/// \brief	Returns the implementation from the given bridge pointer.
+	///
+	/// \param [in]	bridge	The bridge pointer.
+	///
+	/// \return	A reference to the implementation.
+
 	static S& _implementation (Bridge <I>* bridge)
 	{
 		return _servant (bridge);
 	}
 };
 
-/// Standard interface implementation
+/// Standard interface implementation.
 /// \tparam S Servant class implementing operations. Must derive from this mix-in.
 /// \tparam I Interface.
 template <class S, class I>
@@ -51,6 +69,7 @@ protected:
 		Bridge <I> (Skeleton <S, I>::epv_)
 	{}
 
+	/// We can simple assign servant pointer to `T_ptr <I>'
 	operator I& ()
 	{
 		return static_cast <I&> (static_cast <Bridge <I>&> (*this));
@@ -130,13 +149,19 @@ class LifeCycleNoCopy
 	}
 };
 
-/// Standard implementation of CORBA::AbstractBase
-template <class S>
+/// Standard implementation of CORBA::AbstractBase.
+template <class S, class Primary>
 class AbstractBaseImpl :
-	public Implementation <S>,
+	public ServantTraits <S>,
 	public LifeCycleRefCnt <S>,
 	public InterfaceImpl <S, AbstractBase>
-{};
+{
+public:
+	Interface_ptr _find_interface (const Char* id)
+	{
+		return FindInterface <Primary>::find (static_cast <S&> (*this), id);
+	}
+};
 
 // Standard implementation of CORBA::Nirvana::ServantBase
 
@@ -182,7 +207,7 @@ public:
 protected:
 	ServantBaseLinks (const EPV& epv) :
 		Bridge <ServantBase> (epv),
-		servant_links_ (nullptr)
+		servant_links_ (ServantLinks::_nil ())
 	{}
 
 	void _final_construct (const Char* primary_interface);
@@ -201,7 +226,7 @@ protected:
 /// \tparam S Servant class implementing operations.
 template <class S, class Primary>
 class ServantBaseImpl :
-	public AbstractBaseImpl <S>,
+	public AbstractBaseImpl <S, Primary>,
 	public ServantBaseLinks,
 	public Skeleton <S, ServantBase>
 {
@@ -209,19 +234,70 @@ protected:
 	ServantBaseImpl () :
 		ServantBaseLinks (Skeleton <S, ServantBase>::epv_)
 	{
-		_final_construct (Bridge <Primary>::interface_id_)
-	}
-
-	Interface_ptr _find_interface (const Char* id)
-	{
-		return FindInterface <Primary>::find (static_cast <S&> (*this), id);
+		_final_construct (Bridge <Primary>::interface_id_);
 	}
 
 	T_ptr <Primary> _this ()
 	{
 		_implicitly_activate ();
-		return static_cast <Primary*> (static_cast <Bridge <Primary>*> (this));
+		return static_cast <S*> (this);
 	}
+};
+
+/// \class	ImplementationSingle
+///
+/// \brief	An implementation of single pseudo interface.
+///
+/// \tparam S Servant class implementing operations.
+/// \tparam	I	interface.
+
+template <class S, class I>
+class ImplementationSingle :
+	public ServantTraits <S>,
+	public LifeCycleRefCnt <S>,
+	public InterfaceImpl <S, I>
+{
+protected:
+	ImplementationSingle ()
+	{}
+};
+
+/// \class	ImplementationPseudo
+///
+/// \brief	An implementation of pseudo interface derived from AbstractBase.
+///
+/// \tparam S Servant class implementing operations.
+/// \tparam	Primary	Primary interface.
+/// \tparam	Bases	 	All base interfaces derived directly or indirectly.
+
+template <class S, class Primary, class ... Bases>
+class ImplementationPseudo :
+	public AbstractBaseImpl <S, Primary>,
+	public InterfaceImpl <S, Bases>...,
+	public InterfaceImpl <S, Primary>
+{
+protected:
+	ImplementationPseudo ()
+	{}
+};
+
+/// \class	Implementation
+///
+/// \brief	An implementation of interface derived from Object.
+///
+/// \tparam S Servant class implementing operations.
+/// \tparam	Primary	Primary interface.
+/// \tparam	Bases	 	All base interfaces derived directly or indirectly.
+
+template <class S, class Primary, class ... Bases>
+class Implementation :
+	public ServantBaseImpl <S, Primary>,
+	public InterfaceImpl <S, Bases>...,
+	public InterfaceImpl <S, Primary>
+{
+protected:
+	Implementation ()
+	{}
 };
 
 }

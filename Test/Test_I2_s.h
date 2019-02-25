@@ -60,26 +60,8 @@ const Bridge < ::Test::I2>::EPV Skeleton <S, ::Test::I2>::epv_ = {
 
 template <class S>
 class Servant <S, ::Test::I2> :
-	public ServantBaseImpl <S>,
-	public InterfaceImpl <S, ::Test::I2>
-{
-public:
-	Servant ()
-	{
-		ServantBaseImpl <S>::_final_construct (Bridge < ::Test::I2>::interface_id_);
-	}
-
-	T_ptr <::Test::I2> _this ()
-	{
-		ServantBaseLinks::_activate ();
-		return this;
-	}
-
-	Interface_ptr _find_interface (const Char* id)
-	{
-		return FindInterface < ::Test::I2>::find (*this, id);
-	}
-};
+	public Implementation <S, ::Test::I2>
+{};
 
 }
 }
