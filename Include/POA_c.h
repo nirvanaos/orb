@@ -76,7 +76,7 @@ class POA :
 public:
 	typedef POA_ptr _ptr_type;
 
-	operator ::CORBA::Object& ()
+	operator Bridge <::CORBA::Object>& ()
 	{
 		::CORBA::Environment _env;
 		::CORBA::Object* _ret = static_cast <::CORBA::Object*> ((_epv ().base.CORBA_Object) (this, &_env));

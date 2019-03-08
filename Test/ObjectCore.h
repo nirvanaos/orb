@@ -20,7 +20,7 @@ public:
 
 	operator Bridge <AbstractBase>& ()
 	{
-		servant_->operator Bridge <AbstractBase>& ();
+		return servant_->operator Bridge <AbstractBase>& ();
 	}
 
 	template <class I>

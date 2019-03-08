@@ -97,9 +97,15 @@ protected:
 
 template <class Primary, class ... Bases>
 class ImplementationPOA :
-	public virtual ... Bases,
-	public InterfaceImpl <ServantPOA < ::Test::I1>, ::Test::I1>
+	public virtual ServantPOA <ServantBase>,
+	public virtual ServantPOA <Bases>...,
+	public InterfaceImpl <ServantPOA <Primary>, Primary>
 {
+public:
+	virtual Interface_ptr _find_interface (const Char* id)
+	{
+		return FindInterface <Primary>::find (*this, id);
+	}
 };
 
 }

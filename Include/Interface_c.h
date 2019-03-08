@@ -55,21 +55,27 @@ public:
 		// Zeroinit skipped for performance
 	{}
 
-	T_ptr (I* p) :
-		p_ (p)
+	T_ptr (const T_ptr <I>& src) :
+		p_ (src.p_)
 	{}
 
 	inline T_ptr (Bridge <I>* bridge);
 
 	template <class I1>
-	T_ptr (T_ptr <I1> src) :
-		T_ptr (static_cast <Bridge <I>*> (src.p_))
+	T_ptr (const T_ptr <I1> src) :
+		T_ptr (&static_cast <Bridge <I>&> (*src.p_))
 	{}
 
-	template <class I1>
-	T_ptr& operator = (T_ptr <I1> src)
+	T_ptr& operator = (const T_ptr <I>& src)
 	{
-		p_ = static_cast <Bridge <I>*> (src.p_);
+		p_ = src.p_;
+		return *this;
+	}
+
+	template <class I1>
+	T_ptr& operator = (const T_ptr <I1> src)
+	{
+		p_ = &static_cast <Bridge <I>&> (*src.p_);
 		return *this;
 	}
 
@@ -413,7 +419,7 @@ class ClientBase
 protected:
 	Bridge <I>& _bridge ()
 	{
-		return static_cast <Bridge <I>&> (static_cast <T&> (*this));
+		return static_cast <Bridge <I>> (tatic_cast <T&> (*this));
 	}
 };
 
@@ -451,7 +457,6 @@ public:
 };
 
 }
-
 }
 
 #endif
