@@ -179,22 +179,22 @@ public:
 
 	POA_ptr _default_POA ()
 	{
-		return servant_base_->_default_POA ();
+		return servant_links_->servant_base()->_default_POA ();
 	}
 
 	InterfaceDef_ptr _get_interface ()
 	{
-		return servant_base_->_get_interface ();
+		return servant_links_->servant_base ()->_get_interface ();
 	}
 
 	Boolean _is_a (const Char* type_id)
 	{
-		return servant_base_->_is_a (type_id);
+		return servant_links_->servant_base ()->_is_a (type_id);
 	}
 
 	Boolean _non_existent ()
 	{
-		return servant_base_->_non_existent ();
+		return servant_links_->servant_base ()->_non_existent ();
 	}
 
 	void _implicitly_activate ();
@@ -214,7 +214,6 @@ protected:
 
 protected:
 	ServantLinks_ptr servant_links_;
-	ServantBase_ptr servant_base_;
 };
 
 //! \tparam S Servant class implementing operations.

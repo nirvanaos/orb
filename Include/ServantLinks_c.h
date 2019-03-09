@@ -74,7 +74,7 @@ class Client <T, ServantLinks> :
 {
 public:
 	ServantBase_ptr servant_base ();
-	ClientBridge <Object>* object ();
+	Object_ptr object ();
 	Boolean is_active ();
 };
 
@@ -84,19 +84,19 @@ ServantBase_ptr Client <T, ServantLinks>::servant_base ()
 	Environment _env;
 	Bridge <ServantLinks>& _b = (*this);
 	// Do not release returned ptr, as it is value type. So we don't use ServantBase_var here.
-	Bridge <ServantBase>* _ret = (_b._epv ().epv.servant_base) (&_b, &_env);
+	ClientBridge <ServantBase>* _ret = (_b._epv ().epv.servant_base) (&_b, &_env);
 	_env.check ();
-	return _ret;
+	return static_cast <ServantBase*> (_ret); // No adoption needed.
 }
 
 template <class T>
-ClientBridge <Object>* Client <T, ServantLinks>::object ()
+Object_ptr Client <T, ServantLinks>::object ()
 {
 	Environment _env;
 	Bridge <ServantLinks>& _b = (*this);
 	ClientBridge <Object>* _ret = (_b._epv ().epv.object) (&_b, &_env);
 	_env.check ();
-	return _ret;
+	return static_cast <Object*> (_ret); // No adoption needed.
 }
 
 template <class T>
@@ -114,6 +114,14 @@ class ServantLinks :
 {
 public:
 	typedef ServantLinks_ptr _ptr_type;
+
+	static ServantLinks* adopt (ClientBridge <ServantLinks>* bridge)
+	{
+		assert (bridge);
+		ServantLinks* p = static_cast <ServantLinks*> (Interface::adopt (bridge, Bridge <ServantLinks>::interface_id_));
+		Interface::adopt (p->object (), Bridge <Object>::interface_id_);
+		Interface::adopt (p->servant_base (), Bridge <ServantBase>::interface_id_);
+	}
 };
 
 }

@@ -7,7 +7,6 @@ void ServantBaseLinks::_final_construct (const Char* primary_interface)
 {
 	assert (is_nil (servant_links_));
 	servant_links_ = g_object_adapter->create_servant (this, primary_interface);
-	servant_base_ = servant_links_->servant_base ();
 }
 
 void ServantBaseLinks::_implicitly_activate ()

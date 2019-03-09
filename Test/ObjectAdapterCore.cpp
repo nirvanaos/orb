@@ -3,7 +3,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-ObjectAdapter_ptr g_system = InterfaceStatic <ObjectAdapterCore, ObjectAdapter>::_bridge ();
+ObjectAdapter_ptr g_object_adapter = InterfaceStatic <ObjectAdapterCore, ObjectAdapter>::_bridge ();
 
 }
 }

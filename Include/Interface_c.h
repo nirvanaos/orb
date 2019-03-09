@@ -115,6 +115,8 @@ public:
 	{
 		return Interface_ptr::nil ();
 	}
+
+	inline static Interface* adopt (ClientBridge <Interface>* bridge);
 };
 
 class Interface :
@@ -133,6 +135,11 @@ Bridge <Interface>::operator Interface& ()
 	return static_cast <Interface&> (*this);
 }
 
+inline Interface* ClientBridge <Interface>::adopt (ClientBridge <Interface>* bridge)
+{
+	return static_cast <Interface*> (bridge);
+}
+
 template <class I>
 class ClientBridge :
 	public Bridge <I>
@@ -140,7 +147,12 @@ class ClientBridge :
 public:
 	operator I& ()
 	{
-		return static_cast <I&> (*Interface::adopt (this, Bridge <I>::_interface_id));
+		return *adopt (this);
+	}
+
+	static I* adopt (ClientBridge <I>* bridge)
+	{
+		return static_cast <I*> (Interface::adopt (bridge, Bridge <I>::interface_id_));
 	}
 
 	static T_ptr <I> _duplicate (T_ptr <I> obj)
@@ -164,9 +176,9 @@ inline bool is_nil (Nirvana::Interface_ptr itf)
 
 //! CORBA::release()
 inline void release (Nirvana::Interface_ptr itf)
-;/* {
-	Nirvana::Interface::_release (static_cast <Nirvana::Bridge <Nirvana::Interface>*> (static_cast <Nirvana::ClientBridge <Nirvana::Interface>*> (itf)));
-}*/
+{
+	Nirvana::Interface::_release (itf);
+}
 
 namespace Nirvana {
 
@@ -260,7 +272,7 @@ public:
 	{
 		if (ptr_) {
 			try {
-				ptr_->operator I&();
+				ptr_ = ptr_->operator I&(); // Adopt
 			} catch (...) {
 				release (ptr_);
 				ptr_ = nullptr;

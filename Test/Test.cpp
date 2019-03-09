@@ -33,13 +33,12 @@ public:
 private:
 	void load_static (const OLF_ObjectInfo& oi, const ServantLinks*& sl)
 	{
-		sl = g_system->create_servant (oi.servant, oi.primary_interface);
-		//g_system->activate_object (const_cast <ServantLinks*> (sl));
+		sl = g_object_adapter->create_servant (oi.servant, oi.primary_interface);
 	}
 
 	void unload_static (const ServantLinks* sl)
 	{
-		g_system->destroy_servant (const_cast <ServantLinks*> (sl));
+		g_object_adapter->destroy_servant (const_cast <ServantLinks*> (sl));
 	}
 
 	template <class S, class I>

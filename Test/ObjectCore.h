@@ -21,8 +21,8 @@ public:
 	template <class Base, class Derived>
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, const Char* id, EnvironmentBridge* env);
 
-	template <class I>
-	static Bridge <AbstractBase>* _wide (Bridge <I>* derived, const Char* id, EnvironmentBridge* env)
+	template <>
+	static Bridge <AbstractBase>* _wide <AbstractBase, Object> (Bridge <Object>* derived, const Char* id, EnvironmentBridge* env)
 	{
 		ServantBase_ptr servant = _implementation (derived).servant_;
 		return (servant->_epv ().base.CORBA_AbstractBase) (servant, id, env);
