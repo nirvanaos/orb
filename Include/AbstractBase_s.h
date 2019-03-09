@@ -32,9 +32,11 @@ protected:
 
 public:
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, EnvironmentBridge* env)
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, const Char* id, EnvironmentBridge* env)
 	{
 		try {
+			if (!RepositoryId::compatible (Bridge <Base>::interface_id_, id))
+				throw MARSHAL ();
 			return &static_cast <Bridge <Base>&> (S::_servant (derived));
 		} catch (const Exception& e) {
 			env->set_exception (e);

@@ -14,7 +14,7 @@ public:
 	static const typename Bridge <ServantLinks>::EPV epv_;
 
 protected:
-	static Bridge <ServantBase>* _servant_base (Bridge <ServantLinks>* obj, EnvironmentBridge* env)
+	static ClientBridge <ServantBase>* _servant_base (Bridge <ServantLinks>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).servant_base ();
@@ -26,7 +26,7 @@ protected:
 		return 0;
 	}
 
-	static Bridge <ServantBase>* _object (Bridge <ServantLinks>* obj, EnvironmentBridge* env)
+	static ClientBridge <Object>* _object (Bridge <ServantLinks>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).object ();
@@ -55,8 +55,8 @@ template <class S>
 const Bridge <ServantLinks>::EPV Skeleton <S, ServantLinks>::epv_ = {
 	{ // interface
 		Bridge <ServantLinks>::interface_id_,
-		S::template __duplicate <Object>,
-		S::template __release <Object>
+		S::template __duplicate <ServantLinks>,
+		S::template __release <ServantLinks>
 	},
 	{ // epv
 		S::_servant_base,

@@ -10,11 +10,13 @@ class AbstractBase;
 typedef Nirvana::T_ptr <AbstractBase> AbstractBase_ptr;
 typedef Nirvana::T_var <AbstractBase> AbstractBase_var;
 typedef Nirvana::T_out <AbstractBase> AbstractBase_out;
+typedef Nirvana::T_inout <AbstractBase> AbstractBase_inout;
 
 class Object;
 typedef Nirvana::T_ptr <Object> Object_ptr;
 typedef Nirvana::T_var <Object> Object_var;
 typedef Nirvana::T_out <Object> Object_out;
+typedef Nirvana::T_inout <Object> Object_inout;
 
 class ValueBase;
 
@@ -52,11 +54,37 @@ protected:
 };
 
 template <class T>
+class ClientBase <T, AbstractBase>
+{
+public:
+	operator AbstractBase& ()
+	{
+		Environment _env;
+		T& t = static_cast <T&> (*this);
+		Bridge <AbstractBase>* _ret = (t._epv ().base.CORBA_AbstractBase) (&t, Bridge <AbstractBase>::interface_id_, &_env);
+		_env.check ();
+		if (!_ret)
+			throw MARSHAL ();
+		return static_cast <AbstractBase&> (*_ret);
+	}
+
+	operator Bridge <AbstractBase>& ()
+	{
+		return operator AbstractBase& ();
+	}
+};
+
+template <>
+class ClientBase <AbstractBase, AbstractBase> :
+	public ClientBridge <AbstractBase>
+{};
+
+template <class T>
 class Client <T, AbstractBase> :
 	public ClientBase <T, AbstractBase>
 {
 protected:
-	template <class I> friend class ClientInterface;
+	template <class I> friend class ClientInterface; // TODO: Does it really need?
 
 	Bridge <Interface>* _find_interface (const Char* type_id);
 
@@ -71,8 +99,8 @@ template <class T>
 Bridge <Interface>* Client <T, AbstractBase>::_find_interface (const Char* type_id)
 {
 	Environment env;
-	Bridge <AbstractBase>& bridge = ClientBase <T, AbstractBase>::_bridge ();
-	Bridge <Interface>* ret = (bridge._epv ().epv.find_interface) (&bridge, type_id, &env);
+	Bridge <AbstractBase>& _b (*this);
+	Bridge <Interface>* ret = (_b._epv ().epv.find_interface) (&_b, type_id, &env);
 	env.check ();
 	return ret;
 }

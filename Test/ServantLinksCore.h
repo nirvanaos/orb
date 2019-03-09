@@ -3,6 +3,7 @@
 
 #include "ServantCore.h"
 #include "ObjectCore.h"
+#include <ServantLinks_s.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -23,14 +24,20 @@ public:
 		return &static_cast <Bridge <ServantBase>&> (servant_base_);
 	}
 
-	Bridge <Object>* object ()
+	Object_ptr object ()
 	{
 		return &object_;
+	}
+
+	Boolean is_active () const
+	{
+		return is_active_;
 	}
 
 private:
 	ServantCore servant_base_;
 	ObjectCore object_;
+	Boolean is_active_;
 };
 
 }

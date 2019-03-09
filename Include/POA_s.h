@@ -31,7 +31,7 @@ public:
 	static const typename Bridge < ::PortableServer::POA>::EPV epv_;
 
 protected:
-	static const Char* _activate_object (Bridge < ::PortableServer::POA>* obj, const ServantLinks* servant, EnvironmentBridge* env)
+	static const Char* _activate_object (Bridge < ::PortableServer::POA>* obj, ClientBridge <ServantLinks>* servant, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).activate_object (servant);

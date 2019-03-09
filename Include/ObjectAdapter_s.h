@@ -31,7 +31,7 @@ public:
 	static const typename Bridge <ObjectAdapter>::EPV epv_;
 
 protected:
-	static ServantLinks* _create_servant (Bridge <ObjectAdapter>* obj, Bridge <ServantBase>* servant, const Char* type_id, EnvironmentBridge* env)
+	static ClientBridge <ServantLinks>* _create_servant (Bridge <ObjectAdapter>* obj, ClientBridge <ServantBase>* servant, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).create_servant (servant, type_id);
@@ -43,18 +43,7 @@ protected:
 		return 0;
 	}
 
-	static void _destroy_servant (Bridge <ObjectAdapter>* obj, ServantLinks* servant, EnvironmentBridge* env)
-	{
-		try {
-			S::_implementation (obj).destroy_servant (servant);
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-	}
-
-	static Bridge <Object>* _create_local_object (Bridge <ObjectAdapter>* obj, Bridge <AbstractBase>* base, const Char* type_id, EnvironmentBridge* env)
+	static ClientBridge <Object>* _create_local_object (Bridge <ObjectAdapter>* obj, ClientBridge <AbstractBase>* base, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).create_local_object (base, type_id);
@@ -79,7 +68,6 @@ const Bridge <ObjectAdapter>::EPV Skeleton <S, ObjectAdapter>::epv_ = {
 	},
 	{ // epv
 		S::_create_servant,
-		S::_destroy_servant,
 		S::_create_local_object
 	}
 };

@@ -28,7 +28,7 @@ public:
 	}
 };
 
-// Virtual implementation of AbstractBase
+//! Virtual implementation of AbstractBase
 
 template <>
 class ServantPOA <AbstractBase> :

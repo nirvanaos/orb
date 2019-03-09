@@ -18,9 +18,14 @@ public:
 		servant_ (servant)
 	{}
 
-	operator Bridge <AbstractBase>& ()
+	template <class Base, class Derived>
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, const Char* id, EnvironmentBridge* env);
+
+	template <class I>
+	static Bridge <AbstractBase>* _wide (Bridge <I>* derived, const Char* id, EnvironmentBridge* env)
 	{
-		return servant_->operator Bridge <AbstractBase>& ();
+		ServantBase_ptr servant = _implementation (derived).servant_;
+		return (servant->_epv ().base.CORBA_AbstractBase) (servant, id, env);
 	}
 
 	template <class I>
@@ -37,12 +42,12 @@ public:
 		return (servant->_epv ().release) (servant);
 	}
 
-	static Bridge <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
+	static ClientBridge <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		return nullptr;
 	}
 
-	static Bridge <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
+	static ClientBridge <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		ServantBase_ptr servant = _implementation (obj).servant_;
 		return (servant->_epv ().epv.get_interface) (servant, env);
@@ -60,7 +65,7 @@ public:
 		return (servant->_epv ().epv.non_existent) (servant, env);
 	}
 
-	static Boolean __is_equivalent (Bridge <Object>* obj, Bridge <Object>* other, EnvironmentBridge*)
+	static Boolean __is_equivalent (Bridge <Object>* obj, ClientBridge <Object>* other, EnvironmentBridge*)
 	{
 		return obj == other;
 	}

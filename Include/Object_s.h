@@ -30,7 +30,7 @@ public:
 	static const typename Bridge <Object>::EPV epv_;
 
 protected:
-	static Bridge <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
+	static ClientBridge <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._get_implementation ();
@@ -42,7 +42,7 @@ protected:
 		return 0;
 	}
 
-	static Bridge <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
+	static ClientBridge <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._get_interface ();
@@ -78,10 +78,10 @@ protected:
 		return 0;
 	}
 
-	static Boolean __is_equivalent (Bridge <Object>* obj, Bridge <Object>* other_object, EnvironmentBridge* env)
+	static Boolean __is_equivalent (Bridge <Object>* obj, ClientBridge <Object>* other_object, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj)._is_equivalent ();
+			return S::_implementation (obj)._is_equivalent (other_object);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {

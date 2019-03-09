@@ -16,7 +16,7 @@ public:
 	static const typename Bridge <ServantBase>::EPV epv_;
 
 protected:
-	static Bridge <POA>* __default_POA (Bridge <ServantBase>* obj, EnvironmentBridge* env)
+	static ClientBridge <POA>* __default_POA (Bridge <ServantBase>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._default_POA ();
@@ -28,7 +28,7 @@ protected:
 		return 0;
 	}
 
-	static Bridge <InterfaceDef>* __get_interface (Bridge <ServantBase>* obj, EnvironmentBridge* env)
+	static ClientBridge <InterfaceDef>* __get_interface (Bridge <ServantBase>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._get_interface ();
@@ -68,7 +68,7 @@ protected:
 template <class S>
 const Bridge <ServantBase>::EPV Skeleton <S, ServantBase>::epv_ = {
 	{ // interface
-		nullptr,
+		Bridge <ServantBase>::interface_id_,
 		S::template __duplicate <ServantBase>,
 		S::template __release <ServantBase>
 	},

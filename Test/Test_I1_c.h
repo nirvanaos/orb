@@ -26,7 +26,7 @@ public:
 
 		struct
 		{
-			Bridge <Object>* (*CORBA_Object) (Bridge < ::Test::I1>*, EnvironmentBridge*);
+			Bridge <Object>* (*CORBA_Object) (Bridge < ::Test::I1>*, const Char* id, EnvironmentBridge*);
 		}
 		base;
 
@@ -52,6 +52,32 @@ protected:
 };
 
 template <class T>
+class ClientBase <T, ::Test::I1>
+{
+public:
+	operator ::Test::I1& ()
+	{
+		Environment _env;
+		T& t = static_cast <T&> (*this);
+		Bridge < ::Test::I1>* _ret = (t._epv ().base.Test_I1) (&t, Bridge < ::Test::I1>::interface_id_, &_env);
+		_env.check ();
+		if (!_ret)
+			throw MARSHAL ();
+		return static_cast < ::Test::I1&> (*_ret);
+	}
+
+	operator Bridge < ::Test::I1>& ()
+	{
+		return operator ::Test::I1& ();
+	}
+};
+
+template <>
+class ClientBase < ::Test::I1, ::Test::I1> :
+	public ClientBridge < ::Test::I1>
+{};
+
+template <class T>
 class Client <T, ::Test::I1> :
 	public ClientBase <T, ::Test::I1>
 {
@@ -64,7 +90,7 @@ template <class T>
 Long Client <T, ::Test::I1>::op1 (Long p1)
 {
 	Environment _env;
-	Bridge < ::Test::I1>& _b = ClientBase <T, ::Test::I1>::_bridge ();
+	Bridge < ::Test::I1>& _b (*this);
 	Long _ret = (_b._epv ().epv.op1) (&_b, p1, &_env);
 	_env.check ();
 	return _ret;
@@ -74,7 +100,7 @@ template <class T>
 void Client <T, ::Test::I1>::throw_NO_IMPLEMENT ()
 {
 	Environment _env;
-	Bridge < ::Test::I1>& _b = ClientBase <T, ::Test::I1>::_bridge ();
+	Bridge < ::Test::I1>& _b (*this);
 	(_b._epv ().epv.throw_NO_IMPLEMENT) (&_b, &_env);
 	_env.check ();
 }
@@ -90,15 +116,6 @@ class I1 :
 {
 public:
 	typedef I1_ptr _ptr_type;
-
-	operator ::CORBA::Object& ()
-	{
-		::CORBA::Environment _env;
-		::CORBA::Object* _ret = static_cast < ::CORBA::Object*> ((_epv ().base.CORBA_Object) (this, &_env));
-		_env.check ();
-		assert (_ret);
-		return *_ret;
-	}
 };
 
 }

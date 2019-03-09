@@ -21,9 +21,9 @@ public:
 		rel_ (false)
 	{}
 
-	ServantTied (T& t, ::PortableServer::POA_ptr poa) :
+	ServantTied (T& t, POA_ptr poa) :
 		ptr_ (&t),
-		poa_ (::PortableServer::POA::_duplicate (poa)),
+		poa_ (POA::_duplicate (poa)),
 		rel_ (false)
 	{}
 
@@ -33,7 +33,7 @@ public:
 		rel_ (release)
 	{}
 
-	ServantTied (T* tp, ::PortableServer::POA_ptr poa, Boolean release = true) :
+	ServantTied (T* tp, POA_ptr poa, Boolean release = true) :
 		ptr_ (tp),
 		poa_ (poa),
 		rel_ (release)
@@ -72,7 +72,7 @@ public:
 	POA_ptr _defauilt_POA ()
 	{
 		if (!is_nil (poa_))
-			return PortableServer::POA::_duplicate (poa_);
+			return POA::_duplicate (poa_);
 		else
 			return Base::_default_POA ();
 	}
@@ -101,7 +101,7 @@ public:
 private:
 	T* ptr_;
 	Boolean rel_;
-	::PortableServer::POA_ptr poa_;
+	POA_ptr poa_;
 };
 
 

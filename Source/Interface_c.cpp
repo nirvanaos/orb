@@ -7,7 +7,7 @@ namespace Nirvana {
 
 Bridge <Interface>* Interface::_duplicate (Bridge <Interface>* itf)
 {
-	if (!is_nil (itf)) {
+	if (itf) {
 		Environment env;
 		itf = (itf->_epv ().duplicate) (itf, &env);
 		env.check ();
@@ -17,11 +17,11 @@ Bridge <Interface>* Interface::_duplicate (Bridge <Interface>* itf)
 
 void Interface::_release (Bridge <Interface>* itf)
 {
-	if (!is_nil (itf))
+	if (itf)
 		(itf->_epv ().release) (itf);
 }
 
-void Interface::adopt (const Bridge <Interface>* bridge, const Char* interface_id)
+Bridge <Interface>* Interface::adopt (Bridge <Interface>* bridge, const Char* interface_id)
 {
 	if (bridge) {
 		const Char* bridge_id = bridge->_epv ().interface_id;
@@ -32,6 +32,7 @@ void Interface::adopt (const Bridge <Interface>* bridge, const Char* interface_i
 		)
 			throw MARSHAL ();
 	}
+	return bridge;
 }
 
 }

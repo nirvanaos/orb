@@ -4,7 +4,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-const Char Bridge < ::PortableServer::POA>::interface_id_ [] = PORTABLESERVER_REPOSITORY_ID (POA);
+const Char Bridge <POA>::interface_id_ [] = NIRVANA_REPOSITORY_ID (POA);
 
 }
 }

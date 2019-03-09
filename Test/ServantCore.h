@@ -8,7 +8,7 @@ namespace CORBA {
 namespace Nirvana {
 
 class ServantCore :
-	public Implementation <ServantCore>,
+	public ServantTraits <ServantCore>,
 	public InterfaceImpl <ServantCore, AbstractBase>,
 	public InterfaceImpl <ServantCore, ServantBase>,
 	public LifeCycleStatic
@@ -26,12 +26,12 @@ public:
 
 	POA_ptr _default_POA () const
 	{
-		return nullptr;
+		return POA_ptr::nil ();	// TODO: Implement
 	}
 
 	InterfaceDef_ptr _get_interface () const
 	{
-		return nullptr;	// TODO: Implement
+		return InterfaceDef_ptr::nil ();	// TODO: Implement
 	}
 
 	static Boolean __is_a (Bridge <ServantBase>* obj, const Char* type_id, EnvironmentBridge* env)

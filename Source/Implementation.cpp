@@ -13,7 +13,7 @@ void ServantBaseLinks::_final_construct (const Char* primary_interface)
 void ServantBaseLinks::_implicitly_activate ()
 {
 	if (!servant_links_->is_active ()) {
-		::PortableServer::POA_var poa = ServantBase_ptr (this)->_default_POA ();
+		POA_var poa = ServantBase_ptr (this)->_default_POA ();
 		poa->activate_object (*this);
 	}
 }

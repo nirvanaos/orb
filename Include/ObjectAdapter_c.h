@@ -23,14 +23,14 @@ public:
 
 		struct
 		{
-			Bridge <AbstractBase>* (*CORBA_AbstractBase) (Bridge <ObjectAdapter>*, EnvironmentBridge*);
+			Bridge <AbstractBase>* (*CORBA_AbstractBase) (Bridge <ObjectAdapter>*, const Char*, EnvironmentBridge*);
 		}
 		base;
 
 		struct
 		{
-			Bridge <ServantLinks>* (*create_servant) (Bridge <ObjectAdapter>*, Bridge <ServantBase>*, const Char*, EnvironmentBridge*);
-			Bridge <Object>* (*create_local_object) (Bridge <ObjectAdapter>*, Bridge <AbstractBase>*, const Char*, EnvironmentBridge*);
+			ClientBridge <ServantLinks>* (*create_servant) (Bridge <ObjectAdapter>*, ClientBridge <ServantBase>*, const Char*, EnvironmentBridge*);
+			ClientBridge <Object>* (*create_local_object) (Bridge <ObjectAdapter>*, ClientBridge <AbstractBase>*, const Char*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -49,6 +49,32 @@ protected:
 };
 
 template <class T>
+class ClientBase <T, ObjectAdapter>
+{
+public:
+	operator Object& ()
+	{
+		Environment _env;
+		T& t = static_cast <T&> (*this);
+		Bridge <Object>* _ret = (t._epv ().base.CORBA_Nirvana_ObjectAdapter) (&t, Bridge <ObjectAdapter>::interface_id_, &_env);
+		_env.check ();
+		if (!_ret)
+			throw MARSHAL ();
+		return static_cast <ObjectAdapter&> (*_ret);
+	}
+
+	operator Bridge <ObjectAdapter>& ()
+	{
+		return operator ObjectAdapter& ();
+	}
+};
+
+template <>
+class ClientBase <ObjectAdapter, ObjectAdapter> :
+	public ClientBridge <ObjectAdapter>
+{};
+
+template <class T>
 class Client <T, ObjectAdapter> :
 	public ClientBase <T, ObjectAdapter>
 {
@@ -63,22 +89,13 @@ class ObjectAdapter :
 {
 public:
 	typedef ObjectAdapter_ptr _ptr_type;
-
-	operator Bridge <AbstractBase>& ()
-	{
-		Environment _env;
-		Bridge <AbstractBase>* _ret = (_epv ().base.CORBA_AbstractBase) (this, &_env);
-		_env.check ();
-		assert (_ret);
-		return *_ret;
-	}
 };
 
 template <class T>
 ServantLinks_ptr Client <T, ObjectAdapter>::create_servant (ServantBase_ptr servant, const Char* type_id)
 {
 	Environment _env;
-	Bridge <ObjectAdapter>& _b = ClientBase <T, ObjectAdapter>::_bridge ();
+	Bridge <ObjectAdapter>& _b = (*this);
 	ServantLinks_var _ret = (_b._epv ().epv.create_servant) (&_b, servant, type_id, &_env);
 	_env.check ();
 	return _ret._retn ();
@@ -88,7 +105,7 @@ template <class T>
 Object_ptr Client <T, ObjectAdapter>::create_local_object (AbstractBase_ptr base, const Char* type_id)
 {
 	Environment _env;
-	Bridge <ObjectAdapter>& _b = ClientBase <T, ObjectAdapter>::_bridge ();
+	Bridge <ObjectAdapter>& _b = (*this);
 	Object_var _ret = (_b._epv ().epv.create_local_object) (&_b, base, type_id, &_env);
 	_env.check ();
 	return _ret._retn ();

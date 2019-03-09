@@ -27,9 +27,9 @@ public:
 
 		struct
 		{
-			Bridge <Object>* (*CORBA_Object) (Bridge < ::Test::I3>*, EnvironmentBridge*);
-			Bridge < ::Test::I1>* (*Test_I1) (Bridge < ::Test::I3>*, EnvironmentBridge*);
-			Bridge < ::Test::I2>* (*Test_I2) (Bridge < ::Test::I3>*, EnvironmentBridge*);
+			Bridge <Object>* (*CORBA_Object) (Bridge < ::Test::I3>*, const Char*, EnvironmentBridge*);
+			Bridge < ::Test::I1>* (*Test_I1) (Bridge < ::Test::I3>*, const Char*, EnvironmentBridge*);
+			Bridge < ::Test::I2>* (*Test_I2) (Bridge < ::Test::I3>*, const Char*, EnvironmentBridge*);
 		}
 		base;
 
@@ -54,6 +54,32 @@ protected:
 };
 
 template <class T>
+class ClientBase <T, ::Test::I3>
+{
+public:
+	operator ::Test::I3& ()
+	{
+		Environment _env;
+		T& t = static_cast <T&> (*this);
+		Bridge < ::Test::I3>* _ret = (t._epv ().base.Test_I3) (&t, Bridge < ::Test::I3>::interface_id_, &_env);
+		_env.check ();
+		if (!_ret)
+			throw MARSHAL ();
+		return static_cast <::Test::I3&> (*_ret);
+	}
+
+	operator Bridge < ::Test::I3>& ()
+	{
+		return operator ::Test::I3& ();
+	}
+};
+
+template <>
+class ClientBase < ::Test::I3, ::Test::I3> :
+	public ClientBridge < ::Test::I3>
+{};
+
+template <class T>
 class Client <T, ::Test::I3> :
 	public ClientBase <T, ::Test::I3>
 {
@@ -65,7 +91,7 @@ template <class T>
 Long Client <T, ::Test::I3>::op3 (Long p1)
 {
 	Environment _env;
-	Bridge < ::Test::I3>& _b = ClientBase <T, ::Test::I3>::_bridge ();
+	Bridge < ::Test::I3>& _b (*this);
 	Long _ret = (_b._epv ().epv.op3) (&_b, p1, &_env);
 	_env.check ();
 	return _ret;
@@ -84,33 +110,6 @@ class I3 :
 {
 public:
 	typedef I3_ptr _ptr_type;
-
-	operator ::Test::I1& ()
-	{
-		::CORBA::Environment _env;
-		::Test::I1* _ret = static_cast < ::Test::I1*> ((_epv ().base.Test_I1) (this, &_env));
-		_env.check ();
-		assert (_ret);
-		return *_ret;
-	}
-
-	operator ::Test::I2& ()
-	{
-		::CORBA::Environment _env;
-		::Test::I2* _ret = static_cast < ::Test::I2*> ((_epv ().base.Test_I2) (this, &_env));
-		_env.check ();
-		assert (_ret);
-		return *_ret;
-	}
-
-	operator ::CORBA::Object& ()
-	{
-		::CORBA::Environment _env;
-		::CORBA::Object* _ret = static_cast < ::CORBA::Object*> ((_epv ().base.CORBA_Object) (this, &_env));
-		_env.check ();
-		assert (_ret);
-		return *_ret;
-	}
 };
 
 }
