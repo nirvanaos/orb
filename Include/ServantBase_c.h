@@ -80,14 +80,9 @@ public:
 	}
 };
 
-template <>
-class ClientBase <ServantBase, ServantBase> :
-	public ClientBridge <ServantBase>
-{};
-
 template <class T>
 class Client <T, ServantBase> :
-	public ClientBase <T, ServantBase>
+	public T
 {
 public:
 	::PortableServer::POA_ptr _default_POA ();
@@ -138,7 +133,7 @@ Boolean Client <T, ServantBase>::_non_existent ()
 
 class ServantBase :
 	public ::CORBA::Nirvana::ClientInterfacePseudo <ServantBase>,
-	public ::CORBA::Nirvana::Client <ServantBase, ::CORBA::AbstractBase>
+	public ::CORBA::Nirvana::ClientInterfaceBase <ServantBase, ::CORBA::AbstractBase>
 {
 public:
 	typedef ServantBase_ptr _ptr_type;

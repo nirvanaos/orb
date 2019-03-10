@@ -67,14 +67,9 @@ public:
 	}
 };
 
-template <>
-class ClientBase < ::PortableServer::POA, ::PortableServer::POA> :
-	public ClientBridge < ::PortableServer::POA>
-{};
-
 template <class T>
 class Client <T, ::PortableServer::POA> :
-	public ClientBase <T, ::PortableServer::POA>
+	public T
 {
 public:
 	const Char* activate_object (ServantLinks_ptr servant);
@@ -97,7 +92,7 @@ namespace PortableServer {
 
 class POA :
 	public ::CORBA::Nirvana::ClientInterface <POA>,
-	public ::CORBA::Nirvana::Client <POA, ::CORBA::Object>
+	public ::CORBA::Nirvana::ClientInterfaceBase <POA, ::CORBA::Object>
 {
 public:
 	typedef POA_ptr _ptr_type;

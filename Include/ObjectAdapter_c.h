@@ -69,14 +69,9 @@ public:
 	}
 };
 
-template <>
-class ClientBase <ObjectAdapter, ObjectAdapter> :
-	public ClientBridge <ObjectAdapter>
-{};
-
 template <class T>
 class Client <T, ObjectAdapter> :
-	public ClientBase <T, ObjectAdapter>
+	public T
 {
 public:
 	ServantLinks_ptr create_servant (ServantBase_ptr servant, const Char* type_id);
@@ -85,7 +80,7 @@ public:
 
 class ObjectAdapter :
 	public ClientInterfacePseudo <ObjectAdapter>,
-	public Client <ObjectAdapter, AbstractBase>
+	public ClientInterfaceBase <ObjectAdapter, AbstractBase>
 {
 public:
 	typedef ObjectAdapter_ptr _ptr_type;

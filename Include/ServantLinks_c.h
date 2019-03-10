@@ -63,14 +63,9 @@ public:
 	}
 };
 
-template <>
-class ClientBase <ServantLinks, ServantLinks> :
-	public ClientBridge <ServantLinks>
-{};
-
 template <class T>
 class Client <T, ServantLinks> :
-	public ClientBase <T, ServantLinks>
+	public T
 {
 public:
 	ServantBase_ptr servant_base ();
@@ -110,7 +105,7 @@ Boolean Client <T, ServantLinks>::is_active ()
 }
 
 class ServantLinks :
-	public ClientInterfaceBase <ServantLinks>
+	public ClientInterfacePrimary <ServantLinks>
 {
 public:
 	typedef ServantLinks_ptr _ptr_type;

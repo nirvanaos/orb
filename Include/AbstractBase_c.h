@@ -74,14 +74,9 @@ public:
 	}
 };
 
-template <>
-class ClientBase <AbstractBase, AbstractBase> :
-	public ClientBridge <AbstractBase>
-{};
-
 template <class T>
 class Client <T, AbstractBase> :
-	public ClientBase <T, AbstractBase>
+	public T
 {
 protected:
 	template <class I> friend class ClientInterface; // TODO: Does it really need?
@@ -108,7 +103,7 @@ Bridge <Interface>* Client <T, AbstractBase>::_find_interface (const Char* type_
 }
 
 class AbstractBase :
-	public Nirvana::ClientInterfaceBase <AbstractBase>
+	public Nirvana::ClientInterfacePrimary <AbstractBase>
 {
 public:
 	typedef AbstractBase_ptr _ptr_type;
@@ -124,9 +119,15 @@ public:
 
 namespace Nirvana {
 
+//! \class	ClientInterfacePseudo
+//!
+//! \brief	A pseudo interface derived from `AbstractBase'.
+//!
+//! \tparam	I	Interface.
+
 template <class I>
 class ClientInterfacePseudo :
-	public ClientInterfaceBase <I>
+	public ClientInterfacePrimary <I>
 {
 public:
 	static T_ptr <I> _narrow (AbstractBase_ptr obj)

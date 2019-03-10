@@ -439,17 +439,19 @@ public:
 	}
 };
 
-//! ClientBase - How client obtains pointer to Bridge
-template <class T, class I> class ClientBase;
+//! ClientBase - How base client obtains pointer to bridge from primary.
+template <class Primary, class I> class ClientBase;
 
-//! Client must derive from ClientBase
+//! Client implementation template.
 template <class T, class I> class Client;
 
-//! ClientInterfaceBase - Base template for client interfaces
+//! Primary interface client implementation.
 template <class I>
-class ClientInterfaceBase :
-	public Client <I, I>
-{};
+using ClientInterfacePrimary = Client <ClientBridge <I>, I>;
+
+//! Base interface client implementation.
+template <class Primary, class I>
+using ClientInterfaceBase = Client <ClientBase <Primary, I>, I>;
 
 }
 }

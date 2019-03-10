@@ -86,14 +86,9 @@ public:
 	}
 };
 
-template <>
-class ClientBase <Object, Object> :
-	public ClientBridge <Object>
-{};
-
 template <class T>
 class Client <T, Object> :
-	public ClientBase <T, Object>
+	public T
 {
 public:
 	ImplementationDef_ptr _get_implementation ();
@@ -170,8 +165,8 @@ ULong Client <T, Object>::_hash (ULong maximum)
 }
 
 class Object :
-	public Nirvana::ClientInterfaceBase <Object>,
-	public Nirvana::Client <Object, AbstractBase>
+	public Nirvana::ClientInterfacePrimary <Object>,
+	public Nirvana::ClientInterfaceBase <Object, AbstractBase>
 {
 public:
 	typedef Object_ptr _ptr_type;
@@ -184,6 +179,11 @@ inline Object_ptr AbstractBase::_to_object ()
 
 namespace Nirvana {
 
+//! \class	ClientInterface
+//!
+//! \brief	A client interface, derived from Object.
+//!
+//! \tparam	I	Interface.
 
 template <class I>
 class ClientInterface :
@@ -195,6 +195,12 @@ public:
 		return obj->_find_interface <I> ();
 	}
 };
+
+//! \class	ClientInterfaceAbstract
+//!
+//! \brief	Abstract client interface.
+//!
+//! \tparam	I	Interface.
 
 template <class I>
 class ClientInterfaceAbstract :

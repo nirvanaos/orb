@@ -71,14 +71,9 @@ public:
 	}
 };
 
-template <>
-class ClientBase < ::Test::I2, ::Test::I2> :
-	public ClientBridge < ::Test::I2>
-{};
-
 template <class T>
 class Client <T, ::Test::I2> :
-	public ClientBase <T, ::Test::I2>
+	public T
 {
 public:
 	Long op2 (Long p1);
@@ -101,7 +96,7 @@ namespace Test {
 
 class I2 :
 	public CORBA::Nirvana::ClientInterface <I2>,
-	public CORBA::Nirvana::Client <I2, ::CORBA::Object>
+	public CORBA::Nirvana::ClientInterfaceBase <I2, ::CORBA::Object>
 {
 public:
 	typedef I2_ptr _ptr_type;
