@@ -95,15 +95,8 @@ namespace Nirvana {
 
 template <class S>
 class ServantStatic <S, ::Test::I2> :
-	public ServantBaseStatic <S, ::Test::I2>,
-	public InterfaceStatic <S, ::Test::I2>
-{
-public:
-	static Interface_ptr _find_interface (const Char* id)
-	{
-		return FindInterface < ::Test::I2>::find (*(S*)nullptr, id);
-	}
-};
+	public ImplementationStatic <S, ::Test::I2>
+{};
 
 }
 }

@@ -162,7 +162,7 @@ public:
 };
 
 template <class S, class Primary>
-const OLF_ObjectInfo ServantBaseStatic <S, Primary>::object_info_ = {ServantBaseStatic <S, Primary>::_bridge (), Bridge <Primary>::interface_id_};
+const OLF_ObjectInfo ServantBaseStatic <S, Primary>::object_info_ = {InterfaceStatic <S, ServantBase>::_bridge (), Bridge <Primary>::interface_id_};
 
 //! Static implementation of LocalObject
 //! \tparam S Servant class.
@@ -215,7 +215,7 @@ public:
 };
 
 template <class S, class Primary>
-const OLF_LocalObjectInfo LocalObjectStatic <S, Primary>::object_info_ = {LocalObjectStatic <S, Primary>::_bridge (), Bridge <Primary>::interface_id_};
+const OLF_LocalObjectInfo LocalObjectStatic <S, Primary>::object_info_ = {InterfaceStatic <S, AbstractBase>::_bridge (), Bridge <Primary>::interface_id_};
 
 template <class S, class I>
 class ImplementationSingleStatic :

@@ -12,8 +12,8 @@ namespace Nirvana {
 
 #ifndef TEST_NO_STATIC
 
-template <> const ServantLinks* StaticObject <TestORB::StaticI1, Test::I1>::servant_links_;
-template <> const ServantLinks* StaticObject <TestORB::StaticI3, Test::I3>::servant_links_;
+template <> ServantLinks_ptr ServantBaseStatic <TestORB::StaticI1, Test::I1>::servant_links_;
+template <> ServantLinks_ptr ServantBaseStatic <TestORB::StaticI3, Test::I3>::servant_links_;
 
 class ModuleLoader
 {
@@ -31,26 +31,26 @@ public:
 	}
 
 private:
-	void load_static (const OLF_ObjectInfo& oi, const ServantLinks*& sl)
+	void load_static (const OLF_ObjectInfo& oi, ServantLinks_ptr& sl)
 	{
 		sl = g_object_adapter->create_servant (oi.servant, oi.primary_interface);
 	}
 
-	void unload_static (const ServantLinks* sl)
+	void unload_static (ServantLinks_ptr sl)
 	{
-		g_object_adapter->destroy_servant (const_cast <ServantLinks*> (sl));
+		release (sl);
 	}
 
 	template <class S, class I>
 	void load_static ()
 	{
-		load_static (StaticObject <TestORB::StaticI1, Test::I1>::object_info_, StaticObject <TestORB::StaticI1, Test::I1>::servant_links_);
+		load_static (ServantBaseStatic <S, I>::object_info_, ServantBaseStatic <S, I>::servant_links_);
 	}
 
 	template <class S, class I>
 	void unload_static ()
 	{
-		unload_static (StaticObject <TestORB::StaticI1, Test::I1>::servant_links_);
+		unload_static (ServantBaseStatic <S, I>::servant_links_);
 	}
 };
 
@@ -116,6 +116,7 @@ protected:
 	{
 		// Code here will be called immediately after the constructor (right
 		// before each test).
+		static CORBA::Nirvana::ModuleLoader loader;
 	}
 
 	virtual void TearDown ()

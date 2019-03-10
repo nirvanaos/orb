@@ -102,10 +102,7 @@ namespace Nirvana {
 
 template <class S>
 class ServantStatic <S, ::Test::I3> :
-	public ServantBaseStatic <S, ::Test::I3>,
-	public InterfaceStatic <S, ::Test::I1>,
-	public InterfaceStatic <S, ::Test::I2>,
-	public InterfaceStatic <S, ::Test::I3>
+	public ImplementationStatic <S, ::Test::I3, ::Test::I1, ::Test::I2>
 {};
 
 }

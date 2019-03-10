@@ -232,16 +232,17 @@ class ServantBaseImpl :
 	public ServantBaseLinks,
 	public Skeleton <S, ServantBase>
 {
-protected:
-	ServantBaseImpl () :
-		ServantBaseLinks (Skeleton <S, ServantBase>::epv_, Bridge <Primary>::interface_id_)
-	{}
-
+public:
 	T_ptr <Primary> _this ()
 	{
 		_implicitly_activate ();
 		return static_cast <S*> (this);
 	}
+
+protected:
+	ServantBaseImpl () :
+		ServantBaseLinks (Skeleton <S, ServantBase>::epv_, Bridge <Primary>::interface_id_)
+	{}
 };
 
 //! Standard implementation of `CORBA::LocalObject'.

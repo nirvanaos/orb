@@ -72,7 +72,18 @@ class ServantPOA <ServantBase> :
 {
 public:
 	operator Bridge <Object>& ();
-	operator ServantLinks_ptr ();
+
+	operator Bridge <ServantBase>& ()
+	{
+		_check_links ();
+		return static_cast <Bridge <ServantBase>&> (*this);
+	}
+
+	operator ServantLinks_ptr ()
+	{
+		_check_links ();
+		return ServantBaseLinks::operator ServantLinks_ptr ();
+	}
 
 	// ServantBase operations
 
@@ -104,6 +115,12 @@ protected:
 	void _implicitly_activate ();
 
 private:
+	void _check_links ()
+	{
+		if (!servant_links_)
+			_final_construct ();
+	}
+
 	void _final_construct ();
 };
 
