@@ -69,7 +69,7 @@ class ServantPOA <ServantBase> :
 public:
 	// ServantBase operations
 
-	virtual POA_ptr _default_POA ()
+	virtual ::PortableServer::POA_ptr _default_POA ()
 	{
 		return ServantBaseLinks::_default_POA ();
 	}

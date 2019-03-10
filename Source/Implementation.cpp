@@ -12,10 +12,15 @@ void ServantBaseLinks::_final_construct (const Char* primary_interface)
 void ServantBaseLinks::_implicitly_activate ()
 {
 	if (!servant_links_->is_active ()) {
-		POA_var poa = ServantBase_ptr (this)->_default_POA ();
+		::PortableServer::POA_var poa = ServantBase_ptr (this)->_default_POA ();
 		poa->activate_object (*this);
 	}
 }
+
+LocalObjectLinks::LocalObjectLinks (const EPV& epv, const Char* primary_id) :
+	ServantBridge <Object> (epv),
+	object_ (g_object_adapter->create_local_object (Object_ptr (this), primary_id))
+{}
 
 }
 }

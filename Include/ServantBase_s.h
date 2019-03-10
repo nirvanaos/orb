@@ -16,7 +16,7 @@ public:
 	static const typename Bridge <ServantBase>::EPV epv_;
 
 protected:
-	static ClientBridge <POA>* __default_POA (Bridge <ServantBase>* obj, EnvironmentBridge* env)
+	static ClientBridge < ::PortableServer::POA>* __default_POA (Bridge <ServantBase>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._default_POA ();

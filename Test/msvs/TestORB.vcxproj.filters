@@ -95,5 +95,11 @@
     <ClInclude Include="..\..\Include\ServantLinks_s.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\LocalObjectStaticCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\POACore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

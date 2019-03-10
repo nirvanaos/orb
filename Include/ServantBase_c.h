@@ -4,13 +4,17 @@
 
 #include "Object_c.h"
 
-namespace CORBA {
-namespace Nirvana {
+namespace PortableServer {
 
 class POA;
-typedef T_ptr <POA> POA_ptr;
-typedef T_var <POA> POA_var;
-typedef T_out <POA> POA_out;
+typedef ::CORBA::Nirvana::T_ptr <POA> POA_ptr;
+typedef ::CORBA::Nirvana::T_var <POA> POA_var;
+typedef ::CORBA::Nirvana::T_out <POA> POA_out;
+
+}
+
+namespace CORBA {
+namespace Nirvana {
 
 class ServantBase;
 typedef T_ptr <ServantBase> ServantBase_ptr;
@@ -34,7 +38,7 @@ public:
 
 		struct
 		{
-			ClientBridge <POA>* (*default_POA) (Bridge <ServantBase>*, EnvironmentBridge*);
+			ClientBridge <::PortableServer::POA>* (*default_POA) (Bridge <ServantBase>*, EnvironmentBridge*);
 			ClientBridge <InterfaceDef>* (*get_interface) (Bridge <ServantBase>*, EnvironmentBridge*);
 			Boolean (*is_a) (Bridge <ServantBase>*, const Char* type_id, EnvironmentBridge*);
 			Boolean (*non_existent) (Bridge <ServantBase>*, EnvironmentBridge*);
@@ -86,18 +90,18 @@ class Client <T, ServantBase> :
 	public ClientBase <T, ServantBase>
 {
 public:
-	POA_ptr _default_POA ();
+	::PortableServer::POA_ptr _default_POA ();
 	InterfaceDef_ptr _get_interface ();
 	Boolean _is_a (const Char* type_id);
 	Boolean _non_existent ();
 };
 
 template <class T>
-POA_ptr Client <T, ServantBase>::_default_POA ()
+::PortableServer::POA_ptr Client <T, ServantBase>::_default_POA ()
 {
 	Environment _env;
 	Bridge <ServantBase>& _b (*this);
-	POA_var _ret ((_b._epv ().epv.default_POA) (&_b, &_env));
+	::PortableServer::POA_var _ret ((_b._epv ().epv.default_POA) (&_b, &_env));
 	_env.check ();
 	return _ret._retn ();
 }

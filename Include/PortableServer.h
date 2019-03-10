@@ -10,10 +10,7 @@ typedef ::CORBA::Nirvana::ServantBase_ptr ServantBase_ptr;
 typedef ::CORBA::Nirvana::ServantBase_var ServantBase_var;
 typedef ::CORBA::Nirvana::ServantBase_out ServantBase_out;
 
-typedef ::CORBA::Nirvana::ServantPOA < ::CORBA::Nirvana::POA> POA;
-typedef ::CORBA::Nirvana::POA_ptr POA_ptr;
-typedef ::CORBA::Nirvana::POA_var POA_var;
-typedef ::CORBA::Nirvana::POA_out POA_out;
+typedef ::CORBA::Nirvana::ServantPOA <POA> POA_PortableServer_POA;
 
 }
 

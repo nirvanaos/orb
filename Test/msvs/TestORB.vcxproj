@@ -68,8 +68,10 @@
     <ClInclude Include="..\..\Include\ServantLinks_s.h" />
     <ClInclude Include="..\I1.h" />
     <ClInclude Include="..\I3.h" />
+    <ClInclude Include="..\LocalObjectStaticCore.h" />
     <ClInclude Include="..\ObjectAdapterCore.h" />
     <ClInclude Include="..\ObjectCore.h" />
+    <ClInclude Include="..\POACore.h" />
     <ClInclude Include="..\ServantCore.h" />
     <ClInclude Include="..\ServantLinksCore.h" />
     <ClInclude Include="..\Server.h" />

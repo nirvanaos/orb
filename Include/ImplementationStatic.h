@@ -18,9 +18,15 @@ struct OLF_ObjectInfo
 	const Char* primary_interface;
 };
 
+struct OLF_LocalObjectInfo
+{
+	Bridge <AbstractBase>* servant;
+	const Char* primary_interface;
+};
+
 template <class S, class I> class ServantStatic;
 
-/// Static interface traits
+//! Static interface traits
 template <class S>
 class ServantTraitsStatic
 {
@@ -96,7 +102,7 @@ public:
 	{}
 };
 
-/// Static implementation of CORBA::AbstractBase
+//! Static implementation of CORBA::AbstractBase
 template <class S, class Primary>
 class AbstractBaseStatic :
 	public ServantTraitsStatic <S>,
@@ -110,9 +116,9 @@ public:
 	}
 };
 
-/// Static implementation of CORBA::Nirvana::ServantBase
-/// \tparam S Servant class.
-/// \tparam Primary Primary interface.
+//! Static implementation of ServantBase
+//! \tparam S Servant class.
+//! \tparam Primary Primary interface.
 template <class S, class Primary>
 class ServantBaseStatic :
 	public AbstractBaseStatic <S, Primary>,
@@ -131,32 +137,85 @@ public:
 
 	// ServantBase operations
 
-	POA_ptr _default_POA ()
+	static ::PortableServer::POA_ptr _default_POA ()
 	{
-		return ServantBase_ptr (servant_links_->servant_base)->_default_POA ();
+		return servant_links_->servant_base ()->_default_POA ();
 	}
 
-	InterfaceDef_ptr _get_interface ()
+	static InterfaceDef_ptr _get_interface ()
 	{
-		return ServantBase_ptr (servant_links_->servant_base)->_get_interface ();
+		return servant_links_->servant_base ()->_get_interface ();
 	}
 
-	Boolean _is_a (const Char* type_id)
+	static Boolean _is_a (const Char* type_id)
 	{
-		return ServantBase_ptr (servant_links_->servant_base)->_is_a (type_id);
+		return servant_links_->servant_base ()->_is_a (type_id);
 	}
 
-	Boolean _non_existent ()
+	static Boolean _non_existent ()
 	{
-		return ServantBase_ptr (servant_links_->servant_base)->_non_existent ();
+		return servant_links_->servant_base ()->_non_existent ();
 	}
 
 	static const OLF_ObjectInfo object_info_;
-	static Bridge <ServantLinks>* servant_links_;
+	static ServantLinks_ptr servant_links_;
 };
 
 template <class S, class Primary>
 const OLF_ObjectInfo ServantBaseStatic <S, Primary>::object_info_ = {ServantBaseStatic <S, Primary>::_bridge (), Bridge <Primary>::interface_id_};
+
+//! Static implementation of LocalObject
+//! \tparam S Servant class.
+//! \tparam Primary Primary interface.
+template <class S, class Primary>
+class LocalObjectStatic :
+	public AbstractBaseStatic <S, Primary>,
+	public InterfaceStatic <S, Object>
+{
+public:
+	static T_ptr <Primary> _this ()
+	{
+		return InterfaceStatic <S, Primary>::_get_ptr ();
+	}
+
+	// Object operations
+
+	static ImplementationDef_ptr _get_implementation ()
+	{
+		return object_->_get_implementation ();
+	}
+
+	static InterfaceDef_ptr _get_interface ()
+	{
+		return object_->_get_interface ();
+	}
+
+	static Boolean _is_a (const Char* type_id)
+	{
+		return object_->_is_a (type_id);
+	}
+
+	static Boolean _non_existent ()
+	{
+		return object_->_non_existent ();
+	}
+
+	static Boolean _is_equivalent (Object_ptr other_object)
+	{
+		return object_->_is_equivalent (other_object);
+	}
+
+	static ULong _hash (ULong maximum)
+	{
+		return object_->_hash (maximum);
+	}
+
+	static const OLF_LocalObjectInfo object_info_;
+	static Object_ptr object_;
+};
+
+template <class S, class Primary>
+const OLF_LocalObjectInfo LocalObjectStatic <S, Primary>::object_info_ = {LocalObjectStatic <S, Primary>::_bridge (), Bridge <Primary>::interface_id_};
 
 template <class S, class I>
 class ImplementationSingleStatic :

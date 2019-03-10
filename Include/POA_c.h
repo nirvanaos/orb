@@ -12,7 +12,7 @@ namespace Nirvana {
 class ServantBase;
 
 template <>
-class Bridge <POA> :
+class Bridge < ::PortableServer::POA> :
 	public Bridge <Interface>
 {
 public:
@@ -22,13 +22,13 @@ public:
 
 		struct
 		{
-			Bridge <Object>* (*CORBA_Object) (Bridge <POA>*, const Char*, EnvironmentBridge*);
+			Bridge <Object>* (*CORBA_Object) (Bridge < ::PortableServer::POA>*, const Char*, EnvironmentBridge*);
 		}
 		base;
 
 		struct
 		{
-			const Char* (*activate_object) (Bridge <POA>*, ClientBridge <ServantLinks>*, EnvironmentBridge*);
+			const Char* (*activate_object) (Bridge < ::PortableServer::POA>*, ClientBridge <ServantLinks>*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -47,48 +47,53 @@ protected:
 };
 
 template <class T>
-class ClientBase <T, POA>
+class ClientBase <T, ::PortableServer::POA>
 {
 public:
-	operator POA& ()
+	operator ::PortableServer::POA& ()
 	{
 		Environment _env;
 		T& t = static_cast <T&> (*this);
-		Bridge <POA>* _ret = (t._epv ().base.CORBA_Nirvana_POA) (&t, Bridge <POA>::interface_id_, &_env);
+		Bridge < ::PortableServer::POA>* _ret = (t._epv ().base.CORBA_Nirvana_POA) (&t, Bridge < ::PortableServer::POA>::interface_id_, &_env);
 		_env.check ();
 		if (!_ret)
 			throw MARSHAL ();
-		return static_cast <POA&> (*_ret);
+		return static_cast < ::PortableServer::POA&> (*_ret);
 	}
 
-	operator Bridge <POA>& ()
+	operator Bridge < ::PortableServer::POA>& ()
 	{
-		return operator  POA& ();
+		return operator ::PortableServer::POA& ();
 	}
 };
 
 template <>
-class ClientBase <POA, POA> :
-	public ClientBridge <POA>
+class ClientBase < ::PortableServer::POA, ::PortableServer::POA> :
+	public ClientBridge < ::PortableServer::POA>
 {};
 
 template <class T>
-class Client <T, POA> :
-	public ClientBase <T, POA>
+class Client <T, ::PortableServer::POA> :
+	public ClientBase <T, ::PortableServer::POA>
 {
 public:
 	const Char* activate_object (ServantLinks_ptr servant);
 };
 
 template <class T>
-const Char* Client <T, POA>::activate_object (ServantLinks_ptr servant)
+const Char* Client <T, ::PortableServer::POA>::activate_object (ServantLinks_ptr servant)
 {
 	Environment _env;
-	Bridge <POA>& _b = (*this);
+	Bridge < ::PortableServer::POA>& _b = (*this);
 	const Char* _ret = (_b._epv ().epv.activate_object) (&_b, servant, &_env);
 	_env.check ();
 	return _ret;
 }
+
+}
+}
+
+namespace PortableServer {
 
 class POA :
 	public ::CORBA::Nirvana::ClientInterface <POA>,
@@ -99,7 +104,6 @@ public:
 
 };
 
-}
 }
 
 #endif

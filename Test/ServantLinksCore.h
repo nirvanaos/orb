@@ -34,7 +34,6 @@ public:
 		return is_active_;
 	}
 
-private:
 	ServantCore servant_base_;
 	ObjectCore object_;
 	Boolean is_active_;

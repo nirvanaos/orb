@@ -24,10 +24,7 @@ public:
 		return nullptr;
 	}
 
-	POA_ptr _default_POA () const
-	{
-		return POA_ptr::nil ();	// TODO: Implement
-	}
+	::PortableServer::POA_ptr _default_POA () const;
 
 	InterfaceDef_ptr _get_interface () const
 	{

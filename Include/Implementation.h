@@ -145,6 +145,7 @@ public:
 };
 
 //! Standard implementation of `CORBA::AbstractBase'.
+ 
 template <class S, class Primary>
 class AbstractBaseImpl :
 	public ServantTraits <S>,
@@ -158,7 +159,7 @@ public:
 	}
 };
 
-//! Standard implementation of `PortableServer::ServantBase'
+//! Standard implementation of ServantBase.
 
 class ServantBaseLinks :
 	public ServantBridge <ServantBase>
@@ -177,7 +178,7 @@ public:
 
 	// ServantBase operations
 
-	POA_ptr _default_POA ()
+	::PortableServer::POA_ptr _default_POA ()
 	{
 		return servant_links_->servant_base()->_default_POA ();
 	}
@@ -212,7 +213,7 @@ protected:
 		release (servant_links_);
 	}
 
-protected:
+private:
 	ServantLinks_ptr servant_links_;
 };
 
@@ -234,6 +235,75 @@ protected:
 	T_ptr <Primary> _this ()
 	{
 		_implicitly_activate ();
+		return static_cast <Primary*> (static_cast <Bridge <Primary>*> (static_cast <S*> (this)));
+	}
+};
+
+//! Standard implementation of `CORBA::LocalObject'.
+
+class LocalObjectLinks :
+	public ServantBridge <Object>
+{
+public:
+	// Object operations
+
+	ImplementationDef_ptr _get_implementation ()
+	{
+		return object_->_get_implementation ();
+	}
+
+	InterfaceDef_ptr _get_interface ()
+	{
+		return object_->_get_interface ();
+	}
+
+	Boolean _is_a (const Char* type_id)
+	{
+		return object_->_is_a (type_id);
+	}
+
+	Boolean _non_existent ()
+	{
+		return object_->_non_existent ();
+	}
+
+	Boolean _is_equivalent (Object_ptr other_object)
+	{
+		return object_->_is_equivalent (other_object);
+	}
+
+	ULong _hash (ULong maximum)
+	{
+		return object_->_hash (maximum);
+	}
+
+protected:
+	LocalObjectLinks (const EPV& epv, const Char* primary_id);
+
+	~LocalObjectLinks ()
+	{
+		release (object_);
+	}
+
+private:
+	Object_ptr object_;
+};
+
+//! \tparam S Servant class implementing operations.
+//! \tparam Primary Primary interface.
+template <class S, class Primary>
+class LocalObjectImpl :
+	public AbstractBaseImpl <S, Primary>,
+	public LocalObjectLinks,
+	public Skeleton <S, Object>
+{
+protected:
+	LocalObjectImpl () :
+		LocalObjectLinks (Skeleton <S, Object>::epv_, Bridge <Primary>::interface_id_)
+	{}
+
+	T_ptr <Primary> _this ()
+	{
 		return static_cast <Primary*> (static_cast <Bridge <Primary>*> (static_cast <S*> (this)));
 	}
 };
