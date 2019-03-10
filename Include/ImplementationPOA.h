@@ -37,7 +37,6 @@ class ServantPOA <AbstractBase> :
 	public LifeCycleRefCnt <ServantPOA <AbstractBase> >
 {
 public:
-
 	virtual void _add_ref ()
 	{
 		RefCountBase::_add_ref ();
@@ -54,6 +53,11 @@ public:
 	}
 
 	virtual Interface_ptr _find_interface (const Char* id) = 0;
+	virtual const Char* _primary_interface () const = 0;
+
+protected:
+	ServantPOA ()
+	{}
 };
 
 typedef ServantPOA <AbstractBase> AbstractBasePOA;
@@ -67,6 +71,9 @@ class ServantPOA <ServantBase> :
 	public Skeleton <ServantPOA <ServantBase>, ServantBase>
 {
 public:
+	operator Bridge <Object>& ();
+	operator ServantLinks_ptr ();
+
 	// ServantBase operations
 
 	virtual ::PortableServer::POA_ptr _default_POA ()
@@ -93,6 +100,11 @@ protected:
 	ServantPOA () :
 		ServantBaseLinks (Skeleton <ServantPOA <ServantBase>, ServantBase>::epv_)
 	{}
+
+	void _implicitly_activate ();
+
+private:
+	void _final_construct ();
 };
 
 template <class Primary, class ... Bases>
@@ -106,12 +118,21 @@ public:
 	{
 		return FindInterface <Primary>::find (*this, id);
 	}
+	
+	virtual const Char* _primary_interface () const
+	{
+		return Bridge <Primary>::interface_id_;
+	}
 
 	T_ptr <Primary> _this ()
 	{
 		_implicitly_activate ();
 		return this;
 	}
+
+protected:
+	ImplementationPOA ()
+	{}
 };
 
 }

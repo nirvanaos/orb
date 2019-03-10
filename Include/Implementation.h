@@ -198,22 +198,29 @@ public:
 		return servant_links_->servant_base ()->_non_existent ();
 	}
 
-	void _implicitly_activate ();
-
 protected:
 	ServantBaseLinks (const EPV& epv) :
 		ServantBridge <ServantBase> (epv),
 		servant_links_ ((ServantLinks*)nullptr)
 	{}
+	
+	ServantBaseLinks (const EPV& epv, const Char* primary_interface) :
+		ServantBridge <ServantBase> (epv),
+		servant_links_ ((ServantLinks*)nullptr)
+	{
+		_final_construct (primary_interface);
+	}
 
 	void _final_construct (const Char* primary_interface);
+
+	void _implicitly_activate ();
 
 	~ServantBaseLinks ()
 	{
 		release (servant_links_);
 	}
 
-private:
+protected:
 	ServantLinks_ptr servant_links_;
 };
 
@@ -227,10 +234,8 @@ class ServantBaseImpl :
 {
 protected:
 	ServantBaseImpl () :
-		ServantBaseLinks (Skeleton <S, ServantBase>::epv_)
-	{
-		_final_construct (Bridge <Primary>::interface_id_);
-	}
+		ServantBaseLinks (Skeleton <S, ServantBase>::epv_, Bridge <Primary>::interface_id_)
+	{}
 
 	T_ptr <Primary> _this ()
 	{

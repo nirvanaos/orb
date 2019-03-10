@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\AbstractBase_c.cpp" />
     <ClCompile Include="..\Implementation.cpp" />
+    <ClCompile Include="..\ImplementationPOA.cpp" />
     <ClCompile Include="..\Interface_s.cpp" />
     <ClCompile Include="..\Environment.cpp" />
     <ClCompile Include="..\Exception.cpp" />
