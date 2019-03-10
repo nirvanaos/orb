@@ -155,7 +155,7 @@ class AbstractBaseImpl :
 public:
 	Interface_ptr _query_interface (const Char* id)
 	{
-		return FindInterface <Primary>::find (static_cast <S&> (*this), id);
+		return Skeleton <S, Primary>::_find_interface (static_cast <S&> (*this), id);
 	}
 };
 

@@ -30,7 +30,34 @@ protected:
 	{}
 };
 
-template <class I> class FindInterface;
+struct InterfaceEntry
+{
+	const Char* interface_id;
+	Bridge <Interface>* (*cast) (void* servant);
+
+	static Bridge <Interface>* find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const Char* id);
+};
+
+template <class S, class ... I>
+class InterfaceFinder
+{
+	template <class I>
+	static Bridge <Interface>* cast (void* servant)
+	{
+		S& s = *reinterpret_cast <S*> (servant);
+		return &static_cast <Bridge <I>&> (s);
+	}
+
+public:
+	static Bridge <Interface>* find (S& servant, const Char* id)
+	{
+		static const InterfaceEntry table [] = {
+			{ Bridge <I>::interface_id_, cast <I> }...,
+		};
+
+		return InterfaceEntry::find (table, table + sizeof (table) / sizeof (*table), &servant, id);
+	}
+};
 
 }
 }

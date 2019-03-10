@@ -10,25 +10,16 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <>
-class FindInterface < ::PortableServer::POA>
-{
-public:
-	template <class S>
-	static Bridge <Interface>* find (S& servant, const Char* id)
-	{
-		if (RepositoryId::compatible (Bridge < ::PortableServer::POA>::interface_id_, id))
-			return Interface::_duplicate (&static_cast <Bridge < ::PortableServer::POA>&> (servant));
-		else
-			return FindInterface < ::CORBA::Object>::find (servant, id);
-	}
-};
-
 template <class S>
 class Skeleton <S, ::PortableServer::POA>
 {
 public:
 	static const typename Bridge < ::PortableServer::POA>::EPV epv_;
+
+	static Bridge <Interface>* _find_interface (S& servant, const Char* id)
+	{
+		return Interface::_duplicate (InterfaceFinder <S, ::PortableServer::POA, Object>::find (servant, id));
+	}
 
 protected:
 	static const Char* _activate_object (Bridge < ::PortableServer::POA>* obj, ClientBridge <ServantLinks>* servant, EnvironmentBridge* env)

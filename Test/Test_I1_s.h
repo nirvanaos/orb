@@ -7,25 +7,16 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <>
-class FindInterface < ::Test::I1>
-{
-public:
-	template <class S>
-	static Bridge <Interface>* find (S& servant, const Char* id)
-	{
-		if (RepositoryId::compatible (Bridge < ::Test::I1>::interface_id_, id))
-			return Interface::_duplicate(&static_cast <Bridge < ::Test::I1>&> (servant));
-		else
-			return FindInterface <Object>::find (servant, id);
-	}
-};
-
 template <class S>
 class Skeleton <S, ::Test::I1>
 {
 public:
 	static const typename Bridge < ::Test::I1>::EPV epv_;
+
+	static Bridge <Interface>* _find_interface (S& servant, const Char* id)
+	{
+		return Interface::_duplicate (InterfaceFinder <S, ::Test::I1, Object>::find (servant, id));
+	}
 
 protected:
 	static Long _op1 (Bridge < ::Test::I1>* _b, Long p1, EnvironmentBridge* _env)

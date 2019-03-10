@@ -112,7 +112,7 @@ class AbstractBaseStatic :
 public:
 	static Interface_ptr _query_interface (const Char* id)
 	{
-		return FindInterface <Primary>::find (*(S*)nullptr, id);
+		return Skeleton <S, Primary>::_find_interface (*(S*)nullptr, id);
 	}
 };
 

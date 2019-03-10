@@ -133,7 +133,7 @@ class ImplementationPOA :
 public:
 	virtual Interface_ptr _query_interface (const Char* id)
 	{
-		return FindInterface <Primary>::find (*this, id);
+		return InterfaceImpl <ServantPOA <Primary>, Primary>::_find_interface (static_cast <ServantPOA <Primary>&> (*this), id);
 	}
 	
 	virtual const Char* _primary_interface () const
