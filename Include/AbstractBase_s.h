@@ -17,11 +17,11 @@ public:
 	static const typename Bridge <AbstractBase>::EPV epv_;
 
 protected:
-	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
+	static Bridge <Interface>* __query_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
 	{
 		Bridge <Interface>* ret = nullptr;
 		try {
-			ret = S::_servant (base)._find_interface (id);
+			ret = S::_servant (base)._query_interface (id);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
@@ -55,7 +55,7 @@ const Bridge <AbstractBase>::EPV Skeleton <S, AbstractBase>::epv_ = {
 		&S::template __release <AbstractBase>
 	},
 	{	// epv
-		&S::__find_interface
+		&S::__query_interface
 	}
 };
 

@@ -52,7 +52,7 @@ public:
 		return RefCountBase::_refcount_value ();
 	}
 
-	virtual Interface_ptr _find_interface (const Char* id) = 0;
+	virtual Interface_ptr _query_interface (const Char* id) = 0;
 	virtual const Char* _primary_interface () const = 0;
 
 protected:
@@ -131,7 +131,7 @@ class ImplementationPOA :
 	public InterfaceImpl <ServantPOA <Primary>, Primary>
 {
 public:
-	virtual Interface_ptr _find_interface (const Char* id)
+	virtual Interface_ptr _query_interface (const Char* id)
 	{
 		return FindInterface <Primary>::find (*this, id);
 	}

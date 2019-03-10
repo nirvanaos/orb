@@ -19,7 +19,7 @@ public:
 		interface_id_ (interface_id)
 	{}
 
-	static Bridge <Interface>* __find_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
+	static Bridge <Interface>* __query_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
 	{
 		return nullptr;
 	}
@@ -34,7 +34,7 @@ public:
 	static Boolean __is_a (Bridge <ServantBase>* obj, const Char* type_id, EnvironmentBridge* env)
 	{
 		AbstractBase_ptr base = _implementation (obj).abstract_base_;
-		Bridge <Interface>* itf = (base->_epv ().epv.find_interface) (base, type_id, env);
+		Bridge <Interface>* itf = (base->_epv ().epv.query_interface) (base, type_id, env);
 		if (itf) {
 			(itf->_epv ().release) (itf);
 			return true;

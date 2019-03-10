@@ -174,7 +174,7 @@ public:
 
 inline Object_ptr AbstractBase::_to_object ()
 {
-	return _find_interface <Object> ();
+	return _query_interface <Object> ();
 }
 
 namespace Nirvana {
@@ -192,7 +192,7 @@ class ClientInterface :
 public:
 	static T_ptr <I> _narrow (Object_ptr obj)
 	{
-		return obj->_find_interface <I> ();
+		return obj->_query_interface <I> ();
 	}
 };
 

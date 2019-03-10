@@ -35,7 +35,7 @@ public:
 
 		struct
 		{
-			Bridge <Interface>* (*find_interface) (Bridge <AbstractBase>*, const Char*, EnvironmentBridge*);
+			Bridge <Interface>* (*query_interface) (Bridge <AbstractBase>*, const Char*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -81,21 +81,21 @@ class Client <T, AbstractBase> :
 protected:
 	template <class I> friend class ClientInterface; // TODO: Does it really need?
 
-	Bridge <Interface>* _find_interface (const Char* type_id);
+	Bridge <Interface>* _query_interface (const Char* type_id);
 
 	template <class I>
-	T_ptr <I> _find_interface ()
+	T_ptr <I> _query_interface ()
 	{
-		return static_cast <I*> (_find_interface (Bridge <I>::interface_id_));
+		return static_cast <I*> (_query_interface (Bridge <I>::interface_id_));
 	}
 };
 
 template <class T>
-Bridge <Interface>* Client <T, AbstractBase>::_find_interface (const Char* type_id)
+Bridge <Interface>* Client <T, AbstractBase>::_query_interface (const Char* type_id)
 {
 	Environment env;
 	Bridge <AbstractBase>& _b (*this);
-	Bridge <Interface>* ret = (_b._epv ().epv.find_interface) (&_b, type_id, &env);
+	Bridge <Interface>* ret = (_b._epv ().epv.query_interface) (&_b, type_id, &env);
 	env.check ();
 	return ret;
 }
@@ -132,7 +132,7 @@ class ClientInterfacePseudo :
 public:
 	static T_ptr <I> _narrow (AbstractBase_ptr obj)
 	{
-		return obj->_find_interface <I> ();
+		return obj->_query_interface <I> ();
 	}
 };
 

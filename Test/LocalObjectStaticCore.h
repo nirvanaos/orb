@@ -31,7 +31,7 @@ public:
 
 	static Boolean _is_a (const Char* type_id)
 	{
-		Bridge <Interface>* itf = AbstractBaseStatic <S, Primary>::_find_interface (type_id);
+		Bridge <Interface>* itf = AbstractBaseStatic <S, Primary>::_query_interface (type_id);
 		if (itf) {
 			(itf->_epv ().release) (itf);
 			return true;

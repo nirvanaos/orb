@@ -110,7 +110,7 @@ class AbstractBaseStatic :
 	public InterfaceStatic <S, AbstractBase>
 {
 public:
-	static Interface_ptr _find_interface (const Char* id)
+	static Interface_ptr _query_interface (const Char* id)
 	{
 		return FindInterface <Primary>::find (*(S*)nullptr, id);
 	}

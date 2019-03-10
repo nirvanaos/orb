@@ -153,7 +153,7 @@ class AbstractBaseImpl :
 	public InterfaceImpl <S, AbstractBase>
 {
 public:
-	Interface_ptr _find_interface (const Char* id)
+	Interface_ptr _query_interface (const Char* id)
 	{
 		return FindInterface <Primary>::find (static_cast <S&> (*this), id);
 	}
