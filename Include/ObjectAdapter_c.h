@@ -52,11 +52,11 @@ template <class T>
 class ClientBase <T, ObjectAdapter>
 {
 public:
-	operator Object& ()
+	operator ObjectAdapter& ()
 	{
 		Environment _env;
 		T& t = static_cast <T&> (*this);
-		Bridge <Object>* _ret = (t._epv ().base.CORBA_Nirvana_ObjectAdapter) (&t, Bridge <ObjectAdapter>::interface_id_, &_env);
+		Bridge <ObjectAdapter>* _ret = (t._epv ().base.CORBA_Nirvana_ObjectAdapter) (&t, Bridge <ObjectAdapter>::interface_id_, &_env);
 		_env.check ();
 		if (!_ret)
 			throw MARSHAL ();
