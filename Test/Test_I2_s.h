@@ -73,26 +73,9 @@ namespace Nirvana {
 
 template <>
 class ServantPOA < ::Test::I2> :
-	public virtual ServantPOA <ServantBase>,
-	public InterfaceImpl <ServantPOA < ::Test::I2>, ::Test::I2>
+	public ImplementationPOA < ::Test::I2>
 {
 public:
-	ServantPOA ()
-	{
-		_final_construct (Bridge < ::Test::I2>::interface_id_);
-	}
-
-	T_ptr < ::Test::I2> _this ()
-	{
-		_activate ();
-		return this;
-	}
-
-	virtual Interface_ptr _find_interface (const Char* id)
-	{
-		return FindInterface < ::Test::I2>::find (*this, id);
-	}
-
 	virtual Long op2 (Long p1) = 0;
 };
 

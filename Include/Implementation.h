@@ -235,7 +235,7 @@ protected:
 	T_ptr <Primary> _this ()
 	{
 		_implicitly_activate ();
-		return static_cast <Primary*> (static_cast <Bridge <Primary>*> (static_cast <S*> (this)));
+		return static_cast <S*> (this);
 	}
 };
 

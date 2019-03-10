@@ -106,6 +106,12 @@ public:
 	{
 		return FindInterface <Primary>::find (*this, id);
 	}
+
+	T_ptr <Primary> _this ()
+	{
+		_implicitly_activate ();
+		return this;
+	}
 };
 
 }
