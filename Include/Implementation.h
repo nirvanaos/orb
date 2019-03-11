@@ -146,18 +146,12 @@ public:
 
 //! Standard implementation of `CORBA::AbstractBase'.
  
-template <class S, class Primary>
+template <class S>
 class AbstractBaseImpl :
 	public ServantTraits <S>,
 	public LifeCycleRefCnt <S>,
 	public InterfaceImpl <S, AbstractBase>
-{
-public:
-	Interface_ptr _query_interface (const Char* id)
-	{
-		return Skeleton <S, Primary>::_find_interface (static_cast <S&> (*this), id);
-	}
-};
+{};
 
 //! Standard implementation of ServantBase.
 
@@ -228,7 +222,7 @@ protected:
 //! \tparam Primary Primary interface.
 template <class S, class Primary>
 class ServantBaseImpl :
-	public AbstractBaseImpl <S, Primary>,
+	public AbstractBaseImpl <S>,
 	public ServantBaseLinks,
 	public Skeleton <S, ServantBase>
 {
@@ -299,7 +293,7 @@ private:
 //! \tparam Primary Primary interface.
 template <class S, class Primary>
 class LocalObjectImpl :
-	public AbstractBaseImpl <S, Primary>,
+	public AbstractBaseImpl <S>,
 	public LocalObjectLinks,
 	public Skeleton <S, Object>
 {
@@ -342,10 +336,16 @@ protected:
 
 template <class S, class Primary, class ... Bases>
 class ImplementationPseudo :
-	public AbstractBaseImpl <S, Primary>,
+	public AbstractBaseImpl <S>,
 	public InterfaceImpl <S, Bases>...,
 	public InterfaceImpl <S, Primary>
 {
+public:
+	Interface_ptr _query_interface (const Char* id)
+	{
+		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases...>::find (static_cast <S&> (*this), id));
+	}
+
 protected:
 	ImplementationPseudo ()
 	{}
@@ -365,8 +365,31 @@ class Implementation :
 	public InterfaceImpl <S, Bases>...,
 	public InterfaceImpl <S, Primary>
 {
+public:
+	Interface_ptr _query_interface (const Char* id)
+	{
+		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases..., Object>::find (static_cast <S&> (*this), id));
+	}
+
 protected:
 	Implementation ()
+	{}
+};
+
+template <class S, class Primary, class ... Bases>
+class ImplementationLocal :
+	public LocalObjectImpl <S, Primary>,
+	public InterfaceImpl <S, Bases>...,
+	public InterfaceImpl <S, Primary>
+{
+public:
+	Interface_ptr _query_interface (const Char* id)
+	{
+		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases..., Object>::find (static_cast <S&> (*this), id));
+	}
+
+protected:
+	ImplementationLocal ()
 	{}
 };
 
