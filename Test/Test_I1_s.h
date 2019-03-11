@@ -76,7 +76,7 @@ namespace Nirvana {
 
 template <>
 class ServantPOA < ::Test::I1> :
-	public ImplementationPOA < ::Test::I1>
+	public ImplementationPOA < ::Test::I1, ServantBase>
 {
 public:
 	virtual Long op1 (Long p1) = 0;

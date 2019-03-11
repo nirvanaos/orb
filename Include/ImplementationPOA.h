@@ -52,11 +52,18 @@ public:
 		return RefCountBase::_refcount_value ();
 	}
 
-	virtual Interface_ptr _query_interface (const Char* id) = 0;
+	virtual Interface_ptr _query_interface (const Char* id)
+	{
+		return Interface_ptr::nil ();
+	}
+
 	virtual const Char* _primary_interface () const = 0;
 
 protected:
 	ServantPOA ()
+	{}
+
+	virtual void _implicitly_activate ()
 	{}
 };
 
@@ -85,6 +92,8 @@ public:
 		return ServantBaseLinks::operator ServantLinks_ptr ();
 	}
 
+	virtual Interface_ptr _query_interface (const Char* id);
+
 	// ServantBase operations
 
 	virtual ::PortableServer::POA_ptr _default_POA ()
@@ -112,7 +121,7 @@ protected:
 		ServantBaseLinks (Skeleton <ServantPOA <ServantBase>, ServantBase>::epv_)
 	{}
 
-	void _implicitly_activate ();
+	virtual void _implicitly_activate ();
 
 private:
 	void _check_links ()
@@ -124,16 +133,64 @@ private:
 	void _final_construct ();
 };
 
+struct InterfaceEntryPOA
+{
+	InterfaceEntry base;
+	Bridge <Interface>* (*find_base) (Bridge <Interface>* servant, const Char*);
+
+	static Bridge <Interface>* find (const InterfaceEntryPOA* begin, const InterfaceEntryPOA* end, void* servant, const Char* id);
+};
+
+template <class Primary, class ... I>
+class InterfaceFinderPOA
+{
+	template <class Itf>
+	static Bridge <Interface>* cast (void* servant)
+	{
+		return &static_cast <Bridge <Itf>&> (*reinterpret_cast <ServantPOA <Primary>*> (servant));
+	}
+
+	template <class Itf>
+	static Bridge <Interface>* find_base (Bridge <Interface>* bridge, const Char* id)
+	{
+		return static_cast <ServantPOA <Itf>&> (static_cast <Bridge <Itf>&> (*bridge)).ServantPOA <Itf>::_query_interface (id);
+	}
+
+	template <>
+	static Bridge <Interface>* find_base <Primary> (Bridge <Interface>* bridge, const Char* id)
+	{
+		return nullptr;
+	}
+
+	template <>
+	static Bridge <Interface>* find_base <Object> (Bridge <Interface>* bridge, const Char* id)
+	{
+		return nullptr;
+	}
+
+public:
+	static Bridge <Interface>* find (ServantPOA <Primary>& servant, const Char* id)
+	{
+		if (RepositoryId::compatible (Bridge <Primary>::interface_id_, id))
+			return Interface::_duplicate (&static_cast <Bridge <Primary>&> (servant));
+
+		static const InterfaceEntryPOA table [] = {
+			{ { Bridge <I>::interface_id_, cast <I> }, find_base <I> }...,
+		};
+
+		return InterfaceEntryPOA::find (table, table + sizeof (table) / sizeof (*table), &servant, id);
+	}
+};
+
 template <class Primary, class ... Bases>
 class ImplementationPOA :
-	public virtual ServantPOA <ServantBase>,
 	public virtual ServantPOA <Bases>...,
 	public InterfaceImpl <ServantPOA <Primary>, Primary>
 {
 public:
 	virtual Interface_ptr _query_interface (const Char* id)
 	{
-		return InterfaceImpl <ServantPOA <Primary>, Primary>::_find_interface (static_cast <ServantPOA <Primary>&> (*this), id);
+		return InterfaceFinderPOA <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
 	}
 	
 	virtual const Char* _primary_interface () const
@@ -143,7 +200,7 @@ public:
 
 	T_ptr <Primary> _this ()
 	{
-		_implicitly_activate ();
+		this->_implicitly_activate ();
 		return this;
 	}
 

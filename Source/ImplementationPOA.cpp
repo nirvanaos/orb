@@ -20,5 +20,24 @@ ServantPOA <ServantBase>::operator Bridge <Object>& ()
 	return ServantBaseLinks::operator Bridge <Object>& ();
 }
 
+Interface_ptr ServantPOA <ServantBase>::_query_interface (const Char* id)
+{
+	return Interface::_duplicate (FindInterface <Object>::find (*this, id));
+}
+
+Bridge <Interface>* InterfaceEntryPOA::find (const InterfaceEntryPOA* begin, const InterfaceEntryPOA* end, void* servant, const Char* id) 
+{
+	for (const InterfaceEntryPOA* p = begin; p != end; ++p) {
+		if (RepositoryId::compatible (p->base.interface_id, id))
+			return Interface::_duplicate ((p->base.cast) (servant));
+	}
+	for (const InterfaceEntryPOA* p = begin; p != end; ++p) {
+		Bridge <Interface>* f = (p->find_base) ((p->base.cast) (servant), id);
+		if (f)
+			return f;
+	}
+	return nullptr;
+}
+
 }
 }

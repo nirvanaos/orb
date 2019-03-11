@@ -41,11 +41,10 @@ struct InterfaceEntry
 template <class S, class ... I>
 class InterfaceFinder
 {
-	template <class I>
+	template <class Itf>
 	static Bridge <Interface>* cast (void* servant)
 	{
-		S& s = *reinterpret_cast <S*> (servant);
-		return &static_cast <Bridge <I>&> (s);
+		return &static_cast <Bridge <Itf>&> (*reinterpret_cast <S*> (servant));
 	}
 
 public:
@@ -56,6 +55,17 @@ public:
 		};
 
 		return InterfaceEntry::find (table, table + sizeof (table) / sizeof (*table), &servant, id);
+	}
+};
+
+template <class ... I>
+class FindInterface
+{
+public:
+	template <class S>
+	static Bridge <Interface>* find (S& servant, const Char* id)
+	{
+		return InterfaceFinder <S, I...>::find (servant, id);
 	}
 };
 
