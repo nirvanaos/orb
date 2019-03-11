@@ -59,7 +59,7 @@ namespace Nirvana {
 
 template <>
 class ServantPOA < ::Test::I2> :
-	public ImplementationPOA < ::Test::I2, ServantBase>
+	public ImplementationPOA < ::Test::I2, ::CORBA::Object>
 {
 public:
 	virtual Long op2 (Long p1) = 0;
