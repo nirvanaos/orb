@@ -135,8 +135,7 @@ private:
 
 struct InterfaceEntryPOA
 {
-	InterfaceEntry base;
-	Bridge <Interface>* (*find_base) (Bridge <Interface>* servant, const Char*);
+	Bridge <Interface>* (*find_base) (void* servant, const Char*);
 
 	static Bridge <Interface>* find (const InterfaceEntryPOA* begin, const InterfaceEntryPOA* end, void* servant, const Char* id);
 };
@@ -151,20 +150,15 @@ class InterfaceFinderPOA
 	}
 
 	template <class Itf>
-	static Bridge <Interface>* find_base (Bridge <Interface>* bridge, const Char* id)
+	static Bridge <Interface>* find_base (void* servant, const Char* id)
 	{
-		return static_cast <ServantPOA <Itf>&> (static_cast <Bridge <Itf>&> (*bridge)).ServantPOA <Itf>::_query_interface (id);
+		return static_cast <ServantPOA <Itf>&> (*reinterpret_cast <ServantPOA <Primary>*> (servant)).ServantPOA <Itf>::_query_interface (id);
 	}
 
 	template <>
-	static Bridge <Interface>* find_base <Primary> (Bridge <Interface>* bridge, const Char* id)
+	static Bridge <Interface>* find_base <Primary> (void* servant, const Char* id)
 	{
-		return nullptr;
-	}
-
-	template <>
-	static Bridge <Interface>* find_base <Object> (Bridge <Interface>* bridge, const Char* id)
-	{
+		assert (false);
 		return nullptr;
 	}
 
@@ -175,10 +169,22 @@ public:
 			return Interface::_duplicate (&static_cast <Bridge <Primary>&> (servant));
 
 		static const InterfaceEntryPOA table [] = {
-			{ { Bridge <I>::interface_id_, cast <I> }, find_base <I> }...,
+			{ find_base <I> }...,
 		};
 
 		return InterfaceEntryPOA::find (table, table + sizeof (table) / sizeof (*table), &servant, id);
+	}
+};
+
+template <class Primary>
+class InterfaceFinderPOA <Primary>
+{
+public:
+	static Bridge <Interface>* find (ServantPOA <Primary>& servant, const Char* id)
+	{
+		if (RepositoryId::compatible (Bridge <Primary>::interface_id_, id))
+			return Interface::_duplicate (&static_cast <Bridge <Primary>&> (servant));
+		return nullptr;
 	}
 };
 
