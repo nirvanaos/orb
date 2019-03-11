@@ -17,10 +17,11 @@ void ServantBaseLinks::_implicitly_activate ()
 	}
 }
 
-LocalObjectLinks::LocalObjectLinks (const EPV& epv, const Char* primary_id) :
-	ServantBridge <Object> (epv),
-	object_ (g_object_adapter->create_local_object (Object_ptr (this), primary_id))
-{}
+void LocalObjectLinks::_final_construct (const Char* primary_id)
+{
+	assert (!object_);
+	object_ = g_object_adapter->create_local_object (Object_ptr (this), primary_id);
+}
 
 }
 }

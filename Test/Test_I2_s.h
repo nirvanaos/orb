@@ -46,7 +46,7 @@ const Bridge < ::Test::I2>::EPV Skeleton <S, ::Test::I2>::epv_ = {
 
 template <class S>
 class Servant <S, ::Test::I2> :
-	public Implementation <S, ::Test::I2>
+	public Implementation <S, ::Test::I2, ::CORBA::Object>
 {};
 
 }
@@ -81,7 +81,7 @@ namespace Nirvana {
 
 template <class S>
 class ServantStatic <S, ::Test::I2> :
-	public ImplementationStatic <S, ::Test::I2>
+	public ImplementationStatic <S, ::Test::I2, ::CORBA::Object>
 {};
 
 }

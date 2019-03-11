@@ -9,11 +9,14 @@ namespace CORBA {
 namespace Nirvana {
 
 class POACore :
-	public LocalObjectStaticCore <POACore, ::PortableServer::POA>,
-	public InterfaceStatic <POACore, ::PortableServer::POA>
+	public ServantTraitsStatic <POACore>,
+	public LifeCycleStatic <>,
+	public LocalObjectStaticCore <POACore>,
+	public InterfaceStatic <POACore, ::PortableServer::POA>,
+	public PrimaryInterface < ::PortableServer::POA>
 {
 public:
-	Interface_ptr _query_interface (const Char* id)
+	static Interface_ptr _query_interface (const Char* id)
 	{
 		return InterfaceFinder <POACore, ::PortableServer::POA, Object>::find (*(POACore*)nullptr, id);
 	}

@@ -12,22 +12,22 @@ namespace Nirvana {
 
 #ifndef TEST_NO_STATIC
 
-template <> ServantLinks_ptr ServantBaseStatic <TestORB::StaticI1, Test::I1>::servant_links_;
-template <> ServantLinks_ptr ServantBaseStatic <TestORB::StaticI3, Test::I3>::servant_links_;
+template <> ServantLinks_ptr InterfaceStatic <TestORB::StaticI1, ServantBase>::servant_links_;
+template <> ServantLinks_ptr InterfaceStatic <TestORB::StaticI3, ServantBase>::servant_links_;
 
 class ModuleLoader
 {
 public:
 	ModuleLoader ()
 	{
-		load_static <TestORB::StaticI1, Test::I1> ();
-		load_static <TestORB::StaticI3, Test::I3> ();
+		load_static <TestORB::StaticI1> ();
+		load_static <TestORB::StaticI3> ();
 	}
 
 	~ModuleLoader ()
 	{
-		unload_static <TestORB::StaticI1, Test::I1> ();
-		unload_static <TestORB::StaticI3, Test::I3> ();
+		unload_static <TestORB::StaticI1> ();
+		unload_static <TestORB::StaticI3> ();
 	}
 
 private:
@@ -41,16 +41,16 @@ private:
 		release (sl);
 	}
 
-	template <class S, class I>
+	template <class S>
 	void load_static ()
 	{
-		load_static (ServantBaseStatic <S, I>::object_info_, ServantBaseStatic <S, I>::servant_links_);
+		load_static (InterfaceStatic <S, ServantBase>::object_info_, InterfaceStatic <S, ServantBase>::servant_links_);
 	}
 
-	template <class S, class I>
+	template <class S>
 	void unload_static ()
 	{
-		unload_static (ServantBaseStatic <S, I>::servant_links_);
+		unload_static (InterfaceStatic <S, ServantBase>::servant_links_);
 	}
 };
 

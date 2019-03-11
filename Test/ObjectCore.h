@@ -11,7 +11,7 @@ namespace Nirvana {
 
 class ObjectCore :
 	public ServantTraits <ObjectCore>,
-	public InterfaceImpl <ObjectCore, Object>
+	public InterfaceImplBase <ObjectCore, Object>
 {
 public:
 	ObjectCore (ServantBase_ptr servant) :

@@ -6,17 +6,12 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <class S, class Primary>
+template <class S>
 class LocalObjectStaticCore :
-	public AbstractBaseStatic <S>,
-	public InterfaceStatic <S, Object>
+	public InterfaceStatic <S, AbstractBase>,
+	public InterfaceStaticBase <S, Object>
 {
 public:
-	static T_ptr <Primary> _this ()
-	{
-		return InterfaceStatic <S, Primary>::_get_ptr ();
-	}
-
 	// Object operations
 
 	static ImplementationDef_ptr _get_implementation ()
@@ -31,7 +26,7 @@ public:
 
 	static Boolean _is_a (const Char* type_id)
 	{
-		Bridge <Interface>* itf = AbstractBaseStatic <S>::_get_ptr ()->_query_interface (type_id);
+		Bridge <Interface>* itf = S::_query_interface (type_id);
 		if (itf) {
 			(itf->_epv ().release) (itf);
 			return true;

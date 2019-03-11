@@ -61,8 +61,23 @@ public:
 	}
 };
 
+template <class ... Bases>
+class LifeCycleStatic : public Bases...
+{
+public:
+	template <class I>
+	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge*)
+	{
+		return itf;
+	}
+
+	template <class I>
+	static void __release (Bridge <Interface>*)
+	{}
+};
+
 template <class S, class I>
-class InterfaceStatic :
+class InterfaceStaticBase :
 	public Skeleton <S, I>
 {
 public:
@@ -86,49 +101,21 @@ protected:
 };
 
 template <class S, class I>
-const typename Bridge <I>::EPV* InterfaceStatic <S, I>::bridge_ = &InterfaceStatic <S, I>::epv_;
+const typename Bridge <I>::EPV* InterfaceStaticBase <S, I>::bridge_ = &InterfaceStaticBase <S, I>::epv_;
 
-class LifeCycleStatic
-{
-public:
-	template <class I>
-	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge*)
-	{
-		return itf;
-	}
-
-	template <class I>
-	static void __release (Bridge <Interface>*)
-	{}
-};
-
-//! Static implementation of CORBA::AbstractBase
-template <class S>
-class AbstractBaseStatic :
-	public ServantTraitsStatic <S>,
-	public LifeCycleStatic,
-	public InterfaceStatic <S, AbstractBase>
+template <class S, class I>
+class InterfaceStatic :
+	public InterfaceStaticBase <S, I>
 {};
 
 //! Static implementation of ServantBase
 //! \tparam S Servant class.
-//! \tparam Primary Primary interface.
-template <class S, class Primary>
-class ServantBaseStatic :
-	public AbstractBaseStatic <S>,
-	public InterfaceStatic <S, ServantBase>
+template <class S>
+class InterfaceStatic <S, ServantBase> :
+	public InterfaceStatic <S, AbstractBase>,
+	public InterfaceStaticBase <S, ServantBase>
 {
 public:
-	operator Bridge <Object>& () const
-	{
-		return *ServantLinks_ptr (servant_links_)->object ();
-	}
-
-	static T_ptr <Primary> _this ()
-	{
-		return InterfaceStatic <S, Primary>::_get_ptr ();
-	}
-
 	// ServantBase operations
 
 	static ::PortableServer::POA_ptr _default_POA ()
@@ -155,23 +142,29 @@ public:
 	static ServantLinks_ptr servant_links_;
 };
 
-template <class S, class Primary>
-const OLF_ObjectInfo ServantBaseStatic <S, Primary>::object_info_ = {InterfaceStatic <S, ServantBase>::_bridge (), Bridge <Primary>::interface_id_};
+template <class S>
+const OLF_ObjectInfo InterfaceStatic <S, ServantBase>::object_info_ = {InterfaceStaticBase <S, ServantBase>::_bridge (), S::primary_interface_};
+
+template <class S>
+class InterfaceStatic <S, Object> :
+	public InterfaceStatic <S, ServantBase>
+{
+public:
+	operator Bridge <Object>& () const
+	{
+		return *ServantLinks_ptr (InterfaceStatic <S, ServantBase>::servant_links_)->object ();
+	}
+};
 
 //! Static implementation of LocalObject
 //! \tparam S Servant class.
 //! \tparam Primary Primary interface.
-template <class S, class Primary>
-class LocalObjectStatic :
-	public AbstractBaseStatic <S>,
-	public InterfaceStatic <S, Object>
+template <class S>
+class InterfaceStatic <S, LocalObject> :
+	public InterfaceStatic <S, AbstractBase>,
+	public InterfaceStaticBase <S, Object>
 {
 public:
-	static T_ptr <Primary> _this ()
-	{
-		return InterfaceStatic <S, Primary>::_get_ptr ();
-	}
-
 	// Object operations
 
 	static ImplementationDef_ptr _get_implementation ()
@@ -208,40 +201,28 @@ public:
 	static Object_ptr object_;
 };
 
-template <class S, class Primary>
-const OLF_LocalObjectInfo LocalObjectStatic <S, Primary>::object_info_ = {InterfaceStatic <S, AbstractBase>::_bridge (), Bridge <Primary>::interface_id_};
-
-template <class S, class I>
-class ImplementationSingleStatic :
-	public ServantTraitsStatic <S>,
-	public LifeCycleStatic,
-	public InterfaceStatic <S, I>
-{};
+template <class S>
+const OLF_LocalObjectInfo InterfaceStatic <S, LocalObject>::object_info_ = {InterfaceStatic <S, AbstractBase>::_bridge (), S::primary_interface_};
 
 template <class S, class Primary, class ... Bases>
-class ImplementationPseudoStatic :
-	public AbstractBaseStatic <S>,
+class ImplementationStatic :
+	public ServantTraitsStatic <S>,
+	public LifeCycleStatic <>,
 	public InterfaceStatic <S, Bases>...,
-	public InterfaceStatic <S, Primary>
+	public InterfaceStatic <S, Primary>,
+	public PrimaryInterface <Primary>
 {
 public:
 	Interface_ptr _query_interface (const Char* id)
 	{
 		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases...>::find (*(S*)nullptr, id));
 	}
-};
 
-template <class S, class Primary, class ... Bases>
-class ImplementationStatic :
-	public ServantBaseStatic <S, Primary>,
-	public InterfaceStatic <S, Bases>...,
-	public InterfaceStatic <S, Primary>
-{
-public:
-	Interface_ptr _query_interface (const Char* id)
+	static T_ptr <Primary> _this ()
 	{
-		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases..., Object>::find (*(S*)nullptr, id));
+		return InterfaceStatic <S, Primary>::_get_ptr ();
 	}
+
 };
 
 }

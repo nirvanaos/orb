@@ -20,7 +20,14 @@ public:
 		_check_pointer (bridge, Skeleton <ServantPOA <I>, I>::epv_.interface);
 		return static_cast <ServantPOA <I>&> (*bridge);
 	}
-
+/*
+	template <>
+	static ServantPOA <LocalObject>& _servant (Bridge <Object>* bridge)
+	{
+		_check_pointer (bridge, Skeleton <ServantPOA <LocalObject>, Object>::epv_.interface);
+		return static_cast <ServantPOA <LocalObject>&> (*bridge);
+	}
+*/
 	template <class I>
 	static ServantPOA <I>& _implementation (Bridge <I>* bridge)
 	{
@@ -39,12 +46,6 @@ template <class Primary, class ... I>
 class InterfaceFinderPOA
 {
 	template <class Itf>
-	static Bridge <Interface>* cast (void* servant)
-	{
-		return &static_cast <Bridge <Itf>&> (*reinterpret_cast <ServantPOA <Primary>*> (servant));
-	}
-
-	template <class Itf>
 	static Bridge <Interface>* find_base (void* servant, const Char* id)
 	{
 		return static_cast <ServantPOA <Itf>&> (*reinterpret_cast <ServantPOA <Primary>*> (servant)).ServantPOA <Itf>::_query_interface (id);
@@ -52,7 +53,7 @@ class InterfaceFinderPOA
 
 	template <>
 	static Bridge <Interface>* find_base <Primary> (void* servant, const Char* id)
-	{
+	{ // Prevent erroneous infinite recusion when primary interface is specified more than once.
 		assert (false);
 		return nullptr;
 	}
@@ -87,7 +88,7 @@ public:
 
 template <>
 class ServantPOA <AbstractBase> :
-	public InterfaceImpl <ServantPOA <AbstractBase>, AbstractBase>,
+	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
 	public ServantTraitsPOA,
 	public LifeCycleRefCnt <ServantPOA <AbstractBase> >
 {
@@ -107,7 +108,7 @@ public:
 		return RefCountBase::_refcount_value ();
 	}
 
-	virtual Interface_ptr _query_interface (const Char* id) = 0;
+	virtual Interface_ptr _query_interface (const Char* id);
 
 	virtual const Char* _primary_interface () const = 0;
 
@@ -118,8 +119,6 @@ protected:
 	virtual void _implicitly_activate ()
 	{}
 };
-
-typedef ServantPOA <AbstractBase> AbstractBasePOA;
 
 // Virtual implementation of ServantBase
 
@@ -192,6 +191,20 @@ public:
 	virtual Interface_ptr _query_interface (const Char* id);
 };
 
+/*
+template <>
+class ServantPOA <LocalObject> :
+	public virtual ServantPOA <AbstractBase>,
+	public LocalObjectLinks,
+	public Skeleton <ServantPOA <LocalObject>, Object>
+{
+public:
+protected:
+	ServantPOA () :
+		LocalObjectLinks (Skeleton <ServantPOA <LocalObject>, Object>::epv_)
+	{}
+};
+*/
 template <class Primary, class ... Bases>
 class ImplementationPOA :
 	public virtual ServantPOA <Bases>...,

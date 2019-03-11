@@ -56,24 +56,10 @@ public:
 	}
 };
 
-//! Standard interface implementation.
-//! \tparam S Servant class implementing operations. Must derive from this mix-in.
-//! \tparam I Interface.
-template <class S, class I>
-class InterfaceImpl :
-	public ServantBridge <I>,
-	public Skeleton <S, I>
-{
-protected:
-	InterfaceImpl () :
-		ServantBridge <I> (Skeleton <S, I>::epv_)
-	{}
-};
-
 //! Dynamic object life cycle.
 //! \tparam S Class implementing `_duplicate()' and `_release()' operations.
-template <class S>
-class LifeCycleDynamic
+template <class S, class ... Bases>
+class LifeCycleDynamic : public Bases...
 {
 public:
 	template <class I>
@@ -100,9 +86,9 @@ public:
 };
 
 //! Life cycle with reference counting.
-template <class S>
+template <class S, class ... Bases>
 class LifeCycleRefCnt :
-	public LifeCycleDynamic <S>,
+	public LifeCycleDynamic <S, Bases...>,
 	public RefCountBase
 {
 public:
@@ -123,8 +109,8 @@ public:
 };
 
 //! Non copyable reference.
-template <class S>
-class LifeCycleNoCopy
+template <class S, class ... Bases>
+class LifeCycleNoCopy : public Bases...
 {
 public:
 	template <class I>
@@ -144,14 +130,35 @@ public:
 	}
 };
 
-//! Standard implementation of `CORBA::AbstractBase'.
- 
-template <class S>
-class AbstractBaseImpl :
-	public ServantTraits <S>,
-	public LifeCycleRefCnt <S>,
-	public InterfaceImpl <S, AbstractBase>
+//! Standard interface implementation.
+//! \tparam S Servant class implementing operations. Must derive from this mix-in.
+//! \tparam I Interface.
+template <class S, class I>
+class InterfaceImplBase :
+	public ServantBridge <I>,
+	public Skeleton <S, I>
+{
+protected:
+	InterfaceImplBase () :
+		ServantBridge <I> (Skeleton <S, I>::epv_)
+	{}
+};
+
+template <class S, class I>
+class InterfaceImpl :
+	public InterfaceImplBase <S, I>
 {};
+
+//! Standard implementation of AbstractBase.
+
+template <class S>
+class InterfaceImpl <S, AbstractBase> :
+	public InterfaceImplBase <S, AbstractBase>
+{
+public:
+	void _implicitly_activate ()
+	{}
+};
 
 //! Standard implementation of ServantBase.
 
@@ -159,12 +166,6 @@ class ServantBaseLinks :
 	public ServantBridge <ServantBase>
 {
 public:
-	operator Bridge <Object>& ()
-	{
-		_implicitly_activate ();
-		return *servant_links_->object ();
-	}
-
 	operator ServantLinks_ptr () const
 	{
 		return servant_links_;
@@ -218,25 +219,29 @@ protected:
 	ServantLinks_ptr servant_links_;
 };
 
-//! \tparam S Servant class implementing operations.
-//! \tparam Primary Primary interface.
-template <class S, class Primary>
-class ServantBaseImpl :
-	public AbstractBaseImpl <S>,
+template <class S>
+class InterfaceImpl <S, ServantBase> :
+	public InterfaceImplBase <S, AbstractBase>,
 	public ServantBaseLinks,
 	public Skeleton <S, ServantBase>
 {
-public:
-	T_ptr <Primary> _this ()
-	{
-		_implicitly_activate ();
-		return static_cast <S*> (this);
-	}
-
 protected:
-	ServantBaseImpl () :
-		ServantBaseLinks (Skeleton <S, ServantBase>::epv_, Bridge <Primary>::interface_id_)
+	InterfaceImpl () :
+		ServantBaseLinks (Skeleton <S, ServantBase>::epv_, S::primary_interface_)
 	{}
+};
+
+//! \tparam S Servant class implementing operations.
+template <class S>
+class InterfaceImpl <S, Object> :
+	public InterfaceImpl <S, ServantBase>
+{
+public:
+	operator Bridge <Object>& ()
+	{
+		this->_implicitly_activate ();
+		return *ServantBaseLinks::servant_links_->object ();
+	}
 };
 
 //! Standard implementation of `CORBA::LocalObject'.
@@ -278,7 +283,19 @@ public:
 	}
 
 protected:
-	LocalObjectLinks (const EPV& epv, const Char* primary_id);
+	LocalObjectLinks (const EPV& epv, const Char* primary_id) :
+		ServantBridge <Object> (epv),
+		object_ (Object_ptr::nil ())
+	{
+		_final_construct (primary_id);
+	}
+
+	LocalObjectLinks (const EPV& epv) :
+		ServantBridge <Object> (epv),
+		object_ (Object_ptr::nil ())
+	{}
+
+	void _final_construct (const Char* primary_interface);
 
 	~LocalObjectLinks ()
 	{
@@ -290,22 +307,16 @@ private:
 };
 
 //! \tparam S Servant class implementing operations.
-//! \tparam Primary Primary interface.
-template <class S, class Primary>
-class LocalObjectImpl :
-	public AbstractBaseImpl <S>,
+template <class S>
+class InterfaceImpl <S, LocalObject> :
+	public InterfaceImplBase <S, AbstractBase>,
 	public LocalObjectLinks,
 	public Skeleton <S, Object>
 {
 protected:
-	LocalObjectImpl () :
-		LocalObjectLinks (Skeleton <S, Object>::epv_, Bridge <Primary>::interface_id_)
+	InterfaceImpl () :
+		LocalObjectLinks (Skeleton <S, Object>::epv_, S::primary_interface_)
 	{}
-
-	T_ptr <Primary> _this ()
-	{
-		return static_cast <Primary*> (static_cast <Bridge <Primary>*> (static_cast <S*> (this)));
-	}
 };
 
 //! \class	ImplementationSingle
@@ -326,19 +337,22 @@ protected:
 	{}
 };
 
-//! \class	ImplementationPseudo
+//! \class	Implementation
 //!
-//! \brief	An implementation of pseudo interface derived from AbstractBase.
+//! \brief	An implementation of interface.
 //!
 //! \tparam S Servant class implementing operations.
 //! \tparam	Primary	Primary interface.
 //! \tparam	Bases	 	All base interfaces derived directly or indirectly.
+//! 								If interface derives from Object or LocalObject, don't include AbstractBase in base list.
 
 template <class S, class Primary, class ... Bases>
-class ImplementationPseudo :
-	public AbstractBaseImpl <S>,
+class Implementation :
+	public ServantTraits <S>,
+	public LifeCycleRefCnt <S>,
 	public InterfaceImpl <S, Bases>...,
-	public InterfaceImpl <S, Primary>
+	public InterfaceImpl <S, Primary>,
+	public PrimaryInterface <Primary>
 {
 public:
 	Interface_ptr _query_interface (const Char* id)
@@ -346,50 +360,14 @@ public:
 		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases...>::find (static_cast <S&> (*this), id));
 	}
 
-protected:
-	ImplementationPseudo ()
-	{}
-};
-
-//! \class	Implementation
-//!
-//! \brief	An implementation of interface derived from Object.
-//!
-//! \tparam S Servant class implementing operations.
-//! \tparam	Primary	Primary interface.
-//! \tparam	Bases	 	All base interfaces derived directly or indirectly.
-
-template <class S, class Primary, class ... Bases>
-class Implementation :
-	public ServantBaseImpl <S, Primary>,
-	public InterfaceImpl <S, Bases>...,
-	public InterfaceImpl <S, Primary>
-{
-public:
-	Interface_ptr _query_interface (const Char* id)
+	T_ptr <Primary> _this ()
 	{
-		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases..., Object>::find (static_cast <S&> (*this), id));
+		this->_implicitly_activate ();
+		return this;
 	}
 
 protected:
 	Implementation ()
-	{}
-};
-
-template <class S, class Primary, class ... Bases>
-class ImplementationLocal :
-	public LocalObjectImpl <S, Primary>,
-	public InterfaceImpl <S, Bases>...,
-	public InterfaceImpl <S, Primary>
-{
-public:
-	Interface_ptr _query_interface (const Char* id)
-	{
-		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases..., Object>::find (static_cast <S&> (*this), id));
-	}
-
-protected:
-	ImplementationLocal ()
 	{}
 };
 

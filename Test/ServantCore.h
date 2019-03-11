@@ -9,9 +9,9 @@ namespace Nirvana {
 
 class ServantCore :
 	public ServantTraits <ServantCore>,
-	public InterfaceImpl <ServantCore, AbstractBase>,
-	public InterfaceImpl <ServantCore, ServantBase>,
-	public LifeCycleStatic
+	public InterfaceImplBase <ServantCore, AbstractBase>,
+	public InterfaceImplBase <ServantCore, ServantBase>,
+	public LifeCycleStatic <>
 {
 public:
 	ServantCore (AbstractBase_ptr base, const Char* interface_id) :

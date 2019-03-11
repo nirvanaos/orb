@@ -178,6 +178,11 @@ inline Object_ptr AbstractBase::_to_object ()
 }
 
 namespace Nirvana {
+class LocalObject : public Object
+{};
+}
+
+namespace Nirvana {
 
 //! \class	ClientInterface
 //!

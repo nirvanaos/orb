@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_INTERFACE_S_H_
 #define NIRVANA_ORB_INTERFACE_S_H_
 
-#include "Interface_c.h"
+#include "AbstractBase_c.h"
 #include "RepositoryId.h"
 
 namespace CORBA {
@@ -47,6 +47,12 @@ class InterfaceFinder
 		return &static_cast <Bridge <Itf>&> (*reinterpret_cast <S*> (servant));
 	}
 
+	template <>
+	static Bridge <Interface>* cast <AbstractBase> (void* servant)
+	{
+		return nullptr;
+	}
+
 public:
 	static Bridge <Interface>* find (S& servant, const Char* id)
 	{
@@ -68,6 +74,16 @@ public:
 		return InterfaceFinder <S, I...>::find (servant, id);
 	}
 };
+
+template <class I>
+class PrimaryInterface
+{
+public:
+	static const Char* const primary_interface_;
+};
+
+template <class I>
+const Char* const PrimaryInterface <I>::primary_interface_ = Bridge <I>::interface_id_;
 
 }
 }
