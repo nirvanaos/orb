@@ -13,6 +13,11 @@ class POACore :
 	public InterfaceStatic <POACore, ::PortableServer::POA>
 {
 public:
+	Interface_ptr _query_interface (const Char* id)
+	{
+		return InterfaceFinder <POACore, ::PortableServer::POA, Object>::find (*(POACore*)nullptr, id);
+	}
+
 	const Char* activate_object (Bridge <ServantLinks>* servant)
 	{
 		ServantLinksCore* links = static_cast <ServantLinksCore*> (servant);

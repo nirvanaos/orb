@@ -13,11 +13,6 @@ class Skeleton <S, ::Test::I1>
 public:
 	static const typename Bridge < ::Test::I1>::EPV epv_;
 
-	static Bridge <Interface>* _find_interface (S& servant, const Char* id)
-	{
-		return Interface::_duplicate (InterfaceFinder <S, ::Test::I1, Object>::find (servant, id));
-	}
-
 protected:
 	static Long _op1 (Bridge < ::Test::I1>* _b, Long p1, EnvironmentBridge* _env)
 	{

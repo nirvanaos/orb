@@ -103,25 +103,19 @@ public:
 };
 
 //! Static implementation of CORBA::AbstractBase
-template <class S, class Primary>
+template <class S>
 class AbstractBaseStatic :
 	public ServantTraitsStatic <S>,
 	public LifeCycleStatic,
 	public InterfaceStatic <S, AbstractBase>
-{
-public:
-	static Interface_ptr _query_interface (const Char* id)
-	{
-		return Skeleton <S, Primary>::_find_interface (*(S*)nullptr, id);
-	}
-};
+{};
 
 //! Static implementation of ServantBase
 //! \tparam S Servant class.
 //! \tparam Primary Primary interface.
 template <class S, class Primary>
 class ServantBaseStatic :
-	public AbstractBaseStatic <S, Primary>,
+	public AbstractBaseStatic <S>,
 	public InterfaceStatic <S, ServantBase>
 {
 public:
@@ -169,7 +163,7 @@ const OLF_ObjectInfo ServantBaseStatic <S, Primary>::object_info_ = {InterfaceSt
 //! \tparam Primary Primary interface.
 template <class S, class Primary>
 class LocalObjectStatic :
-	public AbstractBaseStatic <S, Primary>,
+	public AbstractBaseStatic <S>,
 	public InterfaceStatic <S, Object>
 {
 public:
@@ -226,17 +220,29 @@ class ImplementationSingleStatic :
 
 template <class S, class Primary, class ... Bases>
 class ImplementationPseudoStatic :
-	public AbstractBaseStatic <S, Primary>,
+	public AbstractBaseStatic <S>,
 	public InterfaceStatic <S, Bases>...,
 	public InterfaceStatic <S, Primary>
-{};
+{
+public:
+	Interface_ptr _query_interface (const Char* id)
+	{
+		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases...>::find (*(S*)nullptr, id));
+	}
+};
 
 template <class S, class Primary, class ... Bases>
 class ImplementationStatic :
 	public ServantBaseStatic <S, Primary>,
 	public InterfaceStatic <S, Bases>...,
 	public InterfaceStatic <S, Primary>
-{};
+{
+public:
+	Interface_ptr _query_interface (const Char* id)
+	{
+		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases..., Object>::find (*(S*)nullptr, id));
+	}
+};
 
 }
 }

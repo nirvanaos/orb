@@ -78,9 +78,7 @@ template <class T>
 class Client <T, AbstractBase> :
 	public T
 {
-protected:
-	template <class I> friend class ClientInterface; // TODO: Does it really need?
-
+public:
 	Bridge <Interface>* _query_interface (const Char* type_id);
 
 	template <class I>
