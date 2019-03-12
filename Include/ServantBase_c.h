@@ -23,7 +23,7 @@ typedef T_out <ServantBase> ServantBase_out;
 
 template <>
 class Bridge <ServantBase> :
-	public Bridge <Interface>
+	public BridgeMarshal <ServantBase>
 {
 public:
 	struct EPV
@@ -32,14 +32,14 @@ public:
 
 		struct
 		{
-			Bridge <AbstractBase>* (*CORBA_AbstractBase) (Bridge <ServantBase>*, const Char*, EnvironmentBridge*);
+			BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
 		}
 		base;
 
 		struct
 		{
-			ClientBridge <::PortableServer::POA>* (*default_POA) (Bridge <ServantBase>*, EnvironmentBridge*);
-			ClientBridge <InterfaceDef>* (*get_interface) (Bridge <ServantBase>*, EnvironmentBridge*);
+			BridgeMarshal <::PortableServer::POA>* (*default_POA) (Bridge <ServantBase>*, EnvironmentBridge*);
+			BridgeMarshal <InterfaceDef>* (*get_interface) (Bridge <ServantBase>*, EnvironmentBridge*);
 			Boolean (*is_a) (Bridge <ServantBase>*, const Char* type_id, EnvironmentBridge*);
 			Boolean (*non_existent) (Bridge <ServantBase>*, EnvironmentBridge*);
 		}
@@ -55,29 +55,8 @@ public:
 
 protected:
 	Bridge (const EPV& epv) :
-		Bridge <Interface> (epv.interface)
+		BridgeMarshal <ServantBase> (epv.interface)
 	{}
-};
-
-template <class T>
-class ClientBase <T, ServantBase>
-{
-public:
-	operator ServantBase& ()
-	{
-		Environment _env;
-		T& t = static_cast <T&> (*this);
-		Bridge <ServantBase>* _ret = (t._epv ().base.CORBA_Nirvana_ServantBase) (&t, Bridge <ServantBase>::interface_id_, &_env);
-		_env.check ();
-		if (!_ret)
-			throw MARSHAL ();
-		return static_cast <ServantBase&> (*_ret);
-	}
-
-	operator Bridge <ServantBase>& ()
-	{
-		return operator ServantBase& ();
-	}
 };
 
 template <class T>
@@ -134,10 +113,7 @@ Boolean Client <T, ServantBase>::_non_existent ()
 class ServantBase :
 	public ::CORBA::Nirvana::ClientInterfacePseudo <ServantBase>,
 	public ::CORBA::Nirvana::ClientInterfaceBase <ServantBase, ::CORBA::AbstractBase>
-{
-public:
-	typedef ServantBase_ptr _ptr_type;
-};
+{};
 
 }
 }

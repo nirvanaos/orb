@@ -17,7 +17,7 @@ namespace Nirvana {
 
 template <>
 class Bridge < ::Test::I1> :
-	public Bridge <Interface>
+	public BridgeMarshal < ::Test::I1>
 {
 public:
 	struct EPV
@@ -26,7 +26,7 @@ public:
 
 		struct
 		{
-			Bridge <Object>* (*CORBA_Object) (Bridge < ::Test::I1>*, const Char* id, EnvironmentBridge*);
+			BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 		}
 		base;
 
@@ -47,29 +47,8 @@ public:
 
 protected:
 	Bridge (const EPV& epv) :
-		Bridge <Interface> (epv.interface)
+		BridgeMarshal < ::Test::I1> (epv.interface)
 	{}
-};
-
-template <class T>
-class ClientBase <T, ::Test::I1>
-{
-public:
-	operator ::Test::I1& ()
-	{
-		Environment _env;
-		T& t = static_cast <T&> (*this);
-		Bridge < ::Test::I1>* _ret = (t._epv ().base.Test_I1) (&t, Bridge < ::Test::I1>::interface_id_, &_env);
-		_env.check ();
-		if (!_ret)
-			throw MARSHAL ();
-		return static_cast < ::Test::I1&> (*_ret);
-	}
-
-	operator Bridge < ::Test::I1>& ()
-	{
-		return operator ::Test::I1& ();
-	}
 };
 
 template <class T>
@@ -108,10 +87,7 @@ namespace Test {
 class I1 :
 	public CORBA::Nirvana::ClientInterface <I1>,
 	public CORBA::Nirvana::ClientInterfaceBase <I1, ::CORBA::Object>
-{
-public:
-	typedef I1_ptr _ptr_type;
-};
+{};
 
 }
 

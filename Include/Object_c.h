@@ -24,7 +24,7 @@ namespace Nirvana {
 
 template <>
 class Bridge <Object> :
-	public Bridge <Interface>
+	public BridgeMarshal <Object>
 {
 public:
 	struct EPV
@@ -33,17 +33,17 @@ public:
 
 		struct
 		{
-			Bridge <AbstractBase>* (*CORBA_AbstractBase) (Bridge <Object>*, const Char* id, EnvironmentBridge*);
+			BASE_STRUCT_ENTRY(CORBA::AbstractBase, CORBA_AbstractBase)
 		}
 		base;
 
 		struct
 		{
-			ClientBridge <ImplementationDef>* (*get_implementation) (Bridge <Object>*, EnvironmentBridge*);
-			ClientBridge <InterfaceDef>* (*get_interface) (Bridge <Object>*, EnvironmentBridge*);
+			BridgeMarshal <ImplementationDef>* (*get_implementation) (Bridge <Object>*, EnvironmentBridge*);
+			BridgeMarshal <InterfaceDef>* (*get_interface) (Bridge <Object>*, EnvironmentBridge*);
 			Boolean (*is_a) (Bridge <Object>*, const Char* type_id, EnvironmentBridge*);
 			Boolean (*non_existent) (Bridge <Object>*, EnvironmentBridge*);
-			Boolean (*is_equivalent) (Bridge <Object>*, ClientBridge <Object>*, EnvironmentBridge*);
+			Boolean (*is_equivalent) (Bridge <Object>*, BridgeMarshal <Object>*, EnvironmentBridge*);
 			ULong (*hash) (Bridge <Object>*, ULong maximum, EnvironmentBridge*);
 			// TODO: Other Object operations shall be here...
 		}
@@ -61,29 +61,8 @@ protected:
 	friend class CORBA::AbstractBase; // TODO: Does it really need?
 
 	Bridge (const EPV& epv) :
-		Bridge <Interface> (epv.interface)
+		BridgeMarshal <Object> (epv.interface)
 	{}
-};
-
-template <class T>
-class ClientBase <T, Object>
-{
-public:
-	operator Object& ()
-	{
-		Environment _env;
-		T& t = static_cast <T&> (*this);
-		Bridge <Object>* _ret = (t._epv ().base.CORBA_Object) (&t, Bridge <Object>::interface_id_, &_env);
-		_env.check ();
-		if (!_ret)
-			throw MARSHAL ();
-		return static_cast <Object&> (*_ret);
-	}
-
-	operator Bridge <Object>& ()
-	{
-		return operator Object& ();
-	}
 };
 
 template <class T>
@@ -167,10 +146,7 @@ ULong Client <T, Object>::_hash (ULong maximum)
 class Object :
 	public Nirvana::ClientInterfacePrimary <Object>,
 	public Nirvana::ClientInterfaceBase <Object, AbstractBase>
-{
-public:
-	typedef Object_ptr _ptr_type;
-};
+{};
 
 inline Object_ptr AbstractBase::_to_object ()
 {
@@ -180,6 +156,7 @@ inline Object_ptr AbstractBase::_to_object ()
 namespace Nirvana {
 class LocalObject : public Object
 {};
+
 }
 
 namespace Nirvana {

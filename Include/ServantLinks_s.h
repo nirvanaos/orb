@@ -14,7 +14,7 @@ public:
 	static const typename Bridge <ServantLinks>::EPV epv_;
 
 protected:
-	static ClientBridge <ServantBase>* _servant_base (Bridge <ServantLinks>* obj, EnvironmentBridge* env)
+	static BridgeMarshal <ServantBase>* _servant_base (Bridge <ServantLinks>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).servant_base ();
@@ -26,7 +26,7 @@ protected:
 		return 0;
 	}
 
-	static ClientBridge <Object>* _object (Bridge <ServantLinks>* obj, EnvironmentBridge* env)
+	static BridgeMarshal <Object>* _object (Bridge <ServantLinks>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).object ();

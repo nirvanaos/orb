@@ -12,24 +12,6 @@ extern void _check_pointer (const Bridge <Interface>* obj, const Bridge <Interfa
 
 template <class S, class I> class Skeleton;
 
-//! Servant end of bridge.
-template <class I>
-class ServantBridge :
-	public Bridge <I>
-{
-public:
-	//! We can simple assign servant pointer to `T_ptr <I>'
-	operator I& ()
-	{
-		return static_cast <I&> (static_cast <Bridge <I>&> (*this));
-	}
-
-protected:
-	ServantBridge (const typename Bridge <I>::EPV& epv) :
-		Bridge <I> (epv)
-	{}
-};
-
 struct InterfaceEntry
 {
 	const Char* interface_id;
@@ -50,6 +32,7 @@ class InterfaceFinder
 	template <>
 	static Bridge <Interface>* cast <AbstractBase> (void* servant)
 	{
+		assert (false);
 		return nullptr;
 	}
 

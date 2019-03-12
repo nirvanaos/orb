@@ -21,9 +21,9 @@ public:
 		return InterfaceFinder <POACore, ::PortableServer::POA, Object>::find (*(POACore*)nullptr, id);
 	}
 
-	const Char* activate_object (Bridge <ServantLinks>* servant)
+	const Char* activate_object (ServantLinks_ptr servant)
 	{
-		ServantLinksCore* links = static_cast <ServantLinksCore*> (servant);
+		ServantLinksCore* links = static_cast <ServantLinksCore*> (static_cast <Bridge <ServantLinks>*> (servant));
 		assert (!links->is_active_);
 		links->is_active_ = TRUE;
 		return "Objectid";

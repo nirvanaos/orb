@@ -135,12 +135,12 @@ public:
 //! \tparam I Interface.
 template <class S, class I>
 class InterfaceImplBase :
-	public ServantBridge <I>,
+	public Bridge <I>,
 	public Skeleton <S, I>
 {
 protected:
 	InterfaceImplBase () :
-		ServantBridge <I> (Skeleton <S, I>::epv_)
+		Bridge <I> (Skeleton <S, I>::epv_)
 	{}
 };
 
@@ -163,7 +163,7 @@ public:
 //! Standard implementation of ServantBase.
 
 class ServantBaseLinks :
-	public ServantBridge <ServantBase>
+	public Bridge <ServantBase>
 {
 public:
 	operator ServantLinks_ptr () const
@@ -195,12 +195,12 @@ public:
 
 protected:
 	ServantBaseLinks (const EPV& epv) :
-		ServantBridge <ServantBase> (epv),
+		Bridge <ServantBase> (epv),
 		servant_links_ ((ServantLinks*)nullptr)
 	{}
 	
 	ServantBaseLinks (const EPV& epv, const Char* primary_interface) :
-		ServantBridge <ServantBase> (epv),
+		Bridge <ServantBase> (epv),
 		servant_links_ ((ServantLinks*)nullptr)
 	{
 		_final_construct (primary_interface);
@@ -247,7 +247,7 @@ public:
 //! Standard implementation of `CORBA::LocalObject'.
 
 class LocalObjectLinks :
-	public ServantBridge <Object>
+	public Bridge <Object>
 {
 public:
 	// Object operations
@@ -284,14 +284,14 @@ public:
 
 protected:
 	LocalObjectLinks (const EPV& epv, const Char* primary_id) :
-		ServantBridge <Object> (epv),
+		Bridge <Object> (epv),
 		object_ (Object_ptr::nil ())
 	{
 		_final_construct (primary_id);
 	}
 
 	LocalObjectLinks (const EPV& epv) :
-		ServantBridge <Object> (epv),
+		Bridge <Object> (epv),
 		object_ (Object_ptr::nil ())
 	{}
 

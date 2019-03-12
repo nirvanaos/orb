@@ -42,12 +42,12 @@ public:
 		return (servant->_epv ().release) (servant);
 	}
 
-	static ClientBridge <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
+	static BridgeMarshal <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		return nullptr;
 	}
 
-	static ClientBridge <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
+	static BridgeMarshal <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		ServantBase_ptr servant = _implementation (obj).servant_;
 		return (servant->_epv ().epv.get_interface) (servant, env);
@@ -65,7 +65,7 @@ public:
 		return (servant->_epv ().epv.non_existent) (servant, env);
 	}
 
-	static Boolean __is_equivalent (Bridge <Object>* obj, ClientBridge <Object>* other, EnvironmentBridge*)
+	static Boolean __is_equivalent (Bridge <Object>* obj, BridgeMarshal <Object>* other, EnvironmentBridge*)
 	{
 		return obj == other;
 	}

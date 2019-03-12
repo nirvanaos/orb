@@ -14,7 +14,7 @@ typedef T_out <ObjectAdapter> ObjectAdapter_out;
 
 template <>
 class Bridge <ObjectAdapter> :
-	public Bridge <Interface>
+	public BridgeMarshal <ObjectAdapter>
 {
 public:
 	struct EPV
@@ -23,14 +23,14 @@ public:
 
 		struct
 		{
-			Bridge <AbstractBase>* (*CORBA_AbstractBase) (Bridge <ObjectAdapter>*, const Char*, EnvironmentBridge*);
+			BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
 		}
 		base;
 
 		struct
 		{
-			ClientBridge <ServantLinks>* (*create_servant) (Bridge <ObjectAdapter>*, ClientBridge <ServantBase>*, const Char*, EnvironmentBridge*);
-			ClientBridge <Object>* (*create_local_object) (Bridge <ObjectAdapter>*, ClientBridge <AbstractBase>*, const Char*, EnvironmentBridge*);
+			BridgeMarshal <ServantLinks>* (*create_servant) (Bridge <ObjectAdapter>*, BridgeMarshal <ServantBase>*, const Char*, EnvironmentBridge*);
+			BridgeMarshal <Object>* (*create_local_object) (Bridge <ObjectAdapter>*, BridgeMarshal <AbstractBase>*, const Char*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -44,29 +44,8 @@ public:
 
 protected:
 	Bridge (const EPV& epv) :
-		Bridge <Interface> (epv.interface)
+		BridgeMarshal <ObjectAdapter> (epv.interface)
 	{}
-};
-
-template <class T>
-class ClientBase <T, ObjectAdapter>
-{
-public:
-	operator ObjectAdapter& ()
-	{
-		Environment _env;
-		T& t = static_cast <T&> (*this);
-		Bridge <ObjectAdapter>* _ret = (t._epv ().base.CORBA_Nirvana_ObjectAdapter) (&t, Bridge <ObjectAdapter>::interface_id_, &_env);
-		_env.check ();
-		if (!_ret)
-			throw MARSHAL ();
-		return static_cast <ObjectAdapter&> (*_ret);
-	}
-
-	operator Bridge <ObjectAdapter>& ()
-	{
-		return operator ObjectAdapter& ();
-	}
 };
 
 template <class T>
@@ -81,10 +60,7 @@ public:
 class ObjectAdapter :
 	public ClientInterfacePseudo <ObjectAdapter>,
 	public ClientInterfaceBase <ObjectAdapter, AbstractBase>
-{
-public:
-	typedef ObjectAdapter_ptr _ptr_type;
-};
+{};
 
 template <class T>
 ServantLinks_ptr Client <T, ObjectAdapter>::create_servant (ServantBase_ptr servant, const Char* type_id)

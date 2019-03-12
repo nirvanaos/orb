@@ -15,13 +15,8 @@ class Skeleton <S, ObjectAdapter>
 public:
 	static const typename Bridge <ObjectAdapter>::EPV epv_;
 
-	static Bridge <Interface>* _find_interface (S& servant, const Char* id)
-	{
-		return Interface::_duplicate (InterfaceFinder <S, ObjectAdapter>::find (servant, id));
-	}
-
 protected:
-	static ClientBridge <ServantLinks>* _create_servant (Bridge <ObjectAdapter>* obj, ClientBridge <ServantBase>* servant, const Char* type_id, EnvironmentBridge* env)
+	static BridgeMarshal <ServantLinks>* _create_servant (Bridge <ObjectAdapter>* obj, BridgeMarshal <ServantBase>* servant, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).create_servant (servant, type_id);
@@ -33,7 +28,7 @@ protected:
 		return 0;
 	}
 
-	static ClientBridge <Object>* _create_local_object (Bridge <ObjectAdapter>* obj, ClientBridge <AbstractBase>* base, const Char* type_id, EnvironmentBridge* env)
+	static BridgeMarshal <Object>* _create_local_object (Bridge <ObjectAdapter>* obj, BridgeMarshal <AbstractBase>* base, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).create_local_object (base, type_id);

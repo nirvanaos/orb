@@ -21,7 +21,7 @@ void Interface::_release (Bridge <Interface>* itf)
 		(itf->_epv ().release) (itf);
 }
 
-Bridge <Interface>* Interface::adopt (Bridge <Interface>* bridge, const Char* interface_id)
+Bridge <Interface>* Interface::unmarshal (Bridge <Interface>* bridge, const Char* interface_id)
 {
 	if (bridge) {
 		const Char* bridge_id = bridge->_epv ().interface_id;

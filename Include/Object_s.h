@@ -15,13 +15,8 @@ class Skeleton <S, Object>
 public:
 	static const typename Bridge <Object>::EPV epv_;
 
-	static Bridge <Interface>* _find_interface (S& servant, const Char* id)
-	{
-		return Interface::_duplicate (InterfaceFinder <S, Object>::find (servant, id));
-	}
-
 protected:
-	static ClientBridge <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
+	static BridgeMarshal <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._get_implementation ();
@@ -33,7 +28,7 @@ protected:
 		return 0;
 	}
 
-	static ClientBridge <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
+	static BridgeMarshal <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._get_interface ();
@@ -69,7 +64,7 @@ protected:
 		return 0;
 	}
 
-	static Boolean __is_equivalent (Bridge <Object>* obj, ClientBridge <Object>* other_object, EnvironmentBridge* env)
+	static Boolean __is_equivalent (Bridge <Object>* obj, BridgeMarshal <Object>* other_object, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._is_equivalent (other_object);

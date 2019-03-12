@@ -4,6 +4,7 @@
 #define NIRVANA_ORB_INTERFACE_C_H_
 
 #include <Nirvana/Nirvana.h>
+#include "Environment.h"
 #include "Exception.h"
 
 namespace CORBA {
@@ -18,7 +19,7 @@ class Interface;
 //! Intermediate part of an interface, bridge between servant and client.
 template <class I> class Bridge;
 
-//! All bridges must derive from `Bridge <Interface>'.
+//! All bridges indirectly derives from `Bridge <Interface>'.
 template <>
 class Bridge <Interface>
 {
@@ -35,9 +36,6 @@ public:
 		return epv_ref_;
 	}
 
-	//! All client interfaces can be widened to Interface.
-	inline operator Interface& ();
-
 protected:
 	Bridge (const EPV& epv) :
 		epv_ref_ (epv)
@@ -47,8 +45,29 @@ protected:
 	const EPV& epv_ref_;
 };
 
-//! Client end of the bridge.
-template <class I> class ClientBridge;
+//! The bridge which was passed from a different binary file.
+//! We can't be sure that the interface version is the same as for current binary.
+//! To obtain the interface pointer we have to unmarshal the bridge pointer.
+//! Each Bridge <I> derives from BridgeMarshal <I>.
+template <class I>
+class BridgeMarshal :
+	public Bridge <Interface>
+{
+public:
+	template <class Base>
+	struct Wide
+	{
+		typedef Bridge <Base>* (*Func) (Bridge <I>*, const Char*, EnvironmentBridge*);
+	};
+
+protected:
+	BridgeMarshal (const EPV& epv) :
+		Bridge <Interface> (epv)
+	{}
+};
+
+#define BASE_STRUCT_ENTRY(type, name) Wide <type>::Func name;\
+operator const Wide <type>::Func () const { return name; }
 
 //! Interface pointer template.
 template <class I>
@@ -56,20 +75,37 @@ class T_ptr
 {
 public:
 	T_ptr ()
-		// Zeroinit skipped for performance
+		// Zero init skipped for performance
 	{}
 
-	template <class T>
-	T_ptr (T* p) :
-		p_ (p ? &static_cast <I&> (*p) : nullptr)
+	T_ptr (I* p) :
+		p_ (p)
+	{}
+
+	T_ptr (Bridge <I>* p) :
+		p_ (static_cast <I*> (p))
+	{}
+
+	T_ptr (BridgeMarshal <I>* p) :
+		T_ptr (I::unmarshal (p))
+	{}
+
+	T_ptr (const T_ptr <I>& src) :
+		p_ (src.p_)
 	{}
 
 	template <class I1>
-	T_ptr (const T_ptr <I1> src) :
-		T_ptr (src.p_)
-	{}
+	T_ptr (const T_ptr <I1>& src, bool check_nil = true)
+	{
+		if (src.p_) {
+			*this = src.p_->operator T_ptr ();
+			if (check_nil && !p_)
+				throw MARSHAL ();
+		} else
+			p_ = nullptr;
+	}
 
-	operator ClientBridge <I>* () const
+	operator Bridge <I>* () const
 	{
 		return p_;
 	}
@@ -85,7 +121,7 @@ public:
 		return p_ != 0;
 	}
 
-	static T_ptr nil ()
+	static T_ptr <I> nil ()
 	{
 		return T_ptr ((I*)nullptr);
 	}
@@ -106,65 +142,69 @@ typedef ::CORBA::Nirvana::T_ptr <Interface> Interface_ptr;
 typedef ::CORBA::Nirvana::T_var <Interface> Interface_var;
 typedef ::CORBA::Nirvana::T_out <Interface> Interface_out;
 
-template <>
-class ClientBridge <Interface> :
-	public Bridge <Interface>
-{
-public:
-	static Interface_ptr _nil ()
-	{
-		return Interface_ptr::nil ();
-	}
-
-	inline static Interface* adopt (ClientBridge <Interface>* bridge);
-};
-
 class Interface :
-	public ClientBridge <Interface>
+	public BridgeMarshal <Interface>
 {
 public:
 	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf);
 
 	static void _release (Bridge <Interface>* itf);
 
-	static Bridge <Interface>* adopt (Bridge <Interface>* bridge, const Char* interface_id);
+	inline static T_ptr <Interface> _nil ();
+
+	static Bridge <Interface>* unmarshal (Bridge <Interface>* bridge, const Char* interface_id);
 };
 
-Bridge <Interface>::operator Interface& ()
-{
-	return static_cast <Interface&> (*this);
-}
-
-inline Interface* ClientBridge <Interface>::adopt (ClientBridge <Interface>* bridge)
-{
-	return static_cast <Interface*> (bridge);
-}
-
-template <class I>
-class ClientBridge :
-	public Bridge <I>
+template <>
+class T_ptr <Interface>
 {
 public:
-	operator I& ()
+	T_ptr ()
+		// Zero init skipped for performance
+	{}
+
+	T_ptr (Interface* p) :
+		p_ (p)
+	{}
+
+	T_ptr (Bridge <Interface>* p) :
+		p_ (static_cast <Interface*> (p))
+	{}
+
+	template <class I1>
+	T_ptr (const T_ptr <I1>& src) :
+		T_ptr (src.p_)
+	{}
+
+	operator BridgeMarshal <Interface>* () const
 	{
-		return *adopt (this);
+		return p_;
 	}
 
-	static I* adopt (ClientBridge <I>* bridge)
+	Interface* operator -> () const
 	{
-		return static_cast <I*> (Interface::adopt (bridge, Bridge <I>::interface_id_));
+		assert (p_);
+		return p_;
 	}
 
-	static T_ptr <I> _duplicate (T_ptr <I> obj)
+	operator bool () const
 	{
-		return static_cast <I*> (Interface::_duplicate (obj));
+		return p_ != 0;
 	}
 
-	static T_ptr <I> _nil ()
+	static T_ptr <Interface> nil ()
 	{
-		return T_ptr <I>::nil ();
+		return T_ptr ((Interface*)nullptr);
 	}
+
+private:
+	Interface* p_;
 };
+
+inline T_ptr <Interface> Interface::_nil ()
+{
+	return T_ptr <Interface>::nil ();
+}
 
 }
 
@@ -199,7 +239,7 @@ public:
 		T_ptr <I> (I::_duplicate (src))
 	{}
 
-	T_var (ClientBridge <I>* bridge) :
+	T_var (BridgeMarshal <I>* bridge) :
 		T_ptr <I> (I::_nil ())
 	{
 		try {
@@ -272,7 +312,7 @@ public:
 	{
 		if (ptr_) {
 			try {
-				ptr_ = ptr_->operator I&(); // Adopt
+				I::unmarshal (ptr_);
 			} catch (...) {
 				release (ptr_);
 				ptr_ = nullptr;
@@ -281,13 +321,13 @@ public:
 		}
 	}
 
-	operator ClientBridge <I>*& ()
+	operator BridgeMarshal <I>*& ()
 	{
 		return ptr_;
 	}
 
 private:
-	ClientBridge <I>*& ptr_;
+	BridgeMarshal <I>*& ptr_;
 };
 
 template <class I>
@@ -306,7 +346,7 @@ public:
 		ptr_ (rhs.ptr_)
 	{}
 
-	T_inout_base (ClientBridge <I>*& bridge) :
+	T_inout_base (BridgeMarshal <I>*& bridge) :
 		ptr_ (*reinterpret_cast <T_ptr <I>*> (&bridge))
 	{}
 
@@ -374,7 +414,7 @@ public:
 		Base (rhs.ptr_)
 	{}
 
-	T_out (ClientBridge <I>*& bridge) :
+	T_out (BridgeMarshal <I>*& bridge) :
 		Base (bridge)
 	{}
 
@@ -414,10 +454,10 @@ public:
 		Base (rhs.ptr_)
 	{}
 
-	T_inout (ClientBridge <I>*& bridge) :
+	T_inout (BridgeMarshal <I>*& bridge) :
 		Base (bridge)
 	{
-		I::adopt (Base::ptr_);
+		I::unmarshal (Base::ptr_);
 	}
 
 	T_inout <I>& operator = (T_inout <I>& rhs)
@@ -439,15 +479,56 @@ public:
 	}
 };
 
-//! ClientBase - How base client obtains pointer to bridge from primary.
-template <class Primary, class I> class ClientBase;
-
 //! Client implementation template.
 template <class T, class I> class Client;
 
 //! Primary interface client implementation.
 template <class I>
-using ClientInterfacePrimary = Client <ClientBridge <I>, I>;
+class ClientInterfacePrimary : 
+	public Client <Bridge <I>, I>
+{
+public:
+	typedef T_ptr <I> _ptr_type;
+
+	static T_ptr <I> _duplicate (T_ptr <I> obj)
+	{
+		return static_cast <I*> (Interface::_duplicate (obj));
+	}
+
+	static T_ptr <I> _nil ()
+	{
+		return T_ptr <I>::nil ();
+	}
+
+	static T_ptr <I> unmarshal (BridgeMarshal <I>* bridge)
+	{
+		return static_cast <I*> (Interface::unmarshal (bridge, Bridge <I>::interface_id_));
+	}
+};
+
+//! ClientBase - How base client obtains pointer to bridge from primary.
+template <class Primary, class Base>
+class ClientBase
+{
+public:
+	operator T_ptr <Base> ()
+	{
+		Environment _env;
+		Primary& t = static_cast <Primary&> (*this);
+		typename BridgeMarshal <Primary>:: template Wide <Base>::Func func = t._epv ().base;
+		Bridge <Base>* _ret = (func)(&t, Bridge <Base>::interface_id_, &_env);
+		_env.check ();
+		return _ret;
+	}
+
+	operator Bridge <Base>& ()
+	{
+		Bridge <Base>* p = operator T_ptr <Base> ();
+		if (!p)
+			throw MARSHAL ();
+		return *p;
+	}
+};
 
 //! Base interface client implementation.
 template <class Primary, class I>

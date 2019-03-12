@@ -16,13 +16,8 @@ class Skeleton <S, ::PortableServer::POA>
 public:
 	static const typename Bridge < ::PortableServer::POA>::EPV epv_;
 
-	static Bridge <Interface>* _find_interface (S& servant, const Char* id)
-	{
-		return Interface::_duplicate (InterfaceFinder <S, ::PortableServer::POA, Object>::find (servant, id));
-	}
-
 protected:
-	static const Char* _activate_object (Bridge < ::PortableServer::POA>* obj, ClientBridge <ServantLinks>* servant, EnvironmentBridge* env)
+	static const Char* _activate_object (Bridge < ::PortableServer::POA>* obj, BridgeMarshal <ServantLinks>* servant, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).activate_object (servant);

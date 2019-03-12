@@ -13,7 +13,7 @@ class ServantBase;
 
 template <>
 class Bridge < ::PortableServer::POA> :
-	public Bridge <Interface>
+	public BridgeMarshal < ::PortableServer::POA>
 {
 public:
 	struct EPV
@@ -22,13 +22,13 @@ public:
 
 		struct
 		{
-			Bridge <Object>* (*CORBA_Object) (Bridge < ::PortableServer::POA>*, const Char*, EnvironmentBridge*);
+			BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 		}
 		base;
 
 		struct
 		{
-			const Char* (*activate_object) (Bridge < ::PortableServer::POA>*, ClientBridge <ServantLinks>*, EnvironmentBridge*);
+			const Char* (*activate_object) (Bridge < ::PortableServer::POA>*, BridgeMarshal <ServantLinks>*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -42,29 +42,8 @@ public:
 
 protected:
 	Bridge (const EPV& epv) :
-		Bridge <Interface> (epv.interface)
+		BridgeMarshal < ::PortableServer::POA> (epv.interface)
 	{}
-};
-
-template <class T>
-class ClientBase <T, ::PortableServer::POA>
-{
-public:
-	operator ::PortableServer::POA& ()
-	{
-		Environment _env;
-		T& t = static_cast <T&> (*this);
-		Bridge < ::PortableServer::POA>* _ret = (t._epv ().base.CORBA_Nirvana_POA) (&t, Bridge < ::PortableServer::POA>::interface_id_, &_env);
-		_env.check ();
-		if (!_ret)
-			throw MARSHAL ();
-		return static_cast < ::PortableServer::POA&> (*_ret);
-	}
-
-	operator Bridge < ::PortableServer::POA>& ()
-	{
-		return operator ::PortableServer::POA& ();
-	}
 };
 
 template <class T>
@@ -93,11 +72,7 @@ namespace PortableServer {
 class POA :
 	public ::CORBA::Nirvana::ClientInterface <POA>,
 	public ::CORBA::Nirvana::ClientInterfaceBase <POA, ::CORBA::Object>
-{
-public:
-	typedef POA_ptr _ptr_type;
-
-};
+{};
 
 }
 

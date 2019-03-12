@@ -2,7 +2,6 @@
 #define NIRVANA_ORB_ABSTRACTBASE_C_H_
 
 #include "Interface_c.h"
-#include "Environment.h"
 
 namespace CORBA {
 
@@ -26,7 +25,7 @@ namespace Nirvana {
 
 template <>
 class Bridge <AbstractBase> :
-	public Bridge <Interface>
+	public BridgeMarshal <AbstractBase>
 {
 public:
 	struct EPV
@@ -49,29 +48,8 @@ public:
 
 protected:
 	Bridge (const EPV& epv) :
-		Bridge <Interface> (epv.interface)
+		BridgeMarshal <AbstractBase> (epv.interface)
 	{}
-};
-
-template <class T>
-class ClientBase <T, AbstractBase>
-{
-public:
-	operator AbstractBase& ()
-	{
-		Environment _env;
-		T& t = static_cast <T&> (*this);
-		Bridge <AbstractBase>* _ret = (t._epv ().base.CORBA_AbstractBase) (&t, Bridge <AbstractBase>::interface_id_, &_env);
-		_env.check ();
-		if (!_ret)
-			throw MARSHAL ();
-		return static_cast <AbstractBase&> (*_ret);
-	}
-
-	operator Bridge <AbstractBase>& ()
-	{
-		return operator AbstractBase& ();
-	}
 };
 
 template <class T>
@@ -104,8 +82,6 @@ class AbstractBase :
 	public Nirvana::ClientInterfacePrimary <AbstractBase>
 {
 public:
-	typedef AbstractBase_ptr _ptr_type;
-
 	static AbstractBase_ptr _narrow (AbstractBase_ptr obj)
 	{
 		return _duplicate (obj);

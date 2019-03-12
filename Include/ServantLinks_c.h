@@ -13,7 +13,7 @@ typedef T_out <ServantLinks> ServantLinks_out;
 
 template <>
 class Bridge <ServantLinks> :
-	public Bridge <Interface>
+	public BridgeMarshal <ServantLinks>
 {
 public:
 	struct EPV
@@ -22,8 +22,8 @@ public:
 
 		struct
 		{
-			ClientBridge <ServantBase>* (*servant_base) (Bridge <ServantLinks>*, EnvironmentBridge*);
-			ClientBridge <Object>* (*object) (Bridge <ServantLinks>*, EnvironmentBridge*);
+			BridgeMarshal <ServantBase>* (*servant_base) (Bridge <ServantLinks>*, EnvironmentBridge*);
+			BridgeMarshal <Object>* (*object) (Bridge <ServantLinks>*, EnvironmentBridge*);
 			Boolean (*is_active) (Bridge <ServantLinks>*, EnvironmentBridge*);
 		}
 		epv;
@@ -38,29 +38,8 @@ public:
 
 protected:
 	Bridge (const EPV& epv) :
-		Bridge <Interface> (epv.interface)
+		BridgeMarshal <ServantLinks> (epv.interface)
 	{}
-};
-
-template <class T>
-class ClientBase <T, ServantLinks>
-{
-public:
-	operator ServantLinks& ()
-	{
-		Environment _env;
-		T& t = static_cast <T&> (*this);
-		Bridge <ServantLinks>* _ret = (t._epv ().base.CORBA_Nirvana_ServantLinks) (&t, Bridge <ServantLinks>::interface_id_, &_env);
-		_env.check ();
-		if (!_ret)
-			throw MARSHAL ();
-		return static_cast <ServantLinks&> (*_ret);
-	}
-
-	operator Bridge <ServantLinks>& ()
-	{
-		return operator ServantLinks& ();
-	}
 };
 
 template <class T>
@@ -79,7 +58,7 @@ ServantBase_ptr Client <T, ServantLinks>::servant_base ()
 	Environment _env;
 	Bridge <ServantLinks>& _b = (*this);
 	// Do not release returned ptr, as it is value type. So we don't use ServantBase_var here.
-	ClientBridge <ServantBase>* _ret = (_b._epv ().epv.servant_base) (&_b, &_env);
+	BridgeMarshal <ServantBase>* _ret = (_b._epv ().epv.servant_base) (&_b, &_env);
 	_env.check ();
 	return static_cast <ServantBase*> (_ret); // No adoption needed.
 }
@@ -89,7 +68,7 @@ Object_ptr Client <T, ServantLinks>::object ()
 {
 	Environment _env;
 	Bridge <ServantLinks>& _b = (*this);
-	ClientBridge <Object>* _ret = (_b._epv ().epv.object) (&_b, &_env);
+	BridgeMarshal <Object>* _ret = (_b._epv ().epv.object) (&_b, &_env);
 	_env.check ();
 	return static_cast <Object*> (_ret); // No adoption needed.
 }
@@ -108,14 +87,13 @@ class ServantLinks :
 	public ClientInterfacePrimary <ServantLinks>
 {
 public:
-	typedef ServantLinks_ptr _ptr_type;
-
-	static ServantLinks* adopt (ClientBridge <ServantLinks>* bridge)
+	static ServantLinks_ptr unmarshal (BridgeMarshal <ServantLinks>* bridge)
 	{
 		assert (bridge);
-		ServantLinks* p = static_cast <ServantLinks*> (Interface::adopt (bridge, Bridge <ServantLinks>::interface_id_));
-		Interface::adopt (p->object (), Bridge <Object>::interface_id_);
-		Interface::adopt (p->servant_base (), Bridge <ServantBase>::interface_id_);
+		ServantLinks* p = static_cast <ServantLinks*> (Interface::unmarshal (bridge, Bridge <ServantLinks>::interface_id_));
+		Interface::unmarshal (p->object (), Bridge <Object>::interface_id_);
+		Interface::unmarshal (p->servant_base (), Bridge <ServantBase>::interface_id_);
+		return p;
 	}
 };
 
