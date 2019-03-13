@@ -204,6 +204,19 @@ public:
 template <class S>
 const OLF_LocalObjectInfo InterfaceStatic <S, LocalObject>::object_info_ = {InterfaceStatic <S, AbstractBase>::_bridge (), S::primary_interface_};
 
+template <class S, class I>
+class ImplementationStaticSingle :
+	public ServantTraitsStatic <S>,
+	public LifeCycleStatic <>,
+	public InterfaceStatic <S, I>
+{
+public:
+	static T_ptr <I> _this ()
+	{
+		return InterfaceStatic <S, I>::_get_ptr ();
+	}
+};
+
 template <class S, class Primary, class ... Bases>
 class ImplementationStatic :
 	public ServantTraitsStatic <S>,
@@ -222,7 +235,6 @@ public:
 	{
 		return InterfaceStatic <S, Primary>::_get_ptr ();
 	}
-
 };
 
 }
