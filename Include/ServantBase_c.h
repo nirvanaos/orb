@@ -110,9 +110,7 @@ Boolean Client <T, ServantBase>::_non_existent ()
 	return _ret;
 }
 
-class ServantBase :
-	public ::CORBA::Nirvana::ClientInterfacePrimary <ServantBase>,
-	public ::CORBA::Nirvana::ClientInterfaceBase <ServantBase, ::CORBA::AbstractBase>
+class ServantBase : public ClientInterface <ServantBase, AbstractBase>
 {};
 
 }

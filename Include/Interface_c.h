@@ -536,6 +536,12 @@ class ClientInterfaceBase :
 	public Client <ClientBase <Primary, I>, I>
 {};
 
+template <class Primary, class ... Bases>
+class ClientInterface :
+	public ClientInterfacePrimary <Primary>,
+	public ClientInterfaceBase <Primary, Bases>...
+{};
+
 }
 }
 

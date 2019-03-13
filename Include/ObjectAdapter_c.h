@@ -57,9 +57,7 @@ public:
 	Object_ptr create_local_object (AbstractBase_ptr base, const Char* type_id);
 };
 
-class ObjectAdapter :
-	public ClientInterfacePrimary <ObjectAdapter>,
-	public ClientInterfaceBase <ObjectAdapter, AbstractBase>
+class ObjectAdapter : public ClientInterface <ObjectAdapter, AbstractBase>
 {};
 
 template <class T>

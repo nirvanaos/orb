@@ -143,9 +143,7 @@ ULong Client <T, Object>::_hash (ULong maximum)
 
 }
 
-class Object :
-	public Nirvana::ClientInterfacePrimary <Object>,
-	public Nirvana::ClientInterfaceBase <Object, AbstractBase>
+class Object : public Nirvana::ClientInterface <Object, AbstractBase>
 {};
 
 inline Object_ptr AbstractBase::_to_object ()
