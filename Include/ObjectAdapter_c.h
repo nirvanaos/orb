@@ -58,7 +58,7 @@ public:
 };
 
 class ObjectAdapter :
-	public ClientInterfacePseudo <ObjectAdapter>,
+	public ClientInterfacePrimary <ObjectAdapter>,
 	public ClientInterfaceBase <ObjectAdapter, AbstractBase>
 {};
 

@@ -154,50 +154,23 @@ inline Object_ptr AbstractBase::_to_object ()
 }
 
 namespace Nirvana {
+
+template <class Primary>
+class ClientInterfaceBase <Primary, Object> :
+	public Client <ClientBase <Primary, Object>, Object>
+{
+public:
+	static T_ptr <Primary> _narrow (Object_ptr obj)
+	{
+		return obj->_query_interface <Primary> ();
+	}
+};
+
+// TODO: ...
 class LocalObject : public Object
 {};
-
 }
 
-namespace Nirvana {
-
-//! \class	ClientInterface
-//!
-//! \brief	A client interface, derived from Object.
-//!
-//! \tparam	I	Interface.
-
-template <class I>
-class ClientInterface :
-	public ClientInterfacePseudo <I>
-{
-public:
-	static T_ptr <I> _narrow (Object_ptr obj)
-	{
-		return obj->_query_interface <I> ();
-	}
-};
-
-//! \class	ClientInterfaceAbstract
-//!
-//! \brief	Abstract client interface.
-//!
-//! \tparam	I	Interface.
-
-template <class I>
-class ClientInterfaceAbstract :
-	public ClientInterface <I>
-{
-public:
-	static T_ptr <I> _narrow (Object_ptr obj)
-	{
-		return ClientInterface <I>::_narrow (obj);
-	}
-
-	static T_ptr <I> _narrow (ValueBase*);
-};
-
-}
 }
 
 #endif

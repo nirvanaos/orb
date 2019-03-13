@@ -85,7 +85,7 @@ void Client <T, ::Test::I1>::throw_NO_IMPLEMENT ()
 namespace Test {
 
 class I1 :
-	public CORBA::Nirvana::ClientInterface <I1>,
+	public CORBA::Nirvana::ClientInterfacePrimary <I1>,
 	public CORBA::Nirvana::ClientInterfaceBase <I1, ::CORBA::Object>
 {};
 

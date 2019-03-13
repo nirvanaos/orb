@@ -532,7 +532,9 @@ public:
 
 //! Base interface client implementation.
 template <class Primary, class I>
-using ClientInterfaceBase = Client <ClientBase <Primary, I>, I>;
+class ClientInterfaceBase :
+	public Client <ClientBase <Primary, I>, I>
+{};
 
 }
 }

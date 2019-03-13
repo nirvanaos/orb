@@ -93,25 +93,18 @@ public:
 
 namespace Nirvana {
 
-//! \class	ClientInterfacePseudo
-//!
-//! \brief	A pseudo interface derived from `AbstractBase'.
-//!
-//! \tparam	I	Interface.
-
-template <class I>
-class ClientInterfacePseudo :
-	public ClientInterfacePrimary <I>
+template <class Primary>
+class ClientInterfaceBase <Primary, AbstractBase> :
+	public Client <ClientBase <Primary, AbstractBase>, AbstractBase>
 {
 public:
-	static T_ptr <I> _narrow (AbstractBase_ptr obj)
+	static T_ptr <Primary> _narrow (AbstractBase_ptr obj)
 	{
-		return obj->_query_interface <I> ();
+		return obj->_query_interface <Primary> ();
 	}
 };
 
 }
-
 }
 
 #endif

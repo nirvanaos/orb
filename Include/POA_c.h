@@ -70,7 +70,7 @@ const Char* Client <T, ::PortableServer::POA>::activate_object (ServantLinks_ptr
 namespace PortableServer {
 
 class POA :
-	public ::CORBA::Nirvana::ClientInterface <POA>,
+	public ::CORBA::Nirvana::ClientInterfacePrimary <POA>,
 	public ::CORBA::Nirvana::ClientInterfaceBase <POA, ::CORBA::Object>
 {};
 

@@ -74,7 +74,7 @@ Long Client <T, ::Test::I2>::op2 (Long p1)
 namespace Test {
 
 class I2 :
-	public CORBA::Nirvana::ClientInterface <I2>,
+	public CORBA::Nirvana::ClientInterfacePrimary <I2>,
 	public CORBA::Nirvana::ClientInterfaceBase <I2, ::CORBA::Object>
 {};
 
