@@ -29,13 +29,6 @@ class InterfaceFinder
 		return &static_cast <Bridge <Itf>&> (*reinterpret_cast <S*> (servant));
 	}
 
-	template <>
-	static Bridge <Interface>* cast <AbstractBase> (void* servant)
-	{
-		assert (false);
-		return nullptr;
-	}
-
 public:
 	static Bridge <Interface>* find (S& servant, const Char* id)
 	{

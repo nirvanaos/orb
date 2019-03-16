@@ -8,7 +8,7 @@ namespace CORBA {
 namespace Nirvana {
 
 class ObjectAdapterCore :
-	public ImplementationStatic <ObjectAdapterCore, ObjectAdapter, AbstractBase>
+	public ImplementationStatic <ObjectAdapterCore, ObjectAdapter>
 {
 public:
 	static ServantLinks_ptr create_servant (ServantBase_ptr servant, const Char* type_id)

@@ -116,7 +116,9 @@ protected:
 	{
 		// Code here will be called immediately after the constructor (right
 		// before each test).
+#ifndef TEST_NO_STATIC
 		static CORBA::Nirvana::ModuleLoader loader;
+#endif
 	}
 
 	virtual void TearDown ()

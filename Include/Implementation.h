@@ -9,6 +9,7 @@
 #include "AbstractBase_s.h"
 #include "ServantBase_s.h"
 #include "RefCountBase.h"
+#include <type_traits>
 
 namespace CORBA {
 namespace Nirvana {
@@ -150,7 +151,7 @@ class InterfaceImpl :
 {};
 
 //! Standard implementation of AbstractBase.
-
+/*
 template <class S>
 class InterfaceImpl <S, AbstractBase> :
 	public InterfaceImplBase <S, AbstractBase>
@@ -159,7 +160,7 @@ public:
 	void _implicitly_activate ()
 	{}
 };
-
+*/
 //! Standard implementation of ServantBase.
 
 class ServantBaseLinks :
@@ -221,7 +222,6 @@ protected:
 
 template <class S>
 class InterfaceImpl <S, ServantBase> :
-	public InterfaceImplBase <S, AbstractBase>,
 	public ServantBaseLinks,
 	public Skeleton <S, ServantBase>
 {
@@ -309,7 +309,6 @@ private:
 //! \tparam S Servant class implementing operations.
 template <class S>
 class InterfaceImpl <S, LocalObject> :
-	public InterfaceImplBase <S, AbstractBase>,
 	public LocalObjectLinks,
 	public Skeleton <S, Object>
 {
@@ -344,16 +343,23 @@ protected:
 //! \tparam S Servant class implementing operations.
 //! \tparam	Primary	Primary interface.
 //! \tparam	Bases	 	All base interfaces derived directly or indirectly.
-//! 								If interface derives from Object or LocalObject, don't include AbstractBase in base list.
+//! 								Don't include AbstractBase in base list.
 
 template <class S, class Primary, class ... Bases>
 class Implementation :
 	public ServantTraits <S>,
 	public LifeCycleRefCnt <S>,
+	public InterfaceImpl <S, AbstractBase>,
 	public InterfaceImpl <S, Bases>...,
 	public InterfaceImpl <S, Primary>,
 	public PrimaryInterface <Primary>
 {
+	class DummyActivator
+	{
+	public:
+		static void _implicitly_activate ()
+		{}
+	};
 public:
 	Interface_ptr _query_interface (const Char* id)
 	{
@@ -362,7 +368,8 @@ public:
 
 	T_ptr <Primary> _this ()
 	{
-		this->_implicitly_activate ();
+		std::conditional < std::is_base_of <ServantBaseLinks, Implementation <S, Primary, Bases...> >::value, 
+			ServantBaseLinks, DummyActivator>::type::_implicitly_activate ();
 		return this;
 	}
 

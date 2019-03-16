@@ -61,8 +61,6 @@ public:
 
 	virtual Interface_ptr _query_interface (const Char* id) = 0;
 
-	virtual const Char* _primary_interface () const = 0;
-
 protected:
 	ServantPOA ()
 	{}
@@ -121,6 +119,7 @@ protected:
 		ServantBaseLinks (Skeleton <ServantPOA <ServantBase>, ServantBase>::epv_)
 	{}
 
+	virtual const Char* _primary_interface () const = 0;
 	virtual void _implicitly_activate ();
 
 protected:
@@ -156,6 +155,14 @@ protected:
 	{}
 };
 */
+
+//! \class	ImplementationPOA
+//!
+//! \brief	Portable implementation of interface.
+//!
+//! \tparam	Primary	Primary interface.
+//! \tparam	Bases	 	All base interfaces derived directly or indirectly.
+//! 								Don't include AbstractBase in base list.
 
 template <class Primary, class ... Bases>
 class ImplementationPOA :

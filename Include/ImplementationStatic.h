@@ -112,7 +112,6 @@ class InterfaceStatic :
 //! \tparam S Servant class.
 template <class S>
 class InterfaceStatic <S, ServantBase> :
-	public InterfaceStatic <S, AbstractBase>,
 	public InterfaceStaticBase <S, ServantBase>
 {
 public:
@@ -161,7 +160,6 @@ public:
 //! \tparam Primary Primary interface.
 template <class S>
 class InterfaceStatic <S, LocalObject> :
-	public InterfaceStatic <S, AbstractBase>,
 	public InterfaceStaticBase <S, Object>
 {
 public:
@@ -217,10 +215,20 @@ public:
 	}
 };
 
+//! \class	ImplementationStatic
+//!
+//! \brief	A static implementation of interface.
+//!
+//! \tparam S Servant class implementing operations.
+//! \tparam	Primary	Primary interface.
+//! \tparam	Bases	 	All base interfaces derived directly or indirectly.
+//! 								Don't include AbstractBase in base list.
+
 template <class S, class Primary, class ... Bases>
 class ImplementationStatic :
 	public ServantTraitsStatic <S>,
 	public LifeCycleStatic <>,
+	public InterfaceStatic <S, AbstractBase>,
 	public InterfaceStatic <S, Bases>...,
 	public InterfaceStatic <S, Primary>,
 	public PrimaryInterface <Primary>
