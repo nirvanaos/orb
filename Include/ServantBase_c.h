@@ -74,7 +74,7 @@ template <class T>
 ::PortableServer::POA_ptr Client <T, ServantBase>::_default_POA ()
 {
 	Environment _env;
-	Bridge <ServantBase>& _b (*this);
+	Bridge <ServantBase>& _b (T::_get_bridge (_env));
 	::PortableServer::POA_var _ret ((_b._epv ().epv.default_POA) (&_b, &_env));
 	_env.check ();
 	return _ret._retn ();
@@ -84,7 +84,7 @@ template <class T>
 InterfaceDef_ptr Client <T, ServantBase>::_get_interface ()
 {
 	Environment _env;
-	Bridge <ServantBase>& _b (*this);
+	Bridge <ServantBase>& _b (T::_get_bridge (_env));
 	InterfaceDef_var _ret = (_b._epv ().epv.get_interface) (&_b, &_env);
 	_env.check ();
 	return _ret._retn ();
@@ -94,7 +94,7 @@ template <class T>
 Boolean Client <T, ServantBase>::_is_a (const Char* type_id)
 {
 	Environment _env;
-	Bridge <ServantBase>& _b (*this);
+	Bridge <ServantBase>& _b (T::_get_bridge (_env));
 	Boolean _ret = (_b._epv ().epv.is_a) (&_b, type_id, &_env);
 	_env.check ();
 	return _ret;
@@ -104,7 +104,7 @@ template <class T>
 Boolean Client <T, ServantBase>::_non_existent ()
 {
 	Environment _env;
-	Bridge <ServantBase>& _b (*this);
+	Bridge <ServantBase>& _b (T::_get_bridge (_env));
 	Boolean _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
 	_env.check ();
 	return _ret;

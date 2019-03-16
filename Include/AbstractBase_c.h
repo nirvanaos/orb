@@ -69,11 +69,11 @@ public:
 template <class T>
 Bridge <Interface>* Client <T, AbstractBase>::_query_interface (const Char* type_id)
 {
-	Environment env;
-	Bridge <AbstractBase>& _b (*this);
-	Bridge <Interface>* ret = (_b._epv ().epv.query_interface) (&_b, type_id, &env);
-	env.check ();
-	return ret;
+	Environment _env;
+	Bridge <AbstractBase>& _b (T::_get_bridge (_env));
+	Bridge <Interface>* _ret = (_b._epv ().epv.query_interface) (&_b, type_id, &_env);
+	_env.check ();
+	return _ret;
 }
 
 }

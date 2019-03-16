@@ -83,7 +83,7 @@ template <class T>
 ImplementationDef_ptr Client <T, Object>::_get_implementation ()
 {
 	Environment _env;
-	Bridge <Object>& _b (*this);
+	Bridge <Object>& _b (T::_get_bridge (_env));
 	ImplementationDef_var _ret ((_b._epv ().epv.get_implementation) (&_b, &_env));
 	_env.check ();
 	return _ret._retn ();
@@ -93,7 +93,7 @@ template <class T>
 InterfaceDef_ptr Client <T, Object>::_get_interface ()
 {
 	Environment _env;
-	Bridge <Object>& _b (*this);
+	Bridge <Object>& _b (T::_get_bridge (_env));
 	InterfaceDef_var _ret ((_b._epv ().epv.get_interface) (&_b, &_env));
 	_env.check ();
 	return _ret._retn ();
@@ -103,7 +103,7 @@ template <class T>
 Boolean Client <T, Object>::_is_a (const Char* type_id)
 {
 	Environment _env;
-	Bridge <Object>& _b (*this);
+	Bridge <Object>& _b (T::_get_bridge (_env));
 	Boolean _ret = (_b._epv ().epv.is_a) (&_b, type_id, &_env);
 	_env.check ();
 	return _ret;
@@ -113,7 +113,7 @@ template <class T>
 Boolean Client <T, Object>::_non_existent ()
 {
 	Environment _env;
-	Bridge <Object>& _b (*this);
+	Bridge <Object>& _b (T::_get_bridge (_env));
 	Boolean _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
 	_env.check ();
 	return _ret;
@@ -123,7 +123,7 @@ template <class T>
 Boolean Client <T, Object>::_is_equivalent (Object_ptr other_object)
 {
 	Environment _env;
-	Bridge <Object>& _b (*this);
+	Bridge <Object>& _b (T::_get_bridge (_env));
 	Boolean _ret = (_b._epv ().epv.is_equivalent) (&_b, other_object, &_env);
 	_env.check ();
 	return _ret;
@@ -133,7 +133,7 @@ template <class T>
 ULong Client <T, Object>::_hash (ULong maximum)
 {
 	Environment _env;
-	Bridge <Object>& _b (*this);
+	Bridge <Object>& _b (T::_get_bridge (_env));
 	ULong _ret = (_b._epv ().epv.hash) (&_b, maximum, &_env);
 	_env.check ();
 	return _ret;

@@ -482,10 +482,21 @@ public:
 //! Client implementation template.
 template <class T, class I> class Client;
 
+template <class I>
+class ClientBridge :
+	public Bridge <I>
+{
+protected:
+	Bridge <I>& _get_bridge (Environment& env)
+	{
+		return *this;
+	}
+};
+
 //! Primary interface client implementation.
 template <class I>
 class ClientInterfacePrimary : 
-	public Client <Bridge <I>, I>
+	public Client <ClientBridge <I>, I>
 {
 public:
 	typedef T_ptr <I> _ptr_type;
@@ -511,31 +522,42 @@ template <class Primary, class Base>
 class ClientBase
 {
 public:
-	operator T_ptr <Base> ()
+	operator T_ptr <Base> ();
+
+protected:
+	Bridge <Base>* _get_bridge_ptr (Environment& env)
 	{
-		Environment _env;
 		Primary& t = static_cast <Primary&> (*this);
 		typename BridgeMarshal <Primary>:: template Wide <Base>::Func func = t._epv ().base;
-		Bridge <Base>* _ret = (func)(&t, Bridge <Base>::interface_id_, &_env);
-		_env.check ();
-		return _ret;
+		Bridge <Base>* ret = (func)(&t, Bridge <Base>::interface_id_, &env);
+		env.check ();
+		return ret;
 	}
 
-	operator Bridge <Base>& ()
+	Bridge <Base>& _get_bridge (Environment& env)
 	{
-		Bridge <Base>* p = operator T_ptr <Base> ();
-		if (!p)
+		Bridge <Base>* ret = _get_bridge_ptr (env);
+		if (!ret)
 			throw MARSHAL ();
-		return *p;
+		return *ret;
 	}
 };
 
+template <class Primary, class Base>
+ClientBase <Primary, Base>::operator T_ptr <Base> ()
+{
+	Environment env;
+	return _get_bridge_ptr (env);
+}
+
 //! Base interface client implementation.
+//! Has specializations for Object and AbstractBase.
 template <class Primary, class I>
 class ClientInterfaceBase :
 	public Client <ClientBase <Primary, I>, I>
 {};
 
+//! Base for client interface.
 template <class Primary, class ... Bases>
 class ClientInterface :
 	public ClientInterfacePrimary <Primary>,

@@ -65,7 +65,7 @@ template <class T>
 Long Client <T, ::Test::I3>::op3 (Long p1)
 {
 	Environment _env;
-	Bridge < ::Test::I3>& _b (*this);
+	Bridge < ::Test::I3>& _b (T::_get_bridge (_env));
 	Long _ret = (_b._epv ().epv.op3) (&_b, p1, &_env);
 	_env.check ();
 	return _ret;
