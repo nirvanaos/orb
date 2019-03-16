@@ -35,55 +35,6 @@ public:
 	}
 };
 
-struct InterfaceEntryPOA
-{
-	Bridge <Interface>* (*find_base) (void* servant, const Char*);
-
-	static Bridge <Interface>* find (const InterfaceEntryPOA* begin, const InterfaceEntryPOA* end, void* servant, const Char* id);
-};
-
-template <class Primary, class ... I>
-class InterfaceFinderPOA
-{
-	template <class Itf>
-	static Bridge <Interface>* find_base (void* servant, const Char* id)
-	{
-		return static_cast <ServantPOA <Itf>&> (*reinterpret_cast <ServantPOA <Primary>*> (servant)).ServantPOA <Itf>::_query_interface (id);
-	}
-
-	template <>
-	static Bridge <Interface>* find_base <Primary> (void* servant, const Char* id)
-	{ // Prevent erroneous infinite recusion when primary interface is specified more than once.
-		assert (false);
-		return nullptr;
-	}
-
-public:
-	static Bridge <Interface>* find (ServantPOA <Primary>& servant, const Char* id)
-	{
-		if (RepositoryId::compatible (Bridge <Primary>::interface_id_, id))
-			return Interface::_duplicate (&static_cast <Bridge <Primary>&> (servant));
-
-		static const InterfaceEntryPOA table [] = {
-			{ find_base <I> }...,
-		};
-
-		return InterfaceEntryPOA::find (table, table + sizeof (table) / sizeof (*table), &servant, id);
-	}
-};
-
-template <class Primary>
-class InterfaceFinderPOA <Primary>
-{
-public:
-	static Bridge <Interface>* find (ServantPOA <Primary>& servant, const Char* id)
-	{
-		if (RepositoryId::compatible (Bridge <Primary>::interface_id_, id))
-			return Interface::_duplicate (&static_cast <Bridge <Primary>&> (servant));
-		return nullptr;
-	}
-};
-
 //! Virtual implementation of AbstractBase
 
 template <>
@@ -108,7 +59,7 @@ public:
 		return RefCountBase::_refcount_value ();
 	}
 
-	virtual Interface_ptr _query_interface (const Char* id);
+	virtual Interface_ptr _query_interface (const Char* id) = 0;
 
 	virtual const Char* _primary_interface () const = 0;
 
@@ -205,6 +156,7 @@ protected:
 	{}
 };
 */
+
 template <class Primary, class ... Bases>
 class ImplementationPOA :
 	public virtual ServantPOA <Bases>...,
@@ -213,7 +165,7 @@ class ImplementationPOA :
 public:
 	virtual Interface_ptr _query_interface (const Char* id)
 	{
-		return InterfaceFinderPOA <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
+		return Interface::_duplicate (FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id));
 	}
 	
 	virtual const Char* _primary_interface () const

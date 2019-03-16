@@ -357,7 +357,7 @@ class Implementation :
 public:
 	Interface_ptr _query_interface (const Char* id)
 	{
-		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases...>::find (static_cast <S&> (*this), id));
+		return Interface::_duplicate (FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id));
 	}
 
 	T_ptr <Primary> _this ()
