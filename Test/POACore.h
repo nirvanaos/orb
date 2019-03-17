@@ -2,7 +2,7 @@
 #define NIRVANA_TESTORB_POACORE_H_
 
 #include "LocalObjectStaticCore.h"
-#include "ServantLinksCore.h"
+#include "ObjectCore.h"
 #include <POA_s.h>
 
 namespace CORBA {
@@ -12,8 +12,7 @@ class POACore :
 	public ServantTraitsStatic <POACore>,
 	public LifeCycleStatic <>,
 	public LocalObjectStaticCore <POACore>,
-	public InterfaceStatic <POACore, ::PortableServer::POA>,
-	public PrimaryInterface < ::PortableServer::POA>
+	public InterfaceStatic <POACore, ::PortableServer::POA>
 {
 public:
 	static Interface_ptr _query_interface (const Char* id)
@@ -21,11 +20,12 @@ public:
 		return InterfaceFinder <POACore, ::PortableServer::POA, Object>::find (*(POACore*)nullptr, id);
 	}
 
-	const Char* activate_object (ServantLinks_ptr servant)
+	const Char* activate_object (ServantBase_ptr servant)
 	{
-		ServantLinksCore* links = static_cast <ServantLinksCore*> (static_cast <Bridge <ServantLinks>*> (servant));
-		assert (!links->is_active_);
-		links->is_active_ = TRUE;
+		Bridge <Object>* p = Object_ptr (servant);
+		ObjectCore* obj = static_cast <ObjectCore*> (p);
+		assert (!obj->is_active_);
+		obj->is_active_ = true;
 		return "Objectid";
 	}
 };

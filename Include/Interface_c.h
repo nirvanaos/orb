@@ -6,6 +6,7 @@
 #include <Nirvana/Nirvana.h>
 #include "Environment.h"
 #include "Exception.h"
+#include "RepositoryId.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -23,6 +24,8 @@ template <class I> class Bridge;
 template <>
 class Bridge <Interface>
 {
+	Bridge (const Bridge&); // = delete;
+	Bridge& operator = (const Bridge&); // = delete;
 public:
 	struct EPV
 	{
@@ -66,8 +69,8 @@ protected:
 	{}
 };
 
-#define BASE_STRUCT_ENTRY(type, name) Wide <type>::Func name;\
-operator const Wide <type>::Func () const { return name; }
+#define BASE_STRUCT_ENTRY(type, name) Wide < type>::Func name;\
+operator const Wide < type>::Func () const { return name; }
 
 //! Interface pointer template.
 template <class I>
@@ -531,6 +534,7 @@ protected:
 		typename BridgeMarshal <Primary>:: template Wide <Base>::Func func = t._epv ().base;
 		Bridge <Base>* ret = (func)(&t, Bridge <Base>::interface_id_, &env);
 		env.check ();
+		assert (!ret || RepositoryId::compatible (ret->_epv().interface.interface_id, Bridge <Base>::interface_id_));
 		return ret;
 	}
 

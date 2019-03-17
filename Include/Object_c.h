@@ -164,9 +164,6 @@ public:
 	}
 };
 
-// TODO: ...
-class LocalObject : public Object
-{};
 }
 
 }

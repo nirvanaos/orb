@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\AbstractBase_c.cpp" />
+    <ClCompile Include="..\DynamicServant_c.cpp" />
     <ClCompile Include="..\Implementation.cpp" />
     <ClCompile Include="..\ImplementationPOA.cpp" />
     <ClCompile Include="..\Interface_s.cpp" />
@@ -31,13 +32,14 @@
     <ClCompile Include="..\POA_c.cpp" />
     <ClCompile Include="..\RepositoryId.cpp" />
     <ClCompile Include="..\ServantBase_c.cpp" />
-    <ClCompile Include="..\ServantLinks_c.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Include\AbstractBase_c.h" />
     <ClInclude Include="..\..\Include\AbstractBase_s.h" />
     <ClInclude Include="..\..\Include\Any.h" />
     <ClInclude Include="..\..\Include\BasicTypes.h" />
+    <ClInclude Include="..\..\Include\DynamicServant_c.h" />
+    <ClInclude Include="..\..\Include\DynamicServant_s.h" />
     <ClInclude Include="..\..\Include\Environment.h" />
     <ClInclude Include="..\..\Include\Exception.h" />
     <ClInclude Include="..\..\Include\Fixed.h" />
@@ -47,6 +49,7 @@
     <ClInclude Include="..\..\Include\ImplementationTied.h" />
     <ClInclude Include="..\..\Include\Interface_c.h" />
     <ClInclude Include="..\..\Include\Interface_s.h" />
+    <ClInclude Include="..\..\Include\LocalObject_c.h" />
     <ClInclude Include="..\..\Include\ObjectAdapter_s.h" />
     <ClInclude Include="..\..\Include\Object_c.h" />
     <ClInclude Include="..\..\Include\ObjectAdapter_c.h" />
@@ -60,8 +63,6 @@
     <ClInclude Include="..\..\Include\sequence.h" />
     <ClInclude Include="..\..\Include\ServantBase_c.h" />
     <ClInclude Include="..\..\Include\ServantBase_s.h" />
-    <ClInclude Include="..\..\Include\ServantLinks_c.h" />
-    <ClInclude Include="..\..\Include\ServantLinks_s.h" />
     <ClInclude Include="..\giop.h" />
     <ClInclude Include="..\iop.h" />
   </ItemGroup>

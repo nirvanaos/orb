@@ -12,8 +12,8 @@ namespace Nirvana {
 
 #ifndef TEST_NO_STATIC
 
-template <> ServantLinks_ptr InterfaceStatic <TestORB::StaticI1, ServantBase>::servant_links_;
-template <> ServantLinks_ptr InterfaceStatic <TestORB::StaticI3, ServantBase>::servant_links_;
+template <> ServantBase_ptr InterfaceStatic <TestORB::StaticI1, Object>::servant_base_;
+template <> ServantBase_ptr InterfaceStatic <TestORB::StaticI3, Object>::servant_base_;
 
 class ModuleLoader
 {
@@ -31,12 +31,12 @@ public:
 	}
 
 private:
-	void load_static (const OLF_ObjectInfo& oi, ServantLinks_ptr& sl)
+	void load_static (const OLF_ObjectInfo& oi, ServantBase_ptr& sl)
 	{
-		sl = g_object_adapter->create_servant (oi.servant, oi.primary_interface);
+		sl = g_object_adapter->create_servant (oi.servant, oi.dynamic);
 	}
 
-	void unload_static (ServantLinks_ptr sl)
+	void unload_static (ServantBase_ptr sl)
 	{
 		release (sl);
 	}
@@ -44,13 +44,13 @@ private:
 	template <class S>
 	void load_static ()
 	{
-		load_static (InterfaceStatic <S, ServantBase>::object_info_, InterfaceStatic <S, ServantBase>::servant_links_);
+		load_static (InterfaceStatic <S, Object>::object_info_, InterfaceStatic <S, Object>::servant_base_);
 	}
 
 	template <class S>
 	void unload_static ()
 	{
-		unload_static (InterfaceStatic <S, ServantBase>::servant_links_);
+		unload_static (InterfaceStatic <S, Object>::servant_base_);
 	}
 };
 

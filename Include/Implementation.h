@@ -8,6 +8,8 @@
 #include "POA_c.h"
 #include "AbstractBase_s.h"
 #include "ServantBase_s.h"
+#include "DynamicServant_s.h"
+#include "LocalObject_c.h"
 #include "RefCountBase.h"
 #include <type_traits>
 
@@ -150,104 +152,77 @@ class InterfaceImpl :
 	public InterfaceImplBase <S, I>
 {};
 
-//! Standard implementation of AbstractBase.
-/*
-template <class S>
-class InterfaceImpl <S, AbstractBase> :
-	public InterfaceImplBase <S, AbstractBase>
-{
-public:
-	void _implicitly_activate ()
-	{}
-};
-*/
-//! Standard implementation of ServantBase.
-
-class ServantBaseLinks :
+//! \brief Implements delegate to the core ServantBase implementation.
+class ServantBaseLink :
 	public Bridge <ServantBase>
-{
-public:
-	operator ServantLinks_ptr () const
-	{
-		return servant_links_;
-	}
-
-	// ServantBase operations
-
-	::PortableServer::POA_ptr _default_POA ()
-	{
-		return servant_links_->servant_base()->_default_POA ();
-	}
-
-	InterfaceDef_ptr _get_interface ()
-	{
-		return servant_links_->servant_base ()->_get_interface ();
-	}
-
-	Boolean _is_a (const Char* type_id)
-	{
-		return servant_links_->servant_base ()->_is_a (type_id);
-	}
-
-	Boolean _non_existent ()
-	{
-		return servant_links_->servant_base ()->_non_existent ();
-	}
-
-protected:
-	ServantBaseLinks (const EPV& epv) :
-		Bridge <ServantBase> (epv),
-		servant_links_ ((ServantLinks*)nullptr)
-	{}
-	
-	ServantBaseLinks (const EPV& epv, const Char* primary_interface) :
-		Bridge <ServantBase> (epv),
-		servant_links_ ((ServantLinks*)nullptr)
-	{
-		_final_construct (primary_interface);
-	}
-
-	void _final_construct (const Char* primary_interface);
-
-	void _implicitly_activate ();
-
-	~ServantBaseLinks ()
-	{
-		release (servant_links_);
-	}
-
-protected:
-	ServantLinks_ptr servant_links_;
-};
-
-template <class S>
-class InterfaceImpl <S, ServantBase> :
-	public ServantBaseLinks,
-	public Skeleton <S, ServantBase>
-{
-protected:
-	InterfaceImpl () :
-		ServantBaseLinks (Skeleton <S, ServantBase>::epv_, S::primary_interface_)
-	{}
-};
-
-//! \tparam S Servant class implementing operations.
-template <class S>
-class InterfaceImpl <S, Object> :
-	public InterfaceImpl <S, ServantBase>
 {
 public:
 	operator Bridge <Object>& ()
 	{
-		this->_implicitly_activate ();
-		return *ServantBaseLinks::servant_links_->object ();
+		_implicitly_activate ();
+		return *Object_ptr (servant_base_);
 	}
+
+	// ServantBase operations
+
+	::PortableServer::POA_ptr _default_POA () const
+	{
+		return servant_base_->_default_POA ();
+	}
+
+	InterfaceDef_ptr _get_interface () const
+	{
+		return servant_base_->_get_interface ();
+	}
+
+	Boolean _is_a (const Char* type_id) const
+	{
+		return servant_base_->_is_a (type_id);
+	}
+
+	Boolean _non_existent () const
+	{
+		return false;
+	}
+
+	// Our extension
+	Boolean _is_active () const
+	{
+		return !servant_base_->_non_existent ();
+	}
+
+protected:
+	ServantBaseLink (const Bridge <ServantBase>::EPV& servant_base, Bridge <DynamicServant>& dynamic_servant);
+
+	void _implicitly_activate ();
+
+	~ServantBaseLink ()
+	{
+		release (servant_base_);
+	}
+
+protected:
+	ServantBase_ptr servant_base_;
+};
+
+//! Standard implementation of Object (ServantBase).
+//! \tparam S Servant class implementing operations.
+template <class S>
+class InterfaceImpl <S, Object> :
+	public Skeleton <S, ServantBase>,
+	public InterfaceImplBase <S, DynamicServant>,
+	public ServantBaseLink
+{
+protected:
+	InterfaceImpl () :
+		ServantBaseLink (Skeleton <S, ServantBase>::epv_, *this)
+	{}
 };
 
 //! Standard implementation of `CORBA::LocalObject'.
 
-class LocalObjectLinks :
-	public Bridge <Object>
+class LocalObjectLink :
+	public Bridge <DynamicServant>
 {
 public:
 	// Object operations
@@ -281,23 +256,12 @@ public:
 	{
 		return object_->_hash (maximum);
 	}
+	// TODO: Other Object operations shall be here...
 
 protected:
-	LocalObjectLinks (const EPV& epv, const Char* primary_id) :
-		Bridge <Object> (epv),
-		object_ (Object_ptr::nil ())
-	{
-		_final_construct (primary_id);
-	}
+	LocalObjectLink (const EPV& epv);
 
-	LocalObjectLinks (const EPV& epv) :
-		Bridge <Object> (epv),
-		object_ (Object_ptr::nil ())
-	{}
-
-	void _final_construct (const Char* primary_interface);
-
-	~LocalObjectLinks ()
+	~LocalObjectLink ()
 	{
 		release (object_);
 	}
@@ -309,12 +273,13 @@ private:
 //! \tparam S Servant class implementing operations.
 template <class S>
 class InterfaceImpl <S, LocalObject> :
-	public LocalObjectLinks,
-	public Skeleton <S, Object>
+	public LocalObjectLink,
+	public InterfaceImplBase <S, Object>,
+	public Skeleton <S, DynamicServant>
 {
 protected:
 	InterfaceImpl () :
-		LocalObjectLinks (Skeleton <S, Object>::epv_, S::primary_interface_)
+		LocalObjectLink (Skeleton <S, DynamicServant>::epv_)
 	{}
 };
 
@@ -351,8 +316,7 @@ class Implementation :
 	public LifeCycleRefCnt <S>,
 	public InterfaceImpl <S, AbstractBase>,
 	public InterfaceImpl <S, Bases>...,
-	public InterfaceImpl <S, Primary>,
-	public PrimaryInterface <Primary>
+	public InterfaceImpl <S, Primary>
 {
 	class DummyActivator
 	{
@@ -360,7 +324,13 @@ class Implementation :
 		static void _implicitly_activate ()
 		{}
 	};
+
 public:
+	static const Char* _primary_interface ()
+	{
+		return Bridge <Primary>::interface_id_;
+	}
+
 	Interface_ptr _query_interface (const Char* id)
 	{
 		return Interface::_duplicate (FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id));
@@ -368,8 +338,8 @@ public:
 
 	T_ptr <Primary> _this ()
 	{
-		std::conditional < std::is_base_of <ServantBaseLinks, Implementation <S, Primary, Bases...> >::value, 
-			ServantBaseLinks, DummyActivator>::type::_implicitly_activate ();
+		std::conditional < std::is_base_of <ServantBaseLink, Implementation <S, Primary, Bases...> >::value, 
+			ServantBaseLink, DummyActivator>::type::_implicitly_activate ();
 		return this;
 	}
 

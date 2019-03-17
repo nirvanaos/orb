@@ -3,25 +3,23 @@
 namespace CORBA {
 namespace Nirvana {
 
-void ServantBaseLinks::_final_construct (const Char* primary_interface)
-{
-	assert (is_nil (servant_links_));
-	servant_links_ = g_object_adapter->create_servant (this, primary_interface);
-}
+ServantBaseLink::ServantBaseLink (const Bridge <ServantBase>::EPV& servant_base, Bridge <DynamicServant>& dynamic_servant) :
+	Bridge <ServantBase> (servant_base),
+	servant_base_ (g_object_adapter->create_servant (this, &dynamic_servant))
+{}
 
-void ServantBaseLinks::_implicitly_activate ()
+void ServantBaseLink::_implicitly_activate ()
 {
-	if (!servant_links_->is_active ()) {
+	if (!_is_active ()) {
 		::PortableServer::POA_var poa = ServantBase_ptr (this)->_default_POA ();
-		poa->activate_object (*this);
+		poa->activate_object (servant_base_);
 	}
 }
 
-void LocalObjectLinks::_final_construct (const Char* primary_id)
-{
-	assert (!object_);
-	object_ = g_object_adapter->create_local_object (Object_ptr (this), primary_id);
-}
+LocalObjectLink::LocalObjectLink (const EPV& epv) :
+	Bridge <DynamicServant> (epv),
+	object_ (g_object_adapter->create_local_object (this))
+{}
 
 }
 }

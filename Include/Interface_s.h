@@ -51,16 +51,6 @@ public:
 	}
 };
 
-template <class I>
-class PrimaryInterface
-{
-public:
-	static const Char* const primary_interface_;
-};
-
-template <class I>
-const Char* const PrimaryInterface <I>::primary_interface_ = Bridge <I>::interface_id_;
-
 }
 }
 

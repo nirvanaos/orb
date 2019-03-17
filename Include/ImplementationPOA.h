@@ -72,64 +72,52 @@ protected:
 // Virtual implementation of ServantBase
 
 template <>
-class ServantPOA <ServantBase> :
+class ServantPOA <DynamicServant> :
 	public virtual ServantPOA <AbstractBase>,
-	public ServantBaseLinks,
-	public Skeleton <ServantPOA <ServantBase>, ServantBase>
+	public InterfaceImplBase <ServantPOA <DynamicServant>, DynamicServant>
 {
 public:
-	operator Bridge <ServantBase>& ()
-	{
-		_check_links ();
-		return static_cast <Bridge <ServantBase>&> (*this);
-	}
+	virtual const Char* _primary_interface () const = 0;
+};
 
-	operator ServantLinks_ptr ()
-	{
-		_check_links ();
-		return ServantBaseLinks::operator ServantLinks_ptr ();
-	}
-
-	virtual Interface_ptr _query_interface (const Char* id);
-
+template <>
+class ServantPOA <ServantBase> :
+	public virtual ServantPOA <DynamicServant>,
+	public Skeleton <ServantPOA <ServantBase>, ServantBase>,
+	public ServantBaseLink
+{
+public:
 	// ServantBase operations
 
 	virtual ::PortableServer::POA_ptr _default_POA ()
 	{
-		return ServantBaseLinks::_default_POA ();
+		return ServantBaseLink::_default_POA ();
 	}
 
 	virtual InterfaceDef_ptr _get_interface ()
 	{
-		return ServantBaseLinks::_get_interface ();
+		return ServantBaseLink::_get_interface ();
 	}
 
 	virtual Boolean _is_a (const Char* type_id)
 	{
-		return ServantBaseLinks::_is_a (type_id);
+		return ServantBaseLink::_is_a (type_id);
 	}
 
 	virtual Boolean _non_existent ()
 	{
-		return ServantBaseLinks::_non_existent ();
+		return ServantBaseLink::_non_existent ();
 	}
 
 protected:
 	ServantPOA () :
-		ServantBaseLinks (Skeleton <ServantPOA <ServantBase>, ServantBase>::epv_)
+		ServantBaseLink (Skeleton <ServantPOA <ServantBase>, ServantBase>::epv_, *this)
 	{}
 
-	virtual const Char* _primary_interface () const = 0;
-	virtual void _implicitly_activate ();
-
-protected:
-	void _check_links ()
+	virtual void _implicitly_activate ()
 	{
-		if (!servant_links_)
-			_final_construct ();
+		ServantBaseLink::_implicitly_activate ();
 	}
-
-	void _final_construct ();
 };
 
 template <>
@@ -137,25 +125,59 @@ class ServantPOA <Object> :
 	public virtual ServantPOA <ServantBase>
 {
 public:
-	operator Bridge <Object>& ();
 	virtual Interface_ptr _query_interface (const Char* id);
-};
 
+protected:
+	ServantPOA ()
+	{}
+};
 /*
 template <>
 class ServantPOA <LocalObject> :
-	public virtual ServantPOA <AbstractBase>,
-	public LocalObjectLinks,
-	public Skeleton <ServantPOA <LocalObject>, Object>
+	public virtual ServantPOA <Object>,
+	public LocalObjectLink,
+	public InterfaceImplBase <ServantPOA <LocalObject>, Object>
 {
 public:
+	// Object operations
+
+	virtual ImplementationDef_ptr _get_implementation ()
+	{
+		return LocalObjectLink::_get_implementation ();
+	}
+
+	InterfaceDef_ptr _get_interface ()
+	{
+		return LocalObjectLink::_get_interface ();
+	}
+
+	Boolean _is_a (const Char* type_id)
+	{
+		return LocalObjectLink::_is_a (type_id);
+	}
+
+	Boolean _non_existent ()
+	{
+		return LocalObjectLink::_non_existent ();
+	}
+
+	Boolean _is_equivalent (Object_ptr other_object)
+	{
+		return LocalObjectLink::_is_equivalent (other_object);
+	}
+
+	ULong _hash (ULong maximum)
+	{
+		return LocalObjectLink::_hash (maximum);
+	}
+	// TODO: Other Object operations shall be here...
+
 protected:
 	ServantPOA () :
-		LocalObjectLinks (Skeleton <ServantPOA <LocalObject>, Object>::epv_)
+		LocalObjectLink (Skeleton <ServantPOA <DynamicServant>, DynamicServant>::epv_)
 	{}
 };
 */
-
 //! \class	ImplementationPOA
 //!
 //! \brief	Portable implementation of interface.

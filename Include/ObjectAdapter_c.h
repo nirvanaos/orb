@@ -2,7 +2,8 @@
 #ifndef NIRVANA_ORB_OBJECTADAPTER_C_H_
 #define NIRVANA_ORB_OBJECTADAPTER_C_H_
 
-#include "ServantLinks_c.h"
+#include "ServantBase_c.h"
+#include "DynamicServant_c.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -29,8 +30,8 @@ public:
 
 		struct
 		{
-			BridgeMarshal <ServantLinks>* (*create_servant) (Bridge <ObjectAdapter>*, BridgeMarshal <ServantBase>*, const Char*, EnvironmentBridge*);
-			BridgeMarshal <Object>* (*create_local_object) (Bridge <ObjectAdapter>*, BridgeMarshal <AbstractBase>*, const Char*, EnvironmentBridge*);
+			BridgeMarshal <ServantBase>* (*create_servant) (Bridge <ObjectAdapter>*, BridgeMarshal <ServantBase>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
+			BridgeMarshal <Object>* (*create_local_object) (Bridge <ObjectAdapter>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -53,29 +54,29 @@ class Client <T, ObjectAdapter> :
 	public T
 {
 public:
-	ServantLinks_ptr create_servant (ServantBase_ptr servant, const Char* type_id);
-	Object_ptr create_local_object (AbstractBase_ptr base, const Char* type_id);
+	ServantBase_ptr create_servant (ServantBase_ptr servant, DynamicServant_ptr dynamic);
+	Object_ptr create_local_object (DynamicServant_ptr dynamic);
 };
 
 class ObjectAdapter : public ClientInterface <ObjectAdapter, AbstractBase>
 {};
 
 template <class T>
-ServantLinks_ptr Client <T, ObjectAdapter>::create_servant (ServantBase_ptr servant, const Char* type_id)
+ServantBase_ptr Client <T, ObjectAdapter>::create_servant (ServantBase_ptr servant, DynamicServant_ptr dynamic)
 {
 	Environment _env;
-	Bridge <ObjectAdapter>& _b = (*this);
-	ServantLinks_var _ret = (_b._epv ().epv.create_servant) (&_b, servant, type_id, &_env);
+	Bridge <ObjectAdapter>& _b (T::_get_bridge (_env));
+	ServantBase_var _ret = (_b._epv ().epv.create_servant) (&_b, servant, dynamic, &_env);
 	_env.check ();
 	return _ret._retn ();
 }
 
 template <class T>
-Object_ptr Client <T, ObjectAdapter>::create_local_object (AbstractBase_ptr base, const Char* type_id)
+Object_ptr Client <T, ObjectAdapter>::create_local_object (DynamicServant_ptr dynamic)
 {
 	Environment _env;
-	Bridge <ObjectAdapter>& _b = (*this);
-	Object_var _ret = (_b._epv ().epv.create_local_object) (&_b, base, type_id, &_env);
+	Bridge <ObjectAdapter>& _b (T::_get_bridge (_env));
+	Object_var _ret = (_b._epv ().epv.create_local_object) (&_b, dynamic, &_env);
 	_env.check ();
 	return _ret._retn ();
 }

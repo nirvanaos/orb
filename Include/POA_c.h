@@ -4,7 +4,7 @@
 #ifndef NIRVANA_ORB_POA_C_H_
 #define NIRVANA_ORB_POA_C_H_
 
-#include "ServantLinks_c.h"
+#include "ServantBase_c.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -28,7 +28,7 @@ public:
 
 		struct
 		{
-			const Char* (*activate_object) (Bridge < ::PortableServer::POA>*, BridgeMarshal <ServantLinks>*, EnvironmentBridge*);
+			const Char* (*activate_object) (Bridge < ::PortableServer::POA>*, BridgeMarshal <ServantBase>*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -51,14 +51,14 @@ class Client <T, ::PortableServer::POA> :
 	public T
 {
 public:
-	const Char* activate_object (ServantLinks_ptr servant);
+	const Char* activate_object (ServantBase_ptr servant);
 };
 
 template <class T>
-const Char* Client <T, ::PortableServer::POA>::activate_object (ServantLinks_ptr servant)
+const Char* Client <T, ::PortableServer::POA>::activate_object (ServantBase_ptr servant)
 {
 	Environment _env;
-	Bridge < ::PortableServer::POA>& _b = (*this);
+	Bridge < ::PortableServer::POA>& _b (T::_get_bridge (_env));
 	const Char* _ret = (_b._epv ().epv.activate_object) (&_b, servant, &_env);
 	_env.check ();
 	return _ret;

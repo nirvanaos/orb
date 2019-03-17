@@ -73,6 +73,7 @@ Bridge <Interface>* Client <T, AbstractBase>::_query_interface (const Char* type
 	Bridge <AbstractBase>& _b (T::_get_bridge (_env));
 	Bridge <Interface>* _ret = (_b._epv ().epv.query_interface) (&_b, type_id, &_env);
 	_env.check ();
+	assert (!_ret || RepositoryId::compatible (_ret->_epv ().interface_id, type_id));
 	return _ret;
 }
 

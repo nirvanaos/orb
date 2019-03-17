@@ -16,10 +16,10 @@ public:
 	static const typename Bridge <ObjectAdapter>::EPV epv_;
 
 protected:
-	static BridgeMarshal <ServantLinks>* _create_servant (Bridge <ObjectAdapter>* obj, BridgeMarshal <ServantBase>* servant, const Char* type_id, EnvironmentBridge* env)
+	static BridgeMarshal <ServantBase>* _create_servant (Bridge <ObjectAdapter>* obj, BridgeMarshal <ServantBase>* servant, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_servant (servant, type_id);
+			return S::_implementation (obj).create_servant (servant, dynamic);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
@@ -28,10 +28,10 @@ protected:
 		return 0;
 	}
 
-	static BridgeMarshal <Object>* _create_local_object (Bridge <ObjectAdapter>* obj, BridgeMarshal <AbstractBase>* base, const Char* type_id, EnvironmentBridge* env)
+	static BridgeMarshal <Object>* _create_local_object (Bridge <ObjectAdapter>* obj, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_local_object (base, type_id);
+			return S::_implementation (obj).create_local_object (dynamic);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {

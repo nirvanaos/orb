@@ -32,7 +32,7 @@ public:
 
 		struct
 		{
-			BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
+			BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 		}
 		base;
 
@@ -110,8 +110,26 @@ Boolean Client <T, ServantBase>::_non_existent ()
 	return _ret;
 }
 
-class ServantBase : public ClientInterface <ServantBase, AbstractBase>
-{};
+class ServantBase : public ClientInterface <ServantBase, Object>
+{
+public:
+	// Overridables
+
+	InterfaceDef_ptr _get_interface ()
+	{
+		return ClientInterfacePrimary <ServantBase>::_get_interface ();
+	}
+
+	Boolean _is_a (const Char* type_id)
+	{
+		return ClientInterfacePrimary <ServantBase>::_is_a (type_id);
+	}
+
+	Boolean _non_existent ()
+	{
+		return ClientInterfacePrimary <ServantBase>::_non_existent ();
+	}
+};
 
 }
 }

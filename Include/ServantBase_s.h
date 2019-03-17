@@ -73,7 +73,7 @@ const Bridge <ServantBase>::EPV Skeleton <S, ServantBase>::epv_ = {
 		S::template __release <ServantBase>
 	},
 	{ // base
-		S::template _wide <::CORBA::AbstractBase, ServantBase>
+		S::template _wide < ::CORBA::Object, ServantBase>
 	},
 	{ // epv
 		S::__default_POA,

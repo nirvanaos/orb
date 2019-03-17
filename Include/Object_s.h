@@ -7,7 +7,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-// Object skeleton
+//! Object skeleton
 
 template <class S>
 class Skeleton <S, Object>
@@ -88,6 +88,7 @@ protected:
 		return 0;
 	}
 };
+// TODO: Other Object operations shall be here...
 
 template <class S>
 const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
@@ -106,7 +107,8 @@ const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 		S::__non_existent,
 		S::__is_equivalent,
 		S::__hash
-	}
+		// TODO: Other Object operations shall be here...
+}
 };
 
 }

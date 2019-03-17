@@ -48,10 +48,10 @@
     <ClCompile Include="..\ServantBase_c.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ServantLinks_c.cpp">
+    <ClCompile Include="..\ImplementationPOA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ImplementationPOA.cpp">
+    <ClCompile Include="..\DynamicServant_c.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -140,10 +140,13 @@
     <ClInclude Include="..\..\Include\POA_s.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\ServantLinks_c.h">
+    <ClInclude Include="..\..\Include\DynamicServant_c.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\ServantLinks_s.h">
+    <ClInclude Include="..\..\Include\DynamicServant_s.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\LocalObject_c.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,6 +7,7 @@
 #include "ObjectAdapter_c.h"
 #include "AbstractBase_s.h"
 #include "ServantBase_s.h"
+#include "DynamicServant_s.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -15,13 +16,12 @@ namespace Nirvana {
 struct OLF_ObjectInfo
 {
 	Bridge <ServantBase>* servant;
-	const Char* primary_interface;
+	Bridge <DynamicServant>* dynamic;
 };
 
 struct OLF_LocalObjectInfo
 {
-	Bridge <AbstractBase>* servant;
-	const Char* primary_interface;
+	Bridge <DynamicServant>* dynamic;
 };
 
 template <class S, class I> class ServantStatic;
@@ -108,59 +108,55 @@ class InterfaceStatic :
 	public InterfaceStaticBase <S, I>
 {};
 
-//! Static implementation of ServantBase
+//! Static implementation of Object (ServantBase)
 //! \tparam S Servant class.
 template <class S>
-class InterfaceStatic <S, ServantBase> :
-	public InterfaceStaticBase <S, ServantBase>
-{
-public:
-	// ServantBase operations
-
-	static ::PortableServer::POA_ptr _default_POA ()
-	{
-		return servant_links_->servant_base ()->_default_POA ();
-	}
-
-	static InterfaceDef_ptr _get_interface ()
-	{
-		return servant_links_->servant_base ()->_get_interface ();
-	}
-
-	static Boolean _is_a (const Char* type_id)
-	{
-		return servant_links_->servant_base ()->_is_a (type_id);
-	}
-
-	static Boolean _non_existent ()
-	{
-		return servant_links_->servant_base ()->_non_existent ();
-	}
-
-	static const OLF_ObjectInfo object_info_;
-	static ServantLinks_ptr servant_links_;
-};
-
-template <class S>
-const OLF_ObjectInfo InterfaceStatic <S, ServantBase>::object_info_ = {InterfaceStaticBase <S, ServantBase>::_bridge (), S::primary_interface_};
-
-template <class S>
 class InterfaceStatic <S, Object> :
-	public InterfaceStatic <S, ServantBase>
+	public InterfaceStaticBase <S, ServantBase>,
+	public InterfaceStaticBase <S, DynamicServant>
 {
 public:
 	operator Bridge <Object>& () const
 	{
-		return *ServantLinks_ptr (InterfaceStatic <S, ServantBase>::servant_links_)->object ();
+		return *Object_ptr (servant_base_);
 	}
+
+	// ServantBase operations
+
+	static ::PortableServer::POA_ptr _default_POA ()
+	{
+		return servant_base_->_default_POA ();
+	}
+
+	static InterfaceDef_ptr _get_interface ()
+	{
+		return servant_base_->_get_interface ();
+	}
+
+	static Boolean _is_a (const Char* type_id)
+	{
+		return servant_base_->_is_a (type_id);
+	}
+
+	static Boolean _non_existent ()
+	{
+		return false;
+	}
+
+	static const OLF_ObjectInfo object_info_;
+	static ServantBase_ptr servant_base_;
 };
+
+template <class S>
+const OLF_ObjectInfo InterfaceStatic <S, Object>::object_info_ = {InterfaceStaticBase <S, ServantBase>::_bridge (), InterfaceStaticBase <S, DynamicServant>::_bridge ()};
 
 //! Static implementation of LocalObject
 //! \tparam S Servant class.
 //! \tparam Primary Primary interface.
 template <class S>
 class InterfaceStatic <S, LocalObject> :
-	public InterfaceStaticBase <S, Object>
+	public InterfaceStaticBase <S, Object>,
+	public InterfaceStaticBase <S, DynamicServant>
 {
 public:
 	// Object operations
@@ -194,13 +190,14 @@ public:
 	{
 		return object_->_hash (maximum);
 	}
+	// TODO: Other Object operations shall be here...
 
 	static const OLF_LocalObjectInfo object_info_;
 	static Object_ptr object_;
 };
 
 template <class S>
-const OLF_LocalObjectInfo InterfaceStatic <S, LocalObject>::object_info_ = {InterfaceStatic <S, AbstractBase>::_bridge (), S::primary_interface_};
+const OLF_LocalObjectInfo InterfaceStatic <S, LocalObject>::object_info_ = {InterfaceStatic <S, DynamicServant>::_bridge ()};
 
 template <class S, class I>
 class ImplementationStaticSingle :
@@ -230,10 +227,14 @@ class ImplementationStatic :
 	public LifeCycleStatic <>,
 	public InterfaceStatic <S, AbstractBase>,
 	public InterfaceStatic <S, Bases>...,
-	public InterfaceStatic <S, Primary>,
-	public PrimaryInterface <Primary>
+	public InterfaceStatic <S, Primary>
 {
 public:
+	static const Char* _primary_interface ()
+	{
+		return Bridge <Primary>::interface_id_;
+	}
+
 	Interface_ptr _query_interface (const Char* id)
 	{
 		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases...>::find (*(S*)nullptr, id));

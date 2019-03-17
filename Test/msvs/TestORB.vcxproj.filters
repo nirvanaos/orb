@@ -53,9 +53,6 @@
     <ClInclude Include="..\ObjectCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\ServantLinksCore.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\ServantCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -90,9 +87,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\I3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Include\ServantLinks_s.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\LocalObjectStaticCore.h">
