@@ -58,7 +58,7 @@ const Bridge < ::Test::I1>::EPV Skeleton <S, ::Test::I1>::epv_ = {
 
 template <class S>
 class Servant <S, ::Test::I1> :
-	public Implementation <S, ::Test::I1, ::CORBA::Object>
+	public Implementation <S, ::Test::I1, ::PortableServer::ServantBase>
 {};
 
 }
@@ -71,7 +71,7 @@ namespace Nirvana {
 
 template <>
 class ServantPOA < ::Test::I1> :
-	public ImplementationPOA < ::Test::I1, ::CORBA::Object>
+	public ImplementationPOA < ::Test::I1, ::PortableServer::ServantBase>
 {
 public:
 	virtual Long op1 (Long p1) = 0;
@@ -95,7 +95,7 @@ namespace Nirvana {
 
 template <class S>
 class ServantStatic <S, ::Test::I1> :
-	public ImplementationStatic <S, ::Test::I1, ::CORBA::Object>
+	public ImplementationStatic <S, ::Test::I1, ::PortableServer::ServantBase>
 {};
 
 }

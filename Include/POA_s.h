@@ -11,13 +11,13 @@ namespace CORBA {
 namespace Nirvana {
 
 template <class S>
-class Skeleton <S, ::PortableServer::POA>
+class Skeleton <S, PortableServer::POA>
 {
 public:
-	static const typename Bridge < ::PortableServer::POA>::EPV epv_;
+	static const typename Bridge <PortableServer::POA>::EPV epv_;
 
 protected:
-	static const Char* _activate_object (Bridge < ::PortableServer::POA>* obj, BridgeMarshal <ServantBase>* servant, EnvironmentBridge* env)
+	static const Char* _activate_object (Bridge <PortableServer::POA>* obj, BridgeMarshal <PortableServer::ServantBase>* servant, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).activate_object (servant);
@@ -31,14 +31,14 @@ protected:
 };
 
 template <class S>
-const Bridge < ::PortableServer::POA>::EPV Skeleton <S, ::PortableServer::POA>::epv_ = {
+const Bridge <PortableServer::POA>::EPV Skeleton <S, PortableServer::POA>::epv_ = {
 	{ // interface
-		Bridge < ::PortableServer::POA>::interface_id_,
-		S::template __duplicate <Object>,
-		S::template __release <Object>
+		Bridge <PortableServer::POA>::interface_id_,
+		S::template __duplicate <PortableServer::POA>,
+		S::template __release <PortableServer::POA>
 	},
 	{ // base
-		S::template _wide <Object, ::PortableServer::POA>
+		S::template _wide <Object, PortableServer::POA>
 	},
 	{ // epv
 		S::_activate_object

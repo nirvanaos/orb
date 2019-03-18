@@ -154,7 +154,7 @@ class InterfaceImpl :
 
 //! \brief Implements delegate to the core ServantBase implementation.
 class ServantBaseLink :
-	public Bridge <ServantBase>
+	public Bridge <PortableServer::ServantBase>
 {
 public:
 	operator Bridge <Object>& ()
@@ -165,7 +165,7 @@ public:
 
 	// ServantBase operations
 
-	::PortableServer::POA_ptr _default_POA () const
+	PortableServer::POA_ptr _default_POA () const
 	{
 		return servant_base_->_default_POA ();
 	}
@@ -192,7 +192,7 @@ public:
 	}
 
 protected:
-	ServantBaseLink (const Bridge <ServantBase>::EPV& servant_base, Bridge <DynamicServant>& dynamic_servant);
+	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& servant_base, Bridge <DynamicServant>& dynamic_servant);
 
 	void _implicitly_activate ();
 
@@ -202,20 +202,20 @@ protected:
 	}
 
 protected:
-	ServantBase_ptr servant_base_;
+	PortableServer::Servant servant_base_;
 };
 
-//! Standard implementation of Object (ServantBase).
+//! Standard implementation of PortableServer::ServantBase.
 //! \tparam S Servant class implementing operations.
 template <class S>
-class InterfaceImpl <S, Object> :
-	public Skeleton <S, ServantBase>,
+class InterfaceImpl <S, PortableServer::ServantBase> :
+	public Skeleton <S, PortableServer::ServantBase>,
 	public InterfaceImplBase <S, DynamicServant>,
 	public ServantBaseLink
 {
 protected:
 	InterfaceImpl () :
-		ServantBaseLink (Skeleton <S, ServantBase>::epv_, *this)
+		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_, *this)
 	{}
 };
 

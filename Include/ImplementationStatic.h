@@ -15,7 +15,7 @@ namespace Nirvana {
 // Structures for OLF loader
 struct OLF_ObjectInfo
 {
-	Bridge <ServantBase>* servant;
+	Bridge <PortableServer::ServantBase>* servant;
 	Bridge <DynamicServant>* dynamic;
 };
 
@@ -108,11 +108,11 @@ class InterfaceStatic :
 	public InterfaceStaticBase <S, I>
 {};
 
-//! Static implementation of Object (ServantBase)
+//! Static implementation of PortableServer::ServantBase.
 //! \tparam S Servant class.
 template <class S>
-class InterfaceStatic <S, Object> :
-	public InterfaceStaticBase <S, ServantBase>,
+class InterfaceStatic <S, PortableServer::ServantBase> :
+	public InterfaceStaticBase <S, PortableServer::ServantBase>,
 	public InterfaceStaticBase <S, DynamicServant>
 {
 public:
@@ -123,7 +123,7 @@ public:
 
 	// ServantBase operations
 
-	static ::PortableServer::POA_ptr _default_POA ()
+	static PortableServer::POA_ptr _default_POA ()
 	{
 		return servant_base_->_default_POA ();
 	}
@@ -144,11 +144,11 @@ public:
 	}
 
 	static const OLF_ObjectInfo object_info_;
-	static ServantBase_ptr servant_base_;
+	static PortableServer::Servant servant_base_;
 };
 
 template <class S>
-const OLF_ObjectInfo InterfaceStatic <S, Object>::object_info_ = {InterfaceStaticBase <S, ServantBase>::_bridge (), InterfaceStaticBase <S, DynamicServant>::_bridge ()};
+const OLF_ObjectInfo InterfaceStatic <S, PortableServer::ServantBase>::object_info_ = {InterfaceStaticBase <S, PortableServer::ServantBase>::_bridge (), InterfaceStaticBase <S, DynamicServant>::_bridge ()};
 
 //! Static implementation of LocalObject
 //! \tparam S Servant class.

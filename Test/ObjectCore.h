@@ -15,7 +15,7 @@ class ObjectCore :
 	public InterfaceImplBase <ObjectCore, Object>
 {
 public:
-	ObjectCore (ServantBase_ptr servant, DynamicServant_ptr dynamic) :
+	ObjectCore (PortableServer::Servant servant, DynamicServant_ptr dynamic) :
 		servant_ (servant), dynamic_ (dynamic),
 		is_active_ (false)
 	{}
@@ -85,7 +85,7 @@ public:
 	static BridgeMarshal <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
-			ServantBase_ptr servant = _implementation (obj).servant_;
+			PortableServer::Servant servant = _implementation (obj).servant_;
 			return (servant->_epv ().epv.get_interface) (servant, env);
 		} catch (const Exception& e) {
 			env->set_exception (e);
@@ -98,7 +98,7 @@ public:
 	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
-			ServantBase_ptr servant = _implementation (obj).servant_;
+			PortableServer::Servant servant = _implementation (obj).servant_;
 			return (servant->_epv ().epv.is_a) (servant, type_id, env);
 		} catch (const Exception& e) {
 			env->set_exception (e);
@@ -111,7 +111,7 @@ public:
 	static Boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
-			ServantBase_ptr servant = _implementation (obj).servant_;
+			PortableServer::Servant servant = _implementation (obj).servant_;
 			return (servant->_epv ().epv.non_existent) (servant, env);
 		} catch (const Exception& e) {
 			env->set_exception (e);
@@ -133,7 +133,7 @@ public:
 	// TODO: Other Object operations shall be here...
 
 private:
-	ServantBase_ptr servant_;
+	PortableServer::Servant servant_;
 	DynamicServant_ptr dynamic_;
 };
 

@@ -11,19 +11,19 @@ typedef ::CORBA::Nirvana::T_ptr <POA> POA_ptr;
 typedef ::CORBA::Nirvana::T_var <POA> POA_var;
 typedef ::CORBA::Nirvana::T_out <POA> POA_out;
 
+class ServantBase;
+typedef ::CORBA::Nirvana::T_ptr <ServantBase> Servant; // TODO: Replace to ServantBase* as described in the standard. ?
+typedef ::CORBA::Nirvana::T_var <ServantBase> ServantBase_var;
+typedef ::CORBA::Nirvana::T_out <ServantBase> ServantBase_out;
+
 }
 
 namespace CORBA {
 namespace Nirvana {
 
-class ServantBase;
-typedef T_ptr <ServantBase> ServantBase_ptr;
-typedef T_var <ServantBase> ServantBase_var;
-typedef T_out <ServantBase> ServantBase_out;
-
 template <>
-class Bridge <ServantBase> :
-	public BridgeMarshal <ServantBase>
+class Bridge <PortableServer::ServantBase> :
+	public BridgeMarshal <PortableServer::ServantBase>
 {
 public:
 	struct EPV
@@ -31,17 +31,17 @@ public:
 		Bridge <Interface>::EPV interface;
 
 		struct
-		{
+		{ // TODO: Derive from DynamicServant.
 			BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 		}
 		base;
 
 		struct
 		{
-			BridgeMarshal <::PortableServer::POA>* (*default_POA) (Bridge <ServantBase>*, EnvironmentBridge*);
-			BridgeMarshal <InterfaceDef>* (*get_interface) (Bridge <ServantBase>*, EnvironmentBridge*);
-			Boolean (*is_a) (Bridge <ServantBase>*, const Char* type_id, EnvironmentBridge*);
-			Boolean (*non_existent) (Bridge <ServantBase>*, EnvironmentBridge*);
+			BridgeMarshal <PortableServer::POA>* (*default_POA) (Bridge <PortableServer::ServantBase>*, EnvironmentBridge*);
+			BridgeMarshal <InterfaceDef>* (*get_interface) (Bridge <PortableServer::ServantBase>*, EnvironmentBridge*);
+			Boolean (*is_a) (Bridge <PortableServer::ServantBase>*, const Char* type_id, EnvironmentBridge*);
+			Boolean (*non_existent) (Bridge <PortableServer::ServantBase>*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -55,12 +55,12 @@ public:
 
 protected:
 	Bridge (const EPV& epv) :
-		BridgeMarshal <ServantBase> (epv.interface)
+		BridgeMarshal <PortableServer::ServantBase> (epv.interface)
 	{}
 };
 
 template <class T>
-class Client <T, ServantBase> :
+class Client <T, PortableServer::ServantBase> :
 	public T
 {
 public:
@@ -71,67 +71,71 @@ public:
 };
 
 template <class T>
-::PortableServer::POA_ptr Client <T, ServantBase>::_default_POA ()
+::PortableServer::POA_ptr Client <T, PortableServer::ServantBase>::_default_POA ()
 {
 	Environment _env;
-	Bridge <ServantBase>& _b (T::_get_bridge (_env));
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
 	::PortableServer::POA_var _ret ((_b._epv ().epv.default_POA) (&_b, &_env));
 	_env.check ();
 	return _ret._retn ();
 }
 
 template <class T>
-InterfaceDef_ptr Client <T, ServantBase>::_get_interface ()
+InterfaceDef_ptr Client <T, PortableServer::ServantBase>::_get_interface ()
 {
 	Environment _env;
-	Bridge <ServantBase>& _b (T::_get_bridge (_env));
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
 	InterfaceDef_var _ret = (_b._epv ().epv.get_interface) (&_b, &_env);
 	_env.check ();
 	return _ret._retn ();
 }
 
 template <class T>
-Boolean Client <T, ServantBase>::_is_a (const Char* type_id)
+Boolean Client <T, PortableServer::ServantBase>::_is_a (const Char* type_id)
 {
 	Environment _env;
-	Bridge <ServantBase>& _b (T::_get_bridge (_env));
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
 	Boolean _ret = (_b._epv ().epv.is_a) (&_b, type_id, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-Boolean Client <T, ServantBase>::_non_existent ()
+Boolean Client <T, PortableServer::ServantBase>::_non_existent ()
 {
 	Environment _env;
-	Bridge <ServantBase>& _b (T::_get_bridge (_env));
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
 	Boolean _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
 
-class ServantBase : public ClientInterface <ServantBase, Object>
+}
+}
+
+namespace PortableServer {
+
+class ServantBase : public CORBA::Nirvana::ClientInterface <ServantBase, CORBA::Object>
 {
 public:
 	// Overridables
 
-	InterfaceDef_ptr _get_interface ()
+	CORBA::InterfaceDef_ptr _get_interface ()
 	{
-		return ClientInterfacePrimary <ServantBase>::_get_interface ();
+		return CORBA::Nirvana::ClientInterfacePrimary <ServantBase>::_get_interface ();
 	}
 
-	Boolean _is_a (const Char* type_id)
+	CORBA::Boolean _is_a (const CORBA::Char* type_id)
 	{
-		return ClientInterfacePrimary <ServantBase>::_is_a (type_id);
+		return CORBA::Nirvana::ClientInterfacePrimary <ServantBase>::_is_a (type_id);
 	}
 
-	Boolean _non_existent ()
+	CORBA::Boolean _non_existent ()
 	{
-		return ClientInterfacePrimary <ServantBase>::_non_existent ();
+		return CORBA::Nirvana::ClientInterfacePrimary <ServantBase>::_non_existent ();
 	}
 };
 
-}
 }
 
 #endif

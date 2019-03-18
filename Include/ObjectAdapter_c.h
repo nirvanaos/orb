@@ -30,7 +30,7 @@ public:
 
 		struct
 		{
-			BridgeMarshal <ServantBase>* (*create_servant) (Bridge <ObjectAdapter>*, BridgeMarshal <ServantBase>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
+			BridgeMarshal <PortableServer::ServantBase>* (*create_servant) (Bridge <ObjectAdapter>*, BridgeMarshal <PortableServer::ServantBase>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
 			BridgeMarshal <Object>* (*create_local_object) (Bridge <ObjectAdapter>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
 		}
 		epv;
@@ -54,7 +54,7 @@ class Client <T, ObjectAdapter> :
 	public T
 {
 public:
-	ServantBase_ptr create_servant (ServantBase_ptr servant, DynamicServant_ptr dynamic);
+	PortableServer::Servant create_servant (PortableServer::Servant servant, DynamicServant_ptr dynamic);
 	Object_ptr create_local_object (DynamicServant_ptr dynamic);
 };
 
@@ -62,11 +62,11 @@ class ObjectAdapter : public ClientInterface <ObjectAdapter, AbstractBase>
 {};
 
 template <class T>
-ServantBase_ptr Client <T, ObjectAdapter>::create_servant (ServantBase_ptr servant, DynamicServant_ptr dynamic)
+PortableServer::Servant Client <T, ObjectAdapter>::create_servant (PortableServer::Servant servant, DynamicServant_ptr dynamic)
 {
 	Environment _env;
 	Bridge <ObjectAdapter>& _b (T::_get_bridge (_env));
-	ServantBase_var _ret = (_b._epv ().epv.create_servant) (&_b, servant, dynamic, &_env);
+	PortableServer::ServantBase_var _ret = (_b._epv ().epv.create_servant) (&_b, servant, dynamic, &_env);
 	_env.check ();
 	return _ret._retn ();
 }

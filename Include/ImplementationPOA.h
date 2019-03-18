@@ -1,6 +1,6 @@
 // Nirvana project
 // Object Request Broker
-// POA Nirvana interface implementation
+// POA (virtual) interface implementation
 #ifndef NIRVANA_ORB_IMPLEMENTATIONPOA_H_
 #define NIRVANA_ORB_IMPLEMENTATIONPOA_H_
 
@@ -20,14 +20,7 @@ public:
 		_check_pointer (bridge, Skeleton <ServantPOA <I>, I>::epv_.interface);
 		return static_cast <ServantPOA <I>&> (*bridge);
 	}
-/*
-	template <>
-	static ServantPOA <LocalObject>& _servant (Bridge <Object>* bridge)
-	{
-		_check_pointer (bridge, Skeleton <ServantPOA <LocalObject>, Object>::epv_.interface);
-		return static_cast <ServantPOA <LocalObject>&> (*bridge);
-	}
-*/
+
 	template <class I>
 	static ServantPOA <I>& _implementation (Bridge <I>* bridge)
 	{
@@ -35,12 +28,12 @@ public:
 	}
 };
 
-//! Virtual implementation of AbstractBase
+//! POA implementation of AbstractBase
 
 template <>
 class ServantPOA <AbstractBase> :
-	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
 	public ServantTraitsPOA,
+	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
 	public LifeCycleRefCnt <ServantPOA <AbstractBase> >
 {
 public:
@@ -69,8 +62,7 @@ protected:
 	{}
 };
 
-// Virtual implementation of ServantBase
-
+//! CORBA::Nirvana::DynamicServant interface
 template <>
 class ServantPOA <DynamicServant> :
 	public virtual ServantPOA <AbstractBase>,
@@ -80,16 +72,17 @@ public:
 	virtual const Char* _primary_interface () const = 0;
 };
 
+// POA implementation of PortableServer::ServantBase
 template <>
-class ServantPOA <ServantBase> :
+class ServantPOA <PortableServer::ServantBase> :
 	public virtual ServantPOA <DynamicServant>,
-	public Skeleton <ServantPOA <ServantBase>, ServantBase>,
+	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>,
 	public ServantBaseLink
 {
 public:
 	// ServantBase operations
 
-	virtual ::PortableServer::POA_ptr _default_POA ()
+	virtual PortableServer::POA_ptr _default_POA ()
 	{
 		return ServantBaseLink::_default_POA ();
 	}
@@ -111,7 +104,7 @@ public:
 
 protected:
 	ServantPOA () :
-		ServantBaseLink (Skeleton <ServantPOA <ServantBase>, ServantBase>::epv_, *this)
+		ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_, *this)
 	{}
 
 	virtual void _implicitly_activate ()
@@ -120,17 +113,6 @@ protected:
 	}
 };
 
-template <>
-class ServantPOA <Object> :
-	public virtual ServantPOA <ServantBase>
-{
-public:
-	virtual Interface_ptr _query_interface (const Char* id);
-
-protected:
-	ServantPOA ()
-	{}
-};
 /*
 template <>
 class ServantPOA <LocalObject> :

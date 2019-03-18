@@ -87,7 +87,7 @@ public:
 		return Base::_servant (itf);
 	}
 
-	static ServantTied <T, I>& _implementation (Bridge <ServantBase>* itf)
+	static ServantTied <T, I>& _implementation (Bridge <PortableServer::ServantBase>* itf)
 	{
 		return Base::_servant (itf);
 	}

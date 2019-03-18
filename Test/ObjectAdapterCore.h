@@ -12,7 +12,7 @@ class ObjectAdapterCore :
 	public ImplementationStatic <ObjectAdapterCore, ObjectAdapter>
 {
 public:
-	static ServantBase_ptr create_servant (ServantBase_ptr servant, DynamicServant_ptr dynamic)
+	static PortableServer::Servant create_servant (PortableServer::Servant servant, DynamicServant_ptr dynamic)
 	{
 		return new ServantCore (servant, dynamic);
 	}

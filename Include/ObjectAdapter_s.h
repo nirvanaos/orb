@@ -16,7 +16,7 @@ public:
 	static const typename Bridge <ObjectAdapter>::EPV epv_;
 
 protected:
-	static BridgeMarshal <ServantBase>* _create_servant (Bridge <ObjectAdapter>* obj, BridgeMarshal <ServantBase>* servant, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
+	static BridgeMarshal <PortableServer::ServantBase>* _create_servant (Bridge <ObjectAdapter>* obj, BridgeMarshal <PortableServer::ServantBase>* servant, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).create_servant (servant, dynamic);

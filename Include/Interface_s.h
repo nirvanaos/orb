@@ -4,6 +4,10 @@
 #include "AbstractBase_c.h"
 #include "RepositoryId.h"
 
+namespace PortableServer {
+class ServantBase;
+}
+
 namespace CORBA {
 namespace Nirvana {
 
@@ -29,11 +33,35 @@ class InterfaceFinder
 		return &static_cast <Bridge <Itf>&> (*reinterpret_cast <S*> (servant));
 	}
 
+	template <class Itf>
+	struct InterfaceId
+	{
+		static constexpr const Char* id ()
+		{
+			return Bridge <Itf>::interface_id_;
+		}
+	};
+
+	template <>
+	static Bridge <Interface>* cast <PortableServer::ServantBase> (void* servant)
+	{
+		return &static_cast <Bridge <Object>&> (*reinterpret_cast <S*> (servant));
+	}
+
+	template <>
+	struct InterfaceId <PortableServer::ServantBase>
+	{
+		static constexpr const Char* id ()
+		{
+			return Bridge <Object>::interface_id_;
+		}
+	};
+
 public:
 	static Bridge <Interface>* find (S& servant, const Char* id)
 	{
 		static const InterfaceEntry table [] = {
-			{ Bridge <I>::interface_id_, cast <I> }...,
+			{ InterfaceId <I>::id (), cast <I> }...,
 		};
 
 		return InterfaceEntry::find (table, table + sizeof (table) / sizeof (*table), &servant, id);

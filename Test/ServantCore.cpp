@@ -6,7 +6,7 @@ namespace Nirvana {
 
 ::PortableServer::POA_ptr ServantCore::_default_POA () const
 {
-	return InterfaceStatic <POACore, ::PortableServer::POA>::_get_ptr ();
+	return InterfaceStatic <POACore, PortableServer::POA>::_get_ptr ();
 }
 
 }

@@ -12,15 +12,15 @@ class POACore :
 	public ServantTraitsStatic <POACore>,
 	public LifeCycleStatic <>,
 	public LocalObjectStaticCore <POACore>,
-	public InterfaceStatic <POACore, ::PortableServer::POA>
+	public InterfaceStatic <POACore, PortableServer::POA>
 {
 public:
 	static Interface_ptr _query_interface (const Char* id)
 	{
-		return InterfaceFinder <POACore, ::PortableServer::POA, Object>::find (*(POACore*)nullptr, id);
+		return InterfaceFinder <POACore, PortableServer::POA, Object>::find (*(POACore*)nullptr, id);
 	}
 
-	const Char* activate_object (ServantBase_ptr servant)
+	const Char* activate_object (PortableServer::Servant servant)
 	{
 		Bridge <Object>* p = Object_ptr (servant);
 		ObjectCore* obj = static_cast <ObjectCore*> (p);

@@ -10,11 +10,11 @@ namespace Nirvana {
 class ServantCore :
 	public ServantTraits <ServantCore>,
 	public Skeleton <ServantCore, AbstractBase>,
-	public InterfaceImpl <ServantCore, ServantBase>,
+	public InterfaceImplBase <ServantCore, PortableServer::ServantBase>,
 	public LifeCycleNoCopy <ServantCore>
 {
 public:
-	ServantCore (ServantBase_ptr servant, DynamicServant_ptr dynamic) :
+	ServantCore (PortableServer::Servant servant, DynamicServant_ptr dynamic) :
 		object_core_ (servant, dynamic)
 	{}
 
@@ -23,14 +23,14 @@ public:
 		return object_core_;
 	}
 
-	::PortableServer::POA_ptr _default_POA () const;
+	PortableServer::POA_ptr _default_POA () const;
 
 	InterfaceDef_ptr _get_interface () const
 	{
 		return InterfaceDef_ptr::nil ();	// TODO: Implement
 	}
 
-	static Boolean __is_a (Bridge <ServantBase>* obj, const Char* type_id, EnvironmentBridge* env)
+	static Boolean __is_a (Bridge <PortableServer::ServantBase>* obj, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
 			AbstractBase_ptr base = _implementation (obj).object_core_.abstract_base ();
