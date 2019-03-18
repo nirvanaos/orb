@@ -24,9 +24,12 @@ template <class I> class Bridge;
 template <>
 class Bridge <Interface>
 {
-	Bridge (const Bridge&); // = delete;
-	Bridge& operator = (const Bridge&); // = delete;
 public:
+	Bridge& operator = (const Bridge&)
+	{
+		return *this;	// Do nothing
+	}
+
 	struct EPV
 	{
 		const Char* interface_id;
