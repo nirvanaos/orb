@@ -1,7 +1,7 @@
-#ifndef NIRVANA_TESTORB_OBJECTADAPTERCORE_H_
-#define NIRVANA_TESTORB_OBJECTADAPTERCORE_H_
+#ifndef NIRVANA_TESTORB_OBJECTFACTORYCORE_H_
+#define NIRVANA_TESTORB_OBJECTFACTORYCORE_H_
 
-#include "ObjectAdapter_s.h"
+#include "ObjectFactory_s.h"
 #include "ServantCore.h"
 #include "LocalObjectCore.h"
 #include <ImplementationStatic.h>
@@ -9,8 +9,8 @@
 namespace CORBA {
 namespace Nirvana {
 
-class ObjectAdapterCore :
-	public ImplementationStatic <ObjectAdapterCore, ObjectAdapter>
+class ObjectFactoryCore :
+	public ImplementationStatic <ObjectFactoryCore, ObjectFactory>
 {
 public:
 	static PortableServer::Servant create_servant (PortableServer::Servant servant, DynamicServant_ptr dynamic)

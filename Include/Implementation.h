@@ -4,7 +4,7 @@
 #ifndef NIRVANA_ORB_IMPLEMENTATION_H_
 #define NIRVANA_ORB_IMPLEMENTATION_H_
 
-#include "ObjectAdapter_c.h"
+#include "ObjectFactory_c.h"
 #include "POA_c.h"
 #include "AbstractBase_s.h"
 #include "ServantBase_s.h"

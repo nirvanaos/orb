@@ -1,6 +1,6 @@
-// ObjectAdapter Interface to the core object functionality.
-#ifndef NIRVANA_ORB_OBJECTADAPTER_C_H_
-#define NIRVANA_ORB_OBJECTADAPTER_C_H_
+// ObjectFactory Interface to the core object functionality.
+#ifndef NIRVANA_ORB_OBJECTFACTORY_C_H_
+#define NIRVANA_ORB_OBJECTFACTORY_C_H_
 
 #include "ServantBase_c.h"
 #include "DynamicServant_c.h"
@@ -8,14 +8,14 @@
 namespace CORBA {
 namespace Nirvana {
 
-class ObjectAdapter;
-typedef T_ptr <ObjectAdapter> ObjectAdapter_ptr;
-typedef T_var <ObjectAdapter> ObjectAdapter_var;
-typedef T_out <ObjectAdapter> ObjectAdapter_out;
+class ObjectFactory;
+typedef T_ptr <ObjectFactory> ObjectFactory_ptr;
+typedef T_var <ObjectFactory> ObjectFactory_var;
+typedef T_out <ObjectFactory> ObjectFactory_out;
 
 template <>
-class Bridge <ObjectAdapter> :
-	public BridgeMarshal <ObjectAdapter>
+class Bridge <ObjectFactory> :
+	public BridgeMarshal <ObjectFactory>
 {
 public:
 	struct EPV
@@ -30,8 +30,8 @@ public:
 
 		struct
 		{
-			BridgeMarshal <PortableServer::ServantBase>* (*create_servant) (Bridge <ObjectAdapter>*, BridgeMarshal <PortableServer::ServantBase>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
-			BridgeMarshal <Object>* (*create_local_object) (Bridge <ObjectAdapter>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
+			BridgeMarshal <PortableServer::ServantBase>* (*create_servant) (Bridge <ObjectFactory>*, BridgeMarshal <PortableServer::ServantBase>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
+			BridgeMarshal <Object>* (*create_local_object) (Bridge <ObjectFactory>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -45,12 +45,12 @@ public:
 
 protected:
 	Bridge (const EPV& epv) :
-		BridgeMarshal <ObjectAdapter> (epv.interface)
+		BridgeMarshal <ObjectFactory> (epv.interface)
 	{}
 };
 
 template <class T>
-class Client <T, ObjectAdapter> :
+class Client <T, ObjectFactory> :
 	public T
 {
 public:
@@ -58,30 +58,30 @@ public:
 	Object_ptr create_local_object (DynamicServant_ptr dynamic);
 };
 
-class ObjectAdapter : public ClientInterface <ObjectAdapter, AbstractBase>
+class ObjectFactory : public ClientInterface <ObjectFactory, AbstractBase>
 {};
 
 template <class T>
-PortableServer::Servant Client <T, ObjectAdapter>::create_servant (PortableServer::Servant servant, DynamicServant_ptr dynamic)
+PortableServer::Servant Client <T, ObjectFactory>::create_servant (PortableServer::Servant servant, DynamicServant_ptr dynamic)
 {
 	Environment _env;
-	Bridge <ObjectAdapter>& _b (T::_get_bridge (_env));
+	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
 	PortableServer::ServantBase_var _ret = (_b._epv ().epv.create_servant) (&_b, servant, dynamic, &_env);
 	_env.check ();
 	return _ret._retn ();
 }
 
 template <class T>
-Object_ptr Client <T, ObjectAdapter>::create_local_object (DynamicServant_ptr dynamic)
+Object_ptr Client <T, ObjectFactory>::create_local_object (DynamicServant_ptr dynamic)
 {
 	Environment _env;
-	Bridge <ObjectAdapter>& _b (T::_get_bridge (_env));
+	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
 	Object_var _ret = (_b._epv ().epv.create_local_object) (&_b, dynamic, &_env);
 	_env.check ();
 	return _ret._retn ();
 }
 
-extern ObjectAdapter_ptr g_object_adapter;
+extern ObjectFactory_ptr g_object_factory;
 
 }
 }

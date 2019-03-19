@@ -6,7 +6,7 @@ namespace Nirvana {
 void ServantBaseLink::_construct (Bridge <DynamicServant>& dynamic_servant)
 {
 	assert (!servant_base_);
-	servant_base_ = g_object_adapter->create_servant (this, &dynamic_servant);
+	servant_base_ = g_object_factory->create_servant (this, &dynamic_servant);
 }
 
 void ServantBaseLink::_implicitly_activate ()
@@ -18,7 +18,7 @@ void ServantBaseLink::_implicitly_activate ()
 }
 
 LocalObjectLink::LocalObjectLink (DynamicServant_ptr servant) :
-	object_ (g_object_adapter->create_local_object (servant))
+	object_ (g_object_factory->create_local_object (servant))
 {}
 
 }

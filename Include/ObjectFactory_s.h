@@ -1,22 +1,22 @@
-#ifndef NIRVANA_ORB_OBJECTADAPTER_S_H_
-#define NIRVANA_ORB_OBJECTADAPTER_S_H_
+#ifndef NIRVANA_ORB_OBJECTFACTORY_S_H_
+#define NIRVANA_ORB_OBJECTFACTORY_S_H_
 
-#include "ObjectAdapter_c.h"
+#include "ObjectFactory_c.h"
 #include "Interface_s.h"
 
-// ObjectAdapter skeleton
+// ObjectFactory skeleton
 
 namespace CORBA {
 namespace Nirvana {
 
 template <class S>
-class Skeleton <S, ObjectAdapter>
+class Skeleton <S, ObjectFactory>
 {
 public:
-	static const typename Bridge <ObjectAdapter>::EPV epv_;
+	static const typename Bridge <ObjectFactory>::EPV epv_;
 
 protected:
-	static BridgeMarshal <PortableServer::ServantBase>* _create_servant (Bridge <ObjectAdapter>* obj, BridgeMarshal <PortableServer::ServantBase>* servant, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
+	static BridgeMarshal <PortableServer::ServantBase>* _create_servant (Bridge <ObjectFactory>* obj, BridgeMarshal <PortableServer::ServantBase>* servant, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).create_servant (servant, dynamic);
@@ -28,7 +28,7 @@ protected:
 		return 0;
 	}
 
-	static BridgeMarshal <Object>* _create_local_object (Bridge <ObjectAdapter>* obj, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
+	static BridgeMarshal <Object>* _create_local_object (Bridge <ObjectFactory>* obj, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).create_local_object (dynamic);
@@ -42,14 +42,14 @@ protected:
 };
 
 template <class S>
-const Bridge <ObjectAdapter>::EPV Skeleton <S, ObjectAdapter>::epv_ = {
+const Bridge <ObjectFactory>::EPV Skeleton <S, ObjectFactory>::epv_ = {
 	{ // interface
-		Bridge <ObjectAdapter>::interface_id_,
-		S::template __duplicate <ObjectAdapter>,
-		S::template __release <ObjectAdapter>
+		Bridge <ObjectFactory>::interface_id_,
+		S::template __duplicate <ObjectFactory>,
+		S::template __release <ObjectFactory>
 	},
 	{ // base
-		S::template _wide <AbstractBase, ObjectAdapter>
+		S::template _wide <AbstractBase, ObjectFactory>
 	},
 	{ // epv
 		S::_create_servant,

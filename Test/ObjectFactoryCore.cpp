@@ -1,9 +1,9 @@
-#include "ObjectAdapterCore.h"
+#include "ObjectFactoryCore.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-ObjectAdapter_ptr g_object_adapter = InterfaceStatic <ObjectAdapterCore, ObjectAdapter>::_bridge ();
+ObjectFactory_ptr g_object_factory = InterfaceStatic <ObjectFactoryCore, ObjectFactory>::_bridge ();
 
 }
 }
