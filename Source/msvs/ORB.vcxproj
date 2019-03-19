@@ -50,9 +50,9 @@
     <ClInclude Include="..\..\Include\Interface_c.h" />
     <ClInclude Include="..\..\Include\Interface_s.h" />
     <ClInclude Include="..\..\Include\LocalObject_c.h" />
-    <ClInclude Include="..\..\Include\ObjectAdapter_s.h" />
+    <ClInclude Include="..\..\Include\ObjectFactory_s.h" />
     <ClInclude Include="..\..\Include\Object_c.h" />
-    <ClInclude Include="..\..\Include\ObjectAdapter_c.h" />
+    <ClInclude Include="..\..\Include\ObjectFactory_c.h" />
     <ClInclude Include="..\..\Include\Object_s.h" />
     <ClInclude Include="..\..\Include\POA_c.h" />
     <ClInclude Include="..\..\Include\POA_s.h" />

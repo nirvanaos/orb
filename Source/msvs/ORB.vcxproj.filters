@@ -107,9 +107,6 @@
     <ClInclude Include="..\..\Include\Object_c.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\ObjectAdapter_c.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\AbstractBase_s.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -128,9 +125,6 @@
     <ClInclude Include="..\..\Include\Interface_s.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\ObjectAdapter_s.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\Servant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -147,6 +141,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Include\LocalObject_c.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\ObjectFactory_c.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\ObjectFactory_s.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

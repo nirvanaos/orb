@@ -30,9 +30,6 @@
     <ClCompile Include="..\ServantCore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ObjectAdapterCore.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Test_I1_c.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,15 +48,15 @@
     <ClCompile Include="..\ObjectImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ObjectFactoryCore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ObjectCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ServantCore.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ObjectAdapterCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Test_I1_c.h">
@@ -102,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ObjectImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ObjectFactoryCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
