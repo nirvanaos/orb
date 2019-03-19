@@ -42,7 +42,7 @@ public:
 
 	static ::Test::I3_ptr incarnate ()
 	{
-		return (new DynamicI3 (MAGIC_CONST))->_this ();
+		return PortableServer::Servant_var <DynamicI3> (new DynamicI3 (MAGIC_CONST))->_this ();
 	}
 
 private:
@@ -84,7 +84,7 @@ public:
 
 	static ::Test::I3_ptr incarnate ()
 	{
-		return (new PortableI3 (MAGIC_CONST))->_this ();
+		return PortableServer::Servant_var <PortableI3> (new PortableI3 (MAGIC_CONST))->_this ();
 	}
 
 private:
@@ -162,7 +162,7 @@ public:
 
 	static ::Test::I3_ptr incarnate ()
 	{
-		return (new POA_Test::I3_tie <TiedI3> (new TiedI3 (MAGIC_CONST)))->_this ();
+		return PortableServer::Servant_var <POA_Test::I3_tie <TiedI3> > (new POA_Test::I3_tie <TiedI3> (new TiedI3 (MAGIC_CONST)))->_this ();
 	}
 
 private:
@@ -181,7 +181,7 @@ public:
 
 	static ::Test::I3_ptr incarnate ()
 	{
-		return (new TiedDerivedI3 (MAGIC_CONST))->_this ();
+		return PortableServer::Servant_var <TiedDerivedI3> (new TiedDerivedI3 (MAGIC_CONST))->_this ();
 	}
 
 private:

@@ -32,7 +32,7 @@ public:
 
 	static ::Test::I1_ptr incarnate ()
 	{
-		return (new DynamicI1 (MAGIC_CONST))->_this ();
+		return PortableServer::Servant_var <DynamicI1> (new DynamicI1 (MAGIC_CONST))->_this ();
 	}
 
 private:
@@ -63,7 +63,7 @@ public:
 
 	static ::Test::I1_ptr incarnate ()
 	{
-		return (new PortableI1 (MAGIC_CONST))->_this ();
+		return PortableServer::Servant_var <PortableI1> (new PortableI1 (MAGIC_CONST))->_this ();
 	}
 
 private:
@@ -121,7 +121,7 @@ public:
 
 	static Test::I1_ptr incarnate ()
 	{
-		return (new POA_Test::I1_tie <TiedI1> (new TiedI1 (MAGIC_CONST)))->_this ();
+		return PortableServer::Servant_var <POA_Test::I1_tie <TiedI1> > (new POA_Test::I1_tie <TiedI1> (new TiedI1 (MAGIC_CONST)))->_this ();
 	}
 
 private:
@@ -140,7 +140,7 @@ public:
 
 	static ::Test::I1_ptr incarnate ()
 	{
-		return (new TiedDerivedI1 (MAGIC_CONST))->_this ();
+		return PortableServer::Servant_var <TiedDerivedI1> (new TiedDerivedI1 (MAGIC_CONST))->_this ();
 	}
 
 private:

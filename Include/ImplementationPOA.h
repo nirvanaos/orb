@@ -201,6 +201,9 @@ protected:
 	ServantPOA (const ServantPOA&) :
 		LocalObjectLink (this)
 	{}
+
+	virtual void _implicitly_activate ()
+	{}
 };
 
 //! \class	ImplementationPOA
@@ -230,6 +233,7 @@ public:
 	T_ptr <Primary> _this ()
 	{
 		this->_implicitly_activate ();
+		this->_add_ref ();
 		return this;
 	}
 

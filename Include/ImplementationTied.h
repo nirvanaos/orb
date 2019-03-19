@@ -109,7 +109,6 @@ private:
 	::PortableServer::POA_ptr poa_;
 };
 
-
 }
 }
 
