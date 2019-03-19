@@ -21,6 +21,8 @@ public:
 		return static_cast <ServantPOA <I>&> (*bridge);
 	}
 
+	static ServantPOA <PortableServer::ServantBase>& _servant (Bridge <PortableServer::ServantBase>* bridge);
+
 	template <class I>
 	static ServantPOA <I>& _implementation (Bridge <I>* bridge)
 	{
@@ -70,6 +72,10 @@ class ServantPOA <DynamicServant> :
 {
 public:
 	virtual const Char* _primary_interface () const = 0;
+
+protected:
+	ServantPOA ()
+	{}
 };
 
 // POA implementation of PortableServer::ServantBase
@@ -104,16 +110,31 @@ public:
 
 protected:
 	ServantPOA () :
-		ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_, *this)
+		ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_)
 	{}
 
 	ServantPOA (const ServantPOA&) :
-		ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_, *this)
+		ServantPOA ()
 	{}
 
 	virtual void _implicitly_activate ()
 	{
+		_check_construct ();
 		ServantBaseLink::_implicitly_activate ();
+	}
+
+private:
+	friend class ServantTraitsPOA;
+
+	void _check_construct ()
+	{
+		if (!ServantBaseLink::servant_base_)
+			_construct ();
+	}
+
+	void _construct ()
+	{
+		ServantBaseLink::_construct (*this);
 	}
 };
 

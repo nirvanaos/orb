@@ -3,10 +3,11 @@
 namespace CORBA {
 namespace Nirvana {
 
-ServantBaseLink::ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& servant_base, Bridge <DynamicServant>& dynamic_servant) :
-	Bridge <PortableServer::ServantBase> (servant_base),
-	servant_base_ (g_object_adapter->create_servant (this, &dynamic_servant))
-{}
+void ServantBaseLink::_construct (Bridge <DynamicServant>& dynamic_servant)
+{
+	assert (!servant_base_);
+	servant_base_ = g_object_adapter->create_servant (this, &dynamic_servant);
+}
 
 void ServantBaseLink::_implicitly_activate ()
 {

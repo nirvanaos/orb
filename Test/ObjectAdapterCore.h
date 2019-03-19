@@ -15,11 +15,17 @@ class ObjectAdapterCore :
 public:
 	static PortableServer::Servant create_servant (PortableServer::Servant servant, DynamicServant_ptr dynamic)
 	{
+#ifdef TEST_LOCAL_OBJECT
+		assert (false);
+#endif
 		return new ServantCore (servant, dynamic);
 	}
 
 	static Object_ptr create_local_object (DynamicServant_ptr servant)
 	{
+#ifndef TEST_LOCAL_OBJECT
+		assert (false);
+#endif
 		return new LocalObjectCore (servant);
 	}
 };
