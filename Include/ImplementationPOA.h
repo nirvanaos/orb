@@ -107,6 +107,10 @@ protected:
 		ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_, *this)
 	{}
 
+	ServantPOA (const ServantPOA&) :
+		ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_, *this)
+	{}
+
 	virtual void _implicitly_activate ()
 	{
 		ServantBaseLink::_implicitly_activate ();
@@ -191,6 +195,10 @@ public:
 
 protected:
 	ServantPOA () :
+		LocalObjectLink (this)
+	{}
+
+	ServantPOA (const ServantPOA&) :
 		LocalObjectLink (this)
 	{}
 };

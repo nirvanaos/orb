@@ -192,6 +192,11 @@ public:
 
 protected:
 	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& servant_base, Bridge <DynamicServant>& dynamic_servant);
+	ServantBaseLink (const ServantBaseLink&) = delete;
+	ServantBaseLink& operator = (const ServantBaseLink&)
+	{
+		return *this;
+	}
 
 	void _implicitly_activate ();
 
@@ -214,6 +219,10 @@ class InterfaceImpl <S, PortableServer::ServantBase> :
 {
 protected:
 	InterfaceImpl () :
+		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_, *this)
+	{}
+
+	InterfaceImpl (const InterfaceImpl&) :
 		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_, *this)
 	{}
 };
@@ -258,6 +267,12 @@ public:
 
 protected:
 	LocalObjectLink (DynamicServant_ptr servant);
+	LocalObjectLink (const LocalObjectLink&) = delete;
+	
+	LocalObjectLink& operator = (const LocalObjectLink&)
+	{
+		return *this;
+	}
 
 	~LocalObjectLink ()
 	{
@@ -277,6 +292,10 @@ class InterfaceImpl <S, LocalObject> :
 {
 protected:
 	InterfaceImpl () :
+		LocalObjectLink (this)
+	{}
+
+	InterfaceImpl (const InterfaceImpl&) :
 		LocalObjectLink (this)
 	{}
 };
