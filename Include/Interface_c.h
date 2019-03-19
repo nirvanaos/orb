@@ -81,8 +81,7 @@ class T_ptr
 {
 public:
 	T_ptr ()
-		// Zero init skipped for performance
-	{}
+	{} // Zero init skipped for performance
 
 	T_ptr (I* p) :
 		p_ (p)
@@ -228,7 +227,7 @@ inline void release (Nirvana::Interface_ptr itf)
 
 namespace Nirvana {
 
-/// T_var helper class
+//! T_var helper class
 template <class I>
 class T_var : public T_ptr <I>
 {

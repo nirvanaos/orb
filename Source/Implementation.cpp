@@ -16,9 +16,8 @@ void ServantBaseLink::_implicitly_activate ()
 	}
 }
 
-LocalObjectLink::LocalObjectLink (const EPV& epv) :
-	Bridge <DynamicServant> (epv),
-	object_ (g_object_adapter->create_local_object (this))
+LocalObjectLink::LocalObjectLink (DynamicServant_ptr servant) :
+	object_ (g_object_adapter->create_local_object (servant))
 {}
 
 }

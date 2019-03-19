@@ -143,7 +143,12 @@ ULong Client <T, Object>::_hash (ULong maximum)
 
 }
 
+/*
 class Object : public Nirvana::ClientInterface <Object, AbstractBase>
+{};*/
+class Object : 
+	public Nirvana::ClientInterfacePrimary <Object>,
+	public Nirvana::ClientBase <Object, AbstractBase> // AbstractBase operations are not available directly on Object_ptr.
 {};
 
 inline Object_ptr AbstractBase::_to_object ()
@@ -160,7 +165,7 @@ class ClientInterfaceBase <Primary, Object> :
 public:
 	static T_ptr <Primary> _narrow (Object_ptr obj)
 	{
-		return obj->_query_interface <Primary> ();
+		return AbstractBase_ptr (obj)->_query_interface <Primary> ();
 	}
 };
 

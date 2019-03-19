@@ -155,8 +155,8 @@ const OLF_ObjectInfo InterfaceStatic <S, PortableServer::ServantBase>::object_in
 //! \tparam Primary Primary interface.
 template <class S>
 class InterfaceStatic <S, LocalObject> :
-	public InterfaceStaticBase <S, Object>,
-	public InterfaceStaticBase <S, DynamicServant>
+	public InterfaceStaticBase <S, DynamicServant>,
+	public InterfaceStaticBase <S, Object>
 {
 public:
 	// Object operations
@@ -237,7 +237,7 @@ public:
 
 	Interface_ptr _query_interface (const Char* id)
 	{
-		return Interface::_duplicate (InterfaceFinder <S, Primary, Bases...>::find (*(S*)nullptr, id));
+		return Interface::_duplicate (FindInterface <Primary, Bases...>::find (*(S*)nullptr, id));
 	}
 
 	static T_ptr <Primary> _this ()

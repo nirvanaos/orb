@@ -159,7 +159,6 @@ class ServantBaseLink :
 public:
 	operator Bridge <Object>& ()
 	{
-		_implicitly_activate ();
 		return *Object_ptr (servant_base_);
 	}
 
@@ -221,8 +220,7 @@ protected:
 
 //! Standard implementation of `CORBA::LocalObject'.
 
-class LocalObjectLink :
-	public Bridge <DynamicServant>
+class LocalObjectLink
 {
 public:
 	// Object operations
@@ -259,7 +257,7 @@ public:
 	// TODO: Other Object operations shall be here...
 
 protected:
-	LocalObjectLink (const EPV& epv);
+	LocalObjectLink (DynamicServant_ptr servant);
 
 	~LocalObjectLink ()
 	{
@@ -273,13 +271,13 @@ private:
 //! \tparam S Servant class implementing operations.
 template <class S>
 class InterfaceImpl <S, LocalObject> :
-	public LocalObjectLink,
+	public InterfaceImplBase <S, DynamicServant>,
 	public InterfaceImplBase <S, Object>,
-	public Skeleton <S, DynamicServant>
+	public LocalObjectLink
 {
 protected:
 	InterfaceImpl () :
-		LocalObjectLink (Skeleton <S, DynamicServant>::epv_)
+		LocalObjectLink (this)
 	{}
 };
 

@@ -113,12 +113,47 @@ protected:
 	}
 };
 
-/*
+template <>
+class ServantPOA <Object> :
+	public virtual ServantPOA <PortableServer::ServantBase>,
+	public InterfaceImplBase <ServantPOA <Object>, Object>
+{
+public:
+	// Static overrides to resolve the ambiguity.
+	static BridgeMarshal <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
+	{
+		return InterfaceImplBase <ServantPOA <Object>, Object>::__get_interface (obj, env);
+	}
+
+	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
+	{
+		return InterfaceImplBase <ServantPOA <Object>, Object>::__is_a (obj, type_id, env);
+	}
+
+	static Boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
+	{
+		return InterfaceImplBase <ServantPOA <Object>, Object>::__non_existent (obj, env);
+	}
+
+	// Object operations
+
+	virtual ImplementationDef_ptr _get_implementation () = 0;
+	virtual InterfaceDef_ptr _get_interface () = 0;
+	virtual Boolean _is_a (const Char* type_id) = 0;
+	virtual Boolean _non_existent () = 0;
+	virtual Boolean _is_equivalent (Object_ptr other_object) = 0;
+	virtual ULong _hash (ULong maximum) = 0;
+	// TODO: Other Object operations shall be here...
+
+protected:
+	ServantPOA ()
+	{}
+};
+
 template <>
 class ServantPOA <LocalObject> :
 	public virtual ServantPOA <Object>,
-	public LocalObjectLink,
-	public InterfaceImplBase <ServantPOA <LocalObject>, Object>
+	public LocalObjectLink
 {
 public:
 	// Object operations
@@ -128,27 +163,27 @@ public:
 		return LocalObjectLink::_get_implementation ();
 	}
 
-	InterfaceDef_ptr _get_interface ()
+	virtual InterfaceDef_ptr _get_interface ()
 	{
 		return LocalObjectLink::_get_interface ();
 	}
 
-	Boolean _is_a (const Char* type_id)
+	virtual Boolean _is_a (const Char* type_id)
 	{
 		return LocalObjectLink::_is_a (type_id);
 	}
 
-	Boolean _non_existent ()
+	virtual Boolean _non_existent ()
 	{
 		return LocalObjectLink::_non_existent ();
 	}
 
-	Boolean _is_equivalent (Object_ptr other_object)
+	virtual Boolean _is_equivalent (Object_ptr other_object)
 	{
 		return LocalObjectLink::_is_equivalent (other_object);
 	}
 
-	ULong _hash (ULong maximum)
+	virtual ULong _hash (ULong maximum)
 	{
 		return LocalObjectLink::_hash (maximum);
 	}
@@ -156,10 +191,10 @@ public:
 
 protected:
 	ServantPOA () :
-		LocalObjectLink (Skeleton <ServantPOA <DynamicServant>, DynamicServant>::epv_)
+		LocalObjectLink (this)
 	{}
 };
-*/
+
 //! \class	ImplementationPOA
 //!
 //! \brief	Portable implementation of interface.

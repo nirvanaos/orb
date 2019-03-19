@@ -47,6 +47,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\ObjectImpl.cpp" />
     <ClCompile Include="..\ObjectCore.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -67,9 +68,11 @@
   <ItemGroup>
     <ClInclude Include="..\I1.h" />
     <ClInclude Include="..\I3.h" />
+    <ClInclude Include="..\LocalObjectCore.h" />
     <ClInclude Include="..\LocalObjectStaticCore.h" />
     <ClInclude Include="..\ObjectAdapterCore.h" />
     <ClInclude Include="..\ObjectCore.h" />
+    <ClInclude Include="..\ObjectImpl.h" />
     <ClInclude Include="..\POACore.h" />
     <ClInclude Include="..\ServantCore.h" />
     <ClInclude Include="..\Server.h" />

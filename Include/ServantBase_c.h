@@ -134,6 +134,22 @@ public:
 	{
 		return CORBA::Nirvana::ClientInterfacePrimary <ServantBase>::_non_existent ();
 	}
+
+	// For compatibility
+	void _add_ref ()
+	{
+		_duplicate (this);
+	}
+
+	void _remove_ref ()
+	{
+		CORBA::release (this);
+	}
+
+	CORBA::ULong _refcount_value () const
+	{
+		return 1; // TODO: Implement special method in AbstractBase.
+	}
 };
 
 }

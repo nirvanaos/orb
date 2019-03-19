@@ -4,6 +4,12 @@
 #include "Test_I1_c.h"
 #include "Server.h"
 
+#ifdef TEST_LOCAL_OBJECT
+typedef CORBA::LocalObject TestObjectBase;
+#else
+typedef PortableServer::ServantBase TestObjectBase;
+#endif
+
 namespace CORBA {
 namespace Nirvana {
 
@@ -58,7 +64,7 @@ const Bridge < ::Test::I1>::EPV Skeleton <S, ::Test::I1>::epv_ = {
 
 template <class S>
 class Servant <S, ::Test::I1> :
-	public Implementation <S, ::Test::I1, ::PortableServer::ServantBase>
+	public Implementation <S, ::Test::I1, TestObjectBase>
 {};
 
 }
@@ -71,7 +77,7 @@ namespace Nirvana {
 
 template <>
 class ServantPOA < ::Test::I1> :
-	public ImplementationPOA < ::Test::I1, ::PortableServer::ServantBase>
+	public ImplementationPOA < ::Test::I1, TestObjectBase>
 {
 public:
 	virtual Long op1 (Long p1) = 0;
@@ -95,7 +101,7 @@ namespace Nirvana {
 
 template <class S>
 class ServantStatic <S, ::Test::I1> :
-	public ImplementationStatic <S, ::Test::I1, ::PortableServer::ServantBase>
+	public ImplementationStatic <S, ::Test::I1, TestObjectBase>
 {};
 
 }

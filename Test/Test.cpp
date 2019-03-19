@@ -12,8 +12,13 @@ namespace Nirvana {
 
 #ifndef TEST_NO_STATIC
 
+#ifndef TEST_LOCAL_OBJECT
 template <> PortableServer::Servant InterfaceStatic <TestORB::StaticI1, PortableServer::ServantBase>::servant_base_;
 template <> PortableServer::Servant InterfaceStatic <TestORB::StaticI3, PortableServer::ServantBase>::servant_base_;
+#else
+template <> Object_ptr InterfaceStatic <TestORB::StaticI1, LocalObject>::object_;
+template <> Object_ptr InterfaceStatic <TestORB::StaticI3, LocalObject>::object_;
+#endif
 
 class ModuleLoader
 {
@@ -31,27 +36,51 @@ public:
 	}
 
 private:
-	void load_static (const OLF_ObjectInfo& oi, PortableServer::Servant& sl)
+#ifndef TEST_LOCAL_OBJECT
+	static void load_static (const OLF_ObjectInfo& oi, PortableServer::Servant& sl)
 	{
 		sl = g_object_adapter->create_servant (oi.servant, oi.dynamic);
 	}
 
-	void unload_static (PortableServer::Servant sl)
+	static void unload_static (PortableServer::Servant sl)
 	{
 		release (sl);
 	}
 
 	template <class S>
-	void load_static ()
+	static void load_static ()
 	{
 		load_static (InterfaceStatic <S, PortableServer::ServantBase>::object_info_, InterfaceStatic <S, PortableServer::ServantBase>::servant_base_);
 	}
 
 	template <class S>
-	void unload_static ()
+	static void unload_static ()
 	{
 		unload_static (InterfaceStatic <S, PortableServer::ServantBase>::servant_base_);
 	}
+#else
+	static void load_static (const OLF_LocalObjectInfo& oi, Object_ptr& ol)
+	{
+		ol = g_object_adapter->create_local_object (oi.dynamic);
+	}
+
+	static void unload_static (Object_ptr ol)
+	{
+		release (ol);
+	}
+
+	template <class S>
+	static void load_static ()
+	{
+		load_static (InterfaceStatic <S, LocalObject>::object_info_, InterfaceStatic <S, LocalObject>::object_);
+	}
+
+	template <class S>
+	static void unload_static ()
+	{
+		unload_static (InterfaceStatic <S, LocalObject>::object_);
+	}
+#endif
 };
 
 #endif

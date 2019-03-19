@@ -9,52 +9,39 @@ namespace Nirvana {
 
 class ServantCore :
 	public ServantTraits <ServantCore>,
-	public Skeleton <ServantCore, AbstractBase>,
+	public Skeleton <ServantCore, AbstractBase>, // Derive only for _wide() implementation.
 	public InterfaceImplBase <ServantCore, PortableServer::ServantBase>,
 	public LifeCycleNoCopy <ServantCore>
 {
 public:
 	ServantCore (PortableServer::Servant servant, DynamicServant_ptr dynamic) :
-		object_core_ (servant, dynamic)
+		object_ (servant, dynamic)
 	{}
 
 	operator Bridge <Object>& ()
 	{
-		return object_core_;
+		return object_;
 	}
 
 	PortableServer::POA_ptr _default_POA () const;
 
 	InterfaceDef_ptr _get_interface () const
 	{
-		return InterfaceDef_ptr::nil ();	// TODO: Implement
+		return static_cast <const ObjectBase&> (object_)._get_interface ();
 	}
 
-	static Boolean __is_a (Bridge <PortableServer::ServantBase>* obj, const Char* type_id, EnvironmentBridge* env)
+	Boolean _is_a (const Char* type_id)
 	{
-		try {
-			AbstractBase_ptr base = _implementation (obj).object_core_.abstract_base ();
-			Bridge <Interface>* itf = (base->_epv ().epv.query_interface) (base, type_id, env);
-			if (itf) {
-				(itf->_epv ().release) (itf);
-				return TRUE;
-			} else
-				return FALSE;
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return 0;
+		return static_cast <const ObjectBase&> (object_)._is_a (type_id);
 	}
 
 	Boolean _non_existent () const
 	{
-		return !object_core_.is_active_;
+		return !object_.is_active_;
 	}
 
 private:
-	ObjectCore object_core_;
+	ObjectCore object_;
 };
 
 }

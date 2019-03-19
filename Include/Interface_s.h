@@ -9,6 +9,9 @@ class ServantBase;
 }
 
 namespace CORBA {
+
+class LocalObject;
+
 namespace Nirvana {
 
 extern void _check_pointer (const void* p);
@@ -50,6 +53,21 @@ class InterfaceFinder
 
 	template <>
 	struct InterfaceId <PortableServer::ServantBase>
+	{
+		static constexpr const Char* id ()
+		{
+			return Bridge <Object>::interface_id_;
+		}
+	};
+
+	template <>
+	static Bridge <Interface>* cast <LocalObject> (void* servant)
+	{
+		return &static_cast <Bridge <Object>&> (*reinterpret_cast <S*> (servant));
+	}
+
+	template <>
+	struct InterfaceId <LocalObject>
 	{
 		static constexpr const Char* id ()
 		{

@@ -3,8 +3,7 @@
 #ifndef NIRVANA_TESTORB_OBJECTCORE_H_
 #define NIRVANA_TESTORB_OBJECTCORE_H_
 
-#include <Object_s.h>
-#include <Implementation.h>
+#include "ObjectImpl.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -12,25 +11,16 @@ namespace Nirvana {
 class ObjectCore :
 	public ServantTraits <ObjectCore>,
 	public LifeCycleDynamic <ObjectCore>,
-	public InterfaceImplBase <ObjectCore, Object>
+	public ObjectImpl <ObjectCore>
 {
 public:
 	ObjectCore (PortableServer::Servant servant, DynamicServant_ptr dynamic) :
-		servant_ (servant), dynamic_ (dynamic),
+		ObjectImpl <ObjectCore> (dynamic),
+		servant_ (servant),
 		is_active_ (false)
 	{}
 
 	bool is_active_;
-
-	AbstractBase_ptr abstract_base () const
-	{
-		return dynamic_;
-	}
-
-	const Char* primary_interface () const
-	{
-		return dynamic_->_primary_interface ();
-	}
 
 	// Delegate to base
 	
@@ -41,7 +31,7 @@ public:
 	static Bridge <AbstractBase>* _wide <AbstractBase, Object> (Bridge <Object>* derived, const Char* id, EnvironmentBridge* env)
 	{
 		try {
-			DynamicServant_ptr servant = _implementation (derived).dynamic_;
+			DynamicServant_ptr servant = _implementation (derived).servant ();
 			return (servant->_epv ().base.CORBA_AbstractBase) (servant, id, env);
 		} catch (const Exception& e) {
 			env->set_exception (e);
@@ -59,7 +49,7 @@ public:
 	{
 		try {
 			ObjectCore& _this = _implementation (static_cast <Bridge <Object>*> (itf));
-			Interface_ptr servant = _this.dynamic_;
+			Interface_ptr servant = _this.servant ();
 			(servant->_epv ().duplicate) (servant, env);
 			return &_this;
 		} catch (const Exception& e) {
@@ -72,15 +62,10 @@ public:
 
 	static void _release (Bridge <Object>* itf)
 	{
-		release (_implementation (itf).dynamic_);
+		release (_implementation (itf).servant ());
 	}
 
-	// Object operations
-
-	static BridgeMarshal <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
-	{
-		return nullptr;
-	}
+	// Object operations delegated to ServantBase.
 
 	static BridgeMarshal <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
@@ -121,20 +106,8 @@ public:
 		return 0;
 	}
 
-	static Boolean __is_equivalent (Bridge <Object>* obj, BridgeMarshal <Object>* other, EnvironmentBridge*)
-	{
-		return obj == other;
-	}
-
-	ULong _hash (ULong maximum) const
-	{
-		return 0; // TODO: Implement.
-	}
-	// TODO: Other Object operations shall be here...
-
 private:
 	PortableServer::Servant servant_;
-	DynamicServant_ptr dynamic_;
 };
 
 }

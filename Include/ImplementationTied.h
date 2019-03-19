@@ -92,6 +92,11 @@ public:
 		return Base::_servant (itf);
 	}
 
+	static ServantTied <T, I>& _implementation (Bridge <Object>* itf)
+	{
+		return Base::_servant (itf);
+	}
+
 	template <class I>
 	static T& _implementation (Bridge <I>* bridge)
 	{
