@@ -164,8 +164,8 @@ template <>
 class T_ptr <Interface>
 {
 public:
-	T_ptr ()
-		// Zero init skipped for performance
+	T_ptr () :
+		p_ (nullptr)
 	{}
 
 	T_ptr (Interface* p) :

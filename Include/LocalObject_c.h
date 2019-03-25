@@ -30,8 +30,8 @@ template <>
 class T_ptr <LocalObject>
 {
 public:
-	T_ptr ()
-		// Zero init skipped for performance
+	T_ptr () :
+		p_ (nullptr)
 	{}
 
 	T_ptr (Bridge <Object>* p) :
