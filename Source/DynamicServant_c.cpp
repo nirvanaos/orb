@@ -4,7 +4,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-const Char Bridge <DynamicServant>::interface_id_ [] = NIRVANA_REPOSITORY_ID (DynamicServant);
+const Char Bridge <DynamicServant>::interface_id_ [] = CORBA_NIRVANA_REPOSITORY_ID (DynamicServant);
 
 }
 }

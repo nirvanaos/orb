@@ -12,7 +12,7 @@ typedef ::CORBA::Nirvana::T_var <POA> POA_var;
 typedef ::CORBA::Nirvana::T_out <POA> POA_out;
 
 class ServantBase;
-typedef ::CORBA::Nirvana::T_ptr <ServantBase> Servant; // TODO: Replace to ServantBase* as described in the standard. ?
+typedef ::CORBA::Nirvana::T_ptr <ServantBase> Servant;
 typedef ::CORBA::Nirvana::T_var <ServantBase> ServantBase_var;
 typedef ::CORBA::Nirvana::T_out <ServantBase> ServantBase_out;
 
