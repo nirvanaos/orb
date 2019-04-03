@@ -3,10 +3,10 @@
 #ifndef NIRVANA_ORB_INTERFACE_C_H_
 #define NIRVANA_ORB_INTERFACE_C_H_
 
-#include <Nirvana/Nirvana.h>
 #include "Environment.h"
 #include "Exception.h"
 #include "RepositoryId.h"
+#include <assert.h>
 
 namespace CORBA {
 namespace Nirvana {
