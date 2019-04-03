@@ -1,4 +1,4 @@
-#include <ImplementationPOA.h>
+#include <CORBA/ImplementationPOA.h>
 
 namespace CORBA {
 namespace Nirvana {

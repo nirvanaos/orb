@@ -1,4 +1,4 @@
-#include "RepositoryId.h"
+#include <CORBA/RepositoryId.h>
 #include <stdlib.h>	// For _countof macro
 #include <algorithm>
 

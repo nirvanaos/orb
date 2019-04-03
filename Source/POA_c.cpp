@@ -1,5 +1,5 @@
-#include <POA_c.h>
-#include <RepositoryId.h>
+#include <CORBA/POA_c.h>
+#include <CORBA/RepositoryId.h>
 
 namespace CORBA {
 namespace Nirvana {

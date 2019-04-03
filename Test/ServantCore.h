@@ -2,7 +2,7 @@
 #define NIRVANA_TESTORB_SERVANTCORE_H_
 
 #include "ObjectCore.h"
-#include <ServantBase_s.h>
+#include <CORBA/ServantBase_s.h>
 
 namespace CORBA {
 namespace Nirvana {

@@ -1,10 +1,10 @@
 #ifndef NIRVANA_TESTORB_OBJECTFACTORYCORE_H_
 #define NIRVANA_TESTORB_OBJECTFACTORYCORE_H_
 
-#include "ObjectFactory_s.h"
+#include "CORBA/ObjectFactory_s.h"
 #include "ServantCore.h"
 #include "LocalObjectCore.h"
-#include <ImplementationStatic.h>
+#include <CORBA/ImplementationStatic.h>
 
 namespace CORBA {
 namespace Nirvana {

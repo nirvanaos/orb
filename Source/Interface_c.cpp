@@ -1,6 +1,6 @@
-#include <Interface_c.h>
-#include <RepositoryId.h>
-#include <Environment.h>
+#include <CORBA/Interface_c.h>
+#include <CORBA/RepositoryId.h>
+#include <CORBA/Environment.h>
 
 namespace CORBA {
 namespace Nirvana {

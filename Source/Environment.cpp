@@ -1,5 +1,5 @@
-#include <AbstractBase_c.h>
-#include <RepositoryId.h>
+#include <CORBA/AbstractBase_c.h>
+#include <CORBA/RepositoryId.h>
 
 namespace CORBA {
 namespace Nirvana {

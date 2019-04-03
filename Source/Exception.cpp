@@ -1,5 +1,5 @@
-#include "Exception.h"
-#include "RepositoryId.h"
+#include <CORBA/Exception.h>
+#include <CORBA/RepositoryId.h>
 
 #define DEFINE_EXCEPTION(MID, e)\
 void e::_raise () const { throw *this; }\

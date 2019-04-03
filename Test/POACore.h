@@ -3,7 +3,7 @@
 
 #include "LocalObjectStaticCore.h"
 #include "ObjectCore.h"
-#include <POA_s.h>
+#include <CORBA/POA_s.h>
 
 namespace CORBA {
 namespace Nirvana {

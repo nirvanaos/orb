@@ -1,7 +1,7 @@
 #ifndef NIRVANA_TESTORB_OBJECTIMPL_H_
 #define NIRVANA_TESTORB_OBJECTIMPL_H_
 
-#include <Implementation.h>
+#include <CORBA/Implementation.h>
 
 namespace CORBA {
 namespace Nirvana {
