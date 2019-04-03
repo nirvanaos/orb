@@ -243,7 +243,7 @@ class ImplementationPOA :
 public:
 	virtual Interface_ptr _query_interface (const Char* id)
 	{
-		return Interface::_duplicate (FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id));
+		return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
 	}
 	
 	virtual const Char* _primary_interface () const

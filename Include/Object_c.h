@@ -58,8 +58,6 @@ public:
 	static const Char interface_id_ [];
 
 protected:
-	friend class CORBA::AbstractBase; // TODO: Does it really need?
-
 	Bridge (const EPV& epv) :
 		BridgeMarshal <Object> (epv.interface)
 	{}
@@ -153,7 +151,7 @@ class Object :
 
 inline Object_ptr AbstractBase::_to_object ()
 {
-	return _query_interface <Object> ();
+	return Object::_duplicate (_query_interface <Object> ());
 }
 
 namespace Nirvana {
@@ -165,7 +163,7 @@ class ClientInterfaceBase <Primary, Object> :
 public:
 	static T_ptr <Primary> _narrow (Object_ptr obj)
 	{
-		return AbstractBase_ptr (obj)->_query_interface <Primary> ();
+		return Primary::_duplicate (AbstractBase_ptr (obj)->_query_interface <Primary> ());
 	}
 };
 

@@ -7,10 +7,9 @@ Boolean ObjectBase::_is_a (const Char* type_id) const
 {
 	AbstractBase_ptr base = servant_;
 	Bridge <Interface>* itf = base->_query_interface (type_id);
-	if (itf) {
-		(itf->_epv ().release) (itf);
+	if (itf)
 		return TRUE;
-	} else
+	else
 		return FALSE;
 }
 

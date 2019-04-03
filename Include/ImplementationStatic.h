@@ -237,7 +237,7 @@ public:
 
 	Interface_ptr _query_interface (const Char* id)
 	{
-		return Interface::_duplicate (FindInterface <Primary, Bases...>::find (*(S*)nullptr, id));
+		return FindInterface <Primary, Bases...>::find (*(S*)nullptr, id);
 	}
 
 	static T_ptr <Primary> _this ()

@@ -101,7 +101,7 @@ class ClientInterfaceBase <Primary, AbstractBase> :
 public:
 	static T_ptr <Primary> _narrow (AbstractBase_ptr obj)
 	{
-		return obj->_query_interface <Primary> ();
+		return Primary::_duplicate (obj->_query_interface <Primary> ());
 	}
 };
 
