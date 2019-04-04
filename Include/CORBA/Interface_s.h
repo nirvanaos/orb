@@ -27,7 +27,7 @@ struct InterfaceEntry
 	static Bridge <Interface>* find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const Char* id);
 };
 
-template <class S, class ... I>
+template <class S, class Primary, class ... I>
 class InterfaceFinder
 {
 	template <class Itf>
@@ -79,6 +79,7 @@ public:
 	static Bridge <Interface>* find (S& servant, const Char* id)
 	{
 		static const InterfaceEntry table [] = {
+			{ InterfaceId <Primary>::id (), cast <Primary> },
 			{ InterfaceId <I>::id (), cast <I> }...,
 		};
 
@@ -86,14 +87,14 @@ public:
 	}
 };
 
-template <class ... I>
+template <class Primary, class ... I>
 class FindInterface
 {
 public:
 	template <class S>
 	static Bridge <Interface>* find (S& servant, const Char* id)
 	{
-		return InterfaceFinder <S, I...>::find (servant, id);
+		return InterfaceFinder <S, Primary, I...>::find (servant, id);
 	}
 };
 
