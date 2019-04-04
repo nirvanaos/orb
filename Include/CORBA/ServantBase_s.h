@@ -73,7 +73,9 @@ const Bridge <PortableServer::ServantBase>::EPV Skeleton <S, PortableServer::Ser
 		S::template __release <PortableServer::ServantBase>
 	},
 	{ // base
-		S::template _wide < ::CORBA::Object, PortableServer::ServantBase>
+		S::template _wide < ::CORBA::AbstractBase, PortableServer::ServantBase>,
+		S::template _wide < ::CORBA::Object, PortableServer::ServantBase>,
+		S::template _wide <ReferenceCounter, PortableServer::ServantBase>
 	},
 	{ // epv
 		S::__default_POA,

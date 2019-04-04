@@ -1,6 +1,7 @@
 #ifndef NIRVANA_TESTORB_OBJECTIMPL_H_
 #define NIRVANA_TESTORB_OBJECTIMPL_H_
 
+#include <CORBA/Object_s.h>
 #include <CORBA/Implementation.h>
 
 namespace CORBA {
@@ -9,13 +10,28 @@ namespace Nirvana {
 class ObjectBase
 {
 public:
-	ObjectBase (DynamicServant_ptr servant) :
+	ObjectBase (AbstractBase_ptr servant) :
 		servant_ (servant)
 	{}
 
-	DynamicServant_ptr servant () const
+	operator Bridge <AbstractBase>& () const
+	{
+		return *servant_;
+	}
+
+	AbstractBase_ptr abstract_base () const
 	{
 		return servant_;
+	}
+
+	Interface_ptr primary_interface () const
+	{
+		return servant_->_query_interface (nullptr);
+	}
+
+	const Char* primary_interface_id () const
+	{
+		return primary_interface ()->_epv ().interface_id;
 	}
 
 	// Object operations
@@ -49,16 +65,17 @@ public:
 	// TODO: More Object operations shall be here...
 	
 private:
-	DynamicServant_ptr servant_;
+	AbstractBase_ptr servant_;
 };
 
 template <class S>
 class ObjectImpl :
+	public ObjectBase,
 	public InterfaceImplBase <S, Object>,
-	public ObjectBase
+	public Skeleton <S, AbstractBase> // Derive only for _wide() implementation.
 {
 public:
-	ObjectImpl (DynamicServant_ptr servant) :
+	ObjectImpl (AbstractBase_ptr servant) :
 		ObjectBase (servant)
 	{}
 

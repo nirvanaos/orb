@@ -1,22 +1,30 @@
 #ifndef NIRVANA_TESTORB_SERVANTCORE_H_
 #define NIRVANA_TESTORB_SERVANTCORE_H_
 
-#include "ObjectCore.h"
 #include <CORBA/ServantBase_s.h>
+#include "ObjectCore.h"
+#include "ReferenceCounterImpl.h"
 
 namespace CORBA {
 namespace Nirvana {
 
 class ServantCore :
 	public ServantTraits <ServantCore>,
-	public Skeleton <ServantCore, AbstractBase>, // Derive only for _wide() implementation.
+	public InterfaceImplBase <ServantCore, AbstractBase>,
 	public InterfaceImplBase <ServantCore, PortableServer::ServantBase>,
+	public ReferenceCounterImpl <ServantCore>,
 	public LifeCycleNoCopy <ServantCore>
 {
 public:
 	ServantCore (PortableServer::Servant servant, DynamicServant_ptr dynamic) :
-		object_ (servant, dynamic)
+		object_ (servant),
+		ReferenceCounterImpl <ServantCore> (dynamic)
 	{}
+
+	Interface_ptr _query_interface (const Char* id)
+	{
+		return FindInterface <PortableServer::ServantBase, Object, ReferenceCounter>::find (*this, id);
+	}
 
 	operator Bridge <Object>& ()
 	{

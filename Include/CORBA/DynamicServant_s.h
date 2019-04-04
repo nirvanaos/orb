@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_DYNAMICSERVANT_S_H_
 
 #include "DynamicServant_c.h"
-#include "AbstractBase_s.h"
+#include "Interface_s.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -14,32 +14,15 @@ public:
 	static const typename Bridge <DynamicServant>::EPV epv_;
 
 protected:
-	static void __invoke (Bridge <DynamicServant>* obj, BridgeMarshal <Request>* request, EnvironmentBridge* env)
+	static void __delete (Bridge <DynamicServant>* obj, EnvironmentBridge* env)
 	{
 		try {
-			return S::_servant (obj)._invoke (request);
+			delete &S::_servant (obj);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
 			env->set_unknown_exception ();
 		}
-	}
-
-	static const Char* __primary_interface (Bridge <DynamicServant>* obj, EnvironmentBridge* env)
-	{
-		try {
-			return S::_servant (obj)._primary_interface ();
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return 0;
-	}
-
-	void _invoke (Request_ptr request)
-	{
-		throw NO_IMPLEMENT ();	// TODO: Implement.
 	}
 };
 
@@ -50,12 +33,8 @@ const Bridge <DynamicServant>::EPV Skeleton <S, DynamicServant>::epv_ = {
 		S::template __duplicate <DynamicServant>,
 		S::template __release <DynamicServant>
 	},
-	{ // base
-		S::template _wide < ::CORBA::AbstractBase, DynamicServant>
-	},
 	{ // epv
-		S::__invoke,
-		S::__primary_interface
+		S::__delete
 	}
 };
 

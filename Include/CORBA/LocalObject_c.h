@@ -1,74 +1,53 @@
 #ifndef NIRVANA_ORB_LOCALOBJECT_C_H_
 #define NIRVANA_ORB_LOCALOBJECT_C_H_
 
-#include "Object_s.h"
+#include "Object_c.h"
+#include "ReferenceCounter_c.h"
 
 namespace CORBA {
 
-class LocalObject : public Object
-{
-public:
-	void _add_ref ()
-	{
-		_duplicate (this);
-	}
-
-	void _remove_ref ()
-	{
-		release (this);
-	}
-
-	ULong _refcount_value () const
-	{
-		return 1; // TODO: Implement special method in AbstractBase.
-	}
-};
-
-namespace Nirvana {
-
-template <>
-class T_ptr <LocalObject>
-{
-public:
-	T_ptr () :
-		p_ (nullptr)
-	{}
-
-	T_ptr (Bridge <Object>* p) :
-		p_ (static_cast <LocalObject*> (p))
-	{}
-
-	operator Bridge <Object>* () const
-	{
-		return p_;
-	}
-
-	LocalObject* operator -> () const
-	{
-		assert (p_);
-		return p_;
-	}
-
-	operator bool () const
-	{
-		return p_ != 0;
-	}
-
-	static T_ptr <LocalObject> nil ()
-	{
-		return T_ptr ((LocalObject*)nullptr);
-	}
-
-private:
-	LocalObject* p_;
-};
-
-}
-
+class LocalObject;
 typedef Nirvana::T_ptr <LocalObject> LocalObject_ptr;
 typedef Nirvana::T_var <LocalObject> LocalObject_var;
 typedef Nirvana::T_out <LocalObject> LocalObject_out;
 typedef Nirvana::T_inout <LocalObject> LocalObject_inout;
+
+namespace Nirvana {
+
+template <>
+class Bridge <LocalObject> :
+	public BridgeMarshal <LocalObject>
+{
+public:
+	struct EPV
+	{
+		Bridge <Interface>::EPV interface;
+
+		struct
+		{
+			BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
+			BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)
+		}
+		base;
+	};
+
+	const EPV& _epv () const
+	{
+		return (EPV&)Bridge <Interface>::_epv ();
+	}
+
+	static const Char interface_id_ [];
+
+protected:
+	Bridge (const EPV& epv) :
+		BridgeMarshal <LocalObject> (epv.interface)
+	{}
+};
+
+}
+
+class LocalObject : public Nirvana::ClientInterface <LocalObject, Object, Nirvana::ReferenceCounter>
+{};
 
 }
 

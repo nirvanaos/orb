@@ -39,7 +39,7 @@ public:
 		rel_ (release)
 	{}
 
-	~ServantTied ()
+	virtual ~ServantTied ()
 	{
 		CORBA::release (poa_);
 		if (rel_)

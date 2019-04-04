@@ -10,59 +10,28 @@ namespace Nirvana {
 
 class ObjectCore :
 	public ServantTraits <ObjectCore>,
-	public LifeCycleDynamic <ObjectCore>,
+	public LifeCycleRefCnt <ObjectCore>,
 	public ObjectImpl <ObjectCore>
 {
 public:
-	ObjectCore (PortableServer::Servant servant, DynamicServant_ptr dynamic) :
-		ObjectImpl <ObjectCore> (dynamic),
+	ObjectCore (PortableServer::Servant servant) :
+		ObjectImpl <ObjectCore> (servant),
 		servant_ (servant),
+		reference_counter_ (servant),
 		is_active_ (false)
 	{}
 
 	bool is_active_;
 
 	// Delegate to base
-	
-	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, const Char* id, EnvironmentBridge* env);
-
-	template <>
-	static Bridge <AbstractBase>* _wide <AbstractBase, Object> (Bridge <Object>* derived, const Char* id, EnvironmentBridge* env)
+	void _add_ref ()
 	{
-		try {
-			DynamicServant_ptr servant = _implementation (derived).servant ();
-			return (servant->_epv ().base.CORBA_AbstractBase) (servant, id, env);
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return nullptr;
+		reference_counter_->_add_ref ();
 	}
 
-	template <class I>
-	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge* env);
-
-	template <>
-	static Bridge <Interface>* __duplicate <Object> (Bridge <Interface>* itf, EnvironmentBridge* env)
+	void _remove_ref ()
 	{
-		try {
-			ObjectCore& _this = _implementation (static_cast <Bridge <Object>*> (itf));
-			Interface_ptr servant = _this.servant ();
-			(servant->_epv ().duplicate) (servant, env);
-			return &_this;
-		} catch (const Exception& e) {
-			env->set_exception (e);
-		} catch (...) {
-			env->set_unknown_exception ();
-		}
-		return nullptr;
-	}
-
-	static void _release (Bridge <Object>* itf)
-	{
-		release (_implementation (itf).servant ());
+		reference_counter_->_remove_ref ();
 	}
 
 	// Object operations delegated to ServantBase.
@@ -108,6 +77,7 @@ public:
 
 private:
 	PortableServer::Servant servant_;
+	ReferenceCounter_ptr reference_counter_;
 };
 
 }

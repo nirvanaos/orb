@@ -28,10 +28,22 @@ protected:
 		return 0;
 	}
 
-	static BridgeMarshal <Object>* _create_local_object (Bridge <ObjectFactory>* obj, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
+	static BridgeMarshal <LocalObject>* _create_local_object (Bridge <ObjectFactory>* obj, BridgeMarshal <AbstractBase>* base, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_local_object (dynamic);
+			return S::_implementation (obj).create_local_object (base, dynamic);
+		} catch (const Exception& e) {
+			env->set_exception (e);
+		} catch (...) {
+			env->set_unknown_exception ();
+		}
+		return 0;
+	}
+
+	static BridgeMarshal <ReferenceCounter>* _create_reference_counter (Bridge <ObjectFactory>* obj, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
+	{
+		try {
+			return S::_implementation (obj).create_reference_counter (dynamic);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
@@ -53,7 +65,8 @@ const Bridge <ObjectFactory>::EPV Skeleton <S, ObjectFactory>::epv_ = {
 	},
 	{ // epv
 		S::_create_servant,
-		S::_create_local_object
+		S::_create_local_object,
+		S::_create_reference_counter
 	}
 };
 

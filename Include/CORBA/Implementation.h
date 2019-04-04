@@ -9,8 +9,9 @@
 #include "AbstractBase_s.h"
 #include "ServantBase_s.h"
 #include "DynamicServant_s.h"
-#include "LocalObject_c.h"
-#include "RefCountBase.h"
+#include "ReferenceCounter_s.h"
+#include "Object_s.h"
+#include "LocalObject_s.h"
 #include <type_traits>
 
 namespace CORBA {
@@ -59,7 +60,67 @@ public:
 	}
 };
 
-//! Dynamic object life cycle.
+//! Standard interface implementation.
+//! \tparam S Servant class implementing operations. Must derive from this mix-in.
+//! \tparam I Interface.
+template <class S, class I>
+class InterfaceImplBase :
+	public Bridge <I>,
+	public Skeleton <S, I>
+{
+protected:
+	InterfaceImplBase () :
+		Bridge <I> (Skeleton <S, I>::epv_)
+	{}
+};
+
+template <class S, class I>
+class InterfaceImpl :
+	public InterfaceImplBase <S, I>
+{};
+
+class ReferenceCounterLink
+{
+public:
+	void _add_ref ()
+	{
+		reference_counter_->_add_ref ();
+	}
+
+	void _remove_ref ()
+	{
+		reference_counter_->_remove_ref ();
+	}
+
+	ULong _refcount_value ()
+	{
+		return reference_counter_->_refcount_value ();
+	}
+
+protected:
+	ReferenceCounterLink () :
+		reference_counter_ (ReferenceCounter::_nil ())
+	{}
+
+	ReferenceCounterLink (DynamicServant_ptr dynamic);
+
+	ReferenceCounterLink (ReferenceCounter_ptr rc) :
+		reference_counter_ (rc)
+	{}
+
+	ReferenceCounterLink (const ReferenceCounterLink&) = delete;
+	ReferenceCounterLink& operator = (const ReferenceCounterLink&)
+	{
+		return *this; // Do nothing
+	}
+
+	~ReferenceCounterLink ();
+
+protected:
+	ReferenceCounter_ptr reference_counter_;
+};
+
+//! Dynamic servant life cycle.
 //! \tparam S Class implementing `_duplicate()' and `_release()' operations.
 template <class S, class ... Bases>
 class LifeCycleDynamic : public Bases...
@@ -91,8 +152,7 @@ public:
 //! Life cycle with reference counting.
 template <class S, class ... Bases>
 class LifeCycleRefCnt :
-	public LifeCycleDynamic <S, Bases...>,
-	public RefCountBase
+	public LifeCycleDynamic <S, Bases...>
 {
 public:
 	template <class I>
@@ -133,24 +193,19 @@ public:
 	}
 };
 
-//! Standard interface implementation.
-//! \tparam S Servant class implementing operations. Must derive from this mix-in.
-//! \tparam I Interface.
-template <class S, class I>
-class InterfaceImplBase :
-	public Bridge <I>,
-	public Skeleton <S, I>
+//! Dynamic servant for abstract interfaces
+template <class S>
+class LifeCycleRefCntAbstract :
+	public LifeCycleRefCnt <S>,
+	public InterfaceImpl <S, ReferenceCounter>,
+	public InterfaceImpl <S, DynamicServant>,
+	public ReferenceCounterLink
 {
 protected:
-	InterfaceImplBase () :
-		Bridge <I> (Skeleton <S, I>::epv_)
+	LifeCycleRefCntAbstract () :
+		ReferenceCounterLink (this)
 	{}
 };
-
-template <class S, class I>
-class InterfaceImpl :
-	public InterfaceImplBase <S, I>
-{};
 
 //! \brief Implements delegate to the core ServantBase implementation.
 class ServantBaseLink :
@@ -191,46 +246,51 @@ public:
 	}
 
 protected:
-	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& servant_base) :
-		Bridge <PortableServer::ServantBase> (servant_base),
-		servant_base_ ((PortableServer::ServantBase*)nullptr)
+	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv) :
+		Bridge <PortableServer::ServantBase> (epv),
+		servant_base_ (PortableServer::ServantBase::_nil ())
 	{}
 
-	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& servant_base, Bridge <DynamicServant>& dynamic_servant) :
-		ServantBaseLink (servant_base)
+	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv, DynamicServant_ptr dynamic) :
+		Bridge <PortableServer::ServantBase> (epv)
 	{
-		_construct (dynamic_servant);
+		_construct (dynamic);
 	}
 
 	ServantBaseLink (const ServantBaseLink&) = delete;
 	ServantBaseLink& operator = (const ServantBaseLink&)
 	{
-		return *this;
+		return *this; // Do nothing
 	}
 
-	void _construct (Bridge <DynamicServant>& dynamic_servant);
+	void _construct (DynamicServant_ptr dynamic);
+
 	void _implicitly_activate ();
-
-	~ServantBaseLink ()
-	{
-		release (servant_base_);
-	}
 
 protected:
 	PortableServer::Servant servant_base_;
 };
 
+template <class S>
+class DynamicServantImpl :
+	public InterfaceImplBase <S, DynamicServant>,
+	public InterfaceImplBase <S, ReferenceCounter>,
+	public LifeCycleRefCnt <S>
+{};
+
 //! Standard implementation of PortableServer::ServantBase.
 //! \tparam S Servant class implementing operations.
 template <class S>
 class InterfaceImpl <S, PortableServer::ServantBase> :
+	public DynamicServantImpl <S>,
 	public Skeleton <S, PortableServer::ServantBase>,
-	public InterfaceImplBase <S, DynamicServant>,
-	public ServantBaseLink
+	public ServantBaseLink,
+	public ReferenceCounterLink
 {
 protected:
 	InterfaceImpl () :
-		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_, *this)
+		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_, this),
+		ReferenceCounterLink (ReferenceCounter_ptr (servant_base_))
 	{}
 
 	InterfaceImpl (const InterfaceImpl&) :
@@ -277,18 +337,17 @@ public:
 	// TODO: Other Object operations shall be here...
 
 protected:
-	LocalObjectLink (DynamicServant_ptr servant);
+	LocalObjectLink () :
+		object_ (Object::_nil ())
+	{}
+
 	LocalObjectLink (const LocalObjectLink&) = delete;
-	
 	LocalObjectLink& operator = (const LocalObjectLink&)
 	{
-		return *this;
+		return *this; // Do nothing
 	}
 
-	~LocalObjectLink ()
-	{
-		release (object_);
-	}
+	ReferenceCounter_ptr _construct (AbstractBase_ptr base, DynamicServant_ptr dynamic);
 
 private:
 	Object_ptr object_;
@@ -297,13 +356,15 @@ private:
 //! \tparam S Servant class implementing operations.
 template <class S>
 class InterfaceImpl <S, LocalObject> :
-	public InterfaceImplBase <S, DynamicServant>,
+	public DynamicServantImpl <S>,
 	public InterfaceImplBase <S, Object>,
-	public LocalObjectLink
+	public InterfaceImplBase <S, LocalObject>,
+	public LocalObjectLink,
+	public ReferenceCounterLink
 {
 protected:
 	InterfaceImpl () :
-		LocalObjectLink (this)
+		ReferenceCounterLink (_construct (&static_cast <S&> (*this), this))
 	{}
 
 	InterfaceImpl (const InterfaceImpl&) :
@@ -341,7 +402,6 @@ protected:
 template <class S, class Primary, class ... Bases>
 class Implementation :
 	public ServantTraits <S>,
-	public LifeCycleRefCnt <S>,
 	public InterfaceImpl <S, AbstractBase>,
 	public InterfaceImpl <S, Bases>...,
 	public InterfaceImpl <S, Primary>
@@ -381,6 +441,7 @@ protected:
 }
 
 namespace PortableServer {
+
 template <typename Servant>
 class Servant_var
 {

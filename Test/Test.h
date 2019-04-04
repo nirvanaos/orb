@@ -22,7 +22,7 @@ protected:
 		--count_;
 	}
 
-private:
+public:
 	static int count_;
 };
 

@@ -14,20 +14,41 @@ template <class I> class ServantPOA;
 class ServantTraitsPOA
 {
 public:
+	template <class I, class IS>
+	static ServantPOA <IS>& __servant (Bridge <I>* bridge)
+	{
+		_check_pointer (bridge, Skeleton <ServantPOA <IS>, I>::epv_.interface);
+		return static_cast <ServantPOA <IS>&> (*bridge);
+	}
+
+	template <class I, class IS>
+	static ServantPOA <IS>& __implementation (Bridge <I>* bridge)
+	{
+		return __servant <I, IS> (bridge);
+	}
+
 	template <class I>
 	static ServantPOA <I>& _servant (Bridge <I>* bridge)
 	{
-		_check_pointer (bridge, Skeleton <ServantPOA <I>, I>::epv_.interface);
-		return static_cast <ServantPOA <I>&> (*bridge);
+		return __servant <I, I> (bridge);
 	}
-
-	static ServantPOA <PortableServer::ServantBase>& _servant (Bridge <PortableServer::ServantBase>* bridge);
 
 	template <class I>
 	static ServantPOA <I>& _implementation (Bridge <I>* bridge)
 	{
 		return _servant (bridge);
 	}
+
+	static ServantPOA <AbstractBase>& _servant (Bridge <ReferenceCounter>* bridge);
+	static ServantPOA <AbstractBase>& _servant (Bridge <DynamicServant>* bridge);
+
+	static ServantPOA <LocalObject>& _servant (Bridge <Object>* bridge);
+
+	static ServantPOA <LocalObject>& _implementation (Bridge <Object>* bridge)
+	{
+		return _servant (bridge);
+	}
+
 };
 
 //! POA implementation of AbstractBase
@@ -36,92 +57,100 @@ template <>
 class ServantPOA <AbstractBase> :
 	public ServantTraitsPOA,
 	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
-	public LifeCycleRefCnt <ServantPOA <AbstractBase> >
+	public InterfaceImplBase <ServantPOA <AbstractBase>, ReferenceCounter>,
+	public InterfaceImplBase <ServantPOA <AbstractBase>, DynamicServant>,
+	public LifeCycleRefCnt <ServantPOA <AbstractBase> >,
+	public ReferenceCounterLink
 {
 public:
 	virtual void _add_ref ()
 	{
-		RefCountBase::_add_ref ();
+		ReferenceCounterLink::_add_ref ();
 	}
 
 	virtual void _remove_ref ()
 	{
-		RefCountBase::_remove_ref ();
+		ReferenceCounterLink::_remove_ref ();
 	}
 
 	virtual ULong _refcount_value ()
 	{
-		return RefCountBase::_refcount_value ();
+		return ReferenceCounterLink::_refcount_value ();
 	}
 
 	virtual Interface_ptr _query_interface (const Char* id) = 0;
+
+	virtual ~ServantPOA ()
+	{}
 
 protected:
 	ServantPOA ()
 	{}
 
 	virtual void _implicitly_activate ()
-	{}
-};
-
-//! CORBA::Nirvana::DynamicServant interface
-template <>
-class ServantPOA <DynamicServant> :
-	public virtual ServantPOA <AbstractBase>,
-	public InterfaceImplBase <ServantPOA <DynamicServant>, DynamicServant>
-{
-public:
-	virtual const Char* _primary_interface () const = 0;
-
-protected:
-	ServantPOA ()
 	{}
 };
 
 // POA implementation of PortableServer::ServantBase
 template <>
 class ServantPOA <PortableServer::ServantBase> :
-	public virtual ServantPOA <DynamicServant>,
+	public virtual ServantPOA <AbstractBase>,
 	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>,
 	public ServantBaseLink
 {
 public:
+	virtual void _add_ref ()
+	{
+		_check_construct ();
+		ServantPOA <AbstractBase>::_add_ref ();
+	}
+
+	virtual void _remove_ref ()
+	{
+		_check_construct ();
+		ServantPOA <AbstractBase>::_remove_ref ();
+	}
+
+	virtual ULong _refcount_value ()
+	{
+		_check_construct ();
+		return ServantPOA <AbstractBase>::_refcount_value ();
+	}
+
 	// ServantBase operations
 
 	virtual PortableServer::POA_ptr _default_POA ()
 	{
+		_check_construct ();
 		return ServantBaseLink::_default_POA ();
 	}
 
 	virtual InterfaceDef_ptr _get_interface ()
 	{
+		_check_construct ();
 		return ServantBaseLink::_get_interface ();
 	}
 
 	virtual Boolean _is_a (const Char* type_id)
 	{
+		_check_construct ();
 		return ServantBaseLink::_is_a (type_id);
 	}
 
 	virtual Boolean _non_existent ()
 	{
+		_check_construct ();
 		return ServantBaseLink::_non_existent ();
 	}
 
 protected:
-	ServantPOA () :
-		ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_)
-	{}
+	ServantPOA ();
 
 	ServantPOA (const ServantPOA&) :
 		ServantPOA ()
 	{}
 
-	virtual void _implicitly_activate ()
-	{
-		_check_construct ();
-		ServantBaseLink::_implicitly_activate ();
-	}
+	virtual void _implicitly_activate ();
 
 private:
 	friend class ServantTraitsPOA;
@@ -132,55 +161,38 @@ private:
 			_construct ();
 	}
 
-	void _construct ()
-	{
-		ServantBaseLink::_construct (*this);
-	}
-};
-
-template <>
-class ServantPOA <Object> :
-	public virtual ServantPOA <PortableServer::ServantBase>,
-	public InterfaceImplBase <ServantPOA <Object>, Object>
-{
-public:
-	// Static overrides to resolve the ambiguity.
-	static BridgeMarshal <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
-	{
-		return InterfaceImplBase <ServantPOA <Object>, Object>::__get_interface (obj, env);
-	}
-
-	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
-	{
-		return InterfaceImplBase <ServantPOA <Object>, Object>::__is_a (obj, type_id, env);
-	}
-
-	static Boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
-	{
-		return InterfaceImplBase <ServantPOA <Object>, Object>::__non_existent (obj, env);
-	}
-
-	// Object operations
-
-	virtual ImplementationDef_ptr _get_implementation () = 0;
-	virtual InterfaceDef_ptr _get_interface () = 0;
-	virtual Boolean _is_a (const Char* type_id) = 0;
-	virtual Boolean _non_existent () = 0;
-	virtual Boolean _is_equivalent (Object_ptr other_object) = 0;
-	virtual ULong _hash (ULong maximum) = 0;
-	// TODO: Other Object operations shall be here...
-
-protected:
-	ServantPOA ()
-	{}
+	void _construct ();
 };
 
 template <>
 class ServantPOA <LocalObject> :
-	public virtual ServantPOA <Object>,
+	public virtual ServantPOA <PortableServer::ServantBase>,
+	public InterfaceImplBase <ServantPOA <LocalObject>, Object>,
+	public InterfaceImplBase <ServantPOA <LocalObject>, LocalObject>,
 	public LocalObjectLink
 {
 public:
+	// Static overrides to resolve the ambiguity.
+	static BridgeMarshal <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env);
+	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env);
+	static Boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env);
+
+	// Delegate ReferenceCounter to AbstractBase
+	virtual void _add_ref ()
+	{
+		ServantPOA <AbstractBase>::_add_ref ();
+	}
+
+	virtual void _remove_ref ()
+	{
+		ServantPOA <AbstractBase>::_remove_ref ();
+	}
+
+	virtual ULong _refcount_value ()
+	{
+		return ServantPOA <AbstractBase>::_refcount_value ();
+	}
+
 	// Object operations
 
 	virtual ImplementationDef_ptr _get_implementation ()
@@ -215,12 +227,10 @@ public:
 	// TODO: Other Object operations shall be here...
 
 protected:
-	ServantPOA () :
-		LocalObjectLink (this)
-	{}
+	ServantPOA ();
 
 	ServantPOA (const ServantPOA&) :
-		LocalObjectLink (this)
+		ServantPOA ()
 	{}
 
 	virtual void _implicitly_activate ()
@@ -244,11 +254,6 @@ public:
 	virtual Interface_ptr _query_interface (const Char* id)
 	{
 		return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
-	}
-	
-	virtual const Char* _primary_interface () const
-	{
-		return Bridge <Primary>::interface_id_;
 	}
 
 	T_ptr <Primary> _this ()

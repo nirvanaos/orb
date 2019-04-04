@@ -3,10 +3,18 @@
 namespace CORBA {
 namespace Nirvana {
 
-void ServantBaseLink::_construct (Bridge <DynamicServant>& dynamic_servant)
+ReferenceCounterLink::ReferenceCounterLink (DynamicServant_ptr dynamic) :
+	reference_counter_ (g_object_factory->create_reference_counter (dynamic))
+{}
+
+ReferenceCounterLink::~ReferenceCounterLink ()
 {
-	assert (!servant_base_);
-	servant_base_ = g_object_factory->create_servant (this, &dynamic_servant);
+	release (reference_counter_);
+}
+
+void ServantBaseLink::_construct (DynamicServant_ptr dynamic)
+{
+	servant_base_ = g_object_factory->create_servant (this, dynamic);
 }
 
 void ServantBaseLink::_implicitly_activate ()
@@ -17,9 +25,12 @@ void ServantBaseLink::_implicitly_activate ()
 	}
 }
 
-LocalObjectLink::LocalObjectLink (DynamicServant_ptr servant) :
-	object_ (g_object_factory->create_local_object (servant))
-{}
+ReferenceCounter_ptr LocalObjectLink::_construct (AbstractBase_ptr base, DynamicServant_ptr dynamic)
+{
+	LocalObject_ptr obj = g_object_factory->create_local_object (base, dynamic);
+	object_ = obj;
+	return obj;
+}
 
 }
 }

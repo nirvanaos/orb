@@ -4,6 +4,7 @@
 #include "CORBA/ObjectFactory_s.h"
 #include "ServantCore.h"
 #include "LocalObjectCore.h"
+#include "ReferenceCounterImpl.h"
 #include <CORBA/ImplementationStatic.h>
 
 namespace CORBA {
@@ -21,12 +22,17 @@ public:
 		return new ServantCore (servant, dynamic);
 	}
 
-	static Object_ptr create_local_object (DynamicServant_ptr servant)
+	static LocalObject_ptr create_local_object (AbstractBase_ptr base, DynamicServant_ptr dynamic)
 	{
 #ifndef TEST_LOCAL_OBJECT
 		assert (false);
 #endif
-		return new LocalObjectCore (servant);
+		return new LocalObjectCore (base, dynamic);
+	}
+
+	static ReferenceCounter_ptr create_reference_counter (DynamicServant_ptr dynamic)
+	{
+		return new ReferenceCounterCore (dynamic);
 	}
 };
 
