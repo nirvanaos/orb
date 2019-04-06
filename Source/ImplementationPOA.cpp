@@ -3,19 +3,19 @@
 namespace CORBA {
 namespace Nirvana {
 
-ServantPOA <AbstractBase>& ServantTraitsPOA::_servant (Bridge <ReferenceCounter>* bridge)
+ServantPOA <AbstractBase>& ServantTraitsPOA::_implementation (Bridge <ReferenceCounter>* bridge)
 {
-	return __servant <ReferenceCounter, AbstractBase> (bridge);
+	return __implementation <ReferenceCounter, AbstractBase> (bridge);
 }
 
-ServantPOA <AbstractBase>& ServantTraitsPOA::_servant (Bridge <DynamicServant>* bridge)
+ServantPOA <AbstractBase>& ServantTraitsPOA::_implementation (Bridge <DynamicServant>* bridge)
 {
-	return __servant <DynamicServant, AbstractBase> (bridge);
+	return __implementation <DynamicServant, AbstractBase> (bridge);
 }
 
-ServantPOA <LocalObject>& ServantTraitsPOA::_servant (Bridge <Object>* bridge)
+ServantPOA <LocalObject>& ServantTraitsPOA::_implementation (Bridge <Object>* bridge)
 {
-	return __servant <Object, LocalObject> (bridge);
+	return __implementation <Object, LocalObject> (bridge);
 }
 
 ServantPOA <PortableServer::ServantBase>::ServantPOA () :

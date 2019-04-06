@@ -4,10 +4,7 @@
 #ifndef NIRVANA_ORB_IMPLEMENTATIONSTATIC_H_
 #define NIRVANA_ORB_IMPLEMENTATIONSTATIC_H_
 
-#include "ObjectFactory_c.h"
-#include "AbstractBase_s.h"
-#include "ServantBase_s.h"
-#include "DynamicServant_s.h"
+#include "Implementation.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -28,7 +25,8 @@ template <class S, class I> class ServantStatic;
 
 //! Static interface traits
 template <class S>
-class ServantTraitsStatic
+class ServantTraitsStatic :
+	public ServantTraits <S>
 {
 public:
 	template <class I>
@@ -36,26 +34,15 @@ public:
 	{
 		return *(S*)0;
 	}
-
-	template <class I>
-	static S& _servant (Bridge <I>* bridge)
-	{
-		return *(S*)0;
-	}
 };
 
 template <class S>
-class ServantTraitsStaticEx
+class ServantTraitsStaticEx :
+	public ServantTraits <S>
 {
 public:
 	template <class I>
 	static S _implementation (Bridge <I>* bridge)
-	{
-		return S ();
-	}
-
-	template <class I>
-	static S _servant (Bridge <I>* bridge)
 	{
 		return S ();
 	}

@@ -17,7 +17,7 @@ protected:
 	static void __delete (Bridge <DynamicServant>* obj, EnvironmentBridge* env)
 	{
 		try {
-			delete &S::_servant (obj);
+			delete &S::_implementation (obj);
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {

@@ -29,34 +29,25 @@ class ServantTraits
 {
 public:
 	template <class I>
-
-	//! \fn	static S& ServantTraits::_servant (Bridge <I>* bridge)
-	//!
-	//! \brief	Returns the servant from the given bridge pointer.
-	//!
-	//! \param [in]	bridge	The bridge pointer.
-	//!
-	//! \return	A reference to the servant.
-
-	static S& _servant (Bridge <I>* bridge)
+	static S& _implementation (Bridge <I>* bridge)
 	{
 		_check_pointer (bridge, Skeleton <S, I>::epv_.interface);
 		return static_cast <S&> (*bridge);
 	}
 
-	template <class I>
-
-	//! \fn	static S& ServantTraits::_implementation (Bridge <I>* bridge)
-	//!
-	//! \brief	Returns the implementation from the given bridge pointer.
-	//!
-	//! \param [in]	bridge	The bridge pointer.
-	//!
-	//! \return	A reference to the implementation.
-
-	static S& _implementation (Bridge <I>* bridge)
+	template <class Base, class Derived>
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, const Char* id, EnvironmentBridge* env)
 	{
-		return _servant (bridge);
+		try {
+			if (!RepositoryId::compatible (Bridge <Base>::interface_id_, id))
+				throw MARSHAL ();
+			return &static_cast <Bridge <Base>&> (S::_implementation (derived));
+		} catch (const Exception& e) {
+			env->set_exception (e);
+		} catch (...) {
+			env->set_unknown_exception ();
+		}
+		return nullptr;
 	}
 };
 
@@ -159,7 +150,7 @@ public:
 	static Bridge <I>* _duplicate (Bridge <I>* itf)
 	{
 		if (itf)
-			S::_servant (itf)._add_ref ();
+			S::_implementation (itf)._add_ref ();
 		return itf;
 	}
 
@@ -167,7 +158,7 @@ public:
 	static void _release (Bridge <I>* itf)
 	{
 		if (itf)
-			S::_servant (itf)._remove_ref ();
+			S::_implementation (itf)._remove_ref ();
 	}
 };
 
@@ -187,7 +178,7 @@ public:
 	static void __release (Bridge <Interface>* itf)
 	{
 		try {
-			delete &S::_servant (static_cast <Bridge <I>*> (itf));
+			delete &S::_implementation (static_cast <Bridge <I>*> (itf));
 		} catch (...) {
 		}
 	}

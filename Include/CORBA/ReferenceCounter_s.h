@@ -17,7 +17,7 @@ protected:
 	static void __add_ref (Bridge <ReferenceCounter>* obj, EnvironmentBridge* env)
 	{
 		try {
-			S::_servant (obj)._add_ref ();
+			S::_implementation (obj)._add_ref ();
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
@@ -28,7 +28,7 @@ protected:
 	static void __remove_ref (Bridge <ReferenceCounter>* obj, EnvironmentBridge* env)
 	{
 		try {
-			S::_servant (obj)._remove_ref ();
+			S::_implementation (obj)._remove_ref ();
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
@@ -39,7 +39,7 @@ protected:
 	static ULong __refcount_value (Bridge <ReferenceCounter>* obj, EnvironmentBridge* env)
 	{
 		try {
-			return S::_servant (obj)._refcount_value ();
+			return S::_implementation (obj)._refcount_value ();
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {

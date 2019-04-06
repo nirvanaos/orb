@@ -11,44 +11,26 @@ namespace Nirvana {
 
 template <class I> class ServantPOA;
 
-class ServantTraitsPOA
+class ServantTraitsPOA :
+	public ServantTraits <ServantTraitsPOA>
 {
 public:
 	template <class I, class IS>
-	static ServantPOA <IS>& __servant (Bridge <I>* bridge)
+	static ServantPOA <IS>& __implementation (Bridge <I>* bridge)
 	{
 		_check_pointer (bridge, Skeleton <ServantPOA <IS>, I>::epv_.interface);
 		return static_cast <ServantPOA <IS>&> (*bridge);
 	}
 
-	template <class I, class IS>
-	static ServantPOA <IS>& __implementation (Bridge <I>* bridge)
-	{
-		return __servant <I, IS> (bridge);
-	}
-
-	template <class I>
-	static ServantPOA <I>& _servant (Bridge <I>* bridge)
-	{
-		return __servant <I, I> (bridge);
-	}
-
 	template <class I>
 	static ServantPOA <I>& _implementation (Bridge <I>* bridge)
 	{
-		return _servant (bridge);
+		return __implementation <I, I> (bridge);
 	}
 
-	static ServantPOA <AbstractBase>& _servant (Bridge <ReferenceCounter>* bridge);
-	static ServantPOA <AbstractBase>& _servant (Bridge <DynamicServant>* bridge);
-
-	static ServantPOA <LocalObject>& _servant (Bridge <Object>* bridge);
-
-	static ServantPOA <LocalObject>& _implementation (Bridge <Object>* bridge)
-	{
-		return _servant (bridge);
-	}
-
+	static ServantPOA <AbstractBase>& _implementation (Bridge <ReferenceCounter>* bridge);
+	static ServantPOA <AbstractBase>& _implementation (Bridge <DynamicServant>* bridge);
+	static ServantPOA <LocalObject>& _implementation (Bridge <Object>* bridge);
 };
 
 //! POA implementation of AbstractBase
