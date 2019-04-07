@@ -199,7 +199,7 @@ class LifeCycleRefCntAbstract :
 {
 protected:
 	LifeCycleRefCntAbstract () :
-		ReferenceCounterLink (this)
+		ReferenceCounterLink (DynamicServant_ptr (this))
 	{}
 };
 
