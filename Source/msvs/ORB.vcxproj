@@ -68,7 +68,6 @@
     <ClInclude Include="..\..\Include\CORBA\POA_c.h" />
     <ClInclude Include="..\..\Include\CORBA\POA_s.h" />
     <ClInclude Include="..\..\Include\CORBA\PortableServer.h" />
-    <ClInclude Include="..\..\Include\CORBA\RefCountBase.h" />
     <ClInclude Include="..\..\Include\CORBA\ReferenceCounter_c.h" />
     <ClInclude Include="..\..\Include\CORBA\RepositoryId.h" />
     <ClInclude Include="..\..\Include\CORBA\sequence.h" />

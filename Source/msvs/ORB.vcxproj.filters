@@ -131,9 +131,6 @@
     <ClInclude Include="..\..\Include\CORBA\PortableServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Include\CORBA\RefCountBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Include\CORBA\RepositoryId.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -405,11 +405,6 @@ class Implementation :
 	};
 
 public:
-	static const Char* _primary_interface ()
-	{
-		return Bridge <Primary>::interface_id_;
-	}
-
 	Interface_ptr _query_interface (const Char* id)
 	{
 		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);

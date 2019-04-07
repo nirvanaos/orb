@@ -13,12 +13,11 @@ namespace Nirvana {
 struct OLF_ObjectInfo
 {
 	Bridge <PortableServer::ServantBase>* servant;
-	Bridge <DynamicServant>* dynamic;
 };
 
 struct OLF_LocalObjectInfo
 {
-	Bridge <DynamicServant>* dynamic;
+	Bridge <AbstractBase>* servant;
 };
 
 template <class S, class I> class ServantStatic;
@@ -95,12 +94,29 @@ class InterfaceStatic :
 	public InterfaceStaticBase <S, I>
 {};
 
+template <class S>
+class InterfaceStatic <S, ReferenceCounter> :
+	public InterfaceStaticBase <S, ReferenceCounter>
+{
+public:
+	static void __add_ref (Bridge <ReferenceCounter>* obj, EnvironmentBridge* env)
+	{}
+
+	static void __remove_ref (Bridge <ReferenceCounter>* obj, EnvironmentBridge* env)
+	{}
+
+	static ULong __refcount_value (Bridge <ReferenceCounter>* obj, EnvironmentBridge* env)
+	{
+		return 1;
+	}
+};
+
 //! Static implementation of PortableServer::ServantBase.
 //! \tparam S Servant class.
 template <class S>
 class InterfaceStatic <S, PortableServer::ServantBase> :
 	public InterfaceStaticBase <S, PortableServer::ServantBase>,
-	public InterfaceStaticBase <S, DynamicServant>
+	public InterfaceStatic <S, ReferenceCounter>
 {
 public:
 	operator Bridge <Object>& () const
@@ -135,15 +151,16 @@ public:
 };
 
 template <class S>
-const OLF_ObjectInfo InterfaceStatic <S, PortableServer::ServantBase>::object_info_ = {InterfaceStaticBase <S, PortableServer::ServantBase>::_bridge (), InterfaceStaticBase <S, DynamicServant>::_bridge ()};
+const OLF_ObjectInfo InterfaceStatic <S, PortableServer::ServantBase>::object_info_ = {InterfaceStaticBase <S, PortableServer::ServantBase>::_bridge ()};
 
 //! Static implementation of LocalObject
 //! \tparam S Servant class.
 //! \tparam Primary Primary interface.
 template <class S>
 class InterfaceStatic <S, LocalObject> :
-	public InterfaceStaticBase <S, DynamicServant>,
-	public InterfaceStaticBase <S, Object>
+	public InterfaceStaticBase <S, LocalObject>,
+	public InterfaceStatic <S, Object>,
+	public InterfaceStatic <S, ReferenceCounter>
 {
 public:
 	// Object operations
@@ -184,7 +201,7 @@ public:
 };
 
 template <class S>
-const OLF_LocalObjectInfo InterfaceStatic <S, LocalObject>::object_info_ = {InterfaceStatic <S, DynamicServant>::_bridge ()};
+const OLF_LocalObjectInfo InterfaceStatic <S, LocalObject>::object_info_ = {InterfaceStatic <S, AbstractBase>::_bridge ()};
 
 template <class S, class I>
 class ImplementationStaticSingle :
@@ -217,11 +234,6 @@ class ImplementationStatic :
 	public InterfaceStatic <S, Primary>
 {
 public:
-	static const Char* _primary_interface ()
-	{
-		return Bridge <Primary>::interface_id_;
-	}
-
 	Interface_ptr _query_interface (const Char* id)
 	{
 		return FindInterface <Primary, Bases...>::find (*(S*)nullptr, id);
