@@ -184,12 +184,17 @@ public:
 	}
 };
 
+template <class S>
+class DynamicServantImpl :
+	public LifeCycleRefCnt <S>,
+	public InterfaceImpl <S, ReferenceCounter>,
+	public InterfaceImpl <S, DynamicServant>
+{};
+
 //! Dynamic servant for abstract interfaces
 template <class S>
 class LifeCycleRefCntAbstract :
-	public LifeCycleRefCnt <S>,
-	public InterfaceImpl <S, ReferenceCounter>,
-	public InterfaceImpl <S, DynamicServant>,
+	public DynamicServantImpl <S>,
 	public ReferenceCounterLink
 {
 protected:
@@ -261,13 +266,6 @@ protected:
 protected:
 	PortableServer::Servant servant_base_;
 };
-
-template <class S>
-class DynamicServantImpl :
-	public InterfaceImplBase <S, DynamicServant>,
-	public InterfaceImplBase <S, ReferenceCounter>,
-	public LifeCycleRefCnt <S>
-{};
 
 //! Standard implementation of PortableServer::ServantBase.
 //! \tparam S Servant class implementing operations.
