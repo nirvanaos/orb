@@ -13,7 +13,7 @@ template <class T, class I>
 class ServantTied :
 	public Servant <ServantTied <T, I>, I>
 {
-	typedef Servant <ServantTied <T, I>, I> Base;
+	typedef Servant <ServantTied <T, I>, I> BaseImpl;
 public:
 	ServantTied (T& t) :
 		ptr_ (&t),
@@ -39,7 +39,7 @@ public:
 		rel_ (release)
 	{}
 
-	~ServantTied ()
+	virtual ~ServantTied ()
 	{
 		CORBA::release (poa_);
 		if (rel_)
@@ -74,7 +74,7 @@ public:
 		if (!is_nil (poa_))
 			return ::PortableServer::POA::_duplicate (poa_);
 		else
-			return Base::_default_POA ();
+			return BaseImpl::_default_POA ();
 	}
 
 	Boolean _non_existent () const
@@ -84,23 +84,68 @@ public:
 
 	static ServantTied <T, I>& _implementation (Bridge <AbstractBase>* itf)
 	{
-		return Base::_servant (itf);
+		return BaseImpl::_implementation (itf);
+	}
+
+	static ServantTied <T, I>& _implementation (Bridge <ReferenceCounter>* itf)
+	{
+		return BaseImpl::_implementation (itf);
+	}
+
+	static ServantTied <T, I>& _implementation (Bridge <DynamicServant>* itf)
+	{
+		return BaseImpl::_implementation (itf);
 	}
 
 	static ServantTied <T, I>& _implementation (Bridge <PortableServer::ServantBase>* itf)
 	{
-		return Base::_servant (itf);
+		return BaseImpl::_implementation (itf);
 	}
 
 	static ServantTied <T, I>& _implementation (Bridge <Object>* itf)
 	{
-		return Base::_servant (itf);
+		return BaseImpl::_implementation (itf);
+	}
+
+	static ServantTied <T, I>& _implementation (Bridge <LocalObject>* itf)
+	{
+		return BaseImpl::_implementation (itf);
 	}
 
 	template <class I>
 	static T& _implementation (Bridge <I>* bridge)
 	{
-		return *(Base::_servant (bridge).ptr_);
+		return *(BaseImpl::_implementation (bridge).ptr_);
+	}
+
+	template <class Base, class Derived>
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, const Char* id, EnvironmentBridge* env)
+	{
+		try {
+			if (!RepositoryId::compatible (Bridge <Base>::interface_id_, id))
+				throw MARSHAL ();
+			return &static_cast <Bridge <Base>&> (BaseImpl::_implementation (derived));
+		} catch (const Exception& e) {
+			env->set_exception (e);
+		} catch (...) {
+			env->set_unknown_exception ();
+		}
+		return nullptr;
+	}
+
+	template <class I>
+	static Bridge <I>* _duplicate (Bridge <I>* itf)
+	{
+		if (itf)
+			BaseImpl::_implementation (itf)._add_ref ();
+		return itf;
+	}
+
+	template <class I>
+	static void _release (Bridge <I>* itf)
+	{
+		if (itf)
+			BaseImpl::_implementation (itf)._remove_ref ();
 	}
 
 private:

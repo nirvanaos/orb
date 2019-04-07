@@ -485,7 +485,11 @@ public:
 };
 
 //! Client implementation template.
-template <class T, class I> class Client;
+template <class T, class I> class Client
+	: public T
+{
+	// Default implementation does not contain any methods.
+};
 
 template <class I>
 class ClientBridge :

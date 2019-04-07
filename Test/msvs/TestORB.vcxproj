@@ -74,6 +74,7 @@
     <ClInclude Include="..\ObjectCore.h" />
     <ClInclude Include="..\ObjectImpl.h" />
     <ClInclude Include="..\POACore.h" />
+    <ClInclude Include="..\ReferenceCounterImpl.h" />
     <ClInclude Include="..\ServantCore.h" />
     <ClInclude Include="..\Server.h" />
     <ClInclude Include="..\Test.h" />

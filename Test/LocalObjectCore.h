@@ -1,7 +1,9 @@
 #ifndef NIRVANA_TESTORB_LOCALOBJECTCORE_H_
 #define NIRVANA_TESTORB_LOCALOBJECTCORE_H_
 
+#include <CORBA/LocalObject_s.h>
 #include "ObjectImpl.h"
+#include "ReferenceCounterImpl.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -9,19 +11,15 @@ namespace Nirvana {
 class LocalObjectCore :
 	public ServantTraits <LocalObjectCore>,
 	public LifeCycleNoCopy <LocalObjectCore>,
-	public ObjectImpl <LocalObjectCore>
+	public ObjectImpl <LocalObjectCore>,
+	public ReferenceCounterImpl <LocalObjectCore>,
+	public InterfaceImplBase <LocalObjectCore, LocalObject>
 {
 public:
-	LocalObjectCore (DynamicServant_ptr servant) :
-		ObjectImpl <LocalObjectCore> (servant)
+	LocalObjectCore (AbstractBase_ptr servant, DynamicServant_ptr dynamic) :
+		ObjectImpl <LocalObjectCore> (servant),
+		ReferenceCounterImpl (dynamic)
 	{}
-
-	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, const Char* id, EnvironmentBridge* env)
-	{ // Don't get base interfaces from this.
-		env->set_exception (NO_IMPLEMENT ());
-		return nullptr;
-	}
 };
 
 }

@@ -39,7 +39,7 @@ private:
 #ifndef TEST_LOCAL_OBJECT
 	static void load_static (const OLF_ObjectInfo& oi, PortableServer::Servant& sl)
 	{
-		sl = g_object_factory->create_servant (oi.servant, oi.dynamic);
+		sl = g_object_factory->create_servant (oi.servant, DynamicServant_ptr::nil ());
 	}
 
 	static void unload_static (PortableServer::Servant sl)
@@ -61,7 +61,7 @@ private:
 #else
 	static void load_static (const OLF_LocalObjectInfo& oi, Object_ptr& ol)
 	{
-		ol = g_object_factory->create_local_object (oi.dynamic);
+		ol = g_object_factory->create_local_object (oi.servant, DynamicServant_ptr::nil ());
 	}
 
 	static void unload_static (Object_ptr ol)
@@ -145,6 +145,7 @@ protected:
 	{
 		// Code here will be called immediately after the constructor (right
 		// before each test).
+		Instance::count_ = 0; 
 #ifndef TEST_NO_STATIC
 		static CORBA::Nirvana::ModuleLoader loader;
 #endif
@@ -261,6 +262,7 @@ protected:
 	{
 		// Code here will be called immediately after the constructor (right
 		// before each test).
+		Instance::count_ = 0;
 	}
 
 	virtual void TearDown ()

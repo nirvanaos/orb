@@ -27,9 +27,11 @@
     <ClCompile Include="..\Environment.cpp" />
     <ClCompile Include="..\Exception.cpp" />
     <ClCompile Include="..\Interface_c.cpp" />
+    <ClCompile Include="..\LocalObject_c.cpp" />
     <ClCompile Include="..\ObjectFactory_c.cpp" />
     <ClCompile Include="..\Object_c.cpp" />
     <ClCompile Include="..\POA_c.cpp" />
+    <ClCompile Include="..\ReferenceCounter_c.cpp" />
     <ClCompile Include="..\RepositoryId.cpp" />
     <ClCompile Include="..\ServantBase_c.cpp" />
   </ItemGroup>
@@ -40,6 +42,8 @@
     <ClInclude Include="..\..\Include\CORBA\BasicTypes.h" />
     <ClInclude Include="..\..\Include\CORBA\DynamicServant_c.h" />
     <ClInclude Include="..\..\Include\CORBA\DynamicServant_s.h" />
+    <ClInclude Include="..\..\Include\CORBA\LocalObject_s.h" />
+    <ClInclude Include="..\..\Include\CORBA\ReferenceCounter_s.h" />
     <ClInclude Include="..\..\Include\CORBA\Environment.h" />
     <ClInclude Include="..\..\Include\CORBA\Exception.h" />
     <ClInclude Include="..\..\Include\CORBA\Fixed.h" />
@@ -59,12 +63,15 @@
     <ClInclude Include="..\..\Include\CORBA\POA_c.h" />
     <ClInclude Include="..\..\Include\CORBA\POA_s.h" />
     <ClInclude Include="..\..\Include\CORBA\PortableServer.h" />
-    <ClInclude Include="..\..\Include\CORBA\RefCountBase.h" />
+    <ClInclude Include="..\..\Include\CORBA\ReferenceCounter_c.h" />
     <ClInclude Include="..\..\Include\CORBA\RepositoryId.h" />
     <ClInclude Include="..\..\Include\CORBA\sequence.h" />
     <ClInclude Include="..\..\Include\CORBA\Servant.h" />
     <ClInclude Include="..\..\Include\CORBA\ServantBase_c.h" />
     <ClInclude Include="..\..\Include\CORBA\ServantBase_s.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{11CC69AA-ABA7-40E5-A5B5-FA0DC3E705A1}</ProjectGuid>

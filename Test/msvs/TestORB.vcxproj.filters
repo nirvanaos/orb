@@ -104,5 +104,8 @@
     <ClInclude Include="..\ObjectFactoryCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\ReferenceCounterImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

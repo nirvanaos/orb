@@ -5,8 +5,7 @@ namespace Nirvana {
 
 Boolean ObjectBase::_is_a (const Char* type_id) const
 {
-	AbstractBase_ptr base = servant_;
-	Bridge <Interface>* itf = base->_query_interface (type_id);
+	Bridge <Interface>* itf = servant_->_query_interface (type_id);
 	if (itf)
 		return TRUE;
 	else

@@ -3,6 +3,7 @@
 #define NIRVANA_ORB_SERVANTBASE_C_H_
 
 #include "Object_c.h"
+#include "ReferenceCounter_c.h"
 
 namespace PortableServer {
 
@@ -31,8 +32,10 @@ public:
 		Bridge <Interface>::EPV interface;
 
 		struct
-		{ // TODO: Derive from DynamicServant.
+		{
+			BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
 			BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
+			BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)
 		}
 		base;
 
@@ -115,42 +118,12 @@ Boolean Client <T, PortableServer::ServantBase>::_non_existent ()
 
 namespace PortableServer {
 
-class ServantBase : public CORBA::Nirvana::ClientInterface <ServantBase, CORBA::Object>
-{
-public:
-	// Overridables
-
-	CORBA::InterfaceDef_ptr _get_interface ()
-	{
-		return CORBA::Nirvana::ClientInterfacePrimary <ServantBase>::_get_interface ();
-	}
-
-	CORBA::Boolean _is_a (const CORBA::Char* type_id)
-	{
-		return CORBA::Nirvana::ClientInterfacePrimary <ServantBase>::_is_a (type_id);
-	}
-
-	CORBA::Boolean _non_existent ()
-	{
-		return CORBA::Nirvana::ClientInterfacePrimary <ServantBase>::_non_existent ();
-	}
-
-	// For compatibility
-	void _add_ref ()
-	{
-		_duplicate (this);
-	}
-
-	void _remove_ref ()
-	{
-		CORBA::release (this);
-	}
-
-	CORBA::ULong _refcount_value () const
-	{
-		return 1; // TODO: Implement special method in AbstractBase.
-	}
-};
+class ServantBase :
+	public ::CORBA::Nirvana::ClientInterface <ServantBase, ::CORBA::Nirvana::ReferenceCounter>,
+	// Client methods from bases AbstractBase and Object are not available directly on pointer to ServantBase.
+	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::Object>,
+	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::AbstractBase>
+{};
 
 }
 
