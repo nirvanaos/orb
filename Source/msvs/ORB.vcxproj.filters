@@ -51,9 +51,6 @@
     <ClCompile Include="..\DynamicServant_c.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ObjectFactory_c.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\ReferenceCounter_c.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
