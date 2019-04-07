@@ -27,7 +27,7 @@
     <ClCompile Include="..\Environment.cpp" />
     <ClCompile Include="..\Exception.cpp" />
     <ClCompile Include="..\Interface_c.cpp" />
-    <ClCompile Include="..\ObjectAdapter_c.cpp" />
+    <ClCompile Include="..\ObjectFactory_c.cpp" />
     <ClCompile Include="..\Object_c.cpp" />
     <ClCompile Include="..\POA_c.cpp" />
     <ClCompile Include="..\RepositoryId.cpp" />

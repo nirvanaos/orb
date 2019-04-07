@@ -30,9 +30,6 @@
     <ClCompile Include="..\Interface_c.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ObjectAdapter_c.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\POA_c.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -52,6 +49,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\DynamicServant_c.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ObjectFactory_c.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
