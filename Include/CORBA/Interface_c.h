@@ -223,6 +223,7 @@ inline bool is_nil (Nirvana::Interface_ptr itf)
 inline void release (Nirvana::Interface_ptr itf)
 {
 	Nirvana::Interface::_release (itf);
+	itf = Nirvana::Interface_ptr::nil ();
 }
 
 namespace Nirvana {
