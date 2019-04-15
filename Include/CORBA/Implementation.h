@@ -361,21 +361,24 @@ protected:
 	{}
 };
 
-//! \class	ImplementationSingle
+//! \class	ImplementationPseudo
 //!
-//! \brief	An implementation of single pseudo interface.
+//! \brief	An implementation of a pseudo interface.
+//! 				
+//! You also have to derive your servant from some life cycle implementation.
 //!
 //! \tparam S Servant class implementing operations.
-//! \tparam	I	interface.
+//! \tparam	I...	interfaces.
+//! 							
+//! \note
 
-template <class S, class I>
-class ImplementationSingle :
+template <class S, class ... I>
+class ImplementationPseudo :
 	public ServantTraits <S>,
-	public LifeCycleRefCnt <S>,
-	public InterfaceImpl <S, I>
+	public InterfaceImpl <S, I> ...
 {
 protected:
-	ImplementationSingle ()
+	ImplementationPseudo ()
 	{}
 };
 
@@ -481,7 +484,7 @@ public:
 		return *this;
 	}
 
-	Servant* operator->() const
+	Servant* operator -> () const
 	{
 		return _ptr;
 	}
