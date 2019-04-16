@@ -121,16 +121,20 @@ void Binder::bind_olf (const void* data, size_t size)
 	if (ps < end && SectionType::OBJECT_EXPORT == ps->type)
 		ps = next_sibling (ps);
 
-	ObjectLink* link_ptr = nullptr, *link_end = nullptr;
+	ObjectLink* links_begin = nullptr, *links_end = nullptr;
 	if (ps < end && SectionType::OBJECT_LINK == ps->type) {
-		link_ptr = (ObjectLink*)(ps + 1);
+		links_begin = (ObjectLink*)(ps + 1);
 		ps = next_sibling (ps);
-		link_end = (ObjectLink*)(ps);
+		links_end = (ObjectLink*)(ps);
 	}
 
-	if (ps < end && link_ptr >= link_end)
+	if (ps < end && links_begin >= links_end)
 		throw INITIALIZE ();
 
+	DWORD protection;
+	VirtualProtect (links_begin, (links_end - links_begin) * sizeof (ObjectLink), PAGE_READWRITE, &protection);
+
+	ObjectLink* link_ptr = links_begin;
 	links_ = links_end_ = link_ptr;
 
 	const SectionHeader* sync_domain_end = nullptr;
@@ -145,7 +149,7 @@ void Binder::bind_olf (const void* data, size_t size)
 
 		case SectionType::STATIC_OBJECT:
 			for (const StaticObject* p = (const StaticObject*)(ps + 1), *end = (const StaticObject*)next_sibling (ps); p < end; ++p) {
-				if (link_ptr >= link_end)
+				if (link_ptr >= links_end)
 					throw INITIALIZE ();
 				(link_ptr++)->interface_ptr = g_object_factory->create_servant (p->servant, DynamicServant_ptr::nil ());
 				links_end_ = link_ptr;
@@ -154,7 +158,7 @@ void Binder::bind_olf (const void* data, size_t size)
 
 		case SectionType::STATIC_LOCAL:
 			for (const StaticLocal* p = (const StaticLocal*)(ps + 1), *end = (const StaticLocal*)next_sibling (ps); p < end; ++p) {
-				if (link_ptr >= link_end)
+				if (link_ptr >= links_end)
 					throw INITIALIZE ();
 				(link_ptr++)->interface_ptr = Object_ptr (g_object_factory->create_local_object (p->servant, DynamicServant_ptr::nil ()));
 				links_end_ = link_ptr;
@@ -172,6 +176,8 @@ void Binder::bind_olf (const void* data, size_t size)
 		if (sync_domain_end && ps >= sync_domain_end)
 			sync_domain_end = nullptr;
 	}
+
+	VirtualProtect (links_begin, (links_end - links_begin) * sizeof (ObjectLink), protection, &protection);
 }
 
 }

@@ -58,22 +58,18 @@ class InterfaceStaticBase :
 public:
 	operator Bridge <I>& () const
 	{
-		return *_bridge ();
+		return *reinterpret_cast <Bridge <I>*> (&bridge_);
 	}
 	
 	static T_ptr <I> _get_ptr ()
 	{
-		return static_cast <I*> (_bridge ());
-	}
-
-	static constexpr Bridge <I>* _bridge ()
-	{
 		return reinterpret_cast <Bridge <I>*> (&bridge_);
 	}
 
-protected:
 	static const typename Bridge <I>::EPV* bridge_;
 };
+
+#define STATIC_BRIDGE(S, I) reinterpret_cast <Bridge <I>*> (&InterfaceStaticBase < S, I>::bridge_)
 
 template <class S, class I>
 const typename Bridge <I>::EPV* InterfaceStaticBase <S, I>::bridge_ = &InterfaceStaticBase <S, I>::epv_;

@@ -7,7 +7,7 @@
 using namespace CORBA;
 using namespace CORBA::Nirvana;
 
-#pragma section (OLF_BIND, read, write)
+#pragma section (OLF_BIND, read, execute)
 
 extern "C" __declspec (allocate(OLF_BIND))
 static const struct
@@ -46,8 +46,8 @@ static const struct
 		{
 			{OLF::SectionType::OBJECT_EXPORT, sizeof (OLF_data.data.s0.data)},
 			{
-				{"TestORB::StaticI1", InterfaceStatic <TestORB::StaticI1, AbstractBase>::_bridge ()},
-				{"TestORB::StaticI3", InterfaceStatic <TestORB::StaticI3, AbstractBase>::_bridge ()}
+				{"TestORB::StaticI1", STATIC_BRIDGE (TestORB::StaticI1, AbstractBase)},
+				{"TestORB::StaticI3", STATIC_BRIDGE (TestORB::StaticI3, AbstractBase)}
 			}
 		},
 		{
@@ -58,14 +58,14 @@ static const struct
 #ifndef TEST_LOCAL_OBJECT
 			{OLF::SectionType::STATIC_OBJECT, sizeof (OLF_data.data.s2.data)},
 			{
-				{InterfaceStaticBase <TestORB::StaticI1, PortableServer::ServantBase>::_bridge ()},
-				{InterfaceStaticBase <TestORB::StaticI3, PortableServer::ServantBase>::_bridge ()}
+				{STATIC_BRIDGE (TestORB::StaticI1, PortableServer::ServantBase)},
+				{STATIC_BRIDGE (TestORB::StaticI3, PortableServer::ServantBase)}
 			}
 #else
 			{OLF::SectionType::STATIC_LOCAL, sizeof (OLF_data.data.s2.data)},
 			{
-				{InterfaceStatic <TestORB::StaticI1, AbstractBase>::_bridge ()},
-				{InterfaceStatic <TestORB::StaticI3, AbstractBase>::_bridge ()}
+				{STATIC_BRIDGE (TestORB::StaticI1, AbstractBase)},
+				{STATIC_BRIDGE (TestORB::StaticI3, AbstractBase)}
 			}
 #endif
 		}
