@@ -1,96 +1,16 @@
 #include "I1.h"
 #include "I3.h"
 #include <gtest/gtest.h>
+#include "Binder.h"
 
 using namespace std;
 using namespace CORBA;
 using namespace Test;
 
-// Imitation of the module loader
-namespace CORBA {
-namespace Nirvana {
-
-#ifndef TEST_NO_STATIC
-
-#ifndef TEST_LOCAL_OBJECT
-template <> PortableServer::Servant InterfaceStatic <TestORB::StaticI1, PortableServer::ServantBase>::servant_base_;
-template <> PortableServer::Servant InterfaceStatic <TestORB::StaticI3, PortableServer::ServantBase>::servant_base_;
-#else
-template <> Object_ptr InterfaceStatic <TestORB::StaticI1, LocalObject>::object_;
-template <> Object_ptr InterfaceStatic <TestORB::StaticI3, LocalObject>::object_;
-#endif
-
-class ModuleLoader
-{
-public:
-	ModuleLoader ()
-	{
-		load_static <TestORB::StaticI1> ();
-		load_static <TestORB::StaticI3> ();
-	}
-
-	~ModuleLoader ()
-	{
-		unload_static <TestORB::StaticI1> ();
-		unload_static <TestORB::StaticI3> ();
-	}
-
-private:
-#ifndef TEST_LOCAL_OBJECT
-	static void load_static (const OLF_ObjectInfo& oi, PortableServer::Servant& sl)
-	{
-		sl = g_object_factory->create_servant (oi.servant, DynamicServant_ptr::nil ());
-	}
-
-	static void unload_static (PortableServer::Servant sl)
-	{
-		release (sl);
-	}
-
-	template <class S>
-	static void load_static ()
-	{
-		load_static (InterfaceStatic <S, PortableServer::ServantBase>::object_info_, InterfaceStatic <S, PortableServer::ServantBase>::servant_base_);
-	}
-
-	template <class S>
-	static void unload_static ()
-	{
-		unload_static (InterfaceStatic <S, PortableServer::ServantBase>::servant_base_);
-	}
-#else
-	static void load_static (const OLF_LocalObjectInfo& oi, Object_ptr& ol)
-	{
-		ol = g_object_factory->create_local_object (oi.servant, DynamicServant_ptr::nil ());
-	}
-
-	static void unload_static (Object_ptr ol)
-	{
-		release (ol);
-	}
-
-	template <class S>
-	static void load_static ()
-	{
-		load_static (InterfaceStatic <S, LocalObject>::object_info_, InterfaceStatic <S, LocalObject>::object_);
-	}
-
-	template <class S>
-	static void unload_static ()
-	{
-		unload_static (InterfaceStatic <S, LocalObject>::object_);
-	}
-#endif
-};
-
-#endif
-
-}
-}
-
 namespace TestORB {
 
 int Instance::count_ = 0;
+CORBA::Nirvana::OLF::Binder loader;
 
 void test_interface (I1_ptr p)
 {
@@ -146,9 +66,6 @@ protected:
 		// Code here will be called immediately after the constructor (right
 		// before each test).
 		Instance::count_ = 0; 
-#ifndef TEST_NO_STATIC
-		static CORBA::Nirvana::ModuleLoader loader;
-#endif
 	}
 
 	virtual void TearDown ()

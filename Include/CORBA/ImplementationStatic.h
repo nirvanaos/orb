@@ -9,17 +9,6 @@
 namespace CORBA {
 namespace Nirvana {
 
-// Structures for OLF loader
-struct OLF_ObjectInfo
-{
-	Bridge <PortableServer::ServantBase>* servant;
-};
-
-struct OLF_LocalObjectInfo
-{
-	Bridge <AbstractBase>* servant;
-};
-
 template <class S, class I> class ServantStatic;
 
 //! Static interface traits
@@ -146,12 +135,8 @@ public:
 		return false;
 	}
 
-	static const OLF_ObjectInfo object_info_;
-	static PortableServer::Servant servant_base_;
+	static const PortableServer::Servant& servant_base_;
 };
-
-template <class S>
-const OLF_ObjectInfo InterfaceStatic <S, PortableServer::ServantBase>::object_info_ = {InterfaceStaticBase <S, PortableServer::ServantBase>::_bridge ()};
 
 //! Static implementation of LocalObject
 //! \tparam S Servant class.
@@ -196,12 +181,8 @@ public:
 	}
 	// TODO: Other Object operations shall be here...
 
-	static const OLF_LocalObjectInfo object_info_;
-	static Object_ptr object_;
+	static const Object_ptr& object_;
 };
-
-template <class S>
-const OLF_LocalObjectInfo InterfaceStatic <S, LocalObject>::object_info_ = {InterfaceStatic <S, AbstractBase>::_bridge ()};
 
 template <class S, class Primary, class ... Bases>
 class ImplementationStaticPseudo :
