@@ -18,24 +18,14 @@ static const struct
 		struct
 		{
 			OLF::SectionHeader hdr;
-			OLF::ObjectExport data [2];
-		} s0;
-
-		struct
-		{
-			OLF::SectionHeader hdr;
 			OLF::ObjectLink data [2];
-		} s1;
+		} links;
 
 		struct
 		{
 			OLF::SectionHeader hdr;
-#ifndef TEST_LOCAL_OBJECT
-			OLF::StaticObject data [2];
-#else
-			OLF::StaticLocal data [2];
-#endif
-		} s2;
+			OLF::ExportInterface data [2];
+		} exports;
 
 	} data;
 
@@ -44,28 +34,21 @@ static const struct
 	{OLF::SectionType::OLF, sizeof (OLF_data.data)},
 	{
 		{
-			{OLF::SectionType::OBJECT_EXPORT, sizeof (OLF_data.data.s0.data)},
-			{
-				{"TestORB::StaticI1", STATIC_BRIDGE (TestORB::StaticI1, AbstractBase)},
-				{"TestORB::StaticI3", STATIC_BRIDGE (TestORB::StaticI3, AbstractBase)}
-			}
-		},
-		{
-			{OLF::SectionType::OBJECT_LINK, sizeof (OLF_data.data.s1.data)},
+			{OLF::SectionType::OBJECT_LINK, sizeof (OLF_data.data.links.data)},
 			{{0}, {0}}
 		},
 		{
 #ifndef TEST_LOCAL_OBJECT
-			{OLF::SectionType::STATIC_OBJECT, sizeof (OLF_data.data.s2.data)},
+			{OLF::SectionType::EXPORT_OBJECT, sizeof (OLF_data.data.exports.data)},
 			{
-				{STATIC_BRIDGE (TestORB::StaticI1, PortableServer::ServantBase)},
-				{STATIC_BRIDGE (TestORB::StaticI3, PortableServer::ServantBase)}
+				{"TestORB::StaticI1", STATIC_BRIDGE (TestORB::StaticI1, PortableServer::ServantBase)},
+				{"TestORB::StaticI3", STATIC_BRIDGE (TestORB::StaticI3, PortableServer::ServantBase)}
 			}
 #else
-			{OLF::SectionType::STATIC_LOCAL, sizeof (OLF_data.data.s2.data)},
+			{OLF::SectionType::EXPORT_LOCAL, sizeof (OLF_data.data.exports.data)},
 			{
-				{STATIC_BRIDGE (TestORB::StaticI1, AbstractBase)},
-				{STATIC_BRIDGE (TestORB::StaticI3, AbstractBase)}
+				{"TestORB::StaticI1", STATIC_BRIDGE (TestORB::StaticI1, AbstractBase)},
+				{"TestORB::StaticI3", STATIC_BRIDGE (TestORB::StaticI3, AbstractBase)}
 			}
 #endif
 		}
@@ -76,21 +59,21 @@ static const struct
 
 template <>
 const PortableServer::Servant& InterfaceStatic <TestORB::StaticI1, PortableServer::ServantBase>::servant_base_ = 
-reinterpret_cast <const PortableServer::Servant&> (OLF_data.data.s1.data [0].interface_ptr);
+reinterpret_cast <const PortableServer::Servant&> (OLF_data.data.links.data [0].interface_ptr);
 
 template <>
 const PortableServer::Servant& InterfaceStatic <TestORB::StaticI3, PortableServer::ServantBase>::servant_base_ = 
-reinterpret_cast <const PortableServer::Servant&> (OLF_data.data.s1.data [1].interface_ptr);
+reinterpret_cast <const PortableServer::Servant&> (OLF_data.data.links.data [1].interface_ptr);
 
 #else
 
 template <>
 const Object_ptr& InterfaceStatic <TestORB::StaticI1, LocalObject>::object_ =
-reinterpret_cast <const Object_ptr&> (OLF_data.data.s1.data [0].interface_ptr);
+reinterpret_cast <const Object_ptr&> (OLF_data.data.links.data [0].interface_ptr);
 
 template <>
 const Object_ptr& InterfaceStatic <TestORB::StaticI3, LocalObject>::object_ =
-reinterpret_cast <const Object_ptr&> (OLF_data.data.s1.data [1].interface_ptr);
+reinterpret_cast <const Object_ptr&> (OLF_data.data.links.data [1].interface_ptr);
 
 #endif
 

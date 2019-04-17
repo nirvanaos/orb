@@ -2,6 +2,7 @@
 #define NIRVANA_TESTORB_LOADER_H_
 
 #include <CORBA/OLF.h>
+#include <CORBA/RepositoryId.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -20,6 +21,15 @@ private:
 	const SectionHeader* next_sibling (const SectionHeader* ps)
 	{
 		return (const SectionHeader*)((const uint8_t*)(ps + 1) + ps->size);
+	}
+
+	template <class I>
+	static T_ptr <I> get_interface (const ExportInterface& ei)
+	{
+		if (RepositoryId::compatible (ei.itf->_epv ().interface_id, Bridge <I>::interface_id_))
+			return static_cast <Bridge <I>*> (ei.itf);
+		else
+			throw INV_OBJREF ();
 	}
 
 private:

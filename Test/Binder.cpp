@@ -118,8 +118,6 @@ void Binder::bind_olf (const void* data, size_t size)
 	const SectionHeader* end = next_sibling (ps);
 	
 	++ps; // Child
-	if (ps < end && SectionType::OBJECT_EXPORT == ps->type)
-		ps = next_sibling (ps);
 
 	ObjectLink* links_begin = nullptr, *links_end = nullptr;
 	if (ps < end && SectionType::OBJECT_LINK == ps->type) {
@@ -128,11 +126,9 @@ void Binder::bind_olf (const void* data, size_t size)
 		links_end = (ObjectLink*)(ps);
 	}
 
-	if (ps < end && links_begin >= links_end)
-		throw INITIALIZE ();
-
 	DWORD protection;
-	VirtualProtect (links_begin, (links_end - links_begin) * sizeof (ObjectLink), PAGE_READWRITE, &protection);
+	if (links_begin < links_end)
+		VirtualProtect (links_begin, (links_end - links_begin) * sizeof (ObjectLink), PAGE_READWRITE, &protection);
 
 	ObjectLink* link_ptr = links_begin;
 	links_ = links_end_ = link_ptr;
@@ -147,25 +143,28 @@ void Binder::bind_olf (const void* data, size_t size)
 			++ps;
 			continue;
 
-		case SectionType::STATIC_OBJECT:
-			for (const StaticObject* p = (const StaticObject*)(ps + 1), *end = (const StaticObject*)next_sibling (ps); p < end; ++p) {
+		case SectionType::EXPORT_INTERFACE:
+			break;
+
+		case SectionType::EXPORT_OBJECT:
+			for (const ExportInterface* p = (const ExportInterface*)(ps + 1), *end = (const ExportInterface*)next_sibling (ps); p < end; ++p) {
 				if (link_ptr >= links_end)
 					throw INITIALIZE ();
-				(link_ptr++)->interface_ptr = g_object_factory->create_servant (p->servant, DynamicServant_ptr::nil ());
+				(link_ptr++)->interface_ptr = g_object_factory->create_servant (get_interface <PortableServer::ServantBase> (*p), DynamicServant_ptr::nil ());
 				links_end_ = link_ptr;
 			}
 			break;
 
-		case SectionType::STATIC_LOCAL:
-			for (const StaticLocal* p = (const StaticLocal*)(ps + 1), *end = (const StaticLocal*)next_sibling (ps); p < end; ++p) {
+		case SectionType::EXPORT_LOCAL:
+			for (const ExportInterface* p = (const ExportInterface*)(ps + 1), *end = (const ExportInterface*)next_sibling (ps); p < end; ++p) {
 				if (link_ptr >= links_end)
 					throw INITIALIZE ();
-				(link_ptr++)->interface_ptr = Object_ptr (g_object_factory->create_local_object (p->servant, DynamicServant_ptr::nil ()));
+				(link_ptr++)->interface_ptr = Object_ptr (g_object_factory->create_local_object (get_interface <AbstractBase> (*p), DynamicServant_ptr::nil ()));
 				links_end_ = link_ptr;
 			}
 			break;
 
-		case SectionType::OBJECT_IMPORT:
+		case SectionType::IMPORT_INTERFACE:
 			throw NO_IMPLEMENT ();
 
 		default:
@@ -177,7 +176,8 @@ void Binder::bind_olf (const void* data, size_t size)
 			sync_domain_end = nullptr;
 	}
 
-	VirtualProtect (links_begin, (links_end - links_begin) * sizeof (ObjectLink), protection, &protection);
+	if (links_begin < links_end)
+		VirtualProtect (links_begin, (links_end - links_begin) * sizeof (ObjectLink), protection, &protection);
 }
 
 }
