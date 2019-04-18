@@ -3,6 +3,7 @@
 
 #include <CORBA/OLF.h>
 #include <CORBA/RepositoryId.h>
+#include <llvm/BinaryFormat/COFF.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -15,8 +16,11 @@ public:
 	~Binder ();
 
 private:
-	void bind_coff (const void* image_base, const void* coff);
+
+	void bind (const void* image_base, const llvm::COFF::header* hdr);
 	void bind_olf (const void* data, size_t size);
+
+	static bool is_section (const llvm::COFF::section* s, const char* name);
 
 	const SectionHeader* next_sibling (const SectionHeader* ps)
 	{
