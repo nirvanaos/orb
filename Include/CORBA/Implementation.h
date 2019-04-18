@@ -191,14 +191,14 @@ class DynamicServantImpl :
 	public InterfaceImpl <S, DynamicServant>
 {};
 
-//! Dynamic servant for abstract interfaces
+//! Dynamic servant for pseudo interfaces
 template <class S>
-class LifeCycleRefCntAbstract :
+class LifeCycleRefCntPseudo :
 	public DynamicServantImpl <S>,
 	public ReferenceCounterLink
 {
 protected:
-	LifeCycleRefCntAbstract () :
+	LifeCycleRefCntPseudo () :
 		ReferenceCounterLink (DynamicServant_ptr (this))
 	{}
 };
