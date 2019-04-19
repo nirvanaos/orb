@@ -3,7 +3,7 @@
 
 #include <CORBA/ServantBase_c.h>
 
-#define OLF_BIND ".olfbind"
+#define OLF_BIND "olfbind"
 
 namespace CORBA {
 namespace Nirvana {
