@@ -3,149 +3,21 @@
 #ifndef NIRVANA_ORB_INTERFACE_C_H_
 #define NIRVANA_ORB_INTERFACE_C_H_
 
-#include "Environment.h"
-#include "Exception.h"
+#include "EnvironmentImpl.h"
+#include "T_ptr.h"
 #include "RepositoryId.h"
-#include <assert.h>
 
 namespace CORBA {
 namespace Nirvana {
-
-class EnvironmentBridge;
-
-//! All interfaces derives from Interface class.
-//! This class provides life-cycle management and pointer to entry-point vector (EPV).
-class Interface;
-
-//! Intermediate part of an interface, bridge between servant and client.
-template <class I> class Bridge;
-
-//! All bridges indirectly derives from `Bridge <Interface>'.
-template <>
-class Bridge <Interface>
-{
-public:
-	Bridge& operator = (const Bridge&)
-	{
-		return *this;	// Do nothing
-	}
-
-	struct EPV
-	{
-		const Char* interface_id;
-		Bridge <Interface>* (*duplicate) (Bridge <Interface>*, EnvironmentBridge*);
-		void (*release) (Bridge <Interface>*);
-	};
-
-	const EPV& _epv () const
-	{
-		return epv_ref_;
-	}
-
-protected:
-	Bridge (const EPV& epv) :
-		epv_ref_ (epv)
-	{}
-
-protected:
-	const EPV& epv_ref_;
-};
-
-//! The bridge which was passed from a different binary file.
-//! We can't be sure that the interface version is the same as for current binary.
-//! To obtain the interface pointer we have to unmarshal the bridge pointer.
-//! Each Bridge <I> derives from BridgeMarshal <I>.
-template <class I>
-class BridgeMarshal :
-	public Bridge <Interface>
-{
-public:
-	template <class Base>
-	struct Wide
-	{
-		typedef Bridge <Base>* (*Func) (Bridge <I>*, const Char*, EnvironmentBridge*);
-	};
-
-protected:
-	BridgeMarshal (const EPV& epv) :
-		Bridge <Interface> (epv)
-	{}
-};
-
-#define BASE_STRUCT_ENTRY(type, name) Wide < type>::Func name;\
-operator const Wide < type>::Func () const { return name; }
-
-//! Interface pointer template.
-template <class I>
-class T_ptr
-{
-public:
-	T_ptr ()
-	{} // Zero init skipped for performance
-
-	T_ptr (I* p) :
-		p_ (p)
-	{}
-
-	T_ptr (Bridge <I>* p) :
-		p_ (static_cast <I*> (p))
-	{}
-
-	T_ptr (BridgeMarshal <I>* p) :
-		T_ptr (I::unmarshal (p))
-	{}
-
-	T_ptr (const T_ptr <I>& src) :
-		p_ (src.p_)
-	{}
-
-	template <class I1>
-	T_ptr (const T_ptr <I1>& src, bool check_nil = true)
-	{
-		if (src.p_) {
-			*this = src.p_->operator T_ptr ();
-			if (check_nil && !p_)
-				throw MARSHAL ();
-		} else
-			p_ = nullptr;
-	}
-
-	operator Bridge <I>* () const
-	{
-		return p_;
-	}
-
-	I* operator -> () const
-	{
-		assert (p_);
-		return p_;
-	}
-
-	operator bool () const
-	{
-		return p_ != 0;
-	}
-
-	static T_ptr <I> nil ()
-	{
-		return T_ptr ((I*)nullptr);
-	}
-
-private:
-	template <class I1> friend class T_ptr;
-
-private:
-	I* p_;
-};
 
 template <class I> class T_var;
 template <class I> class T_out;
 template <class I> class T_inout;
 template <class I> class T_ref;
 
-typedef ::CORBA::Nirvana::T_ptr <Interface> Interface_ptr;
-typedef ::CORBA::Nirvana::T_var <Interface> Interface_var;
-typedef ::CORBA::Nirvana::T_out <Interface> Interface_out;
+typedef T_ptr <Interface> Interface_ptr;
+typedef T_var <Interface> Interface_var;
+typedef T_out <Interface> Interface_out;
 
 class Interface :
 	public BridgeMarshal <Interface>

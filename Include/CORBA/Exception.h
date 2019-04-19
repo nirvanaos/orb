@@ -28,8 +28,10 @@ public:
 protected:
 	Exception ()
 	{}
+
 	Exception (const Exception&)
 	{}
+
 	Exception& operator = (const Exception&)
 	{
 		return *this;

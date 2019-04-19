@@ -5,79 +5,10 @@
 #define NIRVANA_ORB_IMPLEMENTATIONSTATIC_H_
 
 #include "Implementation.h"
+#include "ServantStatic.h"
 
 namespace CORBA {
 namespace Nirvana {
-
-template <class S, class I> class ServantStatic;
-
-//! Static interface traits
-template <class S>
-class ServantTraitsStatic :
-	public ServantTraits <S>
-{
-public:
-	template <class I>
-	static S& _implementation (Bridge <I>* bridge)
-	{
-		return *(S*)0;
-	}
-};
-
-template <class S>
-class ServantTraitsStaticEx :
-	public ServantTraits <S>
-{
-public:
-	template <class I>
-	static S _implementation (Bridge <I>* bridge)
-	{
-		return S ();
-	}
-};
-
-template <class ... Bases>
-class LifeCycleStatic : public Bases...
-{
-public:
-	template <class I>
-	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge*)
-	{
-		return itf;
-	}
-
-	template <class I>
-	static void __release (Bridge <Interface>*)
-	{}
-};
-
-template <class S, class I>
-class InterfaceStaticBase :
-	public Skeleton <S, I>
-{
-public:
-	operator Bridge <I>& () const
-	{
-		return *reinterpret_cast <Bridge <I>*> (&bridge_);
-	}
-	
-	static T_ptr <I> _get_ptr ()
-	{
-		return reinterpret_cast <Bridge <I>*> (&bridge_);
-	}
-
-	static const typename Bridge <I>::EPV* bridge_;
-};
-
-#define STATIC_BRIDGE(S, I) reinterpret_cast <Bridge <I>*> (&InterfaceStaticBase < S, I>::bridge_)
-
-template <class S, class I>
-const typename Bridge <I>::EPV* InterfaceStaticBase <S, I>::bridge_ = &InterfaceStaticBase <S, I>::epv_;
-
-template <class S, class I>
-class InterfaceStatic :
-	public InterfaceStaticBase <S, I>
-{};
 
 template <class S>
 class InterfaceStatic <S, ReferenceCounter> :
