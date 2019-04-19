@@ -41,6 +41,13 @@ public:
 		exception_ = nullptr;
 	}
 
+	Exception* detach ()
+	{
+		Exception* ret = exception_;
+		exception_ = nullptr;
+		return ret;
+	}
+
 protected:
 	EnvironmentBase () :
 		exception_ (nullptr)
