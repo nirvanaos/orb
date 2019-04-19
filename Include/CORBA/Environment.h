@@ -10,16 +10,35 @@ namespace Nirvana {
 class EnvironmentBase
 {
 public:
-	void clear ()
-	{
-		delete exception_;
-		exception_ = nullptr;
-	}
-
 	void check () const
 	{
 		if (exception_)
 			exception_->_raise ();
+	}
+
+	void exception_set (Long code, const char* rep_id, const void* param,
+											const ExceptionEntry* const* user_exceptions = 0);
+
+	const Char* exception_id () const
+	{
+		if (exception_)
+			return exception_->_rep_id ();
+		else
+			return nullptr;
+	}
+
+	const void* exception_value () const
+	{
+		if (exception_)
+			return exception_->__data ();
+		else
+			return nullptr;
+	}
+
+	void exception_free ()
+	{
+		delete exception_;
+		exception_ = nullptr;
 	}
 
 protected:
@@ -31,9 +50,6 @@ protected:
 	{
 		delete exception_;
 	}
-
-	void set_exception (Long code, const char* rep_id, const void* param,
-											const ExceptionEntry* const* user_exceptions = 0);
 
 protected:
 	Exception* exception_;
@@ -68,7 +84,10 @@ public:
 
 		struct
 		{
-			void (*set_exception) (Bridge < ::CORBA::Environment>*, Long code, const char* rep_id, const void* param);
+			void (*exception_set) (Bridge < ::CORBA::Environment>*, Long code, const char* rep_id, const void* param);
+			const Char* (*exception_id) (Bridge < ::CORBA::Environment>*);
+			const void* (*exception_value) (Bridge < ::CORBA::Environment>*);
+			void (*exception_free) (Bridge < ::CORBA::Environment>*);
 		}
 		epv;
 	};

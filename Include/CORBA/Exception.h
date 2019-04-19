@@ -25,6 +25,11 @@ public:
 		return this + 1;
 	}
 
+	enum {
+		EC_NO_EXCEPTION = -2,
+		EC_USER_EXCEPTION = -1
+	};
+
 protected:
 	Exception ()
 	{}
@@ -144,7 +149,8 @@ protected:
 	}
 
 	enum
-	{  // System exception codes
+	{
+		// System exception codes
 		EC_UNKNOWN = 0,
 		EC_BAD_PARAM,
 		EC_NO_MEMORY,
@@ -260,7 +266,7 @@ class UserException : public Exception
 {
 	virtual Long __code () const
 	{
-		return -1;
+		return EC_USER_EXCEPTION;
 	}
 public:
 

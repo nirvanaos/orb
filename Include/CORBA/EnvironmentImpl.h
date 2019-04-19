@@ -14,10 +14,36 @@ public:
 	static const typename Bridge <Environment>::EPV epv_;
 
 protected:
-	static void _set_exception (Bridge <Environment>* obj, Long code, const char* rep_id, const void* param)
+	static void _exception_set (Bridge <Environment>* obj, Long code, const char* rep_id, const void* param)
 	{
 		try {
-			S::_implementation (obj).set_exception (code, rep_id, param);
+			S::_implementation (obj).exception_set (code, rep_id, param);
+		} catch (...) {
+		}
+	}
+
+	static const Char* _exception_id (Bridge <Environment>* obj)
+	{
+		try {
+			return S::_implementation (obj).exception_id ();
+		} catch (...) {
+		}
+		return nullptr;
+	}
+
+	static const void* _exception_value (Bridge <Environment>* obj)
+	{
+		try {
+			return S::_implementation (obj).exception_value ();
+		} catch (...) {
+		}
+		return nullptr;
+	}
+
+	static void _exception_free (Bridge <Environment>* obj)
+	{
+		try {
+			S::_implementation (obj).exception_free ();
 		} catch (...) {
 		}
 	}
@@ -31,7 +57,10 @@ const Bridge < ::CORBA::Environment>::EPV Skeleton <S, ::CORBA::Environment>::ep
 		S::template __release < ::CORBA::Environment>
 	},
 	{ // epv
-		S::_set_exception
+		S::_exception_set,
+		S::_exception_id,
+		S::_exception_value,
+		S::_exception_free
 	}
 };
 
@@ -40,13 +69,7 @@ class Environment :
 	public InterfaceImpl <Environment, ::CORBA::Environment>,
 	public ServantTraits <Environment>,
 	public LifeCycleStatic <>
-{
-public:
-	void set_exception (Long code, const char* rep_id, const void* param)
-	{
-		EnvironmentBase::set_exception (code, rep_id, param);
-	}
-};
+{};
 
 class EnvironmentEx :
 	public EnvironmentBase,
@@ -55,13 +78,13 @@ class EnvironmentEx :
 	public LifeCycleStatic <>
 {
 public:
-	EnvironmentEx (const ExceptionEntry* const* user_exceptions) :
+	EnvironmentEx (const ExceptionEntry** user_exceptions) :
 		user_exceptions_ (user_exceptions)
 	{}
 
-	void set_exception (Long code, const char* rep_id, const void* param)
+	void exception_set (Long code, const char* rep_id, const void* param)
 	{
-		EnvironmentBase::set_exception (code, rep_id, param, user_exceptions_);
+		EnvironmentBase::exception_set (code, rep_id, param, user_exceptions_);
 	}
 
 private:
