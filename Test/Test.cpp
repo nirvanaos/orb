@@ -84,6 +84,12 @@ TEST_F (TestORB, RepositoryId)
 	EXPECT_FALSE (CORBA::Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "aaa/bbb/type:1.0"));
 }
 
+TEST_F (TestORB, Exception)
+{
+	CORBA::Exception* p = new NO_MEMORY ();
+	EXPECT_THROW (p->_raise (), NO_MEMORY);
+}
+
 // The fixture for testing simple interface.
 
 typedef ::testing::Types <DynamicI1
