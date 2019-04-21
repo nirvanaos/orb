@@ -94,7 +94,7 @@ ReferenceCounter_ptr Client <T, ObjectFactory>::create_reference_counter (Dynami
 	return _ret._retn ();
 }
 
-extern ObjectFactory_ptr g_object_factory;
+extern Bridge <ObjectFactory>* const g_object_factory;
 
 }
 }
