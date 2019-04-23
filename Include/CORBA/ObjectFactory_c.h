@@ -62,7 +62,15 @@ public:
 };
 
 class ObjectFactory : public ClientInterface <ObjectFactory, AbstractBase>
-{};
+{
+public:
+	static ObjectFactory_ptr singleton ()
+	{
+		return singleton_;
+	}
+
+	static Bridge <ObjectFactory>* const singleton_;
+};
 
 template <class T>
 PortableServer::Servant Client <T, ObjectFactory>::create_servant (PortableServer::Servant servant, DynamicServant_ptr dynamic)
@@ -93,8 +101,6 @@ ReferenceCounter_ptr Client <T, ObjectFactory>::create_reference_counter (Dynami
 	_env.check ();
 	return _ret._retn ();
 }
-
-extern Bridge <ObjectFactory>* const g_object_factory;
 
 }
 }

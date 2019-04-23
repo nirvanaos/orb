@@ -108,7 +108,7 @@ void Binder::bind_olf (const void* data, size_t size)
 			for (const ExportInterface* p = (const ExportInterface*)(ps + 1), *end = (const ExportInterface*)next_sibling (ps); p < end; ++p) {
 				if (link_ptr >= links_end)
 					throw INITIALIZE ();
-				(link_ptr++)->interface_ptr = ObjectFactory_ptr (g_object_factory)->create_servant (get_interface <PortableServer::ServantBase> (*p), DynamicServant_ptr::nil ());
+				(link_ptr++)->interface_ptr = ObjectFactory::singleton ()->create_servant (get_interface <PortableServer::ServantBase> (*p), DynamicServant_ptr::nil ());
 				links_end_ = link_ptr;
 			}
 			break;
@@ -117,7 +117,7 @@ void Binder::bind_olf (const void* data, size_t size)
 			for (const ExportInterface* p = (const ExportInterface*)(ps + 1), *end = (const ExportInterface*)next_sibling (ps); p < end; ++p) {
 				if (link_ptr >= links_end)
 					throw INITIALIZE ();
-				(link_ptr++)->interface_ptr = Object_ptr (ObjectFactory_ptr (g_object_factory)->create_local_object (get_interface <AbstractBase> (*p), DynamicServant_ptr::nil ()));
+				(link_ptr++)->interface_ptr = Object_ptr (ObjectFactory::singleton ()->create_local_object (get_interface <AbstractBase> (*p), DynamicServant_ptr::nil ()));
 				links_end_ = link_ptr;
 			}
 			break;
