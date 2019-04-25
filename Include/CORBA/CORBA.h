@@ -3,5 +3,6 @@
 
 #include "ORB.h"
 #include "LocalObject_c.h"
+#include "String.h"
 
 #endif

@@ -22,6 +22,8 @@ public:
 			C* (*string_alloc) (Bridge <StringManager <C> >*, ULong, EnvironmentBridge*);
 			C* (*string_dup) (Bridge <StringManager <C> >*, const C*, EnvironmentBridge*);
 			void (*string_free) (Bridge <StringManager <C> >*, C*, EnvironmentBridge*);
+			C* (*at) (Bridge <StringManager <C> >*, C**, ULong, EnvironmentBridge*);
+			// TODO: Extend for the full support of std::basic_string operations.
 		}
 		epv;
 	};
@@ -47,6 +49,7 @@ public:
 	C* string_alloc (ULong len);
 	C* string_dup (const C*);
 	void string_free (C*);
+	C& at (C*& s, ULong index);
 };
 
 template <class T, class C>
@@ -78,9 +81,27 @@ void Client <T, StringManager <C> >::string_free (C* s)
 	_env.check ();
 }
 
+template <class T, class C>
+C& Client <T, StringManager <C> >::at (C*& s, ULong index)
+{
+	Environment _env;
+	Bridge <StringManager <C> >& _b (T::_get_bridge (_env));
+	C* _ret = (_b._epv ().epv.at) (&_b, &s, index, &_env);
+	_env.check ();
+	return *_ret;
+}
+
 template <class C>
 class StringManager : public ClientInterface <StringManager <C> >
-{};
+{
+public:
+	static T_ptr <StringManager <C> > singleton ()
+	{
+		return singleton_;
+	}
+
+	Bridge <StringManager <C> >* const singleton_;
+};
 
 }
 }

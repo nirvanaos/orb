@@ -47,6 +47,19 @@ protected:
 			env->set_unknown_exception ();
 		}
 	}
+
+	static C* _at (Bridge <StringManager <C> >* obj, C** s, ULong index, EnvironmentBridge* env)
+	{
+		try {
+			_check_pointer (s);
+			return &S::_implementation (obj).at (*s, index);
+		} catch (const Exception& e) {
+			env->set_exception (e);
+		} catch (...) {
+			env->set_unknown_exception ();
+		}
+		return nullptr;
+	}
 };
 
 template <class S, class C>
@@ -59,7 +72,8 @@ const typename Bridge <StringManager <C> >::EPV Skeleton <S, StringManager <C> >
 	{ // epv
 		S::_string_alloc,
 		S::_string_dup,
-		S::_string_free
+		S::_string_free,
+		S::_at
 	}
 };
 
