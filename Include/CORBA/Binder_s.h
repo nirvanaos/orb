@@ -2,6 +2,7 @@
 #define NIRVANA_ORB_BINDER_S_H_
 
 #include "Binder_c.h"
+#include "ImplementationStatic.h"
 
 namespace CORBA {
 namespace Nirvana {

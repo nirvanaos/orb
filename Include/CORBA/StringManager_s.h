@@ -2,6 +2,7 @@
 #define NIRVANA_ORB_STRINGMANAGER_S_H_
 
 #include "StringManager_c.h"
+#include "ImplementationStatic.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -76,6 +77,11 @@ const typename Bridge <StringManager <C> >::EPV Skeleton <S, StringManager <C> >
 		S::_at
 	}
 };
+
+template <class S, class C>
+class ServantStatic <S, StringManager <C> > :
+	public ImplementationStaticPseudo <S, StringManager <C> >
+{};
 
 }
 }
