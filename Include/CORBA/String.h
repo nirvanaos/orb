@@ -5,41 +5,13 @@
 
 namespace CORBA {
 
-inline
-Char* string_alloc (ULong len)
-{
-	return Nirvana::StringManager <Char>::singleton ()->string_alloc (len);
-}
+Char* string_alloc (ULong len);
+Char* string_dup (const Char* s);
+void string_free (Char* s);
 
-inline
-Char* string_dup (const Char* s)
-{
-	return Nirvana::StringManager <Char>::singleton ()->string_dup (s);
-}
-
-inline
-void string_free (Char* s)
-{
-	Nirvana::StringManager <Char>::singleton ()->string_free (s);
-}
-
-inline
-WChar* wstring_alloc (ULong len)
-{
-	return Nirvana::StringManager <WChar>::singleton ()->string_alloc (len);
-}
-
-inline
-WChar* wstring_dup (const WChar* s)
-{
-	return Nirvana::StringManager <WChar>::singleton ()->string_dup (s);
-}
-
-inline
-void wstring_free (WChar* s)
-{
-	Nirvana::StringManager <WChar>::singleton ()->string_free (s);
-}
+WChar* wstring_alloc (ULong len);
+WChar* wstring_dup (const WChar* s);
+void wstring_free (WChar* s);
 
 template <class C> class StringT_out;
 
@@ -59,7 +31,7 @@ public:
 		p_ (Nirvana::StringManager <C>::singleton ()->string_dup (p))
 	{}
 
-	StringT_var (const String_var &s) :
+	StringT_var (const StringT_var &s) :
 		p_ (Nirvana::StringManager <C>::singleton ()->string_dup (s.p_))
 	{}
 
@@ -211,7 +183,7 @@ public:
 
 private:
 	// assignment from String_var disallowed
-	void operator = (const String_var <C>&) = delete;
+	void operator = (const StringT_var <C>&) = delete;
 
 private:
 	C*& p_;

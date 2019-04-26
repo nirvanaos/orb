@@ -100,7 +100,7 @@ public:
 		return singleton_;
 	}
 
-	Bridge <StringManager <C> >* const singleton_;
+	static Bridge <StringManager <C> >* const singleton_;
 };
 
 }
