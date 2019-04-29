@@ -198,7 +198,7 @@ public:
 		}
 	}
 
-	operator BridgeMarshal <I>*& ()
+	operator BridgeMarshal <I>** ()
 	{
 		return ptr_;
 	}
