@@ -78,11 +78,6 @@ public:
 		return p_;
 	}
 
-	const C* operator()
-	{
-		return p_;
-	}
-
 	const C* in () const
 	{
 		return p_;
@@ -106,7 +101,7 @@ public:
 		return p;
 	}
 
-	C &operator [] (ULong index)
+	C& operator [] (ULong index)
 	{
 		return Nirvana::StringManager <C>::singleton ()->at (p_, index);
 	}
