@@ -11,10 +11,10 @@ template <class S>
 class Skeleton <S, ::CORBA::Environment>
 {
 public:
-	static const typename Bridge <Environment>::EPV epv_;
+	static const typename Bridge < ::CORBA::Environment>::EPV epv_;
 
 protected:
-	static void _exception_set (Bridge <Environment>* obj, Long code, const char* rep_id, const void* param)
+	static void _exception_set (Bridge < ::CORBA::Environment>* obj, Long code, const char* rep_id, const void* param)
 	{
 		try {
 			S::_implementation (obj).exception_set (code, rep_id, param);
@@ -22,7 +22,7 @@ protected:
 		}
 	}
 
-	static const Char* _exception_id (Bridge <Environment>* obj)
+	static const Char* _exception_id (Bridge < ::CORBA::Environment>* obj)
 	{
 		try {
 			return S::_implementation (obj).exception_id ();
@@ -31,7 +31,7 @@ protected:
 		return nullptr;
 	}
 
-	static const void* _exception_value (Bridge <Environment>* obj)
+	static const void* _exception_value (Bridge < ::CORBA::Environment>* obj)
 	{
 		try {
 			return S::_implementation (obj).exception_value ();
@@ -40,7 +40,7 @@ protected:
 		return nullptr;
 	}
 
-	static void _exception_free (Bridge <Environment>* obj)
+	static void _exception_free (Bridge < ::CORBA::Environment>* obj)
 	{
 		try {
 			S::_implementation (obj).exception_free ();
