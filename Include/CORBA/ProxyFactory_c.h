@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_PROXYFACTORY_C_H_
 #define NIRVANA_ORB_PROXYFACTORY_C_H_
 
-#include "ReferenceCounter_c.h"
+#include "ProxyManager_c.h"
 #include "DynamicServant_c.h"
 
 namespace CORBA {
@@ -32,9 +32,9 @@ public:
 		{
 			//! Returns ids of all interfaces.
 			const CountedArray <const Char*>* (*interfaces) (Bridge <ProxyFactory>*, EnvironmentBridge*);
-			void (*create_server_proxy) (Bridge <ProxyFactory>*, Bridge <Interface>*, BridgeMarshal <ReferenceCounter>*, 
+			void (*create_server_proxy) (Bridge <ProxyFactory>*, Bridge <Interface>*, BridgeMarshal <ProxyManager>*, 
 																	 Bridge <Interface>**, BridgeMarshal <DynamicServant>**, EnvironmentBridge*);
-			void (*create_client_proxy) (Bridge <ProxyFactory>*, const void*, BridgeMarshal <ReferenceCounter>*,
+			void (*create_client_proxy) (Bridge <ProxyFactory>*, const void*, BridgeMarshal <ProxyManager>*,
 																	 Bridge <Interface>**, BridgeMarshal <DynamicServant>**, EnvironmentBridge*);
 		}
 		epv;
@@ -59,8 +59,8 @@ class Client <T, ProxyFactory> :
 {
 public:
 	const CountedArray <const Char*>* interfaces ();
-	void create_server_proxy (Bridge <Interface>*, ReferenceCounter_ptr, Interface_out, DynamicServant_out);
-	void create_client_proxy (const void*, ReferenceCounter_ptr, Interface_out, DynamicServant_out);
+	void create_server_proxy (Bridge <Interface>*, ProxyManager_ptr, Interface_out, DynamicServant_out);
+	void create_client_proxy (const void*, ProxyManager_ptr, Interface_out, DynamicServant_out);
 };
 
 template <class T>
@@ -74,21 +74,21 @@ const CountedArray <const Char*>* Client <T, ProxyFactory>::interfaces ()
 }
 
 template <class T>
-void Client <T, ProxyFactory>::create_server_proxy (Bridge <Interface>* servant, ReferenceCounter_ptr refcnt, Interface_out proxy, DynamicServant_out dynamic)
+void Client <T, ProxyFactory>::create_server_proxy (Bridge <Interface>* servant, ProxyManager_ptr pm, Interface_out proxy, DynamicServant_out dynamic)
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	const CountedArray <const Char*>* _ret = (_b._epv ().epv.create_server_proxy) (&_b, servant, refcnt, proxy, dynamic, &_env);
+	const CountedArray <const Char*>* _ret = (_b._epv ().epv.create_server_proxy) (&_b, servant, pm, proxy, dynamic, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-void Client <T, ProxyFactory>::create_client_proxy (const void* address, ReferenceCounter_ptr refcnt, Interface_out proxy, DynamicServant_out dynamic)
+void Client <T, ProxyFactory>::create_client_proxy (const void* address, ProxyManager_ptr pm, Interface_out proxy, DynamicServant_out dynamic)
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	const CountedArray <const Char*>* _ret = (_b._epv ().epv.create_client_proxy) (&_b, address, refcnt, proxy, dynamic, &_env);
+	const CountedArray <const Char*>* _ret = (_b._epv ().epv.create_client_proxy) (&_b, address, pm, proxy, dynamic, &_env);
 	_env.check ();
 	return _ret;
 }
