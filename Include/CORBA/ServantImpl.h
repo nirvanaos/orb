@@ -2,6 +2,7 @@
 #define NIRVANA_ORB_SERVANTIMPL_H_
 
 #include "Environment.h"
+#include "RepositoryId.h"
 
 namespace CORBA {
 namespace Nirvana {

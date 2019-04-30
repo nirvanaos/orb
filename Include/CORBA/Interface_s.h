@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_INTERFACE_S_H_
 #define NIRVANA_ORB_INTERFACE_S_H_
 
-#include "AbstractBase_c.h"
+#include "Object_c.h"
 #include "RepositoryId.h"
 #include "ServantImpl.h"
 
