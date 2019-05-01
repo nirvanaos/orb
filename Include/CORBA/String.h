@@ -69,7 +69,6 @@ public:
 
 	operator C*& ()
 	{
-		clear ();
 		return p_;
 	}
 
@@ -136,7 +135,9 @@ class StringT_out
 public:
 	StringT_out (C*& p) :
 		p_ (p)
-	{}
+	{
+		p_ = nullptr;
+	}
 
 	StringT_out (StringT_var <C>& s) :
 		p_ (s.p_)
