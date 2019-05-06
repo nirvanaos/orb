@@ -11,8 +11,8 @@ namespace OLF {
 
 struct SectionHeader
 {
-	ULong type;
-	ULong size;
+	ULong type; //!< Section type
+	ULong size;	//!< Size of the section data (not including this header).
 };
 
 enum SectionType

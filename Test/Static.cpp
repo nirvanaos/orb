@@ -58,12 +58,12 @@ static const struct
 #ifndef TEST_LOCAL_OBJECT
 
 template <>
-const PortableServer::Servant& InterfaceStatic <TestORB::StaticI1, PortableServer::ServantBase>::servant_base_ = 
-reinterpret_cast <const PortableServer::Servant&> (OLF_data.data.links.data [0].interface_ptr);
+Bridge <PortableServer::ServantBase>*& InterfaceStatic <TestORB::StaticI1, PortableServer::ServantBase>::servant_base_ = 
+*(Bridge <PortableServer::ServantBase>**)(&(OLF_data.data.links.data [0].interface_ptr));
 
 template <>
-const PortableServer::Servant& InterfaceStatic <TestORB::StaticI3, PortableServer::ServantBase>::servant_base_ = 
-reinterpret_cast <const PortableServer::Servant&> (OLF_data.data.links.data [1].interface_ptr);
+Bridge <PortableServer::ServantBase>*& InterfaceStatic <TestORB::StaticI3, PortableServer::ServantBase>::servant_base_ =
+*(Bridge <PortableServer::ServantBase>**)(&(OLF_data.data.links.data [1].interface_ptr));
 
 #else
 

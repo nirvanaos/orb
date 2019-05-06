@@ -11,6 +11,14 @@ typedef T_ptr <ProxyManager> ProxyManager_ptr;
 typedef T_var <ProxyManager> ProxyManager_var;
 typedef T_out <ProxyManager> ProxyManager_out;
 
+typedef void (*Function1) (void*);
+
+struct ContextFrame
+{
+	Function1 function;
+	void* parameter;
+};
+
 template <>
 class Bridge <ProxyManager> :
 	public BridgeMarshal <ProxyManager>
@@ -24,8 +32,8 @@ public:
 		{
 			void (*add_ref) (Bridge <ProxyManager>*, EnvironmentBridge*);
 			void (*remove_ref) (Bridge <ProxyManager>*);
-			void (*enter) (Bridge <ProxyManager>*, EnvironmentBridge*);
-			void (*leave) (Bridge <ProxyManager>*, EnvironmentBridge*);
+			void (*enter) (Bridge <ProxyManager>*, ContextFrame*, EnvironmentBridge*);
+			void (*leave) (Bridge <ProxyManager>*, ContextFrame*, EnvironmentBridge*);
 			Bridge <Interface>* (*wide) (Bridge <ProxyManager>*, const Char*, EnvironmentBridge*);
 		}
 		epv;

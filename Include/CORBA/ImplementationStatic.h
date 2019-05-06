@@ -37,24 +37,24 @@ class InterfaceStatic <S, PortableServer::ServantBase> :
 public:
 	operator Bridge <Object>& () const
 	{
-		return *Object_ptr (servant_base_);
+		return *Object_ptr (servant_base ());
 	}
 
 	// ServantBase operations
 
 	static PortableServer::POA_ptr _default_POA ()
 	{
-		return servant_base_->_default_POA ();
+		return servant_base ()->_default_POA ();
 	}
 
 	static InterfaceDef_ptr _get_interface ()
 	{
-		return servant_base_->_get_interface ();
+		return servant_base ()->_get_interface ();
 	}
 
 	static Boolean _is_a (const Char* type_id)
 	{
-		return servant_base_->_is_a (type_id);
+		return servant_base ()->_is_a (type_id);
 	}
 
 	static Boolean _non_existent ()
@@ -62,7 +62,13 @@ public:
 		return false;
 	}
 
-	static const PortableServer::Servant& servant_base_;
+private:
+	static PortableServer::Servant servant_base ()
+	{
+		return servant_base_;
+	}
+
+	static Bridge <PortableServer::ServantBase>*& servant_base_;
 };
 
 //! Static implementation of LocalObject
@@ -108,7 +114,13 @@ public:
 	}
 	// TODO: Other Object operations shall be here...
 
-	static const Object_ptr& object_;
+private:
+	static Object_ptr object ()
+	{
+		return object_;
+	}
+
+	static Bridge <Object>*& object_;
 };
 
 template <class S, class Primary, class ... Bases>
