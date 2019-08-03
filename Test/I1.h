@@ -2,7 +2,7 @@
 #define NIRVANA_TESTORB_I1_H_
 
 #include "Test_I1_s.h"
-#include "Test.h"
+#include "TestORB.h"
 
 namespace TestORB {
 
