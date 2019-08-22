@@ -2,10 +2,11 @@
 #include <CORBA/RepositoryId.h>
 
 #define DEFINE_EXCEPTION(MID, e)\
-void e::_raise () const { throw *this; }\
+void e::raise () const { throw *this; }\
 const char* e::_name () const { return #e; }\
 const char* e::_rep_id () const { return MID (e); }\
 Long e::__code () const { return EC_##e; }\
+Exception* e::__clone () const { return new e (*this); }\
 const e* e::_downcast (const Exception* ep) { return (ep && (EC_##e == ep->__code ())) ? static_cast <const e*> (ep) : 0; }\
 Exception* e::_create (const void* data) { return new e ((Data*)data); }
 

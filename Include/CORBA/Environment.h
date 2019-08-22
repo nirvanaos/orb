@@ -13,7 +13,7 @@ public:
 	void check () const
 	{
 		if (exception_)
-			exception_->_raise ();
+			exception_->raise ();
 	}
 
 	void exception_set (Long code, const char* rep_id, const void* param,

@@ -13,13 +13,14 @@ class Exception
 public:
 	virtual ~Exception ()
 	{}
-	virtual void _raise () const = 0;
+	virtual void raise () const = 0;
 	virtual const char* _name () const = 0;
 	virtual const char* _rep_id () const = 0;
 
 	// Nirvana specific
 	virtual Long __code () const = 0;
-	
+	virtual Exception* __clone () const = 0;
+
 	const void* __data () const
 	{
 		return this + 1;
@@ -90,8 +91,6 @@ public:
 	{
 		data_.completed = status;
 	}
-
-	virtual void _raise () const = 0;
 
 	static const SystemException* _downcast (const Exception* ep)
 	{
@@ -205,10 +204,11 @@ private:
 public: e () {}\
 e (ULong minor, CompletionStatus status = COMPLETED_NO) : SystemException (minor, status) {}\
 e (const Data* data) : SystemException (data) {}\
-virtual void _raise () const;\
+virtual void raise () const;\
 virtual const char* _name () const;\
 virtual const char* _rep_id () const;\
 virtual Long __code () const;\
+virtual Exception* __clone () const;\
 static const e* _downcast (const Exception* ep);\
 static e* _downcast (Exception* ep) { return const_cast <e*> (_downcast ((const Exception*)ep)); }\
 static const e* _narrow (const Exception* ep) { return _downcast (ep); }\
@@ -269,9 +269,6 @@ class UserException : public Exception
 		return EC_USER_EXCEPTION;
 	}
 public:
-
-	virtual void _raise () const = 0;
-
 	static const UserException* _downcast (const Exception* ep)
 	{
 		return (ep && (ep->__code () < 0)) ? static_cast <const UserException*> (ep) : 0;

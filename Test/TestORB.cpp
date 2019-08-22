@@ -86,8 +86,9 @@ TEST_F (TestORB, RepositoryId)
 
 TEST_F (TestORB, Exception)
 {
-	CORBA::Exception* p = new NO_MEMORY ();
-	EXPECT_THROW (p->_raise (), NO_MEMORY);
+	NO_MEMORY nm;
+	CORBA::Exception* p = nm.__clone ();
+	EXPECT_THROW (p->raise (), NO_MEMORY);
 }
 
 // The fixture for testing simple interface.
