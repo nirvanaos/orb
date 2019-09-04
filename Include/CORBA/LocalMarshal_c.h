@@ -4,6 +4,9 @@
 #include "Interface_c.h"
 
 namespace CORBA {
+
+class Object;
+
 namespace Nirvana {
 
 class LocalMarshal;
@@ -38,6 +41,8 @@ public:
 			uintptr_t (*marshal_memory) (Bridge <LocalMarshal>*, const void* p, size_t size, EnvironmentBridge*);
 			uintptr_t (*get_buffer) (Bridge <LocalMarshal>*, size_t size, void** buf_ptr, EnvironmentBridge*);
 			void* (*unmarshal_memory) (Bridge <LocalMarshal>*, void* p, size_t size, EnvironmentBridge*);
+			uintptr_t (*marshal_object) (Bridge <LocalMarshal>*, BridgeMarshal <Object>*, EnvironmentBridge*);
+			Bridge <Interface>* (*unmarshal_interface) (Bridge <LocalMarshal>*, const void*, const Char*, EnvironmentBridge*);
 			void (*release_marshal_data) (Bridge <LocalMarshal>*, EnvironmentBridge*);
 			void (*post_call) (Bridge <LocalMarshal>*, uintptr_t target_object, OperationIndex operation, EnvironmentBridge*);
 			void (*post_return) (Bridge <LocalMarshal>*, uintptr_t return_object, EnvironmentBridge*);
@@ -68,6 +73,8 @@ public:
 	uintptr_t marshal_memory (const void* p, size_t size);
 	uintptr_t get_buffer (size_t size, void** buf_ptr);
 	void* unmarshal_memory (void* p, size_t size);
+	uintptr_t marshal_object (Object_ptr);
+	Interface_ptr unmarshal_interface (const void* marshal_data, const Char* interface_id, EnvironmentBridge*);
 	void release_marshal_data ();
 	void post_call (uintptr_t target_object, OperationIndex operation);
 	void post_return (uintptr_t return_object);
@@ -75,7 +82,10 @@ public:
 };
 
 class LocalMarshal : public ClientInterface <LocalMarshal>
-{};
+{
+public:
+	static LocalMarshal_ptr singleton ();
+};
 
 }
 }
