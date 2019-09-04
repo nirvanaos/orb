@@ -6,6 +6,22 @@
 
 #include "AbstractBase_c.h"
 
+//! \namespace	IOP
+//!
+//! \brief	Inter-ORB declarations.
+
+namespace IOP {
+
+struct IOR;
+
+}
+
+namespace Nirvana {
+
+class SynchronizationDomain;
+
+}
+
 namespace CORBA {
 
 typedef Nirvana::Interface ImplementationDef; // Not defined yet
@@ -34,8 +50,7 @@ public:
 		struct
 		{
 			BASE_STRUCT_ENTRY(CORBA::AbstractBase, CORBA_AbstractBase)
-		}
-		base;
+		} base;
 
 		struct
 		{
@@ -46,8 +61,14 @@ public:
 			Boolean (*is_equivalent) (Bridge <Object>*, BridgeMarshal <Object>*, EnvironmentBridge*);
 			ULong (*hash) (Bridge <Object>*, ULong maximum, EnvironmentBridge*);
 			// TODO: Other Object operations shall be here...
-		}
-		epv;
+		} epv;
+
+		struct
+		{
+			BridgeMarshal <::Nirvana::SynchronizationDomain>* (*sync_domain) (Bridge <Object>*, EnvironmentBridge*);
+			const IOP::IOR* (*object_reference) (Boolean local);
+			const void* (*call_target) ();
+		} internal;
 	};
 
 	const EPV& _epv () const
