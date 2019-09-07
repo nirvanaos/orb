@@ -335,9 +335,9 @@ protected:
 //! \brief	An implementation of interface.
 //!
 //! \tparam S Servant class implementing operations.
-//! \tparam	Primary	Primary interface.
-//! \tparam	Bases	 	All base interfaces derived directly or indirectly.
-//! 								Don't include AbstractBase in base list.
+//! \tparam Primary Primary interface.
+//! \tparam Bases All base interfaces derived directly or indirectly.
+//!    Don't include AbstractBase in base list.
 
 template <class S, class Primary, class ... Bases>
 class Implementation :
