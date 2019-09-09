@@ -279,7 +279,7 @@ TEST_F (TestORB, Runnable)
 	int a = 1, b = 2, c = 0;
 
 	Functor functor ([a, b, &c]() { c = a + b; });
-	::Nirvana::Runnable_ptr r = &functor;
+	::Nirvana::Runnable_ptr r = functor._get_ptr ();
 	r->run ();
 	EXPECT_EQ (c, a + b);
 }

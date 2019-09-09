@@ -56,13 +56,13 @@ class Client <T, ObjectFactory> :
 	public T
 {
 public:
-	PortableServer::Servant create_servant (PortableServer::Servant servant, DynamicServant_ptr dynamic);
-	LocalObject_ptr create_local_object (AbstractBase_ptr base, DynamicServant_ptr dynamic);
-	ReferenceCounter_ptr create_reference_counter (DynamicServant_ptr dynamic);
+	PortableServer::Servant create_servant (BridgeMarshal <PortableServer::ServantBase>* servant, BridgeMarshal <DynamicServant>* dynamic);
+	LocalObject_ptr create_local_object (BridgeMarshal <AbstractBase>* base, BridgeMarshal <DynamicServant>* dynamic);
+	ReferenceCounter_ptr create_reference_counter (BridgeMarshal <DynamicServant>* dynamic);
 };
 
 template <class T>
-PortableServer::Servant Client <T, ObjectFactory>::create_servant (PortableServer::Servant servant, DynamicServant_ptr dynamic)
+PortableServer::Servant Client <T, ObjectFactory>::create_servant (BridgeMarshal <PortableServer::ServantBase>* servant, BridgeMarshal <DynamicServant>* dynamic)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
@@ -72,7 +72,7 @@ PortableServer::Servant Client <T, ObjectFactory>::create_servant (PortableServe
 }
 
 template <class T>
-LocalObject_ptr Client <T, ObjectFactory>::create_local_object (AbstractBase_ptr base, DynamicServant_ptr dynamic)
+LocalObject_ptr Client <T, ObjectFactory>::create_local_object (BridgeMarshal <AbstractBase>* base, BridgeMarshal <DynamicServant>* dynamic)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
@@ -82,7 +82,7 @@ LocalObject_ptr Client <T, ObjectFactory>::create_local_object (AbstractBase_ptr
 }
 
 template <class T>
-ReferenceCounter_ptr Client <T, ObjectFactory>::create_reference_counter (DynamicServant_ptr dynamic)
+ReferenceCounter_ptr Client <T, ObjectFactory>::create_reference_counter (BridgeMarshal <DynamicServant>* dynamic)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
@@ -96,7 +96,7 @@ class ObjectFactory : public ClientInterface <ObjectFactory, AbstractBase>
 public:
 	static ObjectFactory_ptr singleton ()
 	{
-		return singleton_;
+		return static_cast <ObjectFactory*> (singleton_);
 	}
 
 	static Bridge <ObjectFactory>* const singleton_;

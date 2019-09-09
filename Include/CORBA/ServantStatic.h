@@ -61,7 +61,7 @@ public:
 
 	static T_ptr <I> _get_ptr ()
 	{
-		return reinterpret_cast <Bridge <I>*> (&bridge_);
+		return static_cast <I*> (reinterpret_cast <Bridge <I>*> (&bridge_));
 	}
 
 	static const typename Bridge <I>::EPV* bridge_;

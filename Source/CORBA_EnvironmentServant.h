@@ -27,7 +27,7 @@ public:
 protected:
 	CORBA_EnvironmentImpl () :
 		::CORBA::Environment (Skeleton <S, DynamicServant>::epv_),
-		ReferenceCounterLink (this)
+		ReferenceCounterLink (&static_cast <DynamicServant&> (static_cast <Bridge <DynamicServant>&> (*this)))
 	{}
 };
 

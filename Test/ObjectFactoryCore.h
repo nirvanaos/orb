@@ -19,7 +19,7 @@ public:
 #ifdef TEST_LOCAL_OBJECT
 		assert (false);
 #endif
-		return new ServantCore (servant, dynamic);
+		return (new ServantCore (servant, dynamic))->_get_ptr ();
 	}
 
 	static LocalObject_ptr create_local_object (AbstractBase_ptr base, DynamicServant_ptr dynamic)
@@ -27,12 +27,12 @@ public:
 #ifndef TEST_LOCAL_OBJECT
 		assert (false);
 #endif
-		return new LocalObjectCore (base, dynamic);
+		return (new LocalObjectCore (base, dynamic))->_get_ptr ();
 	}
 
 	static ReferenceCounter_ptr create_reference_counter (DynamicServant_ptr dynamic)
 	{
-		return new ReferenceCounterCore (dynamic);
+		return (new ReferenceCounterCore (dynamic))->_get_ptr ();
 	}
 };
 

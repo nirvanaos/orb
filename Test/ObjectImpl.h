@@ -71,8 +71,7 @@ private:
 template <class S>
 class ObjectImpl :
 	public ObjectBase,
-	public InterfaceImplBase <S, Object>,
-	public Skeleton <S, AbstractBase> // Derive only for _wide() implementation.
+	public InterfaceImplBase <S, Object>
 {
 public:
 	ObjectImpl (AbstractBase_ptr servant) :

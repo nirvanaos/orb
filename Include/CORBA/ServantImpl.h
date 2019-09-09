@@ -3,6 +3,7 @@
 
 #include "Environment.h"
 #include "RepositoryId.h"
+#include "T_ptr.h"
 
 namespace CORBA {
 namespace Nirvana {

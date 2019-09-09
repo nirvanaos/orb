@@ -219,13 +219,13 @@ protected:
 	{}
 };
 
-//! \class	ImplementationPOA
+//! \class ImplementationPOA
 //!
-//! \brief	Portable implementation of interface.
+//! \brief Portable implementation of interface.
 //!
-//! \tparam	Primary	Primary interface.
-//! \tparam	Bases	 	All base interfaces derived directly or indirectly.
-//! 								Don't include AbstractBase in base list.
+//! \tparam Primary Primary interface.
+//! \tparam Bases All base interfaces derived directly or indirectly.
+//!               Don't include AbstractBase in base list.
 
 template <class Primary, class ... Bases>
 class ImplementationPOA :
@@ -242,7 +242,7 @@ public:
 	{
 		this->_implicitly_activate ();
 		this->_add_ref ();
-		return this;
+		return &static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this));
 	}
 
 protected:

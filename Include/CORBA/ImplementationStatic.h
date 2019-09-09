@@ -65,7 +65,7 @@ public:
 private:
 	static PortableServer::Servant servant_base ()
 	{
-		return servant_base_;
+		return static_cast <PortableServer::ServantBase*> (servant_base_);
 	}
 
 	static Bridge <PortableServer::ServantBase>*& servant_base_;
@@ -85,39 +85,39 @@ public:
 
 	static ImplementationDef_ptr _get_implementation ()
 	{
-		return object_->_get_implementation ();
+		return object ()->_get_implementation ();
 	}
 
 	static InterfaceDef_ptr _get_interface ()
 	{
-		return object_->_get_interface ();
+		return object ()->_get_interface ();
 	}
 
 	static Boolean _is_a (const Char* type_id)
 	{
-		return object_->_is_a (type_id);
+		return object ()->_is_a (type_id);
 	}
 
 	static Boolean _non_existent ()
 	{
-		return object_->_non_existent ();
+		return object ()->_non_existent ();
 	}
 
 	static Boolean _is_equivalent (Object_ptr other_object)
 	{
-		return object_->_is_equivalent (other_object);
+		return object ()->_is_equivalent (other_object);
 	}
 
 	static ULong _hash (ULong maximum)
 	{
-		return object_->_hash (maximum);
+		return object ()->_hash (maximum);
 	}
 	// TODO: Other Object operations shall be here...
 
 private:
 	static Object_ptr object ()
 	{
-		return object_;
+		return static_cast <Object*> (object_);
 	}
 
 	static Bridge <Object>*& object_;
@@ -137,14 +137,14 @@ public:
 	}
 };
 
-//! \class	ImplementationStatic
+//! \class ImplementationStatic
 //!
-//! \brief	A static implementation of interface.
+//! \brief A static implementation of interface.
 //!
 //! \tparam S Servant class implementing operations.
-//! \tparam	Primary	Primary interface.
-//! \tparam	Bases	 	All base interfaces derived directly or indirectly.
-//! 								Don't include AbstractBase in base list.
+//! \tparam Primary Primary interface.
+//! \tparam	Bases All base interfaces derived directly or indirectly.
+//!               Don't include AbstractBase in base list.
 
 template <class S, class Primary, class ... Bases>
 class ImplementationStatic :

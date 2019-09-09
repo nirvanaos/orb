@@ -429,7 +429,7 @@ template <class Primary, class Base>
 ClientBase <Primary, Base>::operator T_ptr <Base> ()
 {
 	Environment env;
-	return _get_bridge_ptr (env);
+	return static_cast <Base*> (_get_bridge_ptr (env));
 }
 
 //! Base interface client implementation.

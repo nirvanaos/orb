@@ -12,7 +12,7 @@ ReferenceCounterLink::~ReferenceCounterLink ()
 	release (reference_counter_);
 }
 
-void ServantBaseLink::_construct (DynamicServant_ptr dynamic)
+void ServantBaseLink::_construct (Bridge <DynamicServant>* dynamic)
 {
 	servant_base_ = ObjectFactory::singleton ()->create_servant (this, dynamic);
 }
@@ -20,12 +20,12 @@ void ServantBaseLink::_construct (DynamicServant_ptr dynamic)
 void ServantBaseLink::_implicitly_activate ()
 {
 	if (!_is_active ()) {
-		::PortableServer::POA_var poa = PortableServer::Servant (this)->_default_POA ();
+		::PortableServer::POA_var poa = servant ()->_default_POA ();
 		poa->activate_object (servant_base_);
 	}
 }
 
-ReferenceCounter_ptr LocalObjectLink::_construct (AbstractBase_ptr base, DynamicServant_ptr dynamic)
+ReferenceCounter_ptr LocalObjectLink::_construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic)
 {
 	LocalObject_ptr obj = ObjectFactory::singleton ()->create_local_object (base, dynamic);
 	object_ = obj;

@@ -31,7 +31,7 @@ private:
 	static T_ptr <I> get_interface (const ExportInterface& ei)
 	{
 		if (RepositoryId::compatible (ei.itf->_epv ().interface_id, Bridge <I>::interface_id_))
-			return static_cast <Bridge <I>*> (ei.itf);
+			return static_cast <I*> (static_cast <Bridge <I>*> (ei.itf));
 		else
 			throw INV_OBJREF ();
 	}

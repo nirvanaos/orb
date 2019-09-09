@@ -195,7 +195,7 @@ protected:
 		servant_base_ (PortableServer::ServantBase::_nil ())
 	{}
 
-	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv, DynamicServant_ptr dynamic) :
+	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv, Bridge <DynamicServant>* dynamic) :
 		Bridge <PortableServer::ServantBase> (epv)
 	{
 		_construct (dynamic);
@@ -207,9 +207,15 @@ protected:
 		return *this; // Do nothing
 	}
 
-	void _construct (DynamicServant_ptr dynamic);
+	void _construct (Bridge <DynamicServant>* dynamic);
 
 	void _implicitly_activate ();
+
+private:
+	PortableServer::Servant servant ()
+	{
+		return PortableServer::Servant (&static_cast <PortableServer::ServantBase&> (static_cast <Bridge <PortableServer::ServantBase>&> (*this)));
+	}
 
 protected:
 	PortableServer::Servant servant_base_;
@@ -284,7 +290,7 @@ protected:
 		return *this; // Do nothing
 	}
 
-	ReferenceCounter_ptr _construct (AbstractBase_ptr base, DynamicServant_ptr dynamic);
+	ReferenceCounter_ptr _construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic);
 
 private:
 	Object_ptr object_;
@@ -309,30 +315,44 @@ protected:
 	{}
 };
 
-//! \class	ImplementationPseudo
+//! \class ImplementationPseudo
 //!
-//! \brief	An implementation of a pseudo interface.
-//! 				
+//! \brief An implementation of a pseudo interface.
+//!
 //! You also have to derive your servant from some life cycle implementation.
 //!
 //! \tparam S Servant class implementing operations.
-//! \tparam	I...	interfaces.
-//! 							
-//! \note
+//! \tparam Primary Primary interface.
+//! \tparam Bases All base interfaces derived directly or indirectly.
 
-template <class S, class ... I>
+template <class S, class Primary, class ... Bases>
 class ImplementationPseudo :
 	public ServantTraits <S>,
-	public InterfaceImpl <S, I> ...
+	public InterfaceImplBase <S, Bases> ...,
+	public InterfaceImplBase <S, Primary>
 {
+public:
+
+	//! \fn T_ptr <Primary> _get_ptr ()
+	//!
+	//! \brief Gets the pointer.
+	//!   Works like _this() method but doesn't increment the reference counter.
+	//!
+	//! \return The pointer.
+
+	T_ptr <Primary> _get_ptr ()
+	{
+		return T_ptr <Primary> (&static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this)));
+	}
+
 protected:
 	ImplementationPseudo ()
 	{}
 };
 
-//! \class	Implementation
+//! \class Implementation
 //!
-//! \brief	An implementation of interface.
+//! \brief An implementation of interface.
 //!
 //! \tparam S Servant class implementing operations.
 //! \tparam Primary Primary interface.
@@ -364,7 +384,7 @@ public:
 		std::conditional < std::is_base_of <ServantBaseLink, Implementation <S, Primary, Bases...> >::value, 
 			ServantBaseLink, DummyActivator>::type::_implicitly_activate ();
 		static_cast <S&> (*this)._add_ref ();
-		return this;
+		return &static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this));
 	}
 
 protected:

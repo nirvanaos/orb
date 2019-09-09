@@ -36,7 +36,8 @@ void ServantPOA <PortableServer::ServantBase>::_implicitly_activate ()
 
 ServantPOA <LocalObject>::ServantPOA ()
 {
-	reference_counter_ = LocalObjectLink::_construct (this, this);
+	ServantPOA <AbstractBase>& ab = *this;
+	reference_counter_ = LocalObjectLink::_construct (&ab, &ab);
 }
 
 BridgeMarshal <InterfaceDef>* ServantPOA <LocalObject>::__get_interface (Bridge <Object>* obj, EnvironmentBridge* env)

@@ -43,25 +43,14 @@ private:
 	DynamicServant_ptr dynamic_;
 };
 
-template <class S>
-class ReferenceCounterImpl :
-	public ReferenceCounterBase,
-	public InterfaceImpl <S, ReferenceCounter>
-{
-protected:
-	ReferenceCounterImpl (DynamicServant_ptr dynamic) :
-		ReferenceCounterBase (dynamic)
-	{}
-};
-
 class ReferenceCounterCore :
-	public ReferenceCounterImpl <ReferenceCounterCore>,
-	public ServantTraits <ReferenceCounterCore>,
-	public LifeCycleNoCopy <ReferenceCounterCore>
+	public ImplementationPseudo <ReferenceCounterCore, ReferenceCounter>,
+	public LifeCycleNoCopy <ReferenceCounterCore>,
+	public ReferenceCounterBase
 {
 public:
 	ReferenceCounterCore (DynamicServant_ptr dynamic) :
-		ReferenceCounterImpl (dynamic)
+		ReferenceCounterBase (dynamic)
 	{}
 };
 }

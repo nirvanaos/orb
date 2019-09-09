@@ -11,16 +11,14 @@ namespace Nirvana {
 template <class I>
 class T_ptr
 {
+	T_ptr (Bridge <I>* p) = delete;
+
 public:
 	T_ptr ()
 	{} // Zero init skipped for performance
 
 	T_ptr (I* p) :
 		p_ (p)
-	{}
-
-	T_ptr (Bridge <I>* p) :
-		p_ (static_cast <I*> (p))
 	{}
 
 	T_ptr (BridgeMarshal <I>* p) :
