@@ -25,12 +25,6 @@ public:
 
 		struct
 		{
-			BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
-		}
-		base;
-
-		struct
-		{
 			BridgeMarshal <PortableServer::ServantBase>* (*create_servant) (Bridge <ObjectFactory>*, BridgeMarshal <PortableServer::ServantBase>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
 			BridgeMarshal <LocalObject>* (*create_local_object) (Bridge <ObjectFactory>*, BridgeMarshal <AbstractBase>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
 			BridgeMarshal <ReferenceCounter>* (*create_reference_counter) (Bridge <ObjectFactory>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
@@ -91,7 +85,7 @@ ReferenceCounter_ptr Client <T, ObjectFactory>::create_reference_counter (Bridge
 	return _ret._retn ();
 }
 
-class ObjectFactory : public ClientInterface <ObjectFactory, AbstractBase>
+class ObjectFactory : public ClientInterface <ObjectFactory>
 {
 public:
 	static ObjectFactory_ptr singleton ()

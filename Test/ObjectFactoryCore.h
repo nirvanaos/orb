@@ -5,13 +5,12 @@
 #include "ServantCore.h"
 #include "LocalObjectCore.h"
 #include "ReferenceCounterImpl.h"
-#include <CORBA/ImplementationStatic.h>
 
 namespace CORBA {
 namespace Nirvana {
 
 class ObjectFactoryCore :
-	public ImplementationStatic <ObjectFactoryCore, ObjectFactory>
+	public ServantStatic <ObjectFactoryCore, ObjectFactory>
 {
 public:
 	static PortableServer::Servant create_servant (PortableServer::Servant servant, DynamicServant_ptr dynamic)

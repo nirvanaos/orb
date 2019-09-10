@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_OBJECTFACTORY_S_H_
 
 #include "ObjectFactory_c.h"
-#include "Interface_s.h"
+#include "Servant.h"
 
 // ObjectFactory skeleton
 
@@ -60,15 +60,25 @@ const Bridge <ObjectFactory>::EPV Skeleton <S, ObjectFactory>::epv_ = {
 		S::template __duplicate <ObjectFactory>,
 		S::template __release <ObjectFactory>
 	},
-	{ // base
-		S::template _wide <AbstractBase, ObjectFactory>
-	},
 	{ // epv
 		S::_create_servant,
 		S::_create_local_object,
 		S::_create_reference_counter
 	}
 };
+
+// Standard implementation
+
+template <class S>
+class Servant <S, ObjectFactory> : public ImplementationPseudo <S, ObjectFactory>
+{};
+
+// Static implementation
+
+template <class S>
+class ServantStatic <S, ObjectFactory> : public ImplementationStaticPseudo <S, ObjectFactory>
+{};
+
 
 }
 }
