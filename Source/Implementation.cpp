@@ -17,12 +17,16 @@ void ServantBaseLink::_construct (Bridge <DynamicServant>* dynamic)
 	servant_base_ = ObjectFactory::singleton ()->create_servant (this, dynamic);
 }
 
-void ServantBaseLink::_implicitly_activate ()
+Bridge <Interface>* ServantBaseLink::_implicitly_activate (Bridge <Interface>* itf)
 {
 	if (!_is_active ()) {
 		::PortableServer::POA_var poa = servant ()->_default_POA ();
 		poa->activate_object (servant_base_);
 	}
+	Bridge <Interface>* proxy = AbstractBase_ptr (servant_base_)->_query_interface (itf->_epv ().interface_id);
+	if (!proxy)
+		throw MARSHAL ();
+	return Interface::_duplicate (proxy);
 }
 
 ReferenceCounter_ptr LocalObjectLink::_construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic)
@@ -30,6 +34,14 @@ ReferenceCounter_ptr LocalObjectLink::_construct (Bridge <AbstractBase>* base, B
 	LocalObject_ptr obj = ObjectFactory::singleton ()->create_local_object (base, dynamic);
 	object_ = obj;
 	return obj;
+}
+
+Bridge <Interface>* LocalObjectLink::_implicitly_activate (Bridge <Interface>* itf)
+{
+	Bridge <Interface>* proxy = AbstractBase_ptr (object_)->_query_interface (itf->_epv ().interface_id);
+	if (!proxy)
+		throw MARSHAL ();
+	return Interface::_duplicate (proxy);
 }
 
 }

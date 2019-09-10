@@ -209,7 +209,7 @@ protected:
 
 	void _construct (Bridge <DynamicServant>* dynamic);
 
-	void _implicitly_activate ();
+	Bridge <Interface>* _implicitly_activate (Bridge <Interface>* itf);
 
 private:
 	PortableServer::Servant servant ()
@@ -292,6 +292,8 @@ protected:
 
 	ReferenceCounter_ptr _construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic);
 
+	Bridge <Interface>* _implicitly_activate (Bridge <Interface>* itf);
+
 private:
 	Object_ptr object_;
 };
@@ -366,13 +368,6 @@ class Implementation :
 	public InterfaceImpl <S, Bases>...,
 	public InterfaceImpl <S, Primary>
 {
-	class DummyActivator
-	{
-	public:
-		static void _implicitly_activate ()
-		{}
-	};
-
 public:
 	Interface_ptr _query_interface (const Char* id)
 	{
@@ -381,10 +376,10 @@ public:
 
 	T_ptr <Primary> _this ()
 	{
-		std::conditional < std::is_base_of <ServantBaseLink, Implementation <S, Primary, Bases...> >::value, 
-			ServantBaseLink, DummyActivator>::type::_implicitly_activate ();
-		static_cast <S&> (*this)._add_ref ();
-		return &static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this));
+		return static_cast <Primary*> (
+			std::conditional < std::is_base_of <LocalObjectLink, Implementation <S, Primary, Bases...> >::value,
+			LocalObjectLink, ServantBaseLink>::type::
+			_implicitly_activate (static_cast <Bridge <Primary>*> (this)));
 	}
 
 protected:

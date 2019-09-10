@@ -28,16 +28,21 @@ void ServantPOA <PortableServer::ServantBase>::_construct ()
 	reference_counter_ = servant_base_;
 }
 
-void ServantPOA <PortableServer::ServantBase>::_implicitly_activate ()
+Bridge <Interface>* ServantPOA <PortableServer::ServantBase>::_implicitly_activate (Bridge <Interface>* itf)
 {
 	_check_construct ();
-	ServantBaseLink::_implicitly_activate ();
+	return ServantBaseLink::_implicitly_activate (itf);
 }
 
 ServantPOA <LocalObject>::ServantPOA ()
 {
 	ServantPOA <AbstractBase>& ab = *this;
 	reference_counter_ = LocalObjectLink::_construct (&ab, &ab);
+}
+
+Bridge <Interface>* ServantPOA <LocalObject>::_implicitly_activate (Bridge <Interface>* itf)
+{
+	return LocalObjectLink::_implicitly_activate (itf);
 }
 
 BridgeMarshal <InterfaceDef>* ServantPOA <LocalObject>::__get_interface (Bridge <Object>* obj, EnvironmentBridge* env)

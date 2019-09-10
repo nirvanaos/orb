@@ -19,7 +19,6 @@ public:
 		return T_ptr <PortableServer::ServantBase> (&static_cast <PortableServer::ServantBase&> (static_cast <Bridge <PortableServer::ServantBase>&> (*this)));
 	}
 
-
 	ServantCore (PortableServer::Servant servant, DynamicServant_ptr dynamic) :
 		object_ (servant),
 		ReferenceCounterBase (dynamic)

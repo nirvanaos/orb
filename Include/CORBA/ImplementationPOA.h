@@ -68,9 +68,6 @@ public:
 protected:
 	ServantPOA ()
 	{}
-
-	virtual void _implicitly_activate ()
-	{}
 };
 
 // POA implementation of PortableServer::ServantBase
@@ -132,7 +129,7 @@ protected:
 		ServantPOA ()
 	{}
 
-	virtual void _implicitly_activate ();
+	virtual Bridge <Interface>* _implicitly_activate (Bridge <Interface>* itf);
 
 private:
 	friend class ServantTraitsPOA;
@@ -215,8 +212,7 @@ protected:
 		ServantPOA ()
 	{}
 
-	virtual void _implicitly_activate ()
-	{}
+	virtual Bridge <Interface>* _implicitly_activate (Bridge <Interface>* itf);
 };
 
 //! \class ImplementationPOA
@@ -240,9 +236,7 @@ public:
 
 	T_ptr <Primary> _this ()
 	{
-		this->_implicitly_activate ();
-		this->_add_ref ();
-		return &static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this));
+		return static_cast <Primary*> (this->_implicitly_activate (static_cast <Bridge <Primary>*> (this)));
 	}
 
 protected:
