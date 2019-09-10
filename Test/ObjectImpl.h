@@ -34,6 +34,8 @@ public:
 		return primary_interface ()->_epv ().interface_id;
 	}
 
+	Interface_ptr _query_interface (const Char* id);
+
 	// Object operations
 
 	static BridgeMarshal <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
@@ -71,6 +73,7 @@ private:
 template <class S>
 class ObjectImpl :
 	public ObjectBase,
+	public InterfaceImplBase <S, AbstractBase>,
 	public InterfaceImplBase <S, Object>
 {
 public:

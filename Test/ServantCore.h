@@ -9,7 +9,7 @@ namespace CORBA {
 namespace Nirvana {
 
 class ServantCore :
-	public ImplementationPseudo <ServantCore, PortableServer::ServantBase, AbstractBase, ReferenceCounter>,
+	public ImplementationPseudo <ServantCore, PortableServer::ServantBase, ReferenceCounter>,
 	public LifeCycleNoCopy <ServantCore>,
 	public ReferenceCounterBase
 {
@@ -24,12 +24,12 @@ public:
 		ReferenceCounterBase (dynamic)
 	{}
 
-	Interface_ptr _query_interface (const Char* id)
+	operator Bridge <Object>& ()
 	{
-		return FindInterface <PortableServer::ServantBase, Object, ReferenceCounter>::find (*this, id);
+		return object_;
 	}
 
-	operator Bridge <Object>& ()
+	operator Bridge <AbstractBase>& ()
 	{
 		return object_;
 	}

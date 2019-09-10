@@ -56,12 +56,12 @@ class InterfaceStaticBase :
 public:
 	operator Bridge <I>& () const
 	{
-		return *reinterpret_cast <Bridge <I>*> (&bridge_);
+		return *_bridge ();
 	}
 
-	static T_ptr <I> _get_ptr ()
+	static Bridge <I>* _bridge ()
 	{
-		return static_cast <I*> (reinterpret_cast <Bridge <I>*> (&bridge_));
+		return reinterpret_cast <Bridge <I>*> (&bridge_);
 	}
 
 	static const typename Bridge <I>::EPV* bridge_;

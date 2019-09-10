@@ -62,6 +62,15 @@ public:
 		return false;
 	}
 
+protected:
+	static Bridge <Interface>* _get_proxy ()
+	{
+		Bridge <Interface>* proxy = AbstractBase_ptr (servant_base ())->_query_interface (nullptr);
+		if (!proxy)
+			throw MARSHAL ();
+		return proxy;
+	}
+
 private:
 	static PortableServer::Servant servant_base ()
 	{
@@ -114,6 +123,15 @@ public:
 	}
 	// TODO: Other Object operations shall be here...
 
+protected:
+	static Bridge <Interface>* _get_proxy ()
+	{
+		Bridge <Interface>* proxy = AbstractBase_ptr (object ())->_query_interface (nullptr);
+		if (!proxy)
+			throw MARSHAL ();
+		return proxy;
+	}
+
 private:
 	static Object_ptr object ()
 	{
@@ -123,17 +141,25 @@ private:
 	static Bridge <Object>*& object_;
 };
 
+//! \class ImplementationPseudo
+//!
+//! \brief Static implementation of a pseudo interface.
+//!
+//! \tparam S Servant class implementing operations.
+//! \tparam Primary Primary interface.
+//! \tparam Bases All base interfaces derived directly or indirectly.
+
 template <class S, class Primary, class ... Bases>
 class ImplementationStaticPseudo :
 	public ServantTraitsStatic <S>,
 	public LifeCycleStatic <>,
-	public InterfaceStatic <S, Bases> ...,
-	public InterfaceStatic <S, Primary>
+	public InterfaceStaticBase <S, Bases> ...,
+	public InterfaceStaticBase <S, Primary>
 {
 public:
-	static T_ptr <Primary> _this ()
+	static T_ptr <Primary> _get_ptr ()
 	{
-		return InterfaceStatic <S, Primary>::_get_ptr ();
+		return static_cast <Primary*> (InterfaceStaticBase <S, Primary>::_bridge ());
 	}
 };
 
@@ -143,7 +169,7 @@ public:
 //!
 //! \tparam S Servant class implementing operations.
 //! \tparam Primary Primary interface.
-//! \tparam	Bases All base interfaces derived directly or indirectly.
+//! \tparam Bases All base interfaces derived directly or indirectly.
 //!               Don't include AbstractBase in base list.
 
 template <class S, class Primary, class ... Bases>
@@ -162,7 +188,10 @@ public:
 
 	static T_ptr <Primary> _this ()
 	{
-		return InterfaceStatic <S, Primary>::_get_ptr ();
+		return static_cast <Primary*> (
+			std::conditional < std::is_base_of <InterfaceStatic <S, LocalObjectLink>, ImplementationStatic <S, Primary, Bases...> >::value,
+			InterfaceStatic <S, LocalObjectLink>, InterfaceStatic <S, PortableServer::ServantBase>>::type::
+			_get_proxy ());
 	}
 };
 

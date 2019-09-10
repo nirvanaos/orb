@@ -209,7 +209,7 @@ protected:
 
 	void _construct (Bridge <DynamicServant>* dynamic);
 
-	Bridge <Interface>* _implicitly_activate (Bridge <Interface>* itf);
+	Bridge <Interface>* _implicitly_activate ();
 
 private:
 	PortableServer::Servant servant ()
@@ -292,7 +292,7 @@ protected:
 
 	ReferenceCounter_ptr _construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic);
 
-	Bridge <Interface>* _implicitly_activate (Bridge <Interface>* itf);
+	Bridge <Interface>* _implicitly_activate ();
 
 private:
 	Object_ptr object_;
@@ -340,7 +340,7 @@ public:
 	//! \brief Gets the pointer.
 	//!   Works like _this() method but doesn't increment the reference counter.
 	//!
-	//! \return The pointer.
+	//! \return The primary interface pointer.
 
 	T_ptr <Primary> _get_ptr ()
 	{
@@ -379,7 +379,7 @@ public:
 		return static_cast <Primary*> (
 			std::conditional < std::is_base_of <LocalObjectLink, Implementation <S, Primary, Bases...> >::value,
 			LocalObjectLink, ServantBaseLink>::type::
-			_implicitly_activate (static_cast <Bridge <Primary>*> (this)));
+			_implicitly_activate ());
 	}
 
 protected:

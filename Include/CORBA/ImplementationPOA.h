@@ -129,7 +129,7 @@ protected:
 		ServantPOA ()
 	{}
 
-	virtual Bridge <Interface>* _implicitly_activate (Bridge <Interface>* itf);
+	virtual Bridge <Interface>* _implicitly_activate ();
 
 private:
 	friend class ServantTraitsPOA;
@@ -212,7 +212,7 @@ protected:
 		ServantPOA ()
 	{}
 
-	virtual Bridge <Interface>* _implicitly_activate (Bridge <Interface>* itf);
+	virtual Bridge <Interface>* _implicitly_activate ();
 };
 
 //! \class ImplementationPOA
@@ -236,7 +236,7 @@ public:
 
 	T_ptr <Primary> _this ()
 	{
-		return static_cast <Primary*> (this->_implicitly_activate (static_cast <Bridge <Primary>*> (this)));
+		return static_cast <Primary*> (this->_implicitly_activate ());
 	}
 
 protected:
