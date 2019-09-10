@@ -41,7 +41,7 @@ protected:
 		reference_counter_ (ReferenceCounter::_nil ())
 	{}
 
-	ReferenceCounterLink (DynamicServant_ptr dynamic);
+	ReferenceCounterLink (Bridge <DynamicServant>* dynamic);
 
 	ReferenceCounterLink (ReferenceCounter_ptr rc) :
 		reference_counter_ (rc)
@@ -147,7 +147,7 @@ class LifeCycleRefCntPseudo :
 {
 protected:
 	LifeCycleRefCntPseudo () :
-		ReferenceCounterLink (DynamicServant_ptr (this))
+		ReferenceCounterLink (this)
 	{}
 };
 

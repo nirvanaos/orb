@@ -123,7 +123,6 @@ public:
 	}
 	// TODO: Other Object operations shall be here...
 
-protected:
 	static Bridge <Interface>* _get_proxy ()
 	{
 		Bridge <Interface>* proxy = AbstractBase_ptr (object ())->_query_interface (nullptr);
@@ -189,9 +188,8 @@ public:
 	static T_ptr <Primary> _this ()
 	{
 		return static_cast <Primary*> (
-			std::conditional < std::is_base_of <InterfaceStatic <S, LocalObjectLink>, ImplementationStatic <S, Primary, Bases...> >::value,
-			InterfaceStatic <S, LocalObjectLink>, InterfaceStatic <S, PortableServer::ServantBase>>::type::
-			_get_proxy ());
+			std::conditional <std::is_base_of <InterfaceStatic <S, LocalObject>, ImplementationStatic <S, Primary, Bases...> >::value,
+			InterfaceStatic <S, LocalObject>, InterfaceStatic <S, PortableServer::ServantBase>>::type::_get_proxy ());
 	}
 };
 

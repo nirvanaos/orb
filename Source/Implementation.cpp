@@ -3,7 +3,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-ReferenceCounterLink::ReferenceCounterLink (DynamicServant_ptr dynamic) :
+ReferenceCounterLink::ReferenceCounterLink (Bridge <DynamicServant>* dynamic) :
 	reference_counter_ (ObjectFactory::singleton ()->create_reference_counter (dynamic))
 {}
 

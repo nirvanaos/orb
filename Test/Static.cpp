@@ -68,12 +68,12 @@ Bridge <PortableServer::ServantBase>*& InterfaceStatic <TestORB::StaticI3, Porta
 #else
 
 template <>
-const Object_ptr& InterfaceStatic <TestORB::StaticI1, LocalObject>::object_ =
-reinterpret_cast <const Object_ptr&> (OLF_data.data.links.data [0].interface_ptr);
+Bridge <Object>*& InterfaceStatic <TestORB::StaticI1, LocalObject>::object_ =
+*(Bridge <Object>**)(&(OLF_data.data.links.data [0].interface_ptr));
 
 template <>
-const Object_ptr& InterfaceStatic <TestORB::StaticI3, LocalObject>::object_ =
-reinterpret_cast <const Object_ptr&> (OLF_data.data.links.data [1].interface_ptr);
+Bridge <Object>*& InterfaceStatic <TestORB::StaticI3, LocalObject>::object_ =
+*(Bridge <Object>**)(&(OLF_data.data.links.data [1].interface_ptr));
 
 #endif
 
