@@ -1,5 +1,5 @@
 #include <CORBA/RepositoryId.h>
-#include <stdlib.h>	// For _countof macro
+#include <Nirvana/Nirvana.h>
 #include <algorithm>
 
 namespace CORBA {
@@ -14,10 +14,10 @@ bool RepositoryId::compatible (const Char* current, const Char* requested)
 
 	static const Char IDL [] = "IDL";
 
-	if (is_type (current, IDL, _countof (IDL) - 1)) {
-		if (is_type (requested, IDL, _countof (IDL) - 1)) {
-			const Char* minor = minor_version (current + _countof (IDL) - 1);
-			const Char* r_minor = minor_version (requested + _countof (IDL) - 1);
+	if (is_type (current, IDL, countof (IDL) - 1)) {
+		if (is_type (requested, IDL, countof (IDL) - 1)) {
+			const Char* minor = minor_version (current + countof (IDL) - 1);
+			const Char* r_minor = minor_version (requested + countof (IDL) - 1);
 			if (minor - current == r_minor - requested && equal (current, minor, requested))
 				return minor_number (minor) >= minor_number (r_minor);
 			else
