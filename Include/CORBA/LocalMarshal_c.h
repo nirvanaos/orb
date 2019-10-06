@@ -1,6 +1,7 @@
 #ifndef NIRVANA_ORB_LOCALMARSHAL_C_H_
 #define NIRVANA_ORB_LOCALMARSHAL_C_H_
 
+#include <CORBA/Object_c.h>
 #include <Nirvana/Memory_c.h>
 
 namespace CORBA {
@@ -72,7 +73,7 @@ public:
 	void begin (uintptr_t protection_domain);
 	uintptr_t marshal_memory (const void* p, size_t size);
 	uintptr_t get_buffer (size_t size, void** buf_ptr);
-	void* unmarshal_memory (void* p, size_t size, ::Nirvana::Memory_ptr heap);
+	void* unmarshal_memory (void* p, size_t& size, ::Nirvana::Memory_ptr heap);
 	uintptr_t marshal_object (Object_ptr);
 	Interface_ptr unmarshal_interface (const void* marshal_data, const Char* interface_id, EnvironmentBridge*);
 	void release_marshal_data ();

@@ -1,23 +1,23 @@
-//#include <gtest/gtest.h>
-#include <string>
-/*
-namespace std {
-typedef decltype(nullptr) nullptr_t;
-}*/
+#include <gtest/gtest.h>
+#include <CORBA/String.h>
+#include <Mock/MockMemory.h>
 
-/*
-namespace TestLibCXX {
+namespace Nirvana {
+Memory_ptr g_default_heap;
+}
+
+namespace TestSTL {
 
 using namespace std;
 
-class TestLibCXX :
+class TestSTL :
 	public ::testing::Test
 {
 protected:
-	TestLibCXX ()
+	TestSTL ()
 	{}
 
-	virtual ~TestLibCXX ()
+	virtual ~TestSTL ()
 	{}
 
 	// If the constructor and destructor are not enough for setting up
@@ -27,6 +27,7 @@ protected:
 	{
 		// Code here will be called immediately after the constructor (right
 		// before each test).
+		Nirvana::g_default_heap = Nirvana::Test::mock_memory ();
 	}
 
 	virtual void TearDown ()
@@ -36,7 +37,8 @@ protected:
 	}
 };
 
-TEST_F (TestLibCXX, String)
+TEST_F (TestSTL, String)
 {}
 
-*/
+}
+
