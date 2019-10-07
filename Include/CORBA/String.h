@@ -703,14 +703,17 @@ basic_string <C, char_traits <C>, allocator <C> >& basic_string <C, char_traits 
 	else {
 		pointer p;
 		size_t space;
+		size_t size;
 		if (!this->is_large ()) {
 			p = nullptr;
 			space = 0;
+			size = 0;
 		} else {
 			p = this->large_pointer ();
 			space = byte_size (this->large_capacity ());
+			size = byte_size (this->large_size ());
 		}
-		p = (pointer)::Nirvana::MemoryHelper (heap ()).assign (p, space, byte_size (this->large_size ()), ptr, byte_size (count));
+		p = (pointer)::Nirvana::MemoryHelper (heap ()).assign (p, space, size, ptr, byte_size (count));
 		p [count] = 0;
 		this->large_pointer (p);
 		this->large_size (count);

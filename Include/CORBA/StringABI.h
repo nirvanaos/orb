@@ -90,7 +90,7 @@ protected:
 
 	void reset ()
 	{
-		std::fill_n (data_.raw, 0, countof (data_.raw));
+		std::fill_n (data_.raw, countof (data_.raw), 0);
 	}
 
 	bool is_large () const

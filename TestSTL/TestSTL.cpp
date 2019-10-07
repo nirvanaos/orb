@@ -4,7 +4,7 @@
 #include <Mock/MockMemory.h>
 
 namespace Nirvana {
-Memory_ptr g_default_heap;
+Memory_ptr g_default_heap = Nirvana::Test::mock_memory ();
 }
 
 namespace CORBA {
@@ -34,7 +34,6 @@ protected:
 	{
 		// Code here will be called immediately after the constructor (right
 		// before each test).
-		Nirvana::g_default_heap = Nirvana::Test::mock_memory ();
 	}
 
 	virtual void TearDown ()
