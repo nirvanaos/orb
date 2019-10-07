@@ -1,9 +1,16 @@
-#include <gtest/gtest.h>
 #include <CORBA/String.h>
+#include <gtest/gtest.h>
+#include <CORBA/ObjectFactory_c.h>
 #include <Mock/MockMemory.h>
 
 namespace Nirvana {
 Memory_ptr g_default_heap;
+}
+
+namespace CORBA {
+namespace Nirvana {
+Bridge <ObjectFactory>* const ObjectFactory::singleton_ = nullptr;
+}
 }
 
 namespace TestSTL {
@@ -38,7 +45,10 @@ protected:
 };
 
 TEST_F (TestSTL, String)
-{}
+{
+	std::basic_string <char, std::char_traits<char>, std::allocator <char> > s ("small");
+	s = "Large large large large string";
+}
 
 }
 

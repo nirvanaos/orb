@@ -2,7 +2,6 @@
 #define NIRVANA_ORB_STLUTILS_H_
 
 #include <Nirvana/MemoryHelper.h>
-#include <iterator>
 
 #if __cplusplus >= 201103L
 #define ORB_STL_NORETURN [[noreturn]]
@@ -15,6 +14,12 @@
 #else
 #define ORB_STL_NODISCARD
 #endif
+
+namespace std {
+template <typename C> class allocator;
+struct random_access_iterator_tag;
+template <class I> class reverse_iterator;
+}
 
 namespace CORBA {
 namespace Nirvana {
