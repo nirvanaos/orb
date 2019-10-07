@@ -217,9 +217,10 @@ public:
 			if (!this->is_large ())
 				this->data_ = src.data_;
 			else
-				return assign (src.small_pointer (), src.small_size ());
+				assign (src.small_pointer (), src.small_size ());
 		} else
-			return assign (src.large_pointer (), src.large_size ());
+			assign (src.large_pointer (), src.large_size ());
+		return *this;
 	}
 
 	basic_string& assign (size_type count, value_type c)
@@ -377,6 +378,12 @@ public:
 		return compare (c_str (), length (), s.c_str (), s.length ());
 	}
 
+	// For MSVC compatibility
+	bool _Equal (const basic_string& s) const
+	{
+		return compare (s) == 0;
+	}
+
 	int compare (size_type pos, size_type cnt, const basic_string& s) const
 	{
 		const_pointer p = get_range (pos, cnt);
@@ -395,6 +402,12 @@ public:
 		return compare (c_str (), length (), s, traits_type::length (s));
 	}
 
+	// For MSVC compatibility
+	bool _Equal (const value_type* s) const
+	{
+		return compare (s) == 0;
+	}
+
 	int compare (size_type pos, size_type cnt, const value_type* s) const
 	{
 		const_pointer p = get_range (pos, cnt);
@@ -408,36 +421,120 @@ public:
 	}
 
 	// find
-	size_type find (const basic_string& s, size_type off = 0) const
+	
+	size_type find (const basic_string& s, size_type pos = 0) const
 	{
-		return find (s.data (), off, s.length ());
+		return find (s.data (), pos, s.length ());
 	}
 
-	size_type find (const value_type* s, size_type off = 0) const
+	size_type find (const value_type* s, size_type pos = 0) const
 	{
-		return find (s, off, traits_type::length (s));
+		return find (s, pos, traits_type::length (s));
 	}
 
-	size_type find (const value_type* s, size_type off, size_type len) const
+	size_type find (const value_type* s, size_type pos, size_type len) const;
+
+	size_type find (const value_type c, size_type pos = 0) const;
+
+	size_type rfind (const basic_string& s, size_type pos = npos) const
 	{
-		const_pointer b, e;
-		get_range (off, b, e);
-		const_pointer f = std::search (b, e, s, s + len);
+		return rfind (s.data (), pos, s.length ());
+	}
+
+	size_type rfind (const value_type* s, size_type pos = npos) const
+	{
+		return rfind (s, pos, traits_type::length (s));
+	}
+
+	size_type rfind (const value_type* s, size_type pos, size_type len) const;
+
+	size_type rfind (const value_type c, size_type pos = npos) const;
+
+	size_type find_first_not_of (const basic_string& s, size_type pos = 0) const
+	{
+		return find_first_not_of (s.data (), pos, s.length ());
+	}
+
+	size_type find_first_not_of (const value_type* s, size_type pos = 0) const
+	{
+		return find_first_not_of (s, pos, traits_type::length (s));
+	}
+
+	size_type find_first_not_of (const value_type* s, size_type pos, size_type len) const;
+
+	size_type find_first_not_of (const value_type c, size_type pos = 0) const
+	{
+		const_pointer f, e;
+		get_range (pos, f, e);
+		for (; f != e; ++f) {
+			if (*f != c)
+				break;
+		}
 		if (f == e)
 			return npos;
 		else
-			return f - b;
+			return f - this->_ptr ();
 	}
 
-	size_type find (const value_type c, size_type off = 0) const
+	size_type find_first_of (const basic_string& s, size_type pos = 0) const
 	{
-		const_pointer b, e;
-		get_range (off, b, e);
-		const_pointer f = std::find (b, e, c);
-		if (f == e)
+		return find_first_of (s.data (), pos, s.length ());
+	}
+
+	size_type find_first_of (const value_type* s, size_type pos = 0) const
+	{
+		return find_first_of (s, pos, traits_type::length (s));
+	}
+
+	size_type find_first_of (const value_type* s, size_type pos, size_type len) const;
+
+	size_type find_first_of (const value_type c, size_type pos = 0) const
+	{
+		return find (c, pos);
+	}
+
+	size_type find_last_not_of (const basic_string& s, size_type pos = npos) const
+	{
+		return find_last_not_of (s.data (), pos, s.length ());
+	}
+
+	size_type find_last_not_of (const value_type* s, size_type pos = npos) const
+	{
+		return find_last_not_of (s, pos, traits_type::length (s));
+	}
+
+	size_type find_last_not_of (const value_type* s, size_type pos, size_type len) const;
+
+	size_type find_last_not_of (const value_type c, size_type pos = npos) const
+	{
+		const_pointer b, f;
+		get_range_rev (pos, b, f);
+		--b; --f;
+		for (; b != f; --f) {
+			if (*f != c)
+				break;
+		}
+		if (f == b)
 			return npos;
 		else
-			return f - b;
+			return f - this->_ptr ();
+	}
+
+	size_type find_last_of (const basic_string& s, size_type pos = npos) const
+	{
+		return find_last_of (s.data (), pos, s.length ());
+	}
+
+	size_type find_last_of (const value_type* s, size_type pos = npos) const
+	{
+		return find_last_of (s, pos, traits_type::length (s));
+	}
+
+	size_type find_last_of (const value_type* s, size_type pos, size_type len) const;
+
+	size_type find_last_of (const value_type c, size_type pos = npos) const
+	{
+		return rfind (c, pos);
 	}
 
 	// Misc. operations
@@ -534,6 +631,12 @@ public:
 	void resize (size_type new_size, value_type c);
 
 	void shrink_to_fit ();
+
+	basic_string substr (size_type pos = 0, size_type len = npos) const
+	{
+		const_pointer p = get_range (pos, len);
+		return basic_string (p, len);
+	}
 
 	// Iterators
 
@@ -657,6 +760,7 @@ private:
 
 	const_pointer get_range (size_type off, size_type& count) const;
 	void get_range (size_type off, const_pointer& b, const_pointer& e) const;
+	void get_range_rev (size_type off, const_pointer& b, const_pointer& e) const;
 
 	static int compare (const value_type* s0, size_type len0, const value_type* s1, size_type len1)
 	{
@@ -888,15 +992,161 @@ void basic_string <C, char_traits <C>, allocator <C> >::get_range (size_type off
 		l = this->small_size ();
 	}
 	if (off > l)
-		xout_of_range ();
+		off = l;
 	b = p + off;
 	e = p + l;
 }
 
+template <typename C>
+void basic_string <C, char_traits <C>, allocator <C> >::get_range_rev (size_type off, const_pointer& b, const_pointer& e) const
+{
+	const_pointer p;
+	size_type l;
+	if (this->is_large ()) {
+		p = this->large_pointer ();
+		l = this->large_size ();
+	} else {
+		p = this->small_pointer ();
+		l = this->small_size ();
+	}
+	if (off > l)
+		off = l;
+	else
+		++off;
+	b = p;
+	e = p + off;
+}
 
 }
 
 #include <string>
+#include <algorithm>
+
+namespace std {
+
+template <typename C>
+typename basic_string <C, char_traits <C>, allocator <C> >::size_type basic_string <C, char_traits <C>, allocator <C> >
+::find (const value_type* s, size_type pos, size_type len) const
+{
+	const_pointer f, e;
+	get_range (pos, f, e);
+	f = std::search (f, e, s, s + len);
+	if (f == e)
+		return npos;
+	else
+		return f - this->_ptr ();
+}
+
+template <typename C>
+typename basic_string <C, char_traits <C>, allocator <C> >::size_type basic_string <C, char_traits <C>, allocator <C> >
+::find (const value_type c, size_type pos) const
+{
+	const_pointer f, e;
+	get_range (pos, f, e);
+	f = std::find (f, e, c);
+	if (f == e)
+		return npos;
+	else
+		return f - this->_ptr ();
+}
+
+template <typename C>
+typename basic_string <C, char_traits <C>, allocator <C> >::size_type basic_string <C, char_traits <C>, allocator <C> >
+::rfind (const value_type* s, size_type pos, size_type len) const
+{
+	const_pointer f, e;
+	get_range_rev (pos, f, e);
+	f = std::find_end (f, e, s, s + len);
+	if (f == e)
+		return npos;
+	else
+		return f - this->_ptr ();
+}
+
+template <typename C>
+typename basic_string <C, char_traits <C>, allocator <C> >::size_type basic_string <C, char_traits <C>, allocator <C> >
+::rfind (const value_type c, size_type pos) const
+{
+	const_pointer b, f;
+	get_range_rev (pos, b, f);
+	--b; --f;
+	for (; b != f; --f) {
+		if (*f == c)
+			break;
+	}
+	if (f == b)
+		return npos;
+	else
+		return f - this->_ptr ();
+}
+
+template <typename C>
+typename basic_string <C, char_traits <C>, allocator <C> >::size_type basic_string <C, char_traits <C>, allocator <C> >
+::find_first_not_of (const value_type* s, size_type pos, size_type len) const
+{
+	const_pointer f, e;
+	get_range (pos, f, e);
+	const_pointer se = s + len;
+	for (; f != e; ++f) {
+		if (std::find (s, se, *f) == se)
+			break;
+	}
+	if (f == e)
+		return npos;
+	else
+		return f - this->_ptr ();
+}
+
+template <typename C>
+typename basic_string <C, char_traits <C>, allocator <C> >::size_type basic_string <C, char_traits <C>, allocator <C> >
+::find_first_of (const value_type* s, size_type pos, size_type len) const
+{
+	const_pointer f, e;
+	get_range (pos, f, e);
+	f = std::find_first_of (f, e, s, len);
+	if (f == e)
+		return npos;
+	else
+		return f - this->_ptr ();
+}
+
+template <typename C>
+typename basic_string <C, char_traits <C>, allocator <C> >::size_type basic_string <C, char_traits <C>, allocator <C> >
+::find_last_not_of (const value_type* s, size_type pos, size_type len) const
+{
+	const_pointer b, f;
+	get_range_rev (pos, b, f);
+	--b, --f;
+	const_pointer se = s + len;
+	for (; f != b; --f) {
+		if (std::find (s, se, *f) == se)
+			break;
+	}
+	if (f == b)
+		return npos;
+	else
+		return f - this->_ptr ();
+}
+
+template <typename C>
+typename basic_string <C, char_traits <C>, allocator <C> >::size_type basic_string <C, char_traits <C>, allocator <C> >
+::find_last_of (const value_type* s, size_type pos, size_type len) const
+{
+	const_pointer b, f;
+	get_range_rev (pos, b, f);
+	--b, --f;
+	const_pointer se = s + len;
+	for (; f != b; --f) {
+		if (std::find (s, se, *f) != se)
+			break;
+	}
+	if (f == b)
+		return npos;
+	else
+		return f - this->_ptr ();
+}
+
+}
 
 #if __cplusplus >= 201103L
 
