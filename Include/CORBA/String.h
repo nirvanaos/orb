@@ -82,6 +82,10 @@ public:
 		this->reset ();
 	}
 
+	basic_string (const allocator_type&) :
+		basic_string ()
+	{}
+
 	basic_string (const basic_string& src)
 	{
 		if (src.is_large ()) {
@@ -103,11 +107,19 @@ public:
 		assign (src, off, npos);
 	}
 
+	basic_string (const basic_string& src, size_type off, size_type cnt, const allocator_type&) :
+		basic_string (src, off, cnt)
+	{}
+
 	basic_string (const value_type* ptr, size_type cnt)
 	{
 		this->reset ();
 		assign (ptr, cnt);
 	}
+	
+	basic_string (const value_type* ptr, size_type cnt, const allocator_type&) :
+		basic_string (ptr, cnt)
+	{}
 
 	basic_string (const value_type* ptr)
 	{
@@ -115,11 +127,19 @@ public:
 		assign (ptr);
 	}
 
+	basic_string (const value_type* ptr, const allocator_type&) :
+		basic_string (ptr)
+	{}
+
 	basic_string (size_type cnt, value_type c)
 	{
 		this->reset ();
 		assign (cnt, c);
 	}
+
+	basic_string (size_type cnt, value_type c, const allocator_type&) :
+		basic_string (cnt, c)
+	{}
 
 	template <class InputIterator>
 	basic_string (InputIterator b, InputIterator e)
@@ -127,6 +147,11 @@ public:
 		this->reset ();
 		assign (b, e);
 	}
+
+	template <class InputIterator>
+	basic_string (InputIterator b, InputIterator e, const allocator_type&) :
+		basic_string (b, e)
+	{}
 
 	basic_string (const_pointer b, const_pointer e)
 	{
@@ -158,7 +183,7 @@ public:
 
 	basic_string& operator = (const basic_string& src)
 	{
-		return assign (src.large_pointer (), src.large_size ());
+		return assign (src);
 	}
 
 	basic_string& operator = (basic_string&& src)
@@ -188,7 +213,13 @@ public:
 
 	basic_string& assign (const basic_string& src)
 	{
-		return assign (src.data (), src.size ());
+		if (!src.is_large ()) {
+			if (!this->is_large ())
+				this->data_ = src.data_;
+			else
+				return assign (src.small_pointer (), src.small_size ());
+		} else
+			return assign (src.large_pointer (), src.large_size ());
 	}
 
 	basic_string& assign (size_type count, value_type c)
@@ -375,6 +406,12 @@ public:
 		const_pointer p = get_range (pos, cnt);
 		return compare (p, cnt, s, cnt2);
 	}
+
+	// find
+	size_type find (const basic_string& s, size_type npos = 0) const;
+	size_type find (const value_type* s, size_type npos = 0) const;
+	size_type find (const value_type* s, size_type npos, size_type len) const;
+	size_type find (const value_type c, size_type npos = 0) const;
 
 	// Misc. operations
 	
@@ -595,7 +632,8 @@ private:
 
 	static int compare (const value_type* s0, size_type len0, const value_type* s1, size_type len1)
 	{
-		int ret = traits_type::compare (s0, s1, min (len0, len1));
+		size_type len = len0 < len1 ? len0 : len1;
+		int ret = traits_type::compare (s0, s1, len);
 		if (!ret) {
 			if (len0 < len1)
 				ret = -1;
@@ -690,8 +728,6 @@ void basic_string <C, char_traits <C>, allocator <C> >::insert_internal (size_ty
 	this->large_pointer (p);
 	this->large_size (new_size);
 	this->large_capacity (char_cnt (space));
-
-	return *this;
 }
 
 template <typename C>
@@ -703,11 +739,11 @@ basic_string <C, char_traits <C>, allocator <C> >& basic_string <C, char_traits 
 			size_t size = this->large_size ();
 			::Nirvana::MemoryHelper (heap ()).erase (this->large_pointer (), byte_size (size),
 				pos * sizeof (value_type), count * sizeof (value_type));
-			large_size (size - count);
+			this->large_size (size - count);
 		} else {
-			pointer dst = this->small_ptr () + pos;
+			pointer dst = this->small_pointer () + pos;
 			pointer src = dst + count;
-			::Nirvana::real_copy (src, this->small_ptr () + this->small_size () - src + 1, dst);
+			::Nirvana::real_copy (src, this->small_pointer () + this->small_size () + 1, dst);
 		}
 	}
 	return *this;
@@ -770,7 +806,7 @@ void basic_string <C, char_traits <C>, allocator <C> >::shrink_to_fit ()
 template <typename C>
 typename basic_string <C, char_traits <C>, allocator <C> >::pointer basic_string <C, char_traits <C>, allocator <C> >::commit (size_type size)
 {
-	if (!this->is_large () && this->small_capacity () >= size) {
+	if (!this->is_large () && ABI::SMALL_CAP >= size) {
 		this->small_size (size);
 		this->small_pointer () [size] = 0;
 		return this->small_pointer ();

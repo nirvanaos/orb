@@ -88,7 +88,6 @@ protected:
 			return small_pointer ();
 	}
 
-
 	void reset ()
 	{
 		std::fill_n (data_.raw, 0, countof (data_.raw));
@@ -96,7 +95,7 @@ protected:
 
 	bool is_large () const
 	{
-		data_.small.size & SMALL_MASK;
+		return data_.small.size & SMALL_MASK;
 	}
 
 	void small_size (size_t s)
@@ -198,6 +197,7 @@ private:
 		int raw [sizeof (ULS) / sizeof (int)];
 	};
 
+protected:
 	Data data_;
 };
 
