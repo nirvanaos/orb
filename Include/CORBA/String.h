@@ -408,10 +408,37 @@ public:
 	}
 
 	// find
-	size_type find (const basic_string& s, size_type npos = 0) const;
-	size_type find (const value_type* s, size_type npos = 0) const;
-	size_type find (const value_type* s, size_type npos, size_type len) const;
-	size_type find (const value_type c, size_type npos = 0) const;
+	size_type find (const basic_string& s, size_type off = 0) const
+	{
+		return find (s.data (), off, s.length ());
+	}
+
+	size_type find (const value_type* s, size_type off = 0) const
+	{
+		return find (s, off, traits_type::length (s));
+	}
+
+	size_type find (const value_type* s, size_type off, size_type len) const
+	{
+		const_pointer b, e;
+		get_range (off, b, e);
+		const_pointer f = std::search (b, e, s, s + len);
+		if (f == e)
+			return npos;
+		else
+			return f - b;
+	}
+
+	size_type find (const value_type c, size_type off = 0) const
+	{
+		const_pointer b, e;
+		get_range (off, b, e);
+		const_pointer f = std::find (b, e, c);
+		if (f == e)
+			return npos;
+		else
+			return f - b;
+	}
 
 	// Misc. operations
 	
@@ -629,6 +656,7 @@ private:
 	}
 
 	const_pointer get_range (size_type off, size_type& count) const;
+	void get_range (size_type off, const_pointer& b, const_pointer& e) const;
 
 	static int compare (const value_type* s0, size_type len0, const value_type* s1, size_type len1)
 	{
@@ -826,14 +854,42 @@ template <typename C>
 typename basic_string <C, char_traits <C>, allocator <C> >::const_pointer basic_string <C, char_traits <C>, allocator <C> >
 ::get_range (size_type off, size_type& count) const
 {
-	size_type l = length ();
+	const_pointer p;
+	size_type l;
+	if (this->is_large ()) {
+		p = this->large_pointer ();
+		l = this->large_size ();
+	} else {
+		p = this->small_pointer ();
+		l = this->small_size ();
+	}
 	if (off > l)
 		xout_of_range ();
 	if (npos == count)
 		count = l - off;
 	else if (count > l - off)
 		xout_of_range ();
+	return p + off;
 }
+
+template <typename C>
+void basic_string <C, char_traits <C>, allocator <C> >::get_range (size_type off, const_pointer& b, const_pointer& e) const
+{
+	const_pointer p;
+	size_type l;
+	if (this->is_large ()) {
+		p = this->large_pointer ();
+		l = this->large_size ();
+	} else {
+		p = this->small_pointer ();
+		l = this->small_size ();
+	}
+	if (off > l)
+		xout_of_range ();
+	b = p + off;
+	e = p + l;
+}
+
 
 }
 
