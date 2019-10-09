@@ -6,7 +6,8 @@
 #ifndef NIRVANA_ORB_STRINGABI_H_
 #define NIRVANA_ORB_STRINGABI_H_
 
-#include "LocalMarshal_c.h"
+#include <Nirvana/NirvanaBase.h>
+#include <Nirvana/real_copy.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -17,7 +18,7 @@ class StringABI
 public:
 	static size_t max_size ()
 	{
-		return size_t (~0) >> 1;
+		return (SIZE_MAX / 2 + 1) / sizeof (C) - 1;
 	}
 
 	size_t size () const
@@ -28,12 +29,12 @@ public:
 			return small_size ();
 	}
 
-	size_t capacity () const
+	size_t allocated () const
 	{
 		if (is_large ())
-			return large_capacity ();
+			return large_allocated ();
 		else
-			return SMALL_CAP;
+			return 0;
 	}
 
 	bool empty () const
@@ -41,28 +42,7 @@ public:
 		return size () == 0;
 	}
 
-	void marshal (StringABI <C>& dst) const
-	{
-		if (is_large ()) {
-			dst.large_pointer ((C*)LocalMarshal::singleton ()->marshal_memory (large_pointer (), (large_size () + 1) * sizeof (C)));
-			size_t size = large_size ();
-			dst.large_size (size);
-			dst.large_capacity (size);
-		} else
-			dst.data_ = data_;
-	}
-
-	void unmarshal (const StringABI <C>& src, ::Nirvana::Memory_ptr heap)
-	{
-		if (src.is_large ()) {
-			size_t size = src.large_size ();
-			size_t cb = (size + 1) * sizeof (C);
-			large_pointer (LocalMarshal::singleton ()->unmarshal_memory (src.large_pointer (), cb, heap));
-			large_size (size);
-			large_capacity (cb / sizeof (C) - 1);
-		} else
-			data_ = src.data_;
-	}
+	void marshal (StringABI& dst) const;
 
 protected:
 	const C* _ptr () const
@@ -93,7 +73,8 @@ protected:
 
 	void small_size (size_t s)
 	{
-		if (std::endian::native == std::endian::big)
+		assert (s <= SMALL_CAPACITY);
+		if (::Nirvana::endian::native == ::Nirvana::endian::big)
 			data_.small.size = (unsigned char)(s << 1);
 		else
 			data_.small.size = (unsigned char)(s);
@@ -101,7 +82,7 @@ protected:
 
 	size_t small_size () const
 	{
-		if (std::endian::native == std::endian::big)
+		if (::Nirvana::endian::native == ::Nirvana::endian::big)
 			return data_.small.size >> 1;
 		else
 			return data_.small.size;
@@ -117,14 +98,21 @@ protected:
 		return data_.large.size;
 	}
 
-	void large_capacity (size_t s)
+	void large_allocated (size_t cb)
 	{
-		data_.large.capacity = LARGE_MASK | s;
+		assert (!(cb & 1));
+		if (::Nirvana::endian::native == ::Nirvana::endian::big)
+			data_.large.allocated = LARGE_MASK | cb;
+		else
+			data_.large.allocated = LARGE_MASK | (cb >> 1);
 	}
 
-	size_t large_capacity () const
+	size_t large_allocated () const
 	{
-		return data_.large.capacity & ~LARGE_MASK;
+		if (::Nirvana::endian::native == ::Nirvana::endian::big)
+			return data_.large.allocated & ~LARGE_MASK;
+		else
+			return data_.large.allocated << 1;
 	}
 
 	void large_pointer (C* p)
@@ -153,14 +141,14 @@ protected:
 	}
 
 private:
-	static const unsigned char SMALL_MASK = std::endian::native == std::endian::big ? 0x01 : 0x80;
-	static const size_t LARGE_MASK = std::endian::native == std::endian::big ? 1 : ~(size_t (~0) >> 1);
+	static const unsigned char SMALL_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 0x01 : 0x80;
+	static const size_t LARGE_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 1 : ~(size_t (~0) >> 1);
 
 	struct Large
 	{
 		C* data;
 		size_t size;
-		size_t capacity;
+		size_t allocated;
 	};
 
 	struct Small
@@ -174,7 +162,7 @@ private:
 	};
 
 protected:
-	static const size_t SMALL_CAP = sizeof (Small::data) / sizeof (C) - 1;
+	static const size_t SMALL_CAPACITY = sizeof (Small::data) / sizeof (C) - 1;
 
 	union ULS
 	{

@@ -39,9 +39,8 @@ public:
 		struct
 		{
 			void (*begin) (uintptr_t protection_domain);
-			uintptr_t (*marshal_memory) (Bridge <LocalMarshal>*, const void* p, size_t size, EnvironmentBridge*);
+			uintptr_t (*marshal_memory) (Bridge <LocalMarshal>*, const void* p, size_t* size, EnvironmentBridge*);
 			uintptr_t (*get_buffer) (Bridge <LocalMarshal>*, size_t size, void** buf_ptr, EnvironmentBridge*);
-			void* (*unmarshal_memory) (Bridge <LocalMarshal>*, void* p, size_t& size, BridgeMarshal <::Nirvana::Memory>, EnvironmentBridge*);
 			uintptr_t (*marshal_object) (Bridge <LocalMarshal>*, BridgeMarshal <Object>*, EnvironmentBridge*);
 			Bridge <Interface>* (*unmarshal_interface) (Bridge <LocalMarshal>*, const void*, const Char*, EnvironmentBridge*);
 			void (*release_marshal_data) (Bridge <LocalMarshal>*, EnvironmentBridge*);
@@ -71,9 +70,8 @@ class Client <T, LocalMarshal> :
 {
 public:
 	void begin (uintptr_t protection_domain);
-	uintptr_t marshal_memory (const void* p, size_t size);
+	uintptr_t marshal_memory (const void* p, size_t& size);
 	uintptr_t get_buffer (size_t size, void** buf_ptr);
-	void* unmarshal_memory (void* p, size_t& size, ::Nirvana::Memory_ptr heap);
 	uintptr_t marshal_object (Object_ptr);
 	Interface_ptr unmarshal_interface (const void* marshal_data, const Char* interface_id, EnvironmentBridge*);
 	void release_marshal_data ();
