@@ -3,10 +3,6 @@
 #include <CORBA/ObjectFactory_c.h>
 #include <Mock/MockMemory.h>
 
-namespace Nirvana {
-Memory_ptr g_default_heap = Nirvana::Test::mock_memory ();
-}
-
 namespace CORBA {
 namespace Nirvana {
 Bridge <ObjectFactory>* const ObjectFactory::singleton_ = nullptr;

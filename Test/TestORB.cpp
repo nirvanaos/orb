@@ -2,8 +2,6 @@
 #include "I3.h"
 #include <gtest/gtest.h>
 #include "Binder.h"
-#include <Nirvana/Runnable_s.h>
-#include <functional>
 
 using namespace std;
 using namespace Test;
@@ -251,37 +249,6 @@ TYPED_TEST (TestORB_I3, MultiInherit)
 	}
 
 	// release (p) must be called automatically.
-}
-
-
-class Functor :
-	public CORBA::Nirvana::Servant <Functor, ::Nirvana::Runnable>,
-	public CORBA::Nirvana::LifeCycleStatic <>
-{
-public:
-	Functor (const std::function <void ()>& f) :
-		func_ (f)
-	{}
-
-	void run ()
-	{
-		func_ ();
-	}
-
-private:
-	std::function <void ()> func_;
-};
-
-TEST_F (TestORB, Runnable)
-{
-	using namespace std;
-
-	int a = 1, b = 2, c = 0;
-
-	Functor functor ([a, b, &c]() { c = a + b; });
-	::Nirvana::Runnable_ptr r = functor._get_ptr ();
-	r->run ();
-	EXPECT_EQ (c, a + b);
 }
 
 }
