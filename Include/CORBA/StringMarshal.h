@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_STRINGMARSHAL_H_
 #define NIRVANA_ORB_STRINGMARSHAL_H_
 
-#include "StringABI.h"
+#include <Nirvana/basic_string.h>
 #include "LocalMarshal_c.h"
 
 namespace CORBA {
@@ -30,7 +30,34 @@ void StringABI <C>::marshal (StringABI& dst) const
 	}
 }
 
+template <typename C>
+void StringABI <C>::unmarshal_inout () const
+{
+	if (is_large ()) {
+		size_t cb = large_allocated ();
+		if (cb)
+			LocalMarshal::singleton ()->unmarshal_memory (large_pointer (), cb);
+	}
 }
+
+}
+}
+
+namespace std {
+
+template <typename C>
+static basic_string <C>& basic_string <C>::unmarshal (::CORBA::Nirvana::StringABI <C>* abi)
+{
+	::CORBA::Nirvana::_check_pointer (abi);
+	return static_cast <basic_string <C>&> (*abi);
+}
+
+template <typename C>
+static const basic_string <C>& basic_string <C>::unmarshal (const ::CORBA::Nirvana::StringABI <C>* abi)
+{
+	return unmarshal (const_cast <::CORBA::Nirvana::StringABI <C>*> (abi));
+}
+
 }
 
 #endif

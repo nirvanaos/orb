@@ -43,6 +43,7 @@ public:
 	}
 
 	void marshal (StringABI& dst) const;
+	void unmarshal_inout () const;
 
 protected:
 	const C* _ptr () const
