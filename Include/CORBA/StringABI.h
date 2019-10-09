@@ -20,13 +20,6 @@ public:
 		return size_t (~0) >> 1;
 	}
 
-	void swap (StringABI& rhs)
-	{
-		Data tmp = data_;
-		data_ = rhs.data_;
-		rhs.data_ = tmp;
-	}
-
 	size_t size () const
 	{
 		if (is_large ())
@@ -183,7 +176,6 @@ private:
 protected:
 	static const size_t SMALL_CAP = sizeof (Small::data) / sizeof (C) - 1;
 
-private:
 	union ULS
 	{
 		Large large;
