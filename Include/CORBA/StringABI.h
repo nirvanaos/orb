@@ -79,6 +79,7 @@ protected:
 			data_.small.size = (unsigned char)(s << 1);
 		else
 			data_.small.size = (unsigned char)(s);
+		assert (!is_large ());
 	}
 
 	size_t small_size () const
@@ -106,6 +107,7 @@ protected:
 			data_.large.allocated = LARGE_MASK | cb;
 		else
 			data_.large.allocated = LARGE_MASK | (cb >> 1);
+		assert (is_large ());
 	}
 
 	size_t large_allocated () const
@@ -145,6 +147,8 @@ private:
 	static const unsigned char SMALL_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 0x01 : 0x80;
 	static const size_t LARGE_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 1 : ~(size_t (~0) >> 1);
 
+#pragma pack (push, 1)
+
 	struct Large
 	{
 		C* data;
@@ -162,6 +166,8 @@ private:
 		unsigned char size;
 	};
 
+	static_assert (sizeof (Large) == sizeof (Small), "sizeof (Large) == sizeof (Small)");
+
 protected:
 	static const size_t SMALL_CAPACITY = sizeof (Small::data) / sizeof (C) - 1;
 
@@ -177,6 +183,8 @@ protected:
 		Large large;
 		int raw [sizeof (ULS) / sizeof (int)];
 	};
+
+#pragma pack (pop)
 
 protected:
 	Data data_;

@@ -49,6 +49,7 @@ template <typename C>
 static basic_string <C>& basic_string <C>::unmarshal (::CORBA::Nirvana::StringABI <C>* abi)
 {
 	::CORBA::Nirvana::_check_pointer (abi);
+	// TODO: Add more checks.
 	return static_cast <basic_string <C>&> (*abi);
 }
 
