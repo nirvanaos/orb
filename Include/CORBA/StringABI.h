@@ -69,7 +69,7 @@ protected:
 
 	bool is_large () const
 	{
-		return data_.small.size & SMALL_MASK;
+		return (data_.large.allocated & LARGE_MASK) != 0;
 	}
 
 	void small_size (size_t s)
