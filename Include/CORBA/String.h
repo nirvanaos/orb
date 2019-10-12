@@ -22,10 +22,9 @@ public:
 		}
 	}
 
-	~String_in ()
-	{
-		this->reset ();
-	}
+#if __cplusplus >= 201703L
+	// TODO: implement basic_string_view constructor
+#endif
 };
 
 template <typename C>
