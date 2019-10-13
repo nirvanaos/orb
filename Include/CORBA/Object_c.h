@@ -5,6 +5,7 @@
 #define NIRVANA_ORB_OBJECT_C_H_
 
 #include "AbstractBase_c.h"
+#include "String.h"
 
 //! \namespace	IOP
 //!

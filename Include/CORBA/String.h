@@ -19,12 +19,9 @@ public:
 		if (s) {
 			this->large_pointer (s);
 			this->large_size (std::char_traits <C>::length (s));
+			this->allocated (0, StringABI <C>::DONT_RELEASE);
 		}
 	}
-
-#if __cplusplus >= 201703L
-	// TODO: implement basic_string_view constructor
-#endif
 };
 
 template <typename C>
