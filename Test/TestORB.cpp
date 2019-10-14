@@ -37,6 +37,12 @@ void test_interface (I1_ptr p)
 	ASSERT_FALSE (p->_non_existent ());
 	EXPECT_TRUE (p->_is_a ("IDL:omg.org/CORBA/Object:1.0"));
 	EXPECT_TRUE (p->_is_a ("IDL:Test/I1:1.0"));
+
+	string out, inout = "inout string";
+	string ret = p->string_op ("in string", out, inout);
+	EXPECT_STREQ (inout.c_str (), "in string");
+	EXPECT_STREQ (ret.c_str (), "inout string");
+
 	release (p);
 }
 

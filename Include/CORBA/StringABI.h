@@ -16,6 +16,15 @@ template <typename C>
 class StringABI
 {
 public:
+	StringABI ()
+	{}
+
+	StringABI (StringABI&& src)
+	{
+		data_ = src.data_;
+		src.reset ();
+	}
+
 	static size_t max_size ()
 	{
 		return (SIZE_MAX / 2 + 1) / sizeof (C) - 1;
@@ -42,8 +51,7 @@ public:
 		return size () == 0;
 	}
 
-	void marshal (StringABI& dst) const;
-	void unmarshal_inout () const;
+	void _marshal (StringABI& dst) const;
 
 protected:
 	const C* _ptr () const
@@ -102,22 +110,20 @@ protected:
 		return data_.large.size;
 	}
 
-	static const size_t DONT_RELEASE = ::Nirvana::endian::native == ::Nirvana::endian::big ? 2 : 1;
-
-	void allocated (size_t cb, size_t dont_release = 0)
+	void allocated (size_t cb)
 	{
-		assert (!(cb & 3));
+		assert (!(cb & 1));
 		if (::Nirvana::endian::native == ::Nirvana::endian::big)
-			data_.large.allocated = LARGE_MASK | dont_release | cb;
+			data_.large.allocated = LARGE_MASK | cb;
 		else
-			data_.large.allocated = LARGE_MASK | dont_release | (cb >> 1);
+			data_.large.allocated = LARGE_MASK | (cb >> 1);
 		assert (is_large ());
 	}
 
 	size_t allocated () const
 	{
 		size_t space = data_.large.allocated;
-		if ((space & (LARGE_MASK | DONT_RELEASE)) == LARGE_MASK) {
+		if (space & LARGE_MASK) {
 			if (::Nirvana::endian::native == ::Nirvana::endian::big)
 				return space & ~LARGE_MASK;
 			else
@@ -129,11 +135,9 @@ protected:
 	size_t large_capacity () const
 	{
 		assert (is_large ());
-		size_t space = data_.large.allocated & ~(LARGE_MASK | DONT_RELEASE);
-		if (!space)	// String_in
+		size_t space = allocated ();
+		if (!space)	// constant object
 			return size ();
-		if (::Nirvana::endian::native == ::Nirvana::endian::little)
-			space <<= 1;
 		return space / sizeof (C) - 1;
 	}
 

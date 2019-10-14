@@ -17,11 +17,15 @@ public:
 	String_in (const C* s)
 	{
 		if (s) {
-			this->large_pointer (s);
+			this->large_pointer (const_cast <C*> (s));
 			this->large_size (std::char_traits <C>::length (s));
-			this->allocated (0, StringABI <C>::DONT_RELEASE);
+			this->allocated (0);
 		}
 	}
+
+	String_in (std::basic_string <C>&& s) :
+		std::basic_string (std::move (s))
+	{}
 };
 
 template <typename C>
@@ -60,9 +64,9 @@ public:
 	// TODO: Mark as deprecated
 	String_out& operator = (C* s);
 
-	operator std::basic_string <C>& ()
+	std::basic_string <C>* operator & () const
 	{
-		return s_;
+		return &s_;
 	}
 
 private:
@@ -90,9 +94,19 @@ public:
 		this->assign (s);
 	}
 
+	String_var (std::basic_string <C>&& s) :
+		String_in <C> (std::move (s))
+	{}
+
 	String_var& operator = (const C* s)
 	{
 		this->assign (s);
+		return *this;
+	}
+
+	String_var& operator = (std::basic_string <C>&& s)
+	{
+		std::basic_string <C>::operator = (std::move (s));
 		return *this;
 	}
 
@@ -176,6 +190,42 @@ void string_free (char* s);
 wchar_t* wstring_alloc (uint32_t len);
 wchar_t* wstring_dup (const wchar_t* s);
 void wstring_free (wchar_t* s);
+
+}
+
+namespace std {
+
+template <typename C, class T>
+basic_string <C, T, allocator <C> >& basic_string <C, T, allocator <C> >::_unmarshal (::CORBA::Nirvana::StringABI <C>* abi)
+{
+	::CORBA::Nirvana::_check_pointer (abi);
+	basic_string <C>& s (static_cast <basic_string <C>&> (*abi));
+	s._unmarshal ();
+	return s;
+}
+
+template <typename C, class T>
+const basic_string <C, T, allocator <C> >& basic_string <C, T, allocator <C> >::_unmarshal (const ::CORBA::Nirvana::StringABI <C>* abi)
+{
+	return _unmarshal (const_cast <::CORBA::Nirvana::StringABI <C>*> (abi));
+}
+
+template <typename C, class T>
+void basic_string <C, T, allocator <C> >::_unmarshal () const
+{
+	// Do some check
+	const_pointer p = data ();
+	size_type cc = length ();
+	if (!heap ()->is_readable (p, (cc + 1) * sizeof (value_type) || p [cc]))
+		throw CORBA::MARSHAL ();
+}
+
+template <typename C, class T>
+basic_string <C, T, allocator <C> >::basic_string (ABI&& src) :
+	ABI (std::move (src))
+{
+	_unmarshal ();
+}
 
 }
 

@@ -30,6 +30,14 @@ public:
 		throw NO_IMPLEMENT ();
 	}
 
+	std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
+	{
+		std::string tmp (std::move (inout_s));
+		out_s = in_s;
+		inout_s = in_s;
+		return tmp;
+	}
+
 	static ::Test::I1_ptr incarnate ()
 	{
 		return PortableServer::Servant_var <DynamicI1> (new DynamicI1 (MAGIC_CONST))->_this ();
@@ -61,6 +69,14 @@ public:
 		throw NO_IMPLEMENT ();
 	}
 
+	virtual std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
+	{
+		std::string tmp (std::move (inout_s));
+		out_s = in_s;
+		inout_s = in_s;
+		return tmp;
+	}
+
 	static ::Test::I1_ptr incarnate ()
 	{
 		return PortableServer::Servant_var <PortableI1> (new PortableI1 (MAGIC_CONST))->_this ();
@@ -90,6 +106,14 @@ public:
 		throw NO_IMPLEMENT ();
 	}
 
+	static std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
+	{
+		std::string tmp (std::move (inout_s));
+		out_s = in_s;
+		inout_s = in_s;
+		return tmp;
+	}
+
 	static ::Test::I1_ptr incarnate ()
 	{
 		return _this ();
@@ -117,6 +141,14 @@ public:
 	void throw_NO_IMPLEMENT ()
 	{
 		throw NO_IMPLEMENT ();
+	}
+
+	std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
+	{
+		std::string tmp (std::move (inout_s));
+		out_s = in_s;
+		inout_s = in_s;
+		return tmp;
 	}
 
 	static Test::I1_ptr incarnate ()

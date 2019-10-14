@@ -2,6 +2,7 @@
 #define NIRVANA_ORB_BINDER_C_H_
 
 #include "Interface_c.h"
+#include "String.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -22,7 +23,7 @@ public:
 
 		struct
 		{
-			Bridge <Interface>* (*bind) (Bridge <Binder>*, const Char*, const Char*, EnvironmentBridge*);
+			Bridge <Interface>* (*bind) (Bridge <Binder>*, const ::CORBA::String_in*, const ::CORBA::String_in*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -45,15 +46,15 @@ class Client <T, Binder> :
 	public T
 {
 public:
-	Bridge <Interface>* bind (const Char* name, const Char* interface_id);
+	Bridge <Interface>* bind (const ::CORBA::String_in& name, const ::CORBA::String_in& interface_id);
 };
 
 template <class T>
-Bridge <Interface>* Client <T, Binder>::bind (const Char* name, const Char* interface_id)
+Bridge <Interface>* Client <T, Binder>::bind (const ::CORBA::String_in& name, const ::CORBA::String_in& interface_id)
 {
 	Environment _env;
 	Bridge <Binder>& _b (T::_get_bridge (_env));
-	Bridge <Interface>* _ret = (_b._epv ().epv.bind) (&_b, name, interface_id, &_env);
+	Bridge <Interface>* _ret = (_b._epv ().epv.bind) (&_b, &name, &interface_id, &_env);
 	_env.check ();
 	return _ret;
 }

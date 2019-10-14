@@ -42,6 +42,19 @@ protected:
 			_env->set_unknown_exception ();
 		}
 	}
+
+	static StringABI <char> _string_op (Bridge < ::Test::I1>* _b, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge* _env)
+	{
+		std::string _ret;
+		try {
+			_ret = S::_implementation (_b).string_op (std::string::_unmarshal (in_s), std::string::_unmarshal (out_s), std::string::_unmarshal (inout_s));
+		} catch (const Exception& e) {
+			_env->set_exception (e);
+		} catch (...) {
+			_env->set_unknown_exception ();
+		}
+		return std::move (_ret);
+	}
 };
 
 template <class S>
@@ -56,7 +69,8 @@ const Bridge < ::Test::I1>::EPV Skeleton <S, ::Test::I1>::epv_ = {
 	},
 	{ // epv
 		S::_op1,
-		S::_throw_NO_IMPLEMENT
+		S::_throw_NO_IMPLEMENT,
+		S::_string_op
 	}
 };
 
@@ -82,6 +96,7 @@ class ServantPOA < ::Test::I1> :
 public:
 	virtual Long op1 (Long p1) = 0;
 	virtual void throw_NO_IMPLEMENT () = 0;
+	virtual std::string string_op (const std::string&, std::string&, std::string&) = 0;
 };
 
 }

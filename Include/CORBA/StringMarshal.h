@@ -1,3 +1,7 @@
+//! \file StringMarshal.h.
+//!
+//! \brief String marshaling functions for use in proxy code.
+
 #ifndef NIRVANA_ORB_STRINGMARSHAL_H_
 #define NIRVANA_ORB_STRINGMARSHAL_H_
 
@@ -8,7 +12,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <typename C>
-void StringABI <C>::marshal (StringABI& dst) const
+void StringABI <C>::_marshal (StringABI& dst) const
 {
 	C* p;
 	size_t len;
@@ -30,33 +34,19 @@ void StringABI <C>::marshal (StringABI& dst) const
 	}
 }
 
-template <typename C>
-void StringABI <C>::unmarshal_inout () const
-{
-	if (is_large ()) {
-		size_t cb = large_allocated ();
-		if (cb)
-			LocalMarshal::singleton ()->unmarshal_memory (large_pointer (), cb);
-	}
-}
-
 }
 }
 
 namespace std {
 
-template <typename C>
-static basic_string <C>& basic_string <C>::unmarshal (::CORBA::Nirvana::StringABI <C>* abi)
+template <typename C, class T>
+void basic_string <C, T, allocator <C> >::_adopt ()
 {
-	::CORBA::Nirvana::_check_pointer (abi);
-	// TODO: Add more checks.
-	return static_cast <basic_string <C>&> (*abi);
-}
-
-template <typename C>
-static const basic_string <C>& basic_string <C>::unmarshal (const ::CORBA::Nirvana::StringABI <C>* abi)
-{
-	return unmarshal (const_cast <::CORBA::Nirvana::StringABI <C>*> (abi));
+	size_t cb = this->allocated ();
+	if (cb)
+		LocalMarshal::singleton ()->adopt_memory (this->large_pointer (), cb);
+	else if (this->is_large ())
+		assign (this->large_pointer (), this->large_size ());
 }
 
 }

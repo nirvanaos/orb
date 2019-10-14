@@ -2,6 +2,7 @@
 #define NIRVANA_ORB_ABSTRACTBASE_C_H_
 
 #include "Interface_c.h"
+#include "String.h"
 
 namespace CORBA {
 

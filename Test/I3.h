@@ -30,6 +30,14 @@ public:
 		throw NO_IMPLEMENT ();
 	}
 
+	std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
+	{
+		std::string tmp (std::move (inout_s));
+		out_s = in_s;
+		inout_s = in_s;
+		return tmp;
+	}
+
 	Long op2 (Long p1) const
 	{
 		return p1 + 2 * addendum_;
@@ -72,6 +80,14 @@ public:
 		throw NO_IMPLEMENT ();
 	}
 
+	virtual std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
+	{
+		std::string tmp (std::move (inout_s));
+		out_s = in_s;
+		inout_s = in_s;
+		return tmp;
+	}
+
 	virtual Long op2 (Long p1)
 	{
 		return p1 + 2 * addendum_;
@@ -111,6 +127,14 @@ public:
 		throw NO_IMPLEMENT ();
 	}
 
+	static std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
+	{
+		std::string tmp (std::move (inout_s));
+		out_s = in_s;
+		inout_s = in_s;
+		return tmp;
+	}
+
 	static Long op2 (Long p1)
 	{
 		return p1 + 2 * MAGIC_CONST;
@@ -148,6 +172,14 @@ public:
 	void throw_NO_IMPLEMENT ()
 	{
 		throw NO_IMPLEMENT ();
+	}
+
+	std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
+	{
+		std::string tmp (std::move (inout_s));
+		out_s = in_s;
+		inout_s = in_s;
+		return tmp;
 	}
 
 	Long op2 (Long p1) const
