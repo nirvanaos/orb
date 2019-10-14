@@ -40,8 +40,9 @@ void test_interface (I1_ptr p)
 
 	string out, inout = "inout string";
 	string ret = p->string_op ("in string", out, inout);
-	EXPECT_STREQ (inout.c_str (), "in string");
 	EXPECT_STREQ (ret.c_str (), "inout string");
+	EXPECT_STREQ (out.c_str (), "in string");
+	EXPECT_STREQ (inout.c_str (), "in string");
 
 	release (p);
 }

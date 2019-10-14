@@ -29,48 +29,55 @@ public:
 };
 
 template <typename C>
-class String_out
+class String_inout
 {
 public:
-	String_out (std::basic_string <C>& s) :
+	String_inout (std::basic_string <C>& s) :
 		s_ (s)
-	{
-		s.clear ();
-		s.shrink_to_fit ();
-	}
-
-	String_out (const String_out& src) :
-		s_ (src.s_)
 	{}
 
-	String_out& operator = (const String_out& src)
-	{
-		s_ = src.s_;
-		return *this;
-	}
+	String_inout (const String_inout& s) :
+		s_ (s.s_)
+	{}
 
-	String_out& operator = (const std::basic_string <C>& src)
+	~String_inout ()
 	{
-		s_ = src;
-		return *this;
+		s_._unmarshal ();
 	}
-
-	String_out& operator = (const C* src)
-	{
-		s_ = src;
-		return *this;
-	}
-
-	// TODO: Mark as deprecated
-	String_out& operator = (C* s);
 
 	std::basic_string <C>* operator & () const
 	{
 		return &s_;
 	}
 
+	String_inout& operator = (const String_inout& s)
+	{
+		s_ = s.s_;
+		return *this;
+	}
+
+	String_inout& operator = (const C* s)
+	{
+		s_ = s;
+		return *this;
+	}
+
+	String_inout& operator = (C* s);
+
 private:
 	std::basic_string <C>& s_;
+};
+
+template <typename C>
+class String_out : public String_inout <C>
+{
+public:
+	String_out (std::basic_string <C>& s) :
+		String_inout <C> (s)
+	{
+		s.clear ();
+		s.shrink_to_fit ();
+	}
 };
 
 // For compatibility with old C++ mapping specification
@@ -133,9 +140,9 @@ public:
 		return *this;
 	}
 
-	std::basic_string <C>& inout ()
+	String_inout <C> inout ()
 	{
-		return *this;
+		return String_inout <C> (*this);
 	}
 
 	String_out <C> out ()
@@ -166,7 +173,7 @@ void String_var <C>::adopt (C* s)
 }
 
 template <typename C>
-String_out <C>& String_out <C>::operator = (C* s)
+String_inout <C>& String_inout <C>::operator = (C* s)
 {
 	static_cast <String_var <C>&> (s_) = s;
 	return *this;
