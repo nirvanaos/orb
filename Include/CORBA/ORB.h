@@ -8,7 +8,7 @@ namespace CORBA {
 class ORB
 {
 public:
-	void create_environment (Environment_out);
+	static void create_environment (Environment_out);
 };
 
 }

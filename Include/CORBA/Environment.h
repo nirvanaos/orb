@@ -17,7 +17,7 @@ public:
 	}
 
 	void exception_set (Long code, const char* rep_id, const void* param,
-											const ExceptionEntry* const* user_exceptions = 0);
+		const ExceptionEntry* const* user_exceptions = 0);
 
 	const Char* exception_id () const
 	{

@@ -14,16 +14,77 @@ typedef T_ptr <LocalMarshal> LocalMarshal_ptr;
 typedef T_var <LocalMarshal> LocalMarshal_var;
 typedef T_out <LocalMarshal> LocalMarshal_out;
 
+struct LocalObjectId
+{
+	uint32_t id;
+	uint32_t timestamp;
+};
+
 struct LocalObjectRef
 {
-	uintptr_t protection_domain;
-	uintptr_t object;
+	LocalObjectId protection_domain;
+	LocalObjectId object;
 };
 
 struct OperationIndex
 {
 	uint16_t interface;
 	uint16_t operation;
+};
+
+struct CallMessageBlock
+{
+	LocalObjectRef target;
+	OperationIndex operation;
+};
+
+//! \interface LocalMarshal
+//!
+//! \brief Controls marshaling between different protection domains on the one system.
+
+template <class T>
+class Client <T, LocalMarshal> :
+	public T
+{
+public:
+	void begin_call (LocalObjectRef target, OperationIndex operation);
+	void begin_return ();
+
+	//! \fn uintptr_t LocalMarshal::marshal_memory (const void* p, size_t& size);
+	//!
+	//! \brief Marshals memory block to another protection domain memory space.
+	//!
+	//! \param          p    A memory block.
+	//! \param [in,out] size The size of memory block.
+	//!   On return, contains the size of memory block allocated in the target memory space.
+	//!   The size is always even, so least significant bit has special purpose.
+	//!   If the least significant bit is set, the memory block is owned by the marshaling system
+	//!   and mustn't be released. If the least significant bit is not set, the memory block
+	//!   may be adopted by the message recipient on the other side by `adopt_memory()` call.
+	//!
+	//! \return An uintptr_t represents address of the memory block at target memory space.
+
+	uintptr_t marshal_memory (const void* p, size_t& size);
+
+	//! \fn uintptr_t LocalMarshal::get_buffer (size_t& size, void*& buf_ptr);
+	//!
+	//! \brief Allocates the uninitialized memory block and map it to the target memory space.
+	//!   The caller gets pointer to the block and fill it with data.
+	//!
+	//! \param [in,out] size    The size of the memory block. See the `marshal_memory`.
+	//! \param [out]    buf_ptr The buffer pointer in current memory space.
+	//!
+	//! \return An uintptr_t represents address of the memory block at target memory space.
+
+	uintptr_t get_buffer (size_t& size, void*& buf_ptr);
+
+	void adopt_memory (void* p, size_t size);
+	uintptr_t marshal_object (Object_ptr);
+	Interface_ptr unmarshal_interface (const void* marshal_data, const Char* interface_id, EnvironmentBridge*);
+	void release_message ();
+	void post_call (uintptr_t target_object, OperationIndex operation);
+	void post_return (uintptr_t return_object);
+	void post_exception (uintptr_t return_object, const Exception*, EnvironmentBridge*);
 };
 
 template <>
@@ -62,23 +123,6 @@ protected:
 	Bridge (const EPV& epv) :
 		BridgeMarshal <LocalMarshal> (epv.interface)
 	{}
-};
-
-template <class T>
-class Client <T, LocalMarshal> :
-	public T
-{
-public:
-	void begin (uintptr_t protection_domain);
-	uintptr_t marshal_memory (const void* p, size_t& size);
-	uintptr_t get_buffer (size_t size, void** buf_ptr);
-	void adopt_memory (void* p, size_t size);
-	uintptr_t marshal_object (Object_ptr);
-	Interface_ptr unmarshal_interface (const void* marshal_data, const Char* interface_id, EnvironmentBridge*);
-	void release_message ();
-	void post_call (uintptr_t target_object, OperationIndex operation);
-	void post_return (uintptr_t return_object);
-	void post_exception (uintptr_t return_object, const Exception*, EnvironmentBridge*);
 };
 
 class LocalMarshal : public ClientInterface <LocalMarshal>
