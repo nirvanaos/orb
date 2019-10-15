@@ -94,8 +94,6 @@ private:
 	const ExceptionEntry** user_exceptions_;
 };
 
-
-
 }
 }
 
