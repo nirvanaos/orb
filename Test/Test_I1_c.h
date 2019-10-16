@@ -86,7 +86,7 @@ std::string Client <T, ::Test::I1>::string_op (const String_in <char>& in_s, Str
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	std::string _ret = (_b._epv ().epv.string_op) (&_b, &in_s, &out_s, &inout_s, &_env);
+	std::string _ret = (_b._epv ().epv.string_op) (&_b, in_s, out_s, inout_s, &_env);
 	_env.check ();
 	return _ret;
 }

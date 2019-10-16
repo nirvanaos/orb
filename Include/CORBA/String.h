@@ -17,15 +17,21 @@ public:
 	String_in (const C* s)
 	{
 		if (s) {
+			size_t cc = std::char_traits <C>::length (s);
 			this->large_pointer (const_cast <C*> (s));
-			this->large_size (std::char_traits <C>::length (s));
-			this->allocated (0);
+			this->large_size (cc);
+			this->allocated (::Nirvana::round_up ((cc + 1) * sizeof (C), 4) | 1);
 		}
 	}
 
 	String_in (std::basic_string <C>&& s) :
 		std::basic_string (std::move (s))
 	{}
+
+	operator const StringABI <C>* () const
+	{
+		return this;
+	}
 };
 
 template <typename C>
@@ -45,7 +51,7 @@ public:
 		s_._unmarshal ();
 	}
 
-	std::basic_string <C>* operator & () const
+	operator StringABI <C>* () const
 	{
 		return &s_;
 	}
@@ -75,8 +81,7 @@ public:
 	String_out (std::basic_string <C>& s) :
 		String_inout <C> (s)
 	{
-		s.clear ();
-		s.shrink_to_fit ();
+		s._clear_out ();
 	}
 };
 
@@ -203,6 +208,12 @@ void wstring_free (wchar_t* s);
 namespace std {
 
 template <typename C, class T>
+const basic_string <C, T, allocator <C> >& basic_string <C, T, allocator <C> >::_unmarshal (const ::CORBA::Nirvana::StringABI <C>* abi)
+{
+	return _unmarshal (const_cast <::CORBA::Nirvana::StringABI <C>*> (abi));
+}
+
+template <typename C, class T>
 basic_string <C, T, allocator <C> >& basic_string <C, T, allocator <C> >::_unmarshal (::CORBA::Nirvana::StringABI <C>* abi)
 {
 	::CORBA::Nirvana::_check_pointer (abi);
@@ -212,24 +223,53 @@ basic_string <C, T, allocator <C> >& basic_string <C, T, allocator <C> >::_unmar
 }
 
 template <typename C, class T>
-const basic_string <C, T, allocator <C> >& basic_string <C, T, allocator <C> >::_unmarshal (const ::CORBA::Nirvana::StringABI <C>* abi)
+basic_string <C, T, allocator <C> >& basic_string <C, T, allocator <C> >::_unmarshal_out (::CORBA::Nirvana::StringABI <C>* abi)
 {
-	return _unmarshal (const_cast <::CORBA::Nirvana::StringABI <C>*> (abi));
+	::CORBA::Nirvana::_check_pointer (abi);
+	basic_string <C>& s (static_cast <basic_string <C>&> (*abi));
+	s._unmarshal_out ();
+	return s;
 }
 
 template <typename C, class T>
 void basic_string <C, T, allocator <C> >::_unmarshal () const
 {
 	// Do some check
-	const_pointer p = data ();
-	size_type cc = length ();
-	if (!heap ()->is_readable (p, (cc + 1) * sizeof (value_type) || p [cc]))
+	const_pointer p;
+	size_type cc;
+	if (this->is_large ()) {
+		p = this->large_pointer ();
+		cc = this->large_size ();
+		if (cc > this->large_capacity () || !heap ()->is_readable (p, (cc + 1) * sizeof (value_type)))
+			throw CORBA::MARSHAL ();
+	} else {
+		p = this->small_pointer ();
+		cc = this->small_size ();
+		if (cc > ABI::SMALL_CAPACITY)
+			throw CORBA::MARSHAL ();
+	}
+	if (p [cc])
 		throw CORBA::MARSHAL ();
 }
 
 template <typename C, class T>
+void basic_string <C, T, allocator <C> >::_unmarshal_out () const
+{
+	const size_t* end = this->data_.raw + countof (this->data_.raw);
+	if (std::find_if (this->data_.raw, end, [](size_t i) { return i != 0; }) != end)
+		throw CORBA::MARSHAL ();
+}
+
+template <typename C, class T>
+void basic_string <C, T, allocator <C> >::_clear_out ()
+{
+	release_memory ();
+	this->reset ();
+}
+
+template <typename C, class T>
 basic_string <C, T, allocator <C> >::basic_string (ABI&& src) :
-	ABI (std::move (src))
+	basic_string (static_cast <basic_string&&> (src))
 {
 	_unmarshal ();
 }

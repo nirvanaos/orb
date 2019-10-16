@@ -38,7 +38,7 @@ void test_interface (I1_ptr p)
 	EXPECT_TRUE (p->_is_a ("IDL:omg.org/CORBA/Object:1.0"));
 	EXPECT_TRUE (p->_is_a ("IDL:Test/I1:1.0"));
 
-	string out, inout = "inout string";
+	string out = "this text will be lost", inout = "inout string";
 	string ret = p->string_op ("in string", out, inout);
 	EXPECT_STREQ (ret.c_str (), "inout string");
 	EXPECT_STREQ (out.c_str (), "in string");

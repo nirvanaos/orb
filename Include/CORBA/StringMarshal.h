@@ -34,21 +34,15 @@ void StringABI <C>::_marshal (StringABI& dst) const
 	}
 }
 
-}
-}
-
-namespace std {
-
-template <typename C, class T>
-void basic_string <C, T, allocator <C> >::_adopt ()
+template <typename C>
+void StringABI <C>::_adopt () const
 {
-	size_t cb = this->allocated ();
+	size_t cb = allocated ();
 	if (cb)
-		LocalMarshal::singleton ()->adopt_memory (this->large_pointer (), cb);
-	else if (this->is_large ())
-		assign (this->large_pointer (), this->large_size ());
+		LocalMarshal::singleton ()->adopt_memory (large_pointer (), cb);
 }
 
+}
 }
 
 #endif

@@ -52,6 +52,7 @@ public:
 	}
 
 	void _marshal (StringABI& dst) const;
+	void _adopt () const;
 
 protected:
 	const C* _ptr () const
@@ -112,18 +113,18 @@ protected:
 
 	void allocated (size_t cb)
 	{
-		assert (!(cb & 1));
+		assert (!(cb & 2));
 		if (::Nirvana::endian::native == ::Nirvana::endian::big)
 			data_.large.allocated = LARGE_MASK | cb;
 		else
-			data_.large.allocated = LARGE_MASK | (cb >> 1);
+			data_.large.allocated = LARGE_MASK | (cb >> 1) | (cb & 1);
 		assert (is_large ());
 	}
 
 	size_t allocated () const
 	{
 		size_t space = data_.large.allocated;
-		if (space & LARGE_MASK) {
+		if ((space & (LARGE_MASK | 1)) == LARGE_MASK) {
 			if (::Nirvana::endian::native == ::Nirvana::endian::big)
 				return space & ~LARGE_MASK;
 			else
@@ -132,12 +133,17 @@ protected:
 			return 0;
 	}
 
+	bool is_constant_allocated () const
+	{
+		return (data_.large.allocated & (LARGE_MASK | 1)) == (LARGE_MASK | 1);
+	}
+
 	size_t large_capacity () const
 	{
 		assert (is_large ());
-		size_t space = allocated ();
-		if (!space)	// constant object
-			return size ();
+		size_t space = data_.large.allocated & ~(LARGE_MASK | 1);
+		if (::Nirvana::endian::native == ::Nirvana::endian::little)
+			space <<= 1;
 		return space / sizeof (C) - 1;
 	}
 
@@ -167,8 +173,8 @@ protected:
 	}
 
 private:
-	static const unsigned char SMALL_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 0x01 : 0x80;
-	static const size_t LARGE_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 1 : ~(size_t (~0) >> 1);
+	static const unsigned char SMALL_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 0x02 : 0x80;
+	static const size_t LARGE_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 2 : ~(size_t (~0) >> 1);
 
 #pragma pack (push, 1)
 
@@ -204,7 +210,7 @@ protected:
 	{
 		Small small;
 		Large large;
-		int raw [sizeof (ULS) / sizeof (int)];
+		size_t raw [sizeof (ULS) / sizeof (size_t)];
 	};
 
 #pragma pack (pop)
