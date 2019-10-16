@@ -48,7 +48,7 @@ public:
 
 	~String_inout ()
 	{
-		s_._unmarshal ();
+		s_._unmarshal_or_clear ();
 	}
 
 	operator StringABI <C>* () const
@@ -253,6 +253,17 @@ void basic_string <C, T, allocator <C> >::_unmarshal () const
 }
 
 template <typename C, class T>
+void basic_string <C, T, allocator <C> >::_unmarshal_or_clear ()
+{
+	try {
+		_unmarshal ();
+	} catch (...) {
+		_clear_out ();
+		throw;
+	}
+}
+
+template <typename C, class T>
 void basic_string <C, T, allocator <C> >::_unmarshal_out () const
 {
 	const size_t* end = this->data_.raw + countof (this->data_.raw);
@@ -271,7 +282,7 @@ template <typename C, class T>
 basic_string <C, T, allocator <C> >::basic_string (ABI&& src) :
 	basic_string (static_cast <basic_string&&> (src))
 {
-	_unmarshal ();
+	_unmarshal_or_clear ();
 }
 
 }
