@@ -285,6 +285,7 @@ public:
 		Base (rhs)
 	{
 		release (Base::ptr_);
+		Base::ptr_ = I::_nil ();
 	}
 
 	T_out (T_out& rhs) :

@@ -11,19 +11,14 @@ typedef Nirvana::T_out <Environment> Environment_out;
 
 //! CORBA::Environment
 class Environment :
-	protected Nirvana::Bridge <Nirvana::DynamicServant>
+	public Nirvana::Bridge <Nirvana::DynamicServant>
 {
 public:
 	typedef Environment_ptr _ptr_type;
 
-	operator Nirvana::Interface_ptr ()
-	{
-		return this;
-	}
-
 	static Environment_ptr _duplicate (Environment_ptr obj)
 	{
-		return static_cast <Environment*> (Nirvana::Interface::_duplicate (obj->operator Nirvana::Interface_ptr ()));
+		return static_cast <Environment*> (Nirvana::Interface::_duplicate (obj));
 	}
 
 	static Environment_ptr _nil ()
@@ -33,7 +28,7 @@ public:
 
 	virtual void exception (Exception* ex) = 0;
 
-	virtual const Exception* exception () const = 0;
+	virtual Exception* exception () const = 0;
 
 	virtual void clear () = 0;
 

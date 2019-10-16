@@ -30,12 +30,12 @@ public:
 		}
 	}
 
-	virtual const Exception* exception () const
+	virtual Exception* exception () const
 	{
 		if (the_same_binary ()) {
 			const void* p = (bridge_._epv ().epv.exception_value) (&bridge_);
 			if (p)
-				return (const Exception*)p - 1;
+				return const_cast <Exception*> ((const Exception*)p - 1);
 			else
 				return nullptr;
 		} else {

@@ -51,7 +51,7 @@ public:
 		exception_ = ex;
 	}
 
-	virtual const Exception* exception () const
+	virtual Exception* exception () const
 	{
 		return exception_;
 	}
