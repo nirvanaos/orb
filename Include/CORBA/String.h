@@ -24,6 +24,10 @@ public:
 		}
 	}
 
+	explicit String_in (const std::basic_string <C>& s) :
+		std::basic_string (s)
+	{}
+
 	String_in (std::basic_string <C>&& s) :
 		std::basic_string (std::move (s))
 	{}
@@ -85,7 +89,6 @@ public:
 	}
 };
 
-// For compatibility with old C++ mapping specification
 template <typename C>
 class String_var :
 	public String_in <C>
@@ -94,11 +97,15 @@ public:
 	String_var ()
 	{}
 
+#ifdef LEGACY_STRING_MAPPING_SUPPORT
+
 	// TODO: Mark as deprecated
 	String_var (C* s)
 	{
 		adopt (s);
 	}
+
+#endif
 
 	String_var (const C* s)
 	{
@@ -106,9 +113,20 @@ public:
 		this->assign (s);
 	}
 
+	String_var (const std::basic_string <C>& s) :
+		String_in <C> (s)
+	{}
+
 	String_var (std::basic_string <C>&& s) :
 		String_in <C> (std::move (s))
 	{}
+
+	String_var (StringABI <C>&& src)
+	{
+		this->data_ = src.data_;
+		src.reset ();
+		this->_unmarshal_or_clear ();
+	}
 
 	String_var& operator = (const C* s)
 	{
@@ -122,6 +140,8 @@ public:
 		return *this;
 	}
 
+#ifdef LEGACY_STRING_MAPPING_SUPPORT
+
 	// TODO: Mark as deprecated
 	String_var& operator = (C* s)
 	{
@@ -129,6 +149,8 @@ public:
 		adopt (s);
 		return *this;
 	}
+
+#endif
 
 	operator C* ()
 	{
@@ -161,8 +183,12 @@ public:
 	}
 
 private:
+#ifdef LEGACY_STRING_MAPPING_SUPPORT
 	void adopt (C* s);
+#endif
 };
+
+#ifdef LEGACY_STRING_MAPPING_SUPPORT
 
 template <typename C>
 void String_var <C>::adopt (C* s)
@@ -183,6 +209,8 @@ String_inout <C>& String_inout <C>::operator = (C* s)
 	static_cast <String_var <C>&> (s_) = s;
 	return *this;
 }
+
+#endif
 
 template <typename C>
 const std::basic_string <C>& _unmarshal_in (const StringABI <C>* abi)
@@ -219,6 +247,8 @@ typedef Nirvana::String_var <wchar_t> WString_var;
 typedef Nirvana::String_out <char> String_out;
 typedef Nirvana::String_out <wchar_t> WString_out;
 
+#ifdef LEGACY_STRING_MAPPING_SUPPORT
+
 // For compatibility with old C++ mapping specification
 char* string_alloc (uint32_t len);
 char* string_dup (const char* s);
@@ -226,6 +256,8 @@ void string_free (char* s);
 wchar_t* wstring_alloc (uint32_t len);
 wchar_t* wstring_dup (const wchar_t* s);
 void wstring_free (wchar_t* s);
+
+#endif
 
 }
 
@@ -276,13 +308,6 @@ void basic_string <C, T, allocator <C> >::_clear_out ()
 {
 	release_memory ();
 	this->reset ();
-}
-
-template <typename C, class T>
-basic_string <C, T, allocator <C> >::basic_string (ABI&& src) :
-	ABI (std::move (src))
-{
-	_unmarshal_or_clear ();
 }
 
 }

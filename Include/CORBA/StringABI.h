@@ -1,7 +1,6 @@
 //! \file StringABI.h.
 //!
 //! \brief Declares the string ABI
-//! 	This file mustn't be changed.
 
 #ifndef NIRVANA_ORB_STRINGABI_H_
 #define NIRVANA_ORB_STRINGABI_H_
@@ -11,6 +10,8 @@
 
 namespace CORBA {
 namespace Nirvana {
+
+template <typename C> class String_var;
 
 template <typename C>
 class StringABI
@@ -214,6 +215,8 @@ protected:
 	};
 
 #pragma pack (pop)
+
+	friend class String_var <C>;
 
 protected:
 	Data data_;

@@ -1,5 +1,7 @@
 #include <CORBA/String.h>
 
+#ifdef LEGACY_STRING_MAPPING_SUPPORT
+
 namespace CORBA {
 namespace Nirvana {
 
@@ -60,3 +62,6 @@ void wstring_free (wchar_t* s)
 }
 
 }
+
+#endif
+
