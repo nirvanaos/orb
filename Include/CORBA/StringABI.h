@@ -7,6 +7,7 @@
 
 #include <Nirvana/NirvanaBase.h>
 #include <Nirvana/real_copy.h>
+#include <algorithm>
 
 namespace CORBA {
 namespace Nirvana {

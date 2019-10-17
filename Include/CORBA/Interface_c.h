@@ -225,6 +225,11 @@ public:
 		return ptr_;
 	}
 
+	operator BridgeMarshal <I>** () const
+	{
+		return reinterpret_cast <BridgeMarshal <I>**> (&ptr_);
+	}
+
 protected:
 	T_ptr <I>& ptr_;
 };

@@ -25,11 +25,11 @@ public:
 	}
 
 	explicit String_in (const std::basic_string <C>& s) :
-		std::basic_string (s)
+		std::basic_string <C> (s)
 	{}
 
 	String_in (std::basic_string <C>&& s) :
-		std::basic_string (std::move (s))
+		std::basic_string <C> (std::move (s))
 	{}
 
 	operator const StringABI <C>* () const
