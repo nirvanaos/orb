@@ -58,13 +58,13 @@ public:
 		{
 			const CountedArray <const char*> interfaces;
 			const CountedArray <const Operation> operations;
-			Bridge <Interface>* (*create_server_proxy) (Bridge <ProxyFactory>*, BridgeMarshal <Object>*,
-				Bridge <Interface>*,
+			BridgeMarshal <Interface>* (*create_server_proxy) (Bridge <ProxyFactory>*, BridgeMarshal <Object>*,
+				BridgeMarshal <Interface>*,
 				BridgeMarshal <DynamicServant>**, EnvironmentBridge*);
-			Bridge <Interface>* (*create_local_proxy) (Bridge <ProxyFactory>*, BridgeMarshal <Object>*,
+			BridgeMarshal <Interface>* (*create_local_proxy) (Bridge <ProxyFactory>*, BridgeMarshal <Object>*,
 				uint16_t interface_idx,
 				BridgeMarshal <DynamicServant>**, EnvironmentBridge*);
-			Bridge <Interface>* (*create_remote_proxy) (Bridge <ProxyFactory>*, BridgeMarshal <Object>*,
+			BridgeMarshal <Interface>* (*create_remote_proxy) (Bridge <ProxyFactory>*, BridgeMarshal <Object>*,
 				BridgeMarshal <DynamicServant>**, EnvironmentBridge*);
 		}
 		epv;
