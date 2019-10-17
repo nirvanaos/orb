@@ -44,10 +44,6 @@ public:
 	T_ptr (Interface* p) :
 		p_ (p)
 	{}
-// TODO: Remove
-	T_ptr (Bridge <Interface>* p) :
-		p_ (static_cast <Interface*> (p))
-	{}
 
 	template <class I>
 	T_ptr (const T_ptr <I>& src) :

@@ -72,14 +72,14 @@ class InterfaceFinder
 	};
 
 public:
-	static Bridge <Interface>* find (S& servant, const Char* id)
+	static Interface_ptr find (S& servant, const Char* id)
 	{
 		static const InterfaceEntry table [] = {
 			{ InterfaceId <Primary>::id (), cast <Primary> },
 			{ InterfaceId <I>::id (), cast <I> }...,
 		};
 
-		return InterfaceEntry::find (table, table + sizeof (table) / sizeof (*table), &servant, id);
+		return Interface::unmarshal (InterfaceEntry::find (table, table + sizeof (table) / sizeof (*table), &servant, id));
 	}
 };
 
@@ -88,7 +88,7 @@ class FindInterface
 {
 public:
 	template <class S>
-	static Bridge <Interface>* find (S& servant, const Char* id)
+	static Interface_ptr find (S& servant, const Char* id)
 	{
 		return InterfaceFinder <S, Primary, I...>::find (servant, id);
 	}
