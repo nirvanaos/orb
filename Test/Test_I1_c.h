@@ -34,6 +34,7 @@ public:
 		{
 			Long (*op1) (Bridge < ::Test::I1>*, Long p1, EnvironmentBridge*);
 			void (*throw_NO_IMPLEMENT) (Bridge < ::Test::I1>*, EnvironmentBridge*);
+			BridgeMarshal < ::Test::I1>* (*object_op) (Bridge < ::Test::I1>*, BridgeMarshal < ::Test::I1>* in_obj, BridgeMarshal < ::Test::I1>** out_obj, BridgeMarshal < ::Test::I1>** inout_obj, EnvironmentBridge*);
 			StringABI <char> (*string_op) (Bridge < ::Test::I1>*, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge*);
 		}
 		epv;
@@ -59,6 +60,7 @@ class Client <T, ::Test::I1> :
 public:
 	Long op1 (Long p1);
 	void throw_NO_IMPLEMENT ();
+	T_ptr < ::Test::I1> object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj);
 	std::string string_op (const String_in <char>& in_s, String_out <char> out_s, String_inout <char> inout_s);
 };
 
@@ -79,6 +81,16 @@ void Client <T, ::Test::I1>::throw_NO_IMPLEMENT ()
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
 	(_b._epv ().epv.throw_NO_IMPLEMENT) (&_b, &_env);
 	_env.check ();
+}
+
+template <class T>
+T_ptr < ::Test::I1> Client <T, ::Test::I1>::object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj)
+{
+	Environment _env;
+	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
+	T_var < ::Test::I1> _ret = (_b._epv ().epv.object_op) (&_b, in_obj, out_obj, inout_obj, &_env);
+	_env.check ();
+	return _ret._retn ();
 }
 
 template <class T>

@@ -43,6 +43,19 @@ protected:
 		}
 	}
 
+	static BridgeMarshal < ::Test::I1>* _object_op (Bridge < ::Test::I1>* _b, BridgeMarshal < ::Test::I1>* in_obj, BridgeMarshal < ::Test::I1>** out_obj, BridgeMarshal < ::Test::I1>** inout_obj, EnvironmentBridge* _env)
+	{
+		BridgeMarshal < ::Test::I1>* _ret = nullptr;
+		try {
+			_ret = S::_implementation (_b).object_op (_unmarshal_in (in_obj), _unmarshal_out (out_obj), _unmarshal_inout (inout_obj));
+		} catch (const Exception& e) {
+			_env->set_exception (e);
+		} catch (...) {
+			_env->set_unknown_exception ();
+		}
+		return _ret;
+	}
+
 	static StringABI <char> _string_op (Bridge < ::Test::I1>* _b, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge* _env)
 	{
 		std::string _ret;
@@ -70,6 +83,7 @@ const Bridge < ::Test::I1>::EPV Skeleton <S, ::Test::I1>::epv_ = {
 	{ // epv
 		S::_op1,
 		S::_throw_NO_IMPLEMENT,
+		S::_object_op,
 		S::_string_op
 	}
 };
@@ -96,6 +110,7 @@ class ServantPOA < ::Test::I1> :
 public:
 	virtual Long op1 (Long p1) = 0;
 	virtual void throw_NO_IMPLEMENT () = 0;
+	virtual ::Test::I1_ptr object_op (::Test::I1_ptr in_obj, ::Test::I1_var& out_obj, ::Test::I1_var& inout_obj) = 0;
 	virtual std::string string_op (const std::string&, std::string&, std::string&) = 0;
 };
 

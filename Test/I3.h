@@ -3,6 +3,7 @@
 
 #include "Test_I3_s.h"
 #include "TestORB.h"
+#include "I1.h"
 
 namespace TestORB {
 
@@ -13,7 +14,8 @@ using namespace Test;
 
 class DynamicI3 :
 	public ::CORBA::Nirvana::Servant <DynamicI3, ::Test::I3>,
-	public Instance
+	public Instance,
+	public ImplI1
 {
 public:
 	DynamicI3 (Long addendum) :
@@ -28,14 +30,6 @@ public:
 	static void throw_NO_IMPLEMENT ()
 	{
 		throw NO_IMPLEMENT ();
-	}
-
-	std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
-	{
-		std::string tmp (std::move (inout_s));
-		out_s = in_s;
-		inout_s = in_s;
-		return tmp;
 	}
 
 	Long op2 (Long p1) const
@@ -63,7 +57,8 @@ private:
 
 class PortableI3 :
 	public virtual POA_Test::I3,
-	public Instance
+	public Instance,
+	public ImplI1
 {
 public:
 	PortableI3 (Long addendum) :
@@ -80,12 +75,14 @@ public:
 		throw NO_IMPLEMENT ();
 	}
 
+	virtual ::Test::I1_ptr object_op (::Test::I1_ptr in_obj, ::Test::I1_var& out_obj, ::Test::I1_var& inout_obj)
+	{
+		return ImplI1::object_op (in_obj, out_obj, inout_obj);
+	}
+
 	virtual std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
 	{
-		std::string tmp (std::move (inout_s));
-		out_s = in_s;
-		inout_s = in_s;
-		return tmp;
+		return ImplI1::string_op (in_s, out_s, inout_s);
 	}
 
 	virtual Long op2 (Long p1)
@@ -114,7 +111,8 @@ private:
 
 class StaticI3 :
 	public ::CORBA::Nirvana::ServantStatic <StaticI3, ::Test::I3>,
-	public Instance
+	public Instance,
+	public ImplI1
 {
 public:
 	static Long op1 (Long p1)
@@ -125,14 +123,6 @@ public:
 	static void throw_NO_IMPLEMENT ()
 	{
 		throw NO_IMPLEMENT ();
-	}
-
-	static std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
-	{
-		std::string tmp (std::move (inout_s));
-		out_s = in_s;
-		inout_s = in_s;
-		return tmp;
 	}
 
 	static Long op2 (Long p1)
@@ -157,7 +147,8 @@ public:
 #ifndef TEST_NO_TIED
 
 class TiedI3 :
-	public Instance
+	public Instance,
+	public ImplI1
 {
 public:
 	TiedI3 (Long addendum) :
@@ -172,14 +163,6 @@ public:
 	void throw_NO_IMPLEMENT ()
 	{
 		throw NO_IMPLEMENT ();
-	}
-
-	std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
-	{
-		std::string tmp (std::move (inout_s));
-		out_s = in_s;
-		inout_s = in_s;
-		return tmp;
 	}
 
 	Long op2 (Long p1) const

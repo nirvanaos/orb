@@ -118,6 +118,12 @@ public:
 		T_ptr <I> (I::_duplicate (src))
 	{}
 
+	T_var (T_var <I>&& src) :
+		T_ptr <I> (src)
+	{
+		static_cast <T_ptr <I>&> (src) = I::_nil ();
+	}
+
 	// For return
 	T_var (BridgeMarshal <I>* bridge) :
 		T_ptr <I> (I::_nil ())
@@ -146,6 +152,15 @@ public:
 		if (&src != this) {
 			reset (I::_nil ());
 			T_ptr <I>::operator = (I::_duplicate (src));
+		}
+		return *this;
+	}
+
+	T_var <I>& operator = (T_var <I>&& src)
+	{
+		if (&src != this) {
+			reset (src);
+			static_cast <T_ptr <I>&> (src) = I::_nil ();
 		}
 		return *this;
 	}
