@@ -184,6 +184,30 @@ String_inout <C>& String_inout <C>::operator = (C* s)
 	return *this;
 }
 
+template <typename C>
+const std::basic_string <C>& _unmarshal (const StringABI <C>* abi)
+{
+	return _unmarshal (const_cast <StringABI <C>*> (abi));
+}
+
+template <typename C>
+std::basic_string <C>& _unmarshal (StringABI <C>* abi)
+{
+	_check_pointer (abi);
+	std::basic_string <C>& s (static_cast <std::basic_string <C>&> (*abi));
+	s._unmarshal ();
+	return s;
+}
+
+template <typename C>
+std::basic_string <C>& _unmarshal_out (StringABI <C>* abi)
+{
+	_check_pointer (abi);
+	std::basic_string <C>& s (static_cast <std::basic_string <C>&> (*abi));
+	s._unmarshal_out ();
+	return s;
+}
+
 }
 
 typedef Nirvana::String_in <char> String_in;
@@ -206,30 +230,6 @@ void wstring_free (wchar_t* s);
 }
 
 namespace std {
-
-template <typename C, class T>
-const basic_string <C, T, allocator <C> >& basic_string <C, T, allocator <C> >::_unmarshal (const ::CORBA::Nirvana::StringABI <C>* abi)
-{
-	return _unmarshal (const_cast <::CORBA::Nirvana::StringABI <C>*> (abi));
-}
-
-template <typename C, class T>
-basic_string <C, T, allocator <C> >& basic_string <C, T, allocator <C> >::_unmarshal (::CORBA::Nirvana::StringABI <C>* abi)
-{
-	::CORBA::Nirvana::_check_pointer (abi);
-	basic_string <C>& s (static_cast <basic_string <C>&> (*abi));
-	s._unmarshal ();
-	return s;
-}
-
-template <typename C, class T>
-basic_string <C, T, allocator <C> >& basic_string <C, T, allocator <C> >::_unmarshal_out (::CORBA::Nirvana::StringABI <C>* abi)
-{
-	::CORBA::Nirvana::_check_pointer (abi);
-	basic_string <C>& s (static_cast <basic_string <C>&> (*abi));
-	s._unmarshal_out ();
-	return s;
-}
 
 template <typename C, class T>
 void basic_string <C, T, allocator <C> >::_unmarshal () const
@@ -280,7 +280,7 @@ void basic_string <C, T, allocator <C> >::_clear_out ()
 
 template <typename C, class T>
 basic_string <C, T, allocator <C> >::basic_string (ABI&& src) :
-	basic_string (static_cast <basic_string&&> (src))
+	ABI (std::move (src))
 {
 	_unmarshal_or_clear ();
 }
