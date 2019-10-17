@@ -274,7 +274,7 @@ public:
 template <class I>
 T_ptr <I> _unmarshal_in (BridgeMarshal <I>* bridge)
 {
-	return T_ptr (I::unmarshal (bridge));
+	return T_ptr <I> (I::unmarshal (bridge));
 }
 
 template <class I>
