@@ -67,7 +67,7 @@ protected:
 	static Boolean __is_equivalent (Bridge <Object>* obj, BridgeMarshal <Object>* other_object, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj)._is_equivalent (other_object);
+			return S::_implementation (obj)._is_equivalent (_unmarshal_in (other_object));
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {

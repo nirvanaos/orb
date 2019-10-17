@@ -13,7 +13,6 @@ namespace Nirvana {
 template <class I> class T_var;
 template <class I> class T_out;
 template <class I> class T_inout;
-template <class I> class T_ref;
 
 typedef T_ptr <Interface> Interface_ptr;
 typedef T_var <Interface> Interface_var;
@@ -30,6 +29,8 @@ public:
 	inline static T_ptr <Interface> _nil ();
 
 	static Bridge <Interface>* unmarshal (Bridge <Interface>* bridge, const Char* interface_id);
+
+	static T_ptr <Interface> unmarshal (Bridge <Interface>* bridge);
 };
 
 template <>
@@ -43,14 +44,14 @@ public:
 	T_ptr (Interface* p) :
 		p_ (p)
 	{}
-
+// TODO: Remove
 	T_ptr (Bridge <Interface>* p) :
 		p_ (static_cast <Interface*> (p))
 	{}
 
-	template <class I1>
-	T_ptr (const T_ptr <I1>& src) :
-		T_ptr (src.p_)
+	template <class I>
+	T_ptr (const T_ptr <I>& src) :
+		p_ (static_cast <Interface*> (static_cast <Bridge <Interface>*> (src)))
 	{}
 
 	operator BridgeMarshal <Interface>* () const
@@ -81,6 +82,11 @@ private:
 inline T_ptr <Interface> Interface::_nil ()
 {
 	return T_ptr <Interface>::nil ();
+}
+
+inline T_ptr <Interface> Interface::unmarshal (Bridge <Interface>* bridge)
+{
+	return static_cast <Interface*> (bridge);
 }
 
 }
@@ -116,11 +122,12 @@ public:
 		T_ptr <I> (I::_duplicate (src))
 	{}
 
+	// For return
 	T_var (BridgeMarshal <I>* bridge) :
 		T_ptr <I> (I::_nil ())
 	{
 		try {
-			T_ptr <I>::operator = (bridge);
+			T_ptr <I>::operator = (I::unmarshal (bridge));
 		} catch (...) {
 			Interface::_release (bridge);
 			throw;
@@ -152,9 +159,9 @@ public:
 		return *this;
 	}
 
-	T_inout <I>& inout ()
+	T_inout <I> inout ()
 	{
-		return *this;
+		return T_inout <I> (*this);
 	}
 
 	T_out <I> out ()
@@ -178,68 +185,30 @@ protected:
 };
 
 template <class I>
-class T_ref
+class T_inout
 {
 public:
-	T_ref (T_ptr <I>& p) :
-		ptr_ (p->p_)
-	{}
-
-	~T_ref ()
-	{
-		if (ptr_) {
-			try {
-				I::unmarshal (ptr_);
-			} catch (...) {
-				release (ptr_);
-				ptr_ = nullptr;
-				throw;
-			}
-		}
-	}
-
-	operator BridgeMarshal <I>** ()
-	{
-		return ptr_;
-	}
-
-private:
-	BridgeMarshal <I>*& ptr_;
-};
-
-template <class I>
-class T_inout_base
-{
-public:
-	T_inout_base (T_ptr <I>& rhs) :
+	T_inout (T_ptr <I>& rhs) :
 		ptr_ (rhs)
 	{}
 
-	T_inout_base (T_var <I>& rhs) :
-		ptr_ (rhs)
-	{}
-
-	T_inout_base (T_inout_base& rhs) :
+	T_inout (T_inout& rhs) :
 		ptr_ (rhs.ptr_)
 	{}
 
-	T_inout_base (BridgeMarshal <I>*& bridge) :
-		ptr_ (*reinterpret_cast <T_ptr <I>*> (&bridge))
-	{}
-
-	T_inout_base <I>& operator = (T_inout_base <I>& rhs)
+	T_inout <I>& operator = (T_inout <I>& rhs)
 	{
 		ptr_ = rhs.ptr_;
 		return *this;
 	}
 
-	T_inout_base <I>& operator = (T_var <I>& rhs)
+	T_inout <I>& operator = (T_var <I>& rhs)
 	{
 		ptr_ = I::_duplicate (rhs);
 		return *this;
 	}
 
-	T_inout_base <I>& operator = (T_ptr <I> p)
+	T_inout <I>& operator = (T_ptr <I> p)
 	{
 		ptr_ = p;
 		return *this;
@@ -248,11 +217,6 @@ public:
 	operator T_ptr <I>& ()
 	{
 		return ptr_;
-	}
-
-	operator T_ref <I> ()
-	{
-		return T_ref <I> (ptr_);
 	}
 
 	T_ptr <I>& ptr ()
@@ -271,9 +235,9 @@ protected:
 
 /// T_out helper class
 template <class I>
-class T_out : public T_inout_base <I>
+class T_out : public T_inout <I>
 {
-	typedef T_inout_base <I> Base;
+	typedef T_inout <I> Base;
 public:
 	T_out (T_ptr <I>& rhs) :
 		Base (rhs)
@@ -290,10 +254,6 @@ public:
 
 	T_out (T_out& rhs) :
 		Base (rhs.ptr_)
-	{}
-
-	T_out (BridgeMarshal <I>*& bridge) :
-		Base (bridge)
 	{}
 
 	T_out <I>& operator = (T_out <I>& rhs)
@@ -316,46 +276,27 @@ public:
 };
 
 template <class I>
-class T_inout : public T_inout_base <I>
+T_ptr <I> _unmarshal_in (BridgeMarshal <I>* bridge)
 {
-	typedef T_inout_base <I> Base;
-public:
-	T_inout (T_ptr <I>& rhs) :
-		Base (rhs)
-	{}
+	return T_ptr (I::unmarshal (bridge));
+}
 
-	T_inout (T_var <I>& rhs) :
-		Base (rhs)
-	{}
+template <class I>
+T_var <I>& _unmarshal_out (BridgeMarshal <I>** bridge)
+{
+	_check_pointer (bridge);
+	if (*bridge)
+		throw CORBA::MARSHAL ();
+	return reinterpret_cast <T_var <I>&> (*bridge);
+}
 
-	T_inout (T_inout& rhs) :
-		Base (rhs.ptr_)
-	{}
-
-	T_inout (BridgeMarshal <I>*& bridge) :
-		Base (bridge)
-	{
-		I::unmarshal (Base::ptr_);
-	}
-
-	T_inout <I>& operator = (T_inout <I>& rhs)
-	{
-		Base::operator = (rhs);
-		return *this;
-	}
-
-	T_inout <I>& operator = (T_var <I>& rhs)
-	{
-		Base::operator = (rhs);
-		return *this;
-	}
-
-	T_inout <I>& operator = (T_ptr <I> rhs)
-	{
-		Base::operator = (rhs);
-		return *this;
-	}
-};
+template <class I>
+T_var <I>& _unmarshal_inout (BridgeMarshal <I>** bridge)
+{
+	_check_pointer (bridge);
+	I::unmarshal (*bridge);
+	return reinterpret_cast <T_var <I>&> (*bridge);
+}
 
 //! Client implementation template.
 template <class T, class I> class Client

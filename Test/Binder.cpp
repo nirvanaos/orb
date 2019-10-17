@@ -43,7 +43,7 @@ Binder::Binder () :
 Binder::~Binder ()
 {
 	for (const ObjectLink* p = links_; p != links_end_; ++p)
-		CORBA::release (p->interface_ptr);
+		Interface::_release (p->interface_ptr);
 }
 
 void Binder::bind (const void* image_base, const COFF::header* hdr)

@@ -185,13 +185,13 @@ String_inout <C>& String_inout <C>::operator = (C* s)
 }
 
 template <typename C>
-const std::basic_string <C>& _unmarshal (const StringABI <C>* abi)
+const std::basic_string <C>& _unmarshal_in (const StringABI <C>* abi)
 {
-	return _unmarshal (const_cast <StringABI <C>*> (abi));
+	return _unmarshal_inout (const_cast <StringABI <C>*> (abi));
 }
 
 template <typename C>
-std::basic_string <C>& _unmarshal (StringABI <C>* abi)
+std::basic_string <C>& _unmarshal_inout (StringABI <C>* abi)
 {
 	_check_pointer (abi);
 	std::basic_string <C>& s (static_cast <std::basic_string <C>&> (*abi));

@@ -21,10 +21,6 @@ public:
 		p_ (p)
 	{}
 
-	T_ptr (BridgeMarshal <I>* p) :
-		T_ptr (I::unmarshal (p))
-	{}
-
 	T_ptr (const T_ptr <I>& src) :
 		p_ (src.p_)
 	{}

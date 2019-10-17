@@ -47,7 +47,7 @@ protected:
 	{
 		std::string _ret;
 		try {
-			_ret = S::_implementation (_b).string_op (_unmarshal (in_s), _unmarshal_out (out_s), _unmarshal (inout_s));
+			_ret = S::_implementation (_b).string_op (_unmarshal_in (in_s), _unmarshal_out (out_s), _unmarshal_inout (inout_s));
 		} catch (const Exception& e) {
 			_env->set_exception (e);
 		} catch (...) {
