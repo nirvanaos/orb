@@ -11,22 +11,6 @@ namespace TestORB {
 int Instance::count_ = 0;
 CORBA::Nirvana::OLF::Binder loader;
 
-I1_ptr ImplI1::object_op (I1_ptr in_obj, I1_var& out_obj, I1_var& inout_obj)
-{
-	I1_var tmp (std::move (inout_obj));
-	out_obj = I1::_duplicate (in_obj);
-	inout_obj = I1::_duplicate (in_obj);
-	return tmp._retn ();
-}
-
-std::string ImplI1::string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
-{
-	std::string tmp (std::move (inout_s));
-	out_s = in_s;
-	inout_s = in_s;
-	return tmp;
-}
-
 void test_interface (I1_ptr p)
 {
 	ASSERT_FALSE (is_nil (p));
@@ -56,7 +40,24 @@ void test_interface (I1_ptr p)
 
 	{
 		string out = "this text will be lost", inout = "inout string";
+		string in = "in string";
+		string ret = p->string_op (in, out, inout);
+		EXPECT_STREQ (ret.c_str (), "inout string");
+		EXPECT_STREQ (out.c_str (), "in string");
+		EXPECT_STREQ (inout.c_str (), "in string");
+	}
+
+	{
+		string out = "this text will be lost", inout = "inout string";
 		string ret = p->string_op ("in string", out, inout);
+		EXPECT_STREQ (ret.c_str (), "inout string");
+		EXPECT_STREQ (out.c_str (), "in string");
+		EXPECT_STREQ (inout.c_str (), "in string");
+	}
+
+	{
+		string out = "this text will be lost", inout = "inout string";
+		string ret = p->bstring_op ("in string", out, inout);
 		EXPECT_STREQ (ret.c_str (), "inout string");
 		EXPECT_STREQ (out.c_str (), "in string");
 		EXPECT_STREQ (inout.c_str (), "in string");

@@ -240,7 +240,7 @@ public:
 		return ptr_;
 	}
 
-	operator BridgeMarshal <I>** () const
+	BridgeMarshal <I>** operator & () const
 	{
 		return reinterpret_cast <BridgeMarshal <I>**> (&ptr_);
 	}

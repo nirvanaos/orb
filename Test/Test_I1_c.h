@@ -36,6 +36,7 @@ public:
 			void (*throw_NO_IMPLEMENT) (Bridge < ::Test::I1>*, EnvironmentBridge*);
 			BridgeMarshal < ::Test::I1>* (*object_op) (Bridge < ::Test::I1>*, BridgeMarshal < ::Test::I1>* in_obj, BridgeMarshal < ::Test::I1>** out_obj, BridgeMarshal < ::Test::I1>** inout_obj, EnvironmentBridge*);
 			StringABI <char> (*string_op) (Bridge < ::Test::I1>*, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge*);
+			StringABI <char> (*bstring_op) (Bridge < ::Test::I1>*, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -62,6 +63,7 @@ public:
 	void throw_NO_IMPLEMENT ();
 	T_ptr < ::Test::I1> object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj);
 	std::string string_op (const String_in <char>& in_s, String_out <char> out_s, String_inout <char> inout_s);
+	std::string bstring_op (const String_in <char>& in_s, String_out <char, 20> out_s, String_inout <char, 20> inout_s);
 };
 
 template <class T>
@@ -88,7 +90,7 @@ T_ptr < ::Test::I1> Client <T, ::Test::I1>::object_op (T_ptr < ::Test::I1> in_ob
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	T_var < ::Test::I1> _ret = (_b._epv ().epv.object_op) (&_b, in_obj, out_obj, inout_obj, &_env);
+	T_var < ::Test::I1> _ret = (_b._epv ().epv.object_op) (&_b, in_obj, &out_obj, &inout_obj, &_env);
 	_env.check ();
 	return _ret._retn ();
 }
@@ -98,7 +100,18 @@ std::string Client <T, ::Test::I1>::string_op (const String_in <char>& in_s, Str
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	String_var <char> _ret = (_b._epv ().epv.string_op) (&_b, in_s, out_s, inout_s, &_env);
+	String_var <char> _ret = (_b._epv ().epv.string_op) (&_b, &in_s, &out_s, &inout_s, &_env);
+	_env.check ();
+	return _ret._retn ();
+}
+
+template <class T>
+std::string Client <T, ::Test::I1>::bstring_op (const String_in <char>& in_s, String_out <char, 20> out_s, String_inout <char, 20> inout_s)
+{
+	_check_bound (in_s, 20);
+	Environment _env;
+	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
+	String_var <char, 20> _ret = (_b._epv ().epv.bstring_op) (&_b, &in_s, &out_s, &inout_s, &_env);
 	_env.check ();
 	return _ret._retn ();
 }
