@@ -12,7 +12,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <typename C> class String_var;
+template <typename C, size_t BOUND> class String_var;
 
 template <typename C>
 class StringABI
@@ -217,7 +217,8 @@ protected:
 
 #pragma pack (pop)
 
-	friend class String_var <C>;
+	template <typename C, size_t BOUND>
+	friend class String_var;
 
 protected:
 	Data data_;

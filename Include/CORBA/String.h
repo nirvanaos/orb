@@ -7,52 +7,60 @@ namespace CORBA {
 namespace Nirvana {
 
 template <typename C>
-class String_in :
-	public std::basic_string <C>
+StringBase <C>::StringBase (const C* s)
+{
+	if (s) {
+		size_t cc = std::char_traits <C>::length (s);
+		this->large_pointer (const_cast <C*> (s));
+		this->large_size (cc);
+		this->allocated (::Nirvana::round_up ((cc + 1) * sizeof (C), 4) | 1);
+	} else
+		this->reset ();
+}
+
+template <typename C, size_t BOUND = 0>
+class String_in
 {
 public:
-	String_in ()
-	{}
-
-	String_in (const C* s)
+	String_in (const StringBase <C>& s) :
+		s_ (s)
 	{
-		if (s) {
-			size_t cc = std::char_traits <C>::length (s);
-			this->large_pointer (const_cast <C*> (s));
-			this->large_size (cc);
-			this->allocated (::Nirvana::round_up ((cc + 1) * sizeof (C), 4) | 1);
-		}
+		if (BOUND && s.size () > BOUND)
+			throw BAD_PARAM ();
 	}
 
-	explicit String_in (const std::basic_string <C>& s) :
-		std::basic_string <C> (s)
-	{}
-
-	String_in (std::basic_string <C>&& s) :
-		std::basic_string <C> (std::move (s))
+	String_in (const String_in& s) :
+		s_ (s.s_)
 	{}
 
 	operator const StringABI <C>* () const
 	{
-		return this;
+		return &s_;
 	}
+
+private:
+	const StringBase <C>& s_;
 };
 
-template <typename C>
-class String_inout
+template <typename C, size_t BOUND = 0>
+class String_inout_base
 {
 public:
-	String_inout (std::basic_string <C>& s) :
+	String_inout_base (std::basic_string <C>& s) :
 		s_ (s)
 	{}
 
-	String_inout (const String_inout& s) :
+	String_inout_base (const String_inout_base& s) :
 		s_ (s.s_)
 	{}
 
-	~String_inout ()
+	~String_inout_base ()
 	{
 		s_._unmarshal_or_clear ();
+		if (BOUND && s_.size () > BOUND) {
+			s_.clear ();
+			throw BAD_PARAM ();
+		}
 	}
 
 	operator StringABI <C>* () const
@@ -60,38 +68,84 @@ public:
 		return &s_;
 	}
 
-	String_inout& operator = (const String_inout& s)
+	operator std::basic_string <C>& () const
+	{
+		return s_;
+	}
+
+	String_inout_base& operator = (const String_inout_base& s)
 	{
 		s_ = s.s_;
 		return *this;
 	}
 
-	String_inout& operator = (const C* s)
+	template <class Tr, class Al>
+	String_inout_base& operator = (const std::basic_string <C, Tr, Al>& s)
 	{
-		s_ = s;
+		size_t cc = s.size ();
+		if (BOUND && cc > BOUND)
+			throw BAD_PARAM ();
+		s_.assign (s.data (), cc);
 		return *this;
 	}
 
-	String_inout& operator = (C* s);
+	String_inout_base& operator = (const C* s)
+	{
+		if (BOUND) {
+			size_t cc = std::char_traits <C>::length (s);
+			if (cc > BOUND)
+				throw BAD_PARAM ();
+			s_.assign (s, cc);
+		} else
+			s_ = s;
+		return *this;
+	}
+
+#ifdef LEGACY_STRING_MAPPING_SUPPORT
+
+	// TODO: Mark as deprecated
+	String_inout_base& operator = (C* s);
+
+#endif
 
 private:
 	std::basic_string <C>& s_;
 };
 
-template <typename C>
-class String_out : public String_inout <C>
+template <typename C, size_t BOUND = 0>
+class String_inout : public String_inout_base <C, BOUND>
+{
+public:
+	String_inout (std::basic_string <C>& s) :
+		String_inout_base <C, BOUND> (s)
+	{
+		if (BOUND && s.size () > BOUND)
+			throw BAD_PARAM ();
+	}
+
+	String_inout (const String_inout& s) :
+		String_inout_base <C, BOUND> (s.s_)
+	{}
+};
+
+template <typename C, size_t BOUND = 0>
+class String_out : public String_inout_base <C, BOUND>
 {
 public:
 	String_out (std::basic_string <C>& s) :
-		String_inout <C> (s)
+		String_inout_base <C, BOUND> (s)
 	{
 		s._clear_out ();
 	}
+
+	String_out (const String_out& s) :
+		String_inout_base <C, BOUND> (s.s_)
+	{}
 };
 
-template <typename C>
+template <typename C, size_t BOUND = 0>
 class String_var :
-	public String_in <C>
+	public std::basic_string <C>
 {
 public:
 	String_var ()
@@ -109,16 +163,18 @@ public:
 
 	String_var (const C* s)
 	{
-		this->reset ();
-		this->assign (s);
+		size_t cc = std::char_traits::length (s);
+		if (BOUND && cc > BOUND)
+			throw BAD_PARAM ();
+		this->assign (s, cc);
 	}
 
 	String_var (const std::basic_string <C>& s) :
-		String_in <C> (s)
+		std::basic_string <C> (check_length (s))
 	{}
 
 	String_var (std::basic_string <C>&& s) :
-		String_in <C> (std::move (s))
+		std::basic_string <C> (std::move (check_length (s)))
 	{}
 
 	String_var (StringABI <C>&& src)
@@ -130,12 +186,30 @@ public:
 
 	String_var& operator = (const C* s)
 	{
-		this->assign (s);
+		if (BOUND) {
+			size_t cc = std::char_traits <C>::length (s);
+			if (cc > BOUND)
+				throw BAD_PARAM ();
+			this->assign (s, cc);
+		} else
+			std::basic_string <C>::operator = (s);
+		return *this;
+	}
+
+	template <class Tr, class Al>
+	String_var& operator = (const std::basic_string <C, Tr, Al>& s)
+	{
+		size_t cc = s.size ();
+		if (BOUND && cc > BOUND)
+			throw BAD_PARAM ();
+		this->assign (s.data (), cc);
 		return *this;
 	}
 
 	String_var& operator = (std::basic_string <C>&& s)
 	{
+		if (BOUND && s.size () > BOUND)
+			throw BAD_PARAM ();
 		std::basic_string <C>::operator = (std::move (s));
 		return *this;
 	}
@@ -162,7 +236,7 @@ public:
 		return this->_ptr ();
 	}
 
-	const String_in <C>& in () const
+	const String_in <C> in () const
 	{
 		return *this;
 	}
@@ -183,6 +257,20 @@ public:
 	}
 
 private:
+	static const std::basic_string <C>& check_length (const std::basic_string <C>& s)
+	{
+		if (BOUND && s.size () > BOUND)
+			throw BAD_PARAM ();
+		return s;
+	}
+
+	static std::basic_string <C>& check_length (std::basic_string <C>& s)
+	{
+		if (BOUND && s.size () > BOUND)
+			throw BAD_PARAM ();
+		return s;
+	}
+
 #ifdef LEGACY_STRING_MAPPING_SUPPORT
 	void adopt (C* s);
 #endif
@@ -190,11 +278,13 @@ private:
 
 #ifdef LEGACY_STRING_MAPPING_SUPPORT
 
-template <typename C>
-void String_var <C>::adopt (C* s)
+template <typename C, size_t BOUND>
+void String_var <C, BOUND>::adopt (C* s)
 {
 	if (s) {
 		size_t cc = std::char_traits <C>::length (s);
+		if (BOUND && cc > BOUND)
+			throw BAD_PARAM ();
 		this->large_pointer (s);
 		this->large_size (cc);
 		size_t au = ::Nirvana::StdString::heap ()->query (s, ::Nirvana::Memory::ALLOCATION_UNIT);
@@ -203,10 +293,10 @@ void String_var <C>::adopt (C* s)
 		this->reset ();
 }
 
-template <typename C>
-String_inout <C>& String_inout <C>::operator = (C* s)
+template <typename C, size_t BOUND>
+String_inout_base <C, BOUND>& String_inout_base <C, BOUND>::operator = (C* s)
 {
-	static_cast <String_var <C>&> (s_) = s;
+	static_cast <String_var <C, BOUND>&> (s_) = s;
 	return *this;
 }
 
@@ -218,12 +308,27 @@ const std::basic_string <C>& _unmarshal_in (const StringABI <C>* abi)
 	return _unmarshal_inout (const_cast <StringABI <C>*> (abi));
 }
 
+template <size_t BOUND, typename C>
+const std::basic_string <C>& _unmarshal_in (const StringABI <C>* abi)
+{
+	return _unmarshal_inout <BOUND, C> (const_cast <StringABI <C>*> (abi));
+}
+
 template <typename C>
 std::basic_string <C>& _unmarshal_inout (StringABI <C>* abi)
 {
 	_check_pointer (abi);
 	std::basic_string <C>& s (static_cast <std::basic_string <C>&> (*abi));
 	s._unmarshal ();
+	return s;
+}
+
+template <size_t BOUND, typename C>
+String_inout <C, BOUND>& _unmarshal_inout (StringABI <C>* abi)
+{
+	_check_pointer (abi);
+	String_inout <C, BOUND>& s (static_cast <String_inout <C, BOUND>&> (*abi));
+	s._unmarshal (BOUND);
 	return s;
 }
 
@@ -234,6 +339,12 @@ std::basic_string <C>& _unmarshal_out (StringABI <C>* abi)
 	std::basic_string <C>& s (static_cast <std::basic_string <C>&> (*abi));
 	s._unmarshal_out ();
 	return s;
+}
+
+template <size_t BOUND, typename C>
+String_out <C, BOUND>& _unmarshal_out (StringABI <C>* abi)
+{
+	return static_cast <String_out <C, BOUND>&> (_unmarshal_out <C> (abi));
 }
 
 }
@@ -264,7 +375,7 @@ void wstring_free (wchar_t* s);
 namespace std {
 
 template <typename C, class T>
-void basic_string <C, T, allocator <C> >::_unmarshal () const
+void basic_string <C, T, allocator <C> >::_unmarshal (size_type max_size) const
 {
 	// Do some check
 	const_pointer p;
@@ -282,6 +393,8 @@ void basic_string <C, T, allocator <C> >::_unmarshal () const
 	}
 	if (p [cc])
 		throw CORBA::MARSHAL ();
+	if (max_size && cc > max_size)
+		throw CORBA::BAD_PARAM ();
 }
 
 template <typename C, class T>
