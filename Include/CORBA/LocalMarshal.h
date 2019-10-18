@@ -2,8 +2,8 @@
 //!
 //! \brief String marshaling functions for use in proxy code.
 
-#ifndef NIRVANA_ORB_STRINGMARSHAL_H_
-#define NIRVANA_ORB_STRINGMARSHAL_H_
+#ifndef NIRVANA_ORB_LOCALMARSHAL_H_
+#define NIRVANA_ORB_LOCALMARSHAL_H_
 
 #include <Nirvana/basic_string.h>
 #include "LocalMarshal_c.h"
