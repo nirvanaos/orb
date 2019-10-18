@@ -6,8 +6,6 @@
 #define NIRVANA_ORB_STRINGABI_H_
 
 #include <Nirvana/NirvanaBase.h>
-#include <Nirvana/real_copy.h>
-#include <algorithm>
 
 namespace CORBA {
 namespace Nirvana {
@@ -75,7 +73,10 @@ protected:
 
 	void reset ()
 	{
-		std::fill_n (data_.raw, countof (data_.raw), 0);
+		size_t* p = data_.raw, *end = p + countof (data_.raw);
+		do {
+			*p = 0;
+		} while (end != ++p);
 	}
 
 	bool is_large () const
