@@ -112,6 +112,7 @@ protected:
 	{
 		// Code here will be called immediately after the constructor (right
 		// before each test).
+		Instance::count_ = 0;
 	}
 
 	virtual void TearDown ()
