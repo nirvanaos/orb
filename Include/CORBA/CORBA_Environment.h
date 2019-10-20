@@ -18,7 +18,7 @@ public:
 
 	static Environment_ptr _duplicate (Environment_ptr obj)
 	{
-		return static_cast <Environment*> (Nirvana::Interface::_duplicate (obj));
+		return static_cast <Environment*> (Nirvana::Interface::__duplicate (obj));
 	}
 
 	static Environment_ptr _nil ()

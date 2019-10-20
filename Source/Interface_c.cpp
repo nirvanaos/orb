@@ -5,7 +5,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-Bridge <Interface>* Interface::_duplicate (Bridge <Interface>* itf)
+Bridge <Interface>* Interface::__duplicate (Bridge <Interface>* itf)
 {
 	if (itf) {
 		Environment env;

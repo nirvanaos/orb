@@ -22,7 +22,9 @@ class Interface :
 	public BridgeMarshal <Interface>
 {
 public:
-	static Bridge <Interface>* _duplicate (Bridge <Interface>* itf);
+	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf);
+	
+	static T_ptr <Interface> _duplicate (T_ptr <Interface> itf);
 
 	static void _release (Bridge <Interface>* itf);
 
@@ -39,6 +41,10 @@ class T_ptr <Interface>
 public:
 	T_ptr () :
 		p_ (nullptr)
+	{}
+
+	T_ptr (const T_ptr& src) :
+		p_ (src.p_)
 	{}
 
 	T_ptr (Interface* p) :
@@ -74,6 +80,11 @@ public:
 private:
 	Interface* p_;
 };
+
+inline T_ptr <Interface> Interface::_duplicate (T_ptr <Interface> itf)
+{
+	return unmarshal (__duplicate (itf));
+}
 
 inline T_ptr <Interface> Interface::_nil ()
 {
@@ -342,7 +353,7 @@ public:
 
 	static T_ptr <I> _duplicate (T_ptr <I> obj)
 	{
-		return static_cast <I*> (Interface::_duplicate (obj));
+		return static_cast <I*> (Interface::__duplicate (obj));
 	}
 
 	static T_ptr <I> _nil ()

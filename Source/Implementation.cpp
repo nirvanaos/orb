@@ -26,7 +26,7 @@ Bridge <Interface>* ServantBaseLink::_implicitly_activate ()
 	Bridge <Interface>* proxy = AbstractBase_ptr (servant_base_)->_query_interface (nullptr);
 	if (!proxy)
 		throw MARSHAL ();
-	return Interface::_duplicate (proxy);
+	return Interface::__duplicate (proxy);
 }
 
 ReferenceCounter_ptr LocalObjectLink::_construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic)
@@ -41,7 +41,7 @@ Bridge <Interface>* LocalObjectLink::_implicitly_activate ()
 	Bridge <Interface>* proxy = AbstractBase_ptr (object_)->_query_interface (nullptr);
 	if (!proxy)
 		throw MARSHAL ();
-	return Interface::_duplicate (proxy);
+	return Interface::__duplicate (proxy);
 }
 
 }
