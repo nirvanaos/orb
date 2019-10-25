@@ -45,41 +45,38 @@ protected:
 
 	static BridgeMarshal < ::Test::I1>* _object_op (Bridge < ::Test::I1>* _b, BridgeMarshal < ::Test::I1>* in_obj, BridgeMarshal < ::Test::I1>** out_obj, BridgeMarshal < ::Test::I1>** inout_obj, EnvironmentBridge* _env)
 	{
-		BridgeMarshal < ::Test::I1>* _ret = nullptr;
 		try {
-			_ret = S::_implementation (_b).object_op (_unmarshal_in (in_obj), _unmarshal_out (out_obj), _unmarshal_inout (inout_obj));
+			return S::_implementation (_b).object_op (_unmarshal_in (in_obj), _unmarshal_out (out_obj), _unmarshal_inout (inout_obj));
 		} catch (const Exception& e) {
 			_env->set_exception (e);
 		} catch (...) {
 			_env->set_unknown_exception ();
 		}
-		return _ret;
+		return ::Test::I1::_nil ();
 	}
 
 	static StringABI <char> _string_op (Bridge < ::Test::I1>* _b, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge* _env)
 	{
-		std::string _ret;
 		try {
-			_ret = S::_implementation (_b).string_op (_unmarshal_in (in_s), _unmarshal_out (out_s), _unmarshal_inout (inout_s));
+			return S::_implementation (_b).string_op (_unmarshal_in (in_s), _unmarshal_out (out_s), _unmarshal_inout (inout_s));
 		} catch (const Exception& e) {
 			_env->set_exception (e);
 		} catch (...) {
 			_env->set_unknown_exception ();
 		}
-		return std::move (_ret);
+		return StringABI <char>::_nil ();
 	}
 
 	static StringABI <char> _bstring_op (Bridge < ::Test::I1>* _b, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge* _env)
 	{
-		std::string _ret;
 		try {
-			_ret = S::_implementation (_b).bstring_op (_unmarshal_in <20> (in_s), _unmarshal_out <20> (out_s), _unmarshal_inout <20> (inout_s));
+			return S::_implementation (_b).bstring_op (_unmarshal_in <20> (in_s), _unmarshal_out <20> (out_s), _unmarshal_inout <20> (inout_s));
 		} catch (const Exception& e) {
 			_env->set_exception (e);
 		} catch (...) {
 			_env->set_unknown_exception ();
 		}
-		return std::move (_ret);
+		return StringABI <char>::_nil ();
 	}
 };
 

@@ -16,8 +16,12 @@ template <typename C>
 class StringABI
 {
 public:
-	StringABI ()
-	{}
+	static StringABI _nil ()
+	{
+		StringABI obj;
+		obj.reset ();
+		return obj;
+	}
 
 	StringABI (StringABI&& src)
 	{
@@ -55,6 +59,9 @@ public:
 	void _adopt () const;
 
 protected:
+	StringABI ()
+	{}
+
 	const C* _ptr () const
 	{
 		if (is_large ())
@@ -203,6 +210,7 @@ private:
 protected:
 	static const size_t SMALL_CAPACITY = sizeof (Small::data) / sizeof (C) - 1;
 
+private:
 	union ULS
 	{
 		Large large;
