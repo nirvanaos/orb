@@ -18,14 +18,14 @@ class StringABI
 public:
 	static StringABI _nil ()
 	{
-		StringABI obj;
-		obj.reset ();
-		return obj;
+		StringABI abi;
+		abi.reset ();
+		return abi;
 	}
 
-	StringABI (StringABI&& src)
+	StringABI (StringABI&& src) :
+		data_ (src.data_)
 	{
-		data_ = src.data_;
 		src.reset ();
 	}
 
@@ -54,9 +54,6 @@ public:
 	{
 		return size () == 0;
 	}
-
-	void _marshal (StringABI& dst) const;
-	void _adopt () const;
 
 protected:
 	StringABI ()

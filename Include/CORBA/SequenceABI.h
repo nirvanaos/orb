@@ -9,10 +9,37 @@ namespace Nirvana {
 template <class T>
 class SequenceABI
 {
+public:
+	static SequenceABI _nil ()
+	{
+		SequenceABI abi;
+		abi.reset ();
+		return abi;
+	}
+
+	SequenceABI (SequenceABI&& src) :
+		data_ (src.data_)
+	{
+		src.reset ();
+	}
+
 protected:
-	T* begin_;
-	size_t size_;
-	size_t allocated_;
+	SequenceABI ()
+	{}
+
+	void reset ()
+	{
+		data_.begin = nullptr;
+		data_.size = 0;
+		data_.allocated = 0;
+	}
+
+protected:
+	struct Data {
+		T* begin;
+		size_t size;
+		size_t allocated;
+	} data_;
 };
 
 }
