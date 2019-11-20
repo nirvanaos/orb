@@ -23,7 +23,7 @@ void basic_string <C, T, allocator <C> >::_local_marshal (basic_string& dst) con
 		len = this->small_size ();
 	}
 	if (len > ABI::SMALL_CAPACITY) {
-		size_t cb = (len + 1) * sizeof (C);
+		size_t cb = byte_size (len);
 		dst.large_pointer ((C*)LocalMarshal::singleton ()->marshal_memory (p, cb));
 		dst.large_size (len);
 		dst.large_allocated (cb);
@@ -34,13 +34,15 @@ void basic_string <C, T, allocator <C> >::_local_marshal (basic_string& dst) con
 }
 
 template <typename C, class T>
-void basic_string <C, T, allocator <C> >::_adopt ()
+void basic_string <C, T, allocator <C> >::_local_unmarshal ()
 {
-	size_t cb = this->allocated ();
-	if (cb)
-		LocalMarshal::singleton ()->adopt_memory (this->large_pointer (), cb);
-	else if (this->is_constant_allocated ())
-		assign_internal (this->large_size (), this->large_pointer ());
+	if (this->is_large ()) {
+		size_t cb = this->allocated ();
+		if (cb)
+			LocalMarshal::singleton ()->adopt_memory (this->large_pointer (), cb);
+		else
+			assign_internal (this->large_size (), this->large_pointer ());
+	}
 }
 
 }
@@ -57,7 +59,7 @@ struct MarshalTraits
 	}
 
 	static void _local_marshal (const T& src, T& dst);
-	static void _adopt (T& val);
+	static void _local_unmarshal (T& val);
 };
 
 template <typename C, class T>
@@ -73,9 +75,9 @@ struct MarshalTraits <std::basic_string <C, T, std::allocator <C> > >
 		src._local_marshal (dst);
 
 	}
-	static void _adopt (std::basic_string <C, T, std::allocator <C> >& val)
+	static void _local_unmarshal (std::basic_string <C, T, std::allocator <C> >& val)
 	{
-		val._adopt ();
+		val._local_unmarshal ();
 	}
 };
 

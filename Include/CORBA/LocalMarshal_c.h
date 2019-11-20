@@ -57,10 +57,10 @@ public:
 	//! \param          p    A memory block.
 	//! \param [in,out] size The size of memory block.
 	//!   On return, contains the size of memory block allocated in the target memory space.
-	//!   The size is always aligned at least to 4 bytes. Least significant bit has special purpose.
-	//!   If the least significant bit is set, the memory block is owned by the marshaling system
-	//!   and mustn't be released. If the least significant bit is not set, the memory block
-	//!   may be adopted by the message recipient on the other side by `adopt_memory()` call.
+	//!   If size = 0 on return, the memory block is owned by the marshaling system
+	//!   and mustn't be released.
+	//!   If size if not zero, the memory block may be adopted by the message recipient
+	//!   on the other side by `adopt_memory()` call.
 	//!
 	//! \return An uintptr_t represents address of the memory block at target memory space.
 

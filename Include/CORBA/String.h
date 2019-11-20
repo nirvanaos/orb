@@ -90,7 +90,7 @@ template <typename C, size_t BOUND>
 String_inout_base <C, BOUND>::~String_inout_base () noexcept (false)
 {
 	if (!std::uncaught_exception ()) {
-		s_._unmarshal_or_clear ();
+		s_._check_or_clear ();
 		if (BOUND && s_.size () > BOUND) {
 			s_.clear ();
 			throw BAD_PARAM ();
@@ -215,7 +215,7 @@ public:
 	{
 		this->data_ = src.data_;
 		src.reset ();
-		this->_unmarshal_or_clear ();
+		this->_check_or_clear ();
 	}
 
 	String_var& operator = (const C* s)
@@ -361,7 +361,7 @@ std::basic_string <C>& _unmarshal_inout (StringABI <C>* abi)
 {
 	_check_pointer (abi);
 	std::basic_string <C>& s (static_cast <std::basic_string <C>&> (*abi));
-	s._unmarshal ();
+	s._check ();
 	return s;
 }
 
@@ -370,7 +370,7 @@ String_inout <C, BOUND> _unmarshal_inout (StringABI <C>* abi)
 {
 	_check_pointer (abi);
 	std::basic_string <C>& s (static_cast <std::basic_string <C>&> (*abi));
-	s._unmarshal (BOUND);
+	s._check (BOUND);
 	return String_inout <C, BOUND> (s);
 }
 
@@ -418,7 +418,7 @@ void wstring_free (wchar_t* s);
 namespace std {
 
 template <typename C, class T>
-void basic_string <C, T, allocator <C> >::_unmarshal (size_type max_size) const
+void basic_string <C, T, allocator <C> >::_check (size_type max_size) const
 {
 	// Do some check
 	const_pointer p;
@@ -441,10 +441,10 @@ void basic_string <C, T, allocator <C> >::_unmarshal (size_type max_size) const
 }
 
 template <typename C, class T>
-void basic_string <C, T, allocator <C> >::_unmarshal_or_clear ()
+void basic_string <C, T, allocator <C> >::_check_or_clear ()
 {
 	try {
-		_unmarshal ();
+		_check ();
 	} catch (...) {
 		release_memory ();
 		this->reset ();
