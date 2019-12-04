@@ -13,7 +13,7 @@ String_in <C>::String_in (const C* s)
 		size_t cc = std::char_traits <C>::length (s);
 		this->large_pointer (const_cast <C*> (s));
 		this->large_size (cc);
-		this->allocated (::Nirvana::round_up ((cc + 1) * sizeof (C), 4) | 1);
+		this->allocated (0);
 	} else
 		this->reset ();
 }

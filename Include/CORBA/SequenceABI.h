@@ -29,14 +29,14 @@ protected:
 
 	void reset ()
 	{
-		data_.begin = nullptr;
+		data_.ptr = nullptr;
 		data_.size = 0;
 		data_.allocated = 0;
 	}
 
 protected:
 	struct Data {
-		T* begin;
+		T* ptr;
 		size_t size;
 		size_t allocated;
 	} data_;

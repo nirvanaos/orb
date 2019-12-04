@@ -11,7 +11,7 @@ namespace CORBA {
 // Primitive types
 
 /// We can not use `bool' built-in type because it is compiler-specific, but we have to achieve the binary compatibility.
-typedef int Boolean;
+typedef char Boolean;
 
 typedef char Char;
 typedef wchar_t WChar;
