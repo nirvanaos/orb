@@ -210,6 +210,7 @@ private:
 		Small small;
 	};
 
+protected:
 	union Data
 	{
 		Small small;
