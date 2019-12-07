@@ -85,8 +85,7 @@ public:
 		return ImplI1::string_op (in_s, out_s, inout_s);
 	}
 
-	virtual CORBA::Nirvana::String_var <char, 20> bstring_op (const std::string& in_s,
-		CORBA::Nirvana::String_out <char, 20> out_s, CORBA::Nirvana::String_inout <char, 20> inout_s)
+	virtual std::string bstring_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
 	{
 		return ImplI1::bstring_op (in_s, out_s, inout_s);
 	}

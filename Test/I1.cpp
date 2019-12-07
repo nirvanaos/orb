@@ -20,8 +20,7 @@ std::string ImplI1::string_op (const std::string& in_s, std::string& out_s, std:
 	return tmp;
 }
 
-CORBA::Nirvana::String_var <char, 20> ImplI1::bstring_op (const std::string& in_s,
-	CORBA::Nirvana::String_out <char, 20> out_s, CORBA::Nirvana::String_inout <char, 20> inout_s)
+std::string ImplI1::bstring_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
 {
 	std::string tmp (std::move (inout_s));
 	out_s = in_s;

@@ -14,7 +14,7 @@ public:
 	static const typename Bridge <Binder>::EPV epv_;
 
 protected:
-	static Bridge <Interface>* _bind (Bridge <Binder>* obj, const ::CORBA::String_in* name, const ::CORBA::String_in* interface_id, EnvironmentBridge* env)
+	static Bridge <Interface>* _bind (Bridge <Binder>* obj, const StringABI <char>* name, const StringABI <char>* interface_id, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).bind (std::string::_unmarshal (name), std::string::_unmarshal (interface_id));

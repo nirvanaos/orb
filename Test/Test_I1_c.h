@@ -62,8 +62,8 @@ public:
 	Long op1 (Long p1);
 	void throw_NO_IMPLEMENT ();
 	T_ptr < ::Test::I1> object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj);
-	std::string string_op (const String_in <char>& in_s, String_out <char> out_s, String_inout <char> inout_s);
-	std::string bstring_op (const String_in <char>& in_s, String_out <char, 20> out_s, String_inout <char, 20> inout_s);
+	std::string string_op (String_in <char> in_s, String_out <char> out_s, String_inout <char> inout_s);
+	std::string bstring_op (String_in <char> in_s, String_out <char> out_s, String_inout <char> inout_s);
 };
 
 template <class T>
@@ -96,7 +96,7 @@ T_ptr < ::Test::I1> Client <T, ::Test::I1>::object_op (T_ptr < ::Test::I1> in_ob
 }
 
 template <class T>
-std::string Client <T, ::Test::I1>::string_op (const String_in <char>& in_s, String_out <char> out_s, String_inout <char> inout_s)
+std::string Client <T, ::Test::I1>::string_op (String_in <char> in_s, String_out <char> out_s, String_inout <char> inout_s)
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
@@ -106,13 +106,15 @@ std::string Client <T, ::Test::I1>::string_op (const String_in <char>& in_s, Str
 }
 
 template <class T>
-std::string Client <T, ::Test::I1>::bstring_op (const String_in <char>& in_s, String_out <char, 20> out_s, String_inout <char, 20> inout_s)
+std::string Client <T, ::Test::I1>::bstring_op (String_in <char> in_s, String_out <char> out_s, String_inout <char> inout_s)
 {
 	_check_bound (in_s, 20);
+	_check_bound (inout_s, 20);
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	String_var <char, 20> _ret = (_b._epv ().epv.bstring_op) (&_b, &in_s, &out_s, &inout_s, &_env);
+	String_var <char> _ret = (_b._epv ().epv.bstring_op) (&_b, &in_s, &out_s, &inout_s, &_env);
 	_env.check ();
+	_check_bound (_ret, 20);
 	return _ret._retn ();
 }
 

@@ -70,7 +70,9 @@ protected:
 	static StringABI <char> _bstring_op (Bridge < ::Test::I1>* _b, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).bstring_op (_unmarshal_in <20> (in_s), _unmarshal_out <20> (out_s), _unmarshal_inout <20> (inout_s));
+			std::string _ret = S::_implementation (_b).bstring_op (_unmarshal_in <20> (in_s), _unmarshal_out <20> (out_s), _unmarshal_inout <20> (inout_s));
+			_check_bound (_ret, 20);
+			return std::move (_ret);
 		} catch (const Exception& e) {
 			_env->set_exception (e);
 		} catch (...) {
@@ -123,7 +125,7 @@ public:
 	virtual void throw_NO_IMPLEMENT () = 0;
 	virtual ::Test::I1_ptr object_op (::Test::I1_ptr in_obj, ::Test::I1_var& out_obj, ::Test::I1_var& inout_obj) = 0;
 	virtual std::string string_op (const std::string&, std::string&, std::string&) = 0;
-	virtual String_var <char, 20> bstring_op (const std::string& in_s, String_out <char, 20> out_s, String_inout <char, 20> inout_s) = 0;
+	virtual std::string bstring_op (const std::string&, std::string&, std::string&) = 0;
 };
 
 }

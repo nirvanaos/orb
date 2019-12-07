@@ -23,7 +23,7 @@ public:
 
 		struct
 		{
-			Bridge <Interface>* (*bind) (Bridge <Binder>*, const ::CORBA::String_in*, const ::CORBA::String_in*, EnvironmentBridge*);
+			Bridge <Interface>* (*bind) (Bridge <Binder>*, const StringABI <char>*, const StringABI <char>*, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -46,11 +46,11 @@ class Client <T, Binder> :
 	public T
 {
 public:
-	Bridge <Interface>* bind (const ::CORBA::String_in& name, const ::CORBA::String_in& interface_id);
+	Bridge <Interface>* bind (CORBA::String_in name, CORBA::String_in interface_id);
 };
 
 template <class T>
-Bridge <Interface>* Client <T, Binder>::bind (const ::CORBA::String_in& name, const ::CORBA::String_in& interface_id)
+Bridge <Interface>* Client <T, Binder>::bind (CORBA::String_in name, CORBA::String_in interface_id)
 {
 	Environment _env;
 	Bridge <Binder>& _b (T::_get_bridge (_env));
