@@ -80,6 +80,18 @@ protected:
 		}
 		return StringABI <char>::_nil ();
 	}
+
+	static SequenceABI <Long> _seq_op (Bridge < ::Test::I1>* _b, const SequenceABI <Long>* in_s, SequenceABI <Long>* out_s, SequenceABI <Long>* inout_s, EnvironmentBridge* _env)
+	{
+		try {
+			return S::_implementation (_b).seq_op (_unmarshal_in (in_s), _unmarshal_out (out_s), _unmarshal_inout (inout_s));
+		} catch (const Exception& e) {
+			_env->set_exception (e);
+		} catch (...) {
+			_env->set_unknown_exception ();
+		}
+		return SequenceABI <Long>::_nil ();
+	}
 };
 
 template <class S>
@@ -126,6 +138,7 @@ public:
 	virtual ::Test::I1_ptr object_op (::Test::I1_ptr in_obj, ::Test::I1_var& out_obj, ::Test::I1_var& inout_obj) = 0;
 	virtual std::string string_op (const std::string&, std::string&, std::string&) = 0;
 	virtual std::string bstring_op (const std::string&, std::string&, std::string&) = 0;
+	virtual std::vector <Long> seq_op (const std::vector <Long>& in_s, std::vector <Long>& out_s, std::vector <Long>& inout_s) = 0;
 };
 
 }

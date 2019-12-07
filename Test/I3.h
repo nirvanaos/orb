@@ -90,6 +90,11 @@ public:
 		return ImplI1::bstring_op (in_s, out_s, inout_s);
 	}
 
+	virtual std::vector <Long> seq_op (const std::vector <Long>& in_s, std::vector <Long>& out_s, std::vector <Long>& inout_s)
+	{
+		return ImplI1::seq_op (in_s, out_s, inout_s);
+	}
+
 	virtual Long op2 (Long p1)
 	{
 		return p1 + 2 * addendum_;

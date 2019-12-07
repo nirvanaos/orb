@@ -170,8 +170,7 @@ public:
 };
 
 template <typename C>
-class String_var :
-	public std::basic_string <C>
+class String_var : public std::basic_string <C>
 {
 public:
 	String_var ()
@@ -299,14 +298,6 @@ String_inout_base <C>& String_inout_base <C>::operator = (C* s)
 }
 
 #endif
-
-template <typename Cont>
-void _check_bound (const Cont& cont, size_t max_length)
-{
-	assert (max_length);
-	if (cont.size () > max_length)
-		throw BAD_PARAM ();
-}
 
 template <typename C>
 const std::basic_string <C>& _unmarshal_in (const StringABI <C>* abi)

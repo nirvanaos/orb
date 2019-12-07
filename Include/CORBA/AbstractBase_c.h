@@ -3,6 +3,7 @@
 
 #include "Interface_c.h"
 #include "String.h"
+#include "sequence.h"
 
 namespace CORBA {
 

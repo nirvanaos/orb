@@ -28,4 +28,12 @@ std::string ImplI1::bstring_op (const std::string& in_s, std::string& out_s, std
 	return tmp;
 }
 
+std::vector <Long> ImplI1::seq_op (const std::vector <Long>& in_s, std::vector <Long>& out_s, std::vector <Long>& inout_s)
+{
+	std::vector <Long> tmp (std::move (inout_s));
+	out_s = in_s;
+	inout_s = in_s;
+	return tmp;
+}
+
 }

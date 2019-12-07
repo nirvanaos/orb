@@ -37,6 +37,7 @@ public:
 			BridgeMarshal < ::Test::I1>* (*object_op) (Bridge < ::Test::I1>*, BridgeMarshal < ::Test::I1>* in_obj, BridgeMarshal < ::Test::I1>** out_obj, BridgeMarshal < ::Test::I1>** inout_obj, EnvironmentBridge*);
 			StringABI <char> (*string_op) (Bridge < ::Test::I1>*, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge*);
 			StringABI <char> (*bstring_op) (Bridge < ::Test::I1>*, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge*);
+			SequenceABI <Long> (*seq_op) (Bridge < ::Test::I1>*, const SequenceABI <Long>* in_s, SequenceABI <Long>* out_s, SequenceABI <Long>* inout_s, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -64,6 +65,7 @@ public:
 	T_ptr < ::Test::I1> object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj);
 	std::string string_op (String_in <char> in_s, String_out <char> out_s, String_inout <char> inout_s);
 	std::string bstring_op (String_in <char> in_s, String_out <char> out_s, String_inout <char> inout_s);
+	std::vector <Long> seq_op (Sequence_in <Long> in_s, Sequence_out <Long> out_s, Sequence_inout <Long> inout_s);
 };
 
 template <class T>
@@ -115,6 +117,16 @@ std::string Client <T, ::Test::I1>::bstring_op (String_in <char> in_s, String_ou
 	String_var <char> _ret = (_b._epv ().epv.bstring_op) (&_b, &in_s, &out_s, &inout_s, &_env);
 	_env.check ();
 	_check_bound (_ret, 20);
+	return _ret._retn ();
+}
+
+template <class T>
+std::vector <Long> Client <T, ::Test::I1>::seq_op (Sequence_in <Long> in_s, Sequence_out <Long> out_s, Sequence_inout <Long> inout_s)
+{
+	Environment _env;
+	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
+	Sequence_var <Long> _ret = (_b._epv ().epv.seq_op) (&_b, &in_s, &out_s, &inout_s, &_env);
+	_env.check ();
 	return _ret._retn ();
 }
 
