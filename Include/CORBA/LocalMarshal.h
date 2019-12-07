@@ -6,14 +6,16 @@
 #define NIRVANA_ORB_LOCALMARSHAL_H_
 
 #include <Nirvana/basic_string.h>
+#include <Nirvana/vector.h>
 #include "LocalMarshal_c.h"
+#include <Nirvana/Memory_c.h>
 
 namespace std {
 
 template <typename C, class T>
 void basic_string <C, T, allocator <C> >::_local_marshal (basic_string& dst) const
 {
-	C* p;
+	const C* p;
 	size_t len;
 	if (this->is_large ()) {
 		p = this->large_pointer ();
@@ -24,9 +26,9 @@ void basic_string <C, T, allocator <C> >::_local_marshal (basic_string& dst) con
 	}
 	if (len > ABI::SMALL_CAPACITY) {
 		size_t cb = byte_size (len);
-		dst.large_pointer ((C*)LocalMarshal::singleton ()->marshal_memory (p, cb));
+		dst.large_pointer ((C*)CORBA::Nirvana::LocalMarshal::singleton ()->marshal_memory (p, cb));
 		dst.large_size (len);
-		dst.large_allocated (cb);
+		dst.allocated (cb);
 	} else {
 		::Nirvana::real_copy (p, p + len + 1, dst.small_pointer ());
 		dst.small_size (len);
@@ -39,7 +41,7 @@ void basic_string <C, T, allocator <C> >::_local_unmarshal ()
 	if (this->is_large ()) {
 		size_t cb = this->allocated ();
 		if (cb)
-			LocalMarshal::singleton ()->adopt_memory (this->large_pointer (), cb);
+			CORBA::Nirvana::LocalMarshal::singleton ()->adopt_memory (this->large_pointer (), cb);
 		else
 			assign_internal (this->large_size (), this->large_pointer ());
 	}
@@ -58,8 +60,8 @@ struct MarshalTraits
 		return false;
 	}
 
-	static void _local_marshal (const T& src, T& dst);
-	static void _local_unmarshal (T& val);
+	static void local_marshal (const T& src, T& dst);
+	static void local_unmarshal (T& val);
 };
 
 template <typename C, class T>
@@ -70,14 +72,58 @@ struct MarshalTraits <std::basic_string <C, T, std::allocator <C> > >
 		return true;
 	}
 
-	static void _local_marshal (const std::basic_string <C, T, std::allocator <C> >& src, std::basic_string <C, T, std::allocator <C> >& dst)
+	static void local_marshal (const std::basic_string <C, T, std::allocator <C> >& src, std::basic_string <C, T, std::allocator <C> >& dst)
 	{
 		src._local_marshal (dst);
 
 	}
-	static void _local_unmarshal (std::basic_string <C, T, std::allocator <C> >& val)
+	static void local_unmarshal (std::basic_string <C, T, std::allocator <C> >& val)
 	{
 		val._local_unmarshal ();
+	}
+};
+
+template <typename T>
+struct MarshalTraits <std::vector < T, std::allocator <T> > >
+{
+	static bool is_dynamic ()
+	{
+		return true;
+	}
+
+	static void local_marshal (const std::vector < T, std::allocator <T> >& src, std::vector < T, std::allocator <T> >& dst)
+	{
+		if (src.empty ())
+			dst.reset ();
+		else if (std::is_trivially_copyable <T> ()) {
+			dst.data_.allocated = (dst.data_.size = src.size ()) * sizeof (T);
+			dst.data_.ptr = (T*)LocalMarshal::singleton ()->marshal_memory (src.data (), dst.data_.allocated);
+		} else {
+			size_t cb = src.size () * sizeof (T);
+			void* buf;
+			dst.data_.ptr = (T*)LocalMarshal::singleton ()->get_buffer (cb, buf);
+			T* dp = (T*)buf;
+			const T* sp = src.data (), *end = sp + src.size ();
+			do {
+				MarshalTraits <T>::local_marshal (*(sp++), *(dp++));
+			} while (sp != end);
+		}
+	}
+
+	static void local_unmarshal (std::vector < T, std::allocator <T> >& val)
+	{
+		if (!val.empty ()) {
+			if (val.data_.allocated)
+				LocalMarshal::singleton ()->adopt_memory (val.data_.ptr, val.data_.allocated);
+			else
+				val.data_.ptr = (T*)::Nirvana::default_heap ()->copy (nullptr, val.data_.ptr, val.data_.allocated, 0);
+			if (!std::is_trivially_copyable <T> ()) {
+				T* p = val.data (), *end = p + val.size (); 
+				do {
+					MarshalTraits <T>::local_unmarshal (*(p++));
+				} while (p != end);
+			}
+		}
 	}
 };
 
