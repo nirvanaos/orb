@@ -89,7 +89,7 @@ public:
 
 	virtual std::vector <Long> seq_op (const std::vector <Long>& in_s, std::vector <Long>& out_s, std::vector <Long>& inout_s)
 	{
-		return ImplI1::seq_op (in_s, out_s, inout_s)
+		return ImplI1::seq_op (in_s, out_s, inout_s);
 	}
 
 	static ::Test::I1_ptr incarnate ()
