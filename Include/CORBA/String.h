@@ -89,7 +89,11 @@ private:
 template <typename C>
 String_inout_base <C>::~String_inout_base () noexcept (false)
 {
+#ifdef NIRVANA_C17
+	if (!std::uncaught_exceptions ())
+#else
 	if (!std::uncaught_exception ())
+#endif
 		s_._check_or_clear ();
 }
 
