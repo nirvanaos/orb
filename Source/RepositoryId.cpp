@@ -1,5 +1,5 @@
 #include <CORBA/RepositoryId.h>
-#include <Nirvana/Nirvana.h>
+#include <Nirvana/NirvanaBase.h>
 #include <algorithm>
 
 namespace CORBA {
