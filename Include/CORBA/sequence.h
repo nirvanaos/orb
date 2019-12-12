@@ -164,7 +164,7 @@ void vector <T, allocator <T> >::_check () const
 	if (p)
 		_check_pointer (p);
 	size_type cnt = size ();
-	if (cnt > 0 && (cnt > this->capacity () || !Nirvana::default_heap ()->is_readable (p, cnt * sizeof (value_type))))
+	if (cnt > 0 && (cnt > this->capacity () || !heap ()->is_readable (p, cnt * sizeof (value_type))))
 		throw CORBA::MARSHAL ();
 }
 

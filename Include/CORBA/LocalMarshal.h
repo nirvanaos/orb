@@ -116,7 +116,7 @@ struct MarshalTraits <std::vector < T, std::allocator <T> > >
 			if (val.data_.allocated)
 				LocalMarshal::singleton ()->adopt_memory (val.data_.ptr, val.data_.allocated);
 			else
-				val.data_.ptr = (T*)::Nirvana::default_heap ()->copy (nullptr, val.data_.ptr, val.data_.allocated, 0);
+				val.data_.ptr = (T*)heap ()->copy (nullptr, val.data_.ptr, val.data_.allocated, 0);
 			if (!std::is_trivially_copyable <T> ()) {
 				T* p = val.data (), *end = p + val.size (); 
 				do {
