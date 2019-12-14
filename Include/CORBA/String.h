@@ -192,7 +192,7 @@ public:
 
 	String_var (const C* s)
 	{
-		size_t cc = std::char_traits::length (s);
+		size_t cc = std::char_traits <C>::length (s);
 		this->assign (s, cc);
 	}
 
@@ -389,6 +389,7 @@ void basic_string <C, T, allocator <C> >::_check () const
 	if (this->is_large ()) {
 		p = this->large_pointer ();
 		cc = this->large_size ();
+		CORBA::Nirvana::_check_pointer (p);
 		if (cc > this->large_capacity () || !heap ()->is_readable (p, (cc + 1) * sizeof (value_type)))
 			throw CORBA::MARSHAL ();
 	} else {
