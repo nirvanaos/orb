@@ -48,21 +48,28 @@ public:
 		return InterfaceDef_ptr::nil ();	// TODO: Implement
 	}
 
-	Boolean _is_a (const Char* type_id) const;
+	Boolean _is_a (const Char* type_id) const
+	{
+		Bridge <Interface>* itf = servant_->_query_interface (type_id);
+		if (itf)
+			return TRUE;
+		else
+			return FALSE;
+	}
 
 	static Boolean __non_existent (Bridge <Object>*, EnvironmentBridge*)
 	{
 		return FALSE;
 	}
 
-	static Boolean __is_equivalent (Bridge <Object>* obj, BridgeMarshal <Object>* other, EnvironmentBridge*)
+	Boolean _is_equivalent (Object_ptr other)
 	{
-		return obj == other;
+		return _query_interface (nullptr) == AbstractBase_ptr (other)->_query_interface (nullptr);
 	}
 
 	ULong _hash (ULong maximum) const
 	{
-		return 0; // TODO: Implement.
+		return (ULong)(uintptr_t)this % maximum;
 	}
 	// TODO: More Object operations shall be here...
 	
@@ -89,11 +96,6 @@ public:
 	static Boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		return ObjectBase::__non_existent (obj, env);
-	}
-
-	static Boolean __is_equivalent (Bridge <Object>* obj, BridgeMarshal <Object>* other, EnvironmentBridge* env)
-	{
-		return ObjectBase::__is_equivalent (obj, other, env);
 	}
 };
 
