@@ -129,7 +129,7 @@ protected:
 		ServantPOA ()
 	{}
 
-	virtual Bridge <Interface>* _implicitly_activate ();
+	virtual Bridge <Interface>* _get_proxy ();
 
 private:
 	friend class ServantTraitsPOA;
@@ -212,7 +212,7 @@ protected:
 		ServantPOA ()
 	{}
 
-	virtual Bridge <Interface>* _implicitly_activate ();
+	virtual Bridge <Interface>* _get_proxy ();
 };
 
 //! \class ImplementationPOA
@@ -236,7 +236,7 @@ public:
 
 	T_ptr <Primary> _this ()
 	{
-		return static_cast <Primary*> (this->_implicitly_activate ());
+		return static_cast <Primary*> (this->_get_proxy ());
 	}
 
 protected:

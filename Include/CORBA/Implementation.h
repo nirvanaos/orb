@@ -209,7 +209,7 @@ protected:
 
 	void _construct (Bridge <DynamicServant>* dynamic);
 
-	Bridge <Interface>* _implicitly_activate ();
+	Bridge <Interface>* _get_proxy ();
 
 private:
 	PortableServer::Servant servant ()
@@ -292,7 +292,7 @@ protected:
 
 	ReferenceCounter_ptr _construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic);
 
-	Bridge <Interface>* _implicitly_activate ();
+	Bridge <Interface>* _get_proxy ();
 
 private:
 	Object_ptr object_;
@@ -377,9 +377,9 @@ public:
 	T_ptr <Primary> _this ()
 	{
 		return static_cast <Primary*> (
-			std::conditional < std::is_base_of <LocalObjectLink, Implementation <S, Primary, Bases...> >::value,
+			std::conditional <std::is_base_of <LocalObjectLink, Implementation <S, Primary, Bases...> >::value,
 			LocalObjectLink, ServantBaseLink>::type::
-			_implicitly_activate ());
+			_get_proxy ());
 	}
 
 protected:

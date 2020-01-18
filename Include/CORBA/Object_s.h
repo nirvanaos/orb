@@ -108,7 +108,7 @@ const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 		S::__is_equivalent,
 		S::__hash
 		// TODO: Other Object operations shall be here...
-}
+	}
 };
 
 }
