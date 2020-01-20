@@ -10,7 +10,7 @@ using namespace CORBA::Nirvana;
 #pragma section (OLF_BIND, read, execute)
 
 extern "C" __declspec (allocate(OLF_BIND))
-static const struct
+const struct
 {
 	OLF::SectionHeader hdr;
 	struct

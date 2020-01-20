@@ -214,23 +214,23 @@ public:
 		ptr_ (rhs)
 	{}
 
-	T_inout (T_inout& rhs) :
+	T_inout (const T_inout& rhs) :
 		ptr_ (rhs.ptr_)
 	{}
 
-	T_inout <I>& operator = (T_inout <I>& rhs)
+	T_inout <I>& operator = (const T_inout <I>& rhs)
 	{
 		ptr_ = rhs.ptr_;
 		return *this;
 	}
 
-	T_inout <I>& operator = (T_var <I>& rhs)
+	T_inout <I>& operator = (const T_var <I>& rhs)
 	{
 		ptr_ = I::_duplicate (rhs);
 		return *this;
 	}
 
-	T_inout <I>& operator = (T_ptr <I> p)
+	T_inout <I>& operator = (const T_ptr <I> p)
 	{
 		ptr_ = p;
 		return *this;
@@ -246,7 +246,7 @@ public:
 		return ptr_;
 	}
 
-	T_ptr <I> operator -> ()
+	T_ptr <I> operator -> () const
 	{
 		return ptr_;
 	}
@@ -279,23 +279,23 @@ public:
 		Base::ptr_ = I::_nil ();
 	}
 
-	T_out (T_out& rhs) :
+	T_out (const T_out& rhs) :
 		Base (rhs.ptr_)
 	{}
 
-	T_out <I>& operator = (T_out <I>& rhs)
+	T_out <I>& operator = (const T_out <I>& rhs)
 	{
 		Base::operator = (rhs);
 		return *this;
 	}
 
-	T_out <I>& operator = (T_var <I>& rhs)
+	T_out <I>& operator = (const T_var <I>& rhs)
 	{
 		Base::operator = (rhs);
 		return *this;
 	}
 
-	T_out <I>& operator = (T_ptr <I> rhs)
+	T_out <I>& operator = (const T_ptr <I> rhs)
 	{
 		Base::operator = (rhs);
 		return *this;
