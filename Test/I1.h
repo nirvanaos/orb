@@ -126,6 +126,8 @@ public:
 	{
 		return _this ();
 	}
+
+	static const char constant_name[];
 };
 
 #endif

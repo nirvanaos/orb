@@ -6,6 +6,9 @@
 
 #include "Implementation.h"
 #include "ServantStatic.h"
+#include <CORBA/OLF.h>
+
+#pragma section (OLF_BIND, read, execute)
 
 namespace CORBA {
 namespace Nirvana {
@@ -25,6 +28,22 @@ public:
 	{
 		return 1;
 	}
+};
+
+extern "C" struct ExportObject
+{
+	uintptr_t tag;
+	const char* constant_name;
+	Bridge <PortableServer::ServantBase>* implementation;
+	Bridge <PortableServer::ServantBase>* core_impl;
+};
+
+extern "C" struct ExportLocal
+{
+	uintptr_t tag;
+	const char* constant_name;
+	Bridge <AbstractBase>* const implementation;
+	Bridge <LocalObject>* const core_impl;
 };
 
 //! Static implementation of PortableServer::ServantBase.
@@ -74,10 +93,16 @@ protected:
 private:
 	static PortableServer::Servant servant_base ()
 	{
-		return static_cast <PortableServer::ServantBase*> (servant_base_);
+		return static_cast <PortableServer::ServantBase*> (export_struct_.core_impl);
 	}
 
-	static Bridge <PortableServer::ServantBase>*& servant_base_;
+	static __declspec (allocate(OLF_BIND)) const ExportObject export_struct_;
+};
+
+template <class S> __declspec (allocate(OLF_BIND))
+//const ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_ { 1, S::constant_name, STATIC_BRIDGE (S, PortableServer::ServantBase), nullptr };
+const ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_ { 1, S::constant_name
+, reinterpret_cast <Bridge <PortableServer::ServantBase>*> (&InterfaceStaticBase <S, PortableServer::ServantBase>::bridge_)
 };
 
 //! Static implementation of LocalObject

@@ -4,6 +4,8 @@ using namespace Test;
 
 namespace TestORB {
 
+const char StaticI1::constant_name[] = "Test/g_I1";
+
 I1_ptr ImplI1::object_op (I1_ptr in_obj, I1_var& out_obj, I1_var& inout_obj)
 {
 	I1_var tmp (std::move (inout_obj));

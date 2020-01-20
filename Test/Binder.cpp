@@ -48,6 +48,7 @@ Binder::~Binder ()
 
 void Binder::bind (const void* image_base, const COFF::header* hdr)
 {
+	return;
 	const COFF::section* metadata = nullptr;
 
 	const COFF::section* s = (const COFF::section*)((const uint8_t*)(hdr + 1) + hdr->SizeOfOptionalHeader);
