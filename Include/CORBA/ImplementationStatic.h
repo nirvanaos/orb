@@ -30,22 +30,6 @@ public:
 	}
 };
 
-extern "C" struct ExportObject
-{
-	uintptr_t tag;
-	const char* constant_name;
-	Bridge <PortableServer::ServantBase>* implementation;
-	Bridge <PortableServer::ServantBase>* core_impl;
-};
-
-extern "C" struct ExportLocal
-{
-	uintptr_t tag;
-	const char* constant_name;
-	Bridge <AbstractBase>* const implementation;
-	Bridge <LocalObject>* const core_impl;
-};
-
 //! Static implementation of PortableServer::ServantBase.
 //! \tparam S Servant class.
 template <class S>
@@ -93,15 +77,14 @@ protected:
 private:
 	static PortableServer::Servant servant_base ()
 	{
-		return static_cast <PortableServer::ServantBase*> (export_struct_.core_impl);
+		return static_cast <PortableServer::ServantBase*> (export_struct_.core_object);
 	}
 
-	static __declspec (allocate(OLF_BIND)) const ExportObject export_struct_;
+	static __declspec (allocate(OLF_BIND)) const OLF::ExportObject export_struct_;
 };
 
 template <class S> __declspec (allocate(OLF_BIND))
-//const ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_ { 1, S::constant_name, STATIC_BRIDGE (S, PortableServer::ServantBase), nullptr };
-const ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_ { 1, S::constant_name
+const OLF::ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_ { OLF::OLF_EXPORT_OBJECT, S::constant_name
 , reinterpret_cast <Bridge <PortableServer::ServantBase>*> (&InterfaceStaticBase <S, PortableServer::ServantBase>::bridge_)
 };
 
@@ -159,10 +142,15 @@ public:
 private:
 	static Object_ptr object ()
 	{
-		return static_cast <Object*> (object_);
+		return LocalObject_ptr (static_cast <LocalObject*> (export_struct_.core_object));
 	}
 
-	static Bridge <Object>*& object_;
+	static __declspec (allocate(OLF_BIND)) const OLF::ExportLocal export_struct_;
+};
+
+template <class S> __declspec (allocate(OLF_BIND))
+const OLF::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ OLF::OLF_EXPORT_LOCAL, S::constant_name
+, reinterpret_cast <Bridge <AbstractBase>*> (&InterfaceStaticBase <S, AbstractBase>::bridge_)
 };
 
 //! \class ImplementationPseudo

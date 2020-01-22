@@ -4,6 +4,8 @@
 #include <CORBA/OLF.h>
 #include <CORBA/RepositoryId.h>
 #include <llvm/BinaryFormat/COFF.h>
+#include <list>
+#include <map>
 
 namespace CORBA {
 namespace Nirvana {
@@ -36,8 +38,27 @@ private:
 			throw INV_OBJREF ();
 	}
 
+	class NameKey
+	{
+	public:
+		NameKey (const char* name) :
+			name_ (name),
+			end_ (name + strlen (name))
+		{}
+
+		bool operator < (const NameKey& rhs) const
+		{
+			return std::lexicographical_compare (name_, end_, rhs.name_, rhs.end_);
+		}
+
+	private:
+		const char* name_;
+		const char* end_;
+	};
+
 private:
-	const ObjectLink* links_, *links_end_;
+	std::list <Interface_var> core_objects_;
+	std::map <NameKey, Interface_var> exported_interfaces_;
 };
 
 }

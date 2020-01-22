@@ -2,6 +2,7 @@
 #define NIRVANA_ORB_OLF_H_
 
 #include <CORBA/ServantBase_c.h>
+#include <CORBA/LocalObject_c.h>
 
 #define OLF_BIND "olfbind"
 
@@ -15,32 +16,43 @@ struct SectionHeader
 	ULong size;	//!< Size of the section data (not including this header).
 };
 
-enum SectionType
+enum Command
 {
-	OLF = 'FLO', // "OLF\0"
-	OBJECT_LINK = 1,
-	SYNC_DOMAIN = 2,
-	EXPORT_INTERFACE = 3,
-	EXPORT_OBJECT = 4,
-	EXPORT_LOCAL = 5,
-	IMPORT_INTERFACE = 6,
+	OLF_IMPORT_INTERFACE = 1,
+	OLF_EXPORT_INTERFACE = 2,
+	OLF_EXPORT_OBJECT = 3,
+	OLF_EXPORT_LOCAL = 4,
 };
 
 struct ExportInterface
 {
+	::Nirvana::Word command;
 	const Char* name;
 	Bridge <Interface>* itf;
 };
 
-struct ObjectLink
+struct ExportObject
 {
-	Bridge <Interface>* interface_ptr;
+	::Nirvana::Word command;
+	const Char* name;
+	BridgeMarshal <PortableServer::ServantBase>* implementation;
+	Bridge <PortableServer::ServantBase>* core_object;
+};
+
+struct ExportLocal
+{
+	::Nirvana::Word command;
+	const Char* name;
+	Bridge <AbstractBase>* implementation;
+	Bridge <LocalObject>* core_object;
 };
 
 struct ImportInterface
 {
+	::Nirvana::Word command;
 	const Char* name;
 	const Char* interface_id;
+	Bridge <Interface>* itf;
 };
 
 }

@@ -1,12 +1,15 @@
 #include "Binder.h"
 #include <CORBA/ObjectFactory_c.h>
+#include <Nirvana/NirvanaBase.h>
 #include <Windows.h>
-
-using namespace llvm;
 
 namespace CORBA {
 namespace Nirvana {
 namespace OLF {
+
+using namespace llvm;
+using ::Nirvana::Word;
+using namespace std;
 
 bool Binder::is_section (const COFF::section* s, const char* name)
 {
@@ -24,9 +27,7 @@ bool Binder::is_section (const COFF::section* s, const char* name)
 		return true;
 }
 
-Binder::Binder () :
-	links_ (nullptr),
-	links_end_ (nullptr)
+Binder::Binder ()
 {
 	void* image_base = GetModuleHandleW (nullptr);
 	const COFF::DOSHeader* dos_header = (const COFF::DOSHeader*)image_base;
@@ -41,14 +42,10 @@ Binder::Binder () :
 }
 
 Binder::~Binder ()
-{
-	for (const ObjectLink* p = links_; p != links_end_; ++p)
-		Interface::_release (p->interface_ptr);
-}
+{}
 
 void Binder::bind (const void* image_base, const COFF::header* hdr)
 {
-	return;
 	const COFF::section* metadata = nullptr;
 
 	const COFF::section* s = (const COFF::section*)((const uint8_t*)(hdr + 1) + hdr->SizeOfOptionalHeader);
@@ -67,76 +64,101 @@ void Binder::bind (const void* image_base, const COFF::header* hdr)
 
 void Binder::bind_olf (const void* data, size_t size)
 {
-	const SectionHeader* ps = (const SectionHeader*)data;
-	if (SectionType::OLF != ps->type)
-		throw INITIALIZE ();
-
-	if (sizeof (SectionHeader) + ps->size > size)
-		throw INITIALIZE ();
-
-	const SectionHeader* end = next_sibling (ps);
-	
-	++ps; // Child
-
-	ObjectLink* links_begin = nullptr, *links_end = nullptr;
-	if (ps < end && SectionType::OBJECT_LINK == ps->type) {
-		links_begin = (ObjectLink*)(ps + 1);
-		ps = next_sibling (ps);
-		links_end = (ObjectLink*)(ps);
-	}
-
 	DWORD protection;
-	if (links_begin < links_end)
-		VirtualProtect (links_begin, (links_end - links_begin) * sizeof (ObjectLink), PAGE_READWRITE, &protection);
+	VirtualProtect ((void*)data, size, PAGE_READWRITE, &protection);
+	Word* p = (Word*)data;
+	Word* end = p + size / sizeof (Word);
 
-	ObjectLink* link_ptr = links_begin;
-	links_ = links_end_ = link_ptr;
+	bool imp = false;
+	while (p != end && *p) {
+		switch (*p) {
+			case OLF_IMPORT_INTERFACE:
+				imp = true;
+				p += sizeof (ImportInterface) / sizeof (*p);
+				break;
 
-	const SectionHeader* sync_domain_end = nullptr;
-	while (ps < end) {
-		switch (ps->type) {
-		case SectionType::SYNC_DOMAIN:
-			if (sync_domain_end)
-				throw INITIALIZE ();
-			sync_domain_end = next_sibling (ps);
-			++ps;
-			continue;
-
-		case SectionType::EXPORT_INTERFACE:
-			break;
-
-		case SectionType::EXPORT_OBJECT:
-			for (const ExportInterface* p = (const ExportInterface*)(ps + 1), *end = (const ExportInterface*)next_sibling (ps); p < end; ++p) {
-				if (link_ptr >= links_end)
-					throw INITIALIZE ();
-				(link_ptr++)->interface_ptr = ObjectFactory::singleton ()->create_servant (get_interface <PortableServer::ServantBase> (*p), DynamicServant_ptr::nil ());
-				links_end_ = link_ptr;
+			case OLF_EXPORT_INTERFACE: {
+				const ExportInterface* ps = reinterpret_cast <const ExportInterface*> (p);
+				exported_interfaces_.emplace (ps->name, static_cast <Interface*> (Interface::__duplicate (ps->itf)));
+				p += sizeof (ExportInterface) / sizeof (*p);
+				break;
 			}
-			break;
 
-		case SectionType::EXPORT_LOCAL:
-			for (const ExportInterface* p = (const ExportInterface*)(ps + 1), *end = (const ExportInterface*)next_sibling (ps); p < end; ++p) {
-				if (link_ptr >= links_end)
-					throw INITIALIZE ();
-				(link_ptr++)->interface_ptr = Object_ptr (ObjectFactory::singleton ()->create_local_object (get_interface <AbstractBase> (*p), DynamicServant_ptr::nil ()));
-				links_end_ = link_ptr;
+			case OLF_EXPORT_OBJECT: {
+				ExportObject* ps = reinterpret_cast <ExportObject*> (p);
+				PortableServer::ServantBase_var core_obj = ObjectFactory::singleton ()->create_servant (ps->implementation, DynamicServant_ptr::nil ());
+				ps->core_object = core_obj;
+				Object_var proxy = Object::_duplicate (static_cast <Object*> (AbstractBase_ptr (core_obj)->_query_interface (Object::interface_id_)));
+				core_objects_.push_back (Interface_var (core_obj._retn ()));
+				exported_interfaces_.emplace (ps->name, Interface_var (proxy._retn ()));
+				p += sizeof (ExportObject) / sizeof (*p);
+				break;
 			}
-			break;
 
-		case SectionType::IMPORT_INTERFACE:
-			throw NO_IMPLEMENT ();
+			case OLF_EXPORT_LOCAL: {
+				ExportLocal* ps = reinterpret_cast <ExportLocal*> (p);
+				LocalObject_var core_obj = ObjectFactory::singleton ()->create_local_object (ps->implementation, DynamicServant_ptr::nil ());
+				ps->core_object = core_obj;
+				LocalObject_var proxy = LocalObject::_duplicate (static_cast <LocalObject*> (AbstractBase_ptr (Object_ptr (core_obj))->_query_interface (LocalObject::interface_id_)));
+				core_objects_.push_back (Interface_var (core_obj._retn ()));
+				exported_interfaces_.emplace (ps->name, Interface_var (proxy._retn ()));
+				p += sizeof (ExportLocal) / sizeof (*p);
+				break;
+			}
 
-		default:
-			throw INITIALIZE ();
+			default:
+				throw INTERNAL ();
+				break;
 		}
-
-		ps = next_sibling (ps);
-		if (sync_domain_end && ps >= sync_domain_end)
-			sync_domain_end = nullptr;
 	}
+	if (imp) {
+		p = (Word*)data;
+		while (p != end && *p) {
+			switch (*p) {
+				case OLF_IMPORT_INTERFACE: {
+					ImportInterface* ps = reinterpret_cast <ImportInterface*> (p);
+					auto pf = exported_interfaces_.find (ps->name);
+					if (pf != exported_interfaces_.end ()) {
+						Bridge <Interface>* itf = pf->second;
+						const Char* itf_id = itf->_epv ().interface_id;
+						if (RepositoryId::compatible (itf_id, ps->interface_id))
+							ps->itf = itf;
+						else {
+							AbstractBase_ptr ab = AbstractBase::_nil ();
+							if (RepositoryId::compatible (itf_id, AbstractBase::interface_id_))
+								ab = static_cast <AbstractBase*> (itf);
+							else if (RepositoryId::compatible (itf_id, Object::interface_id_))
+								ab = Object_ptr (static_cast <Object*> (itf));
+							else if (RepositoryId::compatible (itf_id, LocalObject::interface_id_))
+								ab = Object_ptr (LocalObject_ptr (static_cast <LocalObject*> (itf)));
+							else
+								throw INV_OBJREF ();
+							Bridge <Interface>* qi = ab->_query_interface (ps->interface_id);
+							if (!qi)
+								throw INV_OBJREF ();
+							ps->itf = qi;
+						}
+					} else
+						throw OBJECT_NOT_EXIST ();
+					p += sizeof (ImportInterface) / sizeof (*p);
+					break;
+				}
 
-	if (links_begin < links_end)
-		VirtualProtect (links_begin, (links_end - links_begin) * sizeof (ObjectLink), protection, &protection);
+			case OLF_EXPORT_INTERFACE:
+				p += sizeof (ExportInterface) / sizeof (*p);
+				break;
+
+			case OLF_EXPORT_OBJECT:
+				p += sizeof (ExportInterface) / sizeof (*p);
+				break;
+
+			case OLF_EXPORT_LOCAL:
+				p += sizeof (ExportLocal) / sizeof (*p);
+				break;
+			}
+		}
+	}
+	VirtualProtect ((void*)data, size, protection, &protection);
 }
 
 }
