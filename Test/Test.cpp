@@ -1,6 +1,6 @@
 #include "I1.h"
 #include "I3.h"
-#include "Binder.h"
+#include "Loader.h"
 #include <gtest/gtest.h>
 
 using namespace Test;
@@ -9,7 +9,7 @@ using namespace std;
 namespace TestORB {
 
 int Instance::count_ = 0;
-CORBA::Nirvana::OLF::Binder loader;
+Loader loader;
 
 void test_interface (I1_ptr p)
 {

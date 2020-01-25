@@ -11,13 +11,13 @@ class StringAllocator
 public:
 	static C* allocate (uint32_t len) NIRVANA_NOEXCEPT
 	{
-		return (C*)::Nirvana::default_heap ()->allocate (0, ((size_t)len + 1) * sizeof (C), ::Nirvana::Memory::EXACTLY);
+		return (C*)::Nirvana::g_default_heap->allocate (0, ((size_t)len + 1) * sizeof (C), ::Nirvana::Memory::EXACTLY);
 	}
 
 	static C* dup (const C* s) NIRVANA_NOEXCEPT
 	{
 		if (s)
-			return (C*)::Nirvana::default_heap ()->copy (0, (C*)s, (std::char_traits <C>::length (s) + 1) * sizeof (C), ::Nirvana::Memory::EXACTLY);
+			return (C*)::Nirvana::g_default_heap->copy (0, (C*)s, (std::char_traits <C>::length (s) + 1) * sizeof (C), ::Nirvana::Memory::EXACTLY);
 		else
 			return nullptr;
 	}
@@ -25,7 +25,7 @@ public:
 	static void free (C* s) NIRVANA_NOEXCEPT
 	{
 		if (s)
-			::Nirvana::default_heap ()->release (s, (std::char_traits <C>::length (s) + 1) * sizeof (C));
+			::Nirvana::g_default_heap->release (s, (std::char_traits <C>::length (s) + 1) * sizeof (C));
 	}
 };
 

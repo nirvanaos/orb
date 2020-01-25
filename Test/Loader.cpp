@@ -1,17 +1,18 @@
-#include "Binder.h"
+#include "Loader.h"
 #include "ObjectFactoryCore.h"
-#include <Nirvana/NirvanaBase.h>
+#include <Nirvana/OLF.h>
 #include <Windows.h>
 
-namespace CORBA {
-namespace Nirvana {
-namespace OLF {
+namespace TestORB {
 
 using namespace llvm;
 using ::Nirvana::Word;
 using namespace std;
+using namespace ::CORBA;
+using namespace ::CORBA::Nirvana;
+using namespace ::Nirvana;
 
-bool Binder::is_section (const COFF::section* s, const char* name)
+bool Loader::is_section (const COFF::section* s, const char* name)
 {
 	const char* sn = s->Name;
 	char c;
@@ -27,7 +28,7 @@ bool Binder::is_section (const COFF::section* s, const char* name)
 		return true;
 }
 
-Binder::Binder ()
+Loader::Loader ()
 {
 	void* image_base = GetModuleHandleW (nullptr);
 	const COFF::DOSHeader* dos_header = (const COFF::DOSHeader*)image_base;
@@ -41,10 +42,10 @@ Binder::Binder ()
 	bind (image_base, (COFF::header*)(PE_magic + 1));
 }
 
-Binder::~Binder ()
+Loader::~Loader ()
 {}
 
-void Binder::bind (const void* image_base, const COFF::header* hdr)
+void Loader::bind (const void* image_base, const COFF::header* hdr)
 {
 	const COFF::section* metadata = nullptr;
 
@@ -62,7 +63,7 @@ void Binder::bind (const void* image_base, const COFF::header* hdr)
 	bind_olf ((const uint8_t*)image_base + metadata->VirtualAddress, metadata->VirtualSize);
 }
 
-void Binder::bind_olf (const void* data, size_t size)
+void Loader::bind_olf (const void* data, size_t size)
 {
 	DWORD protection;
 	VirtualProtect ((void*)data, size, PAGE_READWRITE, &protection);
@@ -161,6 +162,4 @@ void Binder::bind_olf (const void* data, size_t size)
 	VirtualProtect ((void*)data, size, protection, &protection);
 }
 
-}
-}
 }

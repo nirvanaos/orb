@@ -1,21 +1,18 @@
 #ifndef NIRVANA_TESTORB_LOADER_H_
 #define NIRVANA_TESTORB_LOADER_H_
 
-#include <CORBA/OLF.h>
-#include <CORBA/RepositoryId.h>
+#include <CORBA/CORBA.h>
 #include <llvm/BinaryFormat/COFF.h>
 #include <list>
 #include <map>
 
-namespace CORBA {
-namespace Nirvana {
-namespace OLF {
+namespace TestORB {
 
-class Binder
+class Loader
 {
 public:
-	Binder ();
-	~Binder ();
+	Loader ();
+	~Loader ();
 
 private:
 
@@ -23,15 +20,6 @@ private:
 	void bind_olf (const void* data, size_t size);
 
 	static bool is_section (const llvm::COFF::section* s, const char* name);
-
-	template <class I>
-	static T_ptr <I> get_interface (const ExportInterface& ei)
-	{
-		if (RepositoryId::compatible (ei.itf->_epv ().interface_id, Bridge <I>::interface_id_))
-			return static_cast <I*> (static_cast <Bridge <I>*> (ei.itf));
-		else
-			throw INV_OBJREF ();
-	}
 
 	class NameKey
 	{
@@ -52,12 +40,10 @@ private:
 	};
 
 private:
-	std::list <Interface_var> core_objects_;
-	std::map <NameKey, Interface_var> exported_interfaces_;
+	std::list <CORBA::Nirvana::Interface_var> core_objects_;
+	std::map <NameKey, CORBA::Nirvana::Interface_var> exported_interfaces_;
 };
 
-}
-}
 }
 
 #endif
