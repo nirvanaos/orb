@@ -6,17 +6,12 @@
 
 #define OLF_BIND "olfbind"
 
+#pragma section (OLF_BIND, read, execute)
+
 namespace CORBA {
 namespace Nirvana {
-namespace OLF {
 
-struct SectionHeader
-{
-	ULong type; //!< Section type
-	ULong size;	//!< Size of the section data (not including this header).
-};
-
-enum Command
+enum OLF_Command
 {
 	OLF_IMPORT_INTERFACE = 1,
 	OLF_EXPORT_INTERFACE = 2,
@@ -43,7 +38,7 @@ struct ExportLocal
 {
 	::Nirvana::Word command;
 	const Char* name;
-	Bridge <AbstractBase>* implementation;
+	BridgeMarshal <AbstractBase>* implementation;
 	Bridge <LocalObject>* core_object;
 };
 
@@ -55,7 +50,22 @@ struct ImportInterface
 	Bridge <Interface>* itf;
 };
 
-}
+template <class I>
+struct ImportInterfaceT
+{
+	ImportInterface imp;
+
+	operator T_ptr <I> () const
+	{
+		return static_cast <Bridge <I>*> (imp.itf);
+	}
+
+	I* operator -> () const
+	{
+		return static_cast <I*> (imp.itf);
+	}
+};
+
 }
 }
 

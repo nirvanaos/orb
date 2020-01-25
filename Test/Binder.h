@@ -24,11 +24,6 @@ private:
 
 	static bool is_section (const llvm::COFF::section* s, const char* name);
 
-	const SectionHeader* next_sibling (const SectionHeader* ps)
-	{
-		return (const SectionHeader*)((const uint8_t*)(ps + 1) + ps->size);
-	}
-
 	template <class I>
 	static T_ptr <I> get_interface (const ExportInterface& ei)
 	{

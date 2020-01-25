@@ -8,8 +8,6 @@
 #include "ServantStatic.h"
 #include <CORBA/OLF.h>
 
-#pragma section (OLF_BIND, read, execute)
-
 namespace CORBA {
 namespace Nirvana {
 
@@ -80,13 +78,12 @@ private:
 		return static_cast <PortableServer::ServantBase*> (export_struct_.core_object);
 	}
 
-	static __declspec (allocate(OLF_BIND)) const OLF::ExportObject export_struct_;
+	static __declspec (allocate(OLF_BIND)) const ExportObject export_struct_;
 };
 
 template <class S> __declspec (allocate(OLF_BIND))
-const OLF::ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_ { OLF::OLF_EXPORT_OBJECT, S::constant_name
-, reinterpret_cast <Bridge <PortableServer::ServantBase>*> (&InterfaceStaticBase <S, PortableServer::ServantBase>::bridge_)
-};
+const ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_ { OLF_EXPORT_OBJECT, S::constant_name
+, STATIC_BRIDGE (S, PortableServer::ServantBase) };
 
 //! Static implementation of LocalObject
 //! \tparam S Servant class.
@@ -145,13 +142,12 @@ private:
 		return LocalObject_ptr (static_cast <LocalObject*> (export_struct_.core_object));
 	}
 
-	static __declspec (allocate(OLF_BIND)) const OLF::ExportLocal export_struct_;
+	static __declspec (allocate(OLF_BIND)) const ExportLocal export_struct_;
 };
 
 template <class S> __declspec (allocate(OLF_BIND))
-const OLF::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ OLF::OLF_EXPORT_LOCAL, S::constant_name
-, reinterpret_cast <Bridge <AbstractBase>*> (&InterfaceStaticBase <S, AbstractBase>::bridge_)
-};
+const ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ OLF_EXPORT_LOCAL, S::constant_name
+, STATIC_BRIDGE (S, AbstractBase) };
 
 //! \class ImplementationPseudo
 //!

@@ -1,7 +1,8 @@
 #ifndef NIRVANA_ORB_LOCALMARSHAL_C_H_
 #define NIRVANA_ORB_LOCALMARSHAL_C_H_
 
-#include <CORBA/Object_c.h>
+#include "Object_c.h"
+#include "OLF.h"
 
 namespace CORBA {
 
@@ -126,10 +127,9 @@ protected:
 };
 
 class LocalMarshal : public ClientInterface <LocalMarshal>
-{
-public:
-	static LocalMarshal_ptr singleton ();
-};
+{};
+
+extern const ImportInterfaceT <LocalMarshal> g_local_marshal;
 
 }
 }

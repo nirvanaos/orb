@@ -5,6 +5,7 @@
 #include "ServantBase_c.h"
 #include "DynamicServant_c.h"
 #include "LocalObject_c.h"
+#include "OLF.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -86,15 +87,9 @@ ReferenceCounter_ptr Client <T, ObjectFactory>::create_reference_counter (Bridge
 }
 
 class ObjectFactory : public ClientInterface <ObjectFactory>
-{
-public:
-	static ObjectFactory_ptr singleton ()
-	{
-		return static_cast <ObjectFactory*> (singleton_);
-	}
+{};
 
-	static Bridge <ObjectFactory>* const singleton_;
-};
+extern const ImportInterfaceT <ObjectFactory> g_object_factory;
 
 }
 }

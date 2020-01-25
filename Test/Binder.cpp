@@ -1,5 +1,5 @@
 #include "Binder.h"
-#include <CORBA/ObjectFactory_c.h>
+#include "ObjectFactoryCore.h"
 #include <Nirvana/NirvanaBase.h>
 #include <Windows.h>
 
@@ -86,7 +86,7 @@ void Binder::bind_olf (const void* data, size_t size)
 
 			case OLF_EXPORT_OBJECT: {
 				ExportObject* ps = reinterpret_cast <ExportObject*> (p);
-				PortableServer::ServantBase_var core_obj = ObjectFactory::singleton ()->create_servant (ps->implementation, DynamicServant_ptr::nil ());
+				PortableServer::ServantBase_var core_obj = ObjectFactoryCore::create_servant (_unmarshal_in (ps->implementation), DynamicServant_ptr::nil ());
 				ps->core_object = core_obj;
 				Object_var proxy = Object::_duplicate (static_cast <Object*> (AbstractBase_ptr (core_obj)->_query_interface (Object::interface_id_)));
 				core_objects_.push_back (Interface_var (core_obj._retn ()));
@@ -97,7 +97,7 @@ void Binder::bind_olf (const void* data, size_t size)
 
 			case OLF_EXPORT_LOCAL: {
 				ExportLocal* ps = reinterpret_cast <ExportLocal*> (p);
-				LocalObject_var core_obj = ObjectFactory::singleton ()->create_local_object (ps->implementation, DynamicServant_ptr::nil ());
+				LocalObject_var core_obj = ObjectFactoryCore::create_local_object (_unmarshal_in (ps->implementation), DynamicServant_ptr::nil ());
 				ps->core_object = core_obj;
 				LocalObject_var proxy = LocalObject::_duplicate (static_cast <LocalObject*> (AbstractBase_ptr (Object_ptr (core_obj))->_query_interface (LocalObject::interface_id_)));
 				core_objects_.push_back (Interface_var (core_obj._retn ()));
@@ -149,7 +149,7 @@ void Binder::bind_olf (const void* data, size_t size)
 				break;
 
 			case OLF_EXPORT_OBJECT:
-				p += sizeof (ExportInterface) / sizeof (*p);
+				p += sizeof (ExportObject) / sizeof (*p);
 				break;
 
 			case OLF_EXPORT_LOCAL:

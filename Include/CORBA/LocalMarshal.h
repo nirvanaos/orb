@@ -26,7 +26,7 @@ void basic_string <C, T, allocator <C> >::_local_marshal (basic_string& dst) con
 	}
 	if (len > ABI::SMALL_CAPACITY) {
 		size_t cb = byte_size (len);
-		dst.large_pointer ((C*)CORBA::Nirvana::LocalMarshal::singleton ()->marshal_memory (p, cb));
+		dst.large_pointer ((C*)CORBA::Nirvana::g_local_marshal->marshal_memory (p, cb));
 		dst.large_size (len);
 		dst.allocated (cb);
 	} else {
@@ -41,7 +41,7 @@ void basic_string <C, T, allocator <C> >::_local_unmarshal ()
 	if (this->is_large ()) {
 		size_t cb = this->allocated ();
 		if (cb)
-			CORBA::Nirvana::LocalMarshal::singleton ()->adopt_memory (this->large_pointer (), cb);
+			CORBA::Nirvana::g_local_marshal->adopt_memory (this->large_pointer (), cb);
 		else
 			assign_internal (this->large_size (), this->large_pointer ());
 	}
@@ -97,11 +97,11 @@ struct MarshalTraits <std::vector < T, std::allocator <T> > >
 			dst.reset ();
 		else if (std::is_trivially_copyable <T> ()) {
 			dst.data_.allocated = (dst.data_.size = src.size ()) * sizeof (T);
-			dst.data_.ptr = (T*)LocalMarshal::singleton ()->marshal_memory (src.data (), dst.data_.allocated);
+			dst.data_.ptr = (T*)g_local_marshal->marshal_memory (src.data (), dst.data_.allocated);
 		} else {
 			size_t cb = src.size () * sizeof (T);
 			void* buf;
-			dst.data_.ptr = (T*)LocalMarshal::singleton ()->get_buffer (cb, buf);
+			dst.data_.ptr = (T*)g_local_marshal->get_buffer (cb, buf);
 			T* dp = (T*)buf;
 			const T* sp = src.data (), *end = sp + src.size ();
 			do {
@@ -114,7 +114,7 @@ struct MarshalTraits <std::vector < T, std::allocator <T> > >
 	{
 		if (!val.empty ()) {
 			if (val.data_.allocated)
-				LocalMarshal::singleton ()->adopt_memory (val.data_.ptr, val.data_.allocated);
+				g_local_marshal->adopt_memory (val.data_.ptr, val.data_.allocated);
 			else
 				val.data_.ptr = (T*)heap ()->copy (nullptr, val.data_.ptr, val.data_.allocated, 0);
 			if (!std::is_trivially_copyable <T> ()) {
