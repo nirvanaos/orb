@@ -1,7 +1,7 @@
 #ifndef IDL_TEST_I1_C_H_
 #define IDL_TEST_I1_C_H_
 
-#include <CORBA/Object_c.h>
+#include <CORBA/CORBA.h>
 
 namespace Test {
 

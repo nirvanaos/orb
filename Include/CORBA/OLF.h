@@ -1,8 +1,9 @@
 #ifndef NIRVANA_ORB_OLF_H_
 #define NIRVANA_ORB_OLF_H_
 
-#include <CORBA/ServantBase_c.h>
-#include <CORBA/LocalObject_c.h>
+#include <Nirvana/NirvanaBase.h>
+#include "ServantBase_c.h"
+#include "LocalObject_c.h"
 
 #define OLF_BIND "olfbind"
 

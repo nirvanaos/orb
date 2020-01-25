@@ -1,4 +1,5 @@
 #include "CORBA_EnvironmentServant.h"
+#include <string.h>
 
 namespace CORBA {
 namespace Nirvana {
