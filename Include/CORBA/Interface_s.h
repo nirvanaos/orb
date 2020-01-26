@@ -1,6 +1,7 @@
 #ifndef NIRVANA_ORB_INTERFACE_S_H_
 #define NIRVANA_ORB_INTERFACE_S_H_
 
+#include <Nirvana/NirvanaBase.h>
 #include "Object_c.h"
 #include "RepositoryId.h"
 #include "ServantImpl.h"
@@ -74,13 +75,17 @@ class InterfaceFinder
 public:
 	static Interface_ptr find (S& servant, const Char* id)
 	{
-		static const InterfaceEntry table [] = {
-			{ InterfaceId <Primary>::id (), cast <Primary> },
-			{ InterfaceId <I>::id (), cast <I> }...,
-		};
-
-		return Interface::unmarshal (InterfaceEntry::find (table, table + sizeof (table) / sizeof (*table), &servant, id));
+		return Interface::unmarshal (InterfaceEntry::find (itable_, itable_ + countof (itable_), &servant, id));
 	}
+
+private:
+	static const InterfaceEntry itable_ [];
+};
+
+template <class S, class Primary, class ... I>
+const InterfaceEntry InterfaceFinder <S, Primary, I...>::itable_ [] = {
+	{ InterfaceId <Primary>::id (), cast <Primary> },
+	{ InterfaceId <I>::id (), cast <I> }...,
 };
 
 template <class Primary, class ... I>

@@ -16,8 +16,8 @@ void _check_pointer (const Bridge <Interface>* obj, const Bridge <Interface>::EP
 		throw INV_OBJREF ();	// Invalid pointer
 }
 
-Bridge <Interface>* InterfaceEntry::find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const Char* id) {
-	
+Bridge <Interface>* InterfaceEntry::find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const Char* id)
+{
 	if (!id) // On NULL id return primary interface
 		return (begin->cast) (servant);
 
