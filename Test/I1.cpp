@@ -4,7 +4,9 @@ using namespace Test;
 
 namespace TestORB {
 
+#ifndef TEST_NO_STATIC
 const char StaticI1::constant_name[] = "Test/g_I1";
+#endif
 
 I1_ptr ImplI1::object_op (I1_ptr in_obj, I1_var& out_obj, I1_var& inout_obj)
 {

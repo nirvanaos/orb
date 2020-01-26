@@ -210,9 +210,6 @@ public:
 	{
 		return PortableServer::Servant_var <TiedDerivedI3> (new TiedDerivedI3 (MAGIC_CONST))->_this ();
 	}
-
-private:
-	Long addendum_;
 };
 
 #endif
