@@ -160,7 +160,7 @@ const ::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ :
 template <class S, class Primary, class ... Bases>
 class ImplementationStaticPseudo :
 	public ServantTraitsStatic <S>,
-	public LifeCycleStatic <>,
+	public LifeCycleStatic,
 	public InterfaceStaticBase <S, Bases> ...,
 	public InterfaceStaticBase <S, Primary>
 {
@@ -183,7 +183,7 @@ public:
 template <class S, class Primary, class ... Bases>
 class ImplementationStatic :
 	public ServantTraitsStatic <S>,
-	public LifeCycleStatic <>,
+	public LifeCycleStatic,
 	public InterfaceStatic <S, AbstractBase>,
 	public InterfaceStatic <S, Bases>...,
 	public InterfaceStatic <S, Primary>

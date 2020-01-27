@@ -68,14 +68,14 @@ class Environment :
 	public EnvironmentBase,
 	public InterfaceImpl <Environment, ::CORBA::Environment>,
 	public ServantTraits <Environment>,
-	public LifeCycleStatic <>
+	public LifeCycleStatic
 {};
 
 class EnvironmentEx :
 	public EnvironmentBase,
 	public InterfaceImpl <EnvironmentEx, ::CORBA::Environment>,
 	public ServantTraits <EnvironmentEx>,
-	public LifeCycleStatic <>
+	public LifeCycleStatic
 {
 public:
 	EnvironmentEx (const ExceptionEntry** user_exceptions) :

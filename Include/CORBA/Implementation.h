@@ -61,8 +61,8 @@ protected:
 
 //! Dynamic servant life cycle.
 //! \tparam S Class implementing `_duplicate()' and `_release()' operations.
-template <class S, class ... Bases>
-class LifeCycleDynamic : public Bases...
+template <class S>
+class LifeCycleDynamic
 {
 public:
 	template <class I>
@@ -89,9 +89,9 @@ public:
 };
 
 //! Life cycle with reference counting.
-template <class S, class ... Bases>
+template <class S>
 class LifeCycleRefCnt :
-	public LifeCycleDynamic <S, Bases...>
+	public LifeCycleDynamic <S>
 {
 public:
 	template <class I>
@@ -111,8 +111,8 @@ public:
 };
 
 //! Non copyable reference.
-template <class S, class ... Bases>
-class LifeCycleNoCopy : public Bases...
+template <class S>
+class LifeCycleNoCopy
 {
 public:
 	template <class I>

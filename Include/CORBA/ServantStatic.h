@@ -34,8 +34,7 @@ public:
 	}
 };
 
-template <class ... Bases>
-class LifeCycleStatic : public Bases...
+class LifeCycleStatic
 {
 public:
 	template <class I>
