@@ -5,6 +5,7 @@
 #define NIRVANA_ORB_IMPLEMENTATIONPOA_H_
 
 #include "Implementation.h"
+#include <string.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -231,6 +232,11 @@ class ImplementationPOA :
 public:
 	virtual Interface_ptr _query_interface (const Char* id)
 	{
+#ifdef _DEBUG
+		Bridge <AbstractBase>* ab = this;
+		const Bridge <AbstractBase>::EPV& epv = ab->_epv ();
+		assert (!strcmp (epv.interface.interface_id, Bridge <AbstractBase>::interface_id_));
+#endif
 		return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
 	}
 

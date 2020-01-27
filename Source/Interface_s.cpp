@@ -33,6 +33,7 @@ Bridge <Interface>* InterfaceEntry::find (const InterfaceEntry* begin, const Int
 	if (ie) {
 		Bridge <Interface>* itf = (ie->cast) (servant);
 		assert (!strcmp (itf->_epv ().interface_id, ie->interface_id));
+		return itf;
 	} else
 		return nullptr;
 }
