@@ -169,8 +169,8 @@ class TiedDerivedI1 :
 {
 public:
 	TiedDerivedI1 (Long addendum) :
-		TiedI1 (addendum),
-		POA_Test::I1_tie <TiedI1> (static_cast <TiedI1&> (*this))
+		POA_Test::I1_tie <TiedI1> (static_cast <TiedI1&> (*this)),
+		TiedI1 (addendum)
 	{}
 
 	static ::Test::I1_ptr incarnate ()

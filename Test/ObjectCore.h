@@ -17,8 +17,8 @@ public:
 	ObjectCore (PortableServer::Servant servant) :
 		ObjectImpl <ObjectCore> (servant),
 		servant_ (servant),
-		reference_counter_ (servant),
-		is_active_ (false)
+		is_active_ (false),
+		reference_counter_ (servant)
 	{}
 
 	bool is_active_;

@@ -123,7 +123,7 @@ protected:
 	}
 };
 
-TYPED_TEST_CASE (TestORB_I1, ServantTypesI1);
+TYPED_TEST_SUITE (TestORB_I1, ServantTypesI1);
 
 TYPED_TEST (TestORB_I1, Inteface)
 {
@@ -186,7 +186,7 @@ protected:
 	}
 };
 
-TYPED_TEST_CASE (TestORB_I3, ServantTypesI3);
+TYPED_TEST_SUITE (TestORB_I3, ServantTypesI3);
 
 TYPED_TEST (TestORB_I3, Inteface)
 {

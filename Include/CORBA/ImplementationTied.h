@@ -17,26 +17,26 @@ class ServantTied :
 public:
 	ServantTied (T& t) :
 		ptr_ (&t),
-		poa_ (::PortableServer::POA::_nil ()),
-		rel_ (false)
+		rel_ (false),
+		poa_ (::PortableServer::POA::_nil ())
 	{}
 
 	ServantTied (T& t, ::PortableServer::POA_ptr poa) :
 		ptr_ (&t),
-		poa_ (::PortableServer::POA::_duplicate (poa)),
-		rel_ (false)
+		rel_ (false),
+		poa_ (::PortableServer::POA::_duplicate (poa))
 	{}
 
 	ServantTied (T* tp, Boolean release = true) :
 		ptr_ (tp),
-		poa_ (::PortableServer::POA::_nil ()),
-		rel_ (release)
+		rel_ (release),
+		poa_ (::PortableServer::POA::_nil ())
 	{}
 
 	ServantTied (T* tp, ::PortableServer::POA_ptr poa, Boolean release = true) :
 		ptr_ (tp),
-		poa_ (poa),
-		rel_ (release)
+		rel_ (release),
+		poa_ (poa)
 	{}
 
 	virtual ~ServantTied ()

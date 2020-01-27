@@ -20,8 +20,8 @@ public:
 	}
 
 	ServantCore (PortableServer::Servant servant, DynamicServant_ptr dynamic) :
-		object_ (servant),
-		ReferenceCounterBase (dynamic)
+		ReferenceCounterBase (dynamic),
+		object_ (servant)
 	{}
 
 	operator Bridge <Object>& ()
