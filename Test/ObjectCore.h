@@ -16,8 +16,8 @@ class ObjectCore :
 public:
 	ObjectCore (PortableServer::Servant servant) :
 		ObjectImpl <ObjectCore> (servant),
-		servant_ (servant),
 		is_active_ (false),
+		servant_ (servant),
 		reference_counter_ (servant)
 	{}
 
