@@ -85,7 +85,7 @@ private:
 template <class S, class Primary, class ... I>
 const InterfaceEntry InterfaceFinder <S, Primary, I...>::itable_ [] = {
 	{ InterfaceId <Primary>::id (), cast <Primary> },
-	{ InterfaceId <I>::id (), cast <I> }...,
+	{ InterfaceId <I>::id (), cast <I> }...
 };
 
 template <class Primary, class ... I>
