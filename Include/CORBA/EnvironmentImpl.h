@@ -71,10 +71,11 @@ class Environment :
 	public LifeCycleStatic
 {};
 
+template <class ... Exceptions>
 class EnvironmentEx :
 	public EnvironmentBase,
-	public InterfaceImpl <EnvironmentEx, ::CORBA::Environment>,
-	public ServantTraits <EnvironmentEx>,
+	public InterfaceImpl <EnvironmentEx <Exceptions...>, ::CORBA::Environment>,
+	public ServantTraits <EnvironmentEx <Exceptions...>>,
 	public LifeCycleStatic
 {
 public:
@@ -84,11 +85,17 @@ public:
 
 	void exception_set (Long code, const char* rep_id, const void* param)
 	{
-		EnvironmentBase::exception_set (code, rep_id, param, user_exceptions_);
+		EnvironmentBase::exception_set (code, rep_id, param, &user_exceptions_);
 	}
 
 private:
-	const ExceptionEntry* const* user_exceptions_;
+	static const ExceptionEntry user_exceptions_ [];
+};
+
+template <class ... Exceptions>
+const ExceptionEntry EnvironmentEx <Exceptions...>::user_exceptions_[] = {
+	{ Exceptions::repository_id_, Exceptions::_create }...,
+	{0}
 };
 
 }

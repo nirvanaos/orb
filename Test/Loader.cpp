@@ -122,15 +122,15 @@ void Loader::bind_olf (const void* data, size_t size)
 					if (pf != exported_interfaces_.end ()) {
 						Bridge <Interface>* itf = pf->second;
 						const Char* itf_id = itf->_epv ().interface_id;
-						if (RepositoryId::compatible (itf_id, ps->interface_id))
+						if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, ps->interface_id))
 							ps->itf = itf;
 						else {
 							AbstractBase_ptr ab = AbstractBase::_nil ();
-							if (RepositoryId::compatible (itf_id, AbstractBase::interface_id_))
+							if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, AbstractBase::interface_id_))
 								ab = static_cast <AbstractBase*> (itf);
-							else if (RepositoryId::compatible (itf_id, Object::interface_id_))
+							else if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, Object::interface_id_))
 								ab = Object_ptr (static_cast <Object*> (itf));
-							else if (RepositoryId::compatible (itf_id, LocalObject::interface_id_))
+							else if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, LocalObject::interface_id_))
 								ab = Object_ptr (LocalObject_ptr (static_cast <LocalObject*> (itf)));
 							else
 								throw INV_OBJREF ();

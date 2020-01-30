@@ -6,11 +6,50 @@
 
 #include "BasicTypes.h"
 
+#define DEFINE_EXCEPTION(e, rep_id)\
+void e::raise () const { throw *this; }\
+const char e::repository_id_ [] = rep_id;\
+const char* e::_rep_id () const { return rep_id; }\
+Exception* e::__clone () const { return new e (*this); }\
+Exception* e::_create (const void* data) { return new e ((Data*)data); }
+
+#define DEFINE_USER_EXCEPTION(e, rep_id)\
+const e* e::_downcast (const Exception* ep) { return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), rep_id)) ? static_cast <const e*> (ep) : nullptr; }\
+DEFINE_EXCEPTION(e, rep_id)
+
+#define OMGVMCID 0x4f4d0000
+#define MAKE_MINOR(vmcid, c) (vmcid | c)
+#define MAKE_OMG_MINOR(c) (MAKE_MINOR (OMGVMCID, c))
+
+#define DECLARE_EXCEPTION(e) \
+virtual void raise () const;\
+virtual const char* _name () const { return #e; }\
+virtual const char* _rep_id () const;\
+static const char repository_id_[];\
+virtual Exception* __clone () const;\
+static const e* _downcast (const Exception* ep);\
+static e* _downcast (Exception* ep) { return const_cast <e*> (_downcast ((const Exception*)ep)); }\
+static const e* _narrow (const Exception* ep) { return _downcast (ep); }\
+static e* _narrow (Exception* ep) { return _downcast (ep); }\
+static Exception* _create (const void* data);
+
+#define DECLARE_SYSTEM_EXCEPTION(e) class e : public SystemException {\
+public: e () {}\
+e (ULong minor, CompletionStatus status = COMPLETED_NO) : SystemException (minor, status) {}\
+e (const Data* data) : SystemException (data) {}\
+virtual Long __code () const;\
+DECLARE_EXCEPTION(e)\
+};
+
+#define EX_TABLE_ENTRY(e) { e::repository_id_, e::_create }
+
 namespace CORBA {
 
 class Exception
 {
 public:
+	typedef void Data;
+
 	virtual ~Exception ()
 	{}
 	virtual void raise () const = 0;
@@ -200,22 +239,6 @@ private:
 	static const Nirvana::ExceptionEntry creators_ [KNOWN_SYSTEM_EXCEPTIONS];
 };
 
-#define DECLARE_SYSTEM_EXCEPTION(e) class e : public SystemException {\
-public: e () {}\
-e (ULong minor, CompletionStatus status = COMPLETED_NO) : SystemException (minor, status) {}\
-e (const Data* data) : SystemException (data) {}\
-virtual void raise () const;\
-virtual const char* _name () const;\
-virtual const char* _rep_id () const;\
-virtual Long __code () const;\
-virtual Exception* __clone () const;\
-static const e* _downcast (const Exception* ep);\
-static e* _downcast (Exception* ep) { return const_cast <e*> (_downcast ((const Exception*)ep)); }\
-static const e* _narrow (const Exception* ep) { return _downcast (ep); }\
-static e* _narrow (Exception* ep) { return _downcast (ep); }\
-static Exception* _create (const void* data);\
-};
-
 DECLARE_SYSTEM_EXCEPTION (UNKNOWN) // the unknown exception
 DECLARE_SYSTEM_EXCEPTION (BAD_PARAM) // an invalid parameter was passed
 DECLARE_SYSTEM_EXCEPTION (NO_MEMORY) // dynamic memory allocation failure
@@ -257,10 +280,6 @@ DECLARE_SYSTEM_EXCEPTION (MEM_NOT_COMMITTED) // memory is not committed
 DECLARE_SYSTEM_EXCEPTION (MEM_NOT_ALLOCATED) // memory is not allocated
 
 #undef DECLARE_SYSTEM_EXCEPTION
-
-#define OMGVMCID 0x4f4d0000
-#define MAKE_MINOR(vmcid, c) (vmcid | c)
-#define MAKE_OMG_MINOR(c) (MAKE_MINOR (OMGVMCID, c))
 
 class UserException : public Exception
 {

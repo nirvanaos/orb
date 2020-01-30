@@ -49,6 +49,9 @@ typedef Long Flags;
 #define TRUE 1
 #endif
 
+typedef const char* RepositoryId;
+typedef const char* Identifier;
+
 } // namespace CORBA
 
 #endif

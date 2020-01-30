@@ -52,7 +52,7 @@ protected:
 		} catch (...) {
 			_env->set_unknown_exception ();
 		}
-		return ::Test::I1::_nil ();
+		return 0;
 	}
 
 	static StringABI <char> _string_op (Bridge < ::Test::I1>* _b, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge* _env)

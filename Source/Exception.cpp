@@ -1,19 +1,14 @@
 #include <CORBA/Exception.h>
 #include <CORBA/RepositoryId.h>
 
-#define DEFINE_EXCEPTION(MID, e)\
-void e::raise () const { throw *this; }\
-const char* e::_name () const { return #e; }\
-const char* e::_rep_id () const { return MID (e); }\
+#define DEFINE_SYS_EXCEPTION(MID, e)\
 Long e::__code () const { return EC_##e; }\
-Exception* e::__clone () const { return new e (*this); }\
-const e* e::_downcast (const Exception* ep) { return (ep && (EC_##e == ep->__code ())) ? static_cast <const e*> (ep) : 0; }\
-Exception* e::_create (const void* data) { return new e ((Data*)data); }
+const e* e::_downcast (const Exception* ep) { return (ep && (EC_##e == ep->__code ())) ? static_cast <const e*> (ep) : nullptr; }\
+DEFINE_EXCEPTION(e, MID (e))
 
-#define DEFINE_SYSTEM_EXCEPTION(e) DEFINE_EXCEPTION(CORBA_REPOSITORY_ID, e)
-#define DEFINE_NIRVANA_EXCEPTION(e) DEFINE_EXCEPTION(NIRVANA_REPOSITORY_ID, e)
 
-#define EX_TABLE_ENTRY(e) { CORBA_REPOSITORY_ID (e), e::_create }
+#define DEFINE_SYSTEM_EXCEPTION(e) DEFINE_SYS_EXCEPTION(CORBA_REPOSITORY_ID, e)
+#define DEFINE_NIRVANA_EXCEPTION(e) DEFINE_SYS_EXCEPTION(NIRVANA_REPOSITORY_ID, e)
 
 namespace CORBA {
 
