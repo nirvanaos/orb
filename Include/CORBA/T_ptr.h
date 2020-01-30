@@ -43,7 +43,8 @@ public:
 
 	I* operator -> () const
 	{
-		assert (p_);
+		if (!p_)
+			throw INV_OBJREF ();
 		return p_;
 	}
 
