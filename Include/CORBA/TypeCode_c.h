@@ -213,7 +213,7 @@ TCKind Client <T, TypeCode>::kind ()
 template <class T>
 const char* Client <T, TypeCode>::id ()
 {
-	EnvironmentEx <TypeCode::BadKind>_env;
+	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	const char* _ret = (_b._epv ().epv.id) (&_b, &_env);
 	_env.check ();
@@ -223,7 +223,7 @@ const char* Client <T, TypeCode>::id ()
 template <class T>
 const char* Client <T, TypeCode>::name ()
 {
-	EnvironmentEx <TypeCode::BadKind>_env;
+	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	const char* _ret = (_b._epv ().epv.name) (&_b, &_env);
 	_env.check ();
@@ -233,7 +233,7 @@ const char* Client <T, TypeCode>::name ()
 template <class T>
 ULong Client <T, TypeCode>::member_count ()
 {
-	EnvironmentEx <TypeCode::BadKind>_env;
+	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	ULong _ret = (_b._epv ().epv.member_count) (&_b, &_env);
 	_env.check ();
@@ -243,7 +243,7 @@ ULong Client <T, TypeCode>::member_count ()
 template <class T>
 const char* Client <T, TypeCode>::member_name (ULong index)
 {
-	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds>_env;
+	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	const char* _ret = (_b._epv ().epv.member_name) (&_b, index, &_env);
 	_env.check ();
@@ -253,7 +253,7 @@ const char* Client <T, TypeCode>::member_name (ULong index)
 template <class T>
 TypeCode Client <T, TypeCode>::member_type (ULong index)
 {
-	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds>_env;
+	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	TypeCode _ret = (_b._epv ().epv.member_type) (&_b, index, &_env);
 	_env.check ();
@@ -263,7 +263,7 @@ TypeCode Client <T, TypeCode>::member_type (ULong index)
 template <class T>
 TypeCode Client <T, TypeCode>::discriminator_type ()
 {
-	EnvironmentEx <TypeCode::BadKind>_env;
+	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	TypeCode _ret = (_b._epv ().epv.discriminator_type) (&_b, &_env);
 	_env.check ();
@@ -273,7 +273,7 @@ TypeCode Client <T, TypeCode>::discriminator_type ()
 template <class T>
 Long Client <T, TypeCode>::default_index ()
 {
-	EnvironmentEx <TypeCode::BadKind>_env;
+	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	Long _ret = (_b._epv ().epv.default_index) (&_b, &_env);
 	_env.check ();
@@ -283,7 +283,7 @@ Long Client <T, TypeCode>::default_index ()
 template <class T>
 ULong Client <T, TypeCode>::length ()
 {
-	EnvironmentEx <TypeCode::BadKind>_env;
+	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	ULong _ret = (_b._epv ().epv.length) (&_b, &_env);
 	_env.check ();
@@ -293,7 +293,7 @@ ULong Client <T, TypeCode>::length ()
 template <class T>
 TypeCode Client <T, TypeCode>::content_type ()
 {
-	EnvironmentEx <TypeCode::BadKind>_env;
+	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	TypeCode _ret = (_b._epv ().epv.content_type) (&_b, &_env);
 	_env.check ();
@@ -303,7 +303,7 @@ TypeCode Client <T, TypeCode>::content_type ()
 template <class T>
 UShort Client <T, TypeCode>::fixed_digits ()
 {
-	EnvironmentEx <TypeCode::BadKind>_env;
+	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	UShort _ret = (_b._epv ().epv.fixed_digits) (&_b, &_env);
 	_env.check ();
@@ -313,7 +313,7 @@ UShort Client <T, TypeCode>::fixed_digits ()
 template <class T>
 Short Client <T, TypeCode>::fixed_scale ()
 {
-	EnvironmentEx <TypeCode::BadKind>_env;
+	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	Short _ret = (_b._epv ().epv.fixed_scale) (&_b, &_env);
 	_env.check ();
@@ -323,7 +323,7 @@ Short Client <T, TypeCode>::fixed_scale ()
 template <class T>
 Visibility Client <T, TypeCode>::member_visibility (ULong index)
 {
-	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds>_env;
+	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	Visibility _ret = (_b._epv ().epv.member_visibility) (&_b, index, &_env);
 	_env.check ();
@@ -333,7 +333,7 @@ Visibility Client <T, TypeCode>::member_visibility (ULong index)
 template <class T>
 ValueModifier Client <T, TypeCode>::type_modifier ()
 {
-	EnvironmentEx <TypeCode::BadKind>_env;
+	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	ValueModifier _ret = (_b._epv ().epv.type_modifier) (&_b, &_env);
 	_env.check ();
@@ -343,7 +343,7 @@ ValueModifier Client <T, TypeCode>::type_modifier ()
 template <class T>
 TypeCode Client <T, TypeCode>::concrete_base_type ()
 {
-	EnvironmentEx <TypeCode::BadKind>_env;
+	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	TypeCode _ret = (_b._epv ().epv.concrete_base_type) (&_b, &_env);
 	_env.check ();

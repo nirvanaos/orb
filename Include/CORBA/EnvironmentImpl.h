@@ -79,13 +79,9 @@ class EnvironmentEx :
 	public LifeCycleStatic
 {
 public:
-	EnvironmentEx (const ExceptionEntry** user_exceptions) :
-		user_exceptions_ (user_exceptions)
-	{}
-
 	void exception_set (Long code, const char* rep_id, const void* param)
 	{
-		EnvironmentBase::exception_set (code, rep_id, param, &user_exceptions_);
+		EnvironmentBase::exception_set (code, rep_id, param, user_exceptions_);
 	}
 
 private:
@@ -93,7 +89,7 @@ private:
 };
 
 template <class ... Exceptions>
-const ExceptionEntry EnvironmentEx <Exceptions...>::user_exceptions_[] = {
+const ExceptionEntry EnvironmentEx <Exceptions...>::user_exceptions_ [] = {
 	{ Exceptions::repository_id_, Exceptions::_create }...,
 	{0}
 };

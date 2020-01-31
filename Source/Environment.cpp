@@ -27,7 +27,7 @@ void BridgeMarshal < ::CORBA::Environment>::set_unknown_exception ()
 }
 
 void EnvironmentBase::exception_set (Long code, const char* rep_id, const void* param, 
-	const Nirvana::ExceptionEntry* const* user_exceptions)
+	const ExceptionEntry* user_exceptions)
 {
 	exception_free ();
 	if (rep_id) {
@@ -36,9 +36,9 @@ void EnvironmentBase::exception_set (Long code, const char* rep_id, const void* 
 			if (code >= 0)
 				e = SystemException::_create (rep_id, param, code);
 			else if (user_exceptions) {
-				for (const ExceptionEntry* const* p = user_exceptions; *p; ++p)
-					if (RepositoryId::compatible ((*p)->rep_id, rep_id)) {
-						e = ((*p)->create) (param);
+				for (const ExceptionEntry* p = user_exceptions; p->rep_id; ++p)
+					if (RepositoryId::compatible (p->rep_id, rep_id)) {
+						e = (p->create) (param);
 						break;
 					}
 				if (!e)
