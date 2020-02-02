@@ -9,8 +9,7 @@ const Char Bridge < ::CORBA::Environment>::interface_id_ [] = CORBA_REPOSITORY_I
 
 void BridgeMarshal < ::CORBA::Environment>::set_exception (Long code, const char* rep_id, const void* param)
 {
-	// Client can pass NULL environment in special cases, so we check this for NULL
-	if (this && RepositoryId::compatible (_epv ().interface_id, Bridge < ::CORBA::Environment>::interface_id_)) {
+	if (RepositoryId::compatible (_epv ().interface_id, Bridge < ::CORBA::Environment>::interface_id_)) {
 		Bridge < ::CORBA::Environment>* b = &static_cast <Bridge < ::CORBA::Environment>&> (*this);
 		(b->_epv ().epv.exception_set) (b, code, rep_id, param);
 	}

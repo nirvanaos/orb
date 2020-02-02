@@ -69,20 +69,24 @@ class Environment :
 	public InterfaceImpl <Environment, ::CORBA::Environment>,
 	public ServantTraits <Environment>,
 	public LifeCycleStatic
-{};
+{
+public:
+	Environment (const ExceptionEntry* user_exceptions = nullptr) :
+		user_exceptions_ (user_exceptions)
+	{}
+
+private:
+	const ExceptionEntry* user_exceptions_;
+};
 
 template <class ... Exceptions>
 class EnvironmentEx :
-	public EnvironmentBase,
-	public InterfaceImpl <EnvironmentEx <Exceptions...>, ::CORBA::Environment>,
-	public ServantTraits <EnvironmentEx <Exceptions...>>,
-	public LifeCycleStatic
+	public Environment
 {
 public:
-	void exception_set (Long code, const char* rep_id, const void* param)
-	{
-		EnvironmentBase::exception_set (code, rep_id, param, user_exceptions_);
-	}
+	EnvironmentEx () :
+		Environment (user_exceptions_)
+	{}
 
 private:
 	static const ExceptionEntry user_exceptions_ [];

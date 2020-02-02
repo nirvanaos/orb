@@ -165,7 +165,7 @@ class ImplementationStaticPseudo :
 	public InterfaceStaticBase <S, Primary>
 {
 public:
-	static T_ptr <Primary> _get_ptr ()
+	constexpr static Primary* _get_ptr ()
 	{
 		return static_cast <Primary*> (InterfaceStaticBase <S, Primary>::_bridge ());
 	}

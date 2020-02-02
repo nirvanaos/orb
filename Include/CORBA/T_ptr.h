@@ -14,10 +14,10 @@ class T_ptr
 	T_ptr (Bridge <I>* p) = delete;
 
 public:
-	T_ptr ()
+	constexpr T_ptr ()
 	{} // Zero init skipped for performance
 
-	T_ptr (I* p) :
+	constexpr T_ptr (I* p) :
 		p_ (p)
 	{}
 
@@ -63,6 +63,22 @@ private:
 
 private:
 	I* p_;
+};
+
+template <class I>
+struct StaticInterface
+{
+	Bridge <I>* itf;
+
+	operator CORBA::Nirvana::T_ptr <I> () const
+	{
+		return static_cast <I*> (itf);
+	}
+
+	I* operator -> () const
+	{
+		return static_cast <I*> (itf);
+	}
 };
 
 }

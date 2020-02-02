@@ -1,6 +1,7 @@
 #ifndef NIRVANA_ORB_ANY_H_
 #define NIRVANA_ORB_ANY_H_
 
+#include "TypeCode.h"
 #include "Fixed.h"
 
 namespace CORBA {
@@ -71,13 +72,13 @@ public:
 		UShort digits;
 		UShort scale;
 	};
-	void operator<<=(from_boolean);
-	void operator<<=(from_char);
-	void operator<<=(from_wchar);
-	void operator<<=(from_octet);
-	void operator<<=(from_string);
-	void operator<<=(from_wstring);
-	void operator<<=(from_fixed);
+	void operator <<= (from_boolean);
+	void operator <<= (from_char);
+	void operator <<= (from_wchar);
+	void operator <<= (from_octet);
+	void operator <<= (from_string);
+	void operator <<= (from_wstring);
+	void operator <<= (from_fixed);
 
 	// special helper types needed for boolean, octet,
 	// char, and bounded string extraction
@@ -137,21 +138,32 @@ public:
 		UShort digits;
 		UShort scale;
 	};
-	Boolean operator>>=(to_boolean) const;
-	Boolean operator>>=(to_char) const;
-	Boolean operator>>=(to_wchar) const;
-	Boolean operator>>=(to_octet) const;
-	Boolean operator>>=(to_string) const;
-	Boolean operator>>=(to_wstring) const;
-	Boolean operator>>=(to_fixed) const;
+
+	Boolean operator >>= (to_boolean) const;
+	Boolean operator >>= (to_char) const;
+	Boolean operator >>= (to_wchar) const;
+	Boolean operator >>= (to_octet) const;
+	Boolean operator >>= (to_string) const;
+	Boolean operator >>= (to_wstring) const;
+	Boolean operator >>= (to_fixed) const;
 
 	// other public Any details omitted
 private:
 	// these functions are private and not implemented
 	// hiding these causes compile-time errors for
 	// unsigned char
-	void operator<<=(unsigned char);
-	Boolean operator>>=(unsigned char &) const;
+	void operator <<= (unsigned char);
+	Boolean operator >>= (unsigned char &) const;
+
+private:
+	uintptr_t type_code_;
+
+	struct Data
+	{
+		uintptr_t p;
+		size_t size;
+		size_t padding;
+	} data_;
 };
 
 }
