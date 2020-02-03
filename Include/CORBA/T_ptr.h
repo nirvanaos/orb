@@ -8,15 +8,12 @@
 namespace CORBA {
 namespace Nirvana {
 
-class PtrExceptions
-{
-protected:
-	NIRVANA_NORETURN static void throw_INV_OBJREF ();
-};
+NIRVANA_NORETURN void throw_INV_OBJREF ();
+NIRVANA_NORETURN void throw_MARSHAL ();
 
 //! Interface pointer template.
 template <class I>
-class T_ptr : public PtrExceptions
+class T_ptr
 {
 	T_ptr (Bridge <I>* p) = delete;
 

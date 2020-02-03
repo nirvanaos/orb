@@ -36,7 +36,7 @@ public:
 	{
 		try {
 			if (!RepositoryId::compatible (Bridge <Base>::interface_id_, id))
-				throw MARSHAL ();
+				throw_MARSHAL ();
 			return &static_cast <Bridge <Base>&> (S::_implementation (derived));
 		} catch (const Exception& e) {
 			env->set_exception (e);

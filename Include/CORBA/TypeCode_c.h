@@ -8,8 +8,6 @@ namespace CORBA {
 
 class Any;
 
-class TypeCode;
-typedef Nirvana::T_ptr <TypeCode> TypeCode_ptr;
 typedef Nirvana::T_var <TypeCode> TypeCode_var;
 typedef Nirvana::T_out <TypeCode> TypeCode_out;
 typedef Nirvana::T_inout <TypeCode> TypeCode_inout;

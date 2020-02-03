@@ -64,7 +64,7 @@ public:
 	Interface* operator -> () const
 	{
 		if (!p_)
-			throw INV_OBJREF ();
+			throw_INV_OBJREF ();
 		return p_;
 	}
 
@@ -314,7 +314,7 @@ T_var <I>& _unmarshal_out (BridgeMarshal <I>** bridge)
 {
 	_check_pointer (bridge);
 	if (*bridge)
-		throw CORBA::MARSHAL ();
+		throw_MARSHAL ();
 	return reinterpret_cast <T_var <I>&> (*bridge);
 }
 
@@ -390,7 +390,7 @@ protected:
 	{
 		Bridge <Base>* ret = _get_bridge_ptr (env);
 		if (!ret)
-			throw MARSHAL ();
+			throw_INV_OBJREF ();
 		return *ret;
 	}
 };
