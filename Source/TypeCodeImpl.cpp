@@ -3,12 +3,12 @@
 namespace CORBA {
 namespace Nirvana {
 
-NIRVANA_NORETURN void TypeCodeBase::throw_bad_kind ()
+NIRVANA_NORETURN void TypeCodeBase::throw_BadKind ()
 {
 	throw TypeCode::BadKind ();
 }
 
-NIRVANA_NORETURN void TypeCodeBase::throw_bounds ()
+NIRVANA_NORETURN void TypeCodeBase::throw_Bounds ()
 {
 	throw TypeCode::Bounds ();
 }
@@ -32,7 +32,4 @@ Boolean TypeCodeBase::equivalent (TCKind tk, TypeCode_ptr other)
 }
 
 }
-
-const Nirvana::StaticInterface <TypeCode> _tc_boolean = { STATIC_BRIDGE (Nirvana::TypeCodeBasicType <tk_boolean>, TypeCode) };
-
 }

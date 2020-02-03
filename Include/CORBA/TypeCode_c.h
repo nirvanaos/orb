@@ -166,18 +166,6 @@ public:
 class TypeCode : public ::CORBA::Nirvana::ClientInterface <TypeCode>
 {
 public:
-	class Bounds : public UserException
-	{
-	public:
-		DECLARE_EXCEPTION (Bounds);
-
-		Bounds ()
-		{}
-
-		Bounds (const void*)
-		{}
-	};
-
 	class BadKind : public UserException
 	{
 	public:
@@ -186,9 +174,25 @@ public:
 		BadKind ()
 		{}
 
-		BadKind (const void*)
+		BadKind (const Data*)
 		{}
 	};
+
+	static const Nirvana::StaticInterface <TypeCode> _tc_BadKind;
+
+	class Bounds : public UserException
+	{
+	public:
+		DECLARE_EXCEPTION (Bounds);
+
+		Bounds ()
+		{}
+
+		Bounds (const Data*)
+		{}
+	};
+
+	static const Nirvana::StaticInterface <TypeCode> _tc_Bounds;
 };
 
 namespace Nirvana {
