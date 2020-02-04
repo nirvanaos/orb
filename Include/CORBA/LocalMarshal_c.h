@@ -2,7 +2,8 @@
 #define NIRVANA_ORB_LOCALMARSHAL_C_H_
 
 #include "Object_c.h"
-#include "OLF.h"
+#include "TypeCode_c.h"
+#include <Nirvana/OLF.h>
 
 namespace CORBA {
 
@@ -81,11 +82,13 @@ public:
 
 	void adopt_memory (void* p, size_t size);
 	uintptr_t marshal_object (Object_ptr);
-	Interface_ptr unmarshal_interface (const void* marshal_data, const Char* interface_id, EnvironmentBridge*);
+	Interface_ptr unmarshal_interface (const void* marshal_data, const Char* interface_id);
+	uintptr_t marshal_type_code (TypeCode_ptr);
+	TypeCode_ptr unmarshal_type_code (const void* marshal_data);
 	void release_message ();
 	void post_call (uintptr_t target_object, OperationIndex operation);
 	void post_return (uintptr_t return_object);
-	void post_exception (uintptr_t return_object, const Exception*, EnvironmentBridge*);
+	void post_exception (uintptr_t return_object, const Exception*);
 };
 
 template <>
@@ -105,6 +108,8 @@ public:
 			void (*adopt_memory) (Bridge <LocalMarshal>*, void* p, size_t size, EnvironmentBridge*);
 			uintptr_t (*marshal_object) (Bridge <LocalMarshal>*, BridgeMarshal <Object>*, EnvironmentBridge*);
 			Bridge <Interface>* (*unmarshal_interface) (Bridge <LocalMarshal>*, const void*, const Char*, EnvironmentBridge*);
+			uintptr_t (*marshal_type_code) (Bridge <LocalMarshal>*, BridgeMarshal <TypeCode>*, EnvironmentBridge*);
+			BridgeMarshal <TypeCode>* (*unmarshal_type_code) (Bridge <LocalMarshal>*, const void*, EnvironmentBridge*);
 			void (*release_message) (Bridge <LocalMarshal>*, EnvironmentBridge*);
 			void (*post_call) (Bridge <LocalMarshal>*, uintptr_t target_object, OperationIndex operation, EnvironmentBridge*);
 			void (*post_return) (Bridge <LocalMarshal>*, uintptr_t return_object, EnvironmentBridge*);
@@ -129,7 +134,7 @@ protected:
 class LocalMarshal : public ClientInterface <LocalMarshal>
 {};
 
-extern const ImportInterfaceT <LocalMarshal> g_local_marshal;
+extern const ::Nirvana::ImportInterfaceT <LocalMarshal> g_local_marshal;
 
 }
 }

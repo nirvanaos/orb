@@ -297,6 +297,39 @@ protected:
 			_env->set_unknown_exception ();
 		}
 	}
+
+	static void __local_marshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
+	{
+		try {
+			S::_implementation (_b)._local_marshal (src, dst);
+		} catch (const Exception & e) {
+			_env->set_exception (e);
+		} catch (...) {
+			_env->set_unknown_exception ();
+		}
+	}
+
+	static void __local_unmarshal_in (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
+	{
+		try {
+			S::_implementation (_b)._local_unmarshal_in (val);
+		} catch (const Exception & e) {
+			_env->set_exception (e);
+		} catch (...) {
+			_env->set_unknown_exception ();
+		}
+	}
+
+	static void __local_unmarshal_inout (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
+	{
+		try {
+			S::_implementation (_b)._local_unmarshal_inout (val);
+		} catch (const Exception & e) {
+			_env->set_exception (e);
+		} catch (...) {
+			_env->set_unknown_exception ();
+		}
+	}
 };
 
 template <class S>
@@ -330,7 +363,10 @@ const Bridge <TypeCode>::EPV Skeleton <S, TypeCode>::epv_ = {
 		S::__construct,
 		S::__destruct,
 		S::__copy,
-		S::__move
+		S::__move,
+		S::__local_marshal,
+		S::__local_unmarshal_in,
+		S::__local_unmarshal_inout
 	}
 };
 

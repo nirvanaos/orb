@@ -6,21 +6,37 @@
 namespace CORBA {
 namespace Nirvana {
 
-class TypeCodeExceptionBase :
-	public TypeCodeBase
+class TypeCodeExceptionBase
 {
 public:
 	static Boolean equal (const char* id, TypeCode_ptr other);
 	static Boolean equivalent (const char* id, TypeCode_ptr other);
 
-	static Identifier member_name (ULong index)
+	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
 	{
-		throw_Bounds ();
+		TypeCodeBase::set_Bounds (_env);
+		return nullptr;
 	}
 
-	TypeCode_ptr member_type (ULong index)
+	static BridgeMarshal <TypeCode>* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
 	{
-		throw_Bounds ();
+		TypeCodeBase::set_Bounds (_env);
+		return nullptr;
+	}
+
+	static void __local_marshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
+	{
+		TypeCodeBase::set_BAD_TYPECODE (_env);
+	}
+
+	static void __local_unmarshal_in (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
+	{
+		TypeCodeBase::set_BAD_TYPECODE (_env);
+	}
+
+	static void __local_unmarshal_inout (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
+	{
+		TypeCodeBase::set_BAD_TYPECODE (_env);
 	}
 };
 
@@ -28,7 +44,7 @@ template <class Ex>
 class TypeCodeException :
 	public TypeCodeExceptionBase,
 	public TypeCodeOps <Ex>,
-	public ServantStatic <TypeCodeException <Ex>, TypeCode>
+	public TypeCodeImpl <TypeCodeException <Ex> >
 {
 public:
 	static Boolean equal (TypeCode_ptr other)
@@ -41,15 +57,12 @@ public:
 		return TypeCodeExceptionBase::equivalent (Ex::repository_id_, other);
 	}
 
-	static BridgeMarshal <TypeCode>* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
-	{
-		return InterfaceStatic <TypeCodeException <Ex>, TypeCode>::_bridge ();
-	}
-
 	static TCKind _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return tk_except;
 	}
+
+	typedef Skeleton <TypeCodeException <Ex>, TypeCode> Sk;
 
 	static const char* _id (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
@@ -66,6 +79,9 @@ public:
 		return 0;
 	}
 
+	using TypeCodeExceptionBase::_member_name;
+	using TypeCodeExceptionBase::_member_type;
+
 	static void _copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src)
 	{
 		// For exceptions, src is pointer to Data, not the exception itself.
@@ -76,6 +92,10 @@ public:
 	{
 		_copy (dst, src);
 	}
+
+	using TypeCodeExceptionBase::__local_marshal;
+	using TypeCodeExceptionBase::__local_unmarshal_in;
+	using TypeCodeExceptionBase::__local_unmarshal_inout;
 };
 
 }

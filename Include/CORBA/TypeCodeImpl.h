@@ -3,6 +3,7 @@
 
 #include "TypeCode_s.h"
 #include <new>
+#include "LocalMarshal.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -10,117 +11,147 @@ namespace Nirvana {
 class TypeCodeBase
 {
 public:
-	static const char* id ()
-	{
-		throw_BadKind ();
-	}
-
-	static const char* name ()
-	{
-		throw_BadKind ();
-	}
-
-	static ULong member_count ()
-	{
-		throw_BadKind ();
-	}
-
-	static Identifier member_name (ULong index)
-	{
-		throw_BadKind ();
-	}
-
-	static TypeCode_ptr member_type (ULong index)
-	{
-		throw_BadKind ();
-	}
-
-	static Any* member_label (ULong index)
-	{
-		throw_BadKind ();
-	}
-
-	static TypeCode_ptr discriminator_type ()
-	{
-		throw_BadKind ();
-	}
-
-	static Long default_index ()
-	{
-		throw_BadKind ();
-	}
-
-	static ULong length ()
-	{
-		throw_BadKind ();
-	}
-
-	static TypeCode_ptr content_type ()
-	{
-		throw_BadKind ();
-	}
-
-	static UShort fixed_digits ()
-	{
-		throw_BadKind ();
-	}
-
-	static Short fixed_scale ()
-	{
-		throw_BadKind ();
-	}
-
-	static Visibility member_visibility (ULong index)
-	{
-		throw_BadKind ();
-	}
-
-	static ValueModifier type_modifier ()
-	{
-		throw_BadKind ();
-	}
-
-	static TypeCode_ptr concrete_base_type ()
-	{
-		throw_BadKind ();
-	}
-
-protected:
-	NIRVANA_NORETURN static void throw_BadKind ();
-	NIRVANA_NORETURN static void throw_Bounds ();
-
 	static Boolean equal (TCKind tk, TypeCode_ptr other);
 	static Boolean equivalent (TCKind tk, TypeCode_ptr other);
+
+	static const char* _id (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static ULong _member_count (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
+	static BridgeMarshal <TypeCode>* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
+	static Any* _member_label (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
+	static BridgeMarshal <TypeCode>* _discriminator_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static Long _default_index (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static ULong _length (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static BridgeMarshal <TypeCode>* _content_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static UShort _fixed_digits (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static Short _fixed_scale (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static Visibility _member_visibility (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
+	static ValueModifier _type_modifier (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static BridgeMarshal <TypeCode>* _concrete_base_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+
+	static void set_BadKind (EnvironmentBridge* env);
+	static void set_Bounds (EnvironmentBridge* env);
+	static void set_BAD_TYPECODE (EnvironmentBridge* env);
 };
 
-template <typename T>
+template <class S>
+class TypeCodeImpl :
+	public TypeCodeBase,
+	public ServantStatic <S, TypeCode>
+{
+public:
+	static BridgeMarshal <TypeCode>* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	{
+		return InterfaceStatic <S, TypeCode>::_bridge ();
+	}
+
+	using TypeCodeBase::_id;
+	using TypeCodeBase::_name;
+	using TypeCodeBase::_member_count;
+	using TypeCodeBase::_member_name;
+	using TypeCodeBase::_member_type;
+	using TypeCodeBase::_member_label;
+	using TypeCodeBase::_discriminator_type;
+	using TypeCodeBase::_default_index;
+	using TypeCodeBase::_length;
+	using TypeCodeBase::_content_type;
+	using TypeCodeBase::_fixed_digits;
+	using TypeCodeBase::_fixed_scale;
+	using TypeCodeBase::_member_visibility;
+	using TypeCodeBase::_type_modifier;
+	using TypeCodeBase::_concrete_base_type;
+};
+
+template <typename Valtype>
 class TypeCodeOps
 {
 public:
 	static ULong _size ()
 	{
-		return sizeof (T);
+		return sizeof (Valtype);
 	}
 
 	static void _construct (::Nirvana::Pointer p)
 	{
-		new (reinterpret_cast <T*> (p)) T ();
+		new (reinterpret_cast <Valtype*> (p)) Valtype ();
 	}
 
 	static void _destruct (::Nirvana::Pointer p)
 	{
-		reinterpret_cast <T*> (p)->~T ();
+		reinterpret_cast <Valtype*> (p)->~Valtype ();
 	}
 
 	static void _copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src)
 	{
-		new (dst) T (*reinterpret_cast <const T*> (src));
+		new (dst) Valtype (*reinterpret_cast <const Valtype*> (src));
 	}
 
 	static void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src)
 	{
-		new (dst) T (std::move (*reinterpret_cast <T*> (src)));
+		new (dst) Valtype (std::move (*reinterpret_cast <Valtype*> (src)));
 	}
+
+	static void _local_marshal (::Nirvana::ConstPointer src, ::Nirvana::Pointer dst)
+	{
+		MarshalTraits <Valtype>::local_marshal (*reinterpret_cast <const Valtype*> (src), *reinterpret_cast <Valtype*> (dst));
+	}
+
+	static void _local_unmarshal_in (::Nirvana::Pointer val)
+	{
+		MarshalTraits <Valtype>::local_unmarshal_in (*reinterpret_cast <Valtype*> (val));
+	}
+
+	static void _local_unmarshal_inout (::Nirvana::Pointer val)
+	{
+		MarshalTraits <Valtype>::local_unmarshal_inout (*reinterpret_cast <Valtype*> (val));
+	}
+};
+
+class TypeCodeOpsEmptyBase
+{
+public:
+	static ULong __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	{
+		return 0;
+	}
+
+	static void __construct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, EnvironmentBridge* _env)
+	{}
+
+	static void __destruct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, EnvironmentBridge* _env)
+	{}
+
+	static void __copy (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::ConstPointer src, EnvironmentBridge* _env)
+	{}
+
+	static void __move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::Pointer src, EnvironmentBridge* _env)
+	{}
+
+	static void __local_marshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
+	{}
+
+	static void __local_unmarshal_in (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
+	{}
+
+	static void __local_unmarshal_inout (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
+	{}
+};
+
+template <class Base>
+class TypeCodeOpsEmpty : 
+	public Base,
+	public TypeCodeOpsEmptyBase
+{
+public:
+	using TypeCodeOpsEmptyBase::__size;
+	using TypeCodeOpsEmptyBase::__construct;
+	using TypeCodeOpsEmptyBase::__destruct;
+	using TypeCodeOpsEmptyBase::__copy;
+	using TypeCodeOpsEmptyBase::__move;
+	using TypeCodeOpsEmptyBase::__local_marshal;
+	using TypeCodeOpsEmptyBase::__local_unmarshal_in;
+	using TypeCodeOpsEmptyBase::__local_unmarshal_inout;
 };
 
 }
