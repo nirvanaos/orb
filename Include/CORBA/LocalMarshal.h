@@ -1,6 +1,6 @@
-//! \file StringMarshal.h.
+//! \file LocalMarshal.h.
 //!
-//! \brief String marshaling functions for use in proxy code.
+//! \brief Local marshaling functions for use in proxy code.
 
 #ifndef NIRVANA_ORB_LOCALMARSHAL_H_
 #define NIRVANA_ORB_LOCALMARSHAL_H_
@@ -148,48 +148,46 @@ struct MarshalTraits <std::vector <T, std::allocator <T> > >
 		}
 	}
 };
-/*
-template <class I>
-struct MarshalTraits <T_ptr <I> >
-{
-	static const bool has_unmarshal_in_ = true;
-	static const bool has_unmarshal_inout_ = true;
 
-	static void local_marshal (T_ptr <I>& src, T_ptr <I>& dst)
-	{
-		reinterpret_cast <uintptr_t&> (dst) = g_local_marshal->marshal_object (src);
-	}
-
-	static void local_unmarshal_in (T_ptr <I>& val)
-	{
-		const void* marshal_data = reinterpret_cast <const void*&> (val);
-		val = static_cast <I*> (static_cast <Bridge <Interface>*> (g_local_marshal->unmarshal_interface (marshal_data, Bridge <I>::interface_id_)));
-	}
-
-	static void local_unmarshal_inout (T_ptr <I>& val)
-	{
-		local_unmarshal_in (val);
-	}
-};
-*/
 template <>
 struct MarshalTraits <TypeCode_var>
 {
 	static const bool has_unmarshal_in_ = true;
 	static const bool has_unmarshal_inout_ = true;
 
-	static void local_marshal (TypeCode_ptr src, TypeCode_var& dst)
+	static void local_marshal (TypeCode_ptr src, TypeCode_ptr& dst)
 	{
 		reinterpret_cast <uintptr_t&> (dst) = g_local_marshal->marshal_type_code (src);
 	}
 
-	static void local_unmarshal_in (TypeCode_var& val)
+	static void local_unmarshal_in (TypeCode_ptr& val)
 	{
-		const void* marshal_data = reinterpret_cast <const void*&> (val);
-		val = g_local_marshal->unmarshal_type_code (marshal_data);
+		val = g_local_marshal->unmarshal_type_code (val);
 	}
 
-	static void local_unmarshal_inout (TypeCode_var& val)
+	static void local_unmarshal_inout (TypeCode_ptr& val)
+	{
+		local_unmarshal_in (val);
+	}
+};
+
+template <class I> // I must derive from Object
+struct MarshalTraits <T_var <I> >
+{
+	static const bool has_unmarshal_in_ = true;
+	static const bool has_unmarshal_inout_ = true;
+
+	static void local_marshal (Object_ptr src, T_ptr <I>& dst)
+	{
+		reinterpret_cast <uintptr_t&> (dst) = g_local_marshal->marshal_object (src);
+	}
+
+	static void local_unmarshal_in (T_ptr <I>& val)
+	{
+		val = static_cast <I*> (static_cast <Bridge <Interface>*> (g_local_marshal->unmarshal_interface (val, Bridge <I>::interface_id_)));
+	}
+
+	static void local_unmarshal_inout (T_ptr <I>& val)
 	{
 		local_unmarshal_in (val);
 	}

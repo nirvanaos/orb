@@ -13,6 +13,8 @@ class TypeCodeBase
 public:
 	static Boolean equal (TCKind tk, TypeCode_ptr other);
 	static Boolean equivalent (TCKind tk, TypeCode_ptr other);
+	static Boolean equal (TCKind tk, const char* id, TypeCode_ptr other);
+	static Boolean equivalent (TCKind tk, const char* id, TypeCode_ptr other);
 
 	static const char* _id (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
 	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
@@ -35,15 +37,30 @@ public:
 	static void set_BAD_TYPECODE (EnvironmentBridge* env);
 };
 
-template <class S>
+template <class S, TCKind tk>
 class TypeCodeImpl :
 	public TypeCodeBase,
 	public ServantStatic <S, TypeCode>
 {
 public:
+	static Boolean equal (TypeCode_ptr other)
+	{
+		return TypeCodeBase::equal (tk, other);
+	}
+
+	static Boolean equivalent (TypeCode_ptr other)
+	{
+		return TypeCodeBase::equivalent (tk, other);
+	}
+
 	static BridgeMarshal <TypeCode>* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return InterfaceStatic <S, TypeCode>::_bridge ();
+	}
+
+	static TCKind _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	{
+		return tk;
 	}
 
 	using TypeCodeBase::_id;
@@ -61,6 +78,27 @@ public:
 	using TypeCodeBase::_member_visibility;
 	using TypeCodeBase::_type_modifier;
 	using TypeCodeBase::_concrete_base_type;
+};
+
+template <class S, TCKind tk, const char* rep_id>
+class TypeCodeWithId :
+	public TypeCodeImpl <S, tk>
+{
+public:
+	static Boolean equal (TypeCode_ptr other)
+	{
+		return TypeCodeBase::equal (tk, rep_id, other);
+	}
+
+	static Boolean equivalent (TypeCode_ptr other)
+	{
+		return TypeCodeBase::equivalent (tk, rep_id, other);
+	}
+
+	static const char* _id (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	{
+		return rep_id;
+	}
 };
 
 template <typename Valtype>

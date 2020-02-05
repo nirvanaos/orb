@@ -110,19 +110,12 @@ public:
 	// tk_value, tk_value_box, tk_native, tk_abstract_interface
 	// tk_local_interface and tk_except
 	const char* id (); // raises (BadKind);
-
-	// for tk_objref, tk_struct, tk_union, tk_enum, tk_alias,
-	// tk_value, tk_value_box, tk_native, tk_abstract_interface
-	// tk_local_interface and tk_except
 	const char* name (); // raises (BadKind);
 
 	// for tk_struct, tk_union, tk_enum, tk_value,
 	// and tk_except
 	ULong member_count (); // raises (BadKind);
 	Identifier member_name (ULong index); // raises (BadKind, Bounds);
-
-	// for tk_struct, tk_union, tk_value,
-	// and tk_except
 	TypeCode_ptr member_type (ULong index); // raises (BadKind, Bounds);
 
 	// for tk_union

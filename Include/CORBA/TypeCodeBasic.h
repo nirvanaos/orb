@@ -6,38 +6,17 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <class S, TCKind TK>
-class TypeCodeBasicBase :
-	public TypeCodeImpl <S>
-{
-public:
-	static Boolean equal (TypeCode_ptr other)
-	{
-		return TypeCodeBase::equal (TK, other);
-	}
-
-	static Boolean equivalent (TypeCode_ptr other)
-	{
-		return TypeCodeBase::equivalent (TK, other);
-	}
-
-	static TCKind _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
-	{
-		return TK;
-	}
-};
-
 /// TypeCode implementation for basic types
-template <typename Valtype, TCKind TK>
+template <typename Valtype, TCKind tk>
 class TypeCodeBasic :
-	public TypeCodeBasicBase <TypeCodeBasic <Valtype, TK>, TK>,
+	public TypeCodeImpl <TypeCodeBasic <Valtype, tk>, tk>,
 	public TypeCodeOps <Valtype>
 {};
 
 /// TypeCode implementation for empty types
-template <TCKind TK>
+template <TCKind tk>
 class TypeCodeEmpty :
-	public TypeCodeOpsEmpty <TypeCodeBasicBase <TypeCodeEmpty <TK>, TK> >
+	public TypeCodeOpsEmpty <TypeCodeImpl <TypeCodeEmpty <tk>, tk> >
 {};
 
 typedef TypeCodeEmpty <tk_null> TC_null;

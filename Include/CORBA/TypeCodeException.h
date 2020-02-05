@@ -9,9 +9,6 @@ namespace Nirvana {
 class TypeCodeExceptionBase
 {
 public:
-	static Boolean equal (const char* id, TypeCode_ptr other);
-	static Boolean equivalent (const char* id, TypeCode_ptr other);
-
 	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
 	{
 		TypeCodeBase::set_Bounds (_env);
@@ -42,33 +39,11 @@ public:
 
 template <class Ex>
 class TypeCodeException :
-	public TypeCodeExceptionBase,
+	public TypeCodeWithId <TypeCodeException <Ex>, tk_except, Ex::repository_id_>,
 	public TypeCodeOps <Ex>,
-	public TypeCodeImpl <TypeCodeException <Ex> >
+	public TypeCodeExceptionBase
 {
 public:
-	static Boolean equal (TypeCode_ptr other)
-	{
-		return TypeCodeExceptionBase::equal (Ex::repository_id_, other);
-	}
-
-	static Boolean equivalent (TypeCode_ptr other)
-	{
-		return TypeCodeExceptionBase::equivalent (Ex::repository_id_, other);
-	}
-
-	static TCKind _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
-	{
-		return tk_except;
-	}
-
-	typedef Skeleton <TypeCodeException <Ex>, TypeCode> Sk;
-
-	static const char* _id (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
-	{
-		return Ex::repository_id_;
-	}
-
 	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return Ex::__name ();
