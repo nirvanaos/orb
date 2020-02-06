@@ -1,11 +1,11 @@
+#include <CORBA/Environment_c.h>
 #include <CORBA/RepositoryId.h>
-#include <CORBA/CORBA_Environment.h>
-#include <string.h>
+#include <CORBA/Exception.h>
 
 namespace CORBA {
 namespace Nirvana {
 
-const Char Bridge < ::CORBA::Environment>::interface_id_ [] = CORBA_REPOSITORY_ID (Environment);
+const Char Bridge < ::CORBA::Environment>::interface_id_[] = CORBA_REPOSITORY_ID (Environment);
 
 void BridgeMarshal < ::CORBA::Environment>::set_exception (Long code, const char* rep_id, const void* param)
 {
@@ -23,30 +23,6 @@ void BridgeMarshal < ::CORBA::Environment>::set_exception (const Exception& e)
 void BridgeMarshal < ::CORBA::Environment>::set_unknown_exception ()
 {
 	set_exception (0, CORBA_REPOSITORY_ID (UNKNOWN), nullptr);
-}
-
-void EnvironmentBase::exception_set (Long code, const char* rep_id, const void* param, 
-	const ExceptionEntry* user_exceptions)
-{
-	exception_free ();
-	if (rep_id) {
-		Exception* e = nullptr;
-		try {
-			if (code >= 0)
-				e = SystemException::_create (rep_id, param, code);
-			else if (user_exceptions) {
-				for (const ExceptionEntry* p = user_exceptions; p->rep_id; ++p)
-					if (RepositoryId::compatible (p->rep_id, rep_id)) {
-						e = (p->create) (param);
-						break;
-					}
-				if (!e)
-					e = new UNKNOWN ();
-			}
-		} catch (...) {
-		}
-		exception_ = e;
-	}
 }
 
 }

@@ -34,7 +34,6 @@ public:
 
 	static void set_BadKind (EnvironmentBridge* env);
 	static void set_Bounds (EnvironmentBridge* env);
-	static void set_BAD_TYPECODE (EnvironmentBridge* env);
 };
 
 template <class S, TCKind tk>

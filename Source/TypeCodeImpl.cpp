@@ -46,11 +46,6 @@ void TypeCodeBase::set_Bounds (EnvironmentBridge* env)
 	env->set_exception (-1, TypeCode::Bounds::repository_id_, nullptr);
 }
 
-void TypeCodeBase::set_BAD_TYPECODE (EnvironmentBridge* env)
-{
-	env->set_exception (BAD_TYPECODE ());
-}
-
 const char* TypeCodeBase::_id (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 {
 	set_BadKind (_env);

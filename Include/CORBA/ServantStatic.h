@@ -34,20 +34,6 @@ public:
 	}
 };
 
-class LifeCycleStatic
-{
-public:
-	template <class I>
-	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge*)
-	{
-		return itf;
-	}
-
-	template <class I>
-	static void __release (Bridge <Interface>*)
-	{}
-};
-
 template <class S, class I>
 class InterfaceStaticBase :
 	public Skeleton <S, I>

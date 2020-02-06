@@ -23,17 +23,17 @@ public:
 
 	static void __local_marshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{
-		TypeCodeBase::set_BAD_TYPECODE (_env);
+		set_BAD_TYPECODE (_env);
 	}
 
 	static void __local_unmarshal_in (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
 	{
-		TypeCodeBase::set_BAD_TYPECODE (_env);
+		set_BAD_TYPECODE (_env);
 	}
 
 	static void __local_unmarshal_inout (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
 	{
-		TypeCodeBase::set_BAD_TYPECODE (_env);
+		set_BAD_TYPECODE (_env);
 	}
 };
 

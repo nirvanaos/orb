@@ -1,101 +1,51 @@
 #ifndef NIRVANA_ORB_ENVIRONMENTIMPL_H_
 #define NIRVANA_ORB_ENVIRONMENTIMPL_H_
 
-#include "ServantStatic.h"
-#include "Environment.h"
+#include "Environment_c.h"
+#include "ServantImpl.h"
+#include "Environment_s.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-template <class S>
-class Skeleton <S, ::CORBA::Environment>
+struct ExceptionEntry;
+
+class EnvironmentBase :
+	public Bridge < ::CORBA::Environment>
 {
 public:
-	static const typename Bridge < ::CORBA::Environment>::EPV epv_;
+	void exception_set (Long code, const char* rep_id, const void* param,
+		const ExceptionEntry* user_exceptions = nullptr);
+
+	const Char* exception_id () const;
+
+	const void* exception_value () const;
+
+	void exception_free ();
+
+	Exception* exception () const
+	{
+		return exception_;
+	}
+
+	void exception (Exception* ex)
+	{
+		exception_free ();
+		exception_ = ex;
+	}
+
+	void check () const;
 
 protected:
-	static void _exception_set (Bridge < ::CORBA::Environment>* obj, Long code, const char* rep_id, const void* param)
-	{
-		try {
-			S::_implementation (obj).exception_set (code, rep_id, param);
-		} catch (...) {
-		}
-	}
-
-	static const Char* _exception_id (Bridge < ::CORBA::Environment>* obj)
-	{
-		try {
-			return S::_implementation (obj).exception_id ();
-		} catch (...) {
-		}
-		return nullptr;
-	}
-
-	static const void* _exception_value (Bridge < ::CORBA::Environment>* obj)
-	{
-		try {
-			return S::_implementation (obj).exception_value ();
-		} catch (...) {
-		}
-		return nullptr;
-	}
-
-	static void _exception_free (Bridge < ::CORBA::Environment>* obj)
-	{
-		try {
-			S::_implementation (obj).exception_free ();
-		} catch (...) {
-		}
-	}
-};
-
-template <class S>
-const Bridge < ::CORBA::Environment>::EPV Skeleton <S, ::CORBA::Environment>::epv_ = {
-	{ // interface
-		Bridge < ::CORBA::Environment>::interface_id_,
-		S::template __duplicate < ::CORBA::Environment>,
-		S::template __release < ::CORBA::Environment>
-	},
-	{ // epv
-		S::_exception_set,
-		S::_exception_id,
-		S::_exception_value,
-		S::_exception_free
-	}
-};
-
-class Environment :
-	public EnvironmentBase,
-	public InterfaceImpl <Environment, ::CORBA::Environment>,
-	public ServantTraits <Environment>,
-	public LifeCycleStatic
-{
-public:
-	Environment (const ExceptionEntry* user_exceptions = nullptr) :
-		user_exceptions_ (user_exceptions)
+	EnvironmentBase (const EPV& epv) :
+		Bridge < ::CORBA::Environment> (epv),
+		exception_ (nullptr)
 	{}
 
-private:
-	const ExceptionEntry* user_exceptions_;
-};
-
-template <class ... Exceptions>
-class EnvironmentEx :
-	public Environment
-{
-public:
-	EnvironmentEx () :
-		Environment (user_exceptions_)
-	{}
+	~EnvironmentBase ();
 
 private:
-	static const ExceptionEntry user_exceptions_ [];
-};
-
-template <class ... Exceptions>
-const ExceptionEntry EnvironmentEx <Exceptions...>::user_exceptions_ [] = {
-	{ Exceptions::repository_id_, Exceptions::_create }...,
-	{0}
+	Exception* exception_;
 };
 
 }

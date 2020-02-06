@@ -3,7 +3,7 @@
 #ifndef NIRVANA_ORB_INTERFACE_C_H_
 #define NIRVANA_ORB_INTERFACE_C_H_
 
-#include "EnvironmentImpl.h"
+#include "Environment.h"
 #include "T_ptr.h"
 #include "RepositoryId.h"
 
@@ -338,7 +338,7 @@ class ClientBridge :
 	public Bridge <I>
 {
 protected:
-	Bridge <I>& _get_bridge (Environment& env)
+	Bridge <I>& _get_bridge (EnvironmentBase& env)
 	{
 		return *this;
 	}
@@ -376,7 +376,7 @@ public:
 	operator T_ptr <Base> ();
 
 protected:
-	Bridge <Base>* _get_bridge_ptr (Environment& env)
+	Bridge <Base>* _get_bridge_ptr (EnvironmentBase& env)
 	{
 		Primary& t = static_cast <Primary&> (*this);
 		typename BridgeMarshal <Primary>:: template Wide <Base>::Func func = t._epv ().base;
@@ -386,7 +386,7 @@ protected:
 		return ret;
 	}
 
-	Bridge <Base>& _get_bridge (Environment& env)
+	Bridge <Base>& _get_bridge (EnvironmentBase& env)
 	{
 		Bridge <Base>* ret = _get_bridge_ptr (env);
 		if (!ret)

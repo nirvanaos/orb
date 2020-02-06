@@ -1,9 +1,10 @@
 #ifndef NIRVANA_ORB_SERVANTIMPL_H_
 #define NIRVANA_ORB_SERVANTIMPL_H_
 
-#include "Environment.h"
+#include "Environment_c.h"
 #include "RepositoryId.h"
 #include "T_ptr.h"
+#include "LifeCycle.h"
 
 namespace CORBA {
 namespace Nirvana {
