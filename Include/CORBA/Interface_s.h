@@ -5,6 +5,7 @@
 #include "Object_c.h"
 #include "RepositoryId.h"
 #include "ServantImpl.h"
+#include "Exception.h"
 
 namespace PortableServer {
 class ServantBase;

@@ -2,14 +2,12 @@
 #define NIRVANA_ORB_T_PTR_H_
 
 #include <Nirvana/NirvanaBase.h>
+#include <Nirvana/throw_exception.h>
 #include "Bridge.h"
 #include <assert.h>
 
 namespace CORBA {
 namespace Nirvana {
-
-NIRVANA_NORETURN void throw_INV_OBJREF ();
-NIRVANA_NORETURN void throw_MARSHAL ();
 
 //! Interface pointer template.
 template <class I>
@@ -35,7 +33,7 @@ public:
 		if (src.p_) {
 			*this = src.p_->operator T_ptr ();
 			if (check_nil && !p_)
-				throw_INV_OBJREF ();
+				::Nirvana::throw_INV_OBJREF ();
 		} else
 			p_ = nullptr;
 	}
@@ -48,7 +46,7 @@ public:
 	I* operator -> () const
 	{
 		if (!p_)
-			throw_INV_OBJREF ();
+			::Nirvana::throw_INV_OBJREF ();
 		return p_;
 	}
 

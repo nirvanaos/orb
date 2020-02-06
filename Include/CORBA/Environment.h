@@ -2,7 +2,6 @@
 #define NIRVANA_ORB_ENVIRONMENT_H_
 
 #include "EnvironmentImpl.h"
-#include "Exception.h"
 
 namespace CORBA {
 namespace Nirvana {

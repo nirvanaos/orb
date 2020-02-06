@@ -25,7 +25,7 @@ Bridge <Interface>* ServantBaseLink::_get_proxy ()
 	}
 	Bridge <Interface>* proxy = AbstractBase_ptr (servant_base_)->_query_interface (nullptr);
 	if (!proxy)
-		throw MARSHAL ();
+		::Nirvana::throw_MARSHAL ();
 	return Interface::__duplicate (proxy);
 }
 
@@ -40,7 +40,7 @@ Bridge <Interface>* LocalObjectLink::_get_proxy ()
 {
 	Bridge <Interface>* proxy = AbstractBase_ptr (object_)->_query_interface (nullptr);
 	if (!proxy)
-		throw MARSHAL ();
+		::Nirvana::throw_MARSHAL ();
 	return Interface::__duplicate (proxy);
 }
 

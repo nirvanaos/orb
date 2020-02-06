@@ -30,7 +30,7 @@ Bridge <Interface>* Interface::unmarshal (Bridge <Interface>* bridge, const Char
 			&&
 			!RepositoryId::compatible (bridge_id, interface_id)
 		)
-			throw MARSHAL ();
+			::Nirvana::throw_MARSHAL ();
 	}
 	return bridge;
 }

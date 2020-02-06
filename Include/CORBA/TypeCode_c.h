@@ -3,6 +3,7 @@
 
 #include <Nirvana/NirvanaBase.h>
 #include "Interface_c.h"
+#include "UserException.h"
 
 namespace CORBA {
 

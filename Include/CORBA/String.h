@@ -343,7 +343,7 @@ std::basic_string <C>& _unmarshal_out (StringABI <C>* abi)
 	_check_pointer (abi);
 	std::basic_string <C>& s (static_cast <std::basic_string <C>&> (*abi));
 	if (!s.empty ())
-		throw MARSHAL ();
+		::Nirvana::throw_MARSHAL ();
 	return s;
 }
 
@@ -391,15 +391,15 @@ void basic_string <C, T, allocator <C> >::_check () const
 		cc = this->large_size ();
 		CORBA::Nirvana::_check_pointer (p);
 		if (cc > this->large_capacity () || !heap ()->is_readable (p, (cc + 1) * sizeof (value_type)))
-			throw CORBA::MARSHAL ();
+			::Nirvana::throw_MARSHAL ();
 	} else {
 		p = this->small_pointer ();
 		cc = this->small_size ();
 		if (cc > ABI::SMALL_CAPACITY)
-			throw CORBA::MARSHAL ();
+			::Nirvana::throw_MARSHAL ();
 	}
 	if (p [cc])
-		throw CORBA::MARSHAL ();
+		::Nirvana::throw_MARSHAL ();
 }
 
 template <typename C, class T>

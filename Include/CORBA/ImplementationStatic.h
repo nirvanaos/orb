@@ -68,7 +68,7 @@ protected:
 	{
 		Bridge <Interface>* proxy = AbstractBase_ptr (servant_base ())->_query_interface (nullptr);
 		if (!proxy)
-			throw MARSHAL ();
+			::Nirvana::throw_MARSHAL ();
 		return proxy;
 	}
 
@@ -132,7 +132,7 @@ public:
 	{
 		Bridge <Interface>* proxy = AbstractBase_ptr (object ())->_query_interface (nullptr);
 		if (!proxy)
-			throw MARSHAL ();
+			::Nirvana::throw_MARSHAL ();
 		return proxy;
 	}
 
