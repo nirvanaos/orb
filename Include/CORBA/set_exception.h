@@ -1,5 +1,4 @@
 /// Static set exception to environment.
-/// TODO: Add more functions.
 #ifndef NIRVANA_ORB_SET_EXCEPTION_H_
 #define NIRVANA_ORB_SET_EXCEPTION_H_
 

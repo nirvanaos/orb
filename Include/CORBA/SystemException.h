@@ -75,9 +75,6 @@ public:
 		// System exception codes
 		SYSTEM_EXCEPTIONS (EXCEPTION_CODE)
 
-		// Nirvana-specific
-		NIRVANA_EXCEPTIONS (EXCEPTION_CODE)
-
 		KNOWN_SYSTEM_EXCEPTIONS
 	};
 

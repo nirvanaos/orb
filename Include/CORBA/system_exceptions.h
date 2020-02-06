@@ -2,7 +2,7 @@
 #ifndef NIRVANA_ORB_SYSTEM_EXCEPTIONS_H_
 #define NIRVANA_ORB_SYSTEM_EXCEPTIONS_H_
 
-#define SYSTEM_EXCEPTIONS(M)/*
+#define CORBA_EXCEPTIONS(M)/*
 */ M (UNKNOWN) /* the unknown exception
 */ M (BAD_PARAM) /* an invalid parameter was passed
 */ M (NO_MEMORY) /* dynamic memory allocation failure
@@ -45,5 +45,9 @@
 */ M (MEM_NOT_COMMITTED) /* memory is not committed
 */ M (MEM_NOT_ALLOCATED) /* memory is not allocated
 */
+
+#define SYSTEM_EXCEPTIONS(M) \
+CORBA_EXCEPTIONS (M)\
+NIRVANA_EXCEPTIONS (M)
 
 #endif
