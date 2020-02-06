@@ -16,7 +16,7 @@ virtual const char* _rep_id () const;\
 static const char repository_id_ [];\
 virtual const char* _name () const;\
 static constexpr const char* __name () { return #e; }\
-virtual TypeCode_ptr e::__type_code () const;\
+virtual TypeCode_ptr __type_code () const;\
 virtual Exception* __clone () const;\
 static const e* _downcast (const Exception* ep);\
 static e* _downcast (Exception* ep) { return const_cast <e*> (_downcast ((const Exception*)ep)); }\

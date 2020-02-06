@@ -1,6 +1,7 @@
 #ifndef NIRVANA_ORB_BRIDGE_H_
 #define NIRVANA_ORB_BRIDGE_H_
 
+#include <Nirvana/NirvanaBase.h>
 #include "BasicTypes.h"
 
 namespace CORBA {

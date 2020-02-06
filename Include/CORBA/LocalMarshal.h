@@ -60,7 +60,7 @@ struct MarshalTraits
 	static const bool has_unmarshal_inout_ = false;
 
 #ifdef NIRVANA_C11
-	template <class = std::enable_if <std::is_trivially_copyable <T>::value>::type>
+	template <class = typename std::enable_if <std::is_trivially_copyable <T>::value>::type>
 #endif
 	static void local_marshal (const T& src, T& dst) NIRVANA_NOEXCEPT
 	{

@@ -18,7 +18,7 @@ public:
 	template <class I>
 	static S& _implementation (Bridge <I>* bridge)
 	{
-		return *(S*)0;
+		return *(S*)nullptr;
 	}
 };
 
