@@ -5,6 +5,6 @@
 #include "LocalObject_c.h"
 #include "String.h"
 #include "sequence.h"
-#include "SystemException.h"
+#include "exceptions.h"
 
 #endif

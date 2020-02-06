@@ -1,5 +1,5 @@
 #include <CORBA/EnvironmentImpl.h>
-#include <CORBA/SystemException.h>
+#include <CORBA/exceptions.h>
 #include <CORBA/RepositoryId.h>
 
 namespace CORBA {
