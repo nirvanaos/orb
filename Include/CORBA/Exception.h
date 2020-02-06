@@ -28,8 +28,6 @@ const char* e::_name () const { return __name (); } \
 Exception* e::__clone () const { return new e (*this); } \
 Exception* e::_create (const void* data) { return new e ((Data*)data); } // TODO : Remove
 
-#define EX_TABLE_ENTRY(e) { e::repository_id_, e::_create }
-
 namespace CORBA {
 
 class TypeCode;
