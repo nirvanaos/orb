@@ -7,7 +7,7 @@
 
 #include <Nirvana/basic_string.h>
 #include <Nirvana/vector.h>
-#include "LocalMarshal_c.h"
+#include "LocalMarshal.h"
 
 namespace std {
 

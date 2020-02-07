@@ -5,8 +5,8 @@
 #define NIRVANA_ORB_IMPLEMENTATION_H_
 
 #include "ServantImpl.h"
-#include "ObjectFactory_c.h"
-#include "POA_c.h"
+#include "ObjectFactory.h"
+#include "POA.h"
 #include "AbstractBase_s.h"
 #include "ServantBase_s.h"
 #include "DynamicServant_s.h"

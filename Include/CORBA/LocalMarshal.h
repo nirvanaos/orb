@@ -1,7 +1,7 @@
-#ifndef NIRVANA_ORB_LOCALMARSHAL_C_H_
-#define NIRVANA_ORB_LOCALMARSHAL_C_H_
+#ifndef NIRVANA_ORB_LOCALMARSHAL_H_
+#define NIRVANA_ORB_LOCALMARSHAL_H_
 
-#include "Object_c.h"
+#include "Object.h"
 #include "TypeCode_b.h"
 #include <Nirvana/OLF.h>
 

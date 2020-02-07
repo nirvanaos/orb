@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_OBJECTFACTORY_S_H_
 #define NIRVANA_ORB_OBJECTFACTORY_S_H_
 
-#include "ObjectFactory_c.h"
+#include "ObjectFactory.h"
 #include "Servant.h"
 
 // ObjectFactory skeleton

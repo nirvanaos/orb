@@ -1,5 +1,5 @@
-#ifndef IDL_TEST_I2_C_H_
-#define IDL_TEST_I2_C_H_
+#ifndef IDL_TEST_I2_H_
+#define IDL_TEST_I2_H_
 
 #include <CORBA/CORBA.h>
 

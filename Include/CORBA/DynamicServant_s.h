@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_DYNAMICSERVANT_S_H_
 #define NIRVANA_ORB_DYNAMICSERVANT_S_H_
 
-#include "DynamicServant_c.h"
+#include "DynamicServant.h"
 #include "Interface_s.h"
 
 namespace CORBA {

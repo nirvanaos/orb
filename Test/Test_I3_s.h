@@ -1,7 +1,7 @@
 #ifndef IDL_TEST_I3_S_H_
 #define IDL_TEST_I3_S_H_
 
-#include "Test_I3_c.h"
+#include "Test_I3.h"
 #include "Test_I1_s.h"
 #include "Test_I2_s.h"
 #include "Server.h"

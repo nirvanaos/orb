@@ -1,4 +1,4 @@
-#include <CORBA/DynamicServant_c.h>
+#include <CORBA/DynamicServant.h>
 #include <CORBA/RepositoryId.h>
 
 namespace CORBA {

@@ -1,7 +1,7 @@
 #ifndef IDL_TEST_I2_S_H_
 #define IDL_TEST_I2_S_H_
 
-#include "Test_I2_c.h"
+#include "Test_I2.h"
 #include "Server.h"
 
 namespace CORBA {

@@ -1,4 +1,4 @@
-#include <CORBA/Interface_c.h>
+#include <CORBA/Interface.h>
 #include <CORBA/RepositoryId.h>
 #include <CORBA/Environment.h>
 

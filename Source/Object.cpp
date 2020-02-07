@@ -1,4 +1,4 @@
-#include <CORBA/Object_c.h>
+#include <CORBA/Object.h>
 #include <CORBA/RepositoryId.h>
 
 namespace CORBA {

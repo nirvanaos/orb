@@ -1,4 +1,4 @@
-#include <CORBA/ProxyFactory_c.h>
+#include <CORBA/ProxyFactory.h>
 #include <CORBA/RepositoryId.h>
 
 namespace CORBA {

@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_SERVANTBASE_S_H_
 #define NIRVANA_ORB_SERVANTBASE_S_H_
 
-#include "ServantBase_c.h"
+#include "ServantBase.h"
 #include "Interface_s.h"
 
 namespace CORBA {

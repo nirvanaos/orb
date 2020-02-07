@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_PROXYFACTORY_S_H_
 #define NIRVANA_ORB_PROXYFACTORY_S_H_
 
-#include "ProxyFactory_c.h"
+#include "ProxyFactory.h"
 #include "Interface_s.h"
 
 // ProxyFactory skeleton

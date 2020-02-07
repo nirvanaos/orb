@@ -3,10 +3,10 @@
 //! \fn DynamicServant::_delete()
 //! \brief Called by the garbage collector.
 
-#ifndef NIRVANA_ORB_DYNAMICSERVANT_C_H_
-#define NIRVANA_ORB_DYNAMICSERVANT_C_H_
+#ifndef NIRVANA_ORB_DYNAMICSERVANT_H_
+#define NIRVANA_ORB_DYNAMICSERVANT_H_
 
-#include "Interface_c.h"
+#include "Interface.h"
 
 namespace CORBA {
 namespace Nirvana {

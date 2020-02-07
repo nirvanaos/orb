@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_INTERFACE_S_H_
 
 #include <Nirvana/NirvanaBase.h>
-#include "Object_c.h"
+#include "Object.h"
 #include "RepositoryId.h"
 #include "ServantImpl.h"
 #include "Exception.h"

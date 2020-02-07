@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_LOCALOBJECT_S_H_
 #define NIRVANA_ORB_LOCALOBJECT_S_H_
 
-#include "LocalObject_c.h"
+#include "LocalObject.h"
 #include "Interface_s.h"
 
 namespace CORBA {

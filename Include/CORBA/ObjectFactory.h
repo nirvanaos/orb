@@ -1,10 +1,10 @@
 // ObjectFactory Interface to the core object functionality.
-#ifndef NIRVANA_ORB_OBJECTFACTORY_C_H_
-#define NIRVANA_ORB_OBJECTFACTORY_C_H_
+#ifndef NIRVANA_ORB_OBJECTFACTORY_H_
+#define NIRVANA_ORB_OBJECTFACTORY_H_
 
-#include "ServantBase_c.h"
-#include "DynamicServant_c.h"
-#include "LocalObject_c.h"
+#include "ServantBase.h"
+#include "DynamicServant.h"
+#include "LocalObject.h"
 #include <Nirvana/OLF.h>
 
 namespace CORBA {

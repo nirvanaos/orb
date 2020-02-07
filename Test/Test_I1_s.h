@@ -1,7 +1,7 @@
 #ifndef IDL_TEST_I1_S_H_
 #define IDL_TEST_I1_S_H_
 
-#include "Test_I1_c.h"
+#include "Test_I1.h"
 #include "Server.h"
 
 #ifdef TEST_LOCAL_OBJECT

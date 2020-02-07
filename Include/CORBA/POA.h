@@ -1,10 +1,10 @@
 // Nirvana project
 // Object Request Broker
 // PortableServer::POA interface
-#ifndef NIRVANA_ORB_POA_C_H_
-#define NIRVANA_ORB_POA_C_H_
+#ifndef NIRVANA_ORB_POA_H_
+#define NIRVANA_ORB_POA_H_
 
-#include "ServantBase_c.h"
+#include "ServantBase.h"
 
 namespace CORBA {
 namespace Nirvana {

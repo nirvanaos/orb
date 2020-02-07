@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_OBJECT_S_H_
 #define NIRVANA_ORB_OBJECT_S_H_
 
-#include "Object_c.h"
+#include "Object.h"
 #include "Interface_s.h"
 
 namespace CORBA {

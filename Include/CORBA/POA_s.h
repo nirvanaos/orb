@@ -4,7 +4,7 @@
 #ifndef NIRVANA_ORB_POA_S_H_
 #define NIRVANA_ORB_POA_S_H_
 
-#include "POA_c.h"
+#include "POA.h"
 #include "Object_s.h"
 
 namespace CORBA {

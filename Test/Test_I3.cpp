@@ -1,4 +1,4 @@
-#include "Test_I3_c.h"
+#include "Test_I3.h"
 
 namespace CORBA {
 namespace Nirvana {

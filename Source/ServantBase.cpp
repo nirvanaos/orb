@@ -1,4 +1,4 @@
-#include <CORBA/ServantBase_c.h>
+#include <CORBA/ServantBase.h>
 #include <CORBA/RepositoryId.h>
 
 namespace CORBA {

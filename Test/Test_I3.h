@@ -1,8 +1,8 @@
-#ifndef IDL_TEST_I3_C_H_
-#define IDL_TEST_I3_C_H_
+#ifndef IDL_TEST_I3_H_
+#define IDL_TEST_I3_H_
 
-#include "Test_I1_c.h"
-#include "Test_I2_c.h"
+#include "Test_I1.h"
+#include "Test_I2.h"
 
 namespace Test {
 

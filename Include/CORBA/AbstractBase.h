@@ -1,7 +1,7 @@
-#ifndef NIRVANA_ORB_ABSTRACTBASE_C_H_
-#define NIRVANA_ORB_ABSTRACTBASE_C_H_
+#ifndef NIRVANA_ORB_ABSTRACTBASE_H_
+#define NIRVANA_ORB_ABSTRACTBASE_H_
 
-#include "Interface_c.h"
+#include "Interface.h"
 
 namespace CORBA {
 

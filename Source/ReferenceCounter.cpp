@@ -1,4 +1,4 @@
-#include <CORBA/ReferenceCounter_c.h>
+#include <CORBA/ReferenceCounter.h>
 #include <CORBA/RepositoryId.h>
 
 namespace CORBA {

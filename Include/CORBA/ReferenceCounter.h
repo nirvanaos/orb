@@ -1,7 +1,7 @@
-#ifndef NIRVANA_ORB_REFERENCECOUNTER_C_H_
-#define NIRVANA_ORB_REFERENCECOUNTER_C_H_
+#ifndef NIRVANA_ORB_REFERENCECOUNTER_H_
+#define NIRVANA_ORB_REFERENCECOUNTER_H_
 
-#include "Interface_c.h"
+#include "Interface.h"
 
 namespace CORBA {
 namespace Nirvana {

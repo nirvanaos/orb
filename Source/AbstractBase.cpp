@@ -1,4 +1,4 @@
-#include <CORBA/AbstractBase_c.h>
+#include <CORBA/AbstractBase.h>
 #include <CORBA/RepositoryId.h>
 
 namespace CORBA {

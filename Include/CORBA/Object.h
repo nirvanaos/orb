@@ -1,10 +1,10 @@
 // Nirvana project
 // Object Request Broker
 // CORBA::Object interface
-#ifndef NIRVANA_ORB_OBJECT_C_H_
-#define NIRVANA_ORB_OBJECT_C_H_
+#ifndef NIRVANA_ORB_OBJECT_H_
+#define NIRVANA_ORB_OBJECT_H_
 
-#include "AbstractBase_c.h"
+#include "AbstractBase.h"
 
 //! \namespace	IOP
 //!

@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_REFERENCECOUNTER_S_H_
 #define NIRVANA_ORB_REFERENCECOUNTER_S_H_
 
-#include "ReferenceCounter_c.h"
+#include "ReferenceCounter.h"
 #include "Interface_s.h"
 
 namespace CORBA {

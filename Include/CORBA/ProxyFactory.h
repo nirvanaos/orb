@@ -1,8 +1,8 @@
-#ifndef NIRVANA_ORB_PROXYFACTORY_C_H_
-#define NIRVANA_ORB_PROXYFACTORY_C_H_
+#ifndef NIRVANA_ORB_PROXYFACTORY_H_
+#define NIRVANA_ORB_PROXYFACTORY_H_
 
-#include "Object_c.h"
-#include "DynamicServant_c.h"
+#include "Object.h"
+#include "DynamicServant.h"
 
 namespace CORBA {
 namespace Nirvana {
