@@ -1,104 +1,33 @@
 #ifndef NIRVANA_ORB_INTERFACE_S_H_
 #define NIRVANA_ORB_INTERFACE_S_H_
 
-#include <Nirvana/NirvanaBase.h>
-#include "Object.h"
-#include "RepositoryId.h"
-#include "ServantImpl.h"
-#include "Exception.h"
-
-namespace PortableServer {
-class ServantBase;
-}
+#include "Interface.h"
 
 namespace CORBA {
-
-class LocalObject;
-
 namespace Nirvana {
 
-struct InterfaceEntry
+template <class I>
+T_ptr <I> _unmarshal_in (BridgeMarshal <I>* bridge)
 {
-	const Char* interface_id;
-	Bridge <Interface>* (*cast) (void* servant);
+	return T_ptr <I> (I::unmarshal (bridge));
+}
 
-	static Bridge <Interface>* find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const Char* id);
-};
-
-template <class S, class Primary, class ... I>
-class InterfaceFinder
+template <class I>
+T_var <I>& _unmarshal_out (BridgeMarshal <I>** bridge)
 {
-	template <class Itf>
-	static Bridge <Interface>* cast (void* servant)
-	{
-		return &static_cast <Bridge <Itf>&> (*reinterpret_cast <S*> (servant));
-	}
+	_check_pointer (bridge);
+	if (*bridge)
+		::Nirvana::throw_MARSHAL ();
+	return reinterpret_cast <T_var <I>&> (*bridge);
+}
 
-	template <class Itf>
-	struct InterfaceId
-	{
-		static constexpr const Char* id ()
-		{
-			return Bridge <Itf>::interface_id_;
-		}
-	};
-
-	template <>
-	static Bridge <Interface>* cast <PortableServer::ServantBase> (void* servant)
-	{
-		return &static_cast <Bridge <Object>&> (*reinterpret_cast <S*> (servant));
-	}
-
-	template <>
-	struct InterfaceId <PortableServer::ServantBase>
-	{
-		static constexpr const Char* id ()
-		{
-			return Bridge <Object>::interface_id_;
-		}
-	};
-
-	template <>
-	static Bridge <Interface>* cast <LocalObject> (void* servant)
-	{
-		return &static_cast <Bridge <Object>&> (*reinterpret_cast <S*> (servant));
-	}
-
-	template <>
-	struct InterfaceId <LocalObject>
-	{
-		static constexpr const Char* id ()
-		{
-			return Bridge <Object>::interface_id_;
-		}
-	};
-
-public:
-	static Interface_ptr find (S& servant, const Char* id)
-	{
-		return Interface::unmarshal (InterfaceEntry::find (itable_, itable_ + countof (itable_), &servant, id));
-	}
-
-private:
-	static const InterfaceEntry itable_ [];
-};
-
-template <class S, class Primary, class ... I>
-const InterfaceEntry InterfaceFinder <S, Primary, I...>::itable_ [] = {
-	{ InterfaceId <Primary>::id (), cast <Primary> },
-	{ InterfaceId <I>::id (), cast <I> }...
-};
-
-template <class Primary, class ... I>
-class FindInterface
+template <class I>
+T_var <I>& _unmarshal_inout (BridgeMarshal <I>** bridge)
 {
-public:
-	template <class S>
-	static Interface_ptr find (S& servant, const Char* id)
-	{
-		return InterfaceFinder <S, Primary, I...>::find (servant, id);
-	}
-};
+	_check_pointer (bridge);
+	I::unmarshal (*bridge);
+	return reinterpret_cast <T_var <I>&> (*bridge);
+}
 
 }
 }

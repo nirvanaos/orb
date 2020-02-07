@@ -16,7 +16,7 @@ public:
 		return abi;
 	}
 
-	AnyABI (AnyABI&& src) :
+	AnyABI (AnyABI&& src) NIRVANA_NOEXCEPT :
 		data_ (src.data_)
 	{
 		src.reset ();
@@ -45,14 +45,14 @@ protected:
 		data_.type_code = 0;
 	}
 
-	TypeCode_ptr type () const
+	Nirvana::BridgeMarshal <TypeCode>* type () const
 	{
-		return reinterpret_cast <TypeCode*> (data_.type_code & ~1);
+		return reinterpret_cast <Nirvana::BridgeMarshal <TypeCode>*> (data_.type_code & ~1);
 	}
 
-	void type (TypeCode_ptr tc)
+	void type (Nirvana::BridgeMarshal <TypeCode>* tc)
 	{
-		data_.type_code = reinterpret_cast <uintptr_t> (static_cast <Bridge <TypeCode>*> (tc)) | (data_.type_code & 1);
+		data_.type_code = reinterpret_cast <uintptr_t> (tc) | (data_.type_code & 1);
 	}
 
 	bool is_large () const

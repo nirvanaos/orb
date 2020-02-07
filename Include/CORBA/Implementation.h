@@ -13,6 +13,7 @@
 #include "ReferenceCounter_s.h"
 #include "Object_s.h"
 #include "LocalObject_s.h"
+#include "FindInterface.h"
 #include <type_traits>
 
 namespace CORBA {

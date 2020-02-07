@@ -130,7 +130,7 @@ public:
 		T_ptr <I> (I::_duplicate (src))
 	{}
 
-	T_var (T_var <I>&& src) :
+	T_var (T_var <I>&& src) NIRVANA_NOEXCEPT :
 		T_ptr <I> (src)
 	{
 		static_cast <T_ptr <I>&> (src) = I::_nil ();
@@ -168,7 +168,7 @@ public:
 		return *this;
 	}
 
-	T_var <I>& operator = (T_var <I>&& src)
+	T_var <I>& operator = (T_var <I>&& src) NIRVANA_NOEXCEPT
 	{
 		if (&src != this) {
 			reset (src);
@@ -302,29 +302,6 @@ public:
 		return *this;
 	}
 };
-
-template <class I>
-T_ptr <I> _unmarshal_in (BridgeMarshal <I>* bridge)
-{
-	return T_ptr <I> (I::unmarshal (bridge));
-}
-
-template <class I>
-T_var <I>& _unmarshal_out (BridgeMarshal <I>** bridge)
-{
-	_check_pointer (bridge);
-	if (*bridge)
-		::Nirvana::throw_MARSHAL ();
-	return reinterpret_cast <T_var <I>&> (*bridge);
-}
-
-template <class I>
-T_var <I>& _unmarshal_inout (BridgeMarshal <I>** bridge)
-{
-	_check_pointer (bridge);
-	I::unmarshal (*bridge);
-	return reinterpret_cast <T_var <I>&> (*bridge);
-}
 
 //! Client implementation template.
 template <class T, class I> class Client

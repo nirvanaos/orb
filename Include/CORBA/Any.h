@@ -48,7 +48,7 @@ public:
 
 	TypeCode_ptr type () const
 	{
-		return Nirvana::AnyABI::type ();
+		return static_cast <TypeCode*> (Nirvana::AnyABI::type ());
 	}
 
 	void type (TypeCode_ptr alias);
