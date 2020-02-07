@@ -43,8 +43,7 @@ TEST_F (TestORB, RepositoryId)
 TEST_F (TestORB, Exception)
 {
 	CORBA::NO_MEMORY nm;
-	CORBA::Exception* p = nm.__clone ();
-	EXPECT_THROW (p->raise (), CORBA::NO_MEMORY);
+	EXPECT_THROW (nm.raise (), CORBA::NO_MEMORY);
 }
 
 TEST_F (TestORB, Environment)
@@ -53,7 +52,7 @@ TEST_F (TestORB, Environment)
 	CORBA::ORB::create_environment (env);
 	CORBA::Nirvana::EnvironmentBridge* eb = env;
 	eb->set_exception (CORBA::NO_MEMORY ());
-	CORBA::Exception* ex = env->exception ();
+	const CORBA::Exception* ex = env->exception ();
 	ASSERT_TRUE (ex);
 	EXPECT_STREQ (ex->_name (), "NO_MEMORY");
 	env->clear ();

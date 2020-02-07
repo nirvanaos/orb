@@ -4,7 +4,7 @@
 #include "SystemException.h"
 
 #define DECLARE_SYSTEM_EXCEPTION(e) \
-extern const Nirvana::StaticInterface <TypeCode> _tc_##e;\
+extern Nirvana::ExceptionEntry _tc_##e;\
 class e : public SystemException {\
 public: e () {}\
 e (ULong minor, CompletionStatus status = COMPLETED_NO) : SystemException (minor, status) {}\

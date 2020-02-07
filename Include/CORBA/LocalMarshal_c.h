@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_LOCALMARSHAL_C_H_
 
 #include "Object_c.h"
-#include "TypeCode_c.h"
+#include "TypeCode_b.h"
 #include <Nirvana/OLF.h>
 
 namespace CORBA {

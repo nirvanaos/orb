@@ -12,6 +12,13 @@ class EnvironmentImpl :
 	public Skeleton <S, ::CORBA::Environment>,
 	public ServantTraits <S>
 {
+public:
+	EnvironmentImpl (const EnvironmentBase& src) :
+		EnvironmentBase (Skeleton <S, ::CORBA::Environment>::epv_)
+	{
+		EnvironmentBase::operator = (src);
+	}
+
 protected:
 	EnvironmentImpl () :
 		EnvironmentBase (Skeleton <S, ::CORBA::Environment>::epv_)
@@ -21,27 +28,9 @@ protected:
 class Environment :
 	public EnvironmentImpl <Environment>,
 	public LifeCycleNoCopy <Environment>
-{};
-
-template <class ... Exceptions>
-class EnvironmentEx :
-	public EnvironmentImpl <EnvironmentEx <Exceptions...> >,
-	public LifeCycleNoCopy <Environment>
 {
 public:
-	void exception_set (Long code, const char* rep_id, const void* param)
-	{
-		EnvironmentBase::exception_set (code, rep_id, param, user_exceptions_);
-	}
-
-private:
-	static const ExceptionEntry user_exceptions_ [];
-};
-
-template <class ... Exceptions>
-const ExceptionEntry EnvironmentEx <Exceptions...>::user_exceptions_ [] = {
-	{ Exceptions::repository_id_, Exceptions::_create }...,
-	{0}
+	Environment () {}
 };
 
 }

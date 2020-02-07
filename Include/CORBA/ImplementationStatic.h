@@ -149,28 +149,6 @@ template <class S> __declspec (allocate(OLF_BIND))
 const ::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ ::Nirvana::OLF_EXPORT_LOCAL, S::constant_name
 , STATIC_BRIDGE (S, AbstractBase) };
 
-//! \class ImplementationPseudo
-//!
-//! \brief Static implementation of a pseudo interface.
-//!
-//! \tparam S Servant class implementing operations.
-//! \tparam Primary Primary interface.
-//! \tparam Bases All base interfaces derived directly or indirectly.
-
-template <class S, class Primary, class ... Bases>
-class ImplementationStaticPseudo :
-	public ServantTraitsStatic <S>,
-	public LifeCycleStatic,
-	public InterfaceStaticBase <S, Bases> ...,
-	public InterfaceStaticBase <S, Primary>
-{
-public:
-	constexpr static Primary* _get_ptr ()
-	{
-		return static_cast <Primary*> (InterfaceStaticBase <S, Primary>::_bridge ());
-	}
-};
-
 //! \class ImplementationStatic
 //!
 //! \brief A static implementation of interface.

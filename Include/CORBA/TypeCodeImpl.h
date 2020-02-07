@@ -2,11 +2,13 @@
 #define NIRVANA_ORB_TYPECODEIMPL_H_
 
 #include "TypeCode_s.h"
+#include "Exception.h"
 #include <new>
-#include "LocalMarshal.h"
 
 namespace CORBA {
 namespace Nirvana {
+
+template <class T> struct MarshalTraits;
 
 class TypeCodeBase
 {

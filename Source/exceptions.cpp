@@ -1,8 +1,8 @@
 #include <CORBA/exceptions.h>
-#include <CORBA/TypeCodeException.h>
+#include <CORBA/TypeCode.h>
 
 #define DEFINE_SYS_EXCEPTION(MID, e)\
-const Nirvana::StaticInterface <TypeCode> _tc_##e { STATIC_BRIDGE (Nirvana::TypeCodeException <e>, TypeCode) };\
+Nirvana::ExceptionEntry _tc_##e { STATIC_BRIDGE (Nirvana::TypeCodeException <e>, TypeCode) };\
 Long e::__code () const { return EC_##e; }\
 const e* e::_downcast (const Exception* ep) { return (ep && (EC_##e == ep->__code ())) ? static_cast <const e*> (ep) : nullptr; }\
 TypeCode_ptr e::__type_code () const { return _tc_##e; }\

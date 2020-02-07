@@ -3,12 +3,6 @@
 
 #include "Exception.h"
 
-#define DEFINE_INTERFACE_EXCEPTION(I, e, rep_id) \
-const Nirvana::StaticInterface <TypeCode> I::_tc_##e { STATIC_BRIDGE (Nirvana::TypeCodeException <I::e>, TypeCode) };\
-TypeCode_ptr I::e::__type_code () const { return _tc_##e; } \
-const I::e* I::e::_downcast (const Exception* ep) { return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), rep_id)) ? static_cast <const I::e*> (ep) : nullptr; } \
-DEFINE_EXCEPTION(I::e, rep_id)
-
 namespace CORBA {
 
 class UserException : public Exception
@@ -44,5 +38,11 @@ protected:
 };
 
 }
+
+#define DEFINE_INTERFACE_EXCEPTION(I, e, rep_id) \
+::CORBA::Nirvana::ExceptionEntry I::_tc_##e { STATIC_BRIDGE (::CORBA::Nirvana::TypeCodeException <I::e>, ::CORBA::TypeCode) };\
+TypeCode_ptr I::e::__type_code () const { return _tc_##e; } \
+const I::e* I::e::_downcast (const Exception* ep) { return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), rep_id)) ? static_cast <const I::e*> (ep) : nullptr; } \
+DEFINE_EXCEPTION(I::e, rep_id)
 
 #endif

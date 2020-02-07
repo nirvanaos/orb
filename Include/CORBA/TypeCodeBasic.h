@@ -2,6 +2,8 @@
 #define NIRVANA_ORB_TYPECODEBASIC_H_
 
 #include "TypeCodeImpl.h"
+#include "TypeCode.h"
+#include "MarshalTraits.h"
 
 namespace CORBA {
 namespace Nirvana {

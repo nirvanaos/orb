@@ -1,4 +1,4 @@
-#include <CORBA/TypeCode_c.h>
+#include <CORBA/TypeCode.h>
 #include <CORBA/RepositoryId.h>
 #include <CORBA/TypeCodeException.h>
 

@@ -66,7 +66,7 @@ public:
 		return _downcast (ep);
 	}
 
-	static Exception* _create (const char* rep_id, const void* data, int hint = -1);
+	static TypeCode_ptr _get_type_code (const char* rep_id, int hint = EC_SYSTEM_EXCEPTION);
 
 #define EXCEPTION_CODE(e) EC_##e,
 
@@ -116,7 +116,7 @@ protected:
 private:
 	Data data_;
 
-	static const Nirvana::ExceptionEntry creators_[KNOWN_SYSTEM_EXCEPTIONS];
+	static const Nirvana::ExceptionEntry type_codes_ [KNOWN_SYSTEM_EXCEPTIONS];
 };
 
 }

@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_ANY_H_
 #define NIRVANA_ORB_ANY_H_
 
-#include "TypeCode.h"
+#include "tc_constants.h"
 #include "Fixed.h"
 
 namespace CORBA {

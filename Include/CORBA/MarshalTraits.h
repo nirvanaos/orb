@@ -2,8 +2,8 @@
 //!
 //! \brief Local marshaling functions for use in proxy code.
 
-#ifndef NIRVANA_ORB_LOCALMARSHAL_H_
-#define NIRVANA_ORB_LOCALMARSHAL_H_
+#ifndef NIRVANA_ORB_MARSHALTRAITS_H_
+#define NIRVANA_ORB_MARSHALTRAITS_H_
 
 #include <Nirvana/basic_string.h>
 #include <Nirvana/vector.h>

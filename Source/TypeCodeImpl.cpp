@@ -1,4 +1,5 @@
 #include <CORBA/TypeCodeImpl.h>
+#include <CORBA/TypeCode.h>
 #include <string.h>
 
 namespace CORBA {

@@ -4,11 +4,10 @@
 #include "Environment_c.h"
 #include "ServantImpl.h"
 #include "Environment_s.h"
+#include "SystemException.h"
 
 namespace CORBA {
 namespace Nirvana {
-
-struct ExceptionEntry;
 
 class EnvironmentBase :
 	public Bridge < ::CORBA::Environment>
@@ -25,27 +24,49 @@ public:
 
 	Exception* exception () const
 	{
-		return exception_;
+		if (data_.is_small)
+			return (Exception*)(data_.small);
+		else
+			return data_.ptr;
 	}
 
-	void exception (Exception* ex)
-	{
-		exception_free ();
-		exception_ = ex;
-	}
+	void exception (Exception* ex);
+	void set (const Exception* ex);
 
 	void check () const;
 
+	EnvironmentBase& operator = (const EnvironmentBase& src)
+	{
+		set (src.exception ());
+	}
+
 protected:
 	EnvironmentBase (const EPV& epv) :
-		Bridge < ::CORBA::Environment> (epv),
-		exception_ (nullptr)
-	{}
+		Bridge < ::CORBA::Environment> (epv)
+	{
+		data_.is_small = 0;
+		data_.ptr = nullptr;
+	}
 
-	~EnvironmentBase ();
+	~EnvironmentBase ()
+	{
+		if (data_.is_small || data_.ptr)
+			exception_free ();
+	}
 
 private:
-	Exception* exception_;
+	void set (TypeCode_ptr tc, const void* data);
+
+private:
+	union Data
+	{
+		int small [(sizeof (SystemException) + sizeof (int) - 1) / sizeof (int)];
+		struct
+		{
+			uintptr_t is_small;
+			Exception* ptr;
+		};
+	} data_;
 };
 
 }

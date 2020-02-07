@@ -6,28 +6,6 @@
 
 #include "T_ptr.h"
 
-#define DECLARE_EXCEPTION(e) \
-virtual void raise () const;\
-virtual const char* _rep_id () const;\
-static const char repository_id_ [];\
-virtual const char* _name () const;\
-static constexpr const char* __name () { return #e; }\
-virtual TypeCode_ptr __type_code () const;\
-virtual Exception* __clone () const;\
-static const e* _downcast (const Exception* ep);\
-static e* _downcast (Exception* ep) { return const_cast <e*> (_downcast ((const Exception*)ep)); }\
-static const e* _narrow (const Exception* ep) { return _downcast (ep); }\
-static e* _narrow (Exception* ep) { return _downcast (ep); }\
-static Exception* _create (const void* data);
-
-#define DEFINE_EXCEPTION(e, rep_id) \
-void e::raise () const { throw *this; } \
-const char e::repository_id_ [] = rep_id; \
-const char* e::_rep_id () const { return repository_id_; } \
-const char* e::_name () const { return __name (); } \
-Exception* e::__clone () const { return new e (*this); } \
-Exception* e::_create (const void* data) { return new e ((Data*)data); } // TODO : Remove
-
 namespace CORBA {
 
 class TypeCode;
@@ -47,7 +25,6 @@ public:
 	// Nirvana specific
 	virtual Long __code () const = 0;
 	virtual TypeCode_ptr __type_code () const = 0;
-	virtual Exception* __clone () const = 0;	// TODO: Remove!
 
 	const void* __data () const
 	{
@@ -55,8 +32,9 @@ public:
 	}
 
 	enum {
-		EC_NO_EXCEPTION = -2,
-		EC_USER_EXCEPTION = -1
+		EC_NO_EXCEPTION = -3,
+		EC_USER_EXCEPTION = -2,
+		EC_SYSTEM_EXCEPTION = -1
 	};
 
 protected:
@@ -74,15 +52,27 @@ protected:
 
 namespace Nirvana {
 
-typedef ::CORBA::Exception* (*ExceptionCreateProc) (const void* data);
-
-struct ExceptionEntry
-{
-	const char* rep_id;
-	ExceptionCreateProc create;
-};
+typedef const StaticInterface <TypeCode> ExceptionEntry;
 
 }
 } // namespace CORBA
+
+#define DECLARE_EXCEPTION(e) \
+virtual void raise () const;\
+virtual const char* _rep_id () const;\
+static const char repository_id_ [];\
+virtual const char* _name () const;\
+static constexpr const char* __name () { return #e; }\
+virtual TypeCode_ptr __type_code () const;\
+static const e* _downcast (const Exception* ep);\
+static e* _downcast (Exception* ep) { return const_cast <e*> (_downcast ((const Exception*)ep)); }\
+static const e* _narrow (const Exception* ep) { return _downcast (ep); }\
+static e* _narrow (Exception* ep) { return _downcast (ep); }
+
+#define DEFINE_EXCEPTION(e, rep_id) \
+void e::raise () const { throw *this; } \
+const char e::repository_id_ [] = rep_id; \
+const char* e::_rep_id () const { return repository_id_; } \
+const char* e::_name () const { return __name (); }
 
 #endif

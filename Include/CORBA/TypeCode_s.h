@@ -1,8 +1,8 @@
 #ifndef NIRVANA_ORB_TYPECODE_S_H_
 #define NIRVANA_ORB_TYPECODE_S_H_
 
-#include "TypeCode_c.h"
-#include "Servant.h"
+#include "TypeCode_b.h"
+#include "ServantStatic.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -369,11 +369,6 @@ const Bridge <TypeCode>::EPV Skeleton <S, TypeCode>::epv_ = {
 		S::__local_unmarshal_inout
 	}
 };
-
-template <class S>
-class Servant <S, TypeCode> :
-	public ImplementationPseudo <S, TypeCode>
-{};
 
 template <class S>
 class ServantStatic <S, TypeCode> :
