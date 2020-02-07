@@ -23,7 +23,7 @@ public:
 		return abi;
 	}
 
-	StringABI (StringABI&& src) :
+	StringABI (StringABI&& src) NIRVANA_NOEXCEPT :
 		data_ (src.data_)
 	{
 		src.reset ();

@@ -38,14 +38,22 @@ public:
 	EnvironmentBase& operator = (const EnvironmentBase& src)
 	{
 		set (src.exception ());
+		return *this;
+	}
+
+	EnvironmentBase& operator = (EnvironmentBase&& src) NIRVANA_NOEXCEPT
+	{
+		exception_free ();
+		data_ = src.data_;
+		src.data_.reset ();
+		return *this;
 	}
 
 protected:
 	EnvironmentBase (const EPV& epv) :
 		Bridge < ::CORBA::Environment> (epv)
 	{
-		data_.is_small = 0;
-		data_.ptr = nullptr;
+		data_.reset ();
 	}
 
 	~EnvironmentBase ()
@@ -66,6 +74,12 @@ private:
 			uintptr_t is_small;
 			Exception* ptr;
 		};
+
+		void reset ()
+		{
+			is_small = 0;
+			ptr = nullptr;
+		}
 	} data_;
 };
 

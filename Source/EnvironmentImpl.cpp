@@ -2,7 +2,7 @@
 #include <CORBA/exceptions.h>
 #include <CORBA/RepositoryId.h>
 #include <CORBA/TypeCode.h>
-#include <Nirvana/Memory_c.h>
+#include <Nirvana/Memory.h>
 
 namespace CORBA {
 namespace Nirvana {

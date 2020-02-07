@@ -17,7 +17,7 @@ public:
 		return abi;
 	}
 
-	SequenceABI (SequenceABI&& src) :
+	SequenceABI (SequenceABI&& src) NIRVANA_NOEXCEPT :
 		data_ (src.data_)
 	{
 		src.reset ();

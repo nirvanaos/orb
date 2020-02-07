@@ -12,13 +12,6 @@ class EnvironmentImpl :
 	public Skeleton <S, ::CORBA::Environment>,
 	public ServantTraits <S>
 {
-public:
-	EnvironmentImpl (const EnvironmentBase& src) :
-		EnvironmentBase (Skeleton <S, ::CORBA::Environment>::epv_)
-	{
-		EnvironmentBase::operator = (src);
-	}
-
 protected:
 	EnvironmentImpl () :
 		EnvironmentBase (Skeleton <S, ::CORBA::Environment>::epv_)
@@ -30,7 +23,13 @@ class Environment :
 	public LifeCycleNoCopy <Environment>
 {
 public:
-	Environment () {}
+	Environment () {} // Inline for performance
+
+	Environment (const EnvironmentBase& src);
+	Environment (EnvironmentBase&& src) NIRVANA_NOEXCEPT;
+
+	Environment& operator = (const EnvironmentBase& src);
+	Environment& operator = (EnvironmentBase&& src) NIRVANA_NOEXCEPT;
 };
 
 }
