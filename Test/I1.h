@@ -93,6 +93,11 @@ public:
 		return ImplI1::seq_op (in_s, out_s, inout_s);
 	}
 
+	virtual CORBA::Any any_op (const CORBA::Any& in_a, CORBA::Any& out_a, CORBA::Any& inout_a)
+	{
+		return ImplI1::any_op (in_a, out_a, inout_a);
+	}
+
 	static ::Test::I1_ptr incarnate ()
 	{
 		return PortableServer::Servant_var <PortableI1> (new PortableI1 (MAGIC_CONST))->_this ();

@@ -55,16 +55,16 @@ protected:
 		return 0;
 	}
 
-	static StringABI <char> _string_op (Bridge < ::Test::I1>* _b, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge* _env)
+	static ABI <std::string>::ABI_ret _string_op (Bridge < ::Test::I1>* _b, ABI <std::string>::ABI_in in_s, ABI <std::string>::ABI_out out_s, ABI <std::string>::ABI_inout inout_s, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).string_op (_unmarshal_in (in_s), _unmarshal_out (out_s), _unmarshal_inout (inout_s));
+			return S::_implementation (_b).string_op (ABI <std::string>::in (in_s), ABI <std::string>::out (out_s), ABI <std::string>::inout (inout_s));
 		} catch (const Exception& e) {
 			_env->set_exception (e);
 		} catch (...) {
 			_env->set_unknown_exception ();
 		}
-		return StringABI <char>::_nil ();
+		return ABI <std::string>::ABI_ret ();
 	}
 
 	static StringABI <char> _bstring_op (Bridge < ::Test::I1>* _b, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge* _env)
@@ -121,7 +121,9 @@ const Bridge < ::Test::I1>::EPV Skeleton <S, ::Test::I1>::epv_ = {
 		S::_throw_NO_IMPLEMENT,
 		S::_object_op,
 		S::_string_op,
-		S::_bstring_op
+		S::_bstring_op,
+		S::_seq_op,
+		S::_any_op
 	}
 };
 
@@ -151,6 +153,7 @@ public:
 	virtual std::string string_op (const std::string&, std::string&, std::string&) = 0;
 	virtual std::string bstring_op (const std::string&, std::string&, std::string&) = 0;
 	virtual std::vector <Long> seq_op (const std::vector <Long>& in_s, std::vector <Long>& out_s, std::vector <Long>& inout_s) = 0;
+	virtual CORBA::Any any_op (const CORBA::Any&, CORBA::Any&, CORBA::Any&) = 0;
 };
 
 }

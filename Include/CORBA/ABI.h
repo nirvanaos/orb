@@ -13,19 +13,27 @@ bool uncaught_exception ();
 
 template <class T, class = void> struct ABI;
 
-/// Base for fixed length data types ABI
 template <class T>
-struct FixedABI
+struct ABI_Base
 {
-	static const bool is_fixed = true;
+	typedef T Var;
 
+	typedef const T* ABI_in;
 	typedef T* ABI_out;
 	typedef T* ABI_inout;
-	typedef T ABI_ret;
+	typedef Var ABI_ret;
 
-	typedef T& C_out;
-	typedef T& C_inout;
 	typedef T C_ret;
+
+	typedef const T& In;
+	typedef T& InOut;
+	typedef T& Out;
+
+	static const T& in (const T* p)
+	{
+		_check_pointer (p);
+		return *p;
+	}
 
 	static T& inout (T* p)
 	{
@@ -39,19 +47,26 @@ struct FixedABI
 	}
 };
 
+/// Base for fixed length data types ABI
+template <class T>
+struct FixedABI : public ABI_Base <T>
+{
+	static const bool is_fixed = true;
+};
+
+/// ABI for fixed length data types
+template <class T>
+struct ABI <T, typename std::enable_if <std::is_trivially_copyable <T>::value && !std::is_fundamental <T>::value>::type> :
+	public FixedABI <T>
+{};
+
 /// ABI for fundamental data types
 template <class T>
 struct ABI <T, typename std::enable_if <std::is_fundamental <T>::value>::type> :
 	public FixedABI <T>
 {
 	typedef T ABI_in;
-//	typedef T* ABI_out;
-//	typedef T* ABI_inout;
-
-	typedef T C_in;
-//	typedef T& C_out;
-//	typedef T& C_inout;
-//	typedef T C_ret;
+	typedef T In;
 
 	static T in (T v)
 	{
@@ -59,60 +74,35 @@ struct ABI <T, typename std::enable_if <std::is_fundamental <T>::value>::type> :
 	}
 };
 
-/// ABI for fixed length data types
-template <class T>
-struct ABI <T, typename std::enable_if <std::is_trivially_copyable <T>::value && !std::is_fundamental <T>::value>::type> :
-	public FixedABI <T>
-{
-	typedef const T* ABI_in;
-//	typedef T* ABI_out;
-//	typedef T* ABI_inout;
-
-	typedef const T& C_in;
-
-	static const T& in (const T* p)
-	{
-		_check_pointer (p);
-		return *p;
-	}
-};
-
 /// Base for variable length data types ABI
 template <class T>
-struct VariableABI
+struct VariableABI : public ABI_Base <T>
 {
 	static const bool is_fixed = false;
 
-	typedef const T* ABI_in;
-	typedef T* ABI_out;
-	typedef T* ABI_inout;
-	typedef T ABI_ret;
-
-	typedef const T& C_in;
-
-	class C_inout
+	class InOut
 	{
 	public:
-		C_inout (T& val) :
+		InOut (T& val) :
 			ref_ (val)
 		{}
 
-		operator T* () const
+		~InOut () noexcept (false);
+
+		T* operator & () const
 		{
 			return &ref_;
 		}
-
-		~C_inout () noexcept (false);
 
 	private:
 		T& ref_;
 	};
 
-	class C_out : public C_inout
+	class Out : public InOut
 	{
 	public:
-		C_out (T& val) :
-			C_inout (val)
+		Out (T& val) :
+			InOut (val)
 		{
 			val = T ();	// Clear
 		}
@@ -121,19 +111,19 @@ struct VariableABI
 	class C_ret
 	{
 	public:
-		C_ret (T&& val) :
+		C_ret (typename ABI <T>::Var&& val) :
 			val_ (std::move (val))
 		{
 			check_or_clear (val_);
 		}
 
-		operator T ()
+		operator typename ABI <T>::Var ()
 		{
 			return std::move (val_);
 		}
 
 	private:
-		T val_;
+		typename ABI <T>::Var val_;
 	};
 
 	static const T& in (const T* p)
@@ -173,7 +163,7 @@ void VariableABI <T>::check_or_clear (T& v)
 
 /// Outline for compact code
 template <class T>
-VariableABI <T>::C_inout::~C_inout () noexcept (false)
+VariableABI <T>::InOut::~InOut () noexcept (false)
 {
 	bool ex = uncaught_exception ();
 	try {
@@ -184,104 +174,21 @@ VariableABI <T>::C_inout::~C_inout () noexcept (false)
 	}
 }
 
-/*
-template <class T, class Enable = void> class C_in;
-
-template <class T, typename std::enable_if <std::is_fundamental <T>::value>::type>
-class C_in
-{
-public:
-	C_in (const T& val) :
-		val_ (val)
-	{}
-
-	operator T () const
-	{
-		return val_;
-	}
-
-private:
-	const T val_;
-};
-
-template <class T>
-class C_in
-{
-public:
-	C_in (const T& val) :
-		ref_ (val)
-	{}
-
-	operator const T* () const
-	{
-		return &ref_;
-	}
-
-private:
-	const T& ref_;
-};
-
-template <class T>
-class C_inout
-{
-public:
-	C_inout (T& val) :
-		ref_ (val)
-	{}
-
-	operator T* () const
-	{
-		return &ref_;
-	}
-
-	~C_inout () noexcept (false);
-
-private:
-	T& ref_;
-};
-
-template <class T>
-C_inout <T>::~C_inout () noexcept (false)
-{
-	if (!ABI <T>::is_fixed) {
-		bool ex = uncaught_exception ();
-		try {
-			ABI <T>::check_or_clear (ref_);
-		} catch (...) {
-			if (!ex)
-				throw;
-		}
-	}
-}
-
-template <class T>
-class C_out : public C_inout <T>
-{
-public:
-	C_out (T& val) :
-		ref_ (val)
-	{
-		val = T ();
-	}
-};
-
-
-template <class T>
-class C_ret : public T
-{
-public:
-	C_ret (T&& val)
-		T (std::move (val))
-	{
-		ABI <T>::check_or_clear (*this);
-	}
-
-	T _retn ()
-	{
-		return std::move (*this);
-	}
-};
-*/
 }
 }
+
+// Compatibility with modern C11 mapping
+namespace IDL {
+
+template <class T>
+struct traits
+{
+	typedef T value_type;
+	typedef typename CORBA::Nirvana::ABI <T>::In in_type;
+	typedef typename CORBA::Nirvana::ABI <T>::Out out_type;
+	typedef typename CORBA::Nirvana::ABI <T>::InOut inout_type;
+};
+
+}
+
 #endif

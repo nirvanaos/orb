@@ -2,6 +2,7 @@
 #define NIRVANA_ORB_STRING_H_
 
 #include <Nirvana/basic_string.h>
+#include "ABI.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -20,6 +21,38 @@ StringBase <C>::StringBase (const C* s)
 
 template <typename C>
 using String_in = const StringBase <C>&;
+
+template <typename C>
+struct ABI <std::basic_string <C, std::char_traits <C>, std::allocator <C> > > :
+	public VariableABI <std::basic_string <C, std::char_traits <C>, std::allocator <C> > >
+{
+	typedef std::basic_string <C, std::char_traits <C>, std::allocator <C> > StringType;
+
+	typedef const StringBase <C>* ABI_in;
+	typedef const StringBase <C>& In;
+
+	static const StringType& in (ABI_in p)
+	{
+		_check_pointer (p);
+		const StringType& s = static_cast <const StringType&> (*p);
+		check (s);
+		return s;
+	}
+
+	static StringType& out (StringType* p)
+	{
+		StringType& val = VariableABI <StringType>::out (p);
+		// Must be empty
+		if (!val.empty ())
+			::Nirvana::throw_BAD_PARAM ();
+		return val;
+	}
+
+	static void check (const StringType& s)
+	{
+		s._check ();
+	}
+};
 
 template <typename C>
 class String_inout_base

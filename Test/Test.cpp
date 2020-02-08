@@ -47,7 +47,7 @@ void test_interface (I1_ptr p)
 		EXPECT_STREQ (inout.c_str (), "in string");
 	}
 
-	{
+	{ // Pass string constant as in parameter
 		string out = "this text will be lost", inout = "inout string";
 		string ret = p->string_op ("in string", out, inout);
 		EXPECT_STREQ (ret.c_str (), "inout string");
@@ -63,11 +63,19 @@ void test_interface (I1_ptr p)
 		EXPECT_STREQ (inout.c_str (), "in string");
 	}
 
-	I1_var out, inout (I1::_duplicate (p));
-	I1_var ret = p->object_op (p, out, inout);
-	EXPECT_TRUE (out && out->_is_equivalent (p));
-	EXPECT_TRUE (inout && inout->_is_equivalent (p));
-	EXPECT_TRUE (ret && ret->_is_equivalent (p));
+	{
+		I1_var out, inout (I1::_duplicate (p));
+		I1_var ret = p->object_op (p, out, inout);
+		EXPECT_TRUE (out && out->_is_equivalent (p));
+		EXPECT_TRUE (inout && inout->_is_equivalent (p));
+		EXPECT_TRUE (ret && ret->_is_equivalent (p));
+	}
+
+	{
+		CORBA::Any out, inout;
+		CORBA::Any in;
+		CORBA::Any ret = p->any_op (in, out, inout);
+	}
 
 	release (p);
 }

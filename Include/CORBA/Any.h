@@ -21,7 +21,7 @@ public:
 	Any (const Any& src)
 	{
 		reset ();
-		copy_from (src.type (), src.data ());
+		copy_from (src);
 	}
 
 	Any (Any&& src) NIRVANA_NOEXCEPT :
@@ -37,7 +37,7 @@ public:
 
 	Any& operator = (const Any& src)
 	{
-		copy_from (src.type (), src.data ());
+		copy_from (src);
 		return *this;
 	}
 
@@ -218,6 +218,7 @@ public:
 private:
 	friend struct Nirvana::ABI <Any>;
 
+	void copy_from (const Any& src);
 	void* prepare (TypeCode_ptr tc);
 	void set_type (TypeCode_ptr tc);
 
@@ -227,6 +228,8 @@ private:
 	void operator <<= (unsigned char);
 	Boolean operator >>= (unsigned char &) const;
 };
+
+typedef Any Any_var;
 
 namespace Nirvana {
 
@@ -239,8 +242,8 @@ struct ABI <Any> : public VariableABI <Any>
 	{
 		Any& val = VariableABI <Any>::out (p);
 		// Must be empty
-		if (val.type ())
-			::Nirvana::throw_MARSHAL ();
+		if (!val.empty ())
+			::Nirvana::throw_BAD_PARAM ();
 		return val;
 	}
 };

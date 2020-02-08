@@ -57,8 +57,20 @@ void Any::set_type (TypeCode_ptr tc)
 void Any::copy_from (TypeCode_ptr tc, const void* val)
 {
 	void* dst = prepare (tc);
-	tc->_copy (dst, val);
-	set_type (tc);
+	if (dst) {
+		tc->_copy (dst, val);
+		set_type (tc);
+	}
+}
+
+void Any::copy_from (const Any& src)
+{
+	TypeCode_ptr tc = src.type ();
+	void* dst = prepare (tc);
+	if (dst) {
+		tc->_copy (dst, src.data ());
+		set_type (tc);
+	}
 }
 
 void Any::move_from (TypeCode_ptr tc, void* val)

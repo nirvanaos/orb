@@ -95,6 +95,11 @@ public:
 		return ImplI1::seq_op (in_s, out_s, inout_s);
 	}
 
+	virtual CORBA::Any any_op (const CORBA::Any& in_a, CORBA::Any& out_a, CORBA::Any& inout_a)
+	{
+		return ImplI1::any_op (in_a, out_a, inout_a);
+	}
+
 	virtual Long op2 (Long p1)
 	{
 		return p1 + 2 * addendum_;
