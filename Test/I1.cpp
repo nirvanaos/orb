@@ -40,4 +40,12 @@ std::vector <Long> ImplI1::seq_op (const std::vector <Long>& in_s, std::vector <
 	return tmp;
 }
 
+CORBA::Any ImplI1::any_op (const CORBA::Any& in_any, CORBA::Any& out_any, CORBA::Any& inout_any)
+{
+	CORBA::Any tmp (std::move (inout_any));
+	out_any = in_any;
+	inout_any = in_any;
+	return tmp;
+}
+
 }

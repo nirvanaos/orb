@@ -1,15 +1,16 @@
 #ifndef NIRVANA_ORB_ANY_H_
 #define NIRVANA_ORB_ANY_H_
 
+#include "ABI.h"
 #include "AnyABI.h"
+#include "TypeCode.h"
 #include <Nirvana/basic_string.h>
 
 //#include "Fixed.h"
 
 namespace CORBA {
 
-class Any :
-	public Nirvana::AnyABI
+class Any : private Nirvana::AnyABI
 {
 public:
 	Any ()
@@ -24,8 +25,10 @@ public:
 	}
 
 	Any (Any&& src) NIRVANA_NOEXCEPT :
-		AnyABI (std::move (src))
-	{}
+		AnyABI (src)
+	{
+		src.reset ();
+	}
 
 	~Any ()
 	{
@@ -41,21 +44,27 @@ public:
 	Any& operator = (Any&& src) NIRVANA_NOEXCEPT
 	{
 		clear ();
-		data_ = src.data_;
+		AnyABI::operator = (src);
 		src.reset ();
 		return *this;
 	}
 
 	TypeCode_ptr type () const
 	{
-		return static_cast <TypeCode*> (Nirvana::AnyABI::type ());
+		return AnyABI::type ();
 	}
 
 	void type (TypeCode_ptr alias);
 
 	const void* data () const
 	{
+		assert (!empty ());
 		return is_large () ? large_pointer () : small_pointer ();
+	}
+
+	bool empty () const
+	{
+		return !type ();
 	}
 
 	void clear ();
@@ -207,12 +216,10 @@ public:
 	void move_from (TypeCode_ptr tc, void* val);
 
 private:
-	void* prepare (TypeCode_ptr tc);
+	friend struct Nirvana::ABI <Any>;
 
-	void set_type (TypeCode_ptr tc)
-	{
-		AnyABI::type (TypeCode::_duplicate (tc));
-	}
+	void* prepare (TypeCode_ptr tc);
+	void set_type (TypeCode_ptr tc);
 
 	// these functions are private and not implemented
 	// hiding these causes compile-time errors for
@@ -220,6 +227,25 @@ private:
 	void operator <<= (unsigned char);
 	Boolean operator >>= (unsigned char &) const;
 };
+
+namespace Nirvana {
+
+template <>
+struct ABI <Any> : public VariableABI <Any>
+{
+	static void check (const Any& any);
+
+	static Any& out (Any* p)
+	{
+		Any& val = VariableABI <Any>::out (p);
+		// Must be empty
+		if (val.type ())
+			::Nirvana::throw_MARSHAL ();
+		return val;
+	}
+};
+
+}
 
 void operator <<= (Any&, Short);
 void operator <<= (Any&, UShort);

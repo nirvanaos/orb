@@ -1,9 +1,19 @@
 #include <CORBA/Any.h>
 #include <CORBA/tc_constants.h>
-#include <CORBA/exceptions.h>
 #include <Nirvana/Memory.h>
 
 namespace CORBA {
+
+namespace Nirvana {
+
+void ABI <Any>::check (const Any& any)
+{
+	TypeCode::unmarshal (any.type ());
+	if (any.is_large () && !any.large_pointer ())
+		::Nirvana::throw_BAD_PARAM ();
+}
+
+}
 
 void Any::clear ()
 {
@@ -30,13 +40,18 @@ void* Any::prepare (TypeCode_ptr tc)
 	if (tc) {
 		ULong size = tc->_size ();
 		if (!size)
-			throw BAD_TYPECODE ();
+			::Nirvana::throw_BAD_TYPECODE ();
 		if (size <= SMALL_CAPACITY)
 			dst = small_pointer ();
 		else
 			large_pointer (dst = ::Nirvana::g_default_heap->allocate (0, size, 0), size);
 	}
 	return dst;
+}
+
+void Any::set_type (TypeCode_ptr tc)
+{
+	AnyABI::type (static_cast <Nirvana::Bridge <TypeCode>*> (TypeCode::_duplicate (tc)));
 }
 
 void Any::copy_from (TypeCode_ptr tc, const void* val)

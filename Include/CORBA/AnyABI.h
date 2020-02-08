@@ -1,95 +1,85 @@
+//! \file AnyABI.h.
+//!
+//! \brief Declares the any ABI
+//! This file have not be changed in future
+
 #ifndef NIRVANA_ORB_ANYABI_H_
 #define NIRVANA_ORB_ANYABI_H_
 
-#include "TypeCode.h"
+#include <Nirvana/NirvanaBase.h>
 
 namespace CORBA {
+
+class TypeCode;
+
 namespace Nirvana {
 
-class AnyABI
+#pragma pack (push, 1)
+
+struct AnyABI
 {
-public:
-	static AnyABI _nil ()
+	/// Pointer to TypeCode and large data tag in the least significant bit.
+	uintptr_t type_code;
+
+	struct
 	{
-		AnyABI abi;
-		abi.reset ();
-		return abi;
-	}
+		void* p;	//< Pointer to large data
+		size_t size;	//< Large data size
+		size_t padding;
+	} data;
 
-	AnyABI (AnyABI&& src) NIRVANA_NOEXCEPT :
-		data_ (src.data_)
-	{
-		src.reset ();
-	}
-
-protected:
-	struct Data
-	{
-		uintptr_t type_code;
-
-		struct
-		{
-			void* p;
-			size_t padding;
-			size_t size;
-		} data;
-	};
-
-	static const size_t SMALL_CAPACITY = sizeof (Data::data);
-
-	AnyABI ()
-	{}
+	static const size_t SMALL_CAPACITY = sizeof (data);
 
 	void reset ()
 	{
-		data_.type_code = 0;
+		type_code = 0;
 	}
 
-	Nirvana::BridgeMarshal <TypeCode>* type () const
+	TypeCode* type () const
 	{
-		return reinterpret_cast <Nirvana::BridgeMarshal <TypeCode>*> (data_.type_code & ~1);
+		return reinterpret_cast <TypeCode*> (type_code & ~1);
 	}
 
-	void type (Nirvana::BridgeMarshal <TypeCode>* tc)
+	void type (void* tc)
 	{
-		data_.type_code = reinterpret_cast <uintptr_t> (tc) | (data_.type_code & 1);
+		assert (((uintptr_t)tc & 1) == 0);
+		type_code = reinterpret_cast <uintptr_t> (tc) | (type_code & 1);
 	}
 
 	bool is_large () const
 	{
-		return (data_.type_code & 1) != 0;
+		return (type_code & 1) != 0;
 	}
 
 	const void* small_pointer () const
 	{
-		return &data_.data;
+		return &data;
 	}
 
 	void* small_pointer ()
 	{
-		return &data_.data;
+		return &data;
 	}
 
 	void* large_pointer () const
 	{
-		return data_.data.p;
+		return data.p;
 	}
 
 	void large_pointer (void* p, size_t size)
 	{
-		data_.data.p = p;
-		data_.data.size = size;
-		data_.type_code |= 1;
+		data.p = p;
+		data.size = size;
+		type_code |= 1;
 	}
 
 	size_t large_size ()
 	{
-		return data_.data.size;
+		return data.size;
 	}
-
-protected:
- Data data_;
 };
+
+#pragma pack (pop)
 
 }
 }

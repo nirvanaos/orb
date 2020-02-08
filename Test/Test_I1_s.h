@@ -92,6 +92,18 @@ protected:
 		}
 		return SequenceABI <Long>::_nil ();
 	}
+
+	static ABI <Any>::ABI_ret _any_op (Bridge < ::Test::I1>* _b, ABI <Any>::ABI_in in_any, ABI <Any>::ABI_out out_any, ABI <Any>::ABI_inout inout_any, EnvironmentBridge* _env)
+	{
+		try {
+			return S::_implementation (_b).any_op (ABI <Any>::in (in_any), ABI <Any>::out (out_any), ABI <Any>::inout (inout_any));
+		} catch (const Exception & e) {
+			_env->set_exception (e);
+		} catch (...) {
+			_env->set_unknown_exception ();
+		}
+		return ABI <Any>::ABI_ret ();
+	}
 };
 
 template <class S>

@@ -175,7 +175,9 @@ void vector <T, allocator <T> >::_check_or_clear ()
 	try {
 		_check ();
 	} catch (...) {
-		release_memory ();
+		try {
+			clear ();
+		} catch (...) {}
 		this->reset ();
 		throw;
 	}

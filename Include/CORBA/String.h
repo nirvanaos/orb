@@ -409,7 +409,9 @@ void basic_string <C, T, allocator <C> >::_check_or_clear ()
 	try {
 		_check ();
 	} catch (...) {
-		release_memory ();
+		try {
+			clear ();
+		} catch (...) {}
 		this->reset ();
 		throw;
 	}
