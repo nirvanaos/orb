@@ -45,15 +45,16 @@ private:
 	std::vector <T>& s_;
 };
 
-template <typename T>
+template <typename T> // Outline for compact code
 Sequence_inout_base <T>::~Sequence_inout_base () noexcept (false)
 {
-#ifdef NIRVANA_C17
-	if (!std::uncaught_exceptions ())
-#else
-	if (!std::uncaught_exception ())
-#endif
+	bool ex = uncaught_exception ();
+	try {
 		s_._check_or_clear ();
+	} catch (...) {
+		if (!ex)
+			throw;
+	}
 }
 
 template <typename T>
@@ -165,7 +166,7 @@ void vector <T, allocator <T> >::_check () const
 		CORBA::Nirvana::_check_pointer (p);
 	size_type cnt = size ();
 	if (cnt > 0 && (cnt > this->capacity () || !heap ()->is_readable (p, cnt * sizeof (value_type))))
-		throw CORBA::MARSHAL ();
+		::Nirvana::throw_MARSHAL ();
 }
 
 template <class T>

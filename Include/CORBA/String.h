@@ -82,19 +82,20 @@ public:
 
 #endif
 
-private:
+protected:
 	std::basic_string <C>& s_;
 };
 
-template <typename C>
+template <typename C> // Outline for compact code
 String_inout_base <C>::~String_inout_base () noexcept (false)
 {
-#ifdef NIRVANA_C17
-	if (!std::uncaught_exceptions ())
-#else
-	if (!std::uncaught_exception ())
-#endif
+	bool ex = uncaught_exception ();
+	try {
 		s_._check_or_clear ();
+	} catch (...) {
+		if (!ex)
+			throw;
+	}
 }
 
 template <typename C>

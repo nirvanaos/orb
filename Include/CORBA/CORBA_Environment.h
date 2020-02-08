@@ -34,6 +34,11 @@ public:
 		return Environment_ptr::nil ();
 	}
 
+	static Environment_ptr unmarshal (Environment_ptr p)
+	{
+		return p;
+	}
+
 	void clear ()
 	{
 		exception_free ();

@@ -1,6 +1,7 @@
 #include <CORBA/Interface.h>
 #include <CORBA/RepositoryId.h>
 #include <CORBA/Environment.h>
+#include <exception>
 
 namespace CORBA {
 namespace Nirvana {
@@ -33,6 +34,15 @@ Bridge <Interface>* Interface::unmarshal (Bridge <Interface>* bridge, const Char
 			::Nirvana::throw_MARSHAL ();
 	}
 	return bridge;
+}
+
+bool uncaught_exception ()
+{
+#ifdef NIRVANA_C17
+	return std::uncaught_exceptions () != 0;
+#else
+	return std::uncaught_exception ();
+#endif
 }
 
 }

@@ -10,6 +10,8 @@
 namespace CORBA {
 namespace Nirvana {
 
+bool uncaught_exception ();
+
 template <class I> class T_var;
 template <class I> class T_out;
 template <class I> class T_inout;
@@ -219,6 +221,8 @@ public:
 		ptr_ (rhs.ptr_)
 	{}
 
+	~T_inout () noexcept (false);
+
 	T_inout <I>& operator = (const T_inout <I>& rhs)
 	{
 		ptr_ = rhs.ptr_;
@@ -260,6 +264,21 @@ public:
 protected:
 	T_ptr <I>& ptr_;
 };
+
+template <class I> // Outline for compact code
+T_inout <I>::~T_inout () noexcept (false)
+{
+	bool ex = uncaught_exception ();
+	try {
+		I::unmarshal (ptr_);
+	} catch (...) {
+		Interface::_release (ptr_);
+		ptr_ = T_ptr <I>::nil ();
+		if (!ex)
+			throw;
+	}
+}
+
 
 /// T_out helper class
 template <class I>
