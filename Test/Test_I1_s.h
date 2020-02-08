@@ -67,20 +67,6 @@ protected:
 		return ABI <std::string>::ABI_ret ();
 	}
 
-	static StringABI <char> _bstring_op (Bridge < ::Test::I1>* _b, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge* _env)
-	{
-		try {
-			std::string _ret = S::_implementation (_b).bstring_op (_unmarshal_in <20> (in_s), _unmarshal_out <20> (out_s), _unmarshal_inout <20> (inout_s));
-			_check_bound (_ret, 20);
-			return std::move (_ret);
-		} catch (const Exception& e) {
-			_env->set_exception (e);
-		} catch (...) {
-			_env->set_unknown_exception ();
-		}
-		return StringABI <char>::_nil ();
-	}
-
 	static SequenceABI <Long> _seq_op (Bridge < ::Test::I1>* _b, const SequenceABI <Long>* in_s, SequenceABI <Long>* out_s, SequenceABI <Long>* inout_s, EnvironmentBridge* _env)
 	{
 		try {
@@ -121,7 +107,6 @@ const Bridge < ::Test::I1>::EPV Skeleton <S, ::Test::I1>::epv_ = {
 		S::_throw_NO_IMPLEMENT,
 		S::_object_op,
 		S::_string_op,
-		S::_bstring_op,
 		S::_seq_op,
 		S::_any_op
 	}
@@ -151,7 +136,6 @@ public:
 	virtual void throw_NO_IMPLEMENT () = 0;
 	virtual ::Test::I1_ptr object_op (::Test::I1_ptr in_obj, ::Test::I1_var& out_obj, ::Test::I1_var& inout_obj) = 0;
 	virtual std::string string_op (const std::string&, std::string&, std::string&) = 0;
-	virtual std::string bstring_op (const std::string&, std::string&, std::string&) = 0;
 	virtual std::vector <Long> seq_op (const std::vector <Long>& in_s, std::vector <Long>& out_s, std::vector <Long>& inout_s) = 0;
 	virtual CORBA::Any any_op (const CORBA::Any&, CORBA::Any&, CORBA::Any&) = 0;
 };

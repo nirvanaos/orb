@@ -14,7 +14,6 @@ class ImplI1
 public:
 	static I1_ptr object_op (I1_ptr in_obj, I1_var& out_obj, I1_var& inout_obj);
 	static std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s);
-	static std::string bstring_op (const std::string& in_s, std::string& out_s, std::string& inout_s);
 	static std::vector <Long> seq_op (const std::vector <Long>& in_s, std::vector <Long>& out_s, std::vector <Long>& inout_s);
 	static CORBA::Any any_op (const CORBA::Any& in_any, CORBA::Any& out_any, CORBA::Any& inout_any);
 };
@@ -81,11 +80,6 @@ public:
 	virtual std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
 	{
 		return ImplI1::string_op (in_s, out_s, inout_s);
-	}
-
-	virtual std::string bstring_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
-	{
-		return ImplI1::bstring_op (in_s, out_s, inout_s);
 	}
 
 	virtual std::vector <Long> seq_op (const std::vector <Long>& in_s, std::vector <Long>& out_s, std::vector <Long>& inout_s)

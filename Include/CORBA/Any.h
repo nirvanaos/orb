@@ -229,18 +229,16 @@ private:
 	Boolean operator >>= (unsigned char &) const;
 };
 
-typedef Any Any_var;
-
 namespace Nirvana {
 
 template <>
-struct ABI <Any> : public VariableABI <Any>
+struct ABI <Any> : public ABI_Variable <Any>
 {
 	static void check (const Any& any);
 
 	static Any& out (Any* p)
 	{
-		Any& val = VariableABI <Any>::out (p);
+		Any& val = ABI_Variable <Any>::out (p);
 		// Must be empty
 		if (!val.empty ())
 			::Nirvana::throw_BAD_PARAM ();
@@ -249,6 +247,11 @@ struct ABI <Any> : public VariableABI <Any>
 };
 
 }
+
+typedef Nirvana::ABI <Any>::Var Any_var;
+typedef Nirvana::ABI <Any>::In Any_in;
+typedef Nirvana::ABI <Any>::Out Any_out;
+typedef Nirvana::ABI <Any>::InOut Any_inout;
 
 void operator <<= (Any&, Short);
 void operator <<= (Any&, UShort);

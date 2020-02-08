@@ -23,52 +23,70 @@ struct ABI_Base
 	typedef T* ABI_inout;
 	typedef Var ABI_ret;
 
-	typedef T C_ret;
-
 	typedef const T& In;
 	typedef T& InOut;
 	typedef T& Out;
 
-	static const T& in (const T* p)
+	static const T& in (ABI_in p)
 	{
 		_check_pointer (p);
 		return *p;
 	}
 
-	static T& inout (T* p)
+	static T& inout (ABI_inout p)
 	{
 		_check_pointer (p);
 		return *p;
 	}
 
-	static T& out (T* p)
+	static T& out (ABI_out p)
 	{
 		return inout (p);
+	}
+
+	static Var ret (ABI_ret ret)
+	{
+		return ret;
 	}
 };
 
 /// Base for fixed length data types ABI
 template <class T>
-struct FixedABI : public ABI_Base <T>
+struct ABI_Fixed : public ABI_Base <T>
 {
-	static const bool is_fixed = true;
+	static const bool is_checked = false;
 };
 
 /// ABI for fixed length data types
 template <class T>
 struct ABI <T, typename std::enable_if <std::is_trivially_copyable <T>::value && !std::is_fundamental <T>::value>::type> :
-	public FixedABI <T>
+	public ABI_Fixed <T>
 {};
 
 /// ABI for fundamental data types
 template <class T>
 struct ABI <T, typename std::enable_if <std::is_fundamental <T>::value>::type> :
-	public FixedABI <T>
+	public ABI_Fixed <T>
 {
 	typedef T ABI_in;
-	typedef T In;
 
-	static T in (T v)
+	class In
+	{
+	public:
+		In (T val) :
+			val_ (val)
+		{}
+
+		ABI_in operator & () const
+		{
+			return val_;
+		}
+
+	private:
+		T val_;
+	};
+
+	static T in (ABI_in v)
 	{
 		return v;
 	}
@@ -76,9 +94,16 @@ struct ABI <T, typename std::enable_if <std::is_fundamental <T>::value>::type> :
 
 /// Base for variable length data types ABI
 template <class T>
-struct VariableABI : public ABI_Base <T>
+struct ABI_Variable : public ABI_Base <T>
 {
-	static const bool is_fixed = false;
+	static const bool is_checked = true;
+
+	using ABI_Base <T>::ABI_in;
+	using ABI_Base <T>::ABI_out;
+	using ABI_Base <T>::ABI_inout;
+	using ABI_Base <T>::ABI_ret;
+
+	using ABI_Base <T>::Var;
 
 	class InOut
 	{
@@ -108,41 +133,29 @@ struct VariableABI : public ABI_Base <T>
 		}
 	};
 
-	class C_ret
-	{
-	public:
-		C_ret (typename ABI <T>::Var&& val) :
-			val_ (std::move (val))
-		{
-			check_or_clear (val_);
-		}
-
-		operator typename ABI <T>::Var ()
-		{
-			return std::move (val_);
-		}
-
-	private:
-		typename ABI <T>::Var val_;
-	};
-
-	static const T& in (const T* p)
+	static const T& in (ABI_in p)
 	{
 		_check_pointer (p);
 		ABI <T>::check (*p);
 		return *p;
 	}
 
-	static T& inout (T* p)
+	static T& inout (ABI_inout p)
 	{
 		_check_pointer (p);
 		ABI <T>::check (*p);
 		return *p;
 	}
 
-	static T& out (T* p)
+	static T& out (ABI_out p)
 	{
 		return inout (p);
+	}
+
+	static Var ret (ABI_ret val)
+	{
+		check_or_clear (val);
+		return val;
 	}
 
 	static void check_or_clear (T& v);
@@ -150,7 +163,7 @@ struct VariableABI : public ABI_Base <T>
 
 /// Outline for compact code
 template <class T>
-void VariableABI <T>::check_or_clear (T& v)
+void ABI_Variable <T>::check_or_clear (T& v)
 {
 	try {
 		ABI <T>::check (v);
@@ -163,7 +176,7 @@ void VariableABI <T>::check_or_clear (T& v)
 
 /// Outline for compact code
 template <class T>
-VariableABI <T>::InOut::~InOut () noexcept (false)
+ABI_Variable <T>::InOut::~InOut () noexcept (false)
 {
 	bool ex = uncaught_exception ();
 	try {
@@ -183,7 +196,7 @@ namespace IDL {
 template <class T>
 struct traits
 {
-	typedef T value_type;
+	typedef typename CORBA::Nirvana::ABI <T>::Var value_type;
 	typedef typename CORBA::Nirvana::ABI <T>::In in_type;
 	typedef typename CORBA::Nirvana::ABI <T>::Out out_type;
 	typedef typename CORBA::Nirvana::ABI <T>::InOut inout_type;

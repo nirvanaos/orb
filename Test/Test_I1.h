@@ -36,7 +36,6 @@ public:
 			void (*throw_NO_IMPLEMENT) (Bridge < ::Test::I1>*, EnvironmentBridge*);
 			BridgeMarshal < ::Test::I1>* (*object_op) (Bridge < ::Test::I1>*, BridgeMarshal < ::Test::I1>* in_obj, BridgeMarshal < ::Test::I1>** out_obj, BridgeMarshal < ::Test::I1>** inout_obj, EnvironmentBridge*);
 			ABI <std::string>::ABI_ret (*string_op) (Bridge < ::Test::I1>*, ABI <std::string>::ABI_in in_s, ABI <std::string>::ABI_out out_s, ABI <std::string>::ABI_inout inout_s, EnvironmentBridge*);
-			StringABI <char> (*bstring_op) (Bridge < ::Test::I1>*, const StringABI <char>* in_s, StringABI <char>* out_s, StringABI <char>* inout_s, EnvironmentBridge*);
 			SequenceABI <Long> (*seq_op) (Bridge < ::Test::I1>*, const SequenceABI <Long>* in_s, SequenceABI <Long>* out_s, SequenceABI <Long>* inout_s, EnvironmentBridge*);
 			ABI <Any>::ABI_ret (*any_op) (Bridge < ::Test::I1>*, ABI <Any>::ABI_in, ABI <Any>::ABI_out, ABI <Any>::ABI_inout, EnvironmentBridge*);
 		}
@@ -64,10 +63,9 @@ public:
 	Long op1 (Long p1);
 	void throw_NO_IMPLEMENT ();
 	T_ptr < ::Test::I1> object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj);
-	ABI <std::string>::Var string_op (ABI <std::string>::In, ABI <std::string>::Out, ABI <std::string>::InOut);
-	std::string bstring_op (String_in <char> in_s, String_out <char> out_s, String_inout <char> inout_s);
+	std::string string_op (CORBA::String_in, CORBA::String_out, CORBA::String_inout);
 	std::vector <Long> seq_op (Sequence_in <Long> in_s, Sequence_out <Long> out_s, Sequence_inout <Long> inout_s);
-	ABI <CORBA::Any>::Var any_op (ABI <CORBA::Any>::In, ABI <CORBA::Any>::Out, ABI <CORBA::Any>::InOut);
+	Any any_op (Any_in, Any_out, Any_inout);
 };
 
 template <class T>
@@ -100,26 +98,13 @@ T_ptr < ::Test::I1> Client <T, ::Test::I1>::object_op (T_ptr < ::Test::I1> in_ob
 }
 
 template <class T>
-ABI <std::string>::Var Client <T, ::Test::I1>::string_op (ABI <std::string>::In in_s, ABI <std::string>::Out out_s, ABI <std::string>::InOut inout_s)
+std::string Client <T, ::Test::I1>::string_op (CORBA::String_in in_s, CORBA::String_out out_s, CORBA::String_inout inout_s)
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	ABI <std::string>::C_ret _ret = (_b._epv ().epv.string_op) (&_b, &in_s, &out_s, &inout_s, &_env);
+	std::string _ret = ABI <std::string>::ret ((_b._epv ().epv.string_op) (&_b, &in_s, &out_s, &inout_s, &_env));
 	_env.check ();
 	return _ret;
-}
-
-template <class T>
-std::string Client <T, ::Test::I1>::bstring_op (String_in <char> in_s, String_out <char> out_s, String_inout <char> inout_s)
-{
-	_check_bound (in_s, 20);
-	_check_bound (inout_s, 20);
-	Environment _env;
-	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	String_var <char> _ret = (_b._epv ().epv.bstring_op) (&_b, &in_s, &out_s, &inout_s, &_env);
-	_env.check ();
-	_check_bound (_ret, 20);
-	return _ret._retn ();
 }
 
 template <class T>
@@ -133,11 +118,11 @@ std::vector <Long> Client <T, ::Test::I1>::seq_op (Sequence_in <Long> in_s, Sequ
 }
 
 template <class T>
-CORBA::Any Client <T, ::Test::I1>::any_op (ABI <CORBA::Any>::In in_any, ABI <CORBA::Any>::Out out_any, ABI <CORBA::Any>::InOut inout_any)
+Any Client <T, ::Test::I1>::any_op (Any_in in_any, Any_out out_any, Any_inout inout_any)
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	ABI <CORBA::Any>::C_ret _ret = (_b._epv ().epv.any_op) (&_b, &in_any, &out_any, &inout_any, &_env);
+	Any _ret = ABI <CORBA::Any>::ret ((_b._epv ().epv.any_op) (&_b, &in_any, &out_any, &inout_any, &_env));
 	_env.check ();
 	return _ret;
 }

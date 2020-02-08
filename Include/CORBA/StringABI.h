@@ -16,19 +16,6 @@ template <typename C>
 class StringABI
 {
 public:
-	static StringABI _nil ()
-	{
-		StringABI abi;
-		abi.reset ();
-		return abi;
-	}
-
-	StringABI (StringABI&& src) NIRVANA_NOEXCEPT :
-		data_ (src.data_)
-	{
-		src.reset ();
-	}
-
 	static size_t max_size ()
 	{
 		return (SIZE_MAX / 2 + 1) / sizeof (C) - 1;
@@ -56,9 +43,6 @@ public:
 	}
 
 protected:
-	StringABI ()
-	{}
-
 	const C* _ptr () const
 	{
 		if (is_large ())

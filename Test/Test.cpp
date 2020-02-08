@@ -56,14 +56,6 @@ void test_interface (I1_ptr p)
 	}
 
 	{
-		string out = "this text will be lost", inout = "inout string";
-		string ret = p->bstring_op ("in string", out, inout);
-		EXPECT_STREQ (ret.c_str (), "inout string");
-		EXPECT_STREQ (out.c_str (), "in string");
-		EXPECT_STREQ (inout.c_str (), "in string");
-	}
-
-	{
 		I1_var out, inout (I1::_duplicate (p));
 		I1_var ret = p->object_op (p, out, inout);
 		EXPECT_TRUE (out && out->_is_equivalent (p));

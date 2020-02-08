@@ -85,11 +85,6 @@ public:
 		return ImplI1::string_op (in_s, out_s, inout_s);
 	}
 
-	virtual std::string bstring_op (const std::string& in_s, std::string& out_s, std::string& inout_s)
-	{
-		return ImplI1::bstring_op (in_s, out_s, inout_s);
-	}
-
 	virtual std::vector <Long> seq_op (const std::vector <Long>& in_s, std::vector <Long>& out_s, std::vector <Long>& inout_s)
 	{
 		return ImplI1::seq_op (in_s, out_s, inout_s);
