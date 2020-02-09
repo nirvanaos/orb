@@ -1,7 +1,6 @@
 #ifndef NIRVANA_ORB_ENVIRONMENTIMPL_H_
 #define NIRVANA_ORB_ENVIRONMENTIMPL_H_
 
-#include "Environment_c.h"
 #include "ServantImpl.h"
 #include "Environment_s.h"
 #include "SystemException.h"

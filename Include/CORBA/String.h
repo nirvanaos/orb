@@ -24,7 +24,7 @@ using String = std::basic_string <C, std::char_traits <C>, std::allocator <C> >;
 
 template <typename C>
 struct ABI <String <C> > :
-	public ABI_Variable <String <C> >
+	public ABI_VariableLen <String <C> >
 {
 	typedef String <C> StringType;
 
@@ -41,7 +41,7 @@ struct ABI <String <C> > :
 
 	static StringType& out (StringType* p)
 	{
-		StringType& val = ABI_Variable <StringType>::out (p);
+		StringType& val = ABI_VariableLen <StringType>::out (p);
 		// Must be empty
 		if (!val.empty ())
 			::Nirvana::throw_BAD_PARAM ();

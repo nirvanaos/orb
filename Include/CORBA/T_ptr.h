@@ -1,10 +1,8 @@
 #ifndef NIRVANA_ORB_T_PTR_H_
 #define NIRVANA_ORB_T_PTR_H_
 
-#include <Nirvana/NirvanaBase.h>
 #include <Nirvana/throw_exception.h>
 #include "Bridge.h"
-#include <assert.h>
 
 namespace CORBA {
 namespace Nirvana {

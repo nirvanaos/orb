@@ -6,11 +6,10 @@
 #include "Environment.h"
 #include "T_ptr.h"
 #include "RepositoryId.h"
+#include "ABI_forward.h"
 
 namespace CORBA {
 namespace Nirvana {
-
-bool uncaught_exception ();
 
 template <class I> class T_var;
 template <class I> class T_out;
@@ -25,7 +24,7 @@ class Interface :
 {
 public:
 	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf);
-	
+
 	static T_ptr <Interface> _duplicate (T_ptr <Interface> itf);
 
 	static void _release (Bridge <Interface>* itf);
@@ -208,7 +207,13 @@ protected:
 		T_ptr <I>::operator = (p);
 	}
 };
+/*
+template <class I, typename std::enable_if <std::is_base_of <Bridge <Interface>, I>::value>::type>
+struct ABI <I> : public ABI_Variable <T_var <I> >
+{
 
+};
+*/
 template <class I>
 class T_inout
 {

@@ -15,7 +15,7 @@ using Sequence = std::vector <T, std::allocator <T> >;
 
 template <class T>
 struct ABI <Sequence <T> > :
-	public ABI_Variable <Sequence <T> >
+	public ABI_VariableLen <Sequence <T> >
 {
 	static void check (const Sequence <T>& v);
 };

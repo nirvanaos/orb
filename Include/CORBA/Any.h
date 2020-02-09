@@ -232,13 +232,13 @@ private:
 namespace Nirvana {
 
 template <>
-struct ABI <Any> : public ABI_Variable <Any>
+struct ABI <Any> : public ABI_VariableLen <Any>
 {
 	static void check (const Any& any);
 
 	static Any& out (Any* p)
 	{
-		Any& val = ABI_Variable <Any>::out (p);
+		Any& val = ABI_VariableLen <Any>::out (p);
 		// Must be empty
 		if (!val.empty ())
 			::Nirvana::throw_BAD_PARAM ();
