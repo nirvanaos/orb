@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_ABI_INTERFACE_H_
 #define NIRVANA_ORB_ABI_INTERFACE_H_
 
-#include "Interface.h"
+#include "ABI_forward.h"
 #include <type_traits>
 
 namespace CORBA {
@@ -19,7 +19,18 @@ struct ABI_Interface
 	typedef BridgeMarshal <I>** ABI_inout;
 	typedef BridgeMarshal <I>* ABI_ret;
 
-	typedef T_ptr <I> In;
+	class In : public T_ptr <I>
+	{
+	public:
+		In (T_ptr <I> p) :
+			T_ptr <I> (p)
+		{}
+
+		ABI_in operator & () const
+		{
+			return *this;
+		}
+	};
 
 	class InOut
 	{
@@ -32,7 +43,7 @@ struct ABI_Interface
 
 		BridgeMarshal <I>** operator & () const
 		{
-			return &ref_.p_;
+			return reinterpret_cast <BridgeMarshal <I>**> (&ref_.p_);
 		}
 
 	protected:
@@ -72,7 +83,7 @@ struct ABI_Interface
 	{
 		_check_pointer (p);
 		I::unmarshal (*p);
-		return reinterpret_cast <T_var <I>&> (**p);
+		return reinterpret_cast <T_var <I>&> (*p);
 	}
 
 	static T_var <I>& out (ABI_out p)
@@ -80,10 +91,10 @@ struct ABI_Interface
 		_check_pointer (p);
 		if (*p)
 			::Nirvana::throw_BAD_PARAM ();
-		return reinterpret_cast <T_var <I>&> (**p);
+		return reinterpret_cast <T_var <I>&> (*p);
 	}
 
-	void check_or_clear (T_ptr <I>& p);
+	static void check_or_clear (T_ptr <I>& p);
 };
 
 // Outline for compact code

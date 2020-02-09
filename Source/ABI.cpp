@@ -1,5 +1,4 @@
 #include <CORBA/ABI_forward.h>
-#include <CORBA/ABI_Interface.h> // TODO: remove after debugging
 #include <Nirvana/throw_exception.h>
 #include <exception>
 

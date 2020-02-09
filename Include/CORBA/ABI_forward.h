@@ -6,8 +6,8 @@ namespace Nirvana {
 
 template <class T, class = void> struct ABI;
 
-void _check_pointer (const void* p);
-bool uncaught_exception ();
+extern void _check_pointer (const void* p);
+extern bool uncaught_exception ();
 
 template <class T>
 struct ABI_Base
