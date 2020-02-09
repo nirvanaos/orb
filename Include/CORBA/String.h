@@ -20,10 +20,13 @@ StringBase <C>::StringBase (const C* s)
 }
 
 template <typename C>
-struct ABI <std::basic_string <C, std::char_traits <C>, std::allocator <C> > > :
-	public ABI_Variable <std::basic_string <C, std::char_traits <C>, std::allocator <C> > >
+using String = std::basic_string <C, std::char_traits <C>, std::allocator <C> >;
+
+template <typename C>
+struct ABI <String <C> > :
+	public ABI_Variable <String <C> >
 {
-	typedef std::basic_string <C, std::char_traits <C>, std::allocator <C> > StringType;
+	typedef String <C> StringType;
 
 	typedef const StringBase <C>* ABI_in;
 	typedef const StringBase <C>& In;
@@ -49,7 +52,7 @@ struct ABI <std::basic_string <C, std::char_traits <C>, std::allocator <C> > > :
 };
 
 template <typename C>
-void ABI <std::basic_string <C, std::char_traits <C>, std::allocator <C> > >::check (const StringType& s)
+void ABI <String <C> >::check (const StringType& s)
 {
 	// Do some check
 	const C* p;
@@ -71,16 +74,16 @@ void ABI <std::basic_string <C, std::char_traits <C>, std::allocator <C> > >::ch
 }
 
 template <typename C>
-using StringTraits = ABI <std::basic_string <C, std::char_traits <C>, std::allocator <C> > >;
+using ABI_String = ABI <String <C> >;
 
 template <typename C>
-using String_in = typename StringTraits <C>::In;
+using String_in = typename ABI_String <C>::In;
 
 template <typename C>
-using String_out = typename StringTraits <C>::Out;
+using String_out = typename ABI_String <C>::Out;
 
 template <typename C>
-using String_inout = typename StringTraits <C>::InOut;
+using String_inout = typename ABI_String <C>::InOut;
 
 template <typename C>
 class String_var : public std::basic_string <C>

@@ -36,7 +36,7 @@ public:
 			void (*throw_NO_IMPLEMENT) (Bridge < ::Test::I1>*, EnvironmentBridge*);
 			BridgeMarshal < ::Test::I1>* (*object_op) (Bridge < ::Test::I1>*, BridgeMarshal < ::Test::I1>* in_obj, BridgeMarshal < ::Test::I1>** out_obj, BridgeMarshal < ::Test::I1>** inout_obj, EnvironmentBridge*);
 			ABI <std::string>::ABI_ret (*string_op) (Bridge < ::Test::I1>*, ABI <std::string>::ABI_in in_s, ABI <std::string>::ABI_out out_s, ABI <std::string>::ABI_inout inout_s, EnvironmentBridge*);
-			SequenceABI <Long> (*seq_op) (Bridge < ::Test::I1>*, const SequenceABI <Long>* in_s, SequenceABI <Long>* out_s, SequenceABI <Long>* inout_s, EnvironmentBridge*);
+			ABI <std::vector <Long> >::ABI_ret (*seq_op) (Bridge < ::Test::I1>*, ABI <std::vector <Long> >::ABI_in in_s, ABI <std::vector <Long> >::ABI_out out_s, ABI <std::vector <Long> >::ABI_inout inout_s, EnvironmentBridge*);
 			ABI <Any>::ABI_ret (*any_op) (Bridge < ::Test::I1>*, ABI <Any>::ABI_in, ABI <Any>::ABI_out, ABI <Any>::ABI_inout, EnvironmentBridge*);
 		}
 		epv;
@@ -64,7 +64,7 @@ public:
 	void throw_NO_IMPLEMENT ();
 	T_ptr < ::Test::I1> object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj);
 	std::string string_op (CORBA::String_in, CORBA::String_out, CORBA::String_inout);
-	std::vector <Long> seq_op (Sequence_in <Long> in_s, Sequence_out <Long> out_s, Sequence_inout <Long> inout_s);
+	Sequence_var <Long> seq_op (Sequence_in <Long> in_s, Sequence_out <Long> out_s, Sequence_inout <Long> inout_s);
 	Any any_op (Any_in, Any_out, Any_inout);
 };
 
@@ -108,13 +108,13 @@ std::string Client <T, ::Test::I1>::string_op (CORBA::String_in in_s, CORBA::Str
 }
 
 template <class T>
-std::vector <Long> Client <T, ::Test::I1>::seq_op (Sequence_in <Long> in_s, Sequence_out <Long> out_s, Sequence_inout <Long> inout_s)
+Sequence_var <Long> Client <T, ::Test::I1>::seq_op (Sequence_in <Long> in_s, Sequence_out <Long> out_s, Sequence_inout <Long> inout_s)
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	Sequence_var <Long> _ret = (_b._epv ().epv.seq_op) (&_b, &in_s, &out_s, &inout_s, &_env);
+	Sequence_var <Long> _ret = ABI_Sequence <Long>::ret ((_b._epv ().epv.seq_op) (&_b, &in_s, &out_s, &inout_s, &_env));
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>

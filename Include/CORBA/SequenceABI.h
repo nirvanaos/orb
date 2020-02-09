@@ -7,26 +7,8 @@ namespace CORBA {
 namespace Nirvana {
 
 template <class T>
-class SequenceABI
+struct SequenceABI
 {
-public:
-	static SequenceABI _nil ()
-	{
-		SequenceABI abi;
-		abi.reset ();
-		return abi;
-	}
-
-	SequenceABI (SequenceABI&& src) NIRVANA_NOEXCEPT :
-		data_ (src.data_)
-	{
-		src.reset ();
-	}
-
-protected:
-	SequenceABI ()
-	{}
-
 	void reset ()
 	{
 		data_.ptr = nullptr;
@@ -34,7 +16,6 @@ protected:
 		data_.allocated = 0;
 	}
 
-protected:
 	struct Data {
 		T* ptr;
 		size_t size;

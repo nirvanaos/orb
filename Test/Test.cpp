@@ -64,6 +64,14 @@ void test_interface (I1_ptr p)
 	}
 
 	{
+		vector <Long> out = { 1, 2, 3, 4 }, inout = { 5, 6, 7, 8 };
+		vector <Long> ret = p->seq_op ({ 9, 10, 11, 12 }, out, inout);
+		EXPECT_EQ (ret, vector <Long> ({ 5, 6, 7, 8 }));
+		EXPECT_EQ (out, vector <Long> ({ 9, 10, 11, 12 }));
+		EXPECT_EQ (inout, vector <Long> ({ 9, 10, 11, 12 }));
+	}
+
+	{
 		CORBA::Any out, inout;
 		CORBA::Any in;
 		CORBA::Any ret = p->any_op (in, out, inout);

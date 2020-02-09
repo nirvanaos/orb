@@ -4,14 +4,13 @@
 #include <type_traits>
 #include <new>
 #include <utility>
+#include "ABI_forward.h"
 
 namespace CORBA {
 namespace Nirvana {
 
 void _check_pointer (const void* p);
 bool uncaught_exception ();
-
-template <class T, class = void> struct ABI;
 
 template <class T>
 struct ABI_Base
@@ -48,6 +47,9 @@ struct ABI_Base
 	{
 		return ret;
 	}
+
+	static void check (const T&)
+	{}
 };
 
 /// Base for fixed length data types ABI
