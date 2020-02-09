@@ -15,7 +15,7 @@ template <typename C> class String_var;
 template <typename C>
 class StringABI
 {
-public:
+protected:
 	static size_t max_size ()
 	{
 		return (SIZE_MAX / 2 + 1) / sizeof (C) - 1;
@@ -42,7 +42,6 @@ public:
 		return size () == 0;
 	}
 
-protected:
 	const C* _ptr () const
 	{
 		if (is_large ())
