@@ -6,7 +6,6 @@
 #include "Environment.h"
 #include "T_ptr.h"
 #include "RepositoryId.h"
-#include "ABI_forward.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -208,12 +207,6 @@ protected:
 	}
 };
 /*
-template <class I, typename std::enable_if <std::is_base_of <Bridge <Interface>, I>::value>::type>
-struct ABI <I> : public ABI_Variable <T_var <I> >
-{
-
-};
-*/
 template <class I>
 class T_inout
 {
@@ -284,7 +277,6 @@ T_inout <I>::~T_inout () noexcept (false)
 	}
 }
 
-
 /// T_out helper class
 template <class I>
 class T_out : public T_inout <I>
@@ -326,7 +318,7 @@ public:
 		return *this;
 	}
 };
-
+*/
 //! Client implementation template.
 template <class T, class I> class Client
 	: public T

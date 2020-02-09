@@ -3,6 +3,7 @@
 
 #include <Nirvana/throw_exception.h>
 #include "Bridge.h"
+#include "ABI_forward.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -60,6 +61,7 @@ public:
 
 private:
 	template <class I1> friend class T_ptr;
+	friend struct ABI <I>;
 
 private:
 	I* p_;
