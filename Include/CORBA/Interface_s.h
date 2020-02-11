@@ -1,3 +1,4 @@
+// TODO: Remove!
 #ifndef NIRVANA_ORB_INTERFACE_S_H_
 #define NIRVANA_ORB_INTERFACE_S_H_
 

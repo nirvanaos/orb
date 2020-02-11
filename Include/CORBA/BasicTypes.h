@@ -25,19 +25,6 @@ typedef uint64_t ULongLong;
 typedef float Float;
 typedef double Double;
 typedef long double LongDouble;
-typedef Boolean& Boolean_out;
-typedef Char& Char_out;
-typedef WChar& WChar_out;
-typedef Octet& Octet_out;
-typedef Short& Short_out;
-typedef UShort& UShort_out;
-typedef Long& Long_out;
-typedef LongLong& LongLong_out;
-typedef ULong& ULong_out;
-typedef ULongLong& ULongLong_out;
-typedef Float& Float_out;
-typedef Double& Double_out;
-typedef LongDouble& LongDouble_out;
 
 typedef Long Flags;
   

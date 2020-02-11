@@ -7,7 +7,8 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <class I> struct ABI_Interface;
+template <class I> class T_inout;
+template <class I> class T_var;
 
 	//! Interface pointer template.
 template <class I>
@@ -38,6 +39,11 @@ public:
 			p_ = nullptr;
 	}
 
+	/// Move constructor in case returned T_var assigned to T_ptr:
+	///    Object_var func ();
+	///    Object_ptr obj = func ();
+	inline T_ptr (T_var <I>&& var);
+
 	operator Bridge <I>* () const
 	{
 		return &static_cast <Bridge <I>&> (*p_);
@@ -62,7 +68,7 @@ public:
 
 private:
 	template <class I1> friend class T_ptr;
-	friend struct ABI_Interface <I>;
+	friend class T_inout <I>;
 
 private:
 	I* p_;

@@ -78,9 +78,9 @@ template <class T>
 {
 	Environment _env;
 	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
-	::PortableServer::POA_var _ret ((_b._epv ().epv.default_POA) (&_b, &_env));
+	T_ret <::PortableServer::POA> _ret = (_b._epv ().epv.default_POA) (&_b, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>
@@ -88,9 +88,9 @@ InterfaceDef_ptr Client <T, PortableServer::ServantBase>::_get_interface ()
 {
 	Environment _env;
 	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
-	InterfaceDef_var _ret = (_b._epv ().epv.get_interface) (&_b, &_env);
+	T_ret <InterfaceDef> _ret = (_b._epv ().epv.get_interface) (&_b, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>

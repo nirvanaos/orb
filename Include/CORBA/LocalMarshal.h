@@ -82,9 +82,9 @@ public:
 
 	void adopt_memory (void* p, size_t size);
 	uintptr_t marshal_object (Object_ptr);
-	Interface_ptr unmarshal_interface (const void* marshal_data, const Char* interface_id);
+	Interface_var unmarshal_interface (const void* marshal_data, const Char* interface_id);
 	uintptr_t marshal_type_code (TypeCode_ptr);
-	TypeCode_ptr unmarshal_type_code (const void* marshal_data);
+	TypeCode_var unmarshal_type_code (const void* marshal_data);
 	void release_message ();
 	void* send ();
 	void return_exception (const Exception*);
@@ -188,13 +188,13 @@ uintptr_t Client <T, LocalMarshal>::marshal_object (Object_ptr obj)
 }
 
 template <class T>
-Interface_ptr Client <T, LocalMarshal>::unmarshal_interface (const void* marshal_data, const Char* interface_id)
+Interface_var Client <T, LocalMarshal>::unmarshal_interface (const void* marshal_data, const Char* interface_id)
 {
 	Environment _env;
 	Bridge <LocalMarshal>& _b (T::_get_bridge (_env));
-	Interface_var _ret = (_b._epv ().epv.unmarshal_interface) (&_b, marshal_data, interface_id, &_env);
+	T_ret <Interface> _ret = (_b._epv ().epv.unmarshal_interface) (&_b, marshal_data, interface_id, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>
@@ -208,11 +208,11 @@ uintptr_t Client <T, LocalMarshal>::marshal_type_code (TypeCode_ptr tc)
 }
 
 template <class T>
-TypeCode_ptr Client <T, LocalMarshal>::unmarshal_type_code (const void* marshal_data)
+TypeCode_var Client <T, LocalMarshal>::unmarshal_type_code (const void* marshal_data)
 {
 	Environment _env;
 	Bridge <LocalMarshal>& _b (T::_get_bridge (_env));
-	TypeCode_var _ret = (_b._epv ().epv.unmarshal_type_code) (&_b, marshal_data, &_env);
+	T_ret <TypeCode> _ret = (_b._epv ().epv.unmarshal_type_code) (&_b, marshal_data, &_env);
 	_env.check ();
 	return _ret;
 }

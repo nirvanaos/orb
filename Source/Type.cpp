@@ -1,4 +1,4 @@
-#include <CORBA/ABI_forward.h>
+#include <CORBA/Type.h>
 #include <Nirvana/throw_exception.h>
 #include <exception>
 

@@ -6,7 +6,7 @@ namespace CORBA {
 
 namespace Nirvana {
 
-void ABI <Any>::check (const Any& any)
+void Type <Any>::check (const Any& any)
 {
 	TypeCode::unmarshal (any.type ());
 	if (any.is_large () && !any.large_pointer ())

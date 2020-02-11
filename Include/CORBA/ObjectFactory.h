@@ -61,9 +61,9 @@ PortableServer::Servant Client <T, ObjectFactory>::create_servant (BridgeMarshal
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
-	PortableServer::ServantBase_var _ret = (_b._epv ().epv.create_servant) (&_b, servant, dynamic, &_env);
+	T_ret <PortableServer::ServantBase> _ret = (_b._epv ().epv.create_servant) (&_b, servant, dynamic, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>
@@ -71,9 +71,9 @@ LocalObject_ptr Client <T, ObjectFactory>::create_local_object (BridgeMarshal <A
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
-	LocalObject_var _ret = (_b._epv ().epv.create_local_object) (&_b, base, dynamic, &_env);
+	T_ret <LocalObject> _ret = (_b._epv ().epv.create_local_object) (&_b, base, dynamic, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>
@@ -81,9 +81,9 @@ ReferenceCounter_ptr Client <T, ObjectFactory>::create_reference_counter (Bridge
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
-	ReferenceCounter_var _ret = (_b._epv ().epv.create_reference_counter) (&_b, dynamic, &_env);
+	T_ret <ReferenceCounter> _ret = (_b._epv ().epv.create_reference_counter) (&_b, dynamic, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 class ObjectFactory : public ClientInterface <ObjectFactory>

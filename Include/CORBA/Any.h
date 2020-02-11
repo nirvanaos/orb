@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_ANY_H_
 #define NIRVANA_ORB_ANY_H_
 
-#include "ABI.h"
+#include "TypeVarLen.h"
 #include "AnyABI.h"
 #include "TypeCode.h"
 #include <Nirvana/basic_string.h>
@@ -37,15 +37,18 @@ public:
 
 	Any& operator = (const Any& src)
 	{
-		copy_from (src);
+		if (this != &src)
+			copy_from (src);
 		return *this;
 	}
 
 	Any& operator = (Any&& src) NIRVANA_NOEXCEPT
 	{
-		clear ();
-		AnyABI::operator = (src);
-		src.reset ();
+		if (this != &src) {
+			clear ();
+			AnyABI::operator = (src);
+			src.reset ();
+		}
 		return *this;
 	}
 
@@ -216,7 +219,7 @@ public:
 	void move_from (TypeCode_ptr tc, void* val);
 
 private:
-	friend struct Nirvana::ABI <Any>;
+	friend struct Nirvana::Type <Any>;
 
 	void copy_from (const Any& src);
 	void* prepare (TypeCode_ptr tc);
@@ -232,13 +235,13 @@ private:
 namespace Nirvana {
 
 template <>
-struct ABI <Any> : public ABI_VariableLen <Any>
+struct Type <Any> : public TypeVarLen <Any>
 {
 	static void check (const Any& any);
 
 	static Any& out (Any* p)
 	{
-		Any& val = ABI_VariableLen <Any>::out (p);
+		Any& val = TypeVarLen <Any>::out (p);
 		// Must be empty
 		if (!val.empty ())
 			::Nirvana::throw_BAD_PARAM ();
@@ -248,10 +251,10 @@ struct ABI <Any> : public ABI_VariableLen <Any>
 
 }
 
-typedef Nirvana::ABI <Any>::Var Any_var;
-typedef Nirvana::ABI <Any>::In Any_in;
-typedef Nirvana::ABI <Any>::Out Any_out;
-typedef Nirvana::ABI <Any>::InOut Any_inout;
+typedef Nirvana::Type <Any>::C_var Any_var;
+typedef Nirvana::Type <Any>::C_in Any_in;
+typedef Nirvana::Type <Any>::C_out Any_out;
+typedef Nirvana::Type <Any>::C_inout Any_inout;
 
 void operator <<= (Any&, Short);
 void operator <<= (Any&, UShort);

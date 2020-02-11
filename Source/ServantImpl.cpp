@@ -1,5 +1,6 @@
 #include <CORBA/ServantImpl.h>
 #include <Nirvana/throw_exception.h>
+#include <CORBA/Type_forward.h>
 
 namespace CORBA {
 namespace Nirvana {

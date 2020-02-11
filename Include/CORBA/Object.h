@@ -103,9 +103,9 @@ ImplementationDef_ptr Client <T, Object>::_get_implementation ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	ImplementationDef_var _ret ((_b._epv ().epv.get_implementation) (&_b, &_env));
+	T_ret <ImplementationDef> _ret = (_b._epv ().epv.get_implementation) (&_b, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>
@@ -113,9 +113,9 @@ InterfaceDef_ptr Client <T, Object>::_get_interface ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	InterfaceDef_var _ret ((_b._epv ().epv.get_interface) (&_b, &_env));
+	T_ret <InterfaceDef> _ret = (_b._epv ().epv.get_interface) (&_b, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>

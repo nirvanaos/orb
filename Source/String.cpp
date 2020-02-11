@@ -31,34 +31,34 @@ public:
 
 }
 
-char* string_alloc (uint32_t len)
+Char* string_alloc (uint32_t len)
 {
-	return Nirvana::StringAllocator <char>::allocate (len);
+	return Nirvana::StringAllocator <Char>::allocate (len);
 }
 
-char* string_dup (const char* s)
+Char* string_dup (const Char* s)
 {
-	return Nirvana::StringAllocator <char>::dup (s);
+	return Nirvana::StringAllocator <Char>::dup (s);
 }
 
-void string_free (char* s)
+void string_free (Char* s)
 {
 	Nirvana::StringAllocator <char>::free (s);
 }
 
-wchar_t* wstring_alloc (uint32_t len)
+WChar* wstring_alloc (uint32_t len)
 {
-	return Nirvana::StringAllocator <wchar_t>::allocate (len);
+	return Nirvana::StringAllocator <WChar>::allocate (len);
 }
 
-wchar_t* wstring_dup (const wchar_t* s)
+WChar* wstring_dup (const wchar_t* s)
 {
-	return Nirvana::StringAllocator <wchar_t>::dup (s);
+	return Nirvana::StringAllocator <WChar>::dup (s);
 }
 
-void wstring_free (wchar_t* s)
+void wstring_free (WChar* s)
 {
-	Nirvana::StringAllocator <wchar_t>::free (s);
+	Nirvana::StringAllocator <WChar>::free (s);
 }
 
 }

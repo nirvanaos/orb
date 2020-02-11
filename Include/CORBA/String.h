@@ -2,7 +2,33 @@
 #define NIRVANA_ORB_STRING_H_
 
 #include <Nirvana/basic_string.h>
-#include "ABI.h"
+#include "TypeVarLen.h"
+
+namespace std {
+
+template <typename C, class T>
+void basic_string <C, T, allocator <C> >::_check () const
+{
+	// Do some check
+	const C* p;
+	size_t cc;
+	if (this->is_large ()) {
+		p = this->large_pointer ();
+		cc = this->large_size ();
+		CORBA::Nirvana::_check_pointer (p);
+		if (cc > this->large_capacity () || !heap ()->is_readable (p, (cc + 1) * sizeof (C)))
+			::Nirvana::throw_BAD_PARAM ();
+	} else {
+		p = this->small_pointer ();
+		cc = this->small_size ();
+		if (cc > ABI::SMALL_CAPACITY)
+			::Nirvana::throw_BAD_PARAM ();
+	}
+	if (p [cc])
+		::Nirvana::throw_BAD_PARAM (); // Not zero-terminated
+}
+
+}
 
 namespace CORBA {
 namespace Nirvana {
@@ -19,71 +45,44 @@ StringBase <C>::StringBase (const C* s)
 		this->reset ();
 }
 
-template <typename C>
-using String = std::basic_string <C, std::char_traits <C>, std::allocator <C> >;
+template <typename C, class T = std::char_traits <C> >
+using StringT = std::basic_string <C, T, std::allocator <C> >;
 
-template <typename C>
-struct ABI <String <C> > :
-	public ABI_VariableLen <String <C> >
+typedef StringT <Char> String;
+typedef StringT <WChar> WString;
+
+template <typename C, class T>
+struct Type <StringT <C, T> > :
+	public TypeVarLen <StringT <C, T> >
 {
-	typedef String <C> StringType;
+	typedef StringT <C, T> StringType;
 
-	typedef const StringBase <C>* ABI_in;
-	typedef const StringBase <C>& In;
-
-	static const StringType& in (ABI_in p)
+	static void check (const StringType& s)
 	{
-		_check_pointer (p);
-		const StringType& s = static_cast <const StringType&> (*p);
-		check (s);
-		return s;
+		s._check ();
 	}
 
 	static StringType& out (StringType* p)
 	{
-		StringType& val = ABI_VariableLen <StringType>::out (p);
+		StringType& val = TypeVarLen <StringType>::out (p);
 		// Must be empty
 		if (!val.empty ())
 			::Nirvana::throw_BAD_PARAM ();
 		return val;
 	}
-
-	static void check (const StringType& s);
 };
 
-template <typename C>
-void ABI <String <C> >::check (const StringType& s)
-{
-	// Do some check
-	const C* p;
-	size_t cc;
-	if (s.is_large ()) {
-		p = s.large_pointer ();
-		cc = s.large_size ();
-		CORBA::Nirvana::_check_pointer (p);
-		if (cc > s.large_capacity () || !StringType::heap ()->is_readable (p, (cc + 1) * sizeof (C)))
-			::Nirvana::throw_BAD_PARAM ();
-	} else {
-		p = s.small_pointer ();
-		cc = s.small_size ();
-		if (cc > StringABI <C>::SMALL_CAPACITY)
-			::Nirvana::throw_BAD_PARAM ();
-	}
-	if (p [cc])
-		::Nirvana::throw_BAD_PARAM ();
-}
+template <typename C, class T = std::char_traits <C> >
+using TypeString = Type <StringT <C, T> >;
 
-template <typename C>
-using ABI_String = ABI <String <C> >;
+template <typename C, class T = std::char_traits <C> >
+using String_in = typename TypeString <C, T>::C_in;
 
-template <typename C>
-using String_in = typename ABI_String <C>::In;
+template <typename C, class T = std::char_traits <C> >
+using String_out = typename TypeString <C, T>::C_out;
 
-template <typename C>
-using String_out = typename ABI_String <C>::Out;
-
-template <typename C>
-using String_inout = typename ABI_String <C>::InOut;
+template <typename C, class T = std::char_traits <C> >
+using String_inout = typename TypeString <C, T>::C_inout;
 
 template <typename C>
 class String_var : public std::basic_string <C>
@@ -203,27 +202,27 @@ void String_var <C>::adopt (C* s)
 
 }
 
-typedef Nirvana::String_var <char> String_var;
-typedef Nirvana::String_var <wchar_t> WString_var;
+typedef Nirvana::String_var <Char> String_var;
+typedef Nirvana::String_var <WChar> WString_var;
 
-typedef Nirvana::String_in <char> String_in;
-typedef Nirvana::String_in <wchar_t> WString_in;
+typedef Nirvana::String_in <Char> String_in;
+typedef Nirvana::String_in <WChar> WString_in;
 
-typedef Nirvana::String_out <char> String_out;
-typedef Nirvana::String_out <wchar_t> WString_out;
+typedef Nirvana::String_out <Char> String_out;
+typedef Nirvana::String_out <WChar> WString_out;
 
-typedef Nirvana::String_inout <char> String_inout;
-typedef Nirvana::String_inout <wchar_t> WString_inout;
+typedef Nirvana::String_inout <Char> String_inout;
+typedef Nirvana::String_inout <WChar> WString_inout;
 
 #ifdef LEGACY_STRING_MAPPING_SUPPORT
 
 // For compatibility with old C++ mapping specification
-char* string_alloc (uint32_t len);
-char* string_dup (const char* s);
-void string_free (char* s);
-wchar_t* wstring_alloc (uint32_t len);
-wchar_t* wstring_dup (const wchar_t* s);
-void wstring_free (wchar_t* s);
+Char* string_alloc (uint32_t len);
+Char* string_dup (const Char* s);
+void string_free (Char* s);
+WChar* wstring_alloc (uint32_t len);
+WChar* wstring_dup (const WChar* s);
+void wstring_free (WChar* s);
 
 #endif
 

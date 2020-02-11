@@ -110,9 +110,9 @@ Interface_ptr Client <T, ProxyFactory>::create_server_proxy (Object_ptr obj, Int
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	Interface_var _ret = (_b._epv ().epv.create_server_proxy) (&_b, obj, servant, &deleter, &_env);
+	T_ret <Interface> _ret = (_b._epv ().epv.create_server_proxy) (&_b, obj, servant, &deleter, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>
@@ -120,9 +120,9 @@ Interface_ptr Client <T, ProxyFactory>::create_local_proxy (Object_ptr obj, uint
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	Interface_var _ret = (_b._epv ().epv.create_local_proxy) (&_b, obj, interface_idx, &deleter, &_env);
+	T_ret <Interface> _ret = (_b._epv ().epv.create_local_proxy) (&_b, obj, interface_idx, &deleter, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>
@@ -130,9 +130,9 @@ Interface_ptr Client <T, ProxyFactory>::create_remote_proxy (Object_ptr obj, Dyn
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	Interface_var _ret = (_b._epv ().epv.create_remote_proxy) (&_b, obj, &deleter, &_env);
+	T_ret <Interface> _ret = (_b._epv ().epv.create_remote_proxy) (&_b, obj, &deleter, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 class ProxyFactory : public ClientInterface <ProxyFactory>

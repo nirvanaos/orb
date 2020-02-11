@@ -21,7 +21,7 @@ class Client <T, TypeCode> :
 public:
 	Boolean equal (TypeCode_ptr other);
 	Boolean equivalent (TypeCode_ptr other);
-	TypeCode_ptr get_compact_typecode ();
+	TypeCode_var get_compact_typecode ();
 	TCKind kind ();
 
 	// for tk_objref, tk_struct, tk_union, tk_enum, tk_alias,
@@ -34,17 +34,17 @@ public:
 	// and tk_except
 	ULong member_count (); // raises (BadKind);
 	Identifier member_name (ULong index); // raises (BadKind, Bounds);
-	TypeCode_ptr member_type (ULong index); // raises (BadKind, Bounds);
+	TypeCode_var member_type (ULong index); // raises (BadKind, Bounds);
 
 	// for tk_union
-	TypeCode_ptr discriminator_type (); // raises (BadKind);
+	TypeCode_var discriminator_type (); // raises (BadKind);
 	Long default_index (); // raises (BadKind);
 
 	// for tk_string, tk_sequence, and tk_array
 	ULong length (); // raises (BadKind);
 
 	// for tk_sequence, tk_array, tk_value_box and tk_alias
-	TypeCode_ptr content_type (); // raises (BadKind);
+	TypeCode_var content_type (); // raises (BadKind);
 
 	// for tk_fixed
 	UShort fixed_digits (); // raises (BadKind);
@@ -53,7 +53,7 @@ public:
 	// for tk_value
 	Visibility member_visibility (ULong index); // raises (BadKind, Bounds);
 	ValueModifier type_modifier (); // raises (BadKind);
-	TypeCode_ptr concrete_base_type (); // raises (BadKind);
+	TypeCode_var concrete_base_type (); // raises (BadKind);
 
 	// Nirvana extensions
 
@@ -130,13 +130,13 @@ Boolean Client <T, TypeCode>::equivalent (TypeCode_ptr other)
 }
 
 template <class T>
-TypeCode_ptr Client <T, TypeCode>::get_compact_typecode ()
+TypeCode_var Client <T, TypeCode>::get_compact_typecode ()
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	TypeCode_var _ret = (_b._epv ().epv.get_compact_typecode) (&_b, &_env);
+	T_ret <TypeCode> _ret = (_b._epv ().epv.get_compact_typecode) (&_b, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>
@@ -144,7 +144,7 @@ TCKind Client <T, TypeCode>::kind ()
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	TCKind _ret = (_b._epv ().epv.kind) (&_b, &_env);
+	Type <TCKind>::C_ret _ret = (_b._epv ().epv.kind) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -190,23 +190,23 @@ const char* Client <T, TypeCode>::member_name (ULong index)
 }
 
 template <class T>
-TypeCode_ptr Client <T, TypeCode>::member_type (ULong index)
+TypeCode_var Client <T, TypeCode>::member_type (ULong index)
 {
 	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	TypeCode_var _ret = (_b._epv ().epv.member_type) (&_b, index, &_env);
+	T_ret <TypeCode> _ret = (_b._epv ().epv.member_type) (&_b, index, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>
-TypeCode_ptr Client <T, TypeCode>::discriminator_type ()
+TypeCode_var Client <T, TypeCode>::discriminator_type ()
 {
 	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	TypeCode_var _ret = (_b._epv ().epv.discriminator_type) (&_b, &_env);
+	T_ret <TypeCode> _ret = (_b._epv ().epv.discriminator_type) (&_b, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>
@@ -230,13 +230,13 @@ ULong Client <T, TypeCode>::length ()
 }
 
 template <class T>
-TypeCode_ptr Client <T, TypeCode>::content_type ()
+TypeCode_var Client <T, TypeCode>::content_type ()
 {
 	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	TypeCode_var _ret = (_b._epv ().epv.content_type) (&_b, &_env);
+	T_ret <TypeCode> _ret = (_b._epv ().epv.content_type) (&_b, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>
@@ -280,13 +280,13 @@ ValueModifier Client <T, TypeCode>::type_modifier ()
 }
 
 template <class T>
-TypeCode_ptr Client <T, TypeCode>::concrete_base_type ()
+TypeCode_var Client <T, TypeCode>::concrete_base_type ()
 {
 	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	TypeCode_var _ret = (_b._epv ().epv.concrete_base_type) (&_b, &_env);
+	T_ret <TypeCode> _ret = (_b._epv ().epv.concrete_base_type) (&_b, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>

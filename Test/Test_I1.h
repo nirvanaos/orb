@@ -6,9 +6,14 @@
 namespace Test {
 
 class I1;
-typedef ::CORBA::Nirvana::T_ptr <I1> I1_ptr;
-typedef ::CORBA::Nirvana::T_var <I1> I1_var;
-typedef ::CORBA::Nirvana::T_out <I1> I1_out;
+typedef CORBA::Nirvana::T_ptr <I1> I1_ptr;
+typedef CORBA::Nirvana::T_var <I1> I1_var;
+typedef CORBA::Nirvana::T_out <I1> I1_out;
+
+typedef CORBA::Nirvana::Sequence <CORBA::Long> SeqLong;
+typedef CORBA::Nirvana::Type <SeqLong>::C_var SeqLong_var;
+typedef CORBA::Nirvana::Type <SeqLong>::C_out SeqLong_out;
+typedef CORBA::Nirvana::Type <SeqLong>::C_inout SeqLong_inout;
 
 }
 
@@ -35,9 +40,9 @@ public:
 			Long (*op1) (Bridge < ::Test::I1>*, Long p1, EnvironmentBridge*);
 			void (*throw_NO_IMPLEMENT) (Bridge < ::Test::I1>*, EnvironmentBridge*);
 			BridgeMarshal < ::Test::I1>* (*object_op) (Bridge < ::Test::I1>*, BridgeMarshal < ::Test::I1>* in_obj, BridgeMarshal < ::Test::I1>** out_obj, BridgeMarshal < ::Test::I1>** inout_obj, EnvironmentBridge*);
-			ABI <std::string>::ABI_ret (*string_op) (Bridge < ::Test::I1>*, ABI <std::string>::ABI_in in_s, ABI <std::string>::ABI_out out_s, ABI <std::string>::ABI_inout inout_s, EnvironmentBridge*);
-			ABI <std::vector <Long> >::ABI_ret (*seq_op) (Bridge < ::Test::I1>*, ABI <std::vector <Long> >::ABI_in in_s, ABI <std::vector <Long> >::ABI_out out_s, ABI <std::vector <Long> >::ABI_inout inout_s, EnvironmentBridge*);
-			ABI <Any>::ABI_ret (*any_op) (Bridge < ::Test::I1>*, ABI <Any>::ABI_in, ABI <Any>::ABI_out, ABI <Any>::ABI_inout, EnvironmentBridge*);
+			ABI_ret <String> (*string_op) (Bridge < ::Test::I1>*, ABI_in <String> in_s, ABI_out <String> out_s, ABI_inout <String> inout_s, EnvironmentBridge*);
+			ABI_ret < ::Test::SeqLong> (*seq_op) (Bridge < ::Test::I1>*, ABI_in < ::Test::SeqLong> in_s, ABI_out < ::Test::SeqLong> out_s, ABI_inout < ::Test::SeqLong> inout_s, EnvironmentBridge*);
+			ABI_ret <Any> (*any_op) (Bridge < ::Test::I1>*, ABI_in <Any>, ABI_out <Any>, ABI_inout <Any>, EnvironmentBridge*);
 		}
 		epv;
 	};
@@ -62,9 +67,9 @@ class Client <T, ::Test::I1> :
 public:
 	Long op1 (Long p1);
 	void throw_NO_IMPLEMENT ();
-	T_ptr < ::Test::I1> object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj);
-	std::string string_op (CORBA::String_in, CORBA::String_out, CORBA::String_inout);
-	Sequence_var <Long> seq_op (Sequence_in <Long> in_s, Sequence_out <Long> out_s, Sequence_inout <Long> inout_s);
+	::Test::I1_var object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj);
+	String string_op (CORBA::String_in, CORBA::String_out, CORBA::String_inout);
+	::Test::SeqLong seq_op (Type <::Test::SeqLong>::C_in in_s, ::Test::SeqLong_out out_s, ::Test::SeqLong_inout inout_s);
 	Any any_op (Any_in, Any_out, Any_inout);
 };
 
@@ -88,13 +93,13 @@ void Client <T, ::Test::I1>::throw_NO_IMPLEMENT ()
 }
 
 template <class T>
-T_ptr < ::Test::I1> Client <T, ::Test::I1>::object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj)
+::Test::I1_var Client <T, ::Test::I1>::object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj)
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	T_var < ::Test::I1> _ret = (_b._epv ().epv.object_op) (&_b, in_obj, &out_obj, &inout_obj, &_env);
+	T_ret < ::Test::I1> _ret = (_b._epv ().epv.object_op) (&_b, in_obj, &out_obj, &inout_obj, &_env);
 	_env.check ();
-	return _ret._retn ();
+	return _ret;
 }
 
 template <class T>
@@ -102,17 +107,17 @@ std::string Client <T, ::Test::I1>::string_op (CORBA::String_in in_s, CORBA::Str
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	std::string _ret = ABI <std::string>::ret ((_b._epv ().epv.string_op) (&_b, &in_s, &out_s, &inout_s, &_env));
+	Type <std::string>::C_ret _ret = (_b._epv ().epv.string_op) (&_b, &in_s, &out_s, &inout_s, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-Sequence_var <Long> Client <T, ::Test::I1>::seq_op (Sequence_in <Long> in_s, Sequence_out <Long> out_s, Sequence_inout <Long> inout_s)
+::Test::SeqLong Client <T, ::Test::I1>::seq_op (Type <::Test::SeqLong>::C_in in_s, ::Test::SeqLong_out out_s, ::Test::SeqLong_inout inout_s)
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	Sequence_var <Long> _ret = ABI_Sequence <Long>::ret ((_b._epv ().epv.seq_op) (&_b, &in_s, &out_s, &inout_s, &_env));
+	Type <Sequence <Long> >::C_ret _ret = (_b._epv ().epv.seq_op) (&_b, &in_s, &out_s, &inout_s, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -122,7 +127,7 @@ Any Client <T, ::Test::I1>::any_op (Any_in in_any, Any_out out_any, Any_inout in
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	Any _ret = ABI <CORBA::Any>::ret ((_b._epv ().epv.any_op) (&_b, &in_any, &out_any, &inout_any, &_env));
+	Type <Any>::C_ret _ret = (_b._epv ().epv.any_op) (&_b, &in_any, &out_any, &inout_any, &_env);
 	_env.check ();
 	return _ret;
 }

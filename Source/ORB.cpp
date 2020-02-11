@@ -5,7 +5,7 @@ namespace CORBA {
 
 void ORB::create_environment (Environment_out env)
 {
-	env = Environment_ptr (new ::CORBA::Environment ());
+	Nirvana::TypeI <Environment>::out (&env) = Environment_ptr (new ::CORBA::Environment ());
 }
 
 }

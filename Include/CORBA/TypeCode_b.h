@@ -24,6 +24,19 @@ enum TCKind
 	tk_local_interface
 };
 
+namespace Nirvana {
+
+template <> struct Type <TCKind> : public TypeEnum <TCKind>
+{
+	static void check (TCKind tk)
+	{
+		if ((unsigned)tk > tk_local_interface)
+			::Nirvana::throw_BAD_PARAM ();
+	}
+};
+
+}
+
 typedef Short Visibility;
 const Visibility PRIVATE_MEMBER = 0;
 const Visibility PUBLIC_MEMBER = 1;
