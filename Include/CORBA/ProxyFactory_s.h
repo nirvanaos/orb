@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_PROXYFACTORY_S_H_
 
 #include "ProxyFactory.h"
-#include "Interface_s.h"
+#include "Interface.h"
 
 // ProxyFactory skeleton
 

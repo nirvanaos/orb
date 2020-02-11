@@ -46,7 +46,7 @@ protected:
 	static BridgeMarshal < ::Test::I1>* _object_op (Bridge < ::Test::I1>* _b, BridgeMarshal < ::Test::I1>* in_obj, BridgeMarshal < ::Test::I1>** out_obj, BridgeMarshal < ::Test::I1>** inout_obj, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).object_op (_unmarshal_in (in_obj), _unmarshal_out (out_obj), _unmarshal_inout (inout_obj));
+			return S::_implementation (_b).object_op (TypeI < ::Test::I1>::in (in_obj), TypeI < ::Test::I1>::out (out_obj), TypeI < ::Test::I1>::inout (inout_obj));
 		} catch (const Exception& e) {
 			_env->set_exception (e);
 		} catch (...) {

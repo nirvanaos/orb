@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_REFERENCECOUNTER_S_H_
 
 #include "ReferenceCounter.h"
-#include "Interface_s.h"
+#include "Interface.h"
 
 namespace CORBA {
 namespace Nirvana {

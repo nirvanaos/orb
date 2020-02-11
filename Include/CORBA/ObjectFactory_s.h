@@ -19,7 +19,7 @@ protected:
 	static BridgeMarshal <PortableServer::ServantBase>* _create_servant (Bridge <ObjectFactory>* obj, BridgeMarshal <PortableServer::ServantBase>* servant, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_servant (_unmarshal_in (servant), _unmarshal_in (dynamic));
+			return S::_implementation (obj).create_servant (TypeI <PortableServer::ServantBase>::in (servant), TypeI <DynamicServant>::in (dynamic));
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
@@ -31,7 +31,7 @@ protected:
 	static BridgeMarshal <LocalObject>* _create_local_object (Bridge <ObjectFactory>* obj, BridgeMarshal <AbstractBase>* base, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_local_object (_unmarshal_in (base), _unmarshal_in (dynamic));
+			return S::_implementation (obj).create_local_object (TypeI <AbstractBase>::in (base), TypeI <DynamicServant>::in (dynamic));
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
@@ -43,7 +43,7 @@ protected:
 	static BridgeMarshal <ReferenceCounter>* _create_reference_counter (Bridge <ObjectFactory>* obj, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_reference_counter (_unmarshal_in (dynamic));
+			return S::_implementation (obj).create_reference_counter (TypeI <DynamicServant>::in (dynamic));
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {

@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_TYPECODE_S_H_
 
 #include "TypeCode_b.h"
-#include "Interface_s.h"
+#include "Interface.h"
 #include "ServantStatic.h"
 
 namespace CORBA {
@@ -18,7 +18,7 @@ protected:
 	static Boolean _equal (Bridge <TypeCode>* _b, BridgeMarshal <TypeCode>* other, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).equal (_unmarshal_in (other));
+			return S::_implementation (_b).equal (TypeI <TypeCode>::in (other));
 		} catch (const Exception & e) {
 			_env->set_exception (e);
 		} catch (...) {
@@ -30,7 +30,7 @@ protected:
 	static Boolean _equivalent (Bridge <TypeCode>* _b, BridgeMarshal <TypeCode>* other, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).equivalent (_unmarshal_in (other));
+			return S::_implementation (_b).equivalent (TypeI <TypeCode>::in (other));
 		} catch (const Exception & e) {
 			_env->set_exception (e);
 		} catch (...) {

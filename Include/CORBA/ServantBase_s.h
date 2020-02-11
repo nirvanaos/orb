@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_SERVANTBASE_S_H_
 
 #include "ServantBase.h"
-#include "Interface_s.h"
+#include "Interface.h"
 
 namespace CORBA {
 namespace Nirvana {

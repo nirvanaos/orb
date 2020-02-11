@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_OBJECT_S_H_
 
 #include "Object.h"
-#include "Interface_s.h"
+#include "Interface.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -67,7 +67,7 @@ protected:
 	static Boolean __is_equivalent (Bridge <Object>* obj, BridgeMarshal <Object>* other_object, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj)._is_equivalent (_unmarshal_in (other_object));
+			return S::_implementation (obj)._is_equivalent (TypeI <Object>::in (other_object));
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {

@@ -20,7 +20,7 @@ protected:
 	static const Char* _activate_object (Bridge <PortableServer::POA>* obj, BridgeMarshal <PortableServer::ServantBase>* servant, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).activate_object (_unmarshal_in (servant));
+			return S::_implementation (obj).activate_object (TypeI <PortableServer::ServantBase>::in (servant));
 		} catch (const Exception& e) {
 			env->set_exception (e);
 		} catch (...) {
