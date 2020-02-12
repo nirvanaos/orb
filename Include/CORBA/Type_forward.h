@@ -11,7 +11,7 @@ template <class T> struct Type;
 ///
 ///     template <> struct Type <T>
 ///     {
-///       // Check internal invariants and throw BAD_PARAM exception if data is invalid.
+///       // Check internal invariants and throw BAD_PARAM or INV_OBJREF exception if data is invalid.
 ///       static void check (const T&);
 ///       
 ///       // true if check () method is not empty.

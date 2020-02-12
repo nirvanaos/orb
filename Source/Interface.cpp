@@ -31,7 +31,7 @@ Bridge <Interface>* Interface::unmarshal (Bridge <Interface>* bridge, const Char
 			&&
 			!RepositoryId::compatible (bridge_id, interface_id)
 		)
-			::Nirvana::throw_BAD_PARAM ();
+			::Nirvana::throw_INV_OBJREF ();
 	}
 	return bridge;
 }

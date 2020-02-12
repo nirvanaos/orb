@@ -8,7 +8,7 @@ namespace CORBA {
 class Any;
 class TypeCode;
 
-enum TCKind
+enum TCKind : uint32_t
 {
 	tk_null, tk_void,
 	tk_short, tk_long, tk_ushort, tk_ulong,

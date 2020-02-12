@@ -192,7 +192,7 @@ void String_var <C>::adopt (C* s)
 		size_t cc = std::char_traits <C>::length (s);
 		this->large_pointer (s);
 		this->large_size (cc);
-		size_t au = ::Nirvana::StdString::heap ()->query (s, ::Nirvana::Memory::ALLOCATION_UNIT);
+		size_t au = ::Nirvana::StdString::heap ()->query (s, ::Nirvana::MemQuery::ALLOCATION_UNIT);
 		this->large_allocated (::Nirvana::round_up ((cc + 1) * sizeof (C), au));
 	} else
 		this->reset ();
