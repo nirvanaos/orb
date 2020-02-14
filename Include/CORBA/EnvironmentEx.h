@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_ENVIRONMENTEX_H_
 #define NIRVANA_ORB_ENVIRONMENTEX_H_
 
-#include "Environment.h"
+#include "EnvironmentImpl.h"
 #include "TypeCodeException.h"
 
 namespace CORBA {

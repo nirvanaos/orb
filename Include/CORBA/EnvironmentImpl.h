@@ -40,14 +40,6 @@ public:
 		return *this;
 	}
 
-	EnvironmentBase& operator = (EnvironmentBase&& src) NIRVANA_NOEXCEPT
-	{
-		exception_free ();
-		data_ = src.data_;
-		src.data_.reset ();
-		return *this;
-	}
-
 protected:
 	EnvironmentBase (const EPV& epv) :
 		Bridge < ::CORBA::Environment> (epv)
@@ -59,6 +51,13 @@ protected:
 	{
 		if (data_.is_small || data_.ptr)
 			exception_free ();
+	}
+
+	void move_from (EnvironmentBase& src) NIRVANA_NOEXCEPT
+	{
+		exception_free ();
+		data_ = src.data_;
+		src.data_.reset ();
 	}
 
 private:
@@ -80,6 +79,18 @@ private:
 			ptr = nullptr;
 		}
 	} data_;
+};
+
+template <class S>
+class EnvironmentImpl :
+	public EnvironmentBase,
+	public Skeleton <S, ::CORBA::Environment>,
+	public ServantTraits <S>
+{
+protected:
+	EnvironmentImpl () :
+		EnvironmentBase (Skeleton <S, ::CORBA::Environment>::epv_)
+	{}
 };
 
 }

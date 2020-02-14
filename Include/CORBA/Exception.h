@@ -57,17 +57,24 @@ typedef const StaticInterface <TypeCode> ExceptionEntry;
 }
 } // namespace CORBA
 
+#ifdef NIRVANA_C11
+#define NIRVANA_DEFAULT_CONSTRUCTORS(t) t (const t&) = default; t (t&&) = default;
+#else
+#define NIRVANA_DEFAULT_CONSTRUCTORS(t)
+#endif
+
 #define DECLARE_EXCEPTION(e) \
+NIRVANA_DEFAULT_CONSTRUCTORS(e)\
 virtual void raise () const;\
 virtual const char* _rep_id () const;\
 static const char repository_id_ [];\
 virtual const char* _name () const;\
 static constexpr const char* __name () { return #e; }\
-virtual TypeCode_ptr __type_code () const;\
-static const e* _downcast (const Exception* ep);\
-static e* _downcast (Exception* ep) { return const_cast <e*> (_downcast ((const Exception*)ep)); }\
-static const e* _narrow (const Exception* ep) { return _downcast (ep); }\
-static e* _narrow (Exception* ep) { return _downcast (ep); }
+virtual ::CORBA::TypeCode_ptr __type_code () const;\
+static const e* _downcast (const ::CORBA::Exception* ep);\
+static e* _downcast (::CORBA::Exception* ep) { return const_cast <e*> (_downcast ((const ::CORBA::Exception*)ep)); }\
+static const e* _narrow (const ::CORBA::Exception* ep) { return _downcast (ep); }\
+static e* _narrow (::CORBA::Exception* ep) { return _downcast (ep); }
 
 #define DEFINE_EXCEPTION(e, rep_id) \
 void e::raise () const { throw *this; } \

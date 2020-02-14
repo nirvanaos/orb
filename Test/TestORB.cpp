@@ -40,6 +40,20 @@ TEST_F (TestORB, RepositoryId)
 	EXPECT_FALSE (CORBA::Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "aaa/bbb/type:1.0"));
 }
 
+class TestException : public CORBA::UserException
+{
+public:
+	DECLARE_EXCEPTION (TestException);
+
+	TestException ()
+	{}
+
+	TestException (const Data*)
+	{}
+};
+
+DEFINE_USER_EXCEPTION (TestException, "IDL:TestORB/TestException:1.0")
+
 TEST_F (TestORB, Exception)
 {
 	CORBA::NO_MEMORY nm;
@@ -48,16 +62,38 @@ TEST_F (TestORB, Exception)
 
 TEST_F (TestORB, Environment)
 {
-	CORBA::Environment_ptr env;
-	CORBA::ORB::create_environment (env);
-	CORBA::Nirvana::EnvironmentBridge* eb = env;
-	eb->set_exception (CORBA::NO_MEMORY ());
-	const CORBA::Exception* ex = env->exception ();
-	ASSERT_TRUE (ex);
-	EXPECT_STREQ (ex->_name (), "NO_MEMORY");
-	env->clear ();
-	CORBA::Environment_var ev = env;
-	CORBA::ORB::create_environment (ev);
+	{	// CORBA::Environment
+		CORBA::Environment_ptr env;
+		CORBA::ORB::create_environment (env);
+		CORBA::Nirvana::EnvironmentBridge* eb = env;
+		eb->set_exception (CORBA::NO_MEMORY ());
+		const CORBA::Exception* ex = env->exception ();
+		ASSERT_TRUE (ex);
+		EXPECT_STREQ (ex->_name (), "NO_MEMORY");
+		env->clear ();
+		CORBA::Environment_var ev = env;
+		CORBA::ORB::create_environment (ev);
+		EXPECT_FALSE (ev->exception ());
+	}
+	{ // CORBA::Nirvana::Environment
+		CORBA::Nirvana::Environment ne;
+		ne.set (&CORBA::NO_MEMORY ());
+		const CORBA::Exception* ex = ne.exception ();
+		ASSERT_TRUE (ex);
+		EXPECT_STREQ (ex->_name (), "NO_MEMORY");
+		CORBA::Nirvana::Environment ne1 (move (ne));
+		EXPECT_FALSE (ne.exception ());
+		ex = ne1.exception ();
+		ASSERT_TRUE (ex);
+		EXPECT_STREQ (ex->_name (), "NO_MEMORY");
+
+		CORBA::Nirvana::EnvironmentEx <TestException> nex;
+		nex.set (&TestException ());
+		CORBA::Nirvana::Environment ne2 (move (nex));
+		ex = ne2.exception ();
+		ASSERT_TRUE (ex);
+		EXPECT_STREQ (ex->_name (), TestException::__name ());
+	}
 }
 
 }
