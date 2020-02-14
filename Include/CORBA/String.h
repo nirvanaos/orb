@@ -4,32 +4,6 @@
 #include <Nirvana/basic_string.h>
 #include "TypeVarLen.h"
 
-namespace std {
-
-template <typename C, class T>
-void basic_string <C, T, allocator <C> >::_check () const
-{
-	// Do some check
-	const C* p;
-	size_t cc;
-	if (this->is_large ()) {
-		p = this->large_pointer ();
-		cc = this->large_size ();
-		CORBA::Nirvana::_check_pointer (p);
-		if (cc > this->large_capacity () || !heap ()->is_readable (p, (cc + 1) * sizeof (C)))
-			::Nirvana::throw_BAD_PARAM ();
-	} else {
-		p = this->small_pointer ();
-		cc = this->small_size ();
-		if (cc > ABI::SMALL_CAPACITY)
-			::Nirvana::throw_BAD_PARAM ();
-	}
-	if (p [cc])
-		::Nirvana::throw_BAD_PARAM (); // Not zero-terminated
-}
-
-}
-
 namespace CORBA {
 namespace Nirvana {
 
@@ -44,23 +18,35 @@ StringBase <C>::StringBase (const C* s)
 	} else
 		this->reset ();
 }
-
-template <typename C, class T = std::char_traits <C> >
-using StringT = std::basic_string <C, T, std::allocator <C> >;
+/*
+template <typename C>
+template <class T, class A>
+StringBase <C>::StringBase (const std::basic_string <C, T, A>& s)
+{
+	if (!s.empty ()) {
+		size_t cc = s.length (s);
+		this->large_pointer (const_cast <C*> (s));
+		this->large_size (cc);
+		this->allocated (0);
+	} else
+		this->reset ();
+}
+*/
+template <typename C>
+using StringT = std::basic_string <C, std::char_traits <C>, std::allocator <C> >;
 
 typedef StringT <Char> String;
 typedef StringT <WChar> WString;
 
-template <typename C, class T>
-struct Type <StringT <C, T> > :
-	public TypeVarLen <StringT <C, T> >
+template <typename C>
+struct Type <StringT <C> > :
+	public TypeVarLen <StringT <C> >
 {
-	typedef StringT <C, T> StringType;
+	typedef StringT <C> StringType;
 
-	static void check (const StringType& s)
-	{
-		s._check ();
-	}
+//	typedef StringBase <C> C_in;
+
+	static void check (const StringType& s);
 
 	static StringType& out (StringType* p)
 	{
@@ -72,17 +58,39 @@ struct Type <StringT <C, T> > :
 	}
 };
 
-template <typename C, class T = std::char_traits <C> >
-using TypeString = Type <StringT <C, T> >;
+template <typename C>
+void Type <StringT <C> >::check (const StringType& s)
+{
+	// Do some check
+	const C* p;
+	size_t cc;
+	if (s.is_large ()) {
+		p = s.large_pointer ();
+		cc = s.large_size ();
+		CORBA::Nirvana::_check_pointer (p);
+		if (cc > s.large_capacity () || !StringType::heap ()->is_readable (p, (cc + 1) * sizeof (C)))
+			::Nirvana::throw_BAD_PARAM ();
+	} else {
+		p = s.small_pointer ();
+		cc = s.small_size ();
+		if (cc > StringABI <C>::SMALL_CAPACITY)
+			::Nirvana::throw_BAD_PARAM ();
+	}
+	if (p [cc])
+		::Nirvana::throw_BAD_PARAM (); // Not zero-terminated
+}
 
-template <typename C, class T = std::char_traits <C> >
-using String_in = typename TypeString <C, T>::C_in;
+template <typename C>
+using TypeString = Type <StringT <C> >;
 
-template <typename C, class T = std::char_traits <C> >
-using String_out = typename TypeString <C, T>::C_out;
+template <typename C>
+using String_in = typename TypeString <C>::C_in;
 
-template <typename C, class T = std::char_traits <C> >
-using String_inout = typename TypeString <C, T>::C_inout;
+template <typename C>
+using String_out = typename TypeString <C>::C_out;
+
+template <typename C>
+using String_inout = typename TypeString <C>::C_inout;
 
 template <typename C>
 class String_var : public std::basic_string <C>
