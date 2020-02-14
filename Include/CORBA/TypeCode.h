@@ -8,9 +8,9 @@
 
 namespace CORBA {
 
-typedef Nirvana::T_var <TypeCode> TypeCode_var;
-typedef Nirvana::T_out <TypeCode> TypeCode_out;
-typedef Nirvana::T_inout <TypeCode> TypeCode_inout;
+typedef Nirvana::I_var <TypeCode> TypeCode_var;
+typedef Nirvana::I_out <TypeCode> TypeCode_out;
+typedef Nirvana::I_inout <TypeCode> TypeCode_inout;
 
 namespace Nirvana {
 
@@ -134,7 +134,7 @@ TypeCode_var Client <T, TypeCode>::get_compact_typecode ()
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	T_ret <TypeCode> _ret = (_b._epv ().epv.get_compact_typecode) (&_b, &_env);
+	I_ret <TypeCode> _ret = (_b._epv ().epv.get_compact_typecode) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -194,7 +194,7 @@ TypeCode_var Client <T, TypeCode>::member_type (ULong index)
 {
 	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	T_ret <TypeCode> _ret = (_b._epv ().epv.member_type) (&_b, index, &_env);
+	I_ret <TypeCode> _ret = (_b._epv ().epv.member_type) (&_b, index, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -204,7 +204,7 @@ TypeCode_var Client <T, TypeCode>::discriminator_type ()
 {
 	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	T_ret <TypeCode> _ret = (_b._epv ().epv.discriminator_type) (&_b, &_env);
+	I_ret <TypeCode> _ret = (_b._epv ().epv.discriminator_type) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -234,7 +234,7 @@ TypeCode_var Client <T, TypeCode>::content_type ()
 {
 	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	T_ret <TypeCode> _ret = (_b._epv ().epv.content_type) (&_b, &_env);
+	I_ret <TypeCode> _ret = (_b._epv ().epv.content_type) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -284,7 +284,7 @@ TypeCode_var Client <T, TypeCode>::concrete_base_type ()
 {
 	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	T_ret <TypeCode> _ret = (_b._epv ().epv.concrete_base_type) (&_b, &_env);
+	I_ret <TypeCode> _ret = (_b._epv ().epv.concrete_base_type) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }

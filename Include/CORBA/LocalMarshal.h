@@ -12,9 +12,9 @@ class Object;
 namespace Nirvana {
 
 class LocalMarshal;
-typedef T_ptr <LocalMarshal> LocalMarshal_ptr;
-typedef T_var <LocalMarshal> LocalMarshal_var;
-typedef T_out <LocalMarshal> LocalMarshal_out;
+typedef I_ptr <LocalMarshal> LocalMarshal_ptr;
+typedef I_var <LocalMarshal> LocalMarshal_var;
+typedef I_out <LocalMarshal> LocalMarshal_out;
 
 struct LocalObjectId
 {
@@ -192,7 +192,7 @@ Interface_var Client <T, LocalMarshal>::unmarshal_interface (const void* marshal
 {
 	Environment _env;
 	Bridge <LocalMarshal>& _b (T::_get_bridge (_env));
-	T_ret <Interface> _ret = (_b._epv ().epv.unmarshal_interface) (&_b, marshal_data, interface_id, &_env);
+	I_ret <Interface> _ret = (_b._epv ().epv.unmarshal_interface) (&_b, marshal_data, interface_id, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -212,7 +212,7 @@ TypeCode_var Client <T, LocalMarshal>::unmarshal_type_code (const void* marshal_
 {
 	Environment _env;
 	Bridge <LocalMarshal>& _b (T::_get_bridge (_env));
-	T_ret <TypeCode> _ret = (_b._epv ().epv.unmarshal_type_code) (&_b, marshal_data, &_env);
+	I_ret <TypeCode> _ret = (_b._epv ().epv.unmarshal_type_code) (&_b, marshal_data, &_env);
 	_env.check ();
 	return _ret;
 }

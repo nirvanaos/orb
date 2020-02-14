@@ -240,7 +240,7 @@ public:
 		return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
 	}
 
-	T_ptr <Primary> _this ()
+	I_ptr <Primary> _this ()
 	{
 		return static_cast <Primary*> (this->_get_proxy ());
 	}

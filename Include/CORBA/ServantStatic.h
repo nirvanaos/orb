@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_SERVANTSTATIC_H_
 
 #include "ServantImpl.h"
-#include "T_ptr.h"
+#include "I_ptr.h"
 
 namespace CORBA {
 namespace Nirvana {

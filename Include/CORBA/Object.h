@@ -25,16 +25,16 @@ class SynchronizationDomain;
 namespace CORBA {
 
 typedef Nirvana::Interface ImplementationDef; // Not defined yet
-typedef Nirvana::T_ptr <ImplementationDef> ImplementationDef_ptr;
-typedef Nirvana::T_var <ImplementationDef> ImplementationDef_var;
-typedef Nirvana::T_out <ImplementationDef> ImplementationDef_out;
-typedef Nirvana::T_inout <ImplementationDef> ImplementationDef_inout;
+typedef Nirvana::I_ptr <ImplementationDef> ImplementationDef_ptr;
+typedef Nirvana::I_var <ImplementationDef> ImplementationDef_var;
+typedef Nirvana::I_out <ImplementationDef> ImplementationDef_out;
+typedef Nirvana::I_inout <ImplementationDef> ImplementationDef_inout;
 
 typedef Nirvana::Interface InterfaceDef; // Not defined yet
-typedef Nirvana::T_ptr <InterfaceDef> InterfaceDef_ptr;
-typedef Nirvana::T_var <InterfaceDef> InterfaceDef_var;
-typedef Nirvana::T_out <InterfaceDef> InterfaceDef_out;
-typedef Nirvana::T_inout <InterfaceDef> InterfaceDef_inout;
+typedef Nirvana::I_ptr <InterfaceDef> InterfaceDef_ptr;
+typedef Nirvana::I_var <InterfaceDef> InterfaceDef_var;
+typedef Nirvana::I_out <InterfaceDef> InterfaceDef_out;
+typedef Nirvana::I_inout <InterfaceDef> InterfaceDef_inout;
 
 namespace Nirvana {
 
@@ -103,7 +103,7 @@ ImplementationDef_ptr Client <T, Object>::_get_implementation ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	T_ret <ImplementationDef> _ret = (_b._epv ().epv.get_implementation) (&_b, &_env);
+	I_ret <ImplementationDef> _ret = (_b._epv ().epv.get_implementation) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -113,7 +113,7 @@ InterfaceDef_ptr Client <T, Object>::_get_interface ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	T_ret <InterfaceDef> _ret = (_b._epv ().epv.get_interface) (&_b, &_env);
+	I_ret <InterfaceDef> _ret = (_b._epv ().epv.get_interface) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -182,7 +182,7 @@ class ClientInterfaceBase <Primary, Object> :
 	public Client <ClientBase <Primary, Object>, Object>
 {
 public:
-	static T_ptr <Primary> _narrow (Object_ptr obj)
+	static I_ptr <Primary> _narrow (Object_ptr obj)
 	{
 		return Primary::_duplicate (AbstractBase_ptr (obj)->_query_interface <Primary> ());
 	}

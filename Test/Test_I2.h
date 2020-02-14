@@ -6,9 +6,9 @@
 namespace Test {
 
 class I2;
-typedef ::CORBA::Nirvana::T_ptr <I2> I2_ptr;
-typedef ::CORBA::Nirvana::T_var <I2> I2_var;
-typedef ::CORBA::Nirvana::T_out <I2> I2_out;
+typedef ::CORBA::Nirvana::I_ptr <I2> I2_ptr;
+typedef ::CORBA::Nirvana::I_var <I2> I2_var;
+typedef ::CORBA::Nirvana::I_out <I2> I2_out;
 
 }
 

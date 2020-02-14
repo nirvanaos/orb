@@ -3,7 +3,7 @@
 
 #include "Environment_c.h"
 #include "RepositoryId.h"
-#include "T_ptr.h"
+#include "I_ptr.h"
 #include "LifeCycle.h"
 
 namespace CORBA {

@@ -172,22 +172,22 @@ struct MarshalTraits <TypeCode_var>
 };
 
 template <class I> // I must derive from Object
-struct MarshalTraits <T_var <I> >
+struct MarshalTraits <I_var <I> >
 {
 	static const bool has_unmarshal_in_ = true;
 	static const bool has_unmarshal_inout_ = true;
 
-	static void local_marshal (Object_ptr src, T_ptr <I>& dst)
+	static void local_marshal (Object_ptr src, I_ptr <I>& dst)
 	{
 		reinterpret_cast <uintptr_t&> (dst) = g_local_marshal->marshal_object (src);
 	}
 
-	static void local_unmarshal_in (T_ptr <I>& val)
+	static void local_unmarshal_in (I_ptr <I>& val)
 	{
 		val = static_cast <I*> (static_cast <Bridge <Interface>*> (g_local_marshal->unmarshal_interface (val, Bridge <I>::interface_id_)));
 	}
 
-	static void local_unmarshal_inout (T_ptr <I>& val)
+	static void local_unmarshal_inout (I_ptr <I>& val)
 	{
 		local_unmarshal_in (val);
 	}

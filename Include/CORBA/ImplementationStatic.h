@@ -172,7 +172,7 @@ public:
 		return FindInterface <Primary, Bases...>::find (*(S*)nullptr, id);
 	}
 
-	static T_ptr <Primary> _this ()
+	static I_ptr <Primary> _this ()
 	{
 		return static_cast <Primary*> (
 			std::conditional <std::is_base_of <InterfaceStatic <S, LocalObject>, ImplementationStatic <S, Primary, Bases...> >::value,

@@ -68,7 +68,7 @@ struct TypeVarLen :
 		T val_;
 	};
 
-	// Client T_var class for the C++ IDL mapping standard conformance
+	// Client I_var class for the C++ IDL mapping standard conformance
 	class C_var :
 		public T
 	{

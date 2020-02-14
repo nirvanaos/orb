@@ -34,19 +34,19 @@ class ClientInterfacePrimary :
 	public Client <ClientBridge <I>, I>
 {
 public:
-	typedef T_ptr <I> _ptr_type;
+	typedef I_ptr <I> _ptr_type;
 
-	static T_ptr <I> _duplicate (T_ptr <I> obj)
+	static I_ptr <I> _duplicate (I_ptr <I> obj)
 	{
 		return static_cast <I*> (Interface::__duplicate (obj));
 	}
 
-	static T_ptr <I> _nil ()
+	static I_ptr <I> _nil ()
 	{
-		return T_ptr <I>::nil ();
+		return I_ptr <I>::nil ();
 	}
 
-	static T_ptr <I> unmarshal (BridgeMarshal <I>* bridge)
+	static I_ptr <I> unmarshal (BridgeMarshal <I>* bridge)
 	{
 		return static_cast <I*> (Interface::unmarshal (bridge, Bridge <I>::interface_id_));
 	}
@@ -57,7 +57,7 @@ template <class Primary, class Base>
 class ClientBase
 {
 public:
-	operator T_ptr <Base> ();
+	operator I_ptr <Base> ();
 
 protected:
 	Bridge <Base>* _get_bridge_ptr (EnvironmentBase& env)
@@ -80,7 +80,7 @@ protected:
 };
 
 template <class Primary, class Base>
-ClientBase <Primary, Base>::operator T_ptr <Base> ()
+ClientBase <Primary, Base>::operator I_ptr <Base> ()
 {
 	Environment env;
 	return static_cast <Base*> (_get_bridge_ptr (env));

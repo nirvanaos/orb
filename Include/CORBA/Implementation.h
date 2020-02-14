@@ -263,16 +263,16 @@ class ImplementationPseudo :
 {
 public:
 
-	//! \fn T_ptr <Primary> _get_ptr ()
+	//! \fn I_ptr <Primary> _get_ptr ()
 	//!
 	//! \brief Gets the pointer.
 	//!   Works like _this() method but doesn't increment the reference counter.
 	//!
 	//! \return The primary interface pointer.
 
-	T_ptr <Primary> _get_ptr ()
+	I_ptr <Primary> _get_ptr ()
 	{
-		return T_ptr <Primary> (&static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this)));
+		return I_ptr <Primary> (&static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this)));
 	}
 
 protected:
@@ -302,7 +302,7 @@ public:
 		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);
 	}
 
-	T_ptr <Primary> _this ()
+	I_ptr <Primary> _this ()
 	{
 		return static_cast <Primary*> (
 			std::conditional <std::is_base_of <LocalObjectLink, Implementation <S, Primary, Bases...> >::value,

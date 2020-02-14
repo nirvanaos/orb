@@ -7,42 +7,42 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <class I> class T_inout;
-template <class I> class T_var;
+template <class I> class I_inout;
+template <class I> class I_var;
 
 	//! Interface pointer template.
 template <class I>
-class T_ptr
+class I_ptr
 {
-	T_ptr (Bridge <I>* p) = delete;
+	I_ptr (Bridge <I>* p) = delete;
 
 public:
-	constexpr T_ptr ()
+	constexpr I_ptr ()
 	{} // Zero init skipped for performance
 
-	constexpr T_ptr (I* p) :
+	constexpr I_ptr (I* p) :
 		p_ (p)
 	{}
 
-	T_ptr (const T_ptr <I>& src) :
+	I_ptr (const I_ptr <I>& src) :
 		p_ (src.p_)
 	{}
 
 	template <class I1>
-	T_ptr (const T_ptr <I1>& src, bool check_nil = true)
+	I_ptr (const I_ptr <I1>& src, bool check_nil = true)
 	{
 		if (src.p_) {
-			*this = src.p_->operator T_ptr ();
+			*this = src.p_->operator I_ptr ();
 			if (check_nil && !p_)
 				::Nirvana::throw_INV_OBJREF ();
 		} else
 			p_ = nullptr;
 	}
 
-	/// Move constructor in case returned T_var assigned to T_ptr:
+	/// Move constructor in case returned I_var assigned to I_ptr:
 	///    Object_var func ();
 	///    Object_ptr obj = func ();
-	inline T_ptr (T_var <I>&& var);
+	inline I_ptr (I_var <I>&& var);
 
 	operator Bridge <I>* () const
 	{
@@ -61,14 +61,14 @@ public:
 		return p_ != 0;
 	}
 
-	static T_ptr <I> nil ()
+	static I_ptr <I> nil ()
 	{
-		return T_ptr ((I*)nullptr);
+		return I_ptr ((I*)nullptr);
 	}
 
 private:
-	template <class I1> friend class T_ptr;
-	friend class T_inout <I>;
+	template <class I1> friend class I_ptr;
+	friend class I_inout <I>;
 
 private:
 	I* p_;
@@ -79,7 +79,7 @@ struct StaticInterface
 {
 	Bridge <I>* itf;
 
-	operator CORBA::Nirvana::T_ptr <I> () const
+	operator CORBA::Nirvana::I_ptr <I> () const
 	{
 		return static_cast <I*> (itf);
 	}

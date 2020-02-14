@@ -3,12 +3,12 @@
 #ifndef NIRVANA_ORB_INTERFACE_FORWARD_H_
 #define NIRVANA_ORB_INTERFACE_FORWARD_H_
 
-#include "T_ptr.h"
+#include "I_ptr.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-typedef T_ptr <Interface> Interface_ptr;
+typedef I_ptr <Interface> Interface_ptr;
 
 class Interface :
 	public BridgeMarshal <Interface>
@@ -16,35 +16,35 @@ class Interface :
 public:
 	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf);
 
-	static T_ptr <Interface> _duplicate (T_ptr <Interface> itf);
+	static I_ptr <Interface> _duplicate (I_ptr <Interface> itf);
 
 	static void _release (Bridge <Interface>* itf);
 
-	inline static T_ptr <Interface> _nil ();
+	inline static I_ptr <Interface> _nil ();
 
 	static Bridge <Interface>* unmarshal (Bridge <Interface>* bridge, const Char* interface_id);
 
-	static T_ptr <Interface> unmarshal (Bridge <Interface>* bridge);
+	static I_ptr <Interface> unmarshal (Bridge <Interface>* bridge);
 };
 
 template <>
-class T_ptr <Interface>
+class I_ptr <Interface>
 {
 public:
-	T_ptr () :
+	I_ptr () :
 		p_ (nullptr)
 	{}
 
-	T_ptr (const T_ptr& src) :
+	I_ptr (const I_ptr& src) :
 		p_ (src.p_)
 	{}
 
-	T_ptr (Interface* p) :
+	I_ptr (Interface* p) :
 		p_ (p)
 	{}
 
 	template <class I>
-	T_ptr (const T_ptr <I>& src) :
+	I_ptr (const I_ptr <I>& src) :
 		p_ (static_cast <Interface*> (static_cast <Bridge <Interface>*> (src)))
 	{}
 
@@ -70,26 +70,26 @@ public:
 		return p_ != 0;
 	}
 
-	static T_ptr <Interface> nil ()
+	static I_ptr <Interface> nil ()
 	{
-		return T_ptr ((Interface*)nullptr);
+		return I_ptr ((Interface*)nullptr);
 	}
 
 private:
 	Interface* p_;
 };
 
-inline T_ptr <Interface> Interface::_duplicate (T_ptr <Interface> itf)
+inline I_ptr <Interface> Interface::_duplicate (I_ptr <Interface> itf)
 {
 	return unmarshal (__duplicate (itf));
 }
 
-inline T_ptr <Interface> Interface::_nil ()
+inline I_ptr <Interface> Interface::_nil ()
 {
-	return T_ptr <Interface>::nil ();
+	return I_ptr <Interface>::nil ();
 }
 
-inline T_ptr <Interface> Interface::unmarshal (Bridge <Interface>* bridge)
+inline I_ptr <Interface> Interface::unmarshal (Bridge <Interface>* bridge)
 {
 	return static_cast <Interface*> (bridge);
 }

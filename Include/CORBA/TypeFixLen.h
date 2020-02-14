@@ -20,7 +20,7 @@ struct TypeFixLen : public TypeBase <T>
 	using TypeBase <T>::C_inout;
 	using TypeBase <T>::C_ret;
 
-	// Client T_var class for the C++ IDL mapping standard conformance
+	// Client I_var class for the C++ IDL mapping standard conformance
 	class C_var :
 		public T
 	{

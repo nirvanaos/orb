@@ -6,9 +6,9 @@
 
 namespace CORBA {
 
-typedef Nirvana::T_ptr <Environment> Environment_ptr;
-typedef Nirvana::T_var <Environment> Environment_var;
-typedef Nirvana::T_out <Environment> Environment_out;
+typedef Nirvana::I_ptr <Environment> Environment_ptr;
+typedef Nirvana::I_var <Environment> Environment_var;
+typedef Nirvana::I_out <Environment> Environment_out;
 
 //! CORBA::Environment
 class Environment :

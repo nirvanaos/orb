@@ -7,9 +7,9 @@ namespace CORBA {
 namespace Nirvana {
 
 class ReferenceCounter;
-typedef T_ptr <ReferenceCounter> ReferenceCounter_ptr;
-typedef T_var <ReferenceCounter> ReferenceCounter_var;
-typedef T_out <ReferenceCounter> ReferenceCounter_out;
+typedef I_ptr <ReferenceCounter> ReferenceCounter_ptr;
+typedef I_var <ReferenceCounter> ReferenceCounter_var;
+typedef I_out <ReferenceCounter> ReferenceCounter_out;
 
 template <>
 class Bridge <ReferenceCounter> :

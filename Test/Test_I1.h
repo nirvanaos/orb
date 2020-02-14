@@ -6,9 +6,9 @@
 namespace Test {
 
 class I1;
-typedef CORBA::Nirvana::T_ptr <I1> I1_ptr;
-typedef CORBA::Nirvana::T_var <I1> I1_var;
-typedef CORBA::Nirvana::T_out <I1> I1_out;
+typedef CORBA::Nirvana::I_ptr <I1> I1_ptr;
+typedef CORBA::Nirvana::I_var <I1> I1_var;
+typedef CORBA::Nirvana::I_out <I1> I1_out;
 
 typedef CORBA::Nirvana::Sequence <CORBA::Long> SeqLong;
 typedef CORBA::Nirvana::Type <SeqLong>::C_var SeqLong_var;
@@ -67,7 +67,7 @@ class Client <T, ::Test::I1> :
 public:
 	Long op1 (Long p1);
 	void throw_NO_IMPLEMENT ();
-	::Test::I1_var object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj);
+	::Test::I1_var object_op (I_ptr < ::Test::I1> in_obj, I_out < ::Test::I1> out_obj, I_inout < ::Test::I1> inout_obj);
 	String string_op (CORBA::String_in, CORBA::String_out, CORBA::String_inout);
 	::Test::SeqLong seq_op (Type <::Test::SeqLong>::C_in in_s, ::Test::SeqLong_out out_s, ::Test::SeqLong_inout inout_s);
 	Any any_op (Any_in, Any_out, Any_inout);
@@ -93,11 +93,11 @@ void Client <T, ::Test::I1>::throw_NO_IMPLEMENT ()
 }
 
 template <class T>
-::Test::I1_var Client <T, ::Test::I1>::object_op (T_ptr < ::Test::I1> in_obj, T_out < ::Test::I1> out_obj, T_inout < ::Test::I1> inout_obj)
+::Test::I1_var Client <T, ::Test::I1>::object_op (I_ptr < ::Test::I1> in_obj, I_out < ::Test::I1> out_obj, I_inout < ::Test::I1> inout_obj)
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	T_ret < ::Test::I1> _ret = (_b._epv ().epv.object_op) (&_b, in_obj, &out_obj, &inout_obj, &_env);
+	I_ret < ::Test::I1> _ret = (_b._epv ().epv.object_op) (&_b, in_obj, &out_obj, &inout_obj, &_env);
 	_env.check ();
 	return _ret;
 }

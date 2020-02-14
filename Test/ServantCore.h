@@ -14,9 +14,9 @@ class ServantCore :
 	public ReferenceCounterBase
 {
 public:
-	T_ptr <PortableServer::ServantBase> _get_ptr ()
+	I_ptr <PortableServer::ServantBase> _get_ptr ()
 	{
-		return T_ptr <PortableServer::ServantBase> (&static_cast <PortableServer::ServantBase&> (static_cast <Bridge <PortableServer::ServantBase>&> (*this)));
+		return I_ptr <PortableServer::ServantBase> (&static_cast <PortableServer::ServantBase&> (static_cast <Bridge <PortableServer::ServantBase>&> (*this)));
 	}
 
 	ServantCore (PortableServer::Servant servant, DynamicServant_ptr dynamic) :

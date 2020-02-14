@@ -11,9 +11,9 @@ namespace CORBA {
 namespace Nirvana {
 
 class ObjectFactory;
-typedef T_ptr <ObjectFactory> ObjectFactory_ptr;
-typedef T_var <ObjectFactory> ObjectFactory_var;
-typedef T_out <ObjectFactory> ObjectFactory_out;
+typedef I_ptr <ObjectFactory> ObjectFactory_ptr;
+typedef I_var <ObjectFactory> ObjectFactory_var;
+typedef I_out <ObjectFactory> ObjectFactory_out;
 
 template <>
 class Bridge <ObjectFactory> :
@@ -61,7 +61,7 @@ PortableServer::Servant Client <T, ObjectFactory>::create_servant (BridgeMarshal
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
-	T_ret <PortableServer::ServantBase> _ret = (_b._epv ().epv.create_servant) (&_b, servant, dynamic, &_env);
+	I_ret <PortableServer::ServantBase> _ret = (_b._epv ().epv.create_servant) (&_b, servant, dynamic, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -71,7 +71,7 @@ LocalObject_ptr Client <T, ObjectFactory>::create_local_object (BridgeMarshal <A
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
-	T_ret <LocalObject> _ret = (_b._epv ().epv.create_local_object) (&_b, base, dynamic, &_env);
+	I_ret <LocalObject> _ret = (_b._epv ().epv.create_local_object) (&_b, base, dynamic, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -81,7 +81,7 @@ ReferenceCounter_ptr Client <T, ObjectFactory>::create_reference_counter (Bridge
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
-	T_ret <ReferenceCounter> _ret = (_b._epv ().epv.create_reference_counter) (&_b, dynamic, &_env);
+	I_ret <ReferenceCounter> _ret = (_b._epv ().epv.create_reference_counter) (&_b, dynamic, &_env);
 	_env.check ();
 	return _ret;
 }

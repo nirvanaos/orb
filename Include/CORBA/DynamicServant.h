@@ -12,9 +12,9 @@ namespace CORBA {
 namespace Nirvana {
 
 class DynamicServant;
-typedef T_ptr <DynamicServant> DynamicServant_ptr;
-typedef T_var <DynamicServant> DynamicServant_var;
-typedef T_out <DynamicServant> DynamicServant_out;
+typedef I_ptr <DynamicServant> DynamicServant_ptr;
+typedef I_var <DynamicServant> DynamicServant_var;
+typedef I_out <DynamicServant> DynamicServant_out;
 
 template <>
 class Bridge <DynamicServant> :

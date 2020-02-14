@@ -8,14 +8,14 @@
 namespace PortableServer {
 
 class POA;
-typedef ::CORBA::Nirvana::T_ptr <POA> POA_ptr;
-typedef ::CORBA::Nirvana::T_var <POA> POA_var;
-typedef ::CORBA::Nirvana::T_out <POA> POA_out;
+typedef ::CORBA::Nirvana::I_ptr <POA> POA_ptr;
+typedef ::CORBA::Nirvana::I_var <POA> POA_var;
+typedef ::CORBA::Nirvana::I_out <POA> POA_out;
 
 class ServantBase;
-typedef ::CORBA::Nirvana::T_ptr <ServantBase> Servant;
-typedef ::CORBA::Nirvana::T_var <ServantBase> ServantBase_var;
-typedef ::CORBA::Nirvana::T_out <ServantBase> ServantBase_out;
+typedef ::CORBA::Nirvana::I_ptr <ServantBase> Servant;
+typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
+typedef ::CORBA::Nirvana::I_out <ServantBase> ServantBase_out;
 
 }
 
@@ -78,7 +78,7 @@ template <class T>
 {
 	Environment _env;
 	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
-	T_ret <::PortableServer::POA> _ret = (_b._epv ().epv.default_POA) (&_b, &_env);
+	I_ret <::PortableServer::POA> _ret = (_b._epv ().epv.default_POA) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -88,7 +88,7 @@ InterfaceDef_ptr Client <T, PortableServer::ServantBase>::_get_interface ()
 {
 	Environment _env;
 	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
-	T_ret <InterfaceDef> _ret = (_b._epv ().epv.get_interface) (&_b, &_env);
+	I_ret <InterfaceDef> _ret = (_b._epv ().epv.get_interface) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }

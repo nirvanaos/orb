@@ -8,9 +8,9 @@ namespace CORBA {
 namespace Nirvana {
 
 class ProxyFactory;
-typedef T_ptr <ProxyFactory> ProxyFactory_ptr;
-typedef T_var <ProxyFactory> ProxyFactory_var;
-typedef T_out <ProxyFactory> ProxyFactory_out;
+typedef I_ptr <ProxyFactory> ProxyFactory_ptr;
+typedef I_var <ProxyFactory> ProxyFactory_var;
+typedef I_out <ProxyFactory> ProxyFactory_out;
 
 template <class T>
 struct CountedArray
@@ -110,7 +110,7 @@ Interface_ptr Client <T, ProxyFactory>::create_server_proxy (Object_ptr obj, Int
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	T_ret <Interface> _ret = (_b._epv ().epv.create_server_proxy) (&_b, obj, servant, &deleter, &_env);
+	I_ret <Interface> _ret = (_b._epv ().epv.create_server_proxy) (&_b, obj, servant, &deleter, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -120,7 +120,7 @@ Interface_ptr Client <T, ProxyFactory>::create_local_proxy (Object_ptr obj, uint
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	T_ret <Interface> _ret = (_b._epv ().epv.create_local_proxy) (&_b, obj, interface_idx, &deleter, &_env);
+	I_ret <Interface> _ret = (_b._epv ().epv.create_local_proxy) (&_b, obj, interface_idx, &deleter, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -130,7 +130,7 @@ Interface_ptr Client <T, ProxyFactory>::create_remote_proxy (Object_ptr obj, Dyn
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	T_ret <Interface> _ret = (_b._epv ().epv.create_remote_proxy) (&_b, obj, &deleter, &_env);
+	I_ret <Interface> _ret = (_b._epv ().epv.create_remote_proxy) (&_b, obj, &deleter, &_env);
 	_env.check ();
 	return _ret;
 }

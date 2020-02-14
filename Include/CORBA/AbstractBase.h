@@ -6,16 +6,16 @@
 namespace CORBA {
 
 class AbstractBase;
-typedef Nirvana::T_ptr <AbstractBase> AbstractBase_ptr;
-typedef Nirvana::T_var <AbstractBase> AbstractBase_var;
-typedef Nirvana::T_out <AbstractBase> AbstractBase_out;
-typedef Nirvana::T_inout <AbstractBase> AbstractBase_inout;
+typedef Nirvana::I_ptr <AbstractBase> AbstractBase_ptr;
+typedef Nirvana::I_var <AbstractBase> AbstractBase_var;
+typedef Nirvana::I_out <AbstractBase> AbstractBase_out;
+typedef Nirvana::I_inout <AbstractBase> AbstractBase_inout;
 
 class Object;
-typedef Nirvana::T_ptr <Object> Object_ptr;
-typedef Nirvana::T_var <Object> Object_var;
-typedef Nirvana::T_out <Object> Object_out;
-typedef Nirvana::T_inout <Object> Object_inout;
+typedef Nirvana::I_ptr <Object> Object_ptr;
+typedef Nirvana::I_var <Object> Object_var;
+typedef Nirvana::I_out <Object> Object_out;
+typedef Nirvana::I_inout <Object> Object_inout;
 
 class ValueBase;
 
@@ -60,7 +60,7 @@ public:
 	Bridge <Interface>* _query_interface (const Char* type_id);
 
 	template <class I>
-	T_ptr <I> _query_interface ()
+	I_ptr <I> _query_interface ()
 	{
 		return static_cast <I*> (_query_interface (Bridge <I>::interface_id_));
 	}
@@ -99,7 +99,7 @@ class ClientInterfaceBase <Primary, AbstractBase> :
 	public Client <ClientBase <Primary, AbstractBase>, AbstractBase>
 {
 public:
-	static T_ptr <Primary> _narrow (AbstractBase_ptr obj)
+	static I_ptr <Primary> _narrow (AbstractBase_ptr obj)
 	{
 		return Primary::_duplicate (obj->_query_interface <Primary> ());
 	}
