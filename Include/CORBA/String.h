@@ -18,20 +18,29 @@ StringBase <C>::StringBase (const C* s)
 	} else
 		this->reset ();
 }
-/*
+
+#ifdef NIRVANA_C11
+
 template <typename C>
-template <class T, class A>
+template <class T, class A, typename>
 StringBase <C>::StringBase (const std::basic_string <C, T, A>& s)
 {
 	if (!s.empty ()) {
-		size_t cc = s.length (s);
-		this->large_pointer (const_cast <C*> (s));
-		this->large_size (cc);
+		this->large_pointer (const_cast <C*> (s.data ()));
+		this->large_size (s.length ());
 		this->allocated (0);
 	} else
 		this->reset ();
 }
-*/
+
+#endif
+
+template <typename C> inline
+const std::basic_string <C, std::char_traits <C>, std::allocator <C> >* StringBase <C>::operator & () const
+{
+	return &static_cast <const std::basic_string <C, std::char_traits <C>, std::allocator <C> >&> (*this);
+}
+
 template <typename C>
 using StringT = std::basic_string <C, std::char_traits <C>, std::allocator <C> >;
 
@@ -45,17 +54,8 @@ struct Type <StringT <C> > :
 	typedef StringT <C> StringType;
 
 	typedef StringBase <C> C_in;
-	typedef const StringBase <C>* ABI_in;
 
 	static void check (const StringType& s);
-
-	static const StringType& in (ABI_in p)
-	{
-		_check_pointer (p);
-		const StringType& s = static_cast <const StringType&> (*p);
-		check (s);
-		return s;
-	}
 
 	static StringType& out (StringType* p)
 	{
