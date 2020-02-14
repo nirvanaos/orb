@@ -53,6 +53,11 @@ public:
 		return p_;
 	}
 
+	operator Bridge <Interface>* () const
+	{
+		return p_;
+	}
+
 	Interface* operator -> () const
 	{
 		if (!p_)

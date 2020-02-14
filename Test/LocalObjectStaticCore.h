@@ -38,9 +38,9 @@ public:
 		return false;
 	}
 
-	static Boolean _is_equivalent (Object_ptr other_object)
+	static Boolean _is_equivalent (Object_ptr other)
 	{
-		return _get_interface () == other_object;
+		return static_cast <AbstractBase*> (InterfaceStatic <S, AbstractBase>::_bridge ())->_query_interface (nullptr) == AbstractBase_ptr (other)->_query_interface (nullptr);
 	}
 
 	static ULong _hash (ULong maximum)

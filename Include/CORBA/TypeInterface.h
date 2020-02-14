@@ -84,6 +84,13 @@ public:
 		return p;
 	}
 
+	operator BridgeMarshal <I>* ()
+	{
+		BridgeMarshal <I>* p = T_ptr <I>::operator Bridge <I>* ();
+		T_ptr <I>::operator = (T_ptr <I>::nil ());
+		return p;
+	}
+
 protected:
 	void reset (T_ptr <I> p)
 	{
