@@ -44,9 +44,18 @@ struct Type <StringT <C> > :
 {
 	typedef StringT <C> StringType;
 
-//	typedef StringBase <C> C_in;
+	typedef StringBase <C> C_in;
+	typedef const StringBase <C>* ABI_in;
 
 	static void check (const StringType& s);
+
+	static const StringType& in (ABI_in p)
+	{
+		_check_pointer (p);
+		const StringType& s = static_cast <const StringType&> (*p);
+		check (s);
+		return s;
+	}
 
 	static StringType& out (StringType* p)
 	{
