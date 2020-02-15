@@ -22,7 +22,7 @@ void EnvironmentBase::check () const
 {
 	const Exception* ex = exception ();
 	if (ex)
-		ex->raise ();
+		ex->_raise ();
 }
 
 const Char* EnvironmentBase::exception_id () const

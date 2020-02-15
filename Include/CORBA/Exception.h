@@ -18,7 +18,7 @@ public:
 
 	virtual ~Exception ()
 	{}
-	virtual void raise () const = 0;
+	virtual void _raise () const = 0;
 	virtual const char* _name () const = 0;
 	virtual const char* _rep_id () const = 0;
 
@@ -36,6 +36,10 @@ public:
 		EC_USER_EXCEPTION = -2,
 		EC_SYSTEM_EXCEPTION = -1
 	};
+
+	/// Create dynamically allocated copy of the exception object.
+	/// Then it must be deleted by operator `delete`.
+	Exception* __clone () const;
 
 protected:
 	Exception ()
@@ -65,7 +69,7 @@ typedef const StaticInterface <TypeCode> ExceptionEntry;
 
 #define DECLARE_EXCEPTION(e) \
 NIRVANA_DEFAULT_CONSTRUCTORS(e)\
-virtual void raise () const;\
+virtual void _raise () const;\
 virtual const char* _rep_id () const;\
 static const char repository_id_ [];\
 virtual const char* _name () const;\
@@ -77,7 +81,7 @@ static const e* _narrow (const ::CORBA::Exception* ep) { return _downcast (ep); 
 static e* _narrow (::CORBA::Exception* ep) { return _downcast (ep); }
 
 #define DEFINE_EXCEPTION(e, rep_id) \
-void e::raise () const { throw *this; } \
+void e::_raise () const { throw *this; } \
 const char e::repository_id_ [] = rep_id; \
 const char* e::_rep_id () const { return repository_id_; } \
 const char* e::_name () const { return __name (); }
