@@ -2,7 +2,6 @@
 #define NIRVANA_ORB_ABSTRACTBASE_S_H_
 
 #include "AbstractBase.h"
-#include "Interface.h"
 
 // Servant part of an interface
 

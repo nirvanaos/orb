@@ -2,7 +2,6 @@
 #define NIRVANA_ORB_LOCALOBJECT_S_H_
 
 #include "LocalObject.h"
-#include "Interface.h"
 
 namespace CORBA {
 namespace Nirvana {

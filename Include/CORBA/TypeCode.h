@@ -2,7 +2,8 @@
 #define NIRVANA_ORB_TYPECODE_H_
 
 #include "TypeCode_b.h"
-#include "Interface.h"
+#include "Client.h"
+#include "TypeInterface.h"
 #include "UserException.h"
 #include "EnvironmentEx.h"
 

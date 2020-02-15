@@ -1,7 +1,8 @@
 #ifndef NIRVANA_ORB_TYPECODE_B_H_
 #define NIRVANA_ORB_TYPECODE_B_H_
 
-#include "Interface.h"
+#include "Interface_forward.h"
+#include "TypeEnum.h"
 
 namespace CORBA {
 

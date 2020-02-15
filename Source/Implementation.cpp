@@ -1,7 +1,11 @@
 #include <CORBA/Implementation.h>
+#include <CORBA/ObjectFactory.h>
+#include <Nirvana/OLF.h>
 
 namespace CORBA {
 namespace Nirvana {
+
+extern const ::Nirvana::ImportInterfaceT <ObjectFactory> g_object_factory;
 
 ReferenceCounterLink::ReferenceCounterLink (Bridge <DynamicServant>* dynamic) :
 	reference_counter_ (g_object_factory->create_reference_counter (dynamic))

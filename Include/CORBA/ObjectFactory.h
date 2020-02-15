@@ -89,8 +89,6 @@ ReferenceCounter_ptr Client <T, ObjectFactory>::create_reference_counter (Bridge
 class ObjectFactory : public ClientInterface <ObjectFactory>
 {};
 
-extern const ::Nirvana::ImportInterfaceT <ObjectFactory> g_object_factory;
-
 }
 }
 

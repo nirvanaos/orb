@@ -4,8 +4,8 @@
 #ifndef NIRVANA_ORB_IMPLEMENTATION_H_
 #define NIRVANA_ORB_IMPLEMENTATION_H_
 
+#include <Nirvana/Nirvana.h>
 #include "ServantImpl.h"
-#include "ObjectFactory.h"
 #include "POA.h"
 #include "AbstractBase_s.h"
 #include "ServantBase_s.h"

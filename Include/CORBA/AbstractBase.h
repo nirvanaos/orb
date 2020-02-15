@@ -1,7 +1,8 @@
 #ifndef NIRVANA_ORB_ABSTRACTBASE_H_
 #define NIRVANA_ORB_ABSTRACTBASE_H_
 
-#include "Interface.h"
+#include "Client.h"
+#include "TypeInterface.h"
 
 namespace CORBA {
 

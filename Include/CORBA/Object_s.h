@@ -2,7 +2,6 @@
 #define NIRVANA_ORB_OBJECT_S_H_
 
 #include "Object.h"
-#include "Interface.h"
 
 namespace CORBA {
 namespace Nirvana {

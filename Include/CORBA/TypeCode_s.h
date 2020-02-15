@@ -2,8 +2,8 @@
 #define NIRVANA_ORB_TYPECODE_S_H_
 
 #include "TypeCode_b.h"
-#include "Interface.h"
 #include "ServantStatic.h"
+#include "TypeInterface.h"
 
 namespace CORBA {
 namespace Nirvana {

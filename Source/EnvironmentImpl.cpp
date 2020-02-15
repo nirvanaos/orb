@@ -3,6 +3,7 @@
 #include <CORBA/RepositoryId.h>
 #include <CORBA/TypeCode.h>
 #include <Nirvana/Memory.h>
+#include <Nirvana/core_objects.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -84,7 +85,7 @@ void EnvironmentBase::set (TypeCode_ptr tc, const void* data)
 	if (size <= sizeof (data_.small))
 		p = data_.small;
 	else
-		p = ::Nirvana::g_default_heap->allocate (nullptr, size, 0);
+		p = ::Nirvana::g_memory->allocate (nullptr, size, 0);
 	tc->_copy (p, data);
 }
 

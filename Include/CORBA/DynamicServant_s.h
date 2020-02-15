@@ -2,7 +2,6 @@
 #define NIRVANA_ORB_DYNAMICSERVANT_S_H_
 
 #include "DynamicServant.h"
-#include "Interface.h"
 
 namespace CORBA {
 namespace Nirvana {

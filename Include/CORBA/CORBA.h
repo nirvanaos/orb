@@ -9,5 +9,6 @@
 #include "exceptions.h"
 #include "tc_constants.h"
 #include "Any.h"
+#include "Type.h"
 
 #endif

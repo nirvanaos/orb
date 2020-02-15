@@ -1,6 +1,7 @@
 #include <CORBA/Any.h>
 #include <CORBA/tc_constants.h>
 #include <Nirvana/Memory.h>
+#include <Nirvana/core_objects.h>
 
 namespace CORBA {
 
@@ -29,7 +30,7 @@ void Any::clear ()
 		release (tc);
 	}
 	if (large)
-		::Nirvana::g_default_heap->release (large_pointer (), large_size ());
+		::Nirvana::g_memory->release (large_pointer (), large_size ());
 	reset ();
 }
 
@@ -44,7 +45,7 @@ void* Any::prepare (TypeCode_ptr tc)
 		if (size <= SMALL_CAPACITY)
 			dst = small_pointer ();
 		else
-			large_pointer (dst = ::Nirvana::g_default_heap->allocate (0, size, 0), size);
+			large_pointer (dst = ::Nirvana::g_memory->allocate (0, size, 0), size);
 	}
 	return dst;
 }
