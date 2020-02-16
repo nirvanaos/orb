@@ -46,10 +46,11 @@ protected:
 	}
 };
 
-#define BASE_STRUCT_ENTRY(type, name) Wide < type>::Func name;\
-operator const Wide < type>::Func () const { return name; }
+#define BASE_STRUCT_ENTRY(type, name) MyBridge::Wide < type>::Func name;\
+operator const MyBridge::Wide < type>::Func () const { return name; }
 
-#define BRIDGE_BEGIN(I) template <> struct Bridge < I>::EPV { Interface::EPV interface; struct {
+#define BRIDGE_BEGIN(I) template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EPV interface; struct {
+#define BRIDGE_EPV } base; struct {
 #define BRIDGE_END() } epv;};
 
 template <>

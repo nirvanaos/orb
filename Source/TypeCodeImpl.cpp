@@ -71,7 +71,7 @@ const char* TypeCodeBase::_member_name (Bridge <TypeCode>* _b, ULong index, Envi
 	return nullptr;
 }
 
-BridgeMarshal <TypeCode>* TypeCodeBase::_member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
+Interface* TypeCodeBase::_member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
 {
 	set_BadKind (_env);
 	return nullptr;
@@ -83,7 +83,7 @@ Any* TypeCodeBase::_member_label (Bridge <TypeCode>* _b, ULong index, Environmen
 	return nullptr;
 }
 
-BridgeMarshal <TypeCode>* TypeCodeBase::_discriminator_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+Interface* TypeCodeBase::_discriminator_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 {
 	set_BadKind (_env);
 	return nullptr;
@@ -101,7 +101,7 @@ ULong TypeCodeBase::_length (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	return 0;
 }
 
-BridgeMarshal <TypeCode>* TypeCodeBase::_content_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+Interface* TypeCodeBase::_content_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 {
 	set_BadKind (_env);
 	return nullptr;
@@ -131,7 +131,7 @@ ValueModifier TypeCodeBase::_type_modifier (Bridge <TypeCode>* _b, EnvironmentBr
 	return 0;
 }
 
-BridgeMarshal <TypeCode>* TypeCodeBase::_concrete_base_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+Interface* TypeCodeBase::_concrete_base_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 {
 	set_BadKind (_env);
 	return nullptr;

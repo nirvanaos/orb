@@ -184,7 +184,7 @@ struct MarshalTraits <I_var <I> >
 
 	static void local_unmarshal_in (I_ptr <I>& val)
 	{
-		val = static_cast <I*> (static_cast <Bridge <Interface>*> (g_local_marshal->unmarshal_interface (val, Bridge <I>::interface_id_)));
+		val = static_cast <I*> (static_cast <Interface*> (g_local_marshal->unmarshal_interface (val, Bridge <I>::interface_id_)));
 	}
 
 	static void local_unmarshal_inout (I_ptr <I>& val)

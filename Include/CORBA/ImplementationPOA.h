@@ -130,7 +130,7 @@ protected:
 		ServantPOA ()
 	{}
 
-	virtual Bridge <Interface>* _get_proxy ();
+	virtual Interface* _get_proxy ();
 
 private:
 	friend class ServantTraitsPOA;
@@ -153,7 +153,7 @@ class ServantPOA <LocalObject> :
 {
 public:
 	// Static overrides to resolve the ambiguity.
-	static BridgeMarshal <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env);
+	static Interface* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env);
 	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env);
 	static Boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env);
 
@@ -213,7 +213,7 @@ protected:
 		ServantPOA ()
 	{}
 
-	virtual Bridge <Interface>* _get_proxy ();
+	virtual Interface* _get_proxy ();
 };
 
 //! \class ImplementationPOA

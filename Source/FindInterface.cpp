@@ -5,7 +5,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-Bridge <Interface>* InterfaceEntry::find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const Char* id)
+Interface* InterfaceEntry::find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const Char* id)
 {
 	const InterfaceEntry* ie = nullptr;
 	if (!id) // On NULL id return primary interface
@@ -19,7 +19,7 @@ Bridge <Interface>* InterfaceEntry::find (const InterfaceEntry* begin, const Int
 		}
 	}
 	if (ie) {
-		Bridge <Interface>* itf = (ie->cast) (servant);
+		Interface* itf = (ie->cast) (servant);
 		assert (!strcmp (itf->_epv ().interface_id, ie->interface_id));
 		return itf;
 	} else

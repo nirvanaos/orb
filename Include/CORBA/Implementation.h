@@ -137,7 +137,7 @@ protected:
 
 	void _construct (Bridge <DynamicServant>* dynamic);
 
-	Bridge <Interface>* _get_proxy ();
+	Interface* _get_proxy ();
 
 private:
 	PortableServer::Servant servant ()
@@ -220,7 +220,7 @@ protected:
 
 	ReferenceCounter_ptr _construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic);
 
-	Bridge <Interface>* _get_proxy ();
+	Interface* _get_proxy ();
 
 private:
 	Object_ptr object_;

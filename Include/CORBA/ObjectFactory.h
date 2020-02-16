@@ -15,49 +15,24 @@ typedef I_ptr <ObjectFactory> ObjectFactory_ptr;
 typedef I_var <ObjectFactory> ObjectFactory_var;
 typedef I_out <ObjectFactory> ObjectFactory_out;
 
-template <>
-class Bridge <ObjectFactory> :
-	public BridgeMarshal <ObjectFactory>
-{
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
-
-		struct
-		{
-			BridgeMarshal <PortableServer::ServantBase>* (*create_servant) (Bridge <ObjectFactory>*, BridgeMarshal <PortableServer::ServantBase>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
-			BridgeMarshal <LocalObject>* (*create_local_object) (Bridge <ObjectFactory>*, BridgeMarshal <AbstractBase>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
-			BridgeMarshal <ReferenceCounter>* (*create_reference_counter) (Bridge <ObjectFactory>*, BridgeMarshal <DynamicServant>*, EnvironmentBridge*);
-		}
-		epv;
-	};
-
-	const EPV& _epv () const
-	{
-		return (EPV&)Bridge <Interface>::_epv ();
-	}
-
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal <ObjectFactory> (epv.interface)
-	{}
-};
+BRIDGE_BEGIN (ObjectFactory)
+Interface* (*create_servant) (Bridge <ObjectFactory>*, Interface*, Interface*, EnvironmentBridge*);
+Interface* (*create_local_object) (Bridge <ObjectFactory>*, Interface*, Interface*, EnvironmentBridge*);
+Interface* (*create_reference_counter) (Bridge <ObjectFactory>*, Interface*, EnvironmentBridge*);
+BRIDGE_END ()
 
 template <class T>
 class Client <T, ObjectFactory> :
 	public T
 {
 public:
-	PortableServer::Servant create_servant (BridgeMarshal <PortableServer::ServantBase>* servant, BridgeMarshal <DynamicServant>* dynamic);
-	LocalObject_ptr create_local_object (BridgeMarshal <AbstractBase>* base, BridgeMarshal <DynamicServant>* dynamic);
-	ReferenceCounter_ptr create_reference_counter (BridgeMarshal <DynamicServant>* dynamic);
+	PortableServer::Servant create_servant (Interface* servant, Interface* dynamic);
+	LocalObject_ptr create_local_object (Interface* base, Interface* dynamic);
+	ReferenceCounter_ptr create_reference_counter (Interface* dynamic);
 };
 
 template <class T>
-PortableServer::Servant Client <T, ObjectFactory>::create_servant (BridgeMarshal <PortableServer::ServantBase>* servant, BridgeMarshal <DynamicServant>* dynamic)
+PortableServer::Servant Client <T, ObjectFactory>::create_servant (Interface* servant, Interface* dynamic)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
@@ -67,7 +42,7 @@ PortableServer::Servant Client <T, ObjectFactory>::create_servant (BridgeMarshal
 }
 
 template <class T>
-LocalObject_ptr Client <T, ObjectFactory>::create_local_object (BridgeMarshal <AbstractBase>* base, BridgeMarshal <DynamicServant>* dynamic)
+LocalObject_ptr Client <T, ObjectFactory>::create_local_object (Interface* base, Interface* dynamic)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
@@ -77,7 +52,7 @@ LocalObject_ptr Client <T, ObjectFactory>::create_local_object (BridgeMarshal <A
 }
 
 template <class T>
-ReferenceCounter_ptr Client <T, ObjectFactory>::create_reference_counter (BridgeMarshal <DynamicServant>* dynamic)
+ReferenceCounter_ptr Client <T, ObjectFactory>::create_reference_counter (Interface* dynamic)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));

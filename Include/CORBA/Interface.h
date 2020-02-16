@@ -38,6 +38,10 @@ struct Interface
 	static NIRVANA_NODISCARD Interface* _duplicate (Interface* obj);
 	static void _release (Interface* obj);
 	static NIRVANA_NODISCARD Interface* _check (Interface* obj, const Char* interface_id);
+	static NIRVANA_NODISCARD Interface* _check (Interface* obj)
+	{
+		return obj;
+	}
 };
 
 }

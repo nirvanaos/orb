@@ -19,16 +19,16 @@ void ServantBaseLink::_construct (Bridge <DynamicServant>* dynamic)
 	servant_base_ = g_object_factory->create_servant (this, dynamic);
 }
 
-Bridge <Interface>* ServantBaseLink::_get_proxy ()
+Interface* ServantBaseLink::_get_proxy ()
 {
 	if (!_is_active ()) {
 		::PortableServer::POA_var poa = servant ()->_default_POA ();
 		poa->activate_object (servant_base_);
 	}
-	Bridge <Interface>* proxy = AbstractBase_ptr (servant_base_)->_query_interface (nullptr);
+	Interface* proxy = AbstractBase_ptr (servant_base_)->_query_interface (nullptr);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
-	return Interface::__duplicate (proxy);
+	return Interface::_duplicate (proxy);
 }
 
 ReferenceCounter_ptr LocalObjectLink::_construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic)
@@ -38,12 +38,12 @@ ReferenceCounter_ptr LocalObjectLink::_construct (Bridge <AbstractBase>* base, B
 	return obj;
 }
 
-Bridge <Interface>* LocalObjectLink::_get_proxy ()
+Interface* LocalObjectLink::_get_proxy ()
 {
-	Bridge <Interface>* proxy = AbstractBase_ptr (object_)->_query_interface (nullptr);
+	Interface* proxy = AbstractBase_ptr (object_)->_query_interface (nullptr);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
-	return Interface::__duplicate (proxy);
+	return Interface::_duplicate (proxy);
 }
 
 }

@@ -80,7 +80,7 @@ void Loader::bind_olf (const void* data, size_t size)
 
 			case OLF_EXPORT_INTERFACE: {
 				const ExportInterface* ps = reinterpret_cast <const ExportInterface*> (p);
-				exported_interfaces_.emplace (ps->name, static_cast <Interface*> (Interface::__duplicate (ps->itf)));
+				exported_interfaces_.emplace (ps->name, static_cast <Interface*> (Interface::_duplicate (ps->itf)));
 				p += sizeof (ExportInterface) / sizeof (*p);
 				break;
 			}
@@ -120,7 +120,7 @@ void Loader::bind_olf (const void* data, size_t size)
 					ImportInterface* ps = reinterpret_cast <ImportInterface*> (p);
 					auto pf = exported_interfaces_.find (ps->name);
 					if (pf != exported_interfaces_.end ()) {
-						Bridge <Interface>* itf = pf->second;
+						Interface* itf = pf->second;
 						const Char* itf_id = itf->_epv ().interface_id;
 						if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, ps->interface_id))
 							ps->itf = itf;
@@ -134,7 +134,7 @@ void Loader::bind_olf (const void* data, size_t size)
 								ab = Object_ptr (LocalObject_ptr (static_cast <LocalObject*> (itf)));
 							else
 								throw INV_OBJREF ();
-							Bridge <Interface>* qi = ab->_query_interface (ps->interface_id);
+							Interface* qi = ab->_query_interface (ps->interface_id);
 							if (!qi)
 								throw INV_OBJREF ();
 							ps->itf = qi;

@@ -22,45 +22,16 @@ typedef ::CORBA::Nirvana::I_out <ServantBase> ServantBase_out;
 namespace CORBA {
 namespace Nirvana {
 
-template <>
-class Bridge <PortableServer::ServantBase> :
-	public BridgeMarshal <PortableServer::ServantBase>
-{
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
-
-		struct
-		{
-			BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
-			BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
-			BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)
-		}
-		base;
-
-		struct
-		{
-			BridgeMarshal <PortableServer::POA>* (*default_POA) (Bridge <PortableServer::ServantBase>*, EnvironmentBridge*);
-			BridgeMarshal <InterfaceDef>* (*get_interface) (Bridge <PortableServer::ServantBase>*, EnvironmentBridge*);
-			Boolean (*is_a) (Bridge <PortableServer::ServantBase>*, const Char* type_id, EnvironmentBridge*);
-			Boolean (*non_existent) (Bridge <PortableServer::ServantBase>*, EnvironmentBridge*);
-		}
-		epv;
-	};
-
-	const EPV& _epv () const
-	{
-		return (EPV&)Bridge <Interface>::_epv ();
-	}
-
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal <PortableServer::ServantBase> (epv.interface)
-	{}
-};
+BRIDGE_BEGIN (PortableServer::ServantBase)
+BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
+BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
+BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)
+BRIDGE_EPV
+Interface* (*default_POA) (Bridge <PortableServer::ServantBase>*, EnvironmentBridge*);
+Interface* (*get_interface) (Bridge <PortableServer::ServantBase>*, EnvironmentBridge*);
+Boolean (*is_a) (Bridge <PortableServer::ServantBase>*, const Char* type_id, EnvironmentBridge*);
+Boolean (*non_existent) (Bridge <PortableServer::ServantBase>*, EnvironmentBridge*);
+BRIDGE_END ()
 
 template <class T>
 class Client <T, PortableServer::ServantBase> :

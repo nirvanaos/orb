@@ -28,7 +28,7 @@ void ServantPOA <PortableServer::ServantBase>::_construct ()
 	reference_counter_ = servant_base_;
 }
 
-Bridge <Interface>* ServantPOA <PortableServer::ServantBase>::_get_proxy ()
+Interface* ServantPOA <PortableServer::ServantBase>::_get_proxy ()
 {
 	_check_construct ();
 	return ServantBaseLink::_get_proxy ();
@@ -40,12 +40,12 @@ ServantPOA <LocalObject>::ServantPOA ()
 	reference_counter_ = LocalObjectLink::_construct (&ab, &ab);
 }
 
-Bridge <Interface>* ServantPOA <LocalObject>::_get_proxy ()
+Interface* ServantPOA <LocalObject>::_get_proxy ()
 {
 	return LocalObjectLink::_get_proxy ();
 }
 
-BridgeMarshal <InterfaceDef>* ServantPOA <LocalObject>::__get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
+Interface* ServantPOA <LocalObject>::__get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 {
 	return Skeleton <ServantPOA <LocalObject>, Object>::__get_interface (obj, env);
 }

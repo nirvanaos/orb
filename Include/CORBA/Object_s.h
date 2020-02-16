@@ -15,7 +15,7 @@ public:
 	static const typename Bridge <Object>::EPV epv_;
 
 protected:
-	static BridgeMarshal <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
+	static Interface* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._get_implementation ();
@@ -27,7 +27,7 @@ protected:
 		return 0;
 	}
 
-	static BridgeMarshal <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
+	static Interface* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._get_interface ();
@@ -63,7 +63,7 @@ protected:
 		return 0;
 	}
 
-	static Boolean __is_equivalent (Bridge <Object>* obj, BridgeMarshal <Object>* other_object, EnvironmentBridge* env)
+	static Boolean __is_equivalent (Bridge <Object>* obj, Interface* other_object, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._is_equivalent (TypeI <Object>::in (other_object));

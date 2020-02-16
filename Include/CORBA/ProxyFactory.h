@@ -22,9 +22,9 @@ struct CountedArray
 class ServerRequest;
 class RemoteRequest;
 
-typedef void (*ServerRequestProc) (Bridge <Interface>*, ServerRequest*, EnvironmentBridge*);
-typedef void (*LocalRequestProc) (Bridge <Interface>*, void*, EnvironmentBridge*);
-typedef void (*RemoteRequestProc) (Bridge <Interface>*, RemoteRequest*, EnvironmentBridge*);
+typedef void (*ServerRequestProc) (Interface*, ServerRequest*, EnvironmentBridge*);
+typedef void (*LocalRequestProc) (Interface*, void*, EnvironmentBridge*);
+typedef void (*RemoteRequestProc) (Interface*, RemoteRequest*, EnvironmentBridge*);
 
 struct Operation
 {
@@ -45,43 +45,18 @@ pseudo interface ProxyFactory {
 };
 */
 
-template <>
-class Bridge <ProxyFactory> :
-	public BridgeMarshal <ProxyFactory>
-{
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
-
-		struct
-		{
-			const CountedArray <const char*> interfaces;
-			const CountedArray <const Operation> operations;
-			BridgeMarshal <Interface>* (*create_server_proxy) (Bridge <ProxyFactory>*, BridgeMarshal <Object>*,
-				BridgeMarshal <Interface>*,
-				BridgeMarshal <DynamicServant>**, EnvironmentBridge*);
-			BridgeMarshal <Interface>* (*create_local_proxy) (Bridge <ProxyFactory>*, BridgeMarshal <Object>*,
-				uint16_t interface_idx,
-				BridgeMarshal <DynamicServant>**, EnvironmentBridge*);
-			BridgeMarshal <Interface>* (*create_remote_proxy) (Bridge <ProxyFactory>*, BridgeMarshal <Object>*,
-				BridgeMarshal <DynamicServant>**, EnvironmentBridge*);
-		}
-		epv;
-	};
-
-	const EPV& _epv () const
-	{
-		return (EPV&)Bridge <Interface>::_epv ();
-	}
-
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal <ProxyFactory> (epv.interface)
-	{}
-};
+BRIDGE_BEGIN (ProxyFactory)
+const CountedArray <const char*> interfaces;
+const CountedArray <const Operation> operations;
+Interface* (*create_server_proxy) (Bridge <ProxyFactory>*, Interface*,
+	Interface*,
+	Interface**, EnvironmentBridge*);
+Interface* (*create_local_proxy) (Bridge <ProxyFactory>*, Interface*,
+	uint16_t interface_idx,
+	Interface**, EnvironmentBridge*);
+Interface* (*create_remote_proxy) (Bridge <ProxyFactory>*, Interface*,
+	Interface**, EnvironmentBridge*);
+BRIDGE_END ()
 
 template <class T>
 class Client <T, ProxyFactory> :

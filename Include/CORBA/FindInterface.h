@@ -17,16 +17,16 @@ namespace Nirvana {
 struct InterfaceEntry
 {
 	const Char* interface_id;
-	Bridge <Interface>* (*cast) (void* servant);
+	Interface* (*cast) (void* servant);
 
-	static Bridge <Interface>* find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const Char* id);
+	static Interface* find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const Char* id);
 };
 
 template <class S, class Primary, class ... I>
 class InterfaceFinder
 {
 	template <class Itf>
-	static Bridge <Interface>* cast (void* servant)
+	static Interface* cast (void* servant)
 	{
 		return &static_cast <Bridge <Itf>&> (*reinterpret_cast <S*> (servant));
 	}
@@ -41,7 +41,7 @@ class InterfaceFinder
 	};
 
 	template <>
-	static Bridge <Interface>* cast <PortableServer::ServantBase> (void* servant)
+	static Interface* cast <PortableServer::ServantBase> (void* servant)
 	{
 		return &static_cast <Bridge <Object>&> (*reinterpret_cast <S*> (servant));
 	}
@@ -56,7 +56,7 @@ class InterfaceFinder
 	};
 
 	template <>
-	static Bridge <Interface>* cast <LocalObject> (void* servant)
+	static Interface* cast <LocalObject> (void* servant)
 	{
 		return &static_cast <Bridge <Object>&> (*reinterpret_cast <S*> (servant));
 	}

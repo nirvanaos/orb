@@ -17,34 +17,9 @@ typedef I_ptr <DynamicServant> DynamicServant_ptr;
 typedef I_var <DynamicServant> DynamicServant_var;
 typedef I_out <DynamicServant> DynamicServant_out;
 
-template <>
-class Bridge <DynamicServant> :
-	public BridgeMarshal <DynamicServant>
-{
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
-
-		struct
-		{
-			void (*_delete) (Bridge <DynamicServant>*, EnvironmentBridge*);
-		}
-		epv;
-	};
-
-	const EPV& _epv () const
-	{
-		return (EPV&)Bridge <Interface>::_epv ();
-	}
-
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal <DynamicServant> (epv.interface)
-	{}
-};
+BRIDGE_BEGIN (DynamicServant)
+void (*_delete) (Bridge <DynamicServant>*, EnvironmentBridge*);
+BRIDGE_END ()
 
 template <class T>
 class Client <T, DynamicServant> :

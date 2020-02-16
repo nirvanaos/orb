@@ -27,7 +27,7 @@ protected:
 		return nullptr;
 	}
 
-	static Bridge <Interface>* _create_server_proxy (Bridge <ProxyFactory>* obj, Bridge <Interface>* servant, EnvironmentBridge* env)
+	static Interface* _create_server_proxy (Bridge <ProxyFactory>* obj, Interface* servant, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).create_server_proxy (servant);
@@ -39,7 +39,7 @@ protected:
 		return nullptr;
 	}
 
-	static Bridge <Interface>* _create_client_proxy (Bridge <ProxyFactory>* obj, const void* address, EnvironmentBridge* env)
+	static Interface* _create_client_proxy (Bridge <ProxyFactory>* obj, const void* address, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).create_client_proxy (address);

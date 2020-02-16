@@ -9,40 +9,11 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <>
-class Bridge <PortableServer::POA> :
-	public BridgeMarshal <PortableServer::POA>
-{
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
-
-		struct
-		{
-			BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
-		}
-		base;
-
-		struct
-		{
-			const Char* (*activate_object) (Bridge <PortableServer::POA>*, BridgeMarshal <PortableServer::ServantBase>*, EnvironmentBridge*);
-		}
-		epv;
-	};
-
-	const EPV& _epv () const
-	{
-		return (EPV&)Bridge <Interface>::_epv ();
-	}
-
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal <PortableServer::POA> (epv.interface)
-	{}
-};
+BRIDGE_BEGIN (PortableServer::POA)
+BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
+BRIDGE_EPV
+const Char* (*activate_object) (Bridge <PortableServer::POA>*, Interface*, EnvironmentBridge*);
+BRIDGE_END ()
 
 template <class T>
 class Client <T, PortableServer::POA> :

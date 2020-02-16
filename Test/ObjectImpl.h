@@ -38,7 +38,7 @@ public:
 
 	// Object operations
 
-	static BridgeMarshal <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
+	static Interface* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		return nullptr; // We dont implement it
 	}
@@ -50,7 +50,7 @@ public:
 
 	Boolean _is_a (const Char* type_id) const
 	{
-		Bridge <Interface>* itf = servant_->_query_interface (type_id);
+		Interface* itf = servant_->_query_interface (type_id);
 		if (itf)
 			return TRUE;
 		else
@@ -88,7 +88,7 @@ public:
 		ObjectBase (servant)
 	{}
 
-	static BridgeMarshal <ImplementationDef>* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
+	static Interface* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		return ObjectBase::__get_implementation (obj, env);
 	}

@@ -15,7 +15,7 @@ public:
 	static const typename Bridge <PortableServer::ServantBase>::EPV epv_;
 
 protected:
-	static BridgeMarshal <PortableServer::POA>* __default_POA (Bridge <PortableServer::ServantBase>* obj, EnvironmentBridge* env)
+	static Interface* __default_POA (Bridge <PortableServer::ServantBase>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._default_POA ();
@@ -27,7 +27,7 @@ protected:
 		return 0;
 	}
 
-	static BridgeMarshal <InterfaceDef>* __get_interface (Bridge <PortableServer::ServantBase>* obj, EnvironmentBridge* env)
+	static Interface* __get_interface (Bridge <PortableServer::ServantBase>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._get_interface ();

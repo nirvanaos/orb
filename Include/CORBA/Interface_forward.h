@@ -14,17 +14,17 @@ class Interface :
 	public BridgeMarshal <Interface>
 {
 public:
-	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf);
+	static Interface* __duplicate (Interface* itf);
 
 	static I_ptr <Interface> _duplicate (I_ptr <Interface> itf);
 
-	static void _release (Bridge <Interface>* itf);
+	static void _release (Interface* itf);
 
 	inline static I_ptr <Interface> _nil ();
 
-	static Bridge <Interface>* _check (Bridge <Interface>* bridge, const Char* interface_id);
+	static Interface* _check (Interface* bridge, const Char* interface_id);
 
-	static I_ptr <Interface> _check (Bridge <Interface>* bridge);
+	static I_ptr <Interface> _check (Interface* bridge);
 };
 
 template <>
@@ -45,15 +45,15 @@ public:
 
 	template <class I>
 	I_ptr (const I_ptr <I>& src) :
-		p_ (static_cast <Interface*> (static_cast <Bridge <Interface>*> (src)))
+		p_ (static_cast <Interface*> (static_cast <Interface*> (src)))
 	{}
 
-	operator BridgeMarshal <Interface>* () const
+	operator Interface* () const
 	{
 		return p_;
 	}
 
-	operator Bridge <Interface>* () const
+	operator Interface* () const
 	{
 		return p_;
 	}
@@ -89,7 +89,7 @@ inline I_ptr <Interface> Interface::_nil ()
 	return I_ptr <Interface>::nil ();
 }
 
-inline I_ptr <Interface> Interface::_check (Bridge <Interface>* bridge)
+inline I_ptr <Interface> Interface::_check (Interface* bridge)
 {
 	return static_cast <Interface*> (bridge);
 }

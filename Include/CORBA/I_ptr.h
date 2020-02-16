@@ -84,6 +84,8 @@ private:
 	I* p_;
 };
 
+typedef I_ptr <Interface> Interface_ptr;
+
 template <class I>
 struct StaticInterface
 {

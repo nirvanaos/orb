@@ -64,9 +64,9 @@ public:
 	}
 
 protected:
-	static Bridge <Interface>* _get_proxy ()
+	static Interface* _get_proxy ()
 	{
-		Bridge <Interface>* proxy = AbstractBase_ptr (servant_base ())->_query_interface (nullptr);
+		Interface* proxy = AbstractBase_ptr (servant_base ())->_query_interface (nullptr);
 		if (!proxy)
 			::Nirvana::throw_MARSHAL ();
 		return proxy;
@@ -128,9 +128,9 @@ public:
 	}
 	// TODO: Other Object operations shall be here...
 
-	static Bridge <Interface>* _get_proxy ()
+	static Interface* _get_proxy ()
 	{
-		Bridge <Interface>* proxy = AbstractBase_ptr (object ())->_query_interface (nullptr);
+		Interface* proxy = AbstractBase_ptr (object ())->_query_interface (nullptr);
 		if (!proxy)
 			::Nirvana::throw_MARSHAL ();
 		return proxy;

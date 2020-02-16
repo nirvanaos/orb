@@ -39,49 +39,36 @@ typedef Nirvana::I_inout <InterfaceDef> InterfaceDef_inout;
 namespace Nirvana {
 
 template <>
-class Bridge <Object> :
-	public BridgeMarshal <Object>
+struct Bridge <Object>::EPV
 {
-public:
-	struct EPV
+	typedef Bridge <Object> MyBridge;
+
+	Interface::EPV interface;
+
+	struct
 	{
-		Bridge <Interface>::EPV interface;
+		typename MyBridge::Wide <CORBA::AbstractBase>::Func CORBA_AbstractBase;
+		operator const MyBridge::Wide <CORBA::AbstractBase>::Func () const { return CORBA_AbstractBase; }
+		//BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
+	} base;
 
-		struct
-		{
-			BASE_STRUCT_ENTRY(CORBA::AbstractBase, CORBA_AbstractBase)
-		} base;
-
-		struct
-		{
-			BridgeMarshal <ImplementationDef>* (*get_implementation) (Bridge <Object>*, EnvironmentBridge*);
-			BridgeMarshal <InterfaceDef>* (*get_interface) (Bridge <Object>*, EnvironmentBridge*);
-			Boolean (*is_a) (Bridge <Object>*, const Char* type_id, EnvironmentBridge*);
-			Boolean (*non_existent) (Bridge <Object>*, EnvironmentBridge*);
-			Boolean (*is_equivalent) (Bridge <Object>*, BridgeMarshal <Object>*, EnvironmentBridge*);
-			ULong (*hash) (Bridge <Object>*, ULong maximum, EnvironmentBridge*);
-			// TODO: Other Object operations shall be here...
-		} epv;
-
-		struct
-		{
-			BridgeMarshal <::Nirvana::SynchronizationDomain>* (*sync_domain) (Bridge <Object>*, EnvironmentBridge*);
-			const IOP::IOR* (*object_reference) (Boolean local);
-			const void* (*call_target) ();
-		} internal;
-	};
-
-	const EPV& _epv () const
+	struct
 	{
-		return (EPV&)Bridge <Interface>::_epv ();
-	}
+		Interface* (*get_implementation) (Bridge <Object>*, EnvironmentBridge*);
+		Interface* (*get_interface) (Bridge <Object>*, EnvironmentBridge*);
+		Boolean (*is_a) (Bridge <Object>*, const Char* type_id, EnvironmentBridge*);
+		Boolean (*non_existent) (Bridge <Object>*, EnvironmentBridge*);
+		Boolean (*is_equivalent) (Bridge <Object>*, Interface*, EnvironmentBridge*);
+		ULong (*hash) (Bridge <Object>*, ULong maximum, EnvironmentBridge*);
+		// TODO: Other Object operations shall be here...
+	} epv;
 
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal <Object> (epv.interface)
-	{}
+	struct
+	{
+		Interface* (*sync_domain) (Bridge <Object>*, EnvironmentBridge*);
+		const IOP::IOR* (*object_reference) (Boolean local);
+		const void* (*call_target) ();
+	} internal;
 };
 
 template <class T>

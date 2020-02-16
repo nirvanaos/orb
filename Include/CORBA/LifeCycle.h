@@ -32,7 +32,7 @@ public:
 	static Interface* __duplicate (Interface* itf, EnvironmentBridge* env)
 	{
 		try {
-			return S::_duplicate (static_cast <Bridge <I>*> (itf));
+			return S::_duplicate_impl (static_cast <Bridge <I>*> (itf));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -45,7 +45,7 @@ public:
 	static void __release (Interface* itf)
 	{
 		try {
-			S::_release (static_cast <Bridge <I>*> (itf));
+			S::_release_impl (static_cast <Bridge <I>*> (itf));
 		} catch (...) {
 		}
 	}
@@ -58,7 +58,7 @@ class LifeCycleRefCnt :
 {
 public:
 	template <class I>
-	static Bridge <I>* _duplicate (Bridge <I>* itf)
+	static Bridge <I>* _duplicate_impl (Bridge <I>* itf)
 	{
 		if (itf)
 			S::_implementation (itf)._add_ref ();
@@ -66,7 +66,7 @@ public:
 	}
 
 	template <class I>
-	static void _release (Bridge <I>* itf)
+	static void _release_impl (Bridge <I>* itf)
 	{
 		if (itf)
 			S::_implementation (itf)._remove_ref ();

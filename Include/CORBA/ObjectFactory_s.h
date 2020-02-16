@@ -16,7 +16,7 @@ public:
 	static const typename Bridge <ObjectFactory>::EPV epv_;
 
 protected:
-	static BridgeMarshal <PortableServer::ServantBase>* _create_servant (Bridge <ObjectFactory>* obj, BridgeMarshal <PortableServer::ServantBase>* servant, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
+	static Interface* _create_servant (Bridge <ObjectFactory>* obj, Interface* servant, Interface* dynamic, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).create_servant (TypeI <PortableServer::ServantBase>::in (servant), TypeI <DynamicServant>::in (dynamic));
@@ -28,7 +28,7 @@ protected:
 		return 0;
 	}
 
-	static BridgeMarshal <LocalObject>* _create_local_object (Bridge <ObjectFactory>* obj, BridgeMarshal <AbstractBase>* base, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
+	static Interface* _create_local_object (Bridge <ObjectFactory>* obj, Interface* base, Interface* dynamic, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).create_local_object (TypeI <AbstractBase>::in (base), TypeI <DynamicServant>::in (dynamic));
@@ -40,7 +40,7 @@ protected:
 		return 0;
 	}
 
-	static BridgeMarshal <ReferenceCounter>* _create_reference_counter (Bridge <ObjectFactory>* obj, BridgeMarshal <DynamicServant>* dynamic, EnvironmentBridge* env)
+	static Interface* _create_reference_counter (Bridge <ObjectFactory>* obj, Interface* dynamic, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj).create_reference_counter (TypeI <DynamicServant>::in (dynamic));

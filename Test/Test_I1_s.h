@@ -43,7 +43,7 @@ protected:
 		}
 	}
 
-	static BridgeMarshal < ::Test::I1>* _object_op (Bridge < ::Test::I1>* _b, BridgeMarshal < ::Test::I1>* in_obj, BridgeMarshal < ::Test::I1>** out_obj, BridgeMarshal < ::Test::I1>** inout_obj, EnvironmentBridge* _env)
+	static Interface* _object_op (Bridge < ::Test::I1>* _b, Interface* in_obj, Interface** out_obj, Interface** inout_obj, EnvironmentBridge* _env)
 	{
 		try {
 			return S::_implementation (_b).object_op (TypeI < ::Test::I1>::in (in_obj), TypeI < ::Test::I1>::out (out_obj), TypeI < ::Test::I1>::inout (inout_obj));

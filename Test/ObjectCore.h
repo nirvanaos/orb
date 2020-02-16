@@ -36,7 +36,7 @@ public:
 
 	// Object operations delegated to ServantBase.
 
-	static BridgeMarshal <InterfaceDef>* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
+	static Interface* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
 			PortableServer::Servant servant = _implementation (obj).servant_;

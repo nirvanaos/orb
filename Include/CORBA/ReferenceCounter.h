@@ -12,36 +12,11 @@ typedef I_ptr <ReferenceCounter> ReferenceCounter_ptr;
 typedef I_var <ReferenceCounter> ReferenceCounter_var;
 typedef I_out <ReferenceCounter> ReferenceCounter_out;
 
-template <>
-class Bridge <ReferenceCounter> :
-	public BridgeMarshal <ReferenceCounter>
-{
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
-
-		struct
-		{
-			void (*add_ref) (Bridge <ReferenceCounter>*, EnvironmentBridge*);
-			void (*remove_ref) (Bridge <ReferenceCounter>*, EnvironmentBridge*);
-			ULong (*refcount_value) (Bridge <ReferenceCounter>*, EnvironmentBridge*);
-		}
-		epv;
-	};
-
-	const EPV& _epv () const
-	{
-		return (EPV&)Bridge <Interface>::_epv ();
-	}
-
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal <ReferenceCounter> (epv.interface)
-	{}
-};
+BRIDGE_BEGIN (ReferenceCounter)
+void (*add_ref) (Bridge <ReferenceCounter>*, EnvironmentBridge*);
+void (*remove_ref) (Bridge <ReferenceCounter>*, EnvironmentBridge*);
+ULong (*refcount_value) (Bridge <ReferenceCounter>*, EnvironmentBridge*);
+BRIDGE_END ()
 
 template <class T>
 class Client <T, ReferenceCounter> :

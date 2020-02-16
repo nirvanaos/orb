@@ -19,14 +19,15 @@ public:
 	typedef Environment_ptr _ptr_type;
 
 	template <class I>
-	static Bridge <I>* _duplicate (Bridge <I>* itf)
+	static Bridge <I>* _duplicate_impl (Bridge <I>* itf)
 	{
-		return Nirvana::LifeCycleRefCntPseudo <Environment>::_duplicate (itf);
+		return Nirvana::LifeCycleRefCntPseudo <Environment>::_duplicate_impl (itf);
 	}
 
 	static Environment_ptr _duplicate (Environment_ptr obj)
 	{
-		return static_cast <Environment*> (_duplicate (static_cast <Nirvana::Bridge <Environment>*> (obj)));
+		return static_cast <Environment*> (
+			static_cast <Nirvana::Bridge <Environment>*> (Interface::_duplicate (obj)));
 	}
 
 	static Environment_ptr _nil ()

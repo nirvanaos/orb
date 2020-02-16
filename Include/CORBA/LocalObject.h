@@ -14,35 +14,11 @@ typedef Nirvana::I_inout <LocalObject> LocalObject_inout;
 
 namespace Nirvana {
 
-template <>
-class Bridge <LocalObject> :
-	public BridgeMarshal <LocalObject>
-{
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
-
-		struct
-		{
-			BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
-			BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)
-		}
-		base;
-	};
-
-	const EPV& _epv () const
-	{
-		return (EPV&)Bridge <Interface>::_epv ();
-	}
-
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal <LocalObject> (epv.interface)
-	{}
-};
+BRIDGE_BEGIN (LocalObject)
+BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
+BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)
+BRIDGE_EPV
+BRIDGE_END ()
 
 }
 

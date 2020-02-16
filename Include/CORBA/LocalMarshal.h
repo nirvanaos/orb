@@ -90,45 +90,20 @@ public:
 	void return_exception (const Exception*);
 };
 
-template <>
-class Bridge <LocalMarshal> :
-	public BridgeMarshal <LocalMarshal>
-{
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
-
-		struct
-		{
-			void (*begin_call) (Bridge <LocalMarshal>*, const LocalObjectRef* target, OperationIndex operation, EnvironmentBridge*);
-			void (*begin_return) (Bridge <LocalMarshal>*, EnvironmentBridge*);
-			uintptr_t (*marshal_memory) (Bridge <LocalMarshal>*, const void* p, size_t* size, EnvironmentBridge*);
-			uintptr_t (*get_buffer) (Bridge <LocalMarshal>*, size_t* size, void** buf_ptr, EnvironmentBridge*);
-			void (*adopt_memory) (Bridge <LocalMarshal>*, void* p, size_t size, EnvironmentBridge*);
-			uintptr_t (*marshal_object) (Bridge <LocalMarshal>*, BridgeMarshal <Object>*, EnvironmentBridge*);
-			BridgeMarshal <Interface>* (*unmarshal_interface) (Bridge <LocalMarshal>*, const void*, const Char*, EnvironmentBridge*);
-			uintptr_t (*marshal_type_code) (Bridge <LocalMarshal>*, BridgeMarshal <TypeCode>*, EnvironmentBridge*);
-			BridgeMarshal <TypeCode>* (*unmarshal_type_code) (Bridge <LocalMarshal>*, const void*, EnvironmentBridge*);
-			void (*release_message) (Bridge <LocalMarshal>*, EnvironmentBridge*);
-			void* (*send) (Bridge <LocalMarshal>*, EnvironmentBridge*);
-			void (*return_exception) (Bridge <LocalMarshal>*, const Exception*, EnvironmentBridge*);
-		}
-		epv;
-	};
-
-	const EPV& _epv () const
-	{
-		return (EPV&)Bridge <Interface>::_epv ();
-	}
-
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal <LocalMarshal> (epv.interface)
-	{}
-};
+BRIDGE_BEGIN (LocalMarshal)
+void (*begin_call) (Bridge <LocalMarshal>*, const LocalObjectRef* target, OperationIndex operation, EnvironmentBridge*);
+void (*begin_return) (Bridge <LocalMarshal>*, EnvironmentBridge*);
+uintptr_t (*marshal_memory) (Bridge <LocalMarshal>*, const void* p, size_t* size, EnvironmentBridge*);
+uintptr_t (*get_buffer) (Bridge <LocalMarshal>*, size_t* size, void** buf_ptr, EnvironmentBridge*);
+void (*adopt_memory) (Bridge <LocalMarshal>*, void* p, size_t size, EnvironmentBridge*);
+uintptr_t (*marshal_object) (Bridge <LocalMarshal>*, Interface*, EnvironmentBridge*);
+Interface* (*unmarshal_interface) (Bridge <LocalMarshal>*, const void*, const Char*, EnvironmentBridge*);
+uintptr_t (*marshal_type_code) (Bridge <LocalMarshal>*, Interface*, EnvironmentBridge*);
+Interface* (*unmarshal_type_code) (Bridge <LocalMarshal>*, const void*, EnvironmentBridge*);
+void (*release_message) (Bridge <LocalMarshal>*, EnvironmentBridge*);
+void* (*send) (Bridge <LocalMarshal>*, EnvironmentBridge*);
+void (*return_exception) (Bridge <LocalMarshal>*, const Exception*, EnvironmentBridge*);
+BRIDGE_END ()
 
 template <class T>
 void Client <T, LocalMarshal>::begin_call (const LocalObjectRef& target, OperationIndex operation)

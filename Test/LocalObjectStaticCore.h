@@ -26,7 +26,7 @@ public:
 
 	static Boolean _is_a (const Char* type_id)
 	{
-		Bridge <Interface>* itf = S::_query_interface (type_id);
+		Interface* itf = S::_query_interface (type_id);
 		if (itf)
 			return true;
 		else
