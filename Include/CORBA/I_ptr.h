@@ -1,5 +1,5 @@
-#ifndef NIRVANA_ORB_T_PTR_H_
-#define NIRVANA_ORB_T_PTR_H_
+#ifndef NIRVANA_ORB_I_PTR_H_
+#define NIRVANA_ORB_I_PTR_H_
 
 #include "Bridge.h"
 #include <Nirvana/throw_exception.h>

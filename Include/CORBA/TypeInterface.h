@@ -2,109 +2,10 @@
 #define NIRVANA_ORB_TYPEINTERFACE_H_
 
 #include "Type_forward.h"
-#include "I_ptr.h"
+#include "I_var.h"
 
 namespace CORBA {
 namespace Nirvana {
-
-template <class I> class I_out;
-template <class I> class I_inout;
-
-//! I_var helper class for interface
-template <class I>
-class I_var : public I_ptr <I>
-{
-public:
-	I_var () :
-		I_ptr <I> (I::_nil ())
-	{}
-
-	I_var (I_ptr <I> p) :
-		I_ptr <I> (p)
-	{}
-
-	I_var (const I_var <I>& src) :
-		I_ptr <I> (I::_duplicate (src))
-	{}
-
-	I_var (I_var <I>&& src) NIRVANA_NOEXCEPT :
-		I_ptr <I> (src)
-	{
-		static_cast <I_ptr <I>&> (src) = I::_nil ();
-	}
-
-	~I_var ()
-	{
-		release (*this);
-	}
-
-	I_var <I>& operator = (I_ptr <I> p)
-	{
-		reset (p);
-		return *this;
-	}
-
-	I_var <I>& operator = (const I_var <I>& src)
-	{
-		if (&src != this) {
-			reset (I::_nil ());
-			I_ptr <I>::operator = (I::_duplicate (src));
-		}
-		return *this;
-	}
-
-	I_var <I>& operator = (I_var <I>&& src) NIRVANA_NOEXCEPT
-	{
-		if (&src != this) {
-			reset (src);
-			static_cast <I_ptr <I>&> (src) = I::_nil ();
-		}
-		return *this;
-	}
-
-	I_ptr <I> in () const
-	{
-		return *this;
-	}
-
-	I_inout <I> inout ()
-	{
-		return I_inout <I> (*this);
-	}
-
-	I_out <I> out ()
-	{
-		return I_out <I> (*this);
-	}
-
-	I_ptr <I> _retn ()
-	{
-		I_ptr <I> p = *this;
-		I_ptr <I>::operator = (I_ptr <I>::nil ());
-		return p;
-	}
-
-	operator Interface* ()
-	{
-		Interface* p = I_ptr <I>::operator Bridge <I>* ();
-		I_ptr <I>::operator = (I_ptr <I>::nil ());
-		return p;
-	}
-
-protected:
-	void reset (I_ptr <I> p)
-	{
-		release (*this);
-		I_ptr <I>::operator = (p);
-	}
-};
-
-template <class I>
-inline I_ptr <I>::I_ptr (I_var <I>&& var)
-{
-	p_ = var.p_;
-	static_cast <I_ptr <I>&> (var).p_ = nullptr;
-}
 
 //! I_in helper class for interface
 template <class I>
@@ -120,6 +21,12 @@ public:
 		return *this;
 	}
 };
+
+template <class I> inline
+I_in <I> I_var <I>::in () const
+{
+	return *this;
+}
 
 //! I_inout helper class for interface
 template <class I>
@@ -162,6 +69,12 @@ I_inout <I>::~I_inout () noexcept (false)
 	}
 }
 
+template <class I> inline
+I_inout <I> I_var <I>::inout ()
+{
+	return I_inout <I> (*this);
+}
+
 //! I_out helper class for interface
 template <class I>
 class I_out : public I_inout <I>
@@ -180,6 +93,12 @@ public:
 		I_inout <I>::ref_ = I_ptr <I>::nil ();
 	}
 };
+
+template <class I> inline
+I_out <I> I_var <I>::out ()
+{
+	return I_out <I> (*this);
+}
 
 //! I_ret helper class for interface
 template <class I>
