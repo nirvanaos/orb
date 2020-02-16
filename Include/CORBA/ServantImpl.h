@@ -39,9 +39,9 @@ public:
 				::Nirvana::throw_MARSHAL ();
 			return &static_cast <Bridge <Base>&> (S::_implementation (derived));
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return nullptr;
 	}

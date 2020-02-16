@@ -20,9 +20,9 @@ protected:
 		try {
 			return S::_implementation (obj)._get_implementation ();
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}
@@ -32,9 +32,9 @@ protected:
 		try {
 			return S::_implementation (obj)._get_interface ();
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}
@@ -44,9 +44,9 @@ protected:
 		try {
 			return S::_implementation (obj)._is_a (type_id);
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}
@@ -56,9 +56,9 @@ protected:
 		try {
 			return S::_implementation (obj)._non_existent ();
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}
@@ -68,9 +68,9 @@ protected:
 		try {
 			return S::_implementation (obj)._is_equivalent (TypeI <Object>::in (other_object));
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}
@@ -80,9 +80,9 @@ protected:
 		try {
 			return S::_implementation (obj)._hash (maximum);
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}

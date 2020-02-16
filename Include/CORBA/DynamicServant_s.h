@@ -23,9 +23,9 @@ protected:
 		try {
 			S::_implementation (obj)._delete ();
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 	}
 };

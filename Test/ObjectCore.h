@@ -42,9 +42,9 @@ public:
 			PortableServer::Servant servant = _implementation (obj).servant_;
 			return (servant->_epv ().epv.get_interface) (servant, env);
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return nullptr;
 	}
@@ -55,9 +55,9 @@ public:
 			PortableServer::Servant servant = _implementation (obj).servant_;
 			return (servant->_epv ().epv.is_a) (servant, type_id, env);
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}
@@ -68,9 +68,9 @@ public:
 			PortableServer::Servant servant = _implementation (obj).servant_;
 			return (servant->_epv ().epv.non_existent) (servant, env);
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}

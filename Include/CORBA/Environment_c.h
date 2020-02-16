@@ -5,25 +5,9 @@
 
 namespace CORBA {
 
-class Exception;
 class Environment;
 
 namespace Nirvana {
-
-template <>
-class BridgeMarshal < ::CORBA::Environment> :
-	public Bridge <Interface>
-{
-public:
-	void set_exception (Long code, const char* rep_id, const void* param);
-	void set_exception (const Exception& e);
-	void set_unknown_exception ();
-
-protected:
-	BridgeMarshal (const EPV& epv) :
-		Bridge <Interface> (epv)
-	{}
-};
 
 template <>
 class Bridge < ::CORBA::Environment> :

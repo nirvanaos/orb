@@ -22,9 +22,9 @@ protected:
 		try {
 			ret = S::_implementation (base)._query_interface (id);
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return ret;
 	}

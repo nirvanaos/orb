@@ -21,9 +21,9 @@ protected:
 		try {
 			return S::_implementation (obj).create_servant (TypeI <PortableServer::ServantBase>::in (servant), TypeI <DynamicServant>::in (dynamic));
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}
@@ -33,9 +33,9 @@ protected:
 		try {
 			return S::_implementation (obj).create_local_object (TypeI <AbstractBase>::in (base), TypeI <DynamicServant>::in (dynamic));
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}
@@ -45,9 +45,9 @@ protected:
 		try {
 			return S::_implementation (obj).create_reference_counter (TypeI <DynamicServant>::in (dynamic));
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}

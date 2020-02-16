@@ -20,9 +20,9 @@ protected:
 		try {
 			return S::_implementation (obj).interfaces ();
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return nullptr;
 	}
@@ -32,9 +32,9 @@ protected:
 		try {
 			return S::_implementation (obj).create_server_proxy (servant);
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return nullptr;
 	}
@@ -44,9 +44,9 @@ protected:
 		try {
 			return S::_implementation (obj).create_client_proxy (address);
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return nullptr;
 	}

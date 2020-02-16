@@ -25,9 +25,9 @@ protected:
 		try {
 			return S::_implementation (_b).op1 (p1);
 		} catch (const Exception& e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -37,9 +37,9 @@ protected:
 		try {
 			S::_implementation (_b).throw_NO_IMPLEMENT ();
 		} catch (const Exception& e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 	}
 
@@ -48,9 +48,9 @@ protected:
 		try {
 			return S::_implementation (_b).object_op (TypeI < ::Test::I1>::in (in_obj), TypeI < ::Test::I1>::out (out_obj), TypeI < ::Test::I1>::inout (inout_obj));
 		} catch (const Exception& e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -60,9 +60,9 @@ protected:
 		try {
 			return S::_implementation (_b).string_op (Type <String>::in (in_s), Type <String>::out (out_s), Type <String>::inout (inout_s));
 		} catch (const Exception& e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return ABI_ret <std::string> ();
 	}
@@ -72,9 +72,9 @@ protected:
 		try {
 			return S::_implementation (_b).seq_op (Type < ::Test::SeqLong>::in (in_s), Type < ::Test::SeqLong>::out (out_s), Type < ::Test::SeqLong>::inout (inout_s));
 		} catch (const Exception& e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return ABI_ret <std::vector <Long> > ();
 	}
@@ -84,9 +84,9 @@ protected:
 		try {
 			return S::_implementation (_b).any_op (Type <Any>::in (in_any), Type <Any>::out (out_any), Type <Any>::inout (inout_any));
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return ABI_ret <Any> ();
 	}

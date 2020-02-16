@@ -58,6 +58,10 @@ namespace Nirvana {
 
 typedef const StaticInterface <TypeCode> ExceptionEntry;
 
+extern void set_exception (Bridge <Interface>* environment, Long code, const char* rep_id, const void* param);
+extern void set_exception (Bridge <Interface>* environment, const Exception& e);
+extern void set_unknown_exception (Bridge <Interface>* environment);
+
 }
 } // namespace CORBA
 

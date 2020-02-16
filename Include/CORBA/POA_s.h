@@ -22,9 +22,9 @@ protected:
 		try {
 			return S::_implementation (obj).activate_object (TypeI <PortableServer::ServantBase>::in (servant));
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}

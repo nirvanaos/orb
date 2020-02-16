@@ -18,9 +18,9 @@ protected:
 		try {
 			S::_implementation (obj)._add_ref ();
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 	}
 
@@ -29,9 +29,9 @@ protected:
 		try {
 			S::_implementation (obj)._remove_ref ();
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 	}
 
@@ -40,9 +40,9 @@ protected:
 		try {
 			return S::_implementation (obj)._refcount_value ();
 		} catch (const Exception& e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return 0;
 	}

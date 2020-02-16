@@ -39,12 +39,12 @@ Boolean TypeCodeBase::equivalent (TCKind tk, const char* id, TypeCode_ptr other)
 
 void TypeCodeBase::set_BadKind (EnvironmentBridge* env)
 {
-	env->set_exception (-1, TypeCode::BadKind::repository_id_, nullptr);
+	set_exception (env, Exception::EC_USER_EXCEPTION, TypeCode::BadKind::repository_id_, nullptr);
 }
 
 void TypeCodeBase::set_Bounds (EnvironmentBridge* env)
 {
-	env->set_exception (-1, TypeCode::Bounds::repository_id_, nullptr);
+	set_exception (env, Exception::EC_USER_EXCEPTION, TypeCode::Bounds::repository_id_, nullptr);
 }
 
 const char* TypeCodeBase::_id (Bridge <TypeCode>* _b, EnvironmentBridge* _env)

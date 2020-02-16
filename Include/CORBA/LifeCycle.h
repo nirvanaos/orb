@@ -3,6 +3,7 @@
 
 #include "Bridge.h"
 #include "set_exception.h"
+#include "Exception.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -33,9 +34,9 @@ public:
 		try {
 			return S::_duplicate (static_cast <Bridge <I>*> (itf));
 		} catch (const Exception & e) {
-			env->set_exception (e);
+			set_exception (env, e);
 		} catch (...) {
-			env->set_unknown_exception ();
+			set_unknown_exception (env);
 		}
 		return nullptr;
 	}

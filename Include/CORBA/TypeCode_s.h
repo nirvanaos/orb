@@ -20,9 +20,9 @@ protected:
 		try {
 			return S::_implementation (_b).equal (TypeI <TypeCode>::in (other));
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -32,9 +32,9 @@ protected:
 		try {
 			return S::_implementation (_b).equivalent (TypeI <TypeCode>::in (other));
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -44,9 +44,9 @@ protected:
 		try {
 			return S::_implementation (_b).get_compact_typecode ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -56,9 +56,9 @@ protected:
 		try {
 			return S::_implementation (_b).kind ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return tk_null;
 	}
@@ -68,9 +68,9 @@ protected:
 		try {
 			return S::_implementation (_b).id ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -80,9 +80,9 @@ protected:
 		try {
 			return S::_implementation (_b).name ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -92,9 +92,9 @@ protected:
 		try {
 			return S::_implementation (_b).member_count ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -104,9 +104,9 @@ protected:
 		try {
 			return S::_implementation (_b).member_name (index);
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -116,9 +116,9 @@ protected:
 		try {
 			return S::_implementation (_b).member_type (index);
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -128,9 +128,9 @@ protected:
 		try {
 			return S::_implementation (_b).member_label (index);
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -140,9 +140,9 @@ protected:
 		try {
 			return S::_implementation (_b).discriminator_type ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -152,9 +152,9 @@ protected:
 		try {
 			return S::_implementation (_b).default_index ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -164,9 +164,9 @@ protected:
 		try {
 			return S::_implementation (_b).length ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -176,9 +176,9 @@ protected:
 		try {
 			return S::_implementation (_b).content_type ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -188,9 +188,9 @@ protected:
 		try {
 			return S::_implementation (_b).fixed_digits ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -200,9 +200,9 @@ protected:
 		try {
 			return S::_implementation (_b).fixed_scale ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -212,9 +212,9 @@ protected:
 		try {
 			return S::_implementation (_b).member_visibility (index);
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -224,9 +224,9 @@ protected:
 		try {
 			return S::_implementation (_b).type_modifier ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -236,9 +236,9 @@ protected:
 		try {
 			return S::_implementation (_b).concrete_base_type ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -248,9 +248,9 @@ protected:
 		try {
 			return S::_implementation (_b)._size ();
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -260,9 +260,9 @@ protected:
 		try {
 			S::_implementation (_b)._construct (p);
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 	}
 
@@ -271,9 +271,9 @@ protected:
 		try {
 			S::_implementation (_b)._destruct (p);
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 	}
 
@@ -282,9 +282,9 @@ protected:
 		try {
 			S::_implementation (_b)._copy (dst, src);
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 	}
 
@@ -293,9 +293,9 @@ protected:
 		try {
 			S::_implementation (_b)._move (dst, src);
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 	}
 
@@ -304,9 +304,9 @@ protected:
 		try {
 			S::_implementation (_b)._local_marshal (src, dst);
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 	}
 
@@ -315,9 +315,9 @@ protected:
 		try {
 			S::_implementation (_b)._local_unmarshal_in (val);
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 	}
 
@@ -326,9 +326,9 @@ protected:
 		try {
 			S::_implementation (_b)._local_unmarshal_inout (val);
 		} catch (const Exception & e) {
-			_env->set_exception (e);
+			set_exception (_env, e);
 		} catch (...) {
-			_env->set_unknown_exception ();
+			set_unknown_exception (_env);
 		}
 	}
 };
