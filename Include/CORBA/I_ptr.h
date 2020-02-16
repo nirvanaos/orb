@@ -22,13 +22,13 @@ class I_ptr
 #endif
 public:
 	/// Zero init skipped for performance
-	constexpr I_ptr ()
+	I_ptr ()
 #ifdef _DEBUG
 		: p_((I*)UNINITIALIZED_PTR)
 #endif
 	{}
 
-	constexpr I_ptr (I* p) :
+	I_ptr (I* p) :
 		p_ (p)
 	{}
 

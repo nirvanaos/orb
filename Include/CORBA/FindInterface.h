@@ -22,15 +22,8 @@ struct InterfaceEntry
 	static Interface* find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const Char* id);
 };
 
-template <class S, class Primary, class ... I>
-class InterfaceFinder
+struct InterfaceFinderBase
 {
-	template <class Itf>
-	static Interface* cast (void* servant)
-	{
-		return &static_cast <Bridge <Itf>&> (*reinterpret_cast <S*> (servant));
-	}
-
 	template <class Itf>
 	struct InterfaceId
 	{
@@ -39,12 +32,6 @@ class InterfaceFinder
 			return Bridge <Itf>::interface_id_;
 		}
 	};
-
-	template <>
-	static Interface* cast <PortableServer::ServantBase> (void* servant)
-	{
-		return &static_cast <Bridge <Object>&> (*reinterpret_cast <S*> (servant));
-	}
 
 	template <>
 	struct InterfaceId <PortableServer::ServantBase>
@@ -56,12 +43,6 @@ class InterfaceFinder
 	};
 
 	template <>
-	static Interface* cast <LocalObject> (void* servant)
-	{
-		return &static_cast <Bridge <Object>&> (*reinterpret_cast <S*> (servant));
-	}
-
-	template <>
 	struct InterfaceId <LocalObject>
 	{
 		static constexpr const Char* id ()
@@ -69,6 +50,28 @@ class InterfaceFinder
 			return Bridge <Object>::interface_id_;
 		}
 	};
+};
+
+template <class S, class Primary, class ... I>
+class InterfaceFinder : private InterfaceFinderBase
+{
+	template <class Itf>
+	static Interface* cast (void* servant)
+	{
+		return &static_cast <Bridge <Itf>&> (*reinterpret_cast <S*> (servant));
+	}
+
+	template <>
+	static Interface* cast <PortableServer::ServantBase> (void* servant)
+	{
+		return &static_cast <Bridge <Object>&> (*reinterpret_cast <S*> (servant));
+	}
+
+	template <>
+	static Interface* cast <LocalObject> (void* servant)
+	{
+		return &static_cast <Bridge <Object>&> (*reinterpret_cast <S*> (servant));
+	}
 
 public:
 	static Interface_ptr find (S& servant, const Char* id)
