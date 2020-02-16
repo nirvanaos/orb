@@ -6,7 +6,8 @@ namespace CORBA {
 namespace Nirvana {
 
 ReferenceCounterLink::ReferenceCounterLink (Bridge <DynamicServant>* dynamic) :
-	reference_counter_ (g_object_factory->create_reference_counter (dynamic))
+	reference_counter_ (g_object_factory->create_reference_counter (
+		DynamicServant_ptr (static_cast <DynamicServant*> (dynamic))))
 {}
 
 ReferenceCounterLink::~ReferenceCounterLink ()
@@ -16,7 +17,9 @@ ReferenceCounterLink::~ReferenceCounterLink ()
 
 void ServantBaseLink::_construct (Bridge <DynamicServant>* dynamic)
 {
-	servant_base_ = g_object_factory->create_servant (this, dynamic);
+	servant_base_ = g_object_factory->create_servant (
+		I_ptr <PortableServer::ServantBase> (&static_cast <PortableServer::ServantBase&> (static_cast <Bridge <PortableServer::ServantBase>&> (*this))),
+		DynamicServant_ptr (static_cast <DynamicServant*> (dynamic)));
 }
 
 Interface* ServantBaseLink::_get_proxy ()
@@ -33,7 +36,9 @@ Interface* ServantBaseLink::_get_proxy ()
 
 ReferenceCounter_ptr LocalObjectLink::_construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic)
 {
-	LocalObject_ptr obj = g_object_factory->create_local_object (base, dynamic);
+	LocalObject_ptr obj = g_object_factory->create_local_object (
+		AbstractBase_ptr (static_cast <AbstractBase*> (base)), 
+		DynamicServant_ptr (static_cast <DynamicServant*> (dynamic)));
 	object_ = obj;
 	return obj;
 }

@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_FINDINTERFACE_H_
 
 #include <Nirvana/NirvanaBase.h>
-#include "Object.h"
+#include "LocalObject.h"
 
 namespace PortableServer {
 class ServantBase;
@@ -22,38 +22,8 @@ struct InterfaceEntry
 	static Interface* find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const Char* id);
 };
 
-struct InterfaceFinderBase
-{
-	template <class Itf>
-	struct InterfaceId
-	{
-		static constexpr const Char* id ()
-		{
-			return Bridge <Itf>::interface_id_;
-		}
-	};
-
-	template <>
-	struct InterfaceId <PortableServer::ServantBase>
-	{
-		static constexpr const Char* id ()
-		{
-			return Bridge <Object>::interface_id_;
-		}
-	};
-
-	template <>
-	struct InterfaceId <LocalObject>
-	{
-		static constexpr const Char* id ()
-		{
-			return Bridge <Object>::interface_id_;
-		}
-	};
-};
-
 template <class S, class Primary, class ... I>
-class InterfaceFinder : private InterfaceFinderBase
+class InterfaceFinder
 {
 	template <class Itf>
 	static Interface* cast (void* servant)
@@ -85,8 +55,8 @@ private:
 
 template <class S, class Primary, class ... I>
 const InterfaceEntry InterfaceFinder <S, Primary, I...>::itable_ [] = {
-	{ InterfaceId <Primary>::id (), cast <Primary> },
-	{ InterfaceId <I>::id (), cast <I> }...
+	{ Bridge <Primary>::interface_id_, cast <Primary> },
+	{ Bridge <I>::interface_id_, cast <I> }...
 };
 
 template <class Primary, class ... I>

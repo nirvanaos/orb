@@ -94,7 +94,15 @@ class ServantBase :
 	// Client methods from bases AbstractBase and Object are not available directly on pointer to ServantBase.
 	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::Object>,
 	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::AbstractBase>
-{};
+{
+public:
+	static Servant _check (Interface* bridge)
+	{
+		return static_cast <ServantBase*> (Interface::_check (bridge, check_interface_id_));
+	}
+
+	static const ::CORBA::Char check_interface_id_ [];
+};
 
 }
 
