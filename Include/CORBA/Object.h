@@ -47,9 +47,7 @@ struct Bridge <Object>::EPV
 
 	struct
 	{
-		typename MyBridge::Wide <CORBA::AbstractBase>::Func CORBA_AbstractBase;
-		operator const MyBridge::Wide <CORBA::AbstractBase>::Func () const { return CORBA_AbstractBase; }
-		//BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
+		BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
 	} base;
 
 	struct

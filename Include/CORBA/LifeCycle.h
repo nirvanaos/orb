@@ -23,7 +23,7 @@ public:
 };
 
 //! Dynamic servant life cycle.
-//! \tparam S Class implementing `_duplicate()' and `_release()' operations.
+//! \tparam S Class implementing `_duplicate_impl()' and `_release_impl()' operations.
 template <class S>
 class LifeCycleDynamic
 {
