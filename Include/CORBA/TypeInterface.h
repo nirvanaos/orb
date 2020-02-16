@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_TYPEINTERFACE_H_
 
 #include "Type_forward.h"
-#include "Interface_forward.h"
+#include "I_ptr.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -84,9 +84,9 @@ public:
 		return p;
 	}
 
-	operator BridgeMarshal <I>* ()
+	operator Interface* ()
 	{
-		BridgeMarshal <I>* p = I_ptr <I>::operator Bridge <I>* ();
+		Interface* p = I_ptr <I>::operator Bridge <I>* ();
 		I_ptr <I>::operator = (I_ptr <I>::nil ());
 		return p;
 	}
@@ -115,7 +115,7 @@ public:
 		I_ptr <I> (p)
 	{}
 
-	BridgeMarshal <I>* operator & () const
+	Interface* operator & () const
 	{
 		return *this;
 	}
@@ -132,9 +132,9 @@ public:
 
 	~I_inout () noexcept (false);
 
-	BridgeMarshal <I>** operator & () const
+	Interface ** operator & () const
 	{
-		return reinterpret_cast <BridgeMarshal <I>**> (&ref_.p_);
+		return reinterpret_cast <Interface**> (&ref_.p_);
 	}
 
 protected:
@@ -186,7 +186,7 @@ template <class I>
 class I_ret
 {
 public:
-	I_ret (BridgeMarshal <I>* p) :
+	I_ret (Interface* p) :
 		val_ (I::_check (p))
 	{}
 
@@ -213,10 +213,10 @@ struct Type <I_var <I> >
 		I::_check (p);
 	}
 
-	typedef BridgeMarshal <I>* ABI_in;
-	typedef BridgeMarshal <I>** ABI_out;
-	typedef BridgeMarshal <I>** ABI_inout;
-	typedef BridgeMarshal <I>* ABI_ret;
+	typedef Interface* ABI_in;
+	typedef Interface** ABI_out;
+	typedef Interface** ABI_inout;
+	typedef Interface* ABI_ret;
 
 	typedef I_var <I> C_var;
 	typedef I_in <I> C_in;

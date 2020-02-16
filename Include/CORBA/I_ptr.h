@@ -1,8 +1,8 @@
 #ifndef NIRVANA_ORB_T_PTR_H_
 #define NIRVANA_ORB_T_PTR_H_
 
-#include <Nirvana/throw_exception.h>
 #include "Bridge.h"
+#include <Nirvana/throw_exception.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -14,11 +14,19 @@ template <class I> class I_var;
 template <class I>
 class I_ptr
 {
+	/// Obtaining I_ptr directly from a servant pointer is prohibited
 	I_ptr (Bridge <I>* p) = delete;
 
+#ifdef _DEBUG
+	static const uintptr_t UNINITIALIZED_PTR = 1;
+#endif
 public:
+	/// Zero init skipped for performance
 	constexpr I_ptr ()
-	{} // Zero init skipped for performance
+#ifdef _DEBUG
+		: p_((I*)UNINITIALIZED_PTR)
+#endif
+	{}
 
 	constexpr I_ptr (I* p) :
 		p_ (p)
@@ -44,6 +52,7 @@ public:
 	///    Object_ptr obj = func ();
 	inline I_ptr (I_var <I>&& var);
 
+	// TODO: Remove?
 	operator Bridge <I>* () const
 	{
 		return &static_cast <Bridge <I>&> (*p_);
@@ -51,6 +60,7 @@ public:
 
 	I* operator -> () const
 	{
+		assert (UNINITIALIZED_PTR != (uintptr_t)p_);
 		if (!p_)
 			::Nirvana::throw_INV_OBJREF ();
 		return p_;

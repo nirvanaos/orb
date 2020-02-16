@@ -1,8 +1,7 @@
 #ifndef NIRVANA_ORB_BRIDGE_H_
 #define NIRVANA_ORB_BRIDGE_H_
 
-#include <Nirvana/NirvanaBase.h>
-#include "BasicTypes.h"
+#include "Interface.h"
 
 namespace CORBA {
 
@@ -10,73 +9,45 @@ class Environment;
 
 namespace Nirvana {
 
-//! All interfaces derives from Interface class.
-//! This class provides life-cycle management and pointer to entry-point vector (EPV).
-class Interface;
+typedef Interface EnvironmentBridge;
 
-//! Intermediate part of an interface, bridge between servant and client.
-template <class I> class Bridge;
-template <class I> class BridgeMarshal;
-
-typedef BridgeMarshal < ::CORBA::Environment> EnvironmentBridge;
-
-//! All bridges indirectly derives from `Bridge <Interface>'.
-template <>
-class Bridge <Interface>
-{
-public:
-	Bridge& operator = (const Bridge&)
-	{
-		return *this;	// Do nothing
-	}
-
-	struct EPV
-	{
-		const Char* interface_id;
-		Bridge <Interface>* (*duplicate) (Bridge <Interface>*, EnvironmentBridge*);
-		void (*release) (Bridge <Interface>*);
-	};
-
-	const EPV& _epv () const
-	{
-		return epv_ref_;
-	}
-
-protected:
-	Bridge (const EPV& epv) :
-		epv_ref_ (epv)
-	{}
-
-private:
-	const EPV& epv_ref_;
-};
-
-//! The bridge which was passed from a different binary file.
-//! We can't be sure that the interface version is the same as for current binary.
-//! To obtain the interface pointer we have to _check the bridge pointer.
-//! Each Bridge <I> derives from BridgeMarshal <I>.
+/// The ABI for a particular interface I.
+/// A "bridge" between the client and servant sides.
 template <class I>
-class BridgeMarshal :
-	public Bridge <Interface>
+class Bridge :
+	public Interface
 {
 public:
+	/// Entry-point vector
+	struct EPV;
+
+	/// Helper for widening to a base interface
 	template <class Base>
 	struct Wide
 	{
-		typedef Bridge <Base>* (*Func) (Bridge <I>*, const Char*, EnvironmentBridge*);
+		typedef Bridge <Base>* (*Func) (Bridge <I>*, const Char* base_id, Interface* environment);
 	};
 
 protected:
-	BridgeMarshal (const EPV& epv) :
-		Bridge <Interface> (epv)
-	{}
+	Bridge (const EPV& epv)
+	{
+		const Interface::EPV* itf = &epv.interface;
+#ifdef NIRVANA_C11
+		static_assert ((const void*)itf == (const void*)&epv, "interface must be at the beginning of EPV.");
+#endif
+		_epv_ref = itf;
+	}
 };
 
 #define BASE_STRUCT_ENTRY(type, name) Wide < type>::Func name;\
 operator const Wide < type>::Func () const { return name; }
 
+template <>
+class Bridge <Interface> :
+	public Interface
+{};
+
 }
 }
 
 #endif
-
