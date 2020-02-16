@@ -1,11 +1,11 @@
-#include <CORBA/Interface_forward.h>
+#include <CORBA/Interface.h>
 #include <CORBA/RepositoryId.h>
 #include <CORBA/Environment.h>
 
 namespace CORBA {
 namespace Nirvana {
 
-Bridge <Interface>* Interface::__duplicate (Bridge <Interface>* itf)
+Interface* Interface::_duplicate (Interface* itf)
 {
 	if (itf) {
 		Environment env;
@@ -15,13 +15,13 @@ Bridge <Interface>* Interface::__duplicate (Bridge <Interface>* itf)
 	return itf;
 }
 
-void Interface::_release (Bridge <Interface>* itf)
+void Interface::_release (Interface* itf)
 {
 	if (itf)
 		(itf->_epv ().release) (itf);
 }
 
-Bridge <Interface>* Interface::_check (Bridge <Interface>* bridge, const Char* interface_id)
+Interface* Interface::_check (Interface* bridge, const Char* interface_id)
 {
 	if (bridge) {
 		//  _check_pointer (bridge);

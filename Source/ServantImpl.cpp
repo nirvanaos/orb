@@ -5,7 +5,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-void _check_pointer (const Bridge <Interface>* obj, const Bridge <Interface>::EPV& epv)
+void _check_pointer (const Interface* obj, const Interface::EPV& epv)
 {
 	_check_pointer (obj);
 	if (&obj->_epv () != &epv)

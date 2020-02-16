@@ -4,7 +4,7 @@
 #ifndef NIRVANA_ORB_CLIENT_H_
 #define NIRVANA_ORB_CLIENT_H_
 
-#include "Interface_forward.h"
+#include "I_ptr.h"
 #include "Environment.h"
 #include "RepositoryId.h"
 
@@ -38,7 +38,7 @@ public:
 
 	static I_ptr <I> _duplicate (I_ptr <I> obj)
 	{
-		return static_cast <I*> (Interface::__duplicate (obj));
+		return static_cast <I*> (Interface::_duplicate (obj));
 	}
 
 	static I_ptr <I> _nil ()
@@ -46,7 +46,7 @@ public:
 		return I_ptr <I>::nil ();
 	}
 
-	static I_ptr <I> _check (BridgeMarshal <I>* bridge)
+	static I_ptr <I> _check (Interface* bridge)
 	{
 		return static_cast <I*> (Interface::_check (bridge, Bridge <I>::interface_id_));
 	}
@@ -63,7 +63,7 @@ protected:
 	Bridge <Base>* _get_bridge_ptr (EnvironmentBase& env)
 	{
 		Primary& t = static_cast <Primary&> (*this);
-		typename BridgeMarshal <Primary>:: template Wide <Base>::Func func = t._epv ().base;
+		typename Bridge <Primary>:: template Wide <Base>::Func func = t._epv ().base;
 		Bridge <Base>* ret = (func)(&t, Bridge <Base>::interface_id_, &env);
 		env.check ();
 		assert (!ret || RepositoryId::compatible (ret->_epv ().interface.interface_id, Bridge <Base>::interface_id_));

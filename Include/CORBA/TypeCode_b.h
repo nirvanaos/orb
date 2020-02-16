@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_TYPECODE_B_H_
 #define NIRVANA_ORB_TYPECODE_B_H_
 
-#include "Interface_forward.h"
+#include "Bridge.h"
 #include "TypeEnum.h"
 
 namespace CORBA {
@@ -51,59 +51,42 @@ const ValueModifier VM_TRUNCATABLE = 3;
 namespace Nirvana {
 
 template <>
-class Bridge <TypeCode> :
-	public BridgeMarshal <TypeCode>
+struct Bridge <TypeCode>::EPV
 {
-public:
-	struct EPV
+	Interface::EPV interface;
+
+	struct
 	{
-		Bridge <Interface>::EPV interface;
+		Boolean (*equal) (Bridge <TypeCode>*, Interface*, EnvironmentBridge*);
+		Boolean (*equivalent) (Bridge <TypeCode>*, Interface*, EnvironmentBridge*);
+		Interface* (*get_compact_typecode) (Bridge <TypeCode>*, EnvironmentBridge*);
+		TCKind (*kind) (Bridge <TypeCode>*, EnvironmentBridge*);
+		const char* (*id) (Bridge <TypeCode>*, EnvironmentBridge*);
+		const char* (*name) (Bridge <TypeCode>*, EnvironmentBridge*);
+		ULong (*member_count) (Bridge <TypeCode>*, EnvironmentBridge*);
+		const char* (*member_name) (Bridge <TypeCode>*, ULong index, EnvironmentBridge*);
+		Interface* (*member_type) (Bridge <TypeCode>*, ULong index, EnvironmentBridge*);
+		Any* (*member_label) (Bridge <TypeCode>*, ULong index, EnvironmentBridge*);
+		Interface* (*discriminator_type) (Bridge <TypeCode>*, EnvironmentBridge*);
+		Long (*default_index) (Bridge <TypeCode>*, EnvironmentBridge*);
+		ULong (*length) (Bridge <TypeCode>*, EnvironmentBridge*);
+		Interface* (*content_type) (Bridge <TypeCode>*, EnvironmentBridge*);
+		UShort (*fixed_digits) (Bridge <TypeCode>*, EnvironmentBridge*);
+		Short (*fixed_scale) (Bridge <TypeCode>*, EnvironmentBridge*);
+		Visibility (*member_visibility) (Bridge <TypeCode>*, ULong index, EnvironmentBridge*);
+		ValueModifier (*type_modifier) (Bridge <TypeCode>*, EnvironmentBridge*);
+		Interface* (*concrete_base_type) (Bridge <TypeCode>*, EnvironmentBridge*);
 
-		struct
-		{
-			Boolean (*equal) (Bridge <TypeCode>*, BridgeMarshal <TypeCode>*, EnvironmentBridge*);
-			Boolean (*equivalent) (Bridge <TypeCode>*, BridgeMarshal <TypeCode>*, EnvironmentBridge*);
-			BridgeMarshal <TypeCode>* (*get_compact_typecode) (Bridge <TypeCode>*, EnvironmentBridge*);
-			TCKind (*kind) (Bridge <TypeCode>*, EnvironmentBridge*);
-			const char* (*id) (Bridge <TypeCode>*, EnvironmentBridge*);
-			const char* (*name) (Bridge <TypeCode>*, EnvironmentBridge*);
-			ULong (*member_count) (Bridge <TypeCode>*, EnvironmentBridge*);
-			const char* (*member_name) (Bridge <TypeCode>*, ULong index, EnvironmentBridge*);
-			BridgeMarshal <TypeCode>* (*member_type) (Bridge <TypeCode>*, ULong index, EnvironmentBridge*);
-			Any* (*member_label) (Bridge <TypeCode>*, ULong index, EnvironmentBridge*);
-			BridgeMarshal <TypeCode>* (*discriminator_type) (Bridge <TypeCode>*, EnvironmentBridge*);
-			Long (*default_index) (Bridge <TypeCode>*, EnvironmentBridge*);
-			ULong (*length) (Bridge <TypeCode>*, EnvironmentBridge*);
-			BridgeMarshal <TypeCode>* (*content_type) (Bridge <TypeCode>*, EnvironmentBridge*);
-			UShort (*fixed_digits) (Bridge <TypeCode>*, EnvironmentBridge*);
-			Short (*fixed_scale) (Bridge <TypeCode>*, EnvironmentBridge*);
-			Visibility (*member_visibility) (Bridge <TypeCode>*, ULong index, EnvironmentBridge*);
-			ValueModifier (*type_modifier) (Bridge <TypeCode>*, EnvironmentBridge*);
-			BridgeMarshal <TypeCode>* (*concrete_base_type) (Bridge <TypeCode>*, EnvironmentBridge*);
-
-			ULong (*_size) (Bridge <TypeCode>*, EnvironmentBridge*);
-			void (*_construct) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
-			void (*_destruct) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
-			void (*_copy) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::ConstPointer, EnvironmentBridge*);
-			void (*_move) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::Pointer, EnvironmentBridge*);
-			void (*_local_marshal) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, ::Nirvana::Pointer, EnvironmentBridge*);
-			void (*_local_unmarshal_in) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
-			void (*_local_unmarshal_inout) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
-		}
-		epv;
-	};
-
-	const EPV& _epv () const
-	{
-		return (EPV&)Bridge <Interface>::_epv ();
+		ULong (*_size) (Bridge <TypeCode>*, EnvironmentBridge*);
+		void (*_construct) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
+		void (*_destruct) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
+		void (*_copy) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::ConstPointer, EnvironmentBridge*);
+		void (*_move) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::Pointer, EnvironmentBridge*);
+		void (*_local_marshal) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, ::Nirvana::Pointer, EnvironmentBridge*);
+		void (*_local_unmarshal_in) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
+		void (*_local_unmarshal_inout) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
 	}
-
-	static const char interface_id_[];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal <TypeCode> (epv.interface)
-	{}
+	epv;
 };
 
 }

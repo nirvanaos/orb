@@ -10,35 +10,18 @@ class Environment;
 namespace Nirvana {
 
 template <>
-class Bridge < ::CORBA::Environment> :
-	public BridgeMarshal < ::CORBA::Environment>
+struct Bridge < ::CORBA::Environment>::EPV
 {
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
+	Interface::EPV interface;
 
-		struct
-		{
-			void (*exception_set) (Bridge < ::CORBA::Environment>*, Long code, const char* rep_id, const void* param);
-			const Char* (*exception_id) (Bridge < ::CORBA::Environment>*);
-			const void* (*exception_value) (Bridge < ::CORBA::Environment>*);
-			void (*exception_free) (Bridge < ::CORBA::Environment>*);
-		}
-		epv;
-	};
-
-	const EPV& _epv () const
+	struct
 	{
-		return (EPV&)Bridge <Interface>::_epv ();
+		void (*exception_set) (Bridge < ::CORBA::Environment>*, Long code, const Char* rep_id, const void* param);
+		const Char* (*exception_id) (Bridge < ::CORBA::Environment>*);
+		const void* (*exception_value) (Bridge < ::CORBA::Environment>*);
+		void (*exception_free) (Bridge < ::CORBA::Environment>*);
 	}
-
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal <Environment> (epv.interface)
-	{}
+	epv;
 };
 
 }

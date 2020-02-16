@@ -21,6 +21,15 @@ struct Interface
 
 	const EPV* const _epv_ref;
 
+	Interface (const EPV& epv) :
+		_epv_ref (&epv)
+	{}
+
+	const EPV& _epv () const
+	{
+		return *_epv_ref;
+	}
+
 	Interface& operator = (const Interface&)
 	{
 		return *this;	// Do nothing
@@ -32,6 +41,19 @@ struct Interface
 };
 
 }
+
+/// CORBA::is_nil()
+inline bool is_nil (Nirvana::Interface* itf)
+{
+	return !itf;
+}
+
+/// CORBA::release()
+inline void release (Nirvana::Interface* itf)
+{
+	Nirvana::Interface::_release (itf);
+}
+
 }
 
 #endif

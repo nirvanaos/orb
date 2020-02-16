@@ -22,17 +22,17 @@ public:
 	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
 	static ULong _member_count (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
 	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
-	static BridgeMarshal <TypeCode>* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
+	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
 	static Any* _member_label (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
-	static BridgeMarshal <TypeCode>* _discriminator_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static Interface* _discriminator_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
 	static Long _default_index (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
 	static ULong _length (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
-	static BridgeMarshal <TypeCode>* _content_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static Interface* _content_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
 	static UShort _fixed_digits (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
 	static Short _fixed_scale (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
 	static Visibility _member_visibility (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
 	static ValueModifier _type_modifier (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
-	static BridgeMarshal <TypeCode>* _concrete_base_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
 
 	static void set_BadKind (EnvironmentBridge* env);
 	static void set_Bounds (EnvironmentBridge* env);
@@ -54,7 +54,7 @@ public:
 		return TypeCodeBase::equivalent (tk, other);
 	}
 
-	static BridgeMarshal <TypeCode>* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static Interface* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return InterfaceStatic <S, TypeCode>::_bridge ();
 	}

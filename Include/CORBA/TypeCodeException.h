@@ -15,7 +15,7 @@ public:
 		return nullptr;
 	}
 
-	static BridgeMarshal <TypeCode>* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
+	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
 	{
 		TypeCodeBase::set_Bounds (_env);
 		return nullptr;

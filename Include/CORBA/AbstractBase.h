@@ -24,41 +24,16 @@ namespace Nirvana {
 
 // AbstractBase
 
-template <>
-class Bridge <AbstractBase> :
-	public BridgeMarshal <AbstractBase>
-{
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
-
-		struct
-		{
-			Bridge <Interface>* (*query_interface) (Bridge <AbstractBase>*, const Char*, EnvironmentBridge*);
-		}
-		epv;
-	};
-
-	const EPV& _epv () const
-	{
-		return (const EPV&)Bridge <Interface>::_epv ();
-	}
-
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal <AbstractBase> (epv.interface)
-	{}
-};
+BRIDGE_BEGIN(AbstractBase)
+	Interface* (*query_interface) (Bridge <AbstractBase>*, const Char*, EnvironmentBridge*);
+BRIDGE_END()
 
 template <class T>
 class Client <T, AbstractBase> :
 	public T
 {
 public:
-	Bridge <Interface>* _query_interface (const Char* type_id);
+	Interface* _query_interface (const Char* type_id);
 
 	template <class I>
 	I_ptr <I> _query_interface ()
@@ -68,11 +43,11 @@ public:
 };
 
 template <class T>
-Bridge <Interface>* Client <T, AbstractBase>::_query_interface (const Char* type_id)
+Interface* Client <T, AbstractBase>::_query_interface (const Char* type_id)
 {
 	Environment _env;
 	Bridge <AbstractBase>& _b (T::_get_bridge (_env));
-	Bridge <Interface>* _ret = (_b._epv ().epv.query_interface) (&_b, type_id, &_env);
+	Interface* _ret = (_b._epv ().epv.query_interface) (&_b, type_id, &_env);
 	_env.check ();
 	assert (!_ret || !type_id || RepositoryId::compatible (_ret->_epv ().interface_id, type_id));
 	return _ret;

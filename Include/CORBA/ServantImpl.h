@@ -9,7 +9,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-extern void _check_pointer (const Bridge <Interface>* obj, const Bridge <Interface>::EPV& epv);
+extern void _check_pointer (const Interface* obj, const Interface::EPV& epv);
 
 template <class S, class I> class Skeleton;
 
@@ -70,4 +70,3 @@ class InterfaceImpl :
 }
 
 #endif
-

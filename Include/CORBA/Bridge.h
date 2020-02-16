@@ -21,6 +21,14 @@ public:
 	/// Entry-point vector
 	struct EPV;
 
+	const EPV& _epv () const
+	{
+		return (const EPV&)Interface::_epv ();
+	}
+
+	/// Interface repository id
+	static const Char interface_id_ [];
+
 	/// Helper for widening to a base interface
 	template <class Base>
 	struct Wide
@@ -29,18 +37,20 @@ public:
 	};
 
 protected:
-	Bridge (const EPV& epv)
+	Bridge (const EPV& epv) :
+		Interface (epv.interface)
 	{
-		const Interface::EPV* itf = &epv.interface;
 #ifdef NIRVANA_C11
-		static_assert ((const void*)itf == (const void*)&epv, "interface must be at the beginning of EPV.");
+		static_assert (offsetof(epv, interface) == 0, "interface must be at the beginning of EPV.");
 #endif
-		_epv_ref = itf;
 	}
 };
 
 #define BASE_STRUCT_ENTRY(type, name) Wide < type>::Func name;\
 operator const Wide < type>::Func () const { return name; }
+
+#define BRIDGE_BEGIN(I) template <> struct Bridge < I>::EPV { Interface::EPV interface; struct {
+#define BRIDGE_END() } epv;};
 
 template <>
 class Bridge <Interface> :

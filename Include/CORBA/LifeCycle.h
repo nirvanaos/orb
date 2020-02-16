@@ -12,13 +12,13 @@ class LifeCycleStatic
 {
 public:
 	template <class I>
-	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge*)
+	static Interface* __duplicate (Interface* itf, EnvironmentBridge*)
 	{
 		return itf;
 	}
 
 	template <class I>
-	static void __release (Bridge <Interface>*)
+	static void __release (Interface*)
 	{}
 };
 
@@ -29,11 +29,11 @@ class LifeCycleDynamic
 {
 public:
 	template <class I>
-	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
+	static Interface* __duplicate (Interface* itf, EnvironmentBridge* env)
 	{
 		try {
 			return S::_duplicate (static_cast <Bridge <I>*> (itf));
-		} catch (const Exception & e) {
+		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
@@ -42,7 +42,7 @@ public:
 	}
 
 	template <class I>
-	static void __release (Bridge <Interface>* itf)
+	static void __release (Interface* itf)
 	{
 		try {
 			S::_release (static_cast <Bridge <I>*> (itf));
@@ -79,14 +79,14 @@ class LifeCycleNoCopy
 {
 public:
 	template <class I>
-	static Bridge <Interface>* __duplicate (Bridge <Interface>* itf, EnvironmentBridge* env)
+	static Interface* __duplicate (Interface* itf, EnvironmentBridge* env)
 	{
 		set_NO_IMPLEMENT (env);
 		return nullptr;
 	}
 
 	template <class I>
-	static void __release (Bridge <Interface>* itf)
+	static void __release (Interface* itf)
 	{
 		try {
 			delete& S::_implementation (static_cast <Bridge <I>*> (itf));

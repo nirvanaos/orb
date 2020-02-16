@@ -15,7 +15,7 @@ public:
 	static const typename Bridge <TypeCode>::EPV epv_;
 
 protected:
-	static Boolean _equal (Bridge <TypeCode>* _b, BridgeMarshal <TypeCode>* other, EnvironmentBridge* _env)
+	static Boolean _equal (Bridge <TypeCode>* _b, Interface* other, EnvironmentBridge* _env)
 	{
 		try {
 			return S::_implementation (_b).equal (TypeI <TypeCode>::in (other));
@@ -27,7 +27,7 @@ protected:
 		return 0;
 	}
 
-	static Boolean _equivalent (Bridge <TypeCode>* _b, BridgeMarshal <TypeCode>* other, EnvironmentBridge* _env)
+	static Boolean _equivalent (Bridge <TypeCode>* _b, Interface* other, EnvironmentBridge* _env)
 	{
 		try {
 			return S::_implementation (_b).equivalent (TypeI <TypeCode>::in (other));
@@ -39,7 +39,7 @@ protected:
 		return 0;
 	}
 
-	static BridgeMarshal <TypeCode>* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static Interface* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		try {
 			return S::_implementation (_b).get_compact_typecode ();
@@ -111,7 +111,7 @@ protected:
 		return 0;
 	}
 
-	static BridgeMarshal <TypeCode>* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
+	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
 	{
 		try {
 			return S::_implementation (_b).member_type (index);
@@ -135,7 +135,7 @@ protected:
 		return 0;
 	}
 
-	static BridgeMarshal <TypeCode>* _discriminator_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static Interface* _discriminator_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		try {
 			return S::_implementation (_b).discriminator_type ();
@@ -171,7 +171,7 @@ protected:
 		return 0;
 	}
 
-	static BridgeMarshal <TypeCode>* _content_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static Interface* _content_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		try {
 			return S::_implementation (_b).content_type ();
@@ -231,7 +231,7 @@ protected:
 		return 0;
 	}
 
-	static BridgeMarshal <TypeCode>* _concrete_base_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		try {
 			return S::_implementation (_b).concrete_base_type ();

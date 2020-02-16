@@ -21,7 +21,7 @@ Exception* Exception::__clone () const
 
 namespace Nirvana {
 
-void set_exception (Bridge <Interface>* environment, Long code, const char* rep_id, const void* param)
+void set_exception (Interface* environment, Long code, const char* rep_id, const void* param)
 {
 	if (environment && RepositoryId::compatible (environment->_epv ().interface_id, Bridge < ::CORBA::Environment>::interface_id_)) {
 		Bridge < ::CORBA::Environment>* b = &static_cast <Bridge < ::CORBA::Environment>&> (*environment);
@@ -29,12 +29,12 @@ void set_exception (Bridge <Interface>* environment, Long code, const char* rep_
 	}
 }
 
-void set_exception (Bridge <Interface>* environment, const Exception& e)
+void set_exception (Interface* environment, const Exception& e)
 {
 	set_exception (environment, e.__code (), e._rep_id (), e.__data ());
 }
 
-void set_unknown_exception (Bridge <Interface>* environment)
+void set_unknown_exception (Interface* environment)
 {
 	set_exception (environment, SystemException::EC_UNKNOWN, CORBA_REPOSITORY_ID (UNKNOWN), nullptr);
 }
