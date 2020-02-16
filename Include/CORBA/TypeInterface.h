@@ -153,7 +153,7 @@ I_inout <I>::~I_inout () noexcept (false)
 {
 	bool ex = uncaught_exception ();
 	try {
-		I::unmarshal (ref_);
+		I::_check (ref_);
 	} catch (...) {
 		Interface::_release (ref_);
 		ref_ = I_ptr <I>::nil ();
@@ -187,7 +187,7 @@ class I_ret
 {
 public:
 	I_ret (BridgeMarshal <I>* p) :
-		val_ (I::unmarshal (p))
+		val_ (I::_check (p))
 	{}
 
 	operator I_var <I> ()
@@ -210,7 +210,7 @@ struct Type <I_var <I> >
 
 	static void check (const I_var <I>& p)
 	{
-		I::unmarshal (p);
+		I::_check (p);
 	}
 
 	typedef BridgeMarshal <I>* ABI_in;
@@ -226,13 +226,13 @@ struct Type <I_var <I> >
 
 	static I_ptr <I> in (ABI_in p)
 	{
-		return I::unmarshal (p);
+		return I::_check (p);
 	}
 
 	static I_var <I>& inout (ABI_inout p)
 	{
 		_check_pointer (p);
-		I::unmarshal (*p);
+		I::_check (*p);
 		return reinterpret_cast <I_var <I>&> (*p);
 	}
 

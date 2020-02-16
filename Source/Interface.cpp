@@ -21,7 +21,7 @@ void Interface::_release (Bridge <Interface>* itf)
 		(itf->_epv ().release) (itf);
 }
 
-Bridge <Interface>* Interface::unmarshal (Bridge <Interface>* bridge, const Char* interface_id)
+Bridge <Interface>* Interface::_check (Bridge <Interface>* bridge, const Char* interface_id)
 {
 	if (bridge) {
 		//  _check_pointer (bridge);

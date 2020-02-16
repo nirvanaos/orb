@@ -73,7 +73,7 @@ class InterfaceFinder
 public:
 	static Interface_ptr find (S& servant, const Char* id)
 	{
-		return Interface::unmarshal (InterfaceEntry::find (itable_, itable_ + countof (itable_), &servant, id));
+		return Interface::_check (InterfaceEntry::find (itable_, itable_ + countof (itable_), &servant, id));
 	}
 
 private:

@@ -26,7 +26,7 @@ public:
 
 	Interface_ptr primary_interface () const
 	{
-		return Interface::unmarshal (servant_->_query_interface (nullptr));
+		return Interface::_check (servant_->_query_interface (nullptr));
 	}
 
 	const Char* primary_interface_id () const

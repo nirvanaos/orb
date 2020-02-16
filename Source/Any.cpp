@@ -9,7 +9,7 @@ namespace Nirvana {
 
 void Type <Any>::check (const Any& any)
 {
-	TypeCode::unmarshal (any.type ());
+	TypeCode::_check (any.type ());
 	if (any.is_large () && !any.large_pointer ())
 		::Nirvana::throw_BAD_PARAM ();
 }

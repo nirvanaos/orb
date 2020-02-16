@@ -46,9 +46,9 @@ public:
 		return I_ptr <I>::nil ();
 	}
 
-	static I_ptr <I> unmarshal (BridgeMarshal <I>* bridge)
+	static I_ptr <I> _check (BridgeMarshal <I>* bridge)
 	{
-		return static_cast <I*> (Interface::unmarshal (bridge, Bridge <I>::interface_id_));
+		return static_cast <I*> (Interface::_check (bridge, Bridge <I>::interface_id_));
 	}
 };
 

@@ -22,9 +22,9 @@ public:
 
 	inline static I_ptr <Interface> _nil ();
 
-	static Bridge <Interface>* unmarshal (Bridge <Interface>* bridge, const Char* interface_id);
+	static Bridge <Interface>* _check (Bridge <Interface>* bridge, const Char* interface_id);
 
-	static I_ptr <Interface> unmarshal (Bridge <Interface>* bridge);
+	static I_ptr <Interface> _check (Bridge <Interface>* bridge);
 };
 
 template <>
@@ -81,7 +81,7 @@ private:
 
 inline I_ptr <Interface> Interface::_duplicate (I_ptr <Interface> itf)
 {
-	return unmarshal (__duplicate (itf));
+	return _check (__duplicate (itf));
 }
 
 inline I_ptr <Interface> Interface::_nil ()
@@ -89,7 +89,7 @@ inline I_ptr <Interface> Interface::_nil ()
 	return I_ptr <Interface>::nil ();
 }
 
-inline I_ptr <Interface> Interface::unmarshal (Bridge <Interface>* bridge)
+inline I_ptr <Interface> Interface::_check (Bridge <Interface>* bridge)
 {
 	return static_cast <Interface*> (bridge);
 }

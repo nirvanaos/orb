@@ -53,7 +53,7 @@ private:
 
 //! The bridge which was passed from a different binary file.
 //! We can't be sure that the interface version is the same as for current binary.
-//! To obtain the interface pointer we have to unmarshal the bridge pointer.
+//! To obtain the interface pointer we have to _check the bridge pointer.
 //! Each Bridge <I> derives from BridgeMarshal <I>.
 template <class I>
 class BridgeMarshal :
