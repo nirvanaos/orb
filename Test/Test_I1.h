@@ -20,45 +20,16 @@ typedef CORBA::Nirvana::Type <SeqLong>::C_inout SeqLong_inout;
 namespace CORBA {
 namespace Nirvana {
 
-template <>
-class Bridge < ::Test::I1> :
-	public BridgeMarshal < ::Test::I1>
-{
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
-
-		struct
-		{
-			BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
-		}
-		base;
-
-		struct
-		{
-			Long (*op1) (Bridge < ::Test::I1>*, Long p1, EnvironmentBridge*);
-			void (*throw_NO_IMPLEMENT) (Bridge < ::Test::I1>*, EnvironmentBridge*);
-			Interface* (*object_op) (Bridge < ::Test::I1>*, Interface* in_obj, Interface** out_obj, Interface** inout_obj, EnvironmentBridge*);
-			ABI_ret <String> (*string_op) (Bridge < ::Test::I1>*, ABI_in <String> in_s, ABI_out <String> out_s, ABI_inout <String> inout_s, EnvironmentBridge*);
-			ABI_ret < ::Test::SeqLong> (*seq_op) (Bridge < ::Test::I1>*, ABI_in < ::Test::SeqLong> in_s, ABI_out < ::Test::SeqLong> out_s, ABI_inout < ::Test::SeqLong> inout_s, EnvironmentBridge*);
-			ABI_ret <Any> (*any_op) (Bridge < ::Test::I1>*, ABI_in <Any>, ABI_out <Any>, ABI_inout <Any>, EnvironmentBridge*);
-		}
-		epv;
-	};
-
-	const EPV& _epv () const
-	{
-		return (EPV&)Bridge <Interface>::_epv ();
-	}
-
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal < ::Test::I1> (epv.interface)
-	{}
-};
+BRIDGE_BEGIN (::Test::I1)
+BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
+BRIDGE_EPV
+Long (*op1) (Bridge < ::Test::I1>*, Long p1, EnvironmentBridge*);
+void (*throw_NO_IMPLEMENT) (Bridge < ::Test::I1>*, EnvironmentBridge*);
+Interface* (*object_op) (Bridge < ::Test::I1>*, Interface* in_obj, Interface** out_obj, Interface** inout_obj, EnvironmentBridge*);
+ABI_ret <String> (*string_op) (Bridge < ::Test::I1>*, ABI_in <String> in_s, ABI_out <String> out_s, ABI_inout <String> inout_s, EnvironmentBridge*);
+ABI_ret < ::Test::SeqLong> (*seq_op) (Bridge < ::Test::I1>*, ABI_in < ::Test::SeqLong> in_s, ABI_out < ::Test::SeqLong> out_s, ABI_inout < ::Test::SeqLong> inout_s, EnvironmentBridge*);
+ABI_ret <Any> (*any_op) (Bridge < ::Test::I1>*, ABI_in <Any>, ABI_out <Any>, ABI_inout <Any>, EnvironmentBridge*);
+BRIDGE_END ()
 
 template <class T>
 class Client <T, ::Test::I1> :

@@ -40,7 +40,7 @@ public:
 	I_ptr (const I_ptr <I1>& src, bool check_nil = true)
 	{
 		if (src.p_) {
-			*this = src.p_->operator I_ptr ();
+			*this = static_cast <I_ptr> (*src.p_);
 			if (check_nil && !p_)
 				::Nirvana::throw_INV_OBJREF ();
 		} else

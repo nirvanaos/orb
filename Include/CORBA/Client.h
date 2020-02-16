@@ -50,6 +50,11 @@ public:
 	{
 		return static_cast <I*> (Interface::_check (bridge, Bridge <I>::interface_id_));
 	}
+
+	operator I_ptr <Interface> ()
+	{
+		return this;
+	}
 };
 
 //! ClientBase - How base client obtains pointer to bridge from primary.

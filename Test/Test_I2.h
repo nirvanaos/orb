@@ -15,40 +15,11 @@ typedef ::CORBA::Nirvana::I_out <I2> I2_out;
 namespace CORBA {
 namespace Nirvana {
 
-template <>
-class Bridge < ::Test::I2> :
-	public BridgeMarshal < ::Test::I2>
-{
-public:
-	struct EPV
-	{
-		Bridge <Interface>::EPV interface;
-
-		struct
-		{
-			BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
-		}
-		base;
-
-		struct
-		{
-			Long (*op2) (Bridge < ::Test::I2>*, Long p1, EnvironmentBridge*);
-		}
-		epv;
-	};
-
-	const EPV& _epv () const
-	{
-		return (EPV&)Bridge <Interface>::_epv ();
-	}
-
-	static const Char interface_id_ [];
-
-protected:
-	Bridge (const EPV& epv) :
-		BridgeMarshal < ::Test::I2> (epv.interface)
-	{}
-};
+BRIDGE_BEGIN (::Test::I2)
+BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
+BRIDGE_EPV
+Long (*op2) (Bridge < ::Test::I2>*, Long p1, EnvironmentBridge*);
+BRIDGE_END ()
 
 template <class T>
 class Client <T, ::Test::I2> :

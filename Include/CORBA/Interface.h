@@ -42,6 +42,11 @@ struct Interface
 	{
 		return obj;
 	}
+
+	static Interface* _nil ()
+	{
+		return nullptr;
+	}
 };
 
 }
