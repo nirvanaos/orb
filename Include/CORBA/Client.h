@@ -38,7 +38,7 @@ public:
 
 	static I_ptr <I> _duplicate (I_ptr <I> obj)
 	{
-		return static_cast <I*> (Interface::_duplicate (obj));
+		return static_cast <I*> (duplicate_interface (obj));
 	}
 
 	static I_ptr <I> _nil ()

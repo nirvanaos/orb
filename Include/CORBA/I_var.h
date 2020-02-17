@@ -73,6 +73,9 @@ public:
 		return p;
 	}
 
+	/// Destroying conversion to the ABI return value.
+	/// When servant returns I_var, skeleton have to return Interface*
+	/// and reset the I_var to avoid object deletion on return.
 	operator Interface* ()
 	{
 		Interface* p = I_ptr <I>::operator Bridge <I> * ();
@@ -87,13 +90,6 @@ protected:
 		I_ptr <I>::operator = (p);
 	}
 };
-
-template <class I>
-inline I_ptr <I>::I_ptr (I_var <I>&& var)
-{
-	p_ = var.p_;
-	static_cast <I_ptr <I>&> (var).p_ = nullptr;
-}
 
 }
 }

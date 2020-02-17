@@ -35,8 +35,6 @@ struct Interface
 		return *this;	// Do nothing
 	}
 
-	static NIRVANA_NODISCARD Interface* _duplicate (Interface* obj);
-	static void _release (Interface* obj);
 	static NIRVANA_NODISCARD Interface* _check (Interface* obj, const Char* interface_id);
 	static NIRVANA_NODISCARD Interface* _check (Interface* obj)
 	{
@@ -49,6 +47,8 @@ struct Interface
 	}
 };
 
+NIRVANA_NODISCARD Interface* duplicate_interface (Interface* obj);
+
 }
 
 /// CORBA::is_nil()
@@ -58,10 +58,7 @@ inline bool is_nil (Nirvana::Interface* itf)
 }
 
 /// CORBA::release()
-inline void release (Nirvana::Interface* itf)
-{
-	Nirvana::Interface::_release (itf);
-}
+void release (Nirvana::Interface* itf);
 
 }
 

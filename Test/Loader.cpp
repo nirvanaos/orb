@@ -80,7 +80,7 @@ void Loader::bind_olf (const void* data, size_t size)
 
 			case OLF_EXPORT_INTERFACE: {
 				const ExportInterface* ps = reinterpret_cast <const ExportInterface*> (p);
-				exported_interfaces_.emplace (ps->name, static_cast <Interface*> (Interface::_duplicate (ps->itf)));
+				exported_interfaces_.emplace (ps->name, static_cast <Interface*> (duplicate_interface (ps->itf)));
 				p += sizeof (ExportInterface) / sizeof (*p);
 				break;
 			}

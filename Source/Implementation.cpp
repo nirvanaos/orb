@@ -31,7 +31,7 @@ Interface* ServantBaseLink::_get_proxy ()
 	Interface* proxy = AbstractBase_ptr (servant_base_)->_query_interface (nullptr);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
-	return Interface::_duplicate (proxy);
+	return duplicate_interface (proxy);
 }
 
 ReferenceCounter_ptr LocalObjectLink::_construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic)
@@ -48,7 +48,7 @@ Interface* LocalObjectLink::_get_proxy ()
 	Interface* proxy = AbstractBase_ptr (object_)->_query_interface (nullptr);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
-	return Interface::_duplicate (proxy);
+	return duplicate_interface (proxy);
 }
 
 }

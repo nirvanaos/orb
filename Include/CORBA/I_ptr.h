@@ -8,6 +8,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <class I> class I_inout;
+template <class I> class I_inout;
 template <class I> class I_var;
 
 	//! Interface pointer template.
@@ -37,20 +38,13 @@ public:
 	{}
 
 	template <class I1>
-	I_ptr (const I_ptr <I1>& src, bool check_nil = true)
+	I_ptr (const I_ptr <I1>& src)
 	{
-		if (src.p_) {
+		if (src.p_)
 			*this = static_cast <I_ptr> (*src.p_);
-			if (check_nil && !p_)
-				::Nirvana::throw_INV_OBJREF ();
-		} else
+		else
 			p_ = nullptr;
 	}
-
-	/// Move constructor in case returned I_var assigned to I_ptr:
-	///    Object_var func ();
-	///    Object_ptr obj = func ();
-	inline I_ptr (I_var <I>&& var);
 
 	// TODO: Remove?
 	operator Bridge <I>* () const
@@ -78,6 +72,7 @@ public:
 
 private:
 	template <class I1> friend class I_ptr;
+	friend class I_var <I>;
 	friend class I_inout <I>;
 
 private:

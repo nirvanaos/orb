@@ -3,9 +3,16 @@
 #include <CORBA/Environment.h>
 
 namespace CORBA {
+
+void release (Nirvana::Interface* itf)
+{
+	if (itf)
+		(itf->_epv ().release) (itf);
+}
+
 namespace Nirvana {
 
-Interface* Interface::_duplicate (Interface* itf)
+Interface* duplicate_interface (Interface* itf)
 {
 	if (itf) {
 		Environment env;
@@ -13,12 +20,6 @@ Interface* Interface::_duplicate (Interface* itf)
 		env.check ();
 	}
 	return itf;
-}
-
-void Interface::_release (Interface* itf)
-{
-	if (itf)
-		(itf->_epv ().release) (itf);
 }
 
 Interface* Interface::_check (Interface* bridge, const Char* interface_id)

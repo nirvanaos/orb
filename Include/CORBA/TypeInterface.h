@@ -62,7 +62,7 @@ I_inout <I>::~I_inout () noexcept (false)
 	try {
 		I::_check (ref_);
 	} catch (...) {
-		Interface::_release (ref_);
+		release (ref_);
 		ref_ = I_ptr <I>::nil ();
 		if (!ex)
 			throw;
