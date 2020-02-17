@@ -155,17 +155,17 @@ struct MarshalTraits <TypeCode_var>
 	static const bool has_unmarshal_in_ = true;
 	static const bool has_unmarshal_inout_ = true;
 
-	static void local_marshal (TypeCode_ptr src, TypeCode_ptr& dst)
+	static void local_marshal (TypeCode_ptr src, TypeCode_var& dst)
 	{
 		reinterpret_cast <uintptr_t&> (dst) = g_local_marshal->marshal_type_code (src);
 	}
 
-	static void local_unmarshal_in (TypeCode_ptr& val)
+	static void local_unmarshal_in (TypeCode_var& val)
 	{
 		val = g_local_marshal->unmarshal_type_code (val);
 	}
 
-	static void local_unmarshal_inout (TypeCode_ptr& val)
+	static void local_unmarshal_inout (TypeCode_var& val)
 	{
 		local_unmarshal_in (val);
 	}
@@ -177,17 +177,17 @@ struct MarshalTraits <I_var <I> >
 	static const bool has_unmarshal_in_ = true;
 	static const bool has_unmarshal_inout_ = true;
 
-	static void local_marshal (Object_ptr src, I_ptr <I>& dst)
+	static void local_marshal (Object_ptr src, I_var <I>& dst)
 	{
 		reinterpret_cast <uintptr_t&> (dst) = g_local_marshal->marshal_object (src);
 	}
 
-	static void local_unmarshal_in (I_ptr <I>& val)
+	static void local_unmarshal_in (I_var <I>& val)
 	{
 		val = static_cast <I*> (static_cast <Interface*> (g_local_marshal->unmarshal_interface (val, Bridge <I>::interface_id_)));
 	}
 
-	static void local_unmarshal_inout (I_ptr <I>& val)
+	static void local_unmarshal_inout (I_var <I>& val)
 	{
 		local_unmarshal_in (val);
 	}

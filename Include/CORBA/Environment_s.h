@@ -29,7 +29,7 @@ protected:
 			return S::_implementation (obj).exception_id ();
 		} catch (...) {
 		}
-		return nullptr;
+		return 0;
 	}
 
 	static const void* _exception_value (Bridge < ::CORBA::Environment>* obj)
@@ -38,7 +38,7 @@ protected:
 			return S::_implementation (obj).exception_value ();
 		} catch (...) {
 		}
-		return nullptr;
+		return 0;
 	}
 
 	static void _exception_free (Bridge < ::CORBA::Environment>* obj)

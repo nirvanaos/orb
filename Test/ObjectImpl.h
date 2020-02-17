@@ -45,7 +45,7 @@ public:
 
 	InterfaceDef_ptr _get_interface () const
 	{
-		return InterfaceDef_ptr::nil ();	// TODO: Implement
+		return InterfaceDef::_nil ();	// TODO: Implement
 	}
 
 	Boolean _is_a (const Char* type_id) const

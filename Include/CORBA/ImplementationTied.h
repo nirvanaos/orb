@@ -130,7 +130,7 @@ public:
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return nullptr;
+		return 0;
 	}
 
 	template <class I>

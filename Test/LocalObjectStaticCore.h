@@ -16,12 +16,12 @@ public:
 
 	static ImplementationDef_ptr _get_implementation ()
 	{
-		return ImplementationDef_ptr::nil ();
+		return ImplementationDef::_nil ();
 	}
 
 	static InterfaceDef_ptr _get_interface ()
 	{
-		return InterfaceDef_ptr::nil ();
+		return InterfaceDef::_nil ();
 	}
 
 	static Boolean _is_a (const Char* type_id)

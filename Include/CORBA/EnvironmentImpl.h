@@ -13,7 +13,7 @@ class EnvironmentBase :
 {
 public:
 	void exception_set (Long code, const char* rep_id, const void* param,
-		const ExceptionEntry* user_exceptions = nullptr);
+		const ExceptionEntry* user_exceptions = 0);
 
 	const Char* exception_id () const;
 
@@ -76,7 +76,7 @@ private:
 		void reset ()
 		{
 			is_small = 0;
-			ptr = nullptr;
+			ptr = 0;
 		}
 	} data_;
 };

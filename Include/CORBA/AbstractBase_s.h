@@ -18,7 +18,7 @@ public:
 protected:
 	static Interface* __query_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
 	{
-		Interface* ret = nullptr;
+		Interface* ret = 0;
 		try {
 			ret = S::_implementation (base)._query_interface (id);
 		} catch (const Exception& e) {

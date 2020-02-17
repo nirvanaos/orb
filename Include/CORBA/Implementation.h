@@ -332,7 +332,7 @@ protected:
 	}
 public:
 	Servant_var ()
-		: _ptr (nullptr)
+		: _ptr (0)
 	{}
 
 	Servant_var (Servant* p)

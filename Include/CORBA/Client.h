@@ -36,14 +36,15 @@ class ClientInterfacePrimary :
 public:
 	typedef I_ptr <I> _ptr_type;
 
-	static I_ptr <I> _duplicate (I_ptr <I> obj)
+	// TODO: Change return type to I_var?
+	static NIRVANA_NODISCARD I_ptr <I> _duplicate (const I_ptr <I>& obj)
 	{
-		return static_cast <I*> (duplicate_interface (obj));
+		return static_cast <I*> (interface_duplicate (obj));
 	}
 
 	static I_ptr <I> _nil ()
 	{
-		return I_ptr <I>::nil ();
+		return I_ptr <I> ((I*)0);
 	}
 
 	static I_ptr <I> _check (Interface* bridge)

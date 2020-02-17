@@ -66,7 +66,7 @@ public:
 protected:
 	static Interface* _get_proxy ()
 	{
-		Interface* proxy = AbstractBase_ptr (servant_base ())->_query_interface (nullptr);
+		Interface* proxy = AbstractBase_ptr (servant_base ())->_query_interface (0);
 		if (!proxy)
 			::Nirvana::throw_MARSHAL ();
 		return proxy;
@@ -130,7 +130,7 @@ public:
 
 	static Interface* _get_proxy ()
 	{
-		Interface* proxy = AbstractBase_ptr (object ())->_query_interface (nullptr);
+		Interface* proxy = AbstractBase_ptr (object ())->_query_interface (0);
 		if (!proxy)
 			::Nirvana::throw_MARSHAL ();
 		return proxy;
@@ -169,7 +169,7 @@ class ImplementationStatic :
 public:
 	Interface_ptr _query_interface (const Char* id)
 	{
-		return FindInterface <Primary, Bases...>::find (*(S*)nullptr, id);
+		return FindInterface <Primary, Bases...>::find (*(S*)0, id);
 	}
 
 	static I_ptr <Primary> _this ()

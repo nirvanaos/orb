@@ -4,12 +4,7 @@
 #include "Interface.h"
 
 namespace CORBA {
-
-class Environment;
-
 namespace Nirvana {
-
-typedef Interface EnvironmentBridge;
 
 /// The ABI for a particular interface I.
 /// A "bridge" between the client and servant sides.
@@ -52,11 +47,6 @@ operator const MyBridge::Wide < type>::Func () const { return name; }
 #define BRIDGE_BEGIN(I) template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EPV interface; struct {
 #define BRIDGE_EPV } base; struct {
 #define BRIDGE_END() } epv;};
-
-template <>
-class Bridge <Interface> :
-	public Interface
-{};
 
 }
 }

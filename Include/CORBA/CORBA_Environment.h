@@ -27,17 +27,17 @@ public:
 	static Environment_ptr _duplicate (Environment_ptr obj)
 	{
 		return static_cast <Environment*> (
-			static_cast <Nirvana::Bridge <Environment>*> (duplicate_interface (obj)));
+			static_cast <Nirvana::Bridge <Environment>*> (interface_duplicate (obj)));
 	}
 
 	static Environment_ptr _nil ()
 	{
-		return Environment_ptr::nil ();
+		return Environment_ptr ((Environment*)0);
 	}
 
-	static Environment_ptr _check (Environment_ptr p)
+	static Environment_ptr _check (Interface* p)
 	{
-		return p;
+		::Nirvana::throw_INV_OBJREF ();
 	}
 
 	void clear ()

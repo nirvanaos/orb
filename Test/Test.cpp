@@ -8,6 +8,12 @@ using namespace std;
 
 namespace TestORB {
 
+/*
+void must_not_compile (const I3_var& var)
+{
+	I1_var i1 = var; // Implicit cast between var must cause a compilation error
+}
+*/
 int Instance::count_ = 0;
 Loader loader;
 

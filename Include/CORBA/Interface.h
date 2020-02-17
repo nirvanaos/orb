@@ -36,18 +36,17 @@ struct Interface
 	}
 
 	static NIRVANA_NODISCARD Interface* _check (Interface* obj, const Char* interface_id);
-	static NIRVANA_NODISCARD Interface* _check (Interface* obj)
-	{
-		return obj;
-	}
 
 	static Interface* _nil ()
 	{
-		return nullptr;
+		return 0;
 	}
 };
 
-NIRVANA_NODISCARD Interface* duplicate_interface (Interface* obj);
+NIRVANA_NODISCARD Interface* interface_duplicate (Interface* obj);
+void interface_release (Nirvana::Interface* itf) NIRVANA_NOEXCEPT;
+
+typedef Interface EnvironmentBridge;
 
 }
 
@@ -57,8 +56,7 @@ inline bool is_nil (Nirvana::Interface* itf)
 	return !itf;
 }
 
-/// CORBA::release()
-void release (Nirvana::Interface* itf);
+class Environment;
 
 }
 
