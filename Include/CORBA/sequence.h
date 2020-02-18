@@ -24,7 +24,7 @@ struct Type <Sequence <T> > :
 		if (p)
 			CORBA::Nirvana::_check_pointer (p);
 		size_t cnt = v.size ();
-		if (cnt > 0 && (cnt > v.capacity () || !Sequence <T>::heap ()->is_readable (p, cnt * sizeof (T))))
+		if (cnt > 0 && (cnt > v.capacity () || !Sequence <T>::memory ()->is_readable (p, cnt * sizeof (T))))
 			::Nirvana::throw_BAD_PARAM ();
 
 		if (Type <T>::has_check)

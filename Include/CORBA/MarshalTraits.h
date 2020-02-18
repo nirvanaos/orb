@@ -132,7 +132,7 @@ struct MarshalTraits <std::vector <T, std::allocator <T> > >
 			if (val.data_.allocated)
 				g_local_marshal->adopt_memory (val.data_.ptr, val.data_.allocated);
 			else
-				val.data_.ptr = (T*)val.heap ()->copy (nullptr, val.data_.ptr, val.data_.allocated, 0);
+				val.data_.ptr = (T*)val.memory ()->copy (nullptr, val.data_.ptr, val.data_.allocated, 0);
 			if (MarshalTraits <T>::has_unmarshal_inout_) {
 				T* p = val.data (), * end = p + val.size ();
 				try {

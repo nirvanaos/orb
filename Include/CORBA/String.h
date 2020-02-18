@@ -77,7 +77,7 @@ void Type <StringT <C> >::check (const StringType& s)
 		p = s.large_pointer ();
 		cc = s.large_size ();
 		CORBA::Nirvana::_check_pointer (p);
-		if (cc > s.large_capacity () || !StringType::heap ()->is_readable (p, (cc + 1) * sizeof (C)))
+		if (cc > s.large_capacity () || !StringType::memory ()->is_readable (p, (cc + 1) * sizeof (C)))
 			::Nirvana::throw_BAD_PARAM ();
 	} else {
 		p = s.small_pointer ();
@@ -209,7 +209,7 @@ void String_var <C>::adopt (C* s)
 		size_t cc = std::char_traits <C>::length (s);
 		this->large_pointer (s);
 		this->large_size (cc);
-		size_t au = ::Nirvana::StdString::heap ()->query (s, ::Nirvana::MemQuery::ALLOCATION_UNIT);
+		size_t au = ::Nirvana::StdString::memory ()->query (s, ::Nirvana::MemQuery::ALLOCATION_UNIT);
 		this->large_allocated (::Nirvana::round_up ((cc + 1) * sizeof (C), au));
 	} else
 		this->reset ();
