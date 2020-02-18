@@ -50,8 +50,15 @@ public:
 		return p_;
 	}
 
-	operator bool () const
+	operator bool () const NIRVANA_NOEXCEPT
 	{
+		assert (UNINITIALIZED_PTR != (uintptr_t)p_);
+		return p_ != 0;
+	}
+
+	operator bool () NIRVANA_NOEXCEPT
+	{
+		assert (UNINITIALIZED_PTR != (uintptr_t)p_);
 		return p_ != 0;
 	}
 

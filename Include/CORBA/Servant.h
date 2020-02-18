@@ -5,6 +5,5 @@
 
 #include "PortableServer.h"
 #include "ImplementationStatic.h"
-#include "Servant_var.h"
 
 #endif

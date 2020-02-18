@@ -12,7 +12,7 @@ template <class I>
 class I_in
 {
 public:
-	I_in (I_ptr <I> ptr) :
+	I_in (const I_ptr <I>& ptr) :
 		p_ (ptr.p_)
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)p_);
@@ -72,7 +72,7 @@ I_inout <I>::~I_inout () noexcept (false)
 		I::_check (ref_);
 	} catch (...) {
 		interface_release (ref_);
-		ref_ = nullptr;
+		ref_ = 0;
 		if (!ex)
 			throw;
 	}
@@ -119,14 +119,14 @@ public:
 	I_out (I_ptr <I>& p) :
 		I_inout <I> (p)
 	{
-		I_inout <I>::ref_ = 0;
+		this->ref_ = 0;
 	}
 
 	I_out (I_var <I>& var) :
 		I_inout <I> (var)
 	{
-		interface_release (I_inout <I>::ref_);
-		I_inout <I>::ref_ = 0;
+		interface_release (this->ref_);
+		this->ref_ = 0;
 	}
 };
 
@@ -138,14 +138,14 @@ public:
 	I_out (I_ptr <Interface>& p) :
 		I_inout <Interface> (p)
 	{
-		I_inout <Interface>::ref_ = 0;
+		this->ref_ = 0;
 	}
 
 	I_out (I_var <Interface>& var) :
 		I_inout <Interface> (var)
 	{
-		interface_release (I_inout <Interface>::ref_);
-		I_inout <Interface>::ref_ = 0;
+		interface_release (this->ref_);
+		this->ref_ = 0;
 	}
 };
 
@@ -160,22 +160,38 @@ template <class I>
 class I_ret
 {
 public:
-	I_ret (Interface* p) :
-		val_ (I::_check (p))
-	{}
+	I_ret (Interface* p)
+	{
+		try {
+			ptr_ = I::_check (p);
+		} catch (...) {
+			ptr_ = I::_nil ();
+			interface_release (p);
+			throw;
+		}
+	}
+
+	~I_ret ()
+	{
+		interface_release (ptr_);
+	}
 
 	operator I_ptr <I> ()
 	{
-		return val_._retn ();
+		I_ptr <I> ret = ptr_;
+		ptr_ = I::_nil ();
+		return ret;
 	}
 
 	operator I_var <I> ()
 	{
-		return val_._retn ();
+		I_var <I> ret = ptr_;
+		ptr_ = I::_nil ();
+		return ret;
 	}
 
 private:
-	I_var <I> val_;
+	I_ptr <I> ptr_;
 };
 
 //! I_ret helper class for interface

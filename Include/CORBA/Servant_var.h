@@ -97,7 +97,8 @@ private:
 	{
 		Servant* tmp = p_;
 		p_ = p;
-		tmp->_remove_ref ();
+		if (tmp)
+			tmp->_remove_ref ();
 	}
 
 	friend class Servant_out <Servant>;
@@ -159,11 +160,12 @@ private:
 	{
 		Servant* tmp = ref_;
 		ref_ = p;
-		tmp->_remove_ref ();
+		if (tmp)
+			tmp->_remove_ref ();
 	}
 
 private:
-	Servant* ref_;
+	Servant*& ref_;
 };
 
 template <class Servant> inline

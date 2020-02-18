@@ -62,6 +62,11 @@ public:
 		return p_ != 0;
 	}
 
+	operator bool ()
+	{
+		return p_ != 0;
+	}
+
 	T* _retn ()
 	{
 		T* p = p_;

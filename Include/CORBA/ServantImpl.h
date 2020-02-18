@@ -36,7 +36,7 @@ public:
 	{
 		try {
 			if (!RepositoryId::compatible (Bridge <Base>::interface_id_, id))
-				::Nirvana::throw_MARSHAL ();
+				::Nirvana::throw_INV_OBJREF ();
 			return &static_cast <Bridge <Base>&> (S::_implementation (derived));
 		} catch (const Exception& e) {
 			set_exception (env, e);
