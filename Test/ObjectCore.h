@@ -46,7 +46,7 @@ public:
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return nullptr;
+		return 0;
 	}
 
 	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)

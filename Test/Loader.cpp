@@ -30,7 +30,7 @@ bool Loader::is_section (const COFF::section* s, const char* name)
 
 Loader::Loader ()
 {
-	void* image_base = GetModuleHandleW (nullptr);
+	void* image_base = GetModuleHandleW (0);
 	const COFF::DOSHeader* dos_header = (const COFF::DOSHeader*)image_base;
 	if (dos_header->Magic != 'ZM')
 		throw INITIALIZE ();
@@ -47,7 +47,7 @@ Loader::~Loader ()
 
 void Loader::bind (const void* image_base, const COFF::header* hdr)
 {
-	const COFF::section* metadata = nullptr;
+	const COFF::section* metadata = 0;
 
 	const COFF::section* s = (const COFF::section*)((const uint8_t*)(hdr + 1) + hdr->SizeOfOptionalHeader);
 	for (uint32_t cnt = hdr->NumberOfSections; cnt; --cnt, ++s) {
@@ -80,7 +80,7 @@ void Loader::bind_olf (const void* data, size_t size)
 
 			case OLF_EXPORT_INTERFACE: {
 				const ExportInterface* ps = reinterpret_cast <const ExportInterface*> (p);
-				exported_interfaces_.emplace (ps->name, static_cast <Interface*> (interface_duplicate (ps->itf)));
+				exported_interfaces_.emplace (ps->name, interface_duplicate (ps->itf));
 				p += sizeof (ExportInterface) / sizeof (*p);
 				break;
 			}
@@ -88,9 +88,9 @@ void Loader::bind_olf (const void* data, size_t size)
 			case OLF_EXPORT_OBJECT: {
 				ExportObject* ps = reinterpret_cast <ExportObject*> (p);
 				PortableServer::ServantBase_var core_obj = ObjectFactoryCore::create_servant (TypeI <PortableServer::ServantBase>::in (ps->implementation), DynamicServant::_nil ());
-				ps->core_object = core_obj;
-				Object_var proxy = Object::_duplicate (static_cast <Object*> (AbstractBase_ptr (core_obj)->_query_interface (Object::interface_id_)));
-				core_objects_.emplace_back (Interface_ptr (core_obj._retn ()));
+				ps->core_object = PortableServer::Servant(core_obj);
+				Object_var proxy = AbstractBase_ptr (core_obj)->_to_object ();
+				core_objects_.push_back (Interface_ptr (core_obj._retn ()));
 				exported_interfaces_.emplace (ps->name, Interface_var (proxy._retn ()));
 				p += sizeof (ExportObject) / sizeof (*p);
 				break;
@@ -99,8 +99,8 @@ void Loader::bind_olf (const void* data, size_t size)
 			case OLF_EXPORT_LOCAL: {
 				ExportLocal* ps = reinterpret_cast <ExportLocal*> (p);
 				LocalObject_var core_obj = ObjectFactoryCore::create_local_object (TypeI <AbstractBase>::in (ps->implementation), DynamicServant::_nil ());
-				ps->core_object = core_obj;
-				LocalObject_var proxy = LocalObject::_duplicate (static_cast <LocalObject*> (AbstractBase_ptr (Object_ptr (core_obj))->_query_interface (LocalObject::interface_id_)));
+				ps->core_object = LocalObject_ptr (core_obj);
+				Object_var proxy = AbstractBase_ptr (Object_ptr (core_obj))->_to_object ();
 				core_objects_.push_back (Interface_var (core_obj._retn ()));
 				exported_interfaces_.emplace (ps->name, Interface_var (proxy._retn ()));
 				p += sizeof (ExportLocal) / sizeof (*p);

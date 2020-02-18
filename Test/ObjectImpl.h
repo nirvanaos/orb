@@ -26,7 +26,7 @@ public:
 
 	Interface_ptr primary_interface () const
 	{
-		return Interface::_check (servant_->_query_interface (nullptr));
+		return servant_->_query_interface (0);
 	}
 
 	const Char* primary_interface_id () const
@@ -40,7 +40,7 @@ public:
 
 	static Interface* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
-		return nullptr; // We dont implement it
+		return 0; // We dont implement it
 	}
 
 	InterfaceDef_ptr _get_interface () const
@@ -64,7 +64,7 @@ public:
 
 	Boolean _is_equivalent (Object_ptr other)
 	{
-		return _query_interface (nullptr) == AbstractBase_ptr (other)->_query_interface (nullptr);
+		return _query_interface (0) == AbstractBase_ptr (other)->_query_interface (0);
 	}
 
 	ULong _hash (ULong maximum) const

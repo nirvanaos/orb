@@ -87,6 +87,18 @@ class EnvironmentImpl :
 	public Skeleton <S, ::CORBA::Environment>,
 	public ServantTraits <S>
 {
+public:
+	template <class I>
+	static Interface* __duplicate (Interface* itf, EnvironmentBridge* env)
+	{
+		set_NO_IMPLEMENT (env);
+		return 0;
+	}
+
+	template <class I>
+	static void __release (Interface* itf)
+	{}
+
 protected:
 	EnvironmentImpl () :
 		EnvironmentBase (Skeleton <S, ::CORBA::Environment>::epv_)

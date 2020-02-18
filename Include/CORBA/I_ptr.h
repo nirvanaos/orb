@@ -15,8 +15,6 @@ template <class I> class I_inout;
 const uintptr_t UNINITIALIZED_PTR = 1;
 #endif
 
-template <class I> class I_var_base;
-
 template <class I>
 class I_ptr_base
 {
@@ -44,7 +42,13 @@ public:
 		return *this;
 	}
 
-	I_ptr_base& operator = (const I_var <I>& var) NIRVANA_NOEXCEPT;
+	I* operator -> () const
+	{
+		assert (UNINITIALIZED_PTR != (uintptr_t)p_);
+		if (!p_)
+			::Nirvana::throw_INV_OBJREF ();
+		return p_;
+	}
 
 	operator bool () const
 	{
@@ -55,7 +59,6 @@ protected:
 	void move_from (I_var <I>& var) NIRVANA_NOEXCEPT;
 
 protected:
-	friend class I_var_base <I>;
 	friend class I_var <I>;
 	friend class I_in <I>;
 	friend class I_inout <I>;
@@ -92,7 +95,7 @@ public:
 		if (src.p_)
 			*this = static_cast <I_ptr> (*src.p_);
 		else
-			I_ptr_base <I>::p_ = 0;
+			this->p_ = 0;
 	}
 
 	template <class I1>
@@ -109,16 +112,10 @@ public:
 	///    Object_ptr obj = func ();
 	I_ptr (I_var <I>&& var) NIRVANA_NOEXCEPT
 	{
-		I_ptr_base <I>::move_from (var);
+		this->move_from (var);
 	}
 
 	I_ptr& operator = (const I_ptr <I>& src) NIRVANA_NOEXCEPT
-	{
-		I_ptr_base <I>::operator = (src);
-		return *this;
-	}
-
-	I_ptr& operator = (const I_var <I>& src) NIRVANA_NOEXCEPT
 	{
 		I_ptr_base <I>::operator = (src);
 		return *this;
@@ -128,16 +125,8 @@ public:
 	/// it to the ABI return type `Interface*`
 	operator Bridge <I>* () const NIRVANA_NOEXCEPT
 	{
-		assert (UNINITIALIZED_PTR != (uintptr_t)I_ptr_base <I>::p_);
-		return static_cast <Bridge <I>*> (I_ptr_base <I>::p_);
-	}
-
-	I* operator -> () const
-	{
-		assert (UNINITIALIZED_PTR != (uintptr_t)I_ptr_base <I>::p_);
-		if (!I_ptr_base <I>::p_)
-			::Nirvana::throw_INV_OBJREF ();
-		return I_ptr_base <I>::p_;
+		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
+		return static_cast <Bridge <I>*> (this->p_);
 	}
 
 private:
@@ -168,7 +157,7 @@ public:
 	///    Object_ptr obj = func ();
 	I_ptr (I_var <Interface>&& var) NIRVANA_NOEXCEPT
 	{
-		I_ptr_base <Interface>::move_from (var);
+		this->move_from (var);
 	}
 
 	I_ptr& operator = (const I_ptr <Interface>& src) NIRVANA_NOEXCEPT
@@ -177,16 +166,10 @@ public:
 		return *this;
 	}
 
-	I_ptr& operator = (const I_var <Interface>& src) NIRVANA_NOEXCEPT
-	{
-		I_ptr_base <Interface>::operator = (src);
-		return *this;
-	}
-
 	operator Interface* () const NIRVANA_NOEXCEPT
 	{
-		assert (UNINITIALIZED_PTR != (uintptr_t)I_ptr_base <Interface>::p_);
-		return I_ptr_base <Interface>::p_;
+		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
+		return this->p_;
 	}
 };
 

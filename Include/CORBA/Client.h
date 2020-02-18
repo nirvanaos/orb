@@ -4,9 +4,9 @@
 #ifndef NIRVANA_ORB_CLIENT_H_
 #define NIRVANA_ORB_CLIENT_H_
 
-#include "I_ptr.h"
 #include "Environment.h"
 #include "RepositoryId.h"
+#include "TypeInterface.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -35,6 +35,9 @@ class ClientInterfacePrimary :
 {
 public:
 	typedef I_ptr <I> _ptr_type;
+	typedef I_var <I> _var_type;
+	typedef I_out <I> _out_type;
+	typedef I_inout <I> _inout_type;
 
 	// TODO: Change return type to I_var?
 	static NIRVANA_NODISCARD I_ptr <I> _duplicate (const I_ptr <I>& obj)

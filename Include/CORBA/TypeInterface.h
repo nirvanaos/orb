@@ -32,7 +32,7 @@ private:
 };
 
 template <class I> inline
-I_in <I> I_var_base <I>::in () const
+I_in <I> I_var <I>::in () const
 {
 	return *this;
 }
@@ -43,7 +43,7 @@ class I_inout
 {
 public:
 	I_inout (I_var <I>& var) :
-		ref_ (var.p_)
+		ref_ (reinterpret_cast <Interface*&> (var.p_))
 	{}
 
 	~I_inout () noexcept (false);

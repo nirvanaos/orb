@@ -9,8 +9,7 @@ namespace Nirvana {
 
 template <class ... Exceptions>
 class EnvironmentEx :
-	public EnvironmentImpl <EnvironmentEx <Exceptions...> >,
-	public LifeCycleNoCopy <EnvironmentEx <Exceptions...> >
+	public EnvironmentImpl <EnvironmentEx <Exceptions...> >
 {
 public:
 	EnvironmentEx () {}

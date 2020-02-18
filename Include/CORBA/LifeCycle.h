@@ -82,7 +82,7 @@ public:
 	static Interface* __duplicate (Interface* itf, EnvironmentBridge* env)
 	{
 		set_NO_IMPLEMENT (env);
-		return nullptr;
+		return 0;
 	}
 
 	template <class I>

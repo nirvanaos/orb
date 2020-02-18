@@ -7,8 +7,7 @@ namespace CORBA {
 namespace Nirvana {
 
 class Environment :
-	public EnvironmentImpl <Environment>,
-	public LifeCycleNoCopy <Environment>
+	public EnvironmentImpl <Environment>
 {
 public:
 	Environment () {}

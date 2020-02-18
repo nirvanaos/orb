@@ -40,7 +40,7 @@ public:
 
 	static Boolean _is_equivalent (Object_ptr other)
 	{
-		return static_cast <AbstractBase*> (InterfaceStatic <S, AbstractBase>::_bridge ())->_query_interface (nullptr) == AbstractBase_ptr (other)->_query_interface (nullptr);
+		return static_cast <AbstractBase*> (InterfaceStatic <S, AbstractBase>::_bridge ())->_query_interface (0) == AbstractBase_ptr (other)->_query_interface (0);
 	}
 
 	static ULong _hash (ULong maximum)
