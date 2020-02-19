@@ -2,6 +2,7 @@
 #define NIRVANA_ORB_PROXYFACTORY_S_H_
 
 #include "ProxyFactory.h"
+#include "ImplementationPseudo.h"
 
 // ProxyFactory skeleton
 
@@ -27,10 +28,10 @@ protected:
 		return nullptr;
 	}
 
-	static Interface* _create_server_proxy (Bridge <ProxyFactory>* obj, Interface* servant, EnvironmentBridge* env)
+	static Interface* _create_servant_proxy (Bridge <ProxyFactory>* obj, Interface* servant, Interface** deleter, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_server_proxy (servant);
+			return S::_implementation (obj).create_servant_proxy (servant, TypeI <DynamicServant>::out (deleter));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -61,7 +62,7 @@ const Bridge <ProxyFactory>::EPV Skeleton <S, ProxyFactory>::epv_ = {
 	},
 	{ // epv
 		S::_interfaces,
-		S::_create_server_proxy,
+		S::_create_servant_proxy,
 		S::_create_client_proxy
 	}
 };
