@@ -33,9 +33,10 @@ template <class T> struct Type;
 ///       // Client type cast to corresponding ABI type by operator &
 ///
 ///       // Servant-side methods
-///       static <type> in (ABI_in p);
-///       static <type> out (ABI_out p);
-///       static <type> inout (ABI_inout p);
+///       static <Servant in type> in (ABI_in p);
+///       static <Servant out type> out (ABI_out p);
+///       static <Servant inout type> inout (ABI_inout p);
+///       // Servant types may be differ from client types.
 ///     };
 
 // Helper functions.
