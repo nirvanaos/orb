@@ -87,27 +87,12 @@ public:
 		return BaseImpl::_implementation (itf);
 	}
 
-	static ServantTied <T, I>& _implementation (Bridge <ReferenceCounter>* itf)
-	{
-		return BaseImpl::_implementation (itf);
-	}
-
-	static ServantTied <T, I>& _implementation (Bridge <DynamicServant>* itf)
-	{
-		return BaseImpl::_implementation (itf);
-	}
-
-	static ServantTied <T, I>& _implementation (Bridge <PortableServer::ServantBase>* itf)
+	static ServantTied <T, I>& _implementation (Bridge <ServantBase>* itf)
 	{
 		return BaseImpl::_implementation (itf);
 	}
 
 	static ServantTied <T, I>& _implementation (Bridge <Object>* itf)
-	{
-		return BaseImpl::_implementation (itf);
-	}
-
-	static ServantTied <T, I>& _implementation (Bridge <LocalObject>* itf)
 	{
 		return BaseImpl::_implementation (itf);
 	}

@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_OBJECTFACTORY_S_H_
 
 #include "ObjectFactory.h"
-#include "Servant.h"
+#include "ImplementationPseudo.h"
 
 // ObjectFactory skeleton
 
@@ -16,10 +16,10 @@ public:
 	static const typename Bridge <ObjectFactory>::EPV epv_;
 
 protected:
-	static Interface* _create_servant (Bridge <ObjectFactory>* obj, Interface* servant, Interface* dynamic, EnvironmentBridge* env)
+	static Interface* _create_servant (Bridge <ObjectFactory>* obj, Interface* servant, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_servant (TypeI <PortableServer::ServantBase>::in (servant), TypeI <DynamicServant>::in (dynamic));
+			return S::_implementation (obj).create_servant (TypeI <ServantBase>::in (servant));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -28,10 +28,10 @@ protected:
 		return 0;
 	}
 
-	static Interface* _create_local_object (Bridge <ObjectFactory>* obj, Interface* base, Interface* dynamic, EnvironmentBridge* env)
+	static Interface* _create_local_object (Bridge <ObjectFactory>* obj, Interface* base, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_local_object (TypeI <AbstractBase>::in (base), TypeI <DynamicServant>::in (dynamic));
+			return S::_implementation (obj).create_local_object (TypeI <AbstractBase>::in (base));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {

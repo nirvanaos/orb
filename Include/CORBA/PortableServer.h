@@ -3,6 +3,5 @@
 
 #include "ImplementationTied.h"
 #include "ImplementationPOA.h"
-#include "Servant_var.h"
 
 #endif

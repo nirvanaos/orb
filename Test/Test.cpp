@@ -14,6 +14,30 @@ void must_not_compile (const I3_var& var)
 	I1_var i1 = var; // Implicit cast between var must cause a compilation error
 }
 */
+
+void must_compile ()
+{
+#ifndef TEST_LOCAL_OBJECT
+	{
+		CORBA::Nirvana::ServantBase_ptr servant = new DynamicI1 (1);
+		CORBA::release (servant);
+	}
+#ifndef TEST_NO_POA
+	{
+		PortableServer::Servant servant = new PortableI1 (1);
+		CORBA::release (servant);
+	}
+#endif
+#else
+#ifndef TEST_NO_POA
+	{
+		CORBA::LocalObject servant = new PortableI1 (1);
+		CORBA::release (servant);
+	}
+#endif
+#endif
+}
+
 int Instance::count_ = 0;
 Loader loader;
 

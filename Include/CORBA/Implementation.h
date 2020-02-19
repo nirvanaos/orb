@@ -9,79 +9,17 @@
 #include "POA.h"
 #include "AbstractBase_s.h"
 #include "ServantBase_s.h"
-#include "DynamicServant_s.h"
-#include "ReferenceCounter_s.h"
 #include "Object_s.h"
-#include "LocalObject_s.h"
 #include "FindInterface.h"
+#include "DynamicImpl.h"
 #include <type_traits>
 
 namespace CORBA {
 namespace Nirvana {
 
-class ReferenceCounterLink
-{
-public:
-	void _add_ref ()
-	{
-		reference_counter_->_add_ref ();
-	}
-
-	void _remove_ref ()
-	{
-		reference_counter_->_remove_ref ();
-	}
-
-	ULong _refcount_value ()
-	{
-		return reference_counter_->_refcount_value ();
-	}
-
-protected:
-	ReferenceCounterLink () :
-		reference_counter_ (ReferenceCounter::_nil ())
-	{}
-
-	ReferenceCounterLink (Bridge <DynamicServant>* dynamic);
-
-	ReferenceCounterLink (ReferenceCounter_ptr rc) :
-		reference_counter_ (rc)
-	{}
-
-	ReferenceCounterLink (const ReferenceCounterLink&) = delete;
-	ReferenceCounterLink& operator = (const ReferenceCounterLink&)
-	{
-		return *this; // Do nothing
-	}
-
-	~ReferenceCounterLink ();
-
-protected:
-	ReferenceCounter_ptr reference_counter_;
-};
-
-template <class S>
-class DynamicServantImpl :
-	public LifeCycleRefCnt <S>,
-	public InterfaceImpl <S, ReferenceCounter>,
-	public InterfaceImpl <S, DynamicServant>
-{};
-
-//! Dynamic servant for pseudo interfaces
-template <class S>
-class LifeCycleRefCntPseudo :
-	public DynamicServantImpl <S>,
-	public ReferenceCounterLink
-{
-protected:
-	LifeCycleRefCntPseudo () :
-		ReferenceCounterLink (this)
-	{}
-};
-
 //! \brief Implements delegate to the core ServantBase implementation.
 class ServantBaseLink :
-	public Bridge <PortableServer::ServantBase>
+	public Bridge <ServantBase>
 {
 public:
 	operator Bridge <Object>& ()
@@ -118,16 +56,10 @@ public:
 	}
 
 protected:
-	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv) :
-		Bridge <PortableServer::ServantBase> (epv),
-		servant_base_ (PortableServer::ServantBase::_nil ())
+	ServantBaseLink (const Bridge <ServantBase>::EPV& epv) :
+		Bridge <ServantBase> (epv),
+		servant_base_ (ServantBase::_nil ())
 	{}
-
-	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv, Bridge <DynamicServant>* dynamic) :
-		Bridge <PortableServer::ServantBase> (epv)
-	{
-		_construct (dynamic);
-	}
 
 	ServantBaseLink (const ServantBaseLink&) = delete;
 	ServantBaseLink& operator = (const ServantBaseLink&)
@@ -135,34 +67,35 @@ protected:
 		return *this; // Do nothing
 	}
 
-	void _construct (Bridge <DynamicServant>* dynamic);
+	void _construct ();
 
 	Interface* _get_proxy ();
 
 private:
-	PortableServer::Servant servant ()
+	ServantBase_ptr servant ()
 	{
-		return PortableServer::Servant (&static_cast <PortableServer::ServantBase&> (static_cast <Bridge <PortableServer::ServantBase>&> (*this)));
+		return ServantBase_ptr (&static_cast <ServantBase&> (static_cast <Bridge <ServantBase>&> (*this)));
 	}
 
 protected:
-	PortableServer::Servant servant_base_;
+	ServantBase_ptr servant_base_;
 };
 
-//! Standard implementation of PortableServer::ServantBase.
+//! Standard implementation of ServantBase.
 //! \tparam S Servant class implementing operations.
 template <class S>
-class InterfaceImpl <S, PortableServer::ServantBase> :
-	public DynamicServantImpl <S>,
-	public Skeleton <S, PortableServer::ServantBase>,
+class InterfaceImpl <S, ServantBase> :
+	public Skeleton <S, ServantBase>,
 	public ServantBaseLink,
-	public ReferenceCounterLink
+	public LifeCycleRefCnt <S>,
+	public DynamicImpl <S>
 {
 protected:
 	InterfaceImpl () :
-		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_, this),
-		ReferenceCounterLink (ReferenceCounter_ptr (servant_base_))
-	{}
+		ServantBaseLink (Skeleton <S, ServantBase>::epv_)
+	{
+		_construct ();
+	}
 
 	InterfaceImpl (const InterfaceImpl&) :
 		InterfaceImpl ()
@@ -218,7 +151,7 @@ protected:
 		return *this; // Do nothing
 	}
 
-	ReferenceCounter_ptr _construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic);
+	void _construct (Bridge <AbstractBase>* base);
 
 	Interface* _get_proxy ();
 
@@ -226,57 +159,23 @@ private:
 	Object_ptr object_;
 };
 
+//! Standard implementation of local Object.
 //! \tparam S Servant class implementing operations.
 template <class S>
-class InterfaceImpl <S, LocalObject> :
-	public DynamicServantImpl <S>,
+class InterfaceImpl <S, Object> :
 	public InterfaceImplBase <S, Object>,
-	public InterfaceImplBase <S, LocalObject>,
 	public LocalObjectLink,
-	public ReferenceCounterLink
+	public LifeCycleRefCnt <S>,
+	public DynamicImpl <S>
 {
 protected:
-	InterfaceImpl () :
-		ReferenceCounterLink (_construct (&static_cast <S&> (*this), this))
-	{}
+	InterfaceImpl ()
+	{
+		_construct (&static_cast <S&> (*this));
+	}
 
 	InterfaceImpl (const InterfaceImpl&) :
 		InterfaceImpl ()
-	{}
-};
-
-//! \class ImplementationPseudo
-//!
-//! \brief An implementation of a pseudo interface.
-//!
-//! You also have to derive your servant from some life cycle implementation.
-//!
-//! \tparam S Servant class implementing operations.
-//! \tparam Primary Primary interface.
-//! \tparam Bases All base interfaces derived directly or indirectly.
-
-template <class S, class Primary, class ... Bases>
-class ImplementationPseudo :
-	public ServantTraits <S>,
-	public InterfaceImplBase <S, Bases> ...,
-	public InterfaceImplBase <S, Primary>
-{
-public:
-
-	//! \fn I_ptr <Primary> _get_ptr ()
-	//!
-	//! \brief Gets the pointer.
-	//!   Works like _this() method but doesn't increment the reference counter.
-	//!
-	//! \return The primary interface pointer.
-
-	I_ptr <Primary> _get_ptr ()
-	{
-		return I_ptr <Primary> (&static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this)));
-	}
-
-protected:
-	ImplementationPseudo ()
 	{}
 };
 
@@ -314,6 +213,9 @@ protected:
 	Implementation ()
 	{}
 };
+
+/// For LocalObject - based implementation, include CORBA::Object or CORBA::Nirvana::LocalObject in the list of base classes.
+typedef Object LocalObject;
 
 }
 }

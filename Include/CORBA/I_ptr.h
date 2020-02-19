@@ -7,6 +7,7 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <class I> class I_ptr;
 template <class I> class I_var;
 template <class I> class I_in;
 template <class I> class I_inout;
@@ -69,6 +70,7 @@ protected:
 	friend class I_var <I>;
 	friend class I_in <I>;
 	friend class I_inout <I>;
+	template <class I1> friend class I_ptr;
 
 	I* p_;
 };
@@ -77,13 +79,14 @@ protected:
 template <class I>
 class I_ptr : public I_ptr_base <I>
 {
+	/*
 	/// Obtaining I_ptr directly from a servant pointer is prohibited
 	I_ptr (Bridge <I>* p)
 #ifdef NIRVANA_C11
 		= delete
 #endif
 		;
-
+*/
 public:
 	I_ptr () NIRVANA_NOEXCEPT
 	{}
@@ -135,9 +138,6 @@ public:
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
 		return static_cast <Bridge <I>*> (this->p_);
 	}
-
-private:
-	template <class I1> friend class I_ptr;
 };
 
 template <>
@@ -160,8 +160,8 @@ public:
 	{}
 
 	/// Move constructor in case returned I_var assigned to I_ptr:
-	///    Object_var func ();
-	///    Object_ptr obj = func ();
+	///    Interface_var func ();
+	///    Interface_ptr obj = func ();
 	I_ptr (I_var <Interface>&& var) NIRVANA_NOEXCEPT
 	{
 		this->move_from (var);

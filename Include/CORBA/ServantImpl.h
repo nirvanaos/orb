@@ -59,6 +59,10 @@ protected:
 	InterfaceImplBase () :
 		Bridge <I> (Skeleton <S, I>::epv_)
 	{}
+
+	InterfaceImplBase (const InterfaceImplBase&) :
+		InterfaceImplBase ()
+	{}
 };
 
 template <class S, class I>

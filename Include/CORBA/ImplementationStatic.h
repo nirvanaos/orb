@@ -11,29 +11,11 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <class S>
-class InterfaceStatic <S, ReferenceCounter> :
-	public InterfaceStaticBase <S, ReferenceCounter>
-{
-public:
-	static void __add_ref (Bridge <ReferenceCounter>* obj, EnvironmentBridge* env)
-	{}
-
-	static void __remove_ref (Bridge <ReferenceCounter>* obj, EnvironmentBridge* env)
-	{}
-
-	static ULong __refcount_value (Bridge <ReferenceCounter>* obj, EnvironmentBridge* env)
-	{
-		return 1;
-	}
-};
-
-//! Static implementation of PortableServer::ServantBase.
+//! Static implementation of ServantBase.
 //! \tparam S Servant class.
 template <class S>
-class InterfaceStatic <S, PortableServer::ServantBase> :
-	public InterfaceStaticBase <S, PortableServer::ServantBase>,
-	public InterfaceStatic <S, ReferenceCounter>
+class InterfaceStatic <S, ServantBase> :
+	public InterfaceStaticBase <S, ServantBase>
 {
 public:
 	operator Bridge <Object>& () const
@@ -73,26 +55,24 @@ protected:
 	}
 
 private:
-	static PortableServer::Servant servant_base ()
+	static ServantBase_ptr servant_base ()
 	{
-		return static_cast <PortableServer::ServantBase*> (export_struct_.core_object);
+		return static_cast <ServantBase*> (export_struct_.core_object);
 	}
 
 	static __declspec (allocate(OLF_BIND)) const ::Nirvana::ExportObject export_struct_;
 };
 
 template <class S> __declspec (allocate(OLF_BIND))
-const ::Nirvana::ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_ { ::Nirvana::OLF_EXPORT_OBJECT, S::constant_name
-, STATIC_BRIDGE (S, PortableServer::ServantBase) };
+const ::Nirvana::ExportObject InterfaceStatic <S, ServantBase>::export_struct_ { ::Nirvana::OLF_EXPORT_OBJECT, S::constant_name
+, STATIC_BRIDGE (S, ServantBase) };
 
 //! Static implementation of LocalObject
 //! \tparam S Servant class.
 //! \tparam Primary Primary interface.
 template <class S>
-class InterfaceStatic <S, LocalObject> :
-	public InterfaceStaticBase <S, LocalObject>,
-	public InterfaceStatic <S, Object>,
-	public InterfaceStatic <S, ReferenceCounter>
+class InterfaceStatic <S, Object> :
+	public InterfaceStaticBase <S, Object>
 {
 public:
 	// Object operations
@@ -139,14 +119,14 @@ public:
 private:
 	static Object_ptr object ()
 	{
-		return LocalObject_ptr (static_cast <LocalObject*> (export_struct_.core_object));
+		return Object_ptr (static_cast <Object*> (export_struct_.core_object));
 	}
 
 	static __declspec (allocate(OLF_BIND)) const ::Nirvana::ExportLocal export_struct_;
 };
 
 template <class S> __declspec (allocate(OLF_BIND))
-const ::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ ::Nirvana::OLF_EXPORT_LOCAL, S::constant_name
+const ::Nirvana::ExportLocal InterfaceStatic <S, Object>::export_struct_{ ::Nirvana::OLF_EXPORT_LOCAL, S::constant_name
 , STATIC_BRIDGE (S, AbstractBase) };
 
 //! \class ImplementationStatic
@@ -176,7 +156,7 @@ public:
 	{
 		return static_cast <Primary*> (
 			std::conditional <std::is_base_of <InterfaceStatic <S, LocalObject>, ImplementationStatic <S, Primary, Bases...> >::value,
-			InterfaceStatic <S, LocalObject>, InterfaceStatic <S, PortableServer::ServantBase>>::type::_get_proxy ());
+			InterfaceStatic <S, LocalObject>, InterfaceStatic <S, ServantBase>>::type::_get_proxy ());
 	}
 };
 

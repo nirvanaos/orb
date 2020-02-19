@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_CORBA_H_
 
 #include "ORB.h"
-#include "LocalObject.h"
+#include "Object.h"
 #include "TypeCode.h"
 #include "String.h"
 #include "sequence.h"

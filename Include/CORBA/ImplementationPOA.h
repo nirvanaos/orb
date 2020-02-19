@@ -5,7 +5,7 @@
 #define NIRVANA_ORB_IMPLEMENTATIONPOA_H_
 
 #include "Implementation.h"
-#include <string.h>
+#include "Servant_var.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -28,10 +28,6 @@ public:
 	{
 		return __implementation <I, I> (bridge);
 	}
-
-	static ServantPOA <AbstractBase>& _implementation (Bridge <ReferenceCounter>* bridge);
-	static ServantPOA <AbstractBase>& _implementation (Bridge <DynamicServant>* bridge);
-	static ServantPOA <LocalObject>& _implementation (Bridge <Object>* bridge);
 };
 
 //! POA implementation of AbstractBase
@@ -40,25 +36,23 @@ template <>
 class ServantPOA <AbstractBase> :
 	public ServantTraitsPOA,
 	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
-	public InterfaceImplBase <ServantPOA <AbstractBase>, ReferenceCounter>,
-	public InterfaceImplBase <ServantPOA <AbstractBase>, DynamicServant>,
 	public LifeCycleRefCnt <ServantPOA <AbstractBase> >,
-	public ReferenceCounterLink
+	public DynamicImpl <ServantPOA <AbstractBase> >
 {
 public:
 	virtual void _add_ref ()
 	{
-		ReferenceCounterLink::_add_ref ();
+		DynamicImpl <ServantPOA <AbstractBase> >::_add_ref ();
 	}
 
 	virtual void _remove_ref ()
 	{
-		ReferenceCounterLink::_remove_ref ();
+		DynamicImpl <ServantPOA <AbstractBase> >::_remove_ref ();
 	}
 
 	virtual ULong _refcount_value ()
 	{
-		return ReferenceCounterLink::_refcount_value ();
+		return DynamicImpl <ServantPOA <AbstractBase> >::_refcount_value ();
 	}
 
 	virtual Interface_ptr _query_interface (const Char* id) = 0;
@@ -71,11 +65,11 @@ protected:
 	{}
 };
 
-// POA implementation of PortableServer::ServantBase
+// POA implementation of ServantBase
 template <>
-class ServantPOA <PortableServer::ServantBase> :
+class ServantPOA <ServantBase> :
 	public virtual ServantPOA <AbstractBase>,
-	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>,
+	public Skeleton <ServantPOA <ServantBase>, ServantBase>,
 	public ServantBaseLink
 {
 public:
@@ -140,18 +134,16 @@ private:
 		if (!ServantBaseLink::servant_base_)
 			_construct ();
 	}
-
-	void _construct ();
 };
 
 template <>
-class ServantPOA <LocalObject> :
-	public virtual ServantPOA <PortableServer::ServantBase>,
-	public InterfaceImplBase <ServantPOA <LocalObject>, Object>,
-	public InterfaceImplBase <ServantPOA <LocalObject>, LocalObject>,
+class ServantPOA <Object> :
+	public virtual ServantPOA <AbstractBase>,
+	public InterfaceImplBase <ServantPOA <Object>, Object>,
 	public LocalObjectLink
 {
 public:
+	/*
 	// Static overrides to resolve the ambiguity.
 	static Interface* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env);
 	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env);
@@ -172,7 +164,7 @@ public:
 	{
 		return ServantPOA <AbstractBase>::_refcount_value ();
 	}
-
+	*/
 	// Object operations
 
 	virtual ImplementationDef_ptr _get_implementation ()
@@ -232,11 +224,6 @@ class ImplementationPOA :
 public:
 	virtual Interface_ptr _query_interface (const Char* id)
 	{
-#ifdef _DEBUG
-		Bridge <AbstractBase>* ab = this;
-		const Bridge <AbstractBase>::EPV& epv = ab->_epv ();
-		assert (!strcmp (epv.interface.interface_id, Bridge <AbstractBase>::interface_id_));
-#endif
 		return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
 	}
 
@@ -251,6 +238,19 @@ protected:
 };
 
 }
+
+typedef Nirvana::ServantPOA <Nirvana::LocalObject> LocalObject;
+typedef LocalObject* LocalObject_ptr;
+typedef PortableServer::Servant_var <LocalObject> LocalObject_var;
+
+}
+
+namespace PortableServer {
+
+typedef CORBA::Nirvana::ServantPOA <CORBA::Nirvana::ServantBase> ServantBase;
+typedef ServantBase* Servant;
+typedef Servant_var <ServantBase> ServantBase_var;
+
 }
 
 #endif

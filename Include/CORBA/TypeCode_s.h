@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_TYPECODE_S_H_
 
 #include "TypeCode_b.h"
-#include "ServantStatic.h"
+#include "ImplementationPseudo.h"
 #include "TypeInterface.h"
 
 namespace CORBA {

@@ -18,7 +18,7 @@ public:
 		return FindInterface <PortableServer::POA, Object>::find (*(POACore*)0, id);
 	}
 
-	const Char* activate_object (PortableServer::Servant servant)
+	const Char* activate_object (ServantBase_ptr servant)
 	{
 		Bridge <Object>* p = Object_ptr (servant);
 		ObjectCore* obj = static_cast <ObjectCore*> (p);

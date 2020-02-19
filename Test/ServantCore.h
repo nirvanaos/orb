@@ -9,18 +9,16 @@ namespace CORBA {
 namespace Nirvana {
 
 class ServantCore :
-	public ImplementationPseudo <ServantCore, PortableServer::ServantBase, ReferenceCounter>,
-	public LifeCycleNoCopy <ServantCore>,
-	public ReferenceCounterBase
+	public ImplementationPseudo <ServantCore, ServantBase>,
+	public LifeCycleNoCopy <ServantCore>
 {
 public:
-	I_ptr <PortableServer::ServantBase> _get_ptr ()
+	I_ptr <ServantBase> _get_ptr ()
 	{
-		return I_ptr <PortableServer::ServantBase> (&static_cast <PortableServer::ServantBase&> (static_cast <Bridge <PortableServer::ServantBase>&> (*this)));
+		return this;
 	}
 
-	ServantCore (PortableServer::Servant servant, DynamicServant_ptr dynamic) :
-		ReferenceCounterBase (dynamic),
+	ServantCore (ServantBase_ptr servant) :
 		object_ (servant)
 	{}
 

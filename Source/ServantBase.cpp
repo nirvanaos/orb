@@ -4,13 +4,8 @@
 namespace CORBA {
 namespace Nirvana {
 
-const Char Bridge < ::PortableServer::ServantBase>::interface_id_ [] = CORBA_REPOSITORY_ID (Object);
+const Char Bridge <ServantBase>::interface_id_ [] = CORBA_REPOSITORY_ID (Object);
+const Char ServantBase::check_interface_id_ [] = CORBA_NIRVANA_REPOSITORY_ID (ServantBase);
 
 }
-}
-
-namespace PortableServer {
-
-const ::CORBA::Char ServantBase::check_interface_id_ [] = PORTABLESERVER_REPOSITORY_ID (ServantBase);
-
 }

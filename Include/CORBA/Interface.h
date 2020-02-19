@@ -9,8 +9,11 @@ namespace Nirvana {
 
 /// Base for all interface ABIs.
 /// Provides life-cycle management and interface identification.
-struct Interface
+class Interface
 {
+	Interface (const Interface&) = delete;
+
+public:
 	/// Entry point vector
 	struct EPV
 	{
@@ -19,15 +22,13 @@ struct Interface
 		void (*release) (Interface*);
 	};
 
-	const EPV* const _epv_ref;
-
 	Interface (const EPV& epv) :
-		_epv_ref (&epv)
+		_epv_ref (epv)
 	{}
 
 	const EPV& _epv () const
 	{
-		return *_epv_ref;
+		return _epv_ref;
 	}
 
 	Interface& operator = (const Interface&)
@@ -41,6 +42,9 @@ struct Interface
 	{
 		return 0;
 	}
+
+private:
+	const EPV& _epv_ref;
 };
 
 NIRVANA_NODISCARD Interface* interface_duplicate (Interface* obj);
