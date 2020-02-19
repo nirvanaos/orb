@@ -10,5 +10,6 @@
 #include "tc_constants.h"
 #include "Any.h"
 #include "Type.h"
+#include "LocalObject.h"
 
 #endif

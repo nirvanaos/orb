@@ -1,6 +1,7 @@
 #include "I1.h"
 #include "I3.h"
 #include "Loader.h"
+#include <CORBA/PortableServer.h>
 #include <gtest/gtest.h>
 
 using namespace Test;
@@ -25,13 +26,13 @@ void must_compile ()
 #ifndef TEST_NO_POA
 	{
 		PortableServer::Servant servant = new PortableI1 (1);
-		CORBA::release (servant);
+		PortableServer::release (servant);
 	}
 #endif
 #else
 #ifndef TEST_NO_POA
 	{
-		CORBA::LocalObject servant = new PortableI1 (1);
+		CORBA::LocalObject_ptr servant = new PortableI1 (1);
 		CORBA::release (servant);
 	}
 #endif

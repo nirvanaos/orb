@@ -137,34 +137,12 @@ private:
 };
 
 template <>
-class ServantPOA <Object> :
+class ServantPOA <LocalObject> :
 	public virtual ServantPOA <AbstractBase>,
-	public InterfaceImplBase <ServantPOA <Object>, Object>,
+	public InterfaceImplBase <ServantPOA <LocalObject>, Object>,
 	public LocalObjectLink
 {
 public:
-	/*
-	// Static overrides to resolve the ambiguity.
-	static Interface* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env);
-	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env);
-	static Boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env);
-
-	// Delegate ReferenceCounter to AbstractBase
-	virtual void _add_ref ()
-	{
-		ServantPOA <AbstractBase>::_add_ref ();
-	}
-
-	virtual void _remove_ref ()
-	{
-		ServantPOA <AbstractBase>::_remove_ref ();
-	}
-
-	virtual ULong _refcount_value ()
-	{
-		return ServantPOA <AbstractBase>::_refcount_value ();
-	}
-	*/
 	// Object operations
 
 	virtual ImplementationDef_ptr _get_implementation ()
@@ -238,19 +216,6 @@ protected:
 };
 
 }
-
-typedef Nirvana::ServantPOA <Nirvana::LocalObject> LocalObject;
-typedef LocalObject* LocalObject_ptr;
-typedef PortableServer::Servant_var <LocalObject> LocalObject_var;
-
-}
-
-namespace PortableServer {
-
-typedef CORBA::Nirvana::ServantPOA <CORBA::Nirvana::ServantBase> ServantBase;
-typedef ServantBase* Servant;
-typedef Servant_var <ServantBase> ServantBase_var;
-
 }
 
 #endif

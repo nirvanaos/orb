@@ -27,9 +27,9 @@ void LocalObjectLink::_construct (Bridge <AbstractBase>* base)
 		AbstractBase_ptr (static_cast <AbstractBase*> (base)));
 }
 
-Interface* LocalObjectLink::_get_proxy ()
+Interface* LocalObjectLink::_get_proxy (const Char* id)
 {
-	Interface* proxy = AbstractBase_ptr (object_)->_query_interface (0);
+	Interface* proxy = AbstractBase_ptr (object_)->_query_interface (id);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
 	return interface_duplicate (proxy);

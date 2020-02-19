@@ -153,16 +153,19 @@ protected:
 
 	void _construct (Bridge <AbstractBase>* base);
 
-	Interface* _get_proxy ();
+	Interface* _get_proxy (const Char* id = 0);
 
 private:
 	Object_ptr object_;
 };
 
+/// For LocalObject - based implementation, include CORBA::Object or CORBA::Nirvana::LocalObject in the list of base classes.
+typedef Object LocalObject;
+
 //! Standard implementation of local Object.
 //! \tparam S Servant class implementing operations.
 template <class S>
-class InterfaceImpl <S, Object> :
+class InterfaceImpl <S, LocalObject> :
 	public InterfaceImplBase <S, Object>,
 	public LocalObjectLink,
 	public LifeCycleRefCnt <S>,
@@ -213,9 +216,6 @@ protected:
 	Implementation ()
 	{}
 };
-
-/// For LocalObject - based implementation, include CORBA::Object or CORBA::Nirvana::LocalObject in the list of base classes.
-typedef Object LocalObject;
 
 }
 }
