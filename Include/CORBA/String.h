@@ -53,7 +53,7 @@ struct Type <StringT <C> > :
 {
 	typedef StringT <C> StringType;
 
-	typedef StringBase <C> C_in;
+	typedef const StringBase <C>& C_in;
 
 	static void check (const StringType& s);
 
