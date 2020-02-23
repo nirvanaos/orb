@@ -113,7 +113,7 @@ public:
 
 	static void _construct (::Nirvana::Pointer p)
 	{
-		new (reinterpret_cast <Valtype*> (p)) Valtype ();
+		new (p) Valtype ();
 	}
 
 	static void _destruct (::Nirvana::Pointer p)

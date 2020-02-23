@@ -11,15 +11,17 @@ namespace Nirvana {
 template <class T>
 struct TypeVarLenBase : TypeFixLen <T>
 {
-	typedef typename TypeFixLen <T>::C_in C_in;
-	typedef typename TypeFixLen <T>::C_inout C_inout;
+	typedef TypeFixLen <T> Base;
+	typedef typename Base::C_in C_in;
+	typedef typename Base::C_inout C_inout;
+	typedef typename Base::ABI_ret ABI_ret;
 
 	/// C_out class clears output variable
-	class C_out : public TypeFixLen <T>::C_out
+	class C_out : public Base::C_out
 	{
 	public:
 		C_out (T& val) :
-			TypeFixLen <T>::C_out (val)
+			Base::C_out (val)
 		{
 			val = T ();	// Clear
 		}
@@ -28,17 +30,17 @@ struct TypeVarLenBase : TypeFixLen <T>
 	class C_ret
 	{
 	public:
-		C_ret (typename TypeFixLen <T>::ABI_ret&& val) :
-			val_ (val)
+		C_ret (ABI_ret&& val) :
+			val_ (reinterpret_cast <T&&> (val))
 		{}
 
-		operator T && ()
+		operator T ()
 		{
-			return reinterpret_cast <T&&> (val_);
+			return std::move (val_);
 		}
 
 	protected:
-		TypeFixLen <T>::ABI_ret val_;
+		T val_;
 	};
 
 	// Client I_var class for the C++ IDL mapping standard conformance
@@ -101,6 +103,13 @@ struct TypeVarLenBase : TypeFixLen <T>
 			return std::move (static_cast <T&> (*this));
 		}
 	};
+
+	static ABI_ret ret (T&& v)
+	{
+		ABI_ret abi;
+		new (&abi) T (std::move (v));
+		return abi;
+	}
 };
 
 template <class T, bool with_check> struct TypeVarLen;
@@ -113,17 +122,19 @@ struct TypeVarLen <T, false> : TypeVarLenBase <T>
 template <class T>
 struct TypeVarLen <T, true> : TypeVarLenBase <T>
 {
+	typedef TypeVarLenBase <T> Base;
+
 	static const bool has_check = true;
 
 	typedef ABI <T> ABI_type;
 
-	static void check_or_clear (ABI_type& v);
+	static void check_or_clear (T& v);
 
-	class C_inout : public TypeVarLenBase <T>::C_inout
+	class C_inout : public Base::C_inout
 	{
 	public:
 		C_inout (T& val) :
-			TypeVarLenBase <T>::C_inout (val)
+			Base::C_inout (val)
 		{}
 
 		~C_inout () noexcept (false);
@@ -139,11 +150,11 @@ struct TypeVarLen <T, true> : TypeVarLenBase <T>
 		}
 	};
 
-	class C_ret : public TypeVarLenBase <T>::C_ret
+	class C_ret : public Base::C_ret
 	{
 	public:
-		C_ret (typename TypeFixLen <T>::ABI_ret&& val) :
-			TypeVarLenBase <T>::C_ret (std::move (val))
+		C_ret (typename Base::ABI_ret&& val) :
+			Base::C_ret (std::move (val))
 		{
 			if (Type <T>::has_check)
 				check_or_clear (this->val_);
@@ -152,21 +163,21 @@ struct TypeVarLen <T, true> : TypeVarLenBase <T>
 
 	// Servant-side methods
 
-	static const T& in (typename TypeFixLen <T>::ABI_in p)
+	static const T& in (typename Base::ABI_in p)
 	{
 		_check_pointer (p);
 		Type <T>::check (*p);
 		return reinterpret_cast <const T&> (*p);
 	}
 
-	static T& inout (typename TypeFixLen <T>::ABI_inout p)
+	static T& inout (typename Base::ABI_inout p)
 	{
 		_check_pointer (p);
 		Type <T>::check (*p);
 		return reinterpret_cast <T&> (*p);
 	}
 
-	static T& out (typename TypeFixLen <T>::ABI_out p)
+	static T& out (typename Base::ABI_out p)
 	{
 		return inout (p);
 	}
@@ -174,12 +185,12 @@ struct TypeVarLen <T, true> : TypeVarLenBase <T>
 
 /// Outline for compact code
 template <class T>
-void TypeVarLen <T, true>::check_or_clear (ABI_type& v)
+void TypeVarLen <T, true>::check_or_clear (T& v)
 {
 	try {
-		Type <T>::check (v);
+		Type <T>::check (reinterpret_cast <typename Type <T>::ABI_type&> (v));
 	} catch (...) {
-		reinterpret_cast <T&> (v).~T (); // Destructor mustn't throw exceptions
+		v.~T (); // Destructor mustn't throw exceptions
 		new (&v) T ();
 		throw;
 	}
@@ -191,7 +202,7 @@ TypeVarLen <T, true>::C_inout::~C_inout () noexcept (false)
 {
 	bool ex = uncaught_exception ();
 	try {
-		check_or_clear (reinterpret_cast <typename Type <T>::ABI_type&> (this->ref_));
+		check_or_clear (this->ref_);
 	} catch (...) {
 		if (!ex)
 			throw;

@@ -19,6 +19,10 @@ struct Type <Sequence <T> > :
 
 	static void check (const ABI_type& v);
 
+	typedef typename Base::ABI_in ABI_in;
+	typedef typename Base::ABI_out ABI_out;
+	typedef typename Base::ABI_inout ABI_inout;
+
 	class C_in : public Base::C_in
 	{
 	public:
@@ -55,9 +59,25 @@ struct Type <Sequence <T> > :
 		}
 	};
 
-	static Sequence <T>& out (typename Base::ABI_out p)
+	static const Sequence <T>& in (ABI_in p)
 	{
-		Sequence <T>& val = Base::out (p);
+		Base::in (p);	// Check
+		// Use static_cast to ensure that we are using own vector implementation.
+		return static_cast <const Sequence <T>&> (*p);
+	}
+
+	static Sequence <T>& inout (ABI_inout p)
+	{
+		Base::inout (p); // Check
+		// Use static_cast to ensure that we are using own vector implementation.
+		return static_cast <Sequence <T>&> (*p);
+	}
+
+	static Sequence <T>& out (ABI_out p)
+	{
+		Base::out (p); // Check
+		// Use static_cast to ensure that we are using own vector implementation.
+		Sequence <T>& val = static_cast <Sequence <T>&> (*p);
 		// Must be empty
 		if (!val.empty ())
 			::Nirvana::throw_BAD_PARAM ();

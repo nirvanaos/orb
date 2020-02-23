@@ -165,9 +165,9 @@ struct TypeFixLen
 		return reinterpret_cast <T&> (*p);
 	}
 
-	static ABI_ret&& ret (T&& v)
+	static ABI_ret ret (T& v)
 	{
-		return reinterpret_cast <ABI_type&&> (v);
+		return reinterpret_cast <ABI_ret&> (v);
 	}
 
 	static ABI_VT_ret VT_ret (const T& v)

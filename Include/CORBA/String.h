@@ -46,7 +46,9 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 
 	static void check (const ABI_type& s);
 
+	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_out ABI_out;
+	typedef typename Base::ABI_inout ABI_inout;
 
 	typedef const StringBase <C>& C_in;
 
@@ -73,9 +75,25 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 		}
 	};
 
+	static const StringT <C>& in (ABI_in p)
+	{
+		Base::in (p);	// Check
+		// Use static_cast to ensure that we are using own basic_string implementation.
+		return static_cast <const StringT <C>&> (*p);
+	}
+
+	static StringT <C>& inout (ABI_inout p)
+	{
+		Base::inout (p); // Check
+		// Use static_cast to ensure that we are using own basic_string implementation.
+		return static_cast <StringT <C>&> (*p);
+	}
+
 	static StringT <C>& out (ABI_out p)
 	{
-		StringT <C>& val = Base::out (p);
+		Base::out (p);	// Check
+		// Use static_cast to ensure that we are using own basic_string implementation.
+		StringT <C>& val = static_cast <StringT <C>&> (*p);
 		// Must be empty
 		if (!val.empty ())
 			::Nirvana::throw_BAD_PARAM ();
