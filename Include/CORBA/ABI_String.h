@@ -67,7 +67,7 @@ struct ABI <StringT <C> >
 
 	void reset ()
 	{
-		size_t* p = data_.raw, *end = p + countof (data_.raw);
+		size_t* p = data.raw, *end = p + countof (data.raw);
 		do {
 			*p = 0;
 		} while (end != ++p);
@@ -75,16 +75,16 @@ struct ABI <StringT <C> >
 
 	bool is_large () const
 	{
-		return (data_.small.size & SMALL_MASK) != 0;
+		return (data.small.size & SMALL_MASK) != 0;
 	}
 
 	void small_size (size_t s)
 	{
 		assert (s <= SMALL_CAPACITY);
 		if (::Nirvana::endian::native == ::Nirvana::endian::big)
-			data_.small.size = (unsigned char)(s << 1);
+			data.small.size = (unsigned char)(s << 1);
 		else
-			data_.small.size = (unsigned char)(s);
+			data.small.size = (unsigned char)(s);
 		assert (!is_large ());
 	}
 
@@ -92,35 +92,35 @@ struct ABI <StringT <C> >
 	{
 		assert (!is_large ());
 		if (::Nirvana::endian::native == ::Nirvana::endian::big)
-			return data_.small.size >> 1;
+			return data.small.size >> 1;
 		else
-			return data_.small.size;
+			return data.small.size;
 	}
 
 	void large_size (size_t s)
 	{
-		data_.large.size = s;
+		data.large.size = s;
 	}
 
 	size_t large_size () const
 	{
 		assert (is_large ());
-		return data_.large.size;
+		return data.large.size;
 	}
 
 	void allocated (size_t cb)
 	{
 		assert (!(cb & 2));
 		if (::Nirvana::endian::native == ::Nirvana::endian::big)
-			data_.large.allocated = LARGE_MASK | cb;
+			data.large.allocated = LARGE_MASK | cb;
 		else
-			data_.large.allocated = LARGE_MASK | (cb >> 1);
+			data.large.allocated = LARGE_MASK | (cb >> 1);
 		assert (is_large ());
 	}
 
 	size_t allocated () const
 	{
-		size_t space = data_.large.allocated;
+		size_t space = data.large.allocated;
 		if (space & LARGE_MASK) {
 			if (::Nirvana::endian::native == ::Nirvana::endian::big)
 				return space & ~LARGE_MASK;
@@ -142,27 +142,27 @@ struct ABI <StringT <C> >
 
 	void large_pointer (C* p)
 	{
-		data_.large.data = p;
+		data.large.data = p;
 	}
 
 	const C* large_pointer () const
 	{
-		return data_.large.data;
+		return data.large.data;
 	}
 
 	C* large_pointer ()
 	{
-		return data_.large.data;
+		return data.large.data;
 	}
 
 	const C* small_pointer () const
 	{
-		return data_.small.data;
+		return data.small.data;
 	}
 
 	C* small_pointer ()
 	{
-		return data_.small.data;
+		return data.small.data;
 	}
 
 	static const unsigned char SMALL_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 0x01 : 0x80;
@@ -206,7 +206,7 @@ struct ABI <StringT <C> >
 
 #pragma pack (pop)
 
-	Data data_;
+	Data data;
 };
 
 }
