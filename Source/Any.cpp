@@ -7,7 +7,7 @@ namespace CORBA {
 
 namespace Nirvana {
 
-void Type <Any>::check (const Any& any)
+void Type <Any>::check (const ABI_type& any)
 {
 	TypeCode::_check (any.type ());
 	if (any.is_large () && !any.large_pointer ())
@@ -52,7 +52,7 @@ void* Any::prepare (TypeCode_ptr tc)
 
 void Any::set_type (TypeCode_ptr tc)
 {
-	AnyABI::type (static_cast <Nirvana::Bridge <TypeCode>*> (TypeCode::_duplicate (tc)));
+	ABI::type (static_cast <Nirvana::Bridge <TypeCode>*> (TypeCode::_duplicate (tc)));
 }
 
 void Any::copy_from (TypeCode_ptr tc, const void* val)

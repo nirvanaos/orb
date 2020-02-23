@@ -23,7 +23,7 @@ public:
 	static ULong _member_count (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
 	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
 	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
-	static Any* _member_label (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
+	static const Any* _member_label (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
 	static Interface* _discriminator_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
 	static Long _default_index (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
 	static ULong _length (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
@@ -59,7 +59,7 @@ public:
 		return InterfaceStatic <S, TypeCode>::_bridge ();
 	}
 
-	static TCKind _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static Type <TCKind>::ABI_ret _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return tk;
 	}

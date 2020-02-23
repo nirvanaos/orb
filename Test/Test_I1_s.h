@@ -46,7 +46,7 @@ protected:
 	static Interface* _object_op (Bridge < ::Test::I1>* _b, Interface* in_obj, Interface** out_obj, Interface** inout_obj, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).object_op (TypeI < ::Test::I1>::in (in_obj), TypeI < ::Test::I1>::out (out_obj), TypeI < ::Test::I1>::inout (inout_obj));
+			return TypeI < ::Test::I1>::ret (S::_implementation (_b).object_op (TypeI < ::Test::I1>::in (in_obj), TypeI < ::Test::I1>::out (out_obj), TypeI < ::Test::I1>::inout (inout_obj)));
 		} catch (const Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -58,7 +58,7 @@ protected:
 	static ABI_ret <String> _string_op (Bridge < ::Test::I1>* _b, ABI_in <String> in_s, ABI_out <String> out_s, ABI_inout <String> inout_s, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).string_op (Type <String>::in (in_s), Type <String>::out (out_s), Type <String>::inout (inout_s));
+			return Type <String>::ret (S::_implementation (_b).string_op (Type <String>::in (in_s), Type <String>::out (out_s), Type <String>::inout (inout_s)));
 		} catch (const Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -70,19 +70,19 @@ protected:
 	static ABI_ret < ::Test::SeqLong> _seq_op (Bridge < ::Test::I1>* _b, ABI_in < ::Test::SeqLong> in_s, ABI_out < ::Test::SeqLong> out_s, ABI_inout < ::Test::SeqLong> inout_s, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).seq_op (Type < ::Test::SeqLong>::in (in_s), Type < ::Test::SeqLong>::out (out_s), Type < ::Test::SeqLong>::inout (inout_s));
+			return Type < ::Test::SeqLong>::ret (S::_implementation (_b).seq_op (Type < ::Test::SeqLong>::in (in_s), Type < ::Test::SeqLong>::out (out_s), Type < ::Test::SeqLong>::inout (inout_s)));
 		} catch (const Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return ABI_ret <std::vector <Long> > ();
+		return ABI_ret < ::Test::SeqLong> ();
 	}
 
 	static ABI_ret <Any> _any_op (Bridge < ::Test::I1>* _b, ABI_in <Any> in_any, ABI_out <Any> out_any, ABI_inout <Any> inout_any, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).any_op (Type <Any>::in (in_any), Type <Any>::out (out_any), Type <Any>::inout (inout_any));
+			return Type <Any>::ret (S::_implementation (_b).any_op (Type <Any>::in (in_any), Type <Any>::out (out_any), Type <Any>::inout (inout_any)));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {

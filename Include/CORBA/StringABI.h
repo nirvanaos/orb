@@ -6,16 +6,23 @@
 #define NIRVANA_ORB_STRINGABI_H_
 
 #include <Nirvana/NirvanaBase.h>
+#include "Type_forward.h"
+
+namespace std {
+template <class C, class T, class A> class basic_string;
+template <class C> struct char_traits;
+template <class T> class allocator;
+}
 
 namespace CORBA {
 namespace Nirvana {
 
-template <typename C> class String_var;
+template <typename C>
+using StringT = std::basic_string <C, std::char_traits <C>, std::allocator <C> >;
 
 template <typename C>
-class StringABI
+struct ABI <StringT <C> >
 {
-protected:
 	static size_t max_size ()
 	{
 		return (SIZE_MAX / 2 + 1) / sizeof (C) - 1;
@@ -158,7 +165,6 @@ protected:
 		return data_.small.data;
 	}
 
-private:
 	static const unsigned char SMALL_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 0x01 : 0x80;
 	static const size_t LARGE_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 1 : ~(size_t (~0) >> 1);
 
@@ -183,17 +189,14 @@ private:
 
 	static_assert (sizeof (Large) == sizeof (Small), "sizeof (Large) == sizeof (Small)");
 
-protected:
 	static const size_t SMALL_CAPACITY = sizeof (Small::data) / sizeof (C) - 1;
 
-private:
 	union ULS
 	{
 		Large large;
 		Small small;
 	};
 
-protected:
 	union Data
 	{
 		Small small;
@@ -203,11 +206,11 @@ protected:
 
 #pragma pack (pop)
 
-	friend class String_var <C>;
-
-protected:
 	Data data_;
 };
+
+template <typename C>
+using StringABI = ABI <StringT <C> >;
 
 }
 }

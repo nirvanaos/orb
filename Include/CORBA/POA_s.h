@@ -17,16 +17,16 @@ public:
 	static const typename Bridge <PortableServer::POA>::EPV epv_;
 
 protected:
-	static const Char* _activate_object (Bridge <PortableServer::POA>* obj, Interface* servant, EnvironmentBridge* env)
+	static Type <String>::ABI_ret _activate_object (Bridge <PortableServer::POA>* obj, Interface* servant, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).activate_object (TypeI <ServantBase>::in (servant));
+			return Type <String>::ret (S::_implementation (obj).activate_object (TypeI <ServantBase>::in (servant)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return 0;
+		return Type <String>::ABI_ret ();
 	}
 };
 

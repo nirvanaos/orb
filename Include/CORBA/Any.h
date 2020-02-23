@@ -10,8 +10,9 @@
 
 namespace CORBA {
 
-class Any : private Nirvana::AnyABI
+class Any : private Nirvana::ABI <Any>
 {
+	typedef Nirvana::ABI <Any> ABI;
 public:
 	Any ()
 	{
@@ -25,7 +26,7 @@ public:
 	}
 
 	Any (Any&& src) NIRVANA_NOEXCEPT :
-		AnyABI (src)
+		ABI (src)
 	{
 		src.reset ();
 	}
@@ -46,7 +47,7 @@ public:
 	{
 		if (this != &src) {
 			clear ();
-			AnyABI::operator = (src);
+			ABI::operator = (src);
 			src.reset ();
 		}
 		return *this;
@@ -54,7 +55,7 @@ public:
 
 	TypeCode_ptr type () const
 	{
-		return AnyABI::type ();
+		return ABI::type ();
 	}
 
 	void type (TypeCode_ptr alias);
@@ -235,13 +236,26 @@ private:
 namespace Nirvana {
 
 template <>
-struct Type <Any> : public TypeVarLen <Any>
+struct Type <Any> : public TypeVarLen <Any, true>
 {
-	static void check (const Any& any);
+	typedef TypeVarLen <Any, true> Base;
+	typedef ABI <Any> ABI_type;
 
-	static Any& out (Any* p)
+	static void check (const ABI_type& any);
+
+	class C_out : public Base::C_out
 	{
-		Any& val = TypeVarLen <Any>::out (p);
+	public:
+		C_out (Any& any) :
+			Base::C_out (any)
+		{
+			any.clear ();
+		}
+	};
+
+	static Any& out (typename Base::ABI_out p)
+	{
+		Any& val = Base::out (p);
 		// Must be empty
 		if (!val.empty ())
 			::Nirvana::throw_BAD_PARAM ();

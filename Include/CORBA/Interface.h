@@ -36,7 +36,7 @@ public:
 		return *this;	// Do nothing
 	}
 
-	static NIRVANA_NODISCARD Interface* _check (Interface* obj, const Char* interface_id);
+	static Interface* _check (Interface* obj, const Char* interface_id);
 
 	static Interface* _nil ()
 	{

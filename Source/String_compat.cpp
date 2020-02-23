@@ -1,4 +1,4 @@
-#include <CORBA/String.h>
+#include <CORBA/String_compat.h>
 
 #ifdef LEGACY_STRING_MAPPING_SUPPORT
 

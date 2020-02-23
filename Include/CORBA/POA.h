@@ -5,6 +5,7 @@
 #define NIRVANA_ORB_POA_H_
 
 #include "ServantBase.h"
+#include "String.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -12,7 +13,7 @@ namespace Nirvana {
 BRIDGE_BEGIN (PortableServer::POA)
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV
-const Char* (*activate_object) (Bridge <PortableServer::POA>*, Interface*, EnvironmentBridge*);
+Type <String>::ABI_ret (*activate_object) (Bridge <PortableServer::POA>*, Interface*, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <class T>
@@ -20,15 +21,15 @@ class Client <T, PortableServer::POA> :
 	public T
 {
 public:
-	const Char* activate_object (ServantBase_ptr servant);
+	String activate_object (ServantBase_ptr servant);
 };
 
 template <class T>
-const Char* Client <T, PortableServer::POA>::activate_object (ServantBase_ptr servant)
+String Client <T, PortableServer::POA>::activate_object (ServantBase_ptr servant)
 {
 	Environment _env;
 	Bridge <PortableServer::POA>& _b (T::_get_bridge (_env));
-	const Char* _ret = (_b._epv ().epv.activate_object) (&_b, servant, &_env);
+	Type <String>::C_ret _ret = (_b._epv ().epv.activate_object) (&_b, servant, &_env);
 	_env.check ();
 	return _ret;
 }

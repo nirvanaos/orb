@@ -8,43 +8,18 @@
 namespace CORBA {
 namespace Nirvana {
 
-/// Base for variable-length data types
 template <class T>
-struct TypeVarLen :
-	public TypeBase <T>
+struct TypeVarLenBase : TypeBase <T>
 {
-	static const bool has_check = true;
+	typedef typename TypeBase <T>::C_in C_in;
+	typedef typename TypeBase <T>::C_inout C_inout;
 
-	using TypeBase <T>::ABI_in;
-	using TypeBase <T>::ABI_out;
-	using TypeBase <T>::ABI_inout;
-	using TypeBase <T>::ABI_ret;
-
-	using TypeBase <T>::C_in;
-
-	class C_inout
-	{
-	public:
-		C_inout (T& val) :
-			ref_ (val)
-		{}
-
-		~C_inout () noexcept (false);
-
-		T* operator & () const
-		{
-			return &ref_;
-		}
-
-	private:
-		T& ref_;
-	};
-
-	class C_out : public C_inout
+	/// C_out class clears output variable
+	class C_out : public TypeBase <T>::C_out
 	{
 	public:
 		C_out (T& val) :
-			C_inout (val)
+			TypeBase <T>::C_out (val)
 		{
 			val = T ();	// Clear
 		}
@@ -53,19 +28,17 @@ struct TypeVarLen :
 	class C_ret
 	{
 	public:
-		C_ret (T val) :
-			val_ (std::move (val))
+		C_ret (typename TypeBase <T>::ABI_ret&& val) :
+			val_ (val)
+		{}
+
+		operator T && ()
 		{
-			check_or_clear (val_);
+			return reinterpret_cast <T&&> (val_);
 		}
 
-		operator T ()
-		{
-			return std::move (val_);
-		}
-
-	private:
-		T val_;
+	protected:
+		TypeBase <T>::ABI_ret val_;
 	};
 
 	// Client I_var class for the C++ IDL mapping standard conformance
@@ -73,13 +46,30 @@ struct TypeVarLen :
 		public T
 	{
 	public:
-		C_var (const T& src) :
+		C_var ()
+		{}
+
+		C_var (const T& v) :
+			T (v)
+		{}
+
+		C_var (const C_var& src) :
 			T (src)
 		{}
 
-		C_var (T&& src) :
-			T (std::move (src))
-		{}
+		C_var& operator = (const T& v)
+		{
+			if (this != &v)
+				T::operator = (v);
+			return *this;
+		}
+
+		C_var& operator = (const C_var& v)
+		{
+			if (this != &v)
+				T::operator = (v);
+			return *this;
+		}
 
 		T& operator -> ()
 		{
@@ -96,12 +86,12 @@ struct TypeVarLen :
 			return *this;
 		}
 
-		typename C_out out ()
+		C_out out ()
 		{
 			return *this;
 		}
 
-		typename C_inout inout ()
+		C_inout inout ()
 		{
 			return *this;
 		}
@@ -111,38 +101,85 @@ struct TypeVarLen :
 			return std::move (static_cast <T&> (*this));
 		}
 	};
+};
 
-	static const T& in (ABI_in p)
+template <class T, bool with_check> struct TypeVarLen;
+
+template <class T>
+struct TypeVarLen <T, false> : TypeVarLenBase <T>
+{};
+
+/// Base for variable-length data types
+template <class T>
+struct TypeVarLen <T, true> : TypeVarLenBase <T>
+{
+	static const bool has_check = true;
+
+	typedef ABI <T> ABI_type;
+
+	static void check_or_clear (ABI_type& v);
+
+	class C_inout : public TypeVarLenBase <T>::C_inout
+	{
+	public:
+		C_inout (T& val) :
+			TypeVarLenBase <T>::C_inout (val)
+		{}
+
+		~C_inout () noexcept (false);
+	};
+
+	class C_out : public C_inout
+	{
+	public:
+		C_out (T& val) :
+			C_inout (val)
+		{
+			val = T ();	// Clear
+		}
+	};
+
+	class C_ret : public TypeVarLenBase <T>::C_ret
+	{
+	public:
+		C_ret (typename TypeBase <T>::ABI_ret&& val) :
+			TypeVarLenBase <T>::C_ret (std::move (val))
+		{
+			if (Type <T>::has_check)
+				check_or_clear (this->val_);
+		}
+	};
+
+	// Servant-side methods
+
+	static const T& in (typename TypeBase <T>::ABI_in p)
 	{
 		_check_pointer (p);
 		Type <T>::check (*p);
-		return *p;
+		return reinterpret_cast <const T&> (*p);
 	}
 
-	static T& inout (ABI_inout p)
+	static T& inout (typename TypeBase <T>::ABI_inout p)
 	{
 		_check_pointer (p);
 		Type <T>::check (*p);
-		return *p;
+		return reinterpret_cast <T&> (*p);
 	}
 
-	static T& out (ABI_out p)
+	static T& out (typename TypeBase <T>::ABI_out p)
 	{
 		return inout (p);
 	}
-
-	static void check_or_clear (T& v);
 };
-
 
 /// Outline for compact code
 template <class T>
-void TypeVarLen <T>::check_or_clear (T& v)
+void TypeVarLen <T, true>::check_or_clear (ABI_type& v)
 {
 	try {
 		Type <T>::check (v);
 	} catch (...) {
-		v.~T (); // Destructor mustn't throw exceptions
+		reinterpret_cast <T&> (v).~T (); // Destructor mustn't throw exceptions
 		new (&v) T ();
 		throw;
 	}
@@ -150,11 +187,11 @@ void TypeVarLen <T>::check_or_clear (T& v)
 
 /// Outline for compact code
 template <class T>
-TypeVarLen <T>::C_inout::~C_inout () noexcept (false)
+TypeVarLen <T, true>::C_inout::~C_inout () noexcept (false)
 {
 	bool ex = uncaught_exception ();
 	try {
-		Type <T>::check_or_clear (ref_);
+		check_or_clear (reinterpret_cast <typename Type <T>::ABI_type&> (this->ref_));
 	} catch (...) {
 		if (!ex)
 			throw;

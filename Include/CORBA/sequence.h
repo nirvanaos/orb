@@ -11,27 +11,78 @@ namespace CORBA {
 namespace Nirvana {
 
 template <class T>
-using Sequence = std::vector <T, std::allocator <T> >;
-
-template <class T>
 struct Type <Sequence <T> > :
-	public TypeVarLen <Sequence <T> >
+	public TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check>
 {
-	static void check (const Sequence <T>& v)
-	{
-		// Do some check
-		const T* p = v.data ();
-		if (p)
-			CORBA::Nirvana::_check_pointer (p);
-		size_t cnt = v.size ();
-		if (cnt > 0 && (cnt > v.capacity () || !Sequence <T>::memory ()->is_readable (p, cnt * sizeof (T))))
-			::Nirvana::throw_BAD_PARAM ();
+	typedef TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check> Base;
+	typedef ABI <Sequence <T> > ABI_type;
 
-		if (Type <T>::has_check)
-			for (const T* end = p + cnt; p != end; ++p)
-				Type <T>::check (*p);
+	static void check (const ABI_type& v);
+
+	class C_in : public Base::C_in
+	{
+	public:
+		C_in (const Sequence <T>& v) :
+			Base::C_in (v)
+		{}
+
+		const ABI_type* operator & () const
+		{
+			return &static_cast <const ABI_type&> (this->ref_);
+		}
+	};
+
+	class C_inout : public Base::C_inout
+	{
+	public:
+		C_inout (Sequence <T>& s) :
+			Base::C_inout (s)
+		{}
+
+		ABI_type* operator & () const
+		{
+			return &static_cast <ABI_type&> (this->ref_);
+		}
+	};
+
+	class C_out : public C_inout
+	{
+	public:
+		C_out (Sequence <T>& s) :
+			C_inout (s)
+		{
+			s.clear ();
+		}
+	};
+
+	static Sequence <T>& out (typename Base::ABI_out p)
+	{
+		Sequence <T>& val = Base::out (p);
+		// Must be empty
+		if (!val.empty ())
+			::Nirvana::throw_BAD_PARAM ();
+		return val;
 	}
 };
+
+template <class T>
+void Type <Sequence <T> >::check (const ABI_type& v)
+{
+	// Do some check
+	if (CHECK_SEQUENCES) {
+		const T* p = v.ptr;
+		if (p)
+			CORBA::Nirvana::_check_pointer (p);
+		size_t cnt = v.size;
+		if (cnt > 0 && (cnt > v.allocated / sizeof (T) || !Sequence <T>::memory ()->is_readable (p, cnt * sizeof (T))))
+			::Nirvana::throw_BAD_PARAM ();
+	}
+
+	if (Type <T>::has_check) {
+		for (const T* p = v.ptr, *end = p + v.size; p != end; ++p)
+			Type <T>::check (*p);
+	}
+}
 
 template <>
 struct Type <Sequence <bool> > :

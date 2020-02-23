@@ -35,31 +35,47 @@ StringBase <C>::StringBase (const std::basic_string <C, T, A>& s)
 
 #endif
 
-template <typename C> inline
-const std::basic_string <C, std::char_traits <C>, std::allocator <C> >* StringBase <C>::operator & () const
-{
-	return &static_cast <const std::basic_string <C, std::char_traits <C>, std::allocator <C> >&> (*this);
-}
-
-template <typename C>
-using StringT = std::basic_string <C, std::char_traits <C>, std::allocator <C> >;
-
 typedef StringT <Char> String;
 typedef StringT <WChar> WString;
 
 template <typename C>
-struct Type <StringT <C> > :
-	public TypeVarLen <StringT <C> >
+struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 {
-	typedef StringT <C> StringType;
+	typedef TypeVarLen <StringT <C>, CHECK_STRINGS> Base;
+	typedef ABI <StringT <C> > ABI_type;
+
+	static void check (const ABI_type& s);
+
+	typedef typename Base::ABI_out ABI_out;
 
 	typedef const StringBase <C>& C_in;
 
-	static void check (const StringType& s);
-
-	static StringType& out (StringType* p)
+	class C_inout : public Base::C_inout
 	{
-		StringType& val = TypeVarLen <StringType>::out (p);
+	public:
+		C_inout (StringT <C>& s) :
+			Base::C_inout (s)
+		{}
+
+		ABI_type* operator & () const
+		{
+			return &static_cast <ABI_type&> (this->ref_);
+		}
+	};
+
+	class C_out : public C_inout
+	{
+	public:
+		C_out (StringT <C>& s) :
+			C_inout (s)
+		{
+			s.clear ();
+		}
+	};
+
+	static StringT <C>& out (ABI_out p)
+	{
+		StringT <C>& val = Base::out (p);
 		// Must be empty
 		if (!val.empty ())
 			::Nirvana::throw_BAD_PARAM ();
@@ -68,7 +84,7 @@ struct Type <StringT <C> > :
 };
 
 template <typename C>
-void Type <StringT <C> >::check (const StringType& s)
+void Type <StringT <C> >::check (const ABI_type& s)
 {
 	// Do some check
 	const C* p;
@@ -77,7 +93,7 @@ void Type <StringT <C> >::check (const StringType& s)
 		p = s.large_pointer ();
 		cc = s.large_size ();
 		CORBA::Nirvana::_check_pointer (p);
-		if (cc > s.large_capacity () || !StringType::memory ()->is_readable (p, (cc + 1) * sizeof (C)))
+		if (cc > s.large_capacity () || !StringT <C>::memory ()->is_readable (p, (cc + 1) * sizeof (C)))
 			::Nirvana::throw_BAD_PARAM ();
 	} else {
 		p = s.small_pointer ();
@@ -101,126 +117,7 @@ using String_out = typename TypeString <C>::C_out;
 template <typename C>
 using String_inout = typename TypeString <C>::C_inout;
 
-template <typename C>
-class String_var : public std::basic_string <C>
-{
-public:
-	String_var ()
-	{}
-
-#ifdef LEGACY_STRING_MAPPING_SUPPORT
-
-	// TODO: Mark as deprecated
-	String_var (C* s)
-	{
-		adopt (s);
-	}
-
-#endif
-
-	String_var (const C* s)
-	{
-		size_t cc = std::char_traits <C>::length (s);
-		this->assign (s, cc);
-	}
-
-	String_var (const std::basic_string <C>& s) :
-		std::basic_string <C> (s)
-	{}
-
-	String_var (std::basic_string <C>&& s) :
-		std::basic_string <C> (std::move (s))
-	{}
-
-	String_var& operator = (const C* s)
-	{
-		std::basic_string <C>::operator = (s);
-		return *this;
-	}
-
-	template <class Tr, class Al>
-	String_var& operator = (const std::basic_string <C, Tr, Al>& s)
-	{
-		std::basic_string <C>::operator = (s);
-		return *this;
-	}
-
-	String_var& operator = (std::basic_string <C>&& s)
-	{
-		std::basic_string <C>::operator = (std::move (s));
-		return *this;
-	}
-
-#ifdef LEGACY_STRING_MAPPING_SUPPORT
-
-	// TODO: Mark as deprecated
-	String_var& operator = (C* s)
-	{
-		this->release_memory ();
-		adopt (s);
-		return *this;
-	}
-
-#endif
-
-	operator C* ()
-	{
-		return this->_ptr ();
-	}
-
-	operator const C* () const
-	{
-		return this->_ptr ();
-	}
-
-	String_in <C> in () const
-	{
-		return *this;
-	}
-
-	String_inout <C> inout ()
-	{
-		return String_inout <C> (*this);
-	}
-
-	String_out <C> out ()
-	{
-		return String_out <C> (*this);
-	}
-
-	std::basic_string <C> _retn ()
-	{
-		return std::move (*this);
-	}
-
-private:
-
-#ifdef LEGACY_STRING_MAPPING_SUPPORT
-	void adopt (C* s);
-#endif
-};
-
-#ifdef LEGACY_STRING_MAPPING_SUPPORT
-
-template <typename C>
-void String_var <C>::adopt (C* s)
-{
-	if (s) {
-		size_t cc = std::char_traits <C>::length (s);
-		this->large_pointer (s);
-		this->large_size (cc);
-		size_t au = ::Nirvana::StdString::memory ()->query (s, ::Nirvana::MemQuery::ALLOCATION_UNIT);
-		this->large_allocated (::Nirvana::round_up ((cc + 1) * sizeof (C), au));
-	} else
-		this->reset ();
 }
-
-#endif
-
-}
-
-typedef Nirvana::String_var <Char> String_var;
-typedef Nirvana::String_var <WChar> WString_var;
 
 typedef Nirvana::String_in <Char> String_in;
 typedef Nirvana::String_in <WChar> WString_in;
@@ -231,17 +128,7 @@ typedef Nirvana::String_out <WChar> WString_out;
 typedef Nirvana::String_inout <Char> String_inout;
 typedef Nirvana::String_inout <WChar> WString_inout;
 
-#ifdef LEGACY_STRING_MAPPING_SUPPORT
-
-// For compatibility with old C++ mapping specification
-Char* string_alloc (uint32_t len);
-Char* string_dup (const Char* s);
-void string_free (Char* s);
-WChar* wstring_alloc (uint32_t len);
-WChar* wstring_dup (const WChar* s);
-void wstring_free (WChar* s);
-
-#endif
+// String_var and WString_var classes are defined in String_compat.h
 
 }
 

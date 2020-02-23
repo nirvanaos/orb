@@ -120,16 +120,16 @@ void Loader::bind_olf (const void* data, size_t size)
 					ImportInterface* ps = reinterpret_cast <ImportInterface*> (p);
 					auto pf = exported_interfaces_.find (ps->name);
 					if (pf != exported_interfaces_.end ()) {
-						Interface* itf = pf->second;
+						Interface_ptr itf = pf->second;
 						const Char* itf_id = itf->_epv ().interface_id;
 						if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, ps->interface_id))
 							ps->itf = itf;
 						else {
 							AbstractBase_ptr ab = AbstractBase::_nil ();
 							if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, AbstractBase::interface_id_))
-								ab = static_cast <AbstractBase*> (itf);
+								ab = static_cast <AbstractBase*> (static_cast <Interface*> (itf));
 							else if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, Object::interface_id_))
-								ab = Object_ptr (static_cast <Object*> (itf));
+								ab = Object_ptr (static_cast <Object*> (static_cast <Interface*> (itf)));
 							else
 								throw INV_OBJREF ();
 							Interface* qi = ab->_query_interface (ps->interface_id);

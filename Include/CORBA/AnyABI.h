@@ -7,16 +7,19 @@
 #define NIRVANA_ORB_ANYABI_H_
 
 #include <Nirvana/NirvanaBase.h>
+#include "Type_forward.h"
 
 namespace CORBA {
 
+class Any;
 class TypeCode;
 
 namespace Nirvana {
 
 #pragma pack (push, 1)
 
-struct AnyABI
+template <>
+struct ABI <Any>
 {
 	/// Pointer to TypeCode and large data tag in the least significant bit.
 	uintptr_t type_code;

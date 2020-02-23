@@ -162,7 +162,7 @@ struct MarshalTraits <TypeCode_var>
 
 	static void local_unmarshal_in (TypeCode_var& val)
 	{
-		val = g_local_marshal->unmarshal_type_code (val);
+		val = g_local_marshal->unmarshal_type_code (reinterpret_cast <void*&> (val));
 	}
 
 	static void local_unmarshal_inout (TypeCode_var& val)
@@ -184,7 +184,8 @@ struct MarshalTraits <I_var <I> >
 
 	static void local_unmarshal_in (I_var <I>& val)
 	{
-		val = static_cast <I*> (static_cast <Interface*> (g_local_marshal->unmarshal_interface (val, Bridge <I>::interface_id_)));
+		Interface_ptr ip = g_local_marshal->unmarshal_interface (reinterpret_cast <void*&> (val), Bridge <I>::interface_id_);
+		val = static_cast <I*> (static_cast <Interface*> (ip));
 	}
 
 	static void local_unmarshal_inout (I_var <I>& val)

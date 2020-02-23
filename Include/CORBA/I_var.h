@@ -91,16 +91,6 @@ public:
 		return p;
 	}
 
-	/// Destroying conversion to the ABI return value.
-	/// When servant returns I_var, skeleton have to return Interface*
-	/// and reset the I_var to avoid object deletion on return.
-	operator Interface* () NIRVANA_NOEXCEPT
-	{
-		Interface* p = p_;
-		p_ = 0;
-		return p;
-	}
-
 protected:
 	void reset (I* p) NIRVANA_NOEXCEPT
 	{

@@ -185,9 +185,27 @@ public:
 
 	operator I_var <I> ()
 	{
-		I_var <I> ret = ptr_;
+		I_ptr <I> ret = ptr_;
 		ptr_ = I::_nil ();
 		return ret;
+	}
+
+private:
+	I_ptr <I> ptr_;
+};
+
+template <class I>
+class I_VT_ret
+{
+public:
+	I_VT_ret (Interface* p)
+	{
+		ptr_ = I::_check (p);
+	}
+
+	operator I_ptr <I> ()
+	{
+		return ptr_;
 	}
 
 private:
@@ -200,21 +218,40 @@ class I_ret <Interface>
 {
 public:
 	I_ret (Interface* p) :
-		val_ (p)
+		ptr_ (p)
 	{}
+
+	~I_ret ()
+	{
+		interface_release (ptr_);
+	}
 
 	operator I_ptr <Interface> ()
 	{
-		return val_._retn ();
+		I_ptr <Interface> ret = ptr_;
+		ptr_ = Interface::_nil ();
+		return ret;
 	}
 
 	operator I_var <Interface> ()
 	{
-		return val_._retn ();
+		I_ptr <Interface> ret = ptr_;
+		ptr_ = Interface::_nil ();
+		return ret;
 	}
 
 private:
-	I_var <Interface> val_;
+	I_ptr <Interface> ptr_;
+};
+
+template <>
+class I_VT_ret <Interface> :
+	public I_ptr <Interface>
+{
+public:
+	I_VT_ret (Interface* p) :
+		I_ptr <Interface> (p)
+	{}
 };
 
 typedef I_var <Interface> Interface_var;
@@ -224,9 +261,11 @@ typedef I_inout <Interface> Interface_inout;
 template <class I>
 struct Type <I_var <I> >
 {
+	typedef Interface* ABI_type;
+
 	static const bool has_check = true;
 
-	static void check (const I_var <I>& p)
+	static void check (Interface* p)
 	{
 		I::_check (p);
 	}
@@ -235,12 +274,14 @@ struct Type <I_var <I> >
 	typedef Interface** ABI_out;
 	typedef Interface** ABI_inout;
 	typedef Interface* ABI_ret;
+	typedef Interface* ABI_VT_ret;
 
 	typedef I_var <I> C_var;
 	typedef I_in <I> C_in;
 	typedef I_out <I> C_out;
 	typedef I_inout <I> C_inout;
 	typedef I_ret <I> C_ret;
+	typedef I_VT_ret <I> C_VT_ret;
 
 	static I_ptr <I> in (ABI_in p)
 	{
@@ -261,26 +302,48 @@ struct Type <I_var <I> >
 			::Nirvana::throw_BAD_PARAM ();
 		return reinterpret_cast <I_var <I>&> (*p);
 	}
+
+	static Interface* ret (const I_ptr <I>& ptr)
+	{
+		return ptr;
+	}
+
+	static Interface* ret (I_var <I>&& var)
+	{
+		return var._retn ();
+	}
+
+	static Interface* VT_ret (I_ptr <I>& ptr)
+	{
+		return ptr;
+	}
+
+	// Valuetupe implementation mustn't return I_var
+	static void VT_ret (I_var <I>&);
 };
 
 template <>
 struct Type <I_var <Interface> >
 {
+	typedef Interface* ABI_type;
+
 	static const bool has_check = false;
 
-	static void check (const I_var <Interface>& p)
+	static void check (Interface* p)
 	{}
 
 	typedef Interface* ABI_in;
 	typedef Interface** ABI_out;
 	typedef Interface** ABI_inout;
 	typedef Interface* ABI_ret;
+	typedef Interface* ABI_VT_ret;
 
 	typedef I_var <Interface> C_var;
 	typedef I_in <Interface> C_in;
 	typedef I_out <Interface> C_out;
 	typedef I_inout <Interface> C_inout;
 	typedef I_ret <Interface> C_ret;
+	typedef I_VT_ret <Interface> C_VT_ret;
 
 	static I_ptr <Interface> in (ABI_in p)
 	{
@@ -300,6 +363,24 @@ struct Type <I_var <Interface> >
 			::Nirvana::throw_BAD_PARAM ();
 		return reinterpret_cast <I_var <Interface>&> (*p);
 	}
+
+	static Interface* ret (const I_ptr <Interface>& ptr)
+	{
+		return ptr;
+	}
+
+	static Interface* ret (I_var <Interface>&& var)
+	{
+		return var._retn ();
+	}
+
+	static Interface* VT_ret (I_ptr <Interface>& ptr)
+	{
+		return ptr;
+	}
+
+	// Valuetupe implementation mustn't return I_var
+	static void VT_ret (I_var <Interface>&);
 };
 
 template <class I>

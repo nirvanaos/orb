@@ -1,7 +1,6 @@
 #ifndef NIRVANA_ORB_TYPE_H_
 #define NIRVANA_ORB_TYPE_H_
 
-#include "TypeBasic.h"
 #include "TypeVarLen.h"
 #include "TypeEnum.h"
 #include "TypeInterface.h"

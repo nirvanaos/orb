@@ -5,11 +5,21 @@
 #ifndef NIRVANA_ORB_SEQUENCEABI_H_
 #define NIRVANA_ORB_SEQUENCEABI_H_
 
+#include "Type_forward.h"
+
+namespace std {
+template <class T, class A> class vector;
+template <class T> class allocator;
+}
+
 namespace CORBA {
 namespace Nirvana {
 
 template <class T>
-struct SequenceABI
+using Sequence = std::vector <T, std::allocator <T> >;
+
+template <class T>
+struct ABI <Sequence <T> >
 {
 	void reset ()
 	{
@@ -22,6 +32,9 @@ struct SequenceABI
 	size_t size;
 	size_t allocated;
 };
+
+template <class T>
+using SequenceABI = ABI <Sequence <T> >;
 
 }
 }

@@ -10,7 +10,7 @@ namespace CORBA {
 class Any;
 class TypeCode;
 
-enum TCKind : uint32_t
+enum TCKind
 {
 	tk_null, tk_void,
 	tk_short, tk_long, tk_ushort, tk_ulong,
@@ -28,11 +28,11 @@ enum TCKind : uint32_t
 
 namespace Nirvana {
 
-template <> struct Type <TCKind> : public TypeEnum <TCKind>
+template <> struct Type <TCKind> : TypeEnum <TCKind>
 {
-	static void check (TCKind tk)
+	static void check (TypeEnum <TCKind>::ABI_type tk)
 	{
-		if ((unsigned)tk > tk_local_interface)
+		if (tk > tk_local_interface)
 			::Nirvana::throw_BAD_PARAM ();
 	}
 };
@@ -55,13 +55,13 @@ BRIDGE_BEGIN (TypeCode)
 Boolean (*equal) (Bridge <TypeCode>*, Interface*, EnvironmentBridge*);
 Boolean (*equivalent) (Bridge <TypeCode>*, Interface*, EnvironmentBridge*);
 Interface* (*get_compact_typecode) (Bridge <TypeCode>*, EnvironmentBridge*);
-TCKind (*kind) (Bridge <TypeCode>*, EnvironmentBridge*);
+Type <TCKind>::ABI_ret (*kind) (Bridge <TypeCode>*, EnvironmentBridge*);
 const char* (*id) (Bridge <TypeCode>*, EnvironmentBridge*);
 const char* (*name) (Bridge <TypeCode>*, EnvironmentBridge*);
 ULong (*member_count) (Bridge <TypeCode>*, EnvironmentBridge*);
 const char* (*member_name) (Bridge <TypeCode>*, ULong index, EnvironmentBridge*);
 Interface* (*member_type) (Bridge <TypeCode>*, ULong index, EnvironmentBridge*);
-Any* (*member_label) (Bridge <TypeCode>*, ULong index, EnvironmentBridge*);
+const Any* (*member_label) (Bridge <TypeCode>*, ULong index, EnvironmentBridge*);
 Interface* (*discriminator_type) (Bridge <TypeCode>*, EnvironmentBridge*);
 Long (*default_index) (Bridge <TypeCode>*, EnvironmentBridge*);
 ULong (*length) (Bridge <TypeCode>*, EnvironmentBridge*);

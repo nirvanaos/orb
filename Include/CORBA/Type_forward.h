@@ -5,44 +5,50 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <class T> struct Type;
+/// For each structure, union or enum data type T, IDL compiler generates CORBA::Nirvana::ABI structure.
+/// ABI type must be POD (mustn't have any constructors and destructors).
+/// Compiler replaces all non-POD struct members with corresponding ABI structures.
+template <class T> struct ABI;
 
 /// For each structure, union or enum data type T, IDL compiler generates CORBA::Nirvana::Type structure:
 ///
 ///     template <> struct Type <T>
 ///     {
+///       typedef ABI <T> ABI_type;
+///
 ///       // Check internal invariants and throw BAD_PARAM or INV_OBJREF exception if data is invalid.
-///       static void check (const T&);
+///       static void check (const ABI_type&);
 ///       
 ///       // true if check () method is not empty.
 ///       static const bool has_check;
 ///
-///       // ABI types:
-///       typedef ABI_in;
-///       typedef ABI_out;
-///       typedef ABI_inout;
-///       typedef ABI_ret;
+///       // Types for passing parameters via interface ABI
+///       typedef const ABI_type* ABI_in;
+///       typedef ABI_type* ABI_out;
+///       typedef ABI_type* ABI_inout;
+///       typedef ABI_type ABI_ret;
+///       typedef const ABI_type* ABI_VT_ret; // Valuetype attributes returned by const reference
 ///
-///       // Client types:
-///       typedef C_in;
-///       typedef C_out;
-///       typedef C_inout;
-///       typedef C_ret;
-///       typedef C_var;
+///       // Client-side types
+///       class C_var;
+///       class C_in;
+///       class C_out;
+///       class C_inout;
+///       class C_ret;
+///       typedef C_VT_ret;
 ///
-///       // Client type cast to corresponding ABI type by operator &
+///       // C_in, C_out and C_inout types cast to corresponding ABI types by operator &.
 ///
 ///       // Servant-side methods
 ///       static <Servant in type> in (ABI_in p);
 ///       static <Servant out type> out (ABI_out p);
 ///       static <Servant inout type> inout (ABI_inout p);
+///       static ABI_ret ret (<Servant return type>);
+///       static ABI_VT_ret VT_ret (<Valuetype servant return type>);
+///
 ///       // Servant types may be differ from client types.
 ///     };
-
-// Helper functions.
-
-extern void _check_pointer (const void* p);
-extern bool uncaught_exception ();
+template <class T> struct Type;
 
 template <class T>
 using ABI_in = typename Type <T>::ABI_in;
@@ -55,6 +61,17 @@ using ABI_inout = typename Type <T>::ABI_inout;
 
 template <class T>
 using ABI_ret = typename Type <T>::ABI_ret;
+
+template <class T>
+using ABI_VT_ret = typename Type <T>::ABI_VT_ret;
+
+// Constraints check
+const bool CHECK_STRINGS = true;
+const bool CHECK_SEQUENCES = true;
+
+// Helper functions.
+extern void _check_pointer (const void* p);
+extern bool uncaught_exception ();
 
 }
 }

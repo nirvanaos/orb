@@ -42,7 +42,7 @@ protected:
 	static Interface* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).get_compact_typecode ();
+			return TypeI <TypeCode>::ret (S::_implementation (_b).get_compact_typecode ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -51,16 +51,16 @@ protected:
 		return 0;
 	}
 
-	static TCKind _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static Type <TCKind>::ABI_ret _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).kind ();
+			return Type <TCKind>::ret (S::_implementation (_b).kind ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return tk_null;
+		return 0;
 	}
 
 	static const char* _id (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
@@ -114,7 +114,7 @@ protected:
 	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).member_type (index);
+			return TypeI <TypeCode>::ret (S::_implementation (_b).member_type (index));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -123,10 +123,10 @@ protected:
 		return 0;
 	}
 
-	static Any* _member_label (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
+	static const Any* _member_label (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).member_label (index);
+			return Type <Any>::VT_ret (S::_implementation (_b).member_label (index));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -138,7 +138,7 @@ protected:
 	static Interface* _discriminator_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).discriminator_type ();
+			return TypeI <TypeCode>::ret (S::_implementation (_b).discriminator_type ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -174,7 +174,7 @@ protected:
 	static Interface* _content_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).content_type ();
+			return TypeI <TypeCode>::ret (S::_implementation (_b).content_type ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -234,7 +234,7 @@ protected:
 	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (_b).concrete_base_type ();
+			return TypeI <TypeCode>::ret (S::_implementation (_b).concrete_base_type ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {

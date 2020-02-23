@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_TYPEENUM_H_
 #define NIRVANA_ORB_TYPEENUM_H_
 
-#include "Type_forward.h"
+#include "BasicTypes.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -12,7 +12,7 @@ struct TypeEnum
 {
 	static const bool has_check = true;
 
-	typedef uint32_t ABI_type;
+	typedef ULong ABI_type;
 
 	typedef ABI_type ABI_in;
 	typedef ABI_type* ABI_out;
@@ -98,6 +98,11 @@ struct TypeEnum
 	{
 		_check_pointer (p);
 		return *p;
+	}
+
+	static ABI_ret ret (T val)
+	{
+		return (ABI_ret)val;
 	}
 };
 

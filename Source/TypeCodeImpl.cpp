@@ -77,7 +77,7 @@ Interface* TypeCodeBase::_member_type (Bridge <TypeCode>* _b, ULong index, Envir
 	return nullptr;
 }
 
-Any* TypeCodeBase::_member_label (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
+const Any* TypeCodeBase::_member_label (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
 {
 	set_BadKind (_env);
 	return nullptr;

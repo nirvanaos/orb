@@ -11,5 +11,6 @@
 #include "Any.h"
 #include "Type.h"
 #include "LocalObject.h"
+#include "String_compat.h"
 
 #endif

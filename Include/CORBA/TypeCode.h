@@ -34,7 +34,7 @@ public:
 	// for tk_struct, tk_union, tk_enum, tk_value,
 	// and tk_except
 	ULong member_count (); // raises (BadKind);
-	Identifier member_name (ULong index); // raises (BadKind, Bounds);
+	const char* member_name (ULong index); // raises (BadKind, Bounds);
 	TypeCode_var member_type (ULong index); // raises (BadKind, Bounds);
 
 	// for tk_union

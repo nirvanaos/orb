@@ -78,7 +78,7 @@ std::string Client <T, ::Test::I1>::string_op (CORBA::String_in in_s, CORBA::Str
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	Type <std::string>::C_ret _ret = (_b._epv ().epv.string_op) (&_b, &in_s, &out_s, &inout_s, &_env);
+	Type <String>::C_ret _ret = (_b._epv ().epv.string_op) (&_b, &in_s, &out_s, &inout_s, &_env);
 	_env.check ();
 	return _ret;
 }
