@@ -7,6 +7,8 @@
 namespace CORBA {
 namespace Nirvana {
 
+typedef Interface* ABI_interface;
+
 //! I_in helper class for interface
 template <class I>
 class I_in

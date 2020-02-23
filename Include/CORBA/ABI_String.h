@@ -1,9 +1,9 @@
-//! \file StringABI.h.
+//! \file ABI_String.h.
 //!
 //! \brief Declares the string ABI
 
-#ifndef NIRVANA_ORB_STRINGABI_H_
-#define NIRVANA_ORB_STRINGABI_H_
+#ifndef NIRVANA_ORB_ABI_STRING_H_
+#define NIRVANA_ORB_ABI_STRING_H_
 
 #include <Nirvana/NirvanaBase.h>
 #include "Type_forward.h"
@@ -208,9 +208,6 @@ struct ABI <StringT <C> >
 
 	Data data_;
 };
-
-template <typename C>
-using StringABI = ABI <StringT <C> >;
 
 }
 }

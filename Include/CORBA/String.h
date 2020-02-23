@@ -98,7 +98,7 @@ void Type <StringT <C> >::check (const ABI_type& s)
 	} else {
 		p = s.small_pointer ();
 		cc = s.small_size ();
-		if (cc > StringABI <C>::SMALL_CAPACITY)
+		if (cc > ABI_type::SMALL_CAPACITY)
 			::Nirvana::throw_BAD_PARAM ();
 	}
 	if (p [cc])

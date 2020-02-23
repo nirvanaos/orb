@@ -1,10 +1,10 @@
-//! \file AnyABI.h.
+//! \file ABI_Any.h.
 //!
-//! \brief Declares the any ABI
+//! \brief Declares the any ABI.
 //! This file have not be changed in future
 
-#ifndef NIRVANA_ORB_ANYABI_H_
-#define NIRVANA_ORB_ANYABI_H_
+#ifndef NIRVANA_ORB_ABI_ANY_H_
+#define NIRVANA_ORB_ABI_ANY_H_
 
 #include <Nirvana/NirvanaBase.h>
 #include "Type_forward.h"

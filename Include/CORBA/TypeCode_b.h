@@ -55,7 +55,7 @@ BRIDGE_BEGIN (TypeCode)
 Boolean (*equal) (Bridge <TypeCode>*, Interface*, EnvironmentBridge*);
 Boolean (*equivalent) (Bridge <TypeCode>*, Interface*, EnvironmentBridge*);
 Interface* (*get_compact_typecode) (Bridge <TypeCode>*, EnvironmentBridge*);
-Type <TCKind>::ABI_ret (*kind) (Bridge <TypeCode>*, EnvironmentBridge*);
+ABI_Enum (*kind) (Bridge <TypeCode>*, EnvironmentBridge*);
 const char* (*id) (Bridge <TypeCode>*, EnvironmentBridge*);
 const char* (*name) (Bridge <TypeCode>*, EnvironmentBridge*);
 ULong (*member_count) (Bridge <TypeCode>*, EnvironmentBridge*);

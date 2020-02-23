@@ -1,9 +1,9 @@
-//! \file SequenceABI.h.
+//! \file ABI_Sequence.h.
 //!
 //! \brief Declares the sequence ABI
 
-#ifndef NIRVANA_ORB_SEQUENCEABI_H_
-#define NIRVANA_ORB_SEQUENCEABI_H_
+#ifndef NIRVANA_ORB_ABI_SEQUENCE_H_
+#define NIRVANA_ORB_ABI_SEQUENCE_H_
 
 #include "Type_forward.h"
 
@@ -32,9 +32,6 @@ struct ABI <Sequence <T> >
 	size_t size;
 	size_t allocated;
 };
-
-template <class T>
-using SequenceABI = ABI <Sequence <T> >;
 
 }
 }

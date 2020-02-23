@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_TYPEVARLEN_H_
 #define NIRVANA_ORB_TYPEVARLEN_H_
 
-#include "TypeBase.h"
+#include "TypeFixLen.h"
 #include <utility>
 #include <new>
 
@@ -9,17 +9,17 @@ namespace CORBA {
 namespace Nirvana {
 
 template <class T>
-struct TypeVarLenBase : TypeBase <T>
+struct TypeVarLenBase : TypeFixLen <T>
 {
-	typedef typename TypeBase <T>::C_in C_in;
-	typedef typename TypeBase <T>::C_inout C_inout;
+	typedef typename TypeFixLen <T>::C_in C_in;
+	typedef typename TypeFixLen <T>::C_inout C_inout;
 
 	/// C_out class clears output variable
-	class C_out : public TypeBase <T>::C_out
+	class C_out : public TypeFixLen <T>::C_out
 	{
 	public:
 		C_out (T& val) :
-			TypeBase <T>::C_out (val)
+			TypeFixLen <T>::C_out (val)
 		{
 			val = T ();	// Clear
 		}
@@ -28,7 +28,7 @@ struct TypeVarLenBase : TypeBase <T>
 	class C_ret
 	{
 	public:
-		C_ret (typename TypeBase <T>::ABI_ret&& val) :
+		C_ret (typename TypeFixLen <T>::ABI_ret&& val) :
 			val_ (val)
 		{}
 
@@ -38,7 +38,7 @@ struct TypeVarLenBase : TypeBase <T>
 		}
 
 	protected:
-		TypeBase <T>::ABI_ret val_;
+		TypeFixLen <T>::ABI_ret val_;
 	};
 
 	// Client I_var class for the C++ IDL mapping standard conformance
@@ -142,7 +142,7 @@ struct TypeVarLen <T, true> : TypeVarLenBase <T>
 	class C_ret : public TypeVarLenBase <T>::C_ret
 	{
 	public:
-		C_ret (typename TypeBase <T>::ABI_ret&& val) :
+		C_ret (typename TypeFixLen <T>::ABI_ret&& val) :
 			TypeVarLenBase <T>::C_ret (std::move (val))
 		{
 			if (Type <T>::has_check)
@@ -152,21 +152,21 @@ struct TypeVarLen <T, true> : TypeVarLenBase <T>
 
 	// Servant-side methods
 
-	static const T& in (typename TypeBase <T>::ABI_in p)
+	static const T& in (typename TypeFixLen <T>::ABI_in p)
 	{
 		_check_pointer (p);
 		Type <T>::check (*p);
 		return reinterpret_cast <const T&> (*p);
 	}
 
-	static T& inout (typename TypeBase <T>::ABI_inout p)
+	static T& inout (typename TypeFixLen <T>::ABI_inout p)
 	{
 		_check_pointer (p);
 		Type <T>::check (*p);
 		return reinterpret_cast <T&> (*p);
 	}
 
-	static T& out (typename TypeBase <T>::ABI_out p)
+	static T& out (typename TypeFixLen <T>::ABI_out p)
 	{
 		return inout (p);
 	}

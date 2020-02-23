@@ -6,13 +6,15 @@
 namespace CORBA {
 namespace Nirvana {
 
+typedef ULong ABI_Enum;
+
 /// Base for enum data types
 template <class T>
 struct TypeEnum
 {
 	static const bool has_check = true;
 
-	typedef ULong ABI_type;
+	typedef ABI_Enum ABI_type;
 
 	typedef ABI_type ABI_in;
 	typedef ABI_type* ABI_out;
