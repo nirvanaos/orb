@@ -38,6 +38,7 @@ public:
 	TypeCode_var member_type (ULong index); // raises (BadKind, Bounds);
 
 	// for tk_union
+	const Any& member_label (ULong index); // raises (BadKind, Bounds);
 	TypeCode_var discriminator_type (); // raises (BadKind);
 	Long default_index (); // raises (BadKind);
 
@@ -196,6 +197,16 @@ TypeCode_var Client <T, TypeCode>::member_type (ULong index)
 	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
 	I_ret <TypeCode> _ret = (_b._epv ().epv.member_type) (&_b, index, &_env);
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
+const Any& Client <T, TypeCode>::member_label (ULong index)
+{
+	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds> _env;
+	Bridge <TypeCode>& _b (T::_get_bridge (_env));
+	typename Type <Any>::C_VT_ret _ret = (_b._epv ().epv.member_label) (&_b, index, &_env);
 	_env.check ();
 	return _ret;
 }

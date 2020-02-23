@@ -161,6 +161,16 @@ struct TypeVarLen <T, true> : TypeVarLenBase <T>
 		}
 	};
 
+	class C_VT_ret : public Base::C_VT_ret
+	{
+	public:
+		C_VT_ret (typename Base::ABI_VT_ret p) :
+			Base::C_VT_ret (p)
+		{
+			Type <T>::check (*p);
+		}
+	};
+
 	// Servant-side methods
 
 	static const T& in (typename Base::ABI_in p)
