@@ -32,7 +32,7 @@ protected:
 
 template <class S>
 const Bridge <DynamicServant>::EPV Skeleton <S, DynamicServant>::epv_ = {
-	{ // interface
+	{ // header
 		Bridge <DynamicServant>::interface_id_,
 		S::template __duplicate <DynamicServant>,
 		S::template __release <DynamicServant>

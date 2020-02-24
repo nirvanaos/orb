@@ -24,7 +24,7 @@ typedef ::CORBA::Nirvana::I_ptr <ServantBase> ServantBase_ptr;
 typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
 typedef ::CORBA::Nirvana::I_out <ServantBase> ServantBase_out;
 
-BRIDGE_BEGIN (ServantBase)
+BRIDGE_BEGIN (ServantBase, CORBA_REPOSITORY_ID (Object))
 BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV

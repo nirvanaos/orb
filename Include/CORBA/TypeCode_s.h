@@ -335,7 +335,7 @@ protected:
 
 template <class S>
 const Bridge <TypeCode>::EPV Skeleton <S, TypeCode>::epv_ = {
-	{ // interface
+	{ // header
 		Bridge <TypeCode>::interface_id_,
 		S::template __duplicate <TypeCode>,
 		S::template __release <TypeCode>

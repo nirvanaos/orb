@@ -16,7 +16,7 @@ typedef ::CORBA::Nirvana::I_out <I3> I3_out;
 namespace CORBA {
 namespace Nirvana {
 
-BRIDGE_BEGIN (::Test::I3)
+BRIDGE_BEGIN (::Test::I3, "IDL:Test/I3:1.0")
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BASE_STRUCT_ENTRY (::Test::I1, Test_I1)
 BASE_STRUCT_ENTRY (::Test::I2, Test_I2)

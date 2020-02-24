@@ -3,11 +3,6 @@
 
 #include "BasicTypes.h"
 
-#define CORBA_REPOSITORY_ID(t) "IDL:omg.org/CORBA/" #t ":1.0"
-#define NIRVANA_REPOSITORY_ID(t) "IDL:Nirvana/" #t ":1.0"
-#define CORBA_NIRVANA_REPOSITORY_ID(t) "IDL:CORBA/Nirvana/" #t ":1.0"
-#define PORTABLESERVER_REPOSITORY_ID(t) "IDL:omg.org/PortableServer/" #t ":1.0"
-
 namespace CORBA {
 namespace Nirvana {
 

@@ -90,7 +90,7 @@ public:
 	void return_exception (const Exception*);
 };
 
-BRIDGE_BEGIN (LocalMarshal)
+BRIDGE_BEGIN (LocalMarshal, CORBA_NIRVANA_REPOSITORY_ID (LocalMarshal))
 void (*begin_call) (Bridge <LocalMarshal>*, const LocalObjectRef* target, OperationIndex operation, EnvironmentBridge*);
 void (*begin_return) (Bridge <LocalMarshal>*, EnvironmentBridge*);
 uintptr_t (*marshal_memory) (Bridge <LocalMarshal>*, const void* p, size_t* size, EnvironmentBridge*);

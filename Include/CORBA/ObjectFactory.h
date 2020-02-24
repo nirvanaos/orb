@@ -14,7 +14,7 @@ typedef I_ptr <ObjectFactory> ObjectFactory_ptr;
 typedef I_var <ObjectFactory> ObjectFactory_var;
 typedef I_out <ObjectFactory> ObjectFactory_out;
 
-BRIDGE_BEGIN (ObjectFactory)
+BRIDGE_BEGIN (ObjectFactory, CORBA_NIRVANA_REPOSITORY_ID (ObjectFactory))
 Interface* (*create_servant) (Bridge <ObjectFactory>*, Interface*, EnvironmentBridge*);
 Interface* (*create_local_object) (Bridge <ObjectFactory>*, Interface*, EnvironmentBridge*);
 Interface* (*create_reference_counter) (Bridge <ObjectFactory>*, Interface*, EnvironmentBridge*);

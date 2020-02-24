@@ -27,7 +27,7 @@ public:
 	template <class I>
 	static S& _implementation (Bridge <I>* bridge)
 	{
-		_check_pointer (bridge, Skeleton <S, I>::epv_.interface);
+		_check_pointer (bridge, Skeleton <S, I>::epv_.header);
 		return static_cast <S&> (*bridge);
 	}
 

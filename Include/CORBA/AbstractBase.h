@@ -3,6 +3,7 @@
 
 #include "Client.h"
 #include "TypeInterface.h"
+#include <CORBA/RepositoryId.h>
 
 namespace CORBA {
 
@@ -24,9 +25,9 @@ namespace Nirvana {
 
 // AbstractBase
 
-BRIDGE_BEGIN(AbstractBase)
+BRIDGE_BEGIN (AbstractBase, CORBA_REPOSITORY_ID (AbstractBase))
 	Interface* (*query_interface) (Bridge <AbstractBase>*, const Char*, EnvironmentBridge*);
-BRIDGE_END()
+BRIDGE_END ()
 
 template <class T>
 class Client <T, AbstractBase> :

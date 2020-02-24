@@ -75,7 +75,7 @@ protected:
 		typename Bridge <Primary>:: template Wide <Base>::Func func = t._epv ().base;
 		Bridge <Base>* ret = (func)(&t, Bridge <Base>::interface_id_, &env);
 		env.check ();
-		assert (!ret || RepositoryId::compatible (ret->_epv ().interface.interface_id, Bridge <Base>::interface_id_));
+		assert (!ret || RepositoryId::compatible (ret->_epv ().header.interface_id, Bridge <Base>::interface_id_));
 		return ret;
 	}
 

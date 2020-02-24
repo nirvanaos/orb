@@ -50,7 +50,7 @@ protected:
 
 template <class S>
 const Bridge <ReferenceCounter>::EPV Skeleton <S, ReferenceCounter>::epv_ = {
-	{ // interface
+	{ // header
 		Bridge <ReferenceCounter>::interface_id_,
 		S::template __duplicate <ReferenceCounter>,
 		S::template __release <ReferenceCounter>

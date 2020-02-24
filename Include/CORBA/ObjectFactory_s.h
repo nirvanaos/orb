@@ -55,7 +55,7 @@ protected:
 
 template <class S>
 const Bridge <ObjectFactory>::EPV Skeleton <S, ObjectFactory>::epv_ = {
-	{ // interface
+	{ // header
 		Bridge <ObjectFactory>::interface_id_,
 		S::template __duplicate <ObjectFactory>,
 		S::template __release <ObjectFactory>

@@ -13,7 +13,7 @@ typedef Nirvana::I_inout <NamedValue> NamedValue_inout;
 
 namespace Nirvana {
 
-BRIDGE_BEGIN (NamedValue)
+BRIDGE_BEGIN (NamedValue, CORBA_REPOSITORY_ID (NamedValue))
 const Char* (*name) (Bridge <NamedValue>*, EnvironmentBridge*);
 const Any& (*value) (Bridge <NamedValue>*, EnvironmentBridge*);
 Flags (*flags) (Bridge <NamedValue>*, EnvironmentBridge*);

@@ -52,7 +52,7 @@ protected:
 
 template <class S>
 const Bridge < ::CORBA::Environment>::EPV Skeleton <S, ::CORBA::Environment>::epv_ = {
-	{ // interface
+	{ // header
 		Bridge < ::CORBA::Environment>::interface_id_,
 		S::template __duplicate < ::CORBA::Environment>,
 		S::template __release < ::CORBA::Environment>

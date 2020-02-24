@@ -10,7 +10,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-BRIDGE_BEGIN (PortableServer::POA)
+BRIDGE_BEGIN (PortableServer::POA, PORTABLESERVER_REPOSITORY_ID (POA))
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV
 Type <String>::ABI_ret (*activate_object) (Bridge <PortableServer::POA>*, Interface*, EnvironmentBridge*);

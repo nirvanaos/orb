@@ -20,7 +20,7 @@ typedef CORBA::Nirvana::Type <SeqLong>::C_inout SeqLong_inout;
 namespace CORBA {
 namespace Nirvana {
 
-BRIDGE_BEGIN (::Test::I1)
+BRIDGE_BEGIN (::Test::I1, "IDL:Test/I1:1.0")
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV
 Long (*op1) (Bridge < ::Test::I1>*, Long p1, EnvironmentBridge*);

@@ -33,10 +33,10 @@ public:
 
 protected:
 	Bridge (const EPV& epv) :
-		Interface (epv.interface)
+		Interface (epv.header)
 	{
 #ifdef NIRVANA_C11
-		static_assert (offsetof(EPV, interface) == 0, "interface must be at the beginning of EPV.");
+		static_assert (offsetof(EPV, header) == 0, "header must be at the beginning of EPV.");
 #endif
 	}
 };
@@ -44,11 +44,17 @@ protected:
 #define BASE_STRUCT_ENTRY(type, name) MyBridge::Wide < type>::Func name;\
 operator const MyBridge::Wide < type>::Func () const { return name; }
 
-#define BRIDGE_BEGIN(I) template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EPV interface; struct {
+#define BRIDGE_BEGIN(I, id) template <> const Char Bridge < I>::interface_id_ [] = id;\
+template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EPV header; struct {
 #define BRIDGE_EPV } base; struct {
 #define BRIDGE_END() } epv;};
 
 }
 }
+
+#define CORBA_REPOSITORY_ID(t) "IDL:omg.org/CORBA/" #t ":1.0"
+#define NIRVANA_REPOSITORY_ID(t) "IDL:Nirvana/" #t ":1.0"
+#define CORBA_NIRVANA_REPOSITORY_ID(t) "IDL:CORBA/Nirvana/" #t ":1.0"
+#define PORTABLESERVER_REPOSITORY_ID(t) "IDL:omg.org/PortableServer/" #t ":1.0"
 
 #endif

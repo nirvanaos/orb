@@ -16,12 +16,6 @@ struct IOR;
 
 }
 
-namespace Nirvana {
-
-class SynchronizationDomain;
-
-}
-
 namespace CORBA {
 
 typedef Nirvana::Interface ImplementationDef; // Not defined yet
@@ -39,11 +33,14 @@ typedef Nirvana::I_inout <InterfaceDef> InterfaceDef_inout;
 namespace Nirvana {
 
 template <>
+const Char Bridge <Object>::interface_id_ [] = CORBA_REPOSITORY_ID (Object);
+
+template <>
 struct Bridge <Object>::EPV
 {
 	typedef Bridge <Object> MyBridge;
 
-	Interface::EPV interface;
+	Interface::EPV header;
 
 	struct
 	{
@@ -63,9 +60,7 @@ struct Bridge <Object>::EPV
 
 	struct
 	{
-		Interface* (*sync_domain) (Bridge <Object>*, EnvironmentBridge*);
 		const IOP::IOR* (*object_reference) (ABI_in <Boolean> local);
-		const void* (*call_target) ();
 	} internal;
 };
 

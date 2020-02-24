@@ -15,7 +15,7 @@ typedef ::CORBA::Nirvana::I_out <I2> I2_out;
 namespace CORBA {
 namespace Nirvana {
 
-BRIDGE_BEGIN (::Test::I2)
+BRIDGE_BEGIN (::Test::I2, "IDL:Test/I2:1.0")
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV
 Long (*op2) (Bridge < ::Test::I2>*, Long p1, EnvironmentBridge*);

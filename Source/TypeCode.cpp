@@ -13,11 +13,4 @@ DEFINE_INTERFACE_EXCEPTION (TypeCode, BadKind, CORBA_REPOSITORY_ID (TypeCode/Bad
 DEFINE_INTERFACE_EXCEPTION (TypeCode, Bounds, CORBA_REPOSITORY_ID (TypeCode/Bounds));
 //const Nirvana::StaticInterface <TypeCode> TypeCode::_tc_Bounds { STATIC_BRIDGE (Nirvana::TypeCodeException <TypeCode::Bounds>, TypeCode) };
 
-namespace Nirvana {
-
-template <>
-const Char Bridge <TypeCode>::interface_id_[] = CORBA_REPOSITORY_ID (TypeCode);
-
-}
-
 }

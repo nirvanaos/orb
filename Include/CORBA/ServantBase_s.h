@@ -66,7 +66,7 @@ protected:
 
 template <class S>
 const Bridge <ServantBase>::EPV Skeleton <S, ServantBase>::epv_ = {
-	{ // interface
+	{ // header
 		ServantBase::check_interface_id_,
 		S::template __duplicate <ServantBase>,
 		S::template __release <ServantBase>
