@@ -49,7 +49,7 @@ public:
 	I_var& operator = (const I_var& src)
 	{
 		if (src.p_ != this->p_)
-			operator = (static_cast <I*> (interface_duplicate (src.p_)));
+			operator = (I_ptr <I> (static_cast <I*> (interface_duplicate (src.p_))));
 		return *this;
 	}
 

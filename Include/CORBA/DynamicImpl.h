@@ -7,7 +7,7 @@ namespace CORBA {
 namespace Nirvana {
 
 /// Dynamic object implementation
-/// Core always call _release synchronously so we don't need atomic counter here.
+/// Core always calls _release synchronously so we don't need atomic counter here.
 template <class T>
 class DynamicImpl
 {

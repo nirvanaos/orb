@@ -4,6 +4,7 @@
 #include "Bridge.h"
 #include "set_exception.h"
 #include "Exception.h"
+#include "DynamicImpl.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -72,6 +73,13 @@ public:
 			S::_implementation (itf)._remove_ref ();
 	}
 };
+
+//! Life cycle with reference counting implementation.
+template <class S>
+class LifeCycleRefCntImpl :
+	public LifeCycleRefCnt <S>,
+	public DynamicImpl <S>
+{};
 
 //! Non copyable reference.
 template <class S>

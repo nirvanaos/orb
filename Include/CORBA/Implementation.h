@@ -87,8 +87,7 @@ template <class S>
 class InterfaceImpl <S, ServantBase> :
 	public Skeleton <S, ServantBase>,
 	public ServantBaseLink,
-	public LifeCycleRefCnt <S>,
-	public DynamicImpl <S>
+	public LifeCycleRefCntImpl <S>
 {
 protected:
 	InterfaceImpl () :
@@ -168,8 +167,7 @@ template <class S>
 class InterfaceImpl <S, LocalObject> :
 	public InterfaceImplBase <S, Object>,
 	public LocalObjectLink,
-	public LifeCycleRefCnt <S>,
-	public DynamicImpl <S>
+	public LifeCycleRefCntImpl <S>
 {
 protected:
 	InterfaceImpl ()

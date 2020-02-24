@@ -4,6 +4,7 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <>
 const Char Bridge <ObjectFactory>::interface_id_ [] = CORBA_NIRVANA_REPOSITORY_ID (ObjectFactory);
 
 }

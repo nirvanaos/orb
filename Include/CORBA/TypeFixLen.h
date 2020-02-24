@@ -104,12 +104,12 @@ struct TypeFixLen
 			return *this;
 		}
 
-		typename C_out out ()
+		C_out out ()
 		{
 			return *this;
 		}
 
-		typename C_inout inout ()
+		C_inout inout ()
 		{
 			return *this;
 		}

@@ -15,10 +15,9 @@ DEFINE_INTERFACE_EXCEPTION (TypeCode, Bounds, CORBA_REPOSITORY_ID (TypeCode/Boun
 
 namespace Nirvana {
 
+template <>
 const Char Bridge <TypeCode>::interface_id_[] = CORBA_REPOSITORY_ID (TypeCode);
 
 }
-
-const ::Nirvana::ImportInterfaceT <TypeCode> _tc_boolean = { { 0, nullptr, nullptr, STATIC_BRIDGE (Nirvana::TC_boolean, TypeCode) } };
 
 }

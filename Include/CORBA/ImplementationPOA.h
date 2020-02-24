@@ -36,8 +36,7 @@ template <>
 class ServantPOA <AbstractBase> :
 	public ServantTraitsPOA,
 	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
-	public LifeCycleRefCnt <ServantPOA <AbstractBase> >,
-	public DynamicImpl <ServantPOA <AbstractBase> >
+	public LifeCycleRefCntImpl <ServantPOA <AbstractBase> >
 {
 public:
 	virtual void _add_ref ()

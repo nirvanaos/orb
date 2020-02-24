@@ -123,7 +123,7 @@ public:
 		var = (Servant*)0;
 	}
 
-	Servant_out (Servant_out& src) :
+	Servant_out (const Servant_out& src) :
 		ref_ (src.ref_)
 	{}
 

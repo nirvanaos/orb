@@ -5,6 +5,7 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <>
 const Char Bridge < ::CORBA::Environment>::interface_id_[] = CORBA_REPOSITORY_ID (Environment);
 
 }

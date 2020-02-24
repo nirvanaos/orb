@@ -82,7 +82,7 @@ TEST_F (TestORB, CORBA_Environment)
 	CORBA::Environment_ptr env;
 	CORBA::ORB::create_environment (env);
 	CORBA::Nirvana::EnvironmentBridge* eb = env;
-	set_exception (eb, CORBA::NO_MEMORY ());
+	CORBA::Nirvana::set_exception (eb, CORBA::NO_MEMORY ());
 	const CORBA::Exception* ex = env->exception ();
 	ASSERT_TRUE (ex);
 	EXPECT_STREQ (ex->_name (), "NO_MEMORY");
@@ -95,7 +95,7 @@ TEST_F (TestORB, CORBA_Environment)
 TEST_F (TestORB, Environment)
 {
 	CORBA::Nirvana::Environment ne;
-	ne.set (&CORBA::NO_MEMORY ());
+	set_exception (&ne, CORBA::NO_MEMORY ());
 	const CORBA::Exception* ex = ne.exception ();
 	ASSERT_TRUE (ex);
 	EXPECT_STREQ (ex->_name (), "NO_MEMORY");
@@ -106,7 +106,7 @@ TEST_F (TestORB, Environment)
 	EXPECT_STREQ (ex->_name (), "NO_MEMORY");
 
 	CORBA::Nirvana::EnvironmentEx <TestException> nex;
-	nex.set (&TestException ());
+	CORBA::Nirvana::set_exception (&nex, TestException ());
 	CORBA::Nirvana::Environment ne2 (move (nex));
 	ex = ne2.exception ();
 	ASSERT_TRUE (ex);

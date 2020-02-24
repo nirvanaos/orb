@@ -36,7 +36,7 @@ protected:
 		Interface (epv.interface)
 	{
 #ifdef NIRVANA_C11
-		static_assert (offsetof(epv, interface) == 0, "interface must be at the beginning of EPV.");
+		static_assert (offsetof(EPV, interface) == 0, "interface must be at the beginning of EPV.");
 #endif
 	}
 };

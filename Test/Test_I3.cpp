@@ -3,6 +3,7 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <>
 const Char Bridge < ::Test::I3>::interface_id_ [] = "IDL:Test/I3:1.0";
 
 }
