@@ -7,34 +7,6 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <typename C>
-StringBase <C>::StringBase (const C* s)
-{
-	if (s) {
-		size_t cc = std::char_traits <C>::length (s);
-		this->large_pointer (const_cast <C*> (s));
-		this->large_size (cc);
-		this->allocated (0);
-	} else
-		this->reset ();
-}
-
-#ifdef NIRVANA_C11
-
-template <typename C>
-template <class T, class A, typename>
-StringBase <C>::StringBase (const std::basic_string <C, T, A>& s)
-{
-	if (!s.empty ()) {
-		this->large_pointer (const_cast <C*> (s.data ()));
-		this->large_size (s.length ());
-		this->allocated (0);
-	} else
-		this->reset ();
-}
-
-#endif
-
 typedef StringT <Char> String;
 typedef StringT <WChar> WString;
 
@@ -123,29 +95,14 @@ void Type <StringT <C> >::check (const ABI_type& s)
 		::Nirvana::throw_BAD_PARAM (); // Not zero-terminated
 }
 
-template <typename C>
-using TypeString = Type <StringT <C> >;
-
-template <typename C>
-using String_in = typename TypeString <C>::C_in;
-
-template <typename C>
-using String_out = typename TypeString <C>::C_out;
-
-template <typename C>
-using String_inout = typename TypeString <C>::C_inout;
-
 }
 
-typedef Nirvana::String_in <Char> String_in;
-typedef Nirvana::String_in <WChar> WString_in;
+typedef typename Nirvana::Type <Nirvana::StringT <Char> >::C_out String_out;
+typedef typename Nirvana::Type <Nirvana::StringT <WChar> >::C_out WString_out;
+typedef typename Nirvana::Type <Nirvana::StringT <Char> >::C_inout String_inout;
+typedef typename Nirvana::Type <Nirvana::StringT <WChar> >::C_inout WString_inout;
 
-typedef Nirvana::String_out <Char> String_out;
-typedef Nirvana::String_out <WChar> WString_out;
-
-typedef Nirvana::String_inout <Char> String_inout;
-typedef Nirvana::String_inout <WChar> WString_inout;
-
+// For String_in and WString_in see StringBase.h
 // String_var and WString_var classes are defined in String_compat.h
 
 }

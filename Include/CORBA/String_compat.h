@@ -79,22 +79,26 @@ public:
 		return this->_ptr ();
 	}
 
-	String_in <C> in () const
+	typedef typename Type <StringT <C> >::C_in C_in;
+	typedef typename Type <StringT <C> >::C_out C_out;
+	typedef typename Type <StringT <C> >::C_inout C_inout;
+
+	C_in in () const
 	{
 		return *this;
 	}
 
-	String_inout <C> inout ()
+	C_inout inout ()
 	{
 		return String_inout <C> (*this);
 	}
 
-	String_out <C> out ()
+	C_out out ()
 	{
 		return String_out <C> (*this);
 	}
 
-	std::basic_string <C> _retn ()
+	StringT <C> _retn ()
 	{
 		return std::move (*this);
 	}
