@@ -5,6 +5,7 @@
 #define NIRVANA_ORB_BASICTYPES_H_
 
 #include <stdint.h>
+#include "Boolean.h"
 #include "TypeScalar.h"
 
 #define DECLARE_BASIC_TYPE(t) namespace Nirvana { template <> struct Nirvana::Type <t> : Nirvana::TypeScalar <t> {}; }\
@@ -13,11 +14,6 @@ typedef Nirvana::Type <t>::C_out t##_out; typedef Nirvana::Type <t>::C_inout t##
 namespace CORBA {
 
 // Primitive types
-
-/// We can not use `bool' built-in type because it is compiler-specific, 
-/// but we have to achieve the binary compatibility.
-typedef char Boolean;
-//DECLARE_BASIC_TYPE (Boolean) // Same as Char
 
 typedef char Char;
 DECLARE_BASIC_TYPE (Char)
@@ -57,14 +53,6 @@ DECLARE_BASIC_TYPE (LongDouble)
 
 typedef Long Flags;
   
-#ifndef FALSE
-#define FALSE 0
-#endif
-  
-#ifndef TRUE
-#define TRUE 1
-#endif
-
 } // namespace CORBA
 
 #undef DECLARE_BASIC_TYPE

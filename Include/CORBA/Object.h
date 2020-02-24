@@ -54,9 +54,9 @@ struct Bridge <Object>::EPV
 	{
 		Interface* (*get_implementation) (Bridge <Object>*, EnvironmentBridge*);
 		Interface* (*get_interface) (Bridge <Object>*, EnvironmentBridge*);
-		Boolean (*is_a) (Bridge <Object>*, const Char* type_id, EnvironmentBridge*);
-		Boolean (*non_existent) (Bridge <Object>*, EnvironmentBridge*);
-		Boolean (*is_equivalent) (Bridge <Object>*, Interface*, EnvironmentBridge*);
+		ABI_boolean (*is_a) (Bridge <Object>*, const Char* type_id, EnvironmentBridge*);
+		ABI_boolean (*non_existent) (Bridge <Object>*, EnvironmentBridge*);
+		ABI_boolean (*is_equivalent) (Bridge <Object>*, Interface*, EnvironmentBridge*);
 		ULong (*hash) (Bridge <Object>*, ULong maximum, EnvironmentBridge*);
 		// TODO: Other Object operations shall be here...
 	} epv;
@@ -64,7 +64,7 @@ struct Bridge <Object>::EPV
 	struct
 	{
 		Interface* (*sync_domain) (Bridge <Object>*, EnvironmentBridge*);
-		const IOP::IOR* (*object_reference) (Boolean local);
+		const IOP::IOR* (*object_reference) (ABI_in <Boolean> local);
 		const void* (*call_target) ();
 	} internal;
 };
@@ -108,7 +108,7 @@ Boolean Client <T, Object>::_is_a (const Char* type_id)
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	Boolean _ret = (_b._epv ().epv.is_a) (&_b, type_id, &_env);
+	Type <Boolean>::C_ret _ret = (_b._epv ().epv.is_a) (&_b, type_id, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -118,7 +118,7 @@ Boolean Client <T, Object>::_non_existent ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	Boolean _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
+	T_ret <Boolean> _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -128,7 +128,7 @@ Boolean Client <T, Object>::_is_equivalent (Object_ptr other_object)
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	Boolean _ret = (_b._epv ().epv.is_equivalent) (&_b, other_object, &_env);
+	T_ret <Boolean> _ret = (_b._epv ().epv.is_equivalent) (&_b, other_object, &_env);
 	_env.check ();
 	return _ret;
 }

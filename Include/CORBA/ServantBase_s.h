@@ -39,7 +39,7 @@ protected:
 		return 0;
 	}
 
-	static Boolean __is_a (Bridge <ServantBase>* obj, const Char* type_id, EnvironmentBridge* env)
+	static ABI_boolean __is_a (Bridge <ServantBase>* obj, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._is_a (type_id);
@@ -51,7 +51,7 @@ protected:
 		return 0;
 	}
 
-	static Boolean __non_existent (Bridge <ServantBase>* obj, EnvironmentBridge* env)
+	static ABI_boolean __non_existent (Bridge <ServantBase>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._non_existent ();

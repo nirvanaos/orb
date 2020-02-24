@@ -47,7 +47,7 @@ public:
 		return 0;
 	}
 
-	static Boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
+	static ABI_boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
 	{
 		try {
 			ServantBase_ptr servant = _implementation (obj).servant_;
@@ -60,7 +60,7 @@ public:
 		return 0;
 	}
 
-	static Boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
+	static ABI_boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
 			ServantBase_ptr servant = _implementation (obj).servant_;

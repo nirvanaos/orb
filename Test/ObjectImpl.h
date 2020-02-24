@@ -52,15 +52,12 @@ public:
 	Boolean _is_a (const Char* type_id) const
 	{
 		Interface* itf = servant_->_query_interface (type_id);
-		if (itf)
-			return TRUE;
-		else
-			return FALSE;
+		return itf != 0;
 	}
 
-	static Boolean __non_existent (Bridge <Object>*, EnvironmentBridge*)
+	static ABI_boolean __non_existent (Bridge <Object>*, EnvironmentBridge*)
 	{
-		return FALSE;
+		return false;
 	}
 
 	Boolean _is_equivalent (Object_ptr other)
@@ -93,7 +90,7 @@ public:
 		return ObjectBase::__get_implementation (obj, env);
 	}
 
-	static Boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
+	static ABI_boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		return ObjectBase::__non_existent (obj, env);
 	}

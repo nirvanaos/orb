@@ -51,7 +51,7 @@ protected:
 		return 0;
 	}
 
-	static ABI_Enum _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static ABI_enum _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		try {
 			return Type <TCKind>::ret (S::_implementation (_b).kind ());

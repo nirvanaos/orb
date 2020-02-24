@@ -104,11 +104,6 @@ void Type <Sequence <T> >::check (const ABI_type& v)
 	}
 }
 
-template <>
-struct Type <Sequence <bool> > :
-	public Type <Sequence <Boolean> >
-{};
-
 template <typename T>
 using TypeSequence = Type <Sequence <T> >;
 

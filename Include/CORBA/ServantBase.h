@@ -30,8 +30,8 @@ BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV
 Interface* (*default_POA) (Bridge <ServantBase>*, EnvironmentBridge*);
 Interface* (*get_interface) (Bridge <ServantBase>*, EnvironmentBridge*);
-Boolean (*is_a) (Bridge <ServantBase>*, const Char* type_id, EnvironmentBridge*);
-Boolean (*non_existent) (Bridge <ServantBase>*, EnvironmentBridge*);
+ABI_boolean (*is_a) (Bridge <ServantBase>*, const Char* type_id, EnvironmentBridge*);
+ABI_boolean (*non_existent) (Bridge <ServantBase>*, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <class T>
@@ -70,7 +70,7 @@ Boolean Client <T, ServantBase>::_is_a (const Char* type_id)
 {
 	Environment _env;
 	Bridge <ServantBase>& _b (T::_get_bridge (_env));
-	Boolean _ret = (_b._epv ().epv.is_a) (&_b, type_id, &_env);
+	T_ret <Boolean> _ret = (_b._epv ().epv.is_a) (&_b, type_id, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -80,7 +80,7 @@ Boolean Client <T, ServantBase>::_non_existent ()
 {
 	Environment _env;
 	Bridge <ServantBase>& _b (T::_get_bridge (_env));
-	Boolean _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
+	T_ret <Boolean> _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }

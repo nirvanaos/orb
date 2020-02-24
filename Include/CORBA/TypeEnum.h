@@ -6,15 +6,16 @@
 namespace CORBA {
 namespace Nirvana {
 
-typedef ULong ABI_Enum;
+typedef ULong ABI_enum;
 
 /// Base for enum data types
 template <class T>
 struct TypeEnum
 {
+	static_assert (sizeof (T) == sizeof (ABI_enum), "IDL enumerations must be declared as 32-bit.");
 	static const bool has_check = true;
 
-	typedef ABI_Enum ABI_type;
+	typedef ABI_enum ABI_type;
 
 	typedef ABI_type ABI_in;
 	typedef ABI_type* ABI_out;
