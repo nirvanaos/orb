@@ -13,7 +13,7 @@ class POACore :
 	public LocalObjectStaticCore <POACore>
 {
 public:
-	static Interface_ptr _query_interface (const Char* id)
+	static Interface_ptr _query_interface (String_in id)
 	{
 		return FindInterface <PortableServer::POA, Object>::find (*(POACore*)0, id);
 	}

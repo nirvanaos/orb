@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_STRINGBASE_H_
 
 #include "ABI_String.h"
-#include "BasicTypes.h"
+#include <string.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -21,18 +21,33 @@ public:
 protected:
 	StringBase ()
 	{}
+
+private:
+	static size_t _length (const C* s);
 };
 
 template <typename C>
 StringBase <C>::StringBase (const C* s)
 {
 	if (s) {
-		size_t cc = std::char_traits <C>::length (s);
+		size_t cc = _length (s);
 		this->large_pointer (const_cast <C*> (s));
 		this->large_size (cc);
 		this->allocated (0);
 	} else
 		this->reset ();
+}
+
+template <> inline
+size_t StringBase <Char>::_length (const Char* s)
+{
+	return strlen (s);
+}
+
+template <> inline
+size_t StringBase <WChar>::_length (const WChar* s)
+{
+	return wcslen (s);
 }
 
 }

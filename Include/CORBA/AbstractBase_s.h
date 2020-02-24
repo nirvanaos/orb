@@ -16,11 +16,11 @@ public:
 	static const typename Bridge <AbstractBase>::EPV epv_;
 
 protected:
-	static Interface* __query_interface (Bridge <AbstractBase>* base, const Char* id, EnvironmentBridge* env)
+	static Interface* __query_interface (Bridge <AbstractBase>* base, ABI_in <String> id, EnvironmentBridge* env)
 	{
 		Interface* ret = 0;
 		try {
-			ret = S::_implementation (base)._query_interface (id);
+			ret = S::_implementation (base)._query_interface (Type <String>::in (id));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {

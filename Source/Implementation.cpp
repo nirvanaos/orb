@@ -27,7 +27,7 @@ void LocalObjectLink::_construct (Bridge <AbstractBase>* base)
 		AbstractBase_ptr (static_cast <AbstractBase*> (base)));
 }
 
-Interface* LocalObjectLink::_get_proxy (const Char* id)
+Interface* LocalObjectLink::_get_proxy (String_in id)
 {
 	Interface* proxy = AbstractBase_ptr (object_)->_query_interface (id);
 	if (!proxy)

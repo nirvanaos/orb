@@ -3,7 +3,6 @@
 
 #include "Object.h"
 #include "TypeCode_b.h"
-#include <Nirvana/OLF.h>
 
 namespace CORBA {
 
@@ -222,8 +221,6 @@ void Client <T, LocalMarshal>::return_exception (const Exception*)
 
 class LocalMarshal : public ClientInterface <LocalMarshal>
 {};
-
-extern const ::Nirvana::ImportInterfaceT <LocalMarshal> g_local_marshal;
 
 }
 }

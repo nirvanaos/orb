@@ -7,7 +7,14 @@
 
 #include <Nirvana/basic_string.h>
 #include <Nirvana/vector.h>
+#include <Nirvana/ImportInterface.h>
 #include "LocalMarshal.h"
+
+namespace CORBA {
+namespace Nirvana {
+extern const ::Nirvana::ImportInterfaceT <LocalMarshal> g_local_marshal;
+}
+}
 
 namespace std {
 

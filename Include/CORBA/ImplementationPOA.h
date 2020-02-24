@@ -54,7 +54,7 @@ public:
 		return DynamicImpl <ServantPOA <AbstractBase> >::_refcount_value ();
 	}
 
-	virtual Interface_ptr _query_interface (const Char* id) = 0;
+	virtual Interface_ptr _query_interface (String_in id) = 0;
 
 	virtual ~ServantPOA ()
 	{}
@@ -199,7 +199,7 @@ class ImplementationPOA :
 	public InterfaceImpl <ServantPOA <Primary>, Primary>
 {
 public:
-	virtual Interface_ptr _query_interface (const Char* id)
+	virtual Interface_ptr _query_interface (String_in id)
 	{
 		return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
 	}

@@ -152,7 +152,7 @@ protected:
 
 	void _construct (Bridge <AbstractBase>* base);
 
-	Interface* _get_proxy (const Char* id = 0);
+	Interface* _get_proxy (String_in id = 0);
 
 private:
 	Object_ptr object_;
@@ -197,7 +197,7 @@ class Implementation :
 	public InterfaceImpl <S, Primary>
 {
 public:
-	Interface_ptr _query_interface (const Char* id)
+	Interface_ptr _query_interface (String_in id)
 	{
 		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);
 	}
