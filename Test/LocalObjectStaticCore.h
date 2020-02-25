@@ -24,7 +24,7 @@ public:
 		return InterfaceDef::_nil ();
 	}
 
-	static Boolean _is_a (const Char* type_id)
+	static Boolean _is_a (const String& type_id)
 	{
 		Interface* itf = S::_query_interface (type_id);
 		if (itf)

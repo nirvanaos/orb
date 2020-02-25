@@ -104,7 +104,7 @@ public:
 		return ServantBaseLink::_get_interface ();
 	}
 
-	virtual Boolean _is_a (const Char* type_id)
+	virtual Boolean _is_a (const String& type_id)
 	{
 		_check_construct ();
 		return ServantBaseLink::_is_a (type_id);
@@ -154,7 +154,7 @@ public:
 		return LocalObjectLink::_get_interface ();
 	}
 
-	virtual Boolean _is_a (const Char* type_id)
+	virtual Boolean _is_a (const String& type_id)
 	{
 		return LocalObjectLink::_is_a (type_id);
 	}

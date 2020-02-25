@@ -47,7 +47,7 @@ public:
 		return 0;
 	}
 
-	static ABI_boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
+	static ABI_boolean __is_a (Bridge <Object>* obj, ABI_in <String> type_id, EnvironmentBridge* env)
 	{
 		try {
 			ServantBase_ptr servant = _implementation (obj).servant_;

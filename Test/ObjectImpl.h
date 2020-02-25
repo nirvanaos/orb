@@ -48,7 +48,7 @@ public:
 		return InterfaceDef::_nil ();	// TODO: Implement
 	}
 
-	Boolean _is_a (const Char* type_id) const
+	Boolean _is_a (String_in type_id) const
 	{
 		Interface* itf = servant_->_query_interface (type_id);
 		return itf != 0;

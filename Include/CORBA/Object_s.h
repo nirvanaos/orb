@@ -39,10 +39,10 @@ protected:
 		return 0;
 	}
 
-	static ABI_boolean __is_a (Bridge <Object>* obj, const Char* type_id, EnvironmentBridge* env)
+	static ABI_boolean __is_a (Bridge <Object>* obj, ABI_in <String> type_id, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj)._is_a (type_id);
+			return S::_implementation (obj)._is_a (Type <String>::in (type_id));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {

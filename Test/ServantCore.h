@@ -39,7 +39,7 @@ public:
 		return static_cast <const ObjectBase&> (object_)._get_interface ();
 	}
 
-	Boolean _is_a (const Char* type_id)
+	Boolean _is_a (const String& type_id)
 	{
 		return static_cast <const ObjectBase&> (object_)._is_a (type_id);
 	}

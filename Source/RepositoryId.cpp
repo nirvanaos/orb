@@ -9,20 +9,23 @@ namespace Nirvana {
 
 using namespace std;
 
-bool RepositoryId::compatible (const Char* current, String_in requested)
+bool RepositoryId::compatible (const Char* current, const Char* requested)
 {
-	return compatible (current, current ? strlen (current) : 0, requested);
+	if (current == requested)
+		return true;
+	return compatible (current, current ? strlen (current) : 0, requested, requested ? strlen (requested) : 0);
 }
 
-bool RepositoryId::compatible (const Char* current, size_t current_len, String_in requested)
+bool RepositoryId::compatible (const Char* current, String_in requested)
 {
 	const String& req_s = Type <String>::in (&requested);
-	const Char* req_p = req_s.c_str ();
-	
+	return compatible (current, current ? strlen (current) : 0, req_s.c_str (), req_s.length ());
+}
+
+bool RepositoryId::compatible (const Char* current, size_t current_len, const Char* req_p, size_t req_l)
+{
 	if (current == req_p)
 		return true;
-
-	size_t req_l = req_s.length ();
 	
 	static const Char IDL [] = "IDL";
 	static const size_t IDL_len = countof (IDL) - 1;

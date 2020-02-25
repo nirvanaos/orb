@@ -35,7 +35,7 @@ public:
 		return servant_base ()->_get_interface ();
 	}
 
-	static Boolean _is_a (const Char* type_id)
+	static Boolean _is_a (String_in type_id)
 	{
 		return servant_base ()->_is_a (type_id);
 	}
@@ -87,7 +87,7 @@ public:
 		return object ()->_get_interface ();
 	}
 
-	static Boolean _is_a (const Char* type_id)
+	static Boolean _is_a (String_in type_id)
 	{
 		return object ()->_is_a (type_id);
 	}
