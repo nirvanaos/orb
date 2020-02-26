@@ -28,10 +28,14 @@ protected:
 		return nullptr;
 	}
 
-	static Interface* _create_servant_proxy (Bridge <ProxyFactory>* obj, Interface* servant, Interface** deleter, EnvironmentBridge* env)
+	static Interface* _create_servant_proxy (Bridge <ProxyFactory>* obj, Interface* proxy,
+		Interface* servant, 
+		Interface** deleter, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_servant_proxy (servant, TypeI <DynamicServant>::out (deleter));
+			return TypeI <Interface>::ret (S::_implementation (obj).create_servant_proxy (TypeI <Object>::in (proxy), 
+				TypeI <Object>::in (servant),
+				TypeI <DynamicServant>::out (deleter)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -40,10 +44,14 @@ protected:
 		return nullptr;
 	}
 
-	static Interface* _create_client_proxy (Bridge <ProxyFactory>* obj, const void* address, EnvironmentBridge* env)
+	static Interface* _create_local_proxy (Bridge <ProxyFactory>* obj, Interface* proxy, 
+		const LocalObjectRef* target, UShort interface_idx,
+		Interface** deleter, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_client_proxy (address);
+			return TypeI <Interface>::ret (S::_implementation (obj).create_local_proxy (TypeI <Object>::in (proxy), 
+				*target, interface_idx,
+				TypeI <DynamicServant>::out (deleter)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -63,7 +71,7 @@ const Bridge <ProxyFactory>::EPV Skeleton <S, ProxyFactory>::epv_ = {
 	{ // epv
 		S::_interfaces,
 		S::_create_servant_proxy,
-		S::_create_client_proxy
+		S::_create_local_proxy
 	}
 };
 

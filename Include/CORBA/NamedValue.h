@@ -14,13 +14,45 @@ typedef Nirvana::I_inout <NamedValue> NamedValue_inout;
 namespace Nirvana {
 
 BRIDGE_BEGIN (NamedValue, CORBA_REPOSITORY_ID (NamedValue))
-const Char* (*name) (Bridge <NamedValue>*, EnvironmentBridge*);
-const Any& (*value) (Bridge <NamedValue>*, EnvironmentBridge*);
+ABI_VT_ret <String> (*name) (Bridge <NamedValue>*, EnvironmentBridge*);
+ABI_VT_ret <Any> (*value) (Bridge <NamedValue>*, EnvironmentBridge*);
 Flags (*flags) (Bridge <NamedValue>*, EnvironmentBridge*);
 BRIDGE_END ()
 
-}
+template <class T>
+class Client <T, NamedValue> :
+	public T
+{
+public:
+	const String& name ()
+	{
+		Environment _env;
+		Bridge <Object>& _b (T::_get_bridge (_env));
+		T_VT_ret <String> _ret = (_b._epv ().epv.name) (&_b, &_env);
+		_env.check ();
+		return _ret;
+	}
 
+	const Any& value ()
+	{
+		Environment _env;
+		Bridge <Object>& _b (T::_get_bridge (_env));
+		T_VT_ret <Any> _ret = (_b._epv ().epv.value) (&_b, &_env);
+		_env.check ();
+		return _ret;
+	}
+
+	Flags flags ()
+	{
+		Environment _env;
+		Bridge <Object>& _b (T::_get_bridge (_env));
+		Flags _ret = (_b._epv ().epv.flags) (&_b, &_env);
+		_env.check ();
+		return _ret;
+	}
+};
+
+}
 }
 
 #endif

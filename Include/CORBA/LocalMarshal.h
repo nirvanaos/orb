@@ -29,8 +29,8 @@ struct LocalObjectRef
 
 struct OperationIndex
 {
-	uint16_t interface;
-	uint16_t operation;
+	uint16_t interface_idx;
+	uint16_t operation_idx;
 };
 
 struct CallMessageBlock

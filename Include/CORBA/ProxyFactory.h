@@ -3,6 +3,7 @@
 
 #include "CORBA.h"
 #include "DynamicServant.h"
+#include "LocalMarshal.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -39,9 +40,9 @@ pseudo interface ProxyFactory {
 	//! Returns ids of all interfaces.
 	const CountedArray <const char*>& interfaces ();
 	const CountedArray <const Operation>& operations ();
-	Interface create_servant_proxy (ProxyManager pm, Interface itf, out DynamicServant deleter);
-	Interface create_local_proxy (ProxyManager pm, uint16_t interface_idx, out DynamicServant deleter);
-	Interface create_remote_proxy (ProxyManager pm, out DynamicServant deleter);
+	Interface create_servant_proxy (Object proxy, Object servant, out DynamicServant deleter);
+	Interface create_local_proxy (Object proxy, in LocalObjectRef target, short interface_idx, out DynamicServant deleter);
+	Interface create_remote_proxy (Object proxy, out DynamicServant deleter);
 };
 */
 
@@ -52,6 +53,7 @@ Interface* (*create_servant_proxy) (Bridge <ProxyFactory>*, Interface*,
 	Interface*,
 	Interface**, EnvironmentBridge*);
 Interface* (*create_local_proxy) (Bridge <ProxyFactory>*, Interface*,
+	const LocalObjectRef* target,
 	UShort interface_idx,
 	Interface**, EnvironmentBridge*);
 Interface* (*create_remote_proxy) (Bridge <ProxyFactory>*, Interface*,
@@ -75,33 +77,33 @@ public:
 		return T::_get_bridge (_env).operations;
 	}
 
-	Interface_ptr create_servant_proxy (I_in <Object> obj, I_in <Interface> servant, I_out <DynamicServant> deleter);
-	Interface_ptr create_local_proxy (I_in <Object> obj, Type <UShort>::C_in interface_idx, I_out <DynamicServant> deleter);
-	Interface_ptr create_remote_proxy (I_in <Object> obj, I_out <DynamicServant> deleter);
+	Interface_var create_servant_proxy (I_in <Object> proxy, I_in <Object> servant, I_out <DynamicServant> deleter);
+	Interface_var create_local_proxy (I_in <Object> obj, const LocalObjectRef& target, UShort interface_idx, I_out <DynamicServant> deleter);
+	Interface_var create_remote_proxy (I_in <Object> obj, I_out <DynamicServant> deleter);
 };
 
 template <class T>
-Interface_ptr Client <T, ProxyFactory>::create_servant_proxy (I_in <Object> obj, I_in <Interface> servant, I_out <DynamicServant> deleter)
+Interface_var Client <T, ProxyFactory>::create_servant_proxy (I_in <Object> proxy, I_in <Object> servant, I_out <DynamicServant> deleter)
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	I_ret <Interface> _ret = (_b._epv ().epv.create_servant_proxy) (&_b, &obj, &servant, &deleter, &_env);
+	I_ret <Interface> _ret = (_b._epv ().epv.create_servant_proxy) (&_b, &proxy, &servant, &deleter, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-Interface_ptr Client <T, ProxyFactory>::create_local_proxy (I_in <Object> obj, Type <UShort>::C_in interface_idx, I_out <DynamicServant> deleter)
+Interface_var Client <T, ProxyFactory>::create_local_proxy (I_in <Object> obj, const LocalObjectRef& target, UShort interface_idx, I_out <DynamicServant> deleter)
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	I_ret <Interface> _ret = (_b._epv ().epv.create_local_proxy) (&_b, &obj, interface_idx, &deleter, &_env);
+	I_ret <Interface> _ret = (_b._epv ().epv.create_local_proxy) (&_b, &obj, &target, interface_idx, &deleter, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-Interface_ptr Client <T, ProxyFactory>::create_remote_proxy (I_in <Object> obj, I_out <DynamicServant> deleter)
+Interface_var Client <T, ProxyFactory>::create_remote_proxy (I_in <Object> obj, I_out <DynamicServant> deleter)
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
