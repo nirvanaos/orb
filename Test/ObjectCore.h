@@ -44,7 +44,7 @@ public:
 	{
 		try {
 			PortableServer::Servant servant = _implementation (obj).servant_;
-			return TypeI <Interface>::ret ((servant->_epv ().epv.get_interface) (servant, env));
+			return (servant->_epv ().epv.get_interface) (servant, env);
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {

@@ -2,22 +2,7 @@
 
 namespace CORBA {
 namespace Nirvana {
-/*
-ServantPOA <AbstractBase>& ServantTraitsPOA::_implementation (Bridge <ReferenceCounter>* bridge)
-{
-	return __implementation <ReferenceCounter, AbstractBase> (bridge);
-}
 
-ServantPOA <AbstractBase>& ServantTraitsPOA::_implementation (Bridge <DynamicServant>* bridge)
-{
-	return __implementation <DynamicServant, AbstractBase> (bridge);
-}
-
-ServantPOA <LocalObject>& ServantTraitsPOA::_implementation (Bridge <Object>* bridge)
-{
-	return __implementation <Object, LocalObject> (bridge);
-}
-*/
 ServantPOA <PortableServer::ServantBase>::ServantPOA () :
 	ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_)
 {}
