@@ -1,7 +1,8 @@
 #ifndef NIRVANA_TESTORB_OBJECTFACTORYCORE_H_
 #define NIRVANA_TESTORB_OBJECTFACTORYCORE_H_
 
-#include "CORBA/ObjectFactory_s.h"
+#include "Server.h"
+#include <CORBA/ObjectFactory_s.h>
 #include "ServantCore.h"
 #include "LocalObjectCore.h"
 #include "ReferenceCounterImpl.h"

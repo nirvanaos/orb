@@ -7,16 +7,15 @@ namespace Nirvana {
 
 void ServantBaseLink::_construct (Bridge <DynamicServant>* dynamic)
 {
-	servant_base_ = g_object_factory->create_servant (
-		I_ptr <PortableServer::ServantBase> (&static_cast <PortableServer::ServantBase&> (static_cast <Bridge <PortableServer::ServantBase>&> (*this))),
+	servant_base_ = g_object_factory->create_servant (PortableServer::Servant (this),
 		DynamicServant_ptr (static_cast <DynamicServant*> (dynamic)));
 }
 
 Interface* ServantBaseLink::_get_proxy ()
 {
 	if (!_is_active ()) {
-		::PortableServer::POA_var poa = servant ()->_default_POA ();
-		poa->activate_object (servant_base_);
+		::PortableServer::POA_var poa = _default_POA ();
+		String objid = poa->activate_object (servant_base_);
 	}
 	Interface* proxy = AbstractBase_ptr (servant_base_)->_query_interface (0);
 	if (!proxy)

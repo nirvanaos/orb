@@ -1,7 +1,7 @@
 #ifndef NIRVANA_TESTORB_SERVANTCORE_H_
 #define NIRVANA_TESTORB_SERVANTCORE_H_
 
-#include <CORBA/ServantBase_s.h>
+#include "Server.h"
 #include "ObjectCore.h"
 #include "ReferenceCounterImpl.h"
 

@@ -77,12 +77,6 @@ protected:
 
 	Interface* _get_proxy ();
 
-private:
-	PortableServer::Servant servant ()
-	{
-		return PortableServer::Servant (&static_cast <PortableServer::ServantBase&> (static_cast <Bridge <PortableServer::ServantBase>&> (*this)));
-	}
-
 protected:
 	PortableServer::Servant servant_base_;
 };
@@ -91,15 +85,17 @@ protected:
 //! \tparam S Servant class implementing operations.
 template <class S>
 class InterfaceImpl <S, PortableServer::ServantBase> :
+	public LifeCycleServant <S>,
 	public Skeleton <S, PortableServer::ServantBase>,
-	public ServantBaseLink,
-	public LifeCycleServant <S>
+	public ServantBaseLink
 {
 protected:
 	InterfaceImpl () :
-		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_, this),
-		LifeCycleServant <S> (servant_base_)
-	{}
+		LifeCycleServant <S> (ReferenceCounter::_nil ()),
+		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_, this)
+	{
+		this->reference_counter_ = servant_base_;
+	}
 
 	InterfaceImpl (const InterfaceImpl&) :
 		InterfaceImpl ()
@@ -173,8 +169,10 @@ class InterfaceImpl <S, LocalObject> :
 {
 protected:
 	InterfaceImpl () :
-		LifeCycleServant <S> (_construct (&static_cast <S&> (*this), this))
-	{}
+		LifeCycleServant <S> (ReferenceCounter::_nil ())
+	{
+		this->reference_counter_ = _construct (&static_cast <S&> (*this), this);
+	}
 
 	InterfaceImpl (const InterfaceImpl&) :
 		InterfaceImpl ()

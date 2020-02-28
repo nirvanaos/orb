@@ -1,6 +1,7 @@
 #ifndef NIRVANA_TESTORB_REFERENCECOUNTERIMPL_H_
 #define NIRVANA_TESTORB_REFERENCECOUNTERIMPL_H_
 
+#include "Server.h"
 #include <CORBA/ReferenceCounter_s.h>
 #include <CORBA/DynamicServant_s.h>
 #include <CORBA/ImplementationPseudo.h>

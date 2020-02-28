@@ -1,8 +1,7 @@
 #ifndef NIRVANA_TESTORB_OBJECTIMPL_H_
 #define NIRVANA_TESTORB_OBJECTIMPL_H_
 
-#include <CORBA/Object_s.h>
-#include <CORBA/Implementation.h>
+#include "Server.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -34,7 +33,7 @@ public:
 		return primary_interface ()->_epv ().interface_id;
 	}
 
-	Interface_ptr _query_interface (const String& id);
+	Interface_ptr _query_interface (String_in id);
 
 	// Object operations
 

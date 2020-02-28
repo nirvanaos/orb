@@ -1,7 +1,7 @@
 #ifndef NIRVANA_TESTORB_LOCALOBJECTCORE_H_
 #define NIRVANA_TESTORB_LOCALOBJECTCORE_H_
 
-#include <CORBA/LocalObject_s.h>
+#include "Server.h"
 #include "ObjectImpl.h"
 #include "ReferenceCounterImpl.h"
 

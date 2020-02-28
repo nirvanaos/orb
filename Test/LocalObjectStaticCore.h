@@ -1,7 +1,7 @@
 #ifndef NIRVANA_TESTORB_LOCALOBJECTSTATICCORE_H_
 #define NIRVANA_TESTORB_LOCALOBJECTSTATICCORE_H_
 
-#include <CORBA/ImplementationStatic.h>
+#include "Server.h"
 
 namespace CORBA {
 namespace Nirvana {
