@@ -7,12 +7,6 @@ ServantPOA <PortableServer::ServantBase>::ServantPOA () :
 	ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_)
 {}
 
-void ServantPOA <PortableServer::ServantBase>::_construct ()
-{
-	ServantBaseLink::_construct (this);
-	reference_counter_ = servant_base_;
-}
-
 Interface* ServantPOA <PortableServer::ServantBase>::_get_proxy ()
 {
 	_check_construct ();
@@ -21,8 +15,7 @@ Interface* ServantPOA <PortableServer::ServantBase>::_get_proxy ()
 
 ServantPOA <Object>::ServantPOA ()
 {
-	ServantPOA <AbstractBase>& ab = *this;
-	reference_counter_ = LocalObjectLink::_construct (&ab, &ab);
+	LocalObjectLink::_construct (this);
 }
 
 Interface* ServantPOA <Object>::_get_proxy ()

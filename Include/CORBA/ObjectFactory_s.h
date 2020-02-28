@@ -17,10 +17,10 @@ public:
 	static const typename Bridge <ObjectFactory>::EPV epv_;
 
 protected:
-	static Interface* _create_servant (Bridge <ObjectFactory>* obj, Interface* servant, Interface* dynamic, EnvironmentBridge* env)
+	static Interface* _create_servant (Bridge <ObjectFactory>* obj, Interface* impl, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_servant (TypeI <PortableServer::ServantBase>::in (servant), TypeI <DynamicServant>::in (dynamic));
+			return TypeI <PortableServer::ServantBase>::ret (S::_implementation (obj).create_servant (TypeI <PortableServer::ServantBase>::in (impl)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -29,10 +29,10 @@ protected:
 		return 0;
 	}
 
-	static Interface* _create_local_object (Bridge <ObjectFactory>* obj, Interface* base, Interface* dynamic, EnvironmentBridge* env)
+	static Interface* _create_local_object (Bridge <ObjectFactory>* obj, Interface* impl, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_local_object (TypeI <AbstractBase>::in (base), TypeI <DynamicServant>::in (dynamic));
+			return TypeI <Object>::ret (S::_implementation (obj).create_local_object (TypeI <Object>::in (impl)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -44,7 +44,7 @@ protected:
 	static Interface* _create_reference_counter (Bridge <ObjectFactory>* obj, Interface* dynamic, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_reference_counter (TypeI <DynamicServant>::in (dynamic));
+			return TypeI <ReferenceCounter>::ret (S::_implementation (obj).create_reference_counter (TypeI <DynamicServant>::in (dynamic)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {

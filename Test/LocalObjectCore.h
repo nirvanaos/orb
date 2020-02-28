@@ -9,15 +9,12 @@ namespace CORBA {
 namespace Nirvana {
 
 class LocalObjectCore :
-	public ImplementationPseudo <LocalObjectCore, LocalObject, ReferenceCounter>,
 	public ObjectImpl <LocalObjectCore>,
-	public ReferenceCounterBase,
 	public LifeCycleNoCopy <LocalObjectCore>
 {
 public:
-	LocalObjectCore (AbstractBase_ptr servant, DynamicServant_ptr dynamic) :
-		ObjectImpl <LocalObjectCore> (servant),
-		ReferenceCounterBase (dynamic)
+	LocalObjectCore (Object_ptr servant) :
+		ObjectImpl <LocalObjectCore> (servant)
 	{}
 };
 

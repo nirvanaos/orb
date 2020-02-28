@@ -2,6 +2,7 @@
 #define NIRVANA_TESTORB_OBJECTIMPL_H_
 
 #include "Server.h"
+#include <CORBA/ImplementationPseudo.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -79,8 +80,7 @@ private:
 template <class S>
 class ObjectImpl :
 	public ObjectBase,
-	public InterfaceImplBase <S, AbstractBase>,
-	public InterfaceImplBase <S, Object>
+	public ImplementationPseudo <S, Object, AbstractBase>
 {
 public:
 	ObjectImpl (AbstractBase_ptr servant) :

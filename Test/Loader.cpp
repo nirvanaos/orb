@@ -87,7 +87,7 @@ void Loader::bind_olf (const void* data, size_t size)
 
 			case OLF_EXPORT_OBJECT: {
 				ExportObject* ps = reinterpret_cast <ExportObject*> (p);
-				PortableServer::ServantBase_var core_obj = ObjectFactoryCore::create_servant (TypeI <PortableServer::ServantBase>::in (ps->implementation), DynamicServant::_nil ());
+				PortableServer::ServantBase_var core_obj = ObjectFactoryCore::create_servant (TypeI <PortableServer::ServantBase>::in (ps->implementation));
 				ps->core_object = PortableServer::Servant(core_obj);
 				Object_var proxy = AbstractBase_ptr (core_obj)->_to_object ();
 				core_objects_.push_back (Interface_ptr (core_obj._retn ()));
@@ -98,8 +98,8 @@ void Loader::bind_olf (const void* data, size_t size)
 
 			case OLF_EXPORT_LOCAL: {
 				ExportLocal* ps = reinterpret_cast <ExportLocal*> (p);
-				LocalObject_var core_obj = ObjectFactoryCore::create_local_object (TypeI <AbstractBase>::in (ps->implementation), DynamicServant::_nil ());
-				ps->core_object = LocalObject_ptr (core_obj);
+				Object_var core_obj = ObjectFactoryCore::create_local_object (TypeI <Object>::in (ps->implementation));
+				ps->core_object = Object_ptr (core_obj);
 				Object_var proxy = AbstractBase_ptr (Object_ptr (core_obj))->_to_object ();
 				core_objects_.push_back (Interface_var (core_obj._retn ()));
 				exported_interfaces_.emplace (ps->name, Interface_var (proxy._retn ()));

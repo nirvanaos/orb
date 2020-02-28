@@ -139,7 +139,7 @@ public:
 private:
 	static Object_ptr object ()
 	{
-		return LocalObject_ptr (static_cast <LocalObject*> (export_struct_.core_object));
+		return static_cast <Object*> (export_struct_.core_object);
 	}
 
 	static __declspec (allocate(OLF_BIND)) const ::Nirvana::ExportLocal export_struct_;
@@ -147,7 +147,7 @@ private:
 
 template <class S> __declspec (allocate(OLF_BIND))
 const ::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ ::Nirvana::OLF_EXPORT_LOCAL, S::constant_name
-, STATIC_BRIDGE (S, AbstractBase) };
+, STATIC_BRIDGE (S, Object) };
 
 //! \class ImplementationStatic
 //!

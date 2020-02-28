@@ -3,25 +3,30 @@
 
 #include "Server.h"
 #include "ObjectCore.h"
-#include "ReferenceCounterImpl.h"
+#include <CORBA/ReferenceCounter.h>
 
 namespace CORBA {
 namespace Nirvana {
 
 class ServantCore :
-	public ImplementationPseudo <ServantCore, PortableServer::ServantBase, ReferenceCounter>,
-	public LifeCycleNoCopy <ServantCore>,
-	public ReferenceCounterBase
+	public ImplementationPseudo <ServantCore, PortableServer::ServantBase>,
+	public LifeCycleNoCopy <ServantCore>
 {
 public:
-	I_ptr <PortableServer::ServantBase> _get_ptr ()
+	template <class Base, class Derived>
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, const Char* id, EnvironmentBridge* env)
 	{
-		return this;
+		return ServantTraits <ServantCore>::_wide <Base, Derived> (derived, id, env);
 	}
 
-	ServantCore (PortableServer::Servant servant, DynamicServant_ptr dynamic) :
-		ReferenceCounterBase (dynamic),
-		object_ (servant, _get_ptr ())
+	template <>
+	static Bridge <ReferenceCounter>* _wide <ReferenceCounter, PortableServer::ServantBase> (Bridge <PortableServer::ServantBase>* derived, const Char* id, EnvironmentBridge* env)
+	{
+		return 0;
+	}
+
+	ServantCore (PortableServer::Servant servant) :
+		object_ (servant)
 	{}
 
 	operator Bridge <Object>& ()

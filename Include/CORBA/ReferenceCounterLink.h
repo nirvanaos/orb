@@ -4,7 +4,8 @@
 #define NIRVANA_ORB_REFERENCECOUNTERLINK_H_
 
 #include "ReferenceCounter.h"
-#include "DynamicServant.h"
+#include "DynamicServant_s.h"
+#include "ServantImpl.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -35,10 +36,6 @@ public:
 protected:
 	ReferenceCounterLink (Bridge <DynamicServant>* dynamic);
 
-	ReferenceCounterLink (ReferenceCounter_ptr rc) :
-		reference_counter_ (rc)
-	{}
-
 	ReferenceCounterLink& operator = (const ReferenceCounterLink&)
 	{
 		return *this; // Do nothing
@@ -47,7 +44,32 @@ protected:
 	~ReferenceCounterLink ();
 
 protected:
+	ReferenceCounter_ptr _reference_counter () const
+	{
+		return reference_counter_;
+	}
+
+private:
 	ReferenceCounter_ptr reference_counter_;
+};
+
+/// \brief Dynamic servant implementation
+/// \tparam S Servant class
+///
+/// We don't implement reference counting in the object implementation
+/// because implementation of the stateless objects resides in the
+/// read-only memory and can't be changed.
+/// So reference counting for objects implemented at the core.
+template <class S>
+class DynamicServantImpl :
+	public InterfaceImpl <S, DynamicServant>,
+	public ReferenceCounterLink,
+	public LifeCycleRefCnt <S>
+{
+protected:
+	DynamicServantImpl () :
+		ReferenceCounterLink (this)
+	{}
 };
 
 }

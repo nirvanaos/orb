@@ -61,19 +61,13 @@ protected:
 		servant_base_ (PortableServer::ServantBase::_nil ())
 	{}
 
-	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv, Bridge <DynamicServant>* dynamic) :
-		Bridge <PortableServer::ServantBase> (epv)
-	{
-		_construct (dynamic);
-	}
-
 	ServantBaseLink (const ServantBaseLink&) = delete;
 	ServantBaseLink& operator = (const ServantBaseLink&)
 	{
 		return *this; // Do nothing
 	}
 
-	void _construct (Bridge <DynamicServant>* dynamic);
+	void _construct ();
 
 	Interface* _get_proxy ();
 
@@ -91,10 +85,9 @@ class InterfaceImpl <S, PortableServer::ServantBase> :
 {
 protected:
 	InterfaceImpl () :
-		LifeCycleServant <S> (ReferenceCounter::_nil ()),
-		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_, this)
+		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_)
 	{
-		this->reference_counter_ = servant_base_;
+		_construct ();
 	}
 
 	InterfaceImpl (const InterfaceImpl&) :
@@ -151,7 +144,7 @@ protected:
 		return *this; // Do nothing
 	}
 
-	ReferenceCounter_ptr _construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic);
+	void _construct (Bridge <Object>* impl);
 
 	Interface* _get_proxy ();
 
@@ -168,11 +161,8 @@ class InterfaceImpl <S, LocalObject> :
 	public LocalObjectLink
 {
 protected:
-	InterfaceImpl () :
-		LifeCycleServant <S> (ReferenceCounter::_nil ())
-	{
-		this->reference_counter_ = _construct (&static_cast <S&> (*this), this);
-	}
+	InterfaceImpl ()
+	{}
 
 	InterfaceImpl (const InterfaceImpl&) :
 		InterfaceImpl ()

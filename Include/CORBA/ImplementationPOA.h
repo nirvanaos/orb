@@ -21,8 +21,7 @@ public:
 	virtual Interface_ptr _query_interface (const String& id) = 0;
 
 protected:
-	ServantPOA () :
-		LifeCyclePOA (ReferenceCounter::_nil ())
+	ServantPOA ()
 	{}
 };
 
@@ -91,8 +90,6 @@ private:
 		if (!ServantBaseLink::servant_base_)
 			_construct ();
 	}
-
-	void _construct ();
 };
 
 template <>
