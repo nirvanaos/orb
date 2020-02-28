@@ -3,8 +3,13 @@
 #define NIRVANA_ORB_SERVANTBASE_H_
 
 #include "Object.h"
+#include "ReferenceCounter.h"
 
 namespace PortableServer {
+
+class ServantBase;
+typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
+typedef ::CORBA::Nirvana::I_out <ServantBase> ServantBase_out;
 
 class POA;
 typedef ::CORBA::Nirvana::I_ptr <POA> POA_ptr;
@@ -16,26 +21,19 @@ typedef ::CORBA::Nirvana::I_out <POA> POA_out;
 namespace CORBA {
 namespace Nirvana {
 
-class ServantBase;
-
-template <> class I_ptr <ServantBase>;
-
-typedef ::CORBA::Nirvana::I_ptr <ServantBase> ServantBase_ptr;
-typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
-typedef ::CORBA::Nirvana::I_out <ServantBase> ServantBase_out;
-
-BRIDGE_BEGIN (ServantBase, CORBA_REPOSITORY_ID (Object))
-BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
-BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
+BRIDGE_BEGIN (::PortableServer::ServantBase, CORBA_REPOSITORY_ID (Object))
+BASE_STRUCT_ENTRY (AbstractBase, CORBA_AbstractBase)
+BASE_STRUCT_ENTRY (Object, CORBA_Object)
+BASE_STRUCT_ENTRY (ReferenceCounter, CORBA_Nirvana_ReferenceCounter)
 BRIDGE_EPV
-Interface* (*default_POA) (Bridge <ServantBase>*, EnvironmentBridge*);
-Interface* (*get_interface) (Bridge <ServantBase>*, EnvironmentBridge*);
-ABI_boolean (*is_a) (Bridge <ServantBase>*, ABI_in <String> type_id, EnvironmentBridge*);
-ABI_boolean (*non_existent) (Bridge <ServantBase>*, EnvironmentBridge*);
+Interface* (*default_POA) (Bridge < ::PortableServer::ServantBase>*, EnvironmentBridge*);
+Interface* (*get_interface) (Bridge < ::PortableServer::ServantBase>*, EnvironmentBridge*);
+ABI_boolean (*is_a) (Bridge < ::PortableServer::ServantBase>*, ABI_in <String> type_id, EnvironmentBridge*);
+ABI_boolean (*non_existent) (Bridge < ::PortableServer::ServantBase>*, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <class T>
-class Client <T, ServantBase> :
+class Client <T, ::PortableServer::ServantBase> :
 	public T
 {
 public:
@@ -46,110 +44,116 @@ public:
 };
 
 template <class T>
-::PortableServer::POA_ptr Client <T, ServantBase>::_default_POA ()
+::PortableServer::POA_ptr Client <T, ::PortableServer::ServantBase>::_default_POA ()
 {
 	Environment _env;
-	Bridge <ServantBase>& _b (T::_get_bridge (_env));
+	Bridge <::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
 	I_ret <::PortableServer::POA> _ret = (_b._epv ().epv.default_POA) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-InterfaceDef_ptr Client <T, ServantBase>::_get_interface ()
+InterfaceDef_ptr Client <T, ::PortableServer::ServantBase>::_get_interface ()
 {
 	Environment _env;
-	Bridge <ServantBase>& _b (T::_get_bridge (_env));
+	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
 	I_ret <InterfaceDef> _ret = (_b._epv ().epv.get_interface) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-Boolean Client <T, ServantBase>::_is_a (String_in type_id)
+Boolean Client <T, ::PortableServer::ServantBase>::_is_a (String_in type_id)
 {
 	Environment _env;
-	Bridge <ServantBase>& _b (T::_get_bridge (_env));
+	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
 	T_ret <Boolean> _ret = (_b._epv ().epv.is_a) (&_b, &type_id, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-Boolean Client <T, ServantBase>::_non_existent ()
+Boolean Client <T, ::PortableServer::ServantBase>::_non_existent ()
 {
 	Environment _env;
-	Bridge <ServantBase>& _b (T::_get_bridge (_env));
+	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
 	T_ret <Boolean> _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
 
-class ServantBase :
-	public ClientInterface <ServantBase>,
-	// Client methods from bases AbstractBase and Object are not available directly on pointer to ServantBase.
-	public ClientBase <ServantBase, Object>,
-	public ClientBase <ServantBase, AbstractBase>
-{
-public:
-	static ServantBase_ptr _check (Interface* bridge);
-
-	static const ::CORBA::Char check_interface_id_ [];
-};
-
-template <>
-class I_ptr <ServantBase> :
-	public I_ptr_base <ServantBase>
+template <> /// We can obtain I_ptr <ServantBase> directly from servant pointer
+class I_ptr < ::PortableServer::ServantBase> : public I_ptr_base < ::PortableServer::ServantBase>
 {
 public:
 	I_ptr () NIRVANA_NOEXCEPT
 	{}
 
-	I_ptr (Bridge <ServantBase>* servant) :
-		I_ptr_base <ServantBase> (static_cast <ServantBase*> (servant))
+	/// We can obtain I_ptr directly from servant pointer
+	I_ptr (Bridge < ::PortableServer::ServantBase>* p) NIRVANA_NOEXCEPT :
+		I_ptr_base < ::PortableServer::ServantBase> (reinterpret_cast < ::PortableServer::ServantBase*> (p))
 	{}
 
-	I_ptr (ServantBase* p) NIRVANA_NOEXCEPT :
-		I_ptr_base <ServantBase> (p)
+	I_ptr (const I_ptr& src) NIRVANA_NOEXCEPT :
+		I_ptr_base (src)
 	{}
 
-	I_ptr (const I_ptr <ServantBase>& src) NIRVANA_NOEXCEPT :
-		I_ptr_base <ServantBase> (src)
-	{}
-
-	I_ptr (const I_var <ServantBase>& var) NIRVANA_NOEXCEPT :
-		I_ptr_base <ServantBase> (var)
+	I_ptr (const I_var <::PortableServer::ServantBase>& var) NIRVANA_NOEXCEPT :
+		I_ptr_base (var)
 	{}
 
 	/// Move constructor in case returned I_var assigned to I_ptr:
-	///    ServantBase_var func ();
-	///    ServantBase_ptr obj = func ();
-	I_ptr (I_var <ServantBase>&& var) NIRVANA_NOEXCEPT
+	///    Object_var func ();
+	///    Object_ptr obj = func ();
+	I_ptr (I_var <::PortableServer::ServantBase>&& var) NIRVANA_NOEXCEPT
 	{
 		this->move_from (var);
 	}
 
-	I_ptr& operator = (const I_ptr <ServantBase>& src) NIRVANA_NOEXCEPT
+	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
 	{
-		I_ptr_base <ServantBase>::operator = (src);
+		I_ptr_base::operator = (src);
 		return *this;
 	}
 
 	/// When servant returns `I_ptr`, skeleton must be able to convert
 	/// it to the ABI return type `Interface*`
-	operator Bridge <ServantBase>* () const NIRVANA_NOEXCEPT
+	operator Bridge <::PortableServer::ServantBase>* () const NIRVANA_NOEXCEPT
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
-		return static_cast <Bridge <ServantBase>*> (this->p_);
+		return reinterpret_cast <Bridge <::PortableServer::ServantBase>*> (this->p_);
 	}
 };
 
-inline ServantBase_ptr ServantBase::_check (Interface* bridge)
-{
-	return static_cast <ServantBase*> (Interface::_check (bridge, check_interface_id_));
+}
 }
 
+namespace PortableServer {
+
+typedef ::CORBA::Nirvana::I_ptr <ServantBase> Servant;
+
+class ServantBase :
+	public ::CORBA::Nirvana::ClientInterface <ServantBase>,
+	// Client methods from bases AbstractBase and Object are not available directly on pointer to ServantBase.
+	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::Object>,
+	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::AbstractBase>,
+	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::Nirvana::ReferenceCounter>
+{
+public:
+	static Servant _check (Interface* bridge)
+	{
+		return static_cast <ServantBase*> (::CORBA::Nirvana::Interface::_check (bridge, check_interface_id_));
+	}
+
+	static const ::CORBA::Char check_interface_id_ [];
+};
+
+inline void release (Servant& ptr)
+{
+	::CORBA::release (ptr);
 }
+
 }
 
 #endif

@@ -1,8 +1,8 @@
 #ifndef NIRVANA_TESTORB_OBJECTIMPL_H_
 #define NIRVANA_TESTORB_OBJECTIMPL_H_
 
-#include <CORBA/Servant.h>
-#include <CORBA/ImplementationPseudo.h>
+#include <CORBA/Object_s.h>
+#include <CORBA/Implementation.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -34,7 +34,7 @@ public:
 		return primary_interface ()->_epv ().interface_id;
 	}
 
-	Interface_ptr _query_interface (String_in id);
+	Interface_ptr _query_interface (const String& id);
 
 	// Object operations
 
@@ -48,13 +48,16 @@ public:
 		return InterfaceDef::_nil ();	// TODO: Implement
 	}
 
-	Boolean _is_a (String_in type_id) const
+	Boolean _is_a (const String& type_id) const
 	{
 		Interface* itf = servant_->_query_interface (type_id);
-		return itf != 0;
+		if (itf)
+			return true;
+		else
+			return false;
 	}
 
-	static ABI_boolean __non_existent (Bridge <Object>*, EnvironmentBridge*)
+	static ABI_ret <Boolean> __non_existent (Bridge <Object>*, EnvironmentBridge*)
 	{
 		return false;
 	}
@@ -77,7 +80,8 @@ private:
 template <class S>
 class ObjectImpl :
 	public ObjectBase,
-	public ImplementationPseudo <S, Object, AbstractBase>
+	public InterfaceImplBase <S, AbstractBase>,
+	public InterfaceImplBase <S, Object>
 {
 public:
 	ObjectImpl (AbstractBase_ptr servant) :
@@ -89,7 +93,7 @@ public:
 		return ObjectBase::__get_implementation (obj, env);
 	}
 
-	static ABI_boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
+	static ABI_ret <Boolean> __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		return ObjectBase::__non_existent (obj, env);
 	}

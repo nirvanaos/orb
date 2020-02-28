@@ -9,13 +9,13 @@ namespace Nirvana {
 // ServantBase skeleton
 
 template <class S>
-class Skeleton <S, ServantBase>
+class Skeleton <S, ::PortableServer::ServantBase>
 {
 public:
-	static const typename Bridge <ServantBase>::EPV epv_;
+	static const typename Bridge <::PortableServer::ServantBase>::EPV epv_;
 
 protected:
-	static Interface* __default_POA (Bridge <ServantBase>* obj, EnvironmentBridge* env)
+	static Interface* __default_POA (Bridge <::PortableServer::ServantBase>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._default_POA ();
@@ -27,7 +27,7 @@ protected:
 		return 0;
 	}
 
-	static Interface* __get_interface (Bridge <ServantBase>* obj, EnvironmentBridge* env)
+	static Interface* __get_interface (Bridge <::PortableServer::ServantBase>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._get_interface ();
@@ -39,7 +39,7 @@ protected:
 		return 0;
 	}
 
-	static ABI_boolean __is_a (Bridge <ServantBase>* obj, ABI_in <String> type_id, EnvironmentBridge* env)
+	static ABI_boolean __is_a (Bridge <::PortableServer::ServantBase>* obj, ABI_in <String> type_id, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._is_a (Type <String>::in (type_id));
@@ -51,7 +51,7 @@ protected:
 		return 0;
 	}
 
-	static ABI_boolean __non_existent (Bridge <ServantBase>* obj, EnvironmentBridge* env)
+	static ABI_boolean __non_existent (Bridge <::PortableServer::ServantBase>* obj, EnvironmentBridge* env)
 	{
 		try {
 			return S::_implementation (obj)._non_existent ();
@@ -65,15 +65,16 @@ protected:
 };
 
 template <class S>
-const Bridge <ServantBase>::EPV Skeleton <S, ServantBase>::epv_ = {
+const Bridge <::PortableServer::ServantBase>::EPV Skeleton <S, ::PortableServer::ServantBase>::epv_ = {
 	{ // header
-		ServantBase::check_interface_id_,
-		S::template __duplicate <ServantBase>,
-		S::template __release <ServantBase>
+		::PortableServer::ServantBase::check_interface_id_,
+		S::template __duplicate <::PortableServer::ServantBase>,
+		S::template __release <::PortableServer::ServantBase>
 	},
 	{ // base
-		S::template _wide < ::CORBA::AbstractBase, ServantBase>,
-		S::template _wide < ::CORBA::Object, ServantBase>
+		S::template _wide < ::CORBA::AbstractBase, ::PortableServer::ServantBase>,
+		S::template _wide < ::CORBA::Object, ::PortableServer::ServantBase>,
+		S::template _wide <ReferenceCounter, ::PortableServer::ServantBase>
 	},
 	{ // epv
 		S::__default_POA,

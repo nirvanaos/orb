@@ -77,7 +77,7 @@ const Bridge <ProxyFactory>::EPV Skeleton <S, ProxyFactory>::epv_ = {
 
 template <class S>
 class ServantStatic <S, ProxyFactory> :
-	public ImplementationStaticPseudo <S, ProxyFactory>
+	public ImplementationPseudoStatic <S, ProxyFactory>
 {};
 
 }

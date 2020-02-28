@@ -4,21 +4,22 @@
 #include "LocalObjectStaticCore.h"
 #include "ObjectCore.h"
 #include <CORBA/POA_s.h>
+#include <CORBA/ImplementationPseudoStatic.h>
 
 namespace CORBA {
 namespace Nirvana {
 
 class POACore :
-	public ImplementationStaticPseudo <POACore, PortableServer::POA>,
+	public ImplementationPseudoStatic <POACore, PortableServer::POA>,
 	public LocalObjectStaticCore <POACore>
 {
 public:
-	static Interface_ptr _query_interface (String_in id)
+	static Interface_ptr _query_interface (const String& id)
 	{
 		return FindInterface <PortableServer::POA, Object>::find (*(POACore*)0, id);
 	}
 
-	String activate_object (ServantBase_ptr servant)
+	const Char* activate_object (PortableServer::Servant servant)
 	{
 		Bridge <Object>* p = Object_ptr (servant);
 		ObjectCore* obj = static_cast <ObjectCore*> (p);

@@ -3,7 +3,7 @@
 
 #include <CORBA/ReferenceCounter_s.h>
 #include <CORBA/DynamicServant_s.h>
-#include <CORBA/Implementation.h>
+#include <CORBA/ImplementationPseudo.h>
 
 namespace CORBA {
 namespace Nirvana {

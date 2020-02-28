@@ -25,11 +25,17 @@ public:
 		p_ (p)
 	{}
 
-	Servant_var (const Servant_var& b) :
-		p_ (b.p_)
+	Servant_var (const Servant_var& src) :
+		p_ (src.p_)
 	{
 		if (p_)
 			p_->_add_ref ();
+	}
+
+	Servant_var (Servant_var&& src) :
+		p_ (src.p_)
+	{
+		src.p_ = 0;
 	}
 
 	~Servant_var ()
@@ -50,13 +56,22 @@ public:
 		return *this;
 	}
 
-	Servant_var& operator = (const Servant_var& b)
+	Servant_var& operator = (const Servant_var& src)
 	{
-		if (p_ != b.p_) {
-			Servant* p = b.p_;
+		if (p_ != src.p_) {
+			Servant* p = src.p_;
 			if (p)
 				p->_add_ref ();
 			reset (p);
+		}
+		return *this;
+	}
+
+	Servant_var& operator = (Servant_var&& src)
+	{
+		if (p_ != src.p_) {
+			reset (src.p_);
+			src.p_ = 0;
 		}
 		return *this;
 	}

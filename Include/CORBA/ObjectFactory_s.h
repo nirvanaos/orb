@@ -3,6 +3,7 @@
 
 #include "ObjectFactory.h"
 #include "ImplementationPseudo.h"
+#include "ImplementationPseudoStatic.h"
 
 // ObjectFactory skeleton
 
@@ -16,10 +17,10 @@ public:
 	static const typename Bridge <ObjectFactory>::EPV epv_;
 
 protected:
-	static Interface* _create_servant (Bridge <ObjectFactory>* obj, Interface* servant, EnvironmentBridge* env)
+	static Interface* _create_servant (Bridge <ObjectFactory>* obj, Interface* servant, Interface* dynamic, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_servant (TypeI <ServantBase>::in (servant));
+			return S::_implementation (obj).create_servant (TypeI <PortableServer::ServantBase>::in (servant), TypeI <DynamicServant>::in (dynamic));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -28,10 +29,10 @@ protected:
 		return 0;
 	}
 
-	static Interface* _create_local_object (Bridge <ObjectFactory>* obj, Interface* base, EnvironmentBridge* env)
+	static Interface* _create_local_object (Bridge <ObjectFactory>* obj, Interface* base, Interface* dynamic, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj).create_local_object (TypeI <AbstractBase>::in (base));
+			return S::_implementation (obj).create_local_object (TypeI <AbstractBase>::in (base), TypeI <DynamicServant>::in (dynamic));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -55,7 +56,7 @@ protected:
 
 template <class S>
 const Bridge <ObjectFactory>::EPV Skeleton <S, ObjectFactory>::epv_ = {
-	{ // header
+	{ // interface
 		Bridge <ObjectFactory>::interface_id_,
 		S::template __duplicate <ObjectFactory>,
 		S::template __release <ObjectFactory>
@@ -76,9 +77,8 @@ class Servant <S, ObjectFactory> : public ImplementationPseudo <S, ObjectFactory
 // Static implementation
 
 template <class S>
-class ServantStatic <S, ObjectFactory> : public ImplementationStaticPseudo <S, ObjectFactory>
+class ServantStatic <S, ObjectFactory> : public ImplementationPseudoStatic <S, ObjectFactory>
 {};
-
 
 }
 }

@@ -1,35 +1,31 @@
 // The Nirvana project.
 // Object Request Broker.
-// Pseudo object servant implementation.
+// Pseudo object servant virtual implementation.
 // This header is intended for core and proxy code.
-#ifndef NIRVANA_ORB_IMPLEMENTATIONPSEUDO_H_
-#define NIRVANA_ORB_IMPLEMENTATIONPSEUDO_H_
+#ifndef NIRVANA_ORB_IMPLEMENTATIONPSEUDOPOA_H_
+#define NIRVANA_ORB_IMPLEMENTATIONPSEUDOPOA_H_
 
 #include "ServantImpl.h"
 #include "I_ptr.h"
+#include "LifeCyclePOA.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-//! \class ImplementationPseudo
+//! \class ImplementationPseudoPOA
 //!
-//! \brief An implementation of a pseudo object (like proxy).
+//! \brief POA-style (virtual) implementation of the pseudo interface.
 //!
-//! You also have to derive your servant from some life cycle implementation,
-//! usually `LifeCycleServant`.
-//!
-//! \tparam S Servant class implementing operations.
 //! \tparam Primary Primary interface.
 //! \tparam Bases All base interfaces derived directly or indirectly.
 
-template <class S, class Primary, class ... Bases>
-class ImplementationPseudo :
-	public ServantTraits <S>,
-	public InterfaceImplBase <S, Bases> ...,
-	public InterfaceImplBase <S, Primary>
+template <class Primary, class ... Bases>
+class ImplementationPseudoPOA :
+	public virtual LifeCyclePOA,
+	public virtual ServantPOA <Bases>...,
+	public InterfaceImpl <ServantPOA <Primary>, Primary>
 {
 public:
-
 	//! \fn I_ptr <Primary> _get_ptr ()
 	//!
 	//! \brief Gets the pointer.
@@ -43,7 +39,7 @@ public:
 	}
 
 protected:
-	ImplementationPseudo ()
+	ImplementationPseudoPOA ()
 	{}
 };
 

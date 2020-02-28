@@ -5,9 +5,9 @@
 #include "Server.h"
 
 #ifdef TEST_LOCAL_OBJECT
-typedef CORBA::Object TestObjectBase;
+typedef CORBA::LocalObject TestObjectBase;
 #else
-typedef CORBA::Nirvana::ServantBase TestObjectBase;
+typedef PortableServer::ServantBase TestObjectBase;
 #endif
 
 namespace CORBA {

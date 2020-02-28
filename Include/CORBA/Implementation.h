@@ -5,13 +5,13 @@
 #define NIRVANA_ORB_IMPLEMENTATION_H_
 
 #include <Nirvana/Nirvana.h>
-#include "ServantImpl.h"
 #include "POA.h"
 #include "AbstractBase_s.h"
 #include "ServantBase_s.h"
 #include "Object_s.h"
+#include "LocalObject_s.h"
+#include "LifeCycleServant.h"
 #include "FindInterface.h"
-#include "DynamicImpl.h"
 #include <type_traits>
 
 namespace CORBA {
@@ -19,7 +19,7 @@ namespace Nirvana {
 
 //! \brief Implements delegate to the core ServantBase implementation.
 class ServantBaseLink :
-	public Bridge <ServantBase>
+	public Bridge <PortableServer::ServantBase>
 {
 public:
 	operator Bridge <Object>& ()
@@ -39,7 +39,7 @@ public:
 		return servant_base_->_get_interface ();
 	}
 
-	Boolean _is_a (String_in type_id) const
+	Boolean _is_a (const String& type_id) const
 	{
 		return servant_base_->_is_a (type_id);
 	}
@@ -56,10 +56,16 @@ public:
 	}
 
 protected:
-	ServantBaseLink (const Bridge <ServantBase>::EPV& epv) :
-		Bridge <ServantBase> (epv),
-		servant_base_ (ServantBase::_nil ())
+	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv) :
+		Bridge <PortableServer::ServantBase> (epv),
+		servant_base_ (PortableServer::ServantBase::_nil ())
 	{}
+
+	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv, Bridge <DynamicServant>* dynamic) :
+		Bridge <PortableServer::ServantBase> (epv)
+	{
+		_construct (dynamic);
+	}
 
 	ServantBaseLink (const ServantBaseLink&) = delete;
 	ServantBaseLink& operator = (const ServantBaseLink&)
@@ -67,34 +73,33 @@ protected:
 		return *this; // Do nothing
 	}
 
-	void _construct ();
+	void _construct (Bridge <DynamicServant>* dynamic);
 
 	Interface* _get_proxy ();
 
 private:
-	ServantBase_ptr servant ()
+	PortableServer::Servant servant ()
 	{
-		return ServantBase_ptr (&static_cast <ServantBase&> (static_cast <Bridge <ServantBase>&> (*this)));
+		return PortableServer::Servant (&static_cast <PortableServer::ServantBase&> (static_cast <Bridge <PortableServer::ServantBase>&> (*this)));
 	}
 
 protected:
-	ServantBase_ptr servant_base_;
+	PortableServer::Servant servant_base_;
 };
 
-//! Standard implementation of ServantBase.
+//! Standard implementation of PortableServer::ServantBase.
 //! \tparam S Servant class implementing operations.
 template <class S>
-class InterfaceImpl <S, ServantBase> :
-	public Skeleton <S, ServantBase>,
+class InterfaceImpl <S, PortableServer::ServantBase> :
+	public Skeleton <S, PortableServer::ServantBase>,
 	public ServantBaseLink,
-	public LifeCycleRefCntImpl <S>
+	public LifeCycleServant <S>
 {
 protected:
 	InterfaceImpl () :
-		ServantBaseLink (Skeleton <S, ServantBase>::epv_)
-	{
-		_construct ();
-	}
+		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_, this),
+		LifeCycleServant <S> (servant_base_)
+	{}
 
 	InterfaceImpl (const InterfaceImpl&) :
 		InterfaceImpl ()
@@ -118,7 +123,7 @@ public:
 		return object_->_get_interface ();
 	}
 
-	Boolean _is_a (String_in type_id)
+	Boolean _is_a (const String& type_id)
 	{
 		return object_->_is_a (type_id);
 	}
@@ -150,30 +155,26 @@ protected:
 		return *this; // Do nothing
 	}
 
-	void _construct (Bridge <AbstractBase>* base);
+	ReferenceCounter_ptr _construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic);
 
-	Interface* _get_proxy (String_in id = 0);
+	Interface* _get_proxy ();
 
 private:
 	Object_ptr object_;
 };
 
-/// For LocalObject - based implementation, include CORBA::Object or CORBA::Nirvana::LocalObject in the list of base classes.
-typedef Object LocalObject;
-
-//! Standard implementation of local Object.
 //! \tparam S Servant class implementing operations.
 template <class S>
 class InterfaceImpl <S, LocalObject> :
+	public LifeCycleServant <S>,
 	public InterfaceImplBase <S, Object>,
-	public LocalObjectLink,
-	public LifeCycleRefCntImpl <S>
+	public InterfaceImplBase <S, LocalObject>,
+	public LocalObjectLink
 {
 protected:
-	InterfaceImpl ()
-	{
-		_construct (&static_cast <S&> (*this));
-	}
+	InterfaceImpl () :
+		LifeCycleServant <S> (_construct (&static_cast <S&> (*this), this))
+	{}
 
 	InterfaceImpl (const InterfaceImpl&) :
 		InterfaceImpl ()
@@ -197,7 +198,7 @@ class Implementation :
 	public InterfaceImpl <S, Primary>
 {
 public:
-	Interface_ptr _query_interface (String_in id)
+	Interface_ptr _query_interface (const String& id)
 	{
 		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);
 	}

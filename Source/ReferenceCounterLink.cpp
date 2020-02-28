@@ -1,4 +1,4 @@
-#include <CORBA/LifeCycleRefCntLink.h>
+#include <CORBA/ReferenceCounterLink.h>
 #include <Nirvana/core_objects.h>
 
 namespace CORBA {

@@ -1,15 +1,13 @@
 #include <CORBA/FindInterface.h>
 #include <CORBA/RepositoryId.h>
-#include <CORBA/String.h>
 
 namespace CORBA {
 namespace Nirvana {
 
-Interface* InterfaceEntry::find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, String_in id)
+Interface* InterfaceEntry::find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const String& id)
 {
 	const InterfaceEntry* ie = 0;
-	const String& sid = Type <String>::in (&id);
-	if (sid.empty ()) // On NULL id return primary interface
+	if (id.empty ()) // On NULL id return primary interface
 		ie = begin;
 	else {
 		for (const InterfaceEntry* p = begin; p != end; ++p) {

@@ -1,19 +1,18 @@
 // The Nirvana project.
 // Object Request Broker.
-// This header is intended exclusively for proxy code.
-#ifndef NIRVANA_ORB_LIFECYCLEREFCNTLINK_H_
-#define NIRVANA_ORB_LIFECYCLEREFCNTLINK_H_
+#ifndef NIRVANA_ORB_REFERENCECOUNTERLINK_H_
+#define NIRVANA_ORB_REFERENCECOUNTERLINK_H_
 
-#include "DynamicServant_s.h"
-#include "ReferenceCounter_s.h"
+#include "ReferenceCounter.h"
+#include "DynamicServant.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-//! \class ReferenceCounterLink
-//!
-//! \brief Delegates reference counting operations to
-//! core implementation of the ReferenceCounter interface.
+/// \class ReferenceCounterLink
+///
+/// \brief Delegates reference counting to core
+///        implementation of the ReferenceCounter interface.
 class ReferenceCounterLink
 {
 	ReferenceCounterLink (const ReferenceCounterLink&) = delete;
@@ -34,10 +33,6 @@ public:
 	}
 
 protected:
-	ReferenceCounterLink () :
-		reference_counter_ (ReferenceCounter::_nil ())
-	{}
-
 	ReferenceCounterLink (Bridge <DynamicServant>* dynamic);
 
 	ReferenceCounterLink (ReferenceCounter_ptr rc) :
@@ -53,19 +48,6 @@ protected:
 
 protected:
 	ReferenceCounter_ptr reference_counter_;
-};
-
-//! Life cycle implementation based on core ReferenceCounter
-template <class S>
-class LifeCycleRefCntLink :
-	public InterfaceImpl <S, DynamicServant>,
-	public LifeCycleRefCnt <S>,
-	public ReferenceCounterLink
-{
-protected:
-	LifeCycleRefCntLink () :
-		ReferenceCounterLink (this)
-	{}
 };
 
 }

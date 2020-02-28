@@ -1,12 +1,15 @@
 #include <CORBA/Implementation.h>
+#include <CORBA/ObjectFactory.h>
 #include <Nirvana/core_objects.h>
 
 namespace CORBA {
 namespace Nirvana {
 
-void ServantBaseLink::_construct ()
+void ServantBaseLink::_construct (Bridge <DynamicServant>* dynamic)
 {
-	servant_base_ = g_object_factory->create_servant (ServantBase_ptr (this));
+	servant_base_ = g_object_factory->create_servant (
+		I_ptr <PortableServer::ServantBase> (&static_cast <PortableServer::ServantBase&> (static_cast <Bridge <PortableServer::ServantBase>&> (*this))),
+		DynamicServant_ptr (static_cast <DynamicServant*> (dynamic)));
 }
 
 Interface* ServantBaseLink::_get_proxy ()
@@ -21,15 +24,18 @@ Interface* ServantBaseLink::_get_proxy ()
 	return interface_duplicate (proxy);
 }
 
-void LocalObjectLink::_construct (Bridge <AbstractBase>* base)
+ReferenceCounter_ptr LocalObjectLink::_construct (Bridge <AbstractBase>* base, Bridge <DynamicServant>* dynamic)
 {
-	object_ = g_object_factory->create_local_object (
-		AbstractBase_ptr (static_cast <AbstractBase*> (base)));
+	LocalObject_ptr obj = g_object_factory->create_local_object (
+		AbstractBase_ptr (static_cast <AbstractBase*> (base)), 
+		DynamicServant_ptr (static_cast <DynamicServant*> (dynamic)));
+	object_ = obj;
+	return obj;
 }
 
-Interface* LocalObjectLink::_get_proxy (String_in id)
+Interface* LocalObjectLink::_get_proxy ()
 {
-	Interface* proxy = AbstractBase_ptr (object_)->_query_interface (id);
+	Interface* proxy = AbstractBase_ptr (object_)->_query_interface (0);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
 	return interface_duplicate (proxy);

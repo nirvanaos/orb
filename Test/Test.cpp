@@ -20,8 +20,8 @@ void must_compile ()
 {
 #ifndef TEST_LOCAL_OBJECT
 	{
-		CORBA::Nirvana::ServantBase_ptr servant = new DynamicI1 (1);
-		CORBA::release (servant);
+		PortableServer::Servant servant = new DynamicI1 (1);
+		PortableServer::release (servant);
 	}
 #ifndef TEST_NO_POA
 	{

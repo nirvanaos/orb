@@ -1,74 +1,36 @@
 // Nirvana project
 // Object Request Broker
-// POA (virtual) interface implementation
+// POA (virtual) interface implementation.
 #ifndef NIRVANA_ORB_IMPLEMENTATIONPOA_H_
 #define NIRVANA_ORB_IMPLEMENTATIONPOA_H_
 
 #include "Implementation.h"
-#include "Servant_var.h"
+#include "LifeCyclePOA.h"
 
 namespace CORBA {
 namespace Nirvana {
-
-template <class I> class ServantPOA;
-
-class ServantTraitsPOA :
-	public ServantTraits <ServantTraitsPOA>
-{
-public:
-	template <class I, class IS>
-	static ServantPOA <IS>& __implementation (Bridge <I>* bridge)
-	{
-		_check_pointer (bridge, Skeleton <ServantPOA <IS>, I>::epv_.header);
-		return static_cast <ServantPOA <IS>&> (*bridge);
-	}
-
-	template <class I>
-	static ServantPOA <I>& _implementation (Bridge <I>* bridge)
-	{
-		return __implementation <I, I> (bridge);
-	}
-};
 
 //! POA implementation of AbstractBase
 
 template <>
 class ServantPOA <AbstractBase> :
-	public ServantTraitsPOA,
-	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
-	public LifeCycleRefCntImpl <ServantPOA <AbstractBase> >
+	public LifeCyclePOA,
+	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>
 {
 public:
-	virtual void _add_ref ()
-	{
-		DynamicImpl <ServantPOA <AbstractBase> >::_add_ref ();
-	}
-
-	virtual void _remove_ref ()
-	{
-		DynamicImpl <ServantPOA <AbstractBase> >::_remove_ref ();
-	}
-
-	virtual ULong _refcount_value ()
-	{
-		return DynamicImpl <ServantPOA <AbstractBase> >::_refcount_value ();
-	}
-
-	virtual Interface_ptr _query_interface (String_in id) = 0;
-
-	virtual ~ServantPOA ()
-	{}
+	virtual Interface_ptr _query_interface (const String& id) = 0;
 
 protected:
-	ServantPOA ()
+	ServantPOA () :
+		LifeCyclePOA (ReferenceCounter::_nil ())
 	{}
 };
 
-// POA implementation of ServantBase
+// POA implementation of PortableServer::ServantBase
 template <>
-class ServantPOA <ServantBase> :
+class ServantPOA <PortableServer::ServantBase> :
 	public virtual ServantPOA <AbstractBase>,
-	public Skeleton <ServantPOA <ServantBase>, ServantBase>,
+	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>,
 	public ServantBaseLink
 {
 public:
@@ -119,10 +81,6 @@ public:
 protected:
 	ServantPOA ();
 
-	ServantPOA (const ServantPOA&) :
-		ServantPOA ()
-	{}
-
 	virtual Interface* _get_proxy ();
 
 private:
@@ -133,15 +91,38 @@ private:
 		if (!ServantBaseLink::servant_base_)
 			_construct ();
 	}
+
+	void _construct ();
 };
 
 template <>
-class ServantPOA <LocalObject> :
-	public virtual ServantPOA <AbstractBase>,
-	public InterfaceImplBase <ServantPOA <LocalObject>, Object>,
+class ServantPOA <Object> :
+	public virtual ServantPOA <PortableServer::ServantBase>,
+	public InterfaceImplBase <ServantPOA <Object>, Object>,
 	public LocalObjectLink
 {
 public:
+	// Static overrides to resolve the ambiguity.
+	static Interface* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env);
+	static ABI_boolean __is_a (Bridge <Object>* obj, ABI_in <String> type_id, EnvironmentBridge* env);
+	static ABI_boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env);
+
+	// Delegate ReferenceCounter to AbstractBase
+	virtual void _add_ref ()
+	{
+		ServantPOA <AbstractBase>::_add_ref ();
+	}
+
+	virtual void _remove_ref ()
+	{
+		ServantPOA <AbstractBase>::_remove_ref ();
+	}
+
+	virtual ULong _refcount_value ()
+	{
+		return ServantPOA <AbstractBase>::_refcount_value ();
+	}
+
 	// Object operations
 
 	virtual ImplementationDef_ptr _get_implementation ()
@@ -178,12 +159,14 @@ public:
 protected:
 	ServantPOA ();
 
-	ServantPOA (const ServantPOA&) :
-		ServantPOA ()
-	{}
-
 	virtual Interface* _get_proxy ();
 };
+
+template <>
+class ServantPOA <LocalObject> :
+	public ServantPOA <Object>,
+	public InterfaceImplBase <ServantPOA <LocalObject>, LocalObject>
+{};
 
 //! \class ImplementationPOA
 //!
@@ -199,8 +182,13 @@ class ImplementationPOA :
 	public InterfaceImpl <ServantPOA <Primary>, Primary>
 {
 public:
-	virtual Interface_ptr _query_interface (String_in id)
+	virtual Interface_ptr _query_interface (const String& id)
 	{
+#ifdef _DEBUG
+		Bridge <AbstractBase>* ab = this;
+		const Bridge <AbstractBase>::EPV& epv = ab->_epv ();
+		assert (!strcmp (epv.header.interface_id, Bridge <AbstractBase>::interface_id_));
+#endif
 		return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
 	}
 

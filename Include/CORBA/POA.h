@@ -21,15 +21,15 @@ class Client <T, PortableServer::POA> :
 	public T
 {
 public:
-	String activate_object (ServantBase_ptr servant);
+	String activate_object (I_in <PortableServer::ServantBase> servant);
 };
 
 template <class T>
-String Client <T, PortableServer::POA>::activate_object (ServantBase_ptr servant)
+String Client <T, PortableServer::POA>::activate_object (I_in <PortableServer::ServantBase> servant)
 {
 	Environment _env;
 	Bridge <PortableServer::POA>& _b (T::_get_bridge (_env));
-	Type <String>::C_ret _ret = (_b._epv ().epv.activate_object) (&_b, servant, &_env);
+	Type <String>::C_ret _ret = (_b._epv ().epv.activate_object) (&_b, &servant, &_env);
 	_env.check ();
 	return _ret;
 }

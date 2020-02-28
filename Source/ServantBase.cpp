@@ -1,9 +1,7 @@
 #include <CORBA/ServantBase.h>
 
-namespace CORBA {
-namespace Nirvana {
+namespace PortableServer {
 
-const Char ServantBase::check_interface_id_ [] = CORBA_NIRVANA_REPOSITORY_ID (ServantBase);
+const ::CORBA::Char ServantBase::check_interface_id_ [] = PORTABLESERVER_REPOSITORY_ID (ServantBase);
 
-}
 }

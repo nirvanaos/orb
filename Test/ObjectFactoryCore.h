@@ -13,20 +13,20 @@ class ObjectFactoryCore :
 	public ServantStatic <ObjectFactoryCore, ObjectFactory>
 {
 public:
-	static ServantBase_ptr create_servant (ServantBase_ptr servant)
+	static PortableServer::Servant create_servant (PortableServer::Servant servant, DynamicServant_ptr dynamic)
 	{
 #ifdef TEST_LOCAL_OBJECT
 		assert (false);
 #endif
-		return (new ServantCore (servant))->_get_ptr ();
+		return (new ServantCore (servant, dynamic))->_get_ptr ();
 	}
 
-	static Object_ptr create_local_object (AbstractBase_ptr base)
+	static LocalObject_ptr create_local_object (AbstractBase_ptr base, DynamicServant_ptr dynamic)
 	{
 #ifndef TEST_LOCAL_OBJECT
 		assert (false);
 #endif
-		return (new LocalObjectCore (base))->_get_ptr ();
+		return (new LocalObjectCore (base, dynamic))->_get_ptr ();
 	}
 
 	static ReferenceCounter_ptr create_reference_counter (DynamicServant_ptr dynamic)

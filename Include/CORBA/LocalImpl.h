@@ -2,109 +2,78 @@
 #ifndef NIRVANA_ORB_LOCALIMPL_H_
 #define NIRVANA_ORB_LOCALIMPL_H_
 
+#include "BasicTypes.h"
+#include "Servant_var.h"
+
 namespace CORBA {
 namespace Nirvana {
 
-template <class T> class Local_inout;
-
+/// Locally implemented dynamic pseudo object
 template <class T>
-class Local_var
+class LocalImpl
 {
 public:
-	Local_var () :
-		p_ (0)
+	typedef T* _ptr_type;
+	typedef PortableServer::Servant_var <T> _var_type;
+	typedef PortableServer::Servant_out <T> _out_type;
+	typedef PortableServer::Servant_var <T>& _inout_type;
+
+	LocalImpl () :
+		ref_cnt_ (1)
 	{}
 
-	Local_var (T* p) :
-		p_ (p)
+	LocalImpl (const LocalImpl&) :
+		ref_cnt_ (1)
 	{}
 
-	Local_var (const Local_var& src) :
-		p_ (T::_duplicate (src.p_))
-	{}
-
-	Local_var& operator = (T* p)
+	LocalImpl& operator = (const LocalImpl&)
 	{
-		reset (p);
-		return *this;
+		return *this; // Do nothing
 	}
 
-	Local_var& operator = (const Local_var& src)
+	void _add_ref ()
 	{
-		if (this != &src)
-			reset (T::_duplicate (src.p_));
-		return *this;
+		++ref_cnt_;
 	}
 
-	Local_var& operator = (Local_var&& src)
+	void _remove_ref ()
 	{
-		if (this != &src) {
-			reset (src.p_);
-			src.p_ = 0;
-		}
-		return *this;
+		assert (ref_cnt_);
+		if (!--ref_cnt_)
+			delete& static_cast <T&> (*this);
 	}
 
-	T* operator -> () const
+	ULong _refcount_value () const
 	{
-		if (!p_)
-			::Nirvana::throw_INV_OBJREF ();
-		return p_;
+		return ref_cnt_;
 	}
 
-	operator T* () const
+	static T* _duplicate (T* obj)
 	{
-		return p_;
+		if (obj)
+			obj->_add_ref ();
+		return obj;
 	}
 
-	operator bool () const
+	static T* _nil ()
 	{
-		return p_ != 0;
-	}
-
-	operator bool ()
-	{
-		return p_ != 0;
-	}
-
-	T* _retn ()
-	{
-		T* p = p_;
-		p_ = 0;
-		return p;
+		return 0;
 	}
 
 private:
-	void reset (T* p) NIRVANA_NOEXCEPT
-	{
-		release (p_);
-		p_ = p;
-	}
-
-private:
-	friend class Local_inout <T>;
-
-	T* p_;
-};
-
-template <class T>
-class Local_inout
-{
-public:
-	Local_inout (Local_var <T>& var) :
-		ref_ (var.p_)
-	{}
-
-protected:
-	Local_inout (T* p) :
-		ref_ (p)
-	{}
-
-protected:
-	T*& ref_;
+	ULong ref_cnt_;
 };
 
 }
+
+/// CORBA::release
+template <class T> inline
+void release (Nirvana::LocalImpl <T>* ptr)
+{
+	if (ptr)
+		ptr->_remove_ref ();
+}
+
 }
 
 #endif

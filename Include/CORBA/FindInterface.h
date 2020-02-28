@@ -1,8 +1,8 @@
 #ifndef NIRVANA_ORB_FINDINTERFACE_H_
 #define NIRVANA_ORB_FINDINTERFACE_H_
 
+#include <Nirvana/Nirvana.h>
 #include "I_ptr.h"
-#include "StringBase.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -15,7 +15,7 @@ struct InterfaceEntry
 	size_t id_len;
 	Interface* (*cast) (void* servant);
 
-	static Interface* find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, String_in id);
+	static Interface* find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const String& id);
 };
 
 template <class S, class Primary, class ... I>
@@ -34,7 +34,7 @@ class InterfaceFinder
 	}
 
 public:
-	static Interface_ptr find (S& servant, String_in id)
+	static Interface_ptr find (S& servant, const String& id)
 	{
 		return InterfaceEntry::find (itable_, itable_ + countof (itable_), &servant, id);
 	}
@@ -54,7 +54,7 @@ class FindInterface
 {
 public:
 	template <class S>
-	static Interface_ptr find (S& servant, String_in id)
+	static Interface_ptr find (S& servant, const String& id)
 	{
 		return InterfaceFinder <S, Primary, I...>::find (servant, id);
 	}

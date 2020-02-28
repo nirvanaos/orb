@@ -1,96 +1,82 @@
-// CORBA::LocalObject class for compatibility with C++ mapping standard.
-// Rarely used.
 #ifndef NIRVANA_ORB_LOCALOBJECT_H_
 #define NIRVANA_ORB_LOCALOBJECT_H_
 
-#include "ImplementationPOA.h"
+#include "Object.h"
+#include "ReferenceCounter.h"
 
 namespace CORBA {
 
 class LocalObject;
+typedef Nirvana::I_var <LocalObject> LocalObject_var;
+typedef Nirvana::I_out <LocalObject> LocalObject_out;
+typedef Nirvana::I_inout <LocalObject> LocalObject_inout;
 
 namespace Nirvana {
 
-template <>
-class I_ptr <CORBA::LocalObject> :
-	public I_ptr_base <CORBA::LocalObject>
+BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID (Object))
+BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
+BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)
+BRIDGE_EPV
+BRIDGE_END ()
+
+template <> /// We can obtain I_ptr <LocalObject> directly from servant pointer
+class I_ptr <LocalObject> : public I_ptr_base <LocalObject>
 {
 public:
 	I_ptr () NIRVANA_NOEXCEPT
 	{}
 
-	I_ptr (ServantPOA <Object>* servant) NIRVANA_NOEXCEPT;
-
-	I_ptr (const I_ptr& src) NIRVANA_NOEXCEPT :
-		I_ptr_base <CORBA::LocalObject> (src)
+	/// We can obtain I_ptr directly from servant pointer
+	I_ptr (Bridge <LocalObject>* p) NIRVANA_NOEXCEPT :
+		I_ptr_base <LocalObject> (reinterpret_cast <LocalObject*> (p))
 	{}
 
-	I_ptr (const I_var <CORBA::LocalObject>& var) NIRVANA_NOEXCEPT :
-		I_ptr_base <CORBA::LocalObject> (var)
+	I_ptr (const I_ptr& src) NIRVANA_NOEXCEPT :
+		I_ptr_base (src)
+	{}
+
+	I_ptr (const I_var <LocalObject>& var) NIRVANA_NOEXCEPT :
+		I_ptr_base (var)
 	{}
 
 	/// Move constructor in case returned I_var assigned to I_ptr:
-	///    ServantBase_var func ();
-	///    ServantBase_ptr obj = func ();
-	I_ptr (I_var <CORBA::LocalObject>&& var) NIRVANA_NOEXCEPT
+	///    Object_var func ();
+	///    Object_ptr obj = func ();
+	I_ptr (I_var <LocalObject>&& var) NIRVANA_NOEXCEPT
 	{
 		this->move_from (var);
 	}
-};
 
-class LocalObjectBase :
-	public Nirvana::ServantPOA <Object>
-{
-public:
-	Bridge <Object>& _get_bridge (EnvironmentBase&)
+	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
 	{
-		return *static_cast <Bridge <Object>*> (LocalObjectLink::_get_proxy (Object::interface_id_));
+		I_ptr_base::operator = (src);
+		return *this;
 	}
 
-	operator Object_ptr ()
+	/// When servant returns `I_ptr`, skeleton must be able to convert
+	/// it to the ABI return type `Interface*`
+	operator Bridge <LocalObject>* () const NIRVANA_NOEXCEPT
 	{
-		return static_cast <Object*> (LocalObjectLink::_get_proxy (Object::interface_id_));
+		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
+		return reinterpret_cast <Bridge <LocalObject>*> (this->p_);
 	}
 };
 
 }
 
 typedef Nirvana::I_ptr <LocalObject> LocalObject_ptr;
-typedef PortableServer::Servant_var <LocalObject> LocalObject_var;
 
-class LocalObject :
-	public Nirvana::Client <Nirvana::LocalObjectBase, Object>
+class LocalObject : public Nirvana::ClientInterface <LocalObject, Object, Nirvana::ReferenceCounter>
 {
 public:
-	typedef LocalObject_ptr _ptr_type;
-	typedef PortableServer::Servant_var <LocalObject> _var_type;
-
-	static LocalObject_ptr _duplicate (LocalObject_ptr obj)
+	static LocalObject_ptr _check (Interface* bridge)
 	{
-		obj->_add_ref ();
-		return obj;
+		return static_cast <LocalObject*> (Interface::_check (bridge, check_interface_id_));
 	}
 
-	static LocalObject_ptr _nil ()
-	{
-		return LocalObject_ptr (0);
-	}
+	static const Char check_interface_id_ [];
 };
 
-inline void release (LocalObject_ptr obj)
-{
-	if (obj)
-		obj->_remove_ref ();
-}
-
-namespace Nirvana {
-
-inline
-I_ptr <CORBA::LocalObject>::I_ptr (ServantPOA <Object>* servant) NIRVANA_NOEXCEPT :
-I_ptr_base (static_cast <CORBA::LocalObject*> (servant))
-{}
-
-}
 }
 
 #endif

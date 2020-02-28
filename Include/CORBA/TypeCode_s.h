@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_TYPECODE_S_H_
 
 #include "TypeCode_b.h"
-#include "ImplementationPseudo.h"
+#include "ImplementationPseudoStatic.h"
 #include "TypeInterface.h"
 
 namespace CORBA {
@@ -373,7 +373,7 @@ const Bridge <TypeCode>::EPV Skeleton <S, TypeCode>::epv_ = {
 
 template <class S>
 class ServantStatic <S, TypeCode> :
-	public ImplementationStaticPseudo <S, TypeCode>
+	public ImplementationPseudoStatic <S, TypeCode>
 {};
 
 }
