@@ -14,12 +14,16 @@ class ObjectCore :
 	public ObjectImpl <ObjectCore>
 {
 public:
-	ObjectCore (PortableServer::Servant servant) :
+	ObjectCore (PortableServer::Servant servant, ReferenceCounter_ptr core_refcnt) :
 		ObjectImpl <ObjectCore> (servant),
 		is_active_ (false),
 		servant_ (servant),
 		reference_counter_ (servant)
-	{}
+	{
+		// If servant does not implement reference counter interface, use core counter.
+		if (!reference_counter_)
+			reference_counter_ = core_refcnt;
+	}
 
 	bool is_active_;
 
