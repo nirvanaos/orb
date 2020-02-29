@@ -7,7 +7,8 @@ namespace CORBA {
 namespace Nirvana {
 
 //! \brief Implements delegate to the core Object implementation.
-class ObjectLink
+class ObjectLink :
+	public Bridge <Object>
 {
 public:
 	// Object operations
@@ -44,9 +45,7 @@ public:
 	// TODO: Other Object operations shall be here...
 
 protected:
-	ObjectLink () :
-		object_ (Object::_nil ())
-	{}
+	ObjectLink (const Bridge <Object>::EPV& epv);
 
 	ObjectLink (const ObjectLink&) = delete;
 	ObjectLink& operator = (const ObjectLink&)
@@ -54,12 +53,10 @@ protected:
 		return *this; // Do nothing
 	}
 
-	void _construct (Bridge <Object>* impl);
-
 	Interface* _get_proxy ();
 
 private:
-	Object_ptr object_;
+	Object_var object_;
 };
 
 }

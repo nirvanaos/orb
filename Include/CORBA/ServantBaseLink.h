@@ -46,8 +46,7 @@ public:
 
 protected:
 	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv) :
-		Bridge <PortableServer::ServantBase> (epv),
-		servant_base_ (PortableServer::ServantBase::_nil ())
+		Bridge <PortableServer::ServantBase> (epv)
 	{}
 
 	ServantBaseLink (const ServantBaseLink&) = delete;
@@ -61,7 +60,7 @@ protected:
 	Interface* _get_proxy ();
 
 protected:
-	PortableServer::Servant servant_base_;
+	PortableServer::ServantBase_var servant_base_;
 };
 
 }

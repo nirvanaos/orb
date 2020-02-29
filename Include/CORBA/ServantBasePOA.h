@@ -15,6 +15,13 @@ class ServantPOA <PortableServer::ServantBase> :
 	public ServantBaseLink
 {
 public:
+	// Override operator from ServantBaseLink
+	virtual operator Bridge <Object>& ()
+	{
+		_check_construct ();
+		return ServantBaseLink::operator Bridge <Object> & ();
+	}
+
 	// ServantBase operations
 
 	virtual PortableServer::POA_ptr _default_POA ()

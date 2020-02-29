@@ -16,10 +16,16 @@ namespace Nirvana {
 template <>
 class ServantPOA <Object> :
 	public virtual ServantPOA <PortableServer::ServantBase>,
-	public InterfaceImplBase <ServantPOA <Object>, Object>,
+	public Skeleton <ServantPOA <Object>, Object>,
 	public ObjectLink
 {
 public:
+	// Override operator from ServantBase
+	virtual operator Bridge <Object>& ()
+	{
+		return *this;
+	}
+
 	// Static overrides to resolve the ambiguity with ServantBase.
 	static Interface* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env);
 	static ABI_boolean __is_a (Bridge <Object>* obj, ABI_in <String> type_id, EnvironmentBridge* env);
@@ -59,7 +65,9 @@ public:
 	// TODO: Other Object operations shall be here...
 
 protected:
-	ServantPOA ();
+	ServantPOA () :
+		ObjectLink (Skeleton <ServantPOA <Object>, Object>::epv_)
+	{}
 
 	virtual Interface* _get_proxy ();
 };

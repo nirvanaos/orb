@@ -4,10 +4,11 @@
 namespace CORBA {
 namespace Nirvana {
 
-void ObjectLink::_construct (Bridge <Object>* impl)
-{
-	object_ = g_object_factory->create_local_object (Object_ptr (static_cast <Object*> (impl)));
-}
+ObjectLink::ObjectLink (const Bridge <Object>::EPV& epv) :
+	Bridge <Object> (epv),
+	object_ (g_object_factory->create_local_object (
+		Object_ptr (&static_cast <Object&> (static_cast <Bridge <Object>&> (*this)))))
+{}
 
 Interface* ObjectLink::_get_proxy ()
 {
