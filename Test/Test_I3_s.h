@@ -50,7 +50,11 @@ const Bridge < ::Test::I3>::EPV Skeleton <S, ::Test::I3>::epv_ = {
 
 template <class S>
 class Servant <S, ::Test::I3> :
-	public Implementation <S, ::Test::I3, ::Test::I2, ::Test::I1, TestObjectBase>
+#ifdef TEST_LOCAL_OBJECT
+	public ImplementationLocal <S, ::Test::I3, ::Test::I2, ::Test::I1>
+#else
+	public Implementation <S, ::Test::I3, ::Test::I2, ::Test::I1>
+#endif
 {};
 
 }
@@ -58,12 +62,17 @@ class Servant <S, ::Test::I3> :
 
 // POA implementation
 #ifndef TEST_NO_POA
+
 namespace CORBA {
 namespace Nirvana {
 
 template <>
 class ServantPOA < ::Test::I3> :
-	public ImplementationPOA < ::Test::I3, ::Test::I1, ::Test::I2, TestObjectBase>
+#ifdef TEST_LOCAL_OBJECT
+	public ImplementationLocalPOA < ::Test::I3, ::Test::I1, ::Test::I2>
+#else
+	public ImplementationPOA < ::Test::I3, ::Test::I1, ::Test::I2>
+#endif
 {
 public:
 	virtual Long op3 (Long p1) = 0;
@@ -75,6 +84,7 @@ public:
 namespace POA_Test {
 typedef ::CORBA::Nirvana::ServantPOA < ::Test::I3> I3;
 }
+
 #endif
 
 // Static implementation
@@ -85,7 +95,11 @@ namespace Nirvana {
 
 template <class S>
 class ServantStatic <S, ::Test::I3> :
-	public ImplementationStatic <S, ::Test::I3, ::Test::I2, ::Test::I1, TestObjectBase>
+#ifdef TEST_LOCAL_OBJECT
+	public ImplementationLocalStatic <S, ::Test::I3, ::Test::I2, ::Test::I1>
+#else
+	public ImplementationStatic <S, ::Test::I3, ::Test::I2, ::Test::I1>
+#endif
 {};
 
 }

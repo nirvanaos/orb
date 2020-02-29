@@ -1,17 +1,14 @@
-// Nirvana project
-// Object Request Broker
-// Static interface implementation
-#ifndef NIRVANA_ORB_IMPLEMENTATIONSTATIC_H_
-#define NIRVANA_ORB_IMPLEMENTATIONSTATIC_H_
+#ifndef NIRVANA_ORB_IMPLEMENTATIONLOCALSTATIC_H_
+#define NIRVANA_ORB_IMPLEMENTATIONLOCALSTATIC_H_
 
-#include "ServantBaseStatic.h"
+#include "ObjectStatic.h"
 
 namespace CORBA {
 namespace Nirvana {
 
 //! \class ImplementationStatic
 //!
-//! \brief Static implementation of an interface.
+//! \brief Static implementation of a local interface.
 //!
 //! \tparam S Servant class implementing operations.
 //! \tparam Primary Primary interface.
@@ -19,7 +16,7 @@ namespace Nirvana {
 
 template <class S, class Primary, class ... Bases>
 class ImplementationStatic :
-	public InterfaceStatic <S, PortableServer::ServantBase>,
+	public InterfaceStatic <S, Object>,
 	public InterfaceStatic <S, Bases>...,
 	public InterfaceStatic <S, Primary>
 {
@@ -31,7 +28,7 @@ public:
 
 	static I_ptr <Primary> _this ()
 	{
-		return static_cast <Primary*> (InterfaceStatic <S, PortableServer::ServantBase>::_get_proxy ());
+		return static_cast <Primary*> (InterfaceStatic <S, Object>::_get_proxy ());
 	}
 };
 

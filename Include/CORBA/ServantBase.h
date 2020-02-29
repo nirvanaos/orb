@@ -2,26 +2,12 @@
 #ifndef NIRVANA_ORB_SERVANTBASE_H_
 #define NIRVANA_ORB_SERVANTBASE_H_
 
-#include "Object.h"
-#include "ReferenceCounter.h"
-
-namespace PortableServer {
-
-class ServantBase;
-typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
-typedef ::CORBA::Nirvana::I_out <ServantBase> ServantBase_out;
-
-class POA;
-typedef ::CORBA::Nirvana::I_ptr <POA> POA_ptr;
-typedef ::CORBA::Nirvana::I_var <POA> POA_var;
-typedef ::CORBA::Nirvana::I_out <POA> POA_out;
-
-}
+#include "POA_c.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-BRIDGE_BEGIN (::PortableServer::ServantBase, CORBA_REPOSITORY_ID (Object))
+BRIDGE_BEGIN (::PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID (ServantBase))
 BASE_STRUCT_ENTRY (AbstractBase, CORBA_AbstractBase)
 BASE_STRUCT_ENTRY (Object, CORBA_Object)
 BASE_STRUCT_ENTRY (ReferenceCounter, CORBA_Nirvana_ReferenceCounter)
@@ -139,15 +125,7 @@ class ServantBase :
 	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::Object>,
 	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::AbstractBase>,
 	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::Nirvana::ReferenceCounter>
-{
-public:
-	static Servant _check (Interface* bridge)
-	{
-		return static_cast <ServantBase*> (::CORBA::Nirvana::Interface::_check (bridge, check_interface_id_));
-	}
-
-	static const ::CORBA::Char check_interface_id_ [];
-};
+{};
 
 inline void release (Servant& ptr)
 {

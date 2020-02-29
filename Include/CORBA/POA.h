@@ -5,24 +5,9 @@
 #define NIRVANA_ORB_POA_H_
 
 #include "ServantBase.h"
-#include "String.h"
 
 namespace CORBA {
 namespace Nirvana {
-
-BRIDGE_BEGIN (PortableServer::POA, PORTABLESERVER_REPOSITORY_ID (POA))
-BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
-BRIDGE_EPV
-Type <String>::ABI_ret (*activate_object) (Bridge <PortableServer::POA>*, Interface*, EnvironmentBridge*);
-BRIDGE_END ()
-
-template <class T>
-class Client <T, PortableServer::POA> :
-	public T
-{
-public:
-	String activate_object (I_in <PortableServer::ServantBase> servant);
-};
 
 template <class T>
 String Client <T, PortableServer::POA>::activate_object (I_in <PortableServer::ServantBase> servant)
@@ -35,13 +20,6 @@ String Client <T, PortableServer::POA>::activate_object (I_in <PortableServer::S
 }
 
 }
-}
-
-namespace PortableServer {
-
-class POA :	public CORBA::Nirvana::ClientInterface <POA, CORBA::Object>
-{};
-
 }
 
 #endif

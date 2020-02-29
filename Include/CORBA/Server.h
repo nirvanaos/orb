@@ -5,5 +5,6 @@
 
 #include "PortableServer.h"
 #include "ImplementationStatic.h"
+#include "ImplementationLocalStatic.h"
 
 #endif

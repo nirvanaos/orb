@@ -7,7 +7,7 @@
 
 #include "ServantImpl.h"
 #include "I_ptr.h"
-#include "LifeCyclePOA.h"
+#include "ReferenceCounterPOA.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -21,7 +21,7 @@ namespace Nirvana {
 
 template <class Primary, class ... Bases>
 class ImplementationPseudoPOA :
-	public virtual LifeCyclePOA,
+	public virtual ServantPOA <ReferenceCounter>,
 	public virtual ServantPOA <Bases>...,
 	public InterfaceImpl <ServantPOA <Primary>, Primary>
 {

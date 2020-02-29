@@ -3,5 +3,6 @@
 
 #include "ImplementationTied.h"
 #include "ImplementationPOA.h"
+#include "ImplementationLocalPOA.h"
 
 #endif

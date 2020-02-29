@@ -14,7 +14,8 @@ namespace Nirvana {
 ///
 /// \brief Delegates reference counting to core
 ///        implementation of the ReferenceCounter interface.
-class ReferenceCounterLink
+class ReferenceCounterLink :
+	public Bridge <DynamicServant>
 {
 	ReferenceCounterLink (const ReferenceCounterLink&) = delete;
 public:
@@ -34,14 +35,12 @@ public:
 	}
 
 protected:
-	ReferenceCounterLink (Bridge <DynamicServant>* dynamic);
+	ReferenceCounterLink (const Bridge <DynamicServant>::EPV& epv);
 
 	ReferenceCounterLink& operator = (const ReferenceCounterLink&)
 	{
 		return *this; // Do nothing
 	}
-
-	~ReferenceCounterLink ();
 
 protected:
 	ReferenceCounter_ptr _reference_counter () const
@@ -50,10 +49,10 @@ protected:
 	}
 
 private:
-	ReferenceCounter_ptr reference_counter_;
+	ReferenceCounter_var reference_counter_;
 };
 
-/// \brief Dynamic servant implementation
+/// \brief Dynamic servant life cycle implementation
 /// \tparam S Servant class
 ///
 /// We don't implement reference counting in the object implementation
@@ -61,14 +60,14 @@ private:
 /// read-only memory and can't be changed.
 /// So reference counting for objects implemented at the core.
 template <class S>
-class DynamicServantImpl :
-	public InterfaceImpl <S, DynamicServant>,
+class LifeCycleServant :
+	public Skeleton <S, DynamicServant>,
 	public ReferenceCounterLink,
 	public LifeCycleRefCnt <S>
 {
 protected:
-	DynamicServantImpl () :
-		ReferenceCounterLink (this)
+	LifeCycleServant () :
+		ReferenceCounterLink (Skeleton <S, DynamicServant>::epv_)
 	{}
 };
 

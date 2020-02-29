@@ -4,170 +4,11 @@
 #ifndef NIRVANA_ORB_IMPLEMENTATION_H_
 #define NIRVANA_ORB_IMPLEMENTATION_H_
 
-#include <Nirvana/Nirvana.h>
-#include "POA.h"
-#include "AbstractBase_s.h"
-#include "ServantBase_s.h"
-#include "Object_s.h"
-#include "LocalObject_s.h"
-#include "LifeCycleServant.h"
+#include "ServantBaseImpl.h"
 #include "FindInterface.h"
-#include <type_traits>
 
 namespace CORBA {
 namespace Nirvana {
-
-//! \brief Implements delegate to the core ServantBase implementation.
-class ServantBaseLink :
-	public Bridge <PortableServer::ServantBase>
-{
-public:
-	operator Bridge <Object>& ()
-	{
-		return *Object_ptr (servant_base_);
-	}
-
-	// ServantBase operations
-
-	PortableServer::POA_ptr _default_POA () const
-	{
-		return servant_base_->_default_POA ();
-	}
-
-	InterfaceDef_ptr _get_interface () const
-	{
-		return servant_base_->_get_interface ();
-	}
-
-	Boolean _is_a (const String& type_id) const
-	{
-		return servant_base_->_is_a (type_id);
-	}
-
-	Boolean _non_existent () const
-	{
-		return false;
-	}
-
-	// Our extension
-	Boolean _is_active () const
-	{
-		return !servant_base_->_non_existent ();
-	}
-
-protected:
-	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv) :
-		Bridge <PortableServer::ServantBase> (epv),
-		servant_base_ (PortableServer::ServantBase::_nil ())
-	{}
-
-	ServantBaseLink (const ServantBaseLink&) = delete;
-	ServantBaseLink& operator = (const ServantBaseLink&)
-	{
-		return *this; // Do nothing
-	}
-
-	void _construct ();
-
-	Interface* _get_proxy ();
-
-protected:
-	PortableServer::Servant servant_base_;
-};
-
-//! Standard implementation of PortableServer::ServantBase.
-//! \tparam S Servant class implementing operations.
-template <class S>
-class InterfaceImpl <S, PortableServer::ServantBase> :
-	public LifeCycleServant <S>,
-	public Skeleton <S, PortableServer::ServantBase>,
-	public ServantBaseLink
-{
-protected:
-	InterfaceImpl () :
-		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_)
-	{
-		_construct ();
-	}
-
-	InterfaceImpl (const InterfaceImpl&) :
-		InterfaceImpl ()
-	{}
-};
-
-//! Standard implementation of `CORBA::LocalObject'.
-
-class LocalObjectLink
-{
-public:
-	// Object operations
-
-	ImplementationDef_ptr _get_implementation ()
-	{
-		return object_->_get_implementation ();
-	}
-
-	InterfaceDef_ptr _get_interface ()
-	{
-		return object_->_get_interface ();
-	}
-
-	Boolean _is_a (const String& type_id)
-	{
-		return object_->_is_a (type_id);
-	}
-
-	Boolean _non_existent ()
-	{
-		return object_->_non_existent ();
-	}
-
-	Boolean _is_equivalent (Object_ptr other_object)
-	{
-		return object_->_is_equivalent (other_object);
-	}
-
-	ULong _hash (ULong maximum)
-	{
-		return object_->_hash (maximum);
-	}
-	// TODO: Other Object operations shall be here...
-
-protected:
-	LocalObjectLink () :
-		object_ (Object::_nil ())
-	{}
-
-	LocalObjectLink (const LocalObjectLink&) = delete;
-	LocalObjectLink& operator = (const LocalObjectLink&)
-	{
-		return *this; // Do nothing
-	}
-
-	void _construct (Bridge <Object>* impl);
-
-	Interface* _get_proxy ();
-
-private:
-	Object_ptr object_;
-};
-
-//! \tparam S Servant class implementing operations.
-template <class S>
-class InterfaceImpl <S, LocalObject> :
-	public LifeCycleServant <S>,
-	public InterfaceImplBase <S, Object>,
-	public InterfaceImplBase <S, LocalObject>,
-	public LocalObjectLink
-{
-protected:
-	InterfaceImpl ()
-	{}
-
-	InterfaceImpl (const InterfaceImpl&) :
-		InterfaceImpl ()
-	{}
-};
 
 //! \class Implementation
 //!
@@ -176,27 +17,22 @@ protected:
 //! \tparam S Servant class implementing operations.
 //! \tparam Primary Primary interface.
 //! \tparam Bases All base interfaces derived directly or indirectly.
-//!    Don't include AbstractBase in base list.
 
 template <class S, class Primary, class ... Bases>
 class Implementation :
-	public ServantTraits <S>,
-	public InterfaceImpl <S, AbstractBase>,
+	public InterfaceImpl <S, PortableServer::ServantBase>,
 	public InterfaceImpl <S, Bases>...,
 	public InterfaceImpl <S, Primary>
 {
 public:
 	Interface_ptr _query_interface (const String& id)
 	{
-		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);
+		return FindInterface <Primary, Bases..., CORBA::Object>::find (static_cast <S&> (*this), id);
 	}
 
 	I_ptr <Primary> _this ()
 	{
-		return static_cast <Primary*> (
-			std::conditional <std::is_base_of <LocalObjectLink, Implementation <S, Primary, Bases...> >::value,
-			LocalObjectLink, ServantBaseLink>::type::
-			_get_proxy ());
+		return static_cast <Primary*> (ServantBaseLink::_get_proxy ());
 	}
 
 protected:

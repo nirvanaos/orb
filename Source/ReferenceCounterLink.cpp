@@ -4,15 +4,11 @@
 namespace CORBA {
 namespace Nirvana {
 
-ReferenceCounterLink::ReferenceCounterLink (Bridge <DynamicServant>* dynamic) :
+ReferenceCounterLink::ReferenceCounterLink (const Bridge <DynamicServant>::EPV& epv) :
+	Bridge <DynamicServant> (epv),
 	reference_counter_ (g_object_factory->create_reference_counter (
-		DynamicServant_ptr (static_cast <DynamicServant*> (dynamic))))
+		DynamicServant_ptr (static_cast <DynamicServant*> (static_cast <Bridge <DynamicServant>*> (this)))))
 {}
-
-ReferenceCounterLink::~ReferenceCounterLink ()
-{
-	release (reference_counter_);
-}
 
 }
 }

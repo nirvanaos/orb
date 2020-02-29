@@ -1,5 +1,5 @@
-#include <CORBA/Implementation.h>
-#include <CORBA/ObjectFactory.h>
+#include <CORBA/ServantBaseLink.h>
+#include <CORBA/POA.h>
 #include <Nirvana/core_objects.h>
 
 namespace CORBA {
@@ -17,19 +17,6 @@ Interface* ServantBaseLink::_get_proxy ()
 		String objid = poa->activate_object (servant_base_);
 	}
 	Interface* proxy = AbstractBase_ptr (servant_base_)->_query_interface (0);
-	if (!proxy)
-		::Nirvana::throw_MARSHAL ();
-	return interface_duplicate (proxy);
-}
-
-void LocalObjectLink::_construct (Bridge <Object>* impl)
-{
-	object_ = g_object_factory->create_local_object (Object_ptr (static_cast <Object*> (impl)));
-}
-
-Interface* LocalObjectLink::_get_proxy ()
-{
-	Interface* proxy = AbstractBase_ptr (object_)->_query_interface (0);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
 	return interface_duplicate (proxy);

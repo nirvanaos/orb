@@ -20,19 +20,19 @@ void must_compile ()
 {
 #ifndef TEST_LOCAL_OBJECT
 	{
-		PortableServer::Servant servant = new DynamicI1 (1);
+		PortableServer::Servant servant = new DynamicI3 (1);
 		PortableServer::release (servant);
 	}
 #ifndef TEST_NO_POA
 	{
-		PortableServer::Servant servant = new PortableI1 (1);
+		PortableServer::Servant servant = new PortableI3 (1);
 		PortableServer::release (servant);
 	}
 #endif
 #else
 #ifndef TEST_NO_POA
 	{
-		CORBA::LocalObject_ptr servant = new PortableI1 (1);
+		CORBA::LocalObject_ptr servant = new PortableI3 (1);
 		CORBA::release (servant);
 	}
 #endif

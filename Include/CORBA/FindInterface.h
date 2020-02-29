@@ -2,8 +2,6 @@
 #define NIRVANA_ORB_FINDINTERFACE_H_
 
 #include <Nirvana/Nirvana.h>
-#include "ServantBase.h"
-#include "LocalObject.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -24,18 +22,6 @@ class InterfaceFinder
 	static Interface* cast (void* servant)
 	{
 		return &static_cast <Bridge <Itf>&> (*reinterpret_cast <S*> (servant));
-	}
-
-	template <>
-	static Interface* cast <::PortableServer::ServantBase> (void* servant)
-	{
-		return &static_cast <Bridge <Object>&> (*reinterpret_cast <S*> (servant));
-	}
-
-	template <>
-	static Interface* cast <LocalObject> (void* servant)
-	{
-		return &static_cast <Bridge <Object>&> (*reinterpret_cast <S*> (servant));
 	}
 
 public:

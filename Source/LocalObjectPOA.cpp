@@ -1,26 +1,16 @@
-#include <CORBA/ImplementationPOA.h>
+#include <CORBA/LocalObjectPOA.h>
 
 namespace CORBA {
 namespace Nirvana {
 
-ServantPOA <PortableServer::ServantBase>::ServantPOA () :
-	ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_)
-{}
-
-Interface* ServantPOA <PortableServer::ServantBase>::_get_proxy ()
-{
-	_check_construct ();
-	return ServantBaseLink::_get_proxy ();
-}
-
 ServantPOA <Object>::ServantPOA ()
 {
-	LocalObjectLink::_construct (this);
+	ObjectLink::_construct (this);
 }
 
 Interface* ServantPOA <Object>::_get_proxy ()
 {
-	return LocalObjectLink::_get_proxy ();
+	return ObjectLink::_get_proxy ();
 }
 
 Interface* ServantPOA <Object>::__get_interface (Bridge <Object>* obj, EnvironmentBridge* env)

@@ -1,25 +1,22 @@
-// Nirvana project
-// Object Request Broker
-// POA (virtual) interface implementation.
-#ifndef NIRVANA_ORB_IMPLEMENTATIONPOA_H_
-#define NIRVANA_ORB_IMPLEMENTATIONPOA_H_
+#ifndef NIRVANA_ORB_IMPLEMENTATIONLOCALPOA_H_
+#define NIRVANA_ORB_IMPLEMENTATIONLOCALPOA_H_
 
-#include "ServantBasePOA.h"
+#include "LocalObjectPOA.h"
 #include "FindInterface.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-//! \class ImplementationPOA
+//! \class ImplementationLocalPOA
 //!
-//! \brief Portable implementation of interface.
+//! \brief Portable implementation of localinterface.
 //!
 //! \tparam Primary Primary interface.
-//! \tparam Bases All base interfaces derived directly or indirectly.
+//! \tparam Bases All base interfaces derived directly.
 
 template <class Primary, class ... Bases>
-class ImplementationPOA :
-	public virtual ServantPOA <PortableServer::ServantBase>,
+class ImplementationLocalPOA :
+	public virtual ServantPOA <LocalObject>,
 	public virtual ServantPOA <Bases>...,
 	public InterfaceImpl <ServantPOA <Primary>, Primary>
 {
@@ -40,7 +37,7 @@ public:
 	}
 
 protected:
-	ImplementationPOA ()
+	ImplementationLocalPOA ()
 	{}
 };
 

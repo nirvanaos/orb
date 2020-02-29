@@ -2,6 +2,7 @@
 #define NIRVANA_ORB_SERVANTBASE_S_H_
 
 #include "ServantBase.h"
+#include "TypeInterface.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -18,7 +19,7 @@ protected:
 	static Interface* __default_POA (Bridge <::PortableServer::ServantBase>* obj, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj)._default_POA ();
+			return TypeI <::PortableServer::POA>::ret (S::_implementation (obj)._default_POA ());
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -30,7 +31,7 @@ protected:
 	static Interface* __get_interface (Bridge <::PortableServer::ServantBase>* obj, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj)._get_interface ();
+			return TypeI <InterfaceDef>::ret (S::_implementation (obj)._get_interface ());
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -67,7 +68,7 @@ protected:
 template <class S>
 const Bridge <::PortableServer::ServantBase>::EPV Skeleton <S, ::PortableServer::ServantBase>::epv_ = {
 	{ // header
-		::PortableServer::ServantBase::check_interface_id_,
+		Bridge <::PortableServer::ServantBase>::interface_id_,
 		S::template __duplicate <::PortableServer::ServantBase>,
 		S::template __release <::PortableServer::ServantBase>
 	},

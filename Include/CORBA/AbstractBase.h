@@ -1,6 +1,7 @@
 #ifndef NIRVANA_ORB_ABSTRACTBASE_H_
 #define NIRVANA_ORB_ABSTRACTBASE_H_
 
+#include <Nirvana/Nirvana.h>
 #include "Client.h"
 #include "TypeInterface.h"
 #include "String.h"

@@ -1,8 +1,8 @@
 // The Nirvana project.
 // Object Request Broker.
 
-#ifndef NIRVANA_ORB_LIFECYCLESERVANT_H_
-#define NIRVANA_ORB_LIFECYCLESERVANT_H_
+#ifndef NIRVANA_ORB_DYNAMICSERVANTIMPL_H_
+#define NIRVANA_ORB_DYNAMICSERVANTIMPL_H_
 
 #include "ReferenceCounterLink.h"
 
@@ -11,8 +11,9 @@ namespace Nirvana {
 
 /// \brief Reference counting implementation for servant
 template <class S>
-class LifeCycleServant :
-	public DynamicServantImpl <S>
+class InterfaceImpl <S, DynamicServant> :
+	public ServantTraits <S>,
+	public LifeCycleServant <S>
 {
 public:
 	/// \brief For the performance reasons, we don't implement 
@@ -26,10 +27,6 @@ public:
 	{
 		return *(this->_reference_counter ());
 	}
-
-protected:
-	LifeCycleServant ()
-	{}
 };
 
 }
