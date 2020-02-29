@@ -14,6 +14,14 @@ class ObjectFactoryCore :
 	public ServantStatic <ObjectFactoryCore, ObjectFactory>
 {
 public:
+	static void before_create ()
+	{}
+
+	static ReferenceCounter_ptr create_reference_counter (DynamicServant_ptr dynamic)
+	{
+		return (new ReferenceCounterCore (dynamic))->_get_ptr ();
+	}
+
 	static PortableServer::Servant create_servant (PortableServer::Servant servant)
 	{
 		return (new ServantCore (servant))->_get_ptr ();
@@ -25,11 +33,6 @@ public:
 		assert (false);
 #endif
 		return (new LocalObjectCore (servant))->_get_ptr ();
-	}
-
-	static ReferenceCounter_ptr create_reference_counter (DynamicServant_ptr dynamic)
-	{
-		return (new ReferenceCounterCore (dynamic))->_get_ptr ();
 	}
 };
 

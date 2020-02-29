@@ -19,6 +19,9 @@ class ReferenceCounterLink :
 {
 	ReferenceCounterLink (const ReferenceCounterLink&) = delete;
 public:
+	void* operator new (size_t size);
+	void operator delete (void* p, size_t size);
+
 	void _add_ref ()
 	{
 		reference_counter_->_add_ref ();

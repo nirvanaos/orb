@@ -14,10 +14,27 @@ typedef I_ptr <ObjectFactory> ObjectFactory_ptr;
 typedef I_var <ObjectFactory> ObjectFactory_var;
 typedef I_out <ObjectFactory> ObjectFactory_out;
 
+struct StatelessCreationBlock
+{
+	const void* tmp; ///< Pointer to the servant temporary location in stack
+	size_t size; ///< Servant size
+	ptrdiff_t offset; ///< Offset to the stateless memory block
+};
+
+template <>
+struct Type <StatelessCreationBlock> :
+	public TypeFixLen <StatelessCreationBlock>
+{};
+
 BRIDGE_BEGIN (ObjectFactory, CORBA_NIRVANA_REPOSITORY_ID (ObjectFactory))
+void* (*memory_allocate) (Bridge <ObjectFactory>*, size_t size, EnvironmentBridge*);
+void (*memory_release) (Bridge <ObjectFactory>*, void* p, size_t size, EnvironmentBridge*);
+void (*stateless_begin) (Bridge <ObjectFactory>*, ABI_inout <StatelessCreationBlock> scb, EnvironmentBridge*);
+void* (*stateless_end) (Bridge <ObjectFactory>*, ABI_in <StatelessCreationBlock> scb, ABI_in <bool> success, EnvironmentBridge*);
+const void* (*stateless_copy) (Bridge <ObjectFactory>*, const void* p, size_t size, EnvironmentBridge*);
+Interface* (*create_reference_counter) (Bridge <ObjectFactory>*, Interface*, EnvironmentBridge*);
 Interface* (*create_servant) (Bridge <ObjectFactory>*, Interface*, EnvironmentBridge*);
 Interface* (*create_local_object) (Bridge <ObjectFactory>*, Interface*, EnvironmentBridge*);
-Interface* (*create_reference_counter) (Bridge <ObjectFactory>*, Interface*, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <class T>
@@ -25,10 +42,88 @@ class Client <T, ObjectFactory> :
 	public T
 {
 public:
+	/// \brief Allocates memory for servant.
+	///
+	/// If we currently in the free SD, this function creates a new
+	/// SD and enters into it. Then it allocates memory from the current SD heap.
+	///
+	/// \param size Amount of memory in bytes.
+	void* memory_allocate (size_t size);
+
+	/// \brief Releases servant memory.
+	///
+	/// This method detects when memory is stateless and releases it properly.
+	/// \param p Servant memory.
+	/// \param size Amount of memory in bytes.
+	void memory_release (void* p, size_t size);
+
+	void stateless_begin (T_inout <StatelessCreationBlock> scb);
+
+	void* stateless_end (T_in <StatelessCreationBlock> scb, T_in <bool> success);
+
+	const void* stateless_copy (const void* src, size_t size);
+
+	ReferenceCounter_var create_reference_counter (I_in <DynamicServant> dynamic);
 	PortableServer::ServantBase_var create_servant (I_in <PortableServer::ServantBase> impl);
 	Object_var create_local_object (I_in <Object> impl);
-	ReferenceCounter_var create_reference_counter (I_in <DynamicServant> dynamic);
 };
+
+template <class T>
+void* Client <T, ObjectFactory>::memory_allocate (size_t size)
+{
+	Environment _env;
+	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
+	void* _ret = (_b._epv ().epv.memory_allocate) (&_b, size, &_env);
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
+void Client <T, ObjectFactory>::memory_release (void* p, size_t size)
+{
+	Environment _env;
+	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.memory_release) (&_b, p, size, &_env);
+	_env.check ();
+}
+
+template <class T>
+void Client <T, ObjectFactory>::stateless_begin (T_inout <StatelessCreationBlock> scb)
+{
+	Environment _env;
+	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.stateless_begin) (&_b, &scb, &_env);
+	_env.check ();
+}
+
+template <class T>
+void* Client <T, ObjectFactory>::stateless_end (T_in <StatelessCreationBlock> scb, T_in <bool> success)
+{
+	Environment _env;
+	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
+	void* _ret = (_b._epv ().epv.stateless_end) (&_b, &scb, &success, &_env);
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
+const void* Client <T, ObjectFactory>::stateless_copy (const void* src, size_t size)
+{
+	Environment _env;
+	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
+	void* _ret = (_b._epv ().epv.stateless_copy) (&_b, src, size, &_env);
+	_env.check ();
+}
+
+template <class T>
+ReferenceCounter_var Client <T, ObjectFactory>::create_reference_counter (I_in <DynamicServant> dynamic)
+{
+	Environment _env;
+	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
+	I_ret <ReferenceCounter> _ret = (_b._epv ().epv.create_reference_counter) (&_b, &dynamic, &_env);
+	_env.check ();
+	return _ret;
+}
 
 template <class T>
 PortableServer::ServantBase_var Client <T, ObjectFactory>::create_servant (I_in <PortableServer::ServantBase> impl)
@@ -46,16 +141,6 @@ Object_var Client <T, ObjectFactory>::create_local_object (I_in <Object> impl)
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
 	I_ret <Object> _ret = (_b._epv ().epv.create_local_object) (&_b, &impl, &_env);
-	_env.check ();
-	return _ret;
-}
-
-template <class T>
-ReferenceCounter_var Client <T, ObjectFactory>::create_reference_counter (I_in <DynamicServant> dynamic)
-{
-	Environment _env;
-	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
-	I_ret <ReferenceCounter> _ret = (_b._epv ().epv.create_reference_counter) (&_b, &dynamic, &_env);
 	_env.check ();
 	return _ret;
 }
