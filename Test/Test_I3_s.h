@@ -67,11 +67,11 @@ namespace CORBA {
 namespace Nirvana {
 
 template <>
-class ServantPOA < ::Test::I3> :
+class ServantPOA <::Test::I3> :
 #ifdef TEST_LOCAL_OBJECT
-	public ImplementationLocalPOA < ::Test::I3, ::Test::I1, ::Test::I2>
+	public ImplementationLocalPOA <::Test::I3, ::Test::I1, ::Test::I2>
 #else
-	public ImplementationPOA < ::Test::I3, ::Test::I1, ::Test::I2>
+	public ImplementationPOA <::Test::I3, ::Test::I1, ::Test::I2>
 #endif
 {
 public:
@@ -82,7 +82,7 @@ public:
 }
 
 namespace POA_Test {
-typedef ::CORBA::Nirvana::ServantPOA < ::Test::I3> I3;
+typedef ::CORBA::Nirvana::ServantPOA <::Test::I3> I3;
 }
 
 #endif

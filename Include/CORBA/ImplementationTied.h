@@ -4,7 +4,9 @@
 #ifndef NIRVANA_ORB_IMPLEMENTATIONTIED_H_
 #define NIRVANA_ORB_IMPLEMENTATIONTIED_H_
 
-#include "Implementation.h"
+#include "POA.h"
+#include "LocalObject.h"
+#include "DynamicServant.h"
 
 namespace CORBA {
 namespace Nirvana {

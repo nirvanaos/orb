@@ -15,7 +15,7 @@ namespace Nirvana {
 //! \tparam Bases All base interfaces derived directly or indirectly.
 
 template <class S, class Primary, class ... Bases>
-class ImplementationStatic :
+class ImplementationLocalStatic :
 	public InterfaceStatic <S, Object>,
 	public InterfaceStatic <S, Bases>...,
 	public InterfaceStatic <S, Primary>

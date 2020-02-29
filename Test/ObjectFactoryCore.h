@@ -16,9 +16,6 @@ class ObjectFactoryCore :
 public:
 	static PortableServer::Servant create_servant (PortableServer::Servant servant)
 	{
-#ifdef TEST_LOCAL_OBJECT
-		assert (false);
-#endif
 		return (new ServantCore (servant))->_get_ptr ();
 	}
 

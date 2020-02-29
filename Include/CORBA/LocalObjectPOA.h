@@ -6,6 +6,10 @@
 #include "Object_s.h"
 #include "LocalObject_s.h"
 
+#ifdef _MSC_BUILD
+#pragma warning (disable:4250)
+#endif
+
 namespace CORBA {
 namespace Nirvana {
 
@@ -20,22 +24,6 @@ public:
 	static Interface* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env);
 	static ABI_boolean __is_a (Bridge <Object>* obj, ABI_in <String> type_id, EnvironmentBridge* env);
 	static ABI_boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env);
-
-	// Delegate ReferenceCounter to AbstractBase
-	virtual void _add_ref ()
-	{
-		ServantPOA <AbstractBase>::_add_ref ();
-	}
-
-	virtual void _remove_ref ()
-	{
-		ServantPOA <AbstractBase>::_remove_ref ();
-	}
-
-	virtual ULong _refcount_value ()
-	{
-		return ServantPOA <AbstractBase>::_refcount_value ();
-	}
 
 	// Object operations
 

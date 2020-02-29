@@ -15,24 +15,6 @@ class ServantPOA <PortableServer::ServantBase> :
 	public ServantBaseLink
 {
 public:
-	virtual void _add_ref ()
-	{
-		_check_construct ();
-		ServantPOA <AbstractBase>::_add_ref ();
-	}
-
-	virtual void _remove_ref ()
-	{
-		_check_construct ();
-		ServantPOA <AbstractBase>::_remove_ref ();
-	}
-
-	virtual ULong _refcount_value ()
-	{
-		_check_construct ();
-		return ServantPOA <AbstractBase>::_refcount_value ();
-	}
-
 	// ServantBase operations
 
 	virtual PortableServer::POA_ptr _default_POA ()

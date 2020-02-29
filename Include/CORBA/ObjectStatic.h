@@ -14,7 +14,8 @@ namespace Nirvana {
 //! \tparam Primary Primary interface.
 template <class S>
 class InterfaceStatic <S, Object> :
-	public InterfaceStatic <S, AbstractBase>
+	public InterfaceStatic <S, AbstractBase>,
+	public InterfaceStaticBase <S, Object>
 {
 public:
 	// Object operations
