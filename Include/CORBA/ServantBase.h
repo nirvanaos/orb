@@ -120,11 +120,10 @@ namespace PortableServer {
 typedef ::CORBA::Nirvana::I_ptr <ServantBase> Servant;
 
 class ServantBase :
-	public ::CORBA::Nirvana::ClientInterface <ServantBase>,
-	// Client methods from bases AbstractBase and Object are not available directly on pointer to ServantBase.
+	public ::CORBA::Nirvana::ClientInterface <ServantBase, ::CORBA::Nirvana::ReferenceCounter>,
+	// Client methods from AbstractBase are not available directly on pointer to ServantBase.
 	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::Object>,
-	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::AbstractBase>,
-	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::Nirvana::ReferenceCounter>
+	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::AbstractBase>
 {};
 
 inline void release (Servant& ptr)

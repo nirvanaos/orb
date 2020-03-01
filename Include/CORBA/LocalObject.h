@@ -67,15 +67,7 @@ public:
 typedef Nirvana::I_ptr <LocalObject> LocalObject_ptr;
 
 class LocalObject : public Nirvana::ClientInterface <LocalObject, Object, Nirvana::ReferenceCounter>
-{
-public:
-	static LocalObject_ptr _check (Interface* bridge)
-	{
-		return static_cast <LocalObject*> (Interface::_check (bridge, check_interface_id_));
-	}
-
-	static const Char check_interface_id_ [];
-};
+{};
 
 }
 
