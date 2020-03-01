@@ -24,7 +24,7 @@ public:
 		::Nirvana::g_memory->release (p, size);
 	}
 
-	void stateless_begin (StatelessCreationStruct& scs)
+	void stateless_begin (StatelessCreationFrame& scs)
 	{
 		if (!(scs.tmp && scs.size))
 			throw BAD_PARAM ();
@@ -35,7 +35,7 @@ public:
 
 	void* stateless_end (bool success)
 	{
-		StatelessCreationStruct* scs = stateless_;
+		StatelessCreationFrame* scs = stateless_;
 		stateless_ = 0;
 		if (!scs)
 			throw BAD_INV_ORDER ();
@@ -73,7 +73,7 @@ public:
 	}
 
 private:
-	static StatelessCreationStruct* stateless_;
+	static StatelessCreationFrame* stateless_;
 };
 
 }

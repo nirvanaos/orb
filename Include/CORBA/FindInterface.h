@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_FINDINTERFACE_H_
 #define NIRVANA_ORB_FINDINTERFACE_H_
 
-#include <Nirvana/Nirvana.h>
+#include "String.h"
 
 namespace CORBA {
 namespace Nirvana {

@@ -3,7 +3,7 @@
 
 namespace CORBA {
 namespace Nirvana {
-StatelessCreationStruct* ObjectFactoryCore::stateless_ = 0;
+StatelessCreationFrame* ObjectFactoryCore::stateless_ = 0;
 }
 }
 

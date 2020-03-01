@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_SERVANTBASESTATIC_H_
 #define NIRVANA_ORB_SERVANTBASESTATIC_H_
 
-#include <Nirvana/Nirvana.h>
+#include <Nirvana/NirvanaBase.h>
 #include <Nirvana/OLF.h>
 #include "AbstractBaseStatic.h"
 #include "ReferenceCounterStatic.h"

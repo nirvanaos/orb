@@ -14,7 +14,7 @@ typedef I_ptr <ObjectFactory> ObjectFactory_ptr;
 typedef I_var <ObjectFactory> ObjectFactory_var;
 typedef I_out <ObjectFactory> ObjectFactory_out;
 
-struct StatelessCreationStruct
+struct StatelessCreationFrame
 {
 	const void* tmp; ///< Pointer to the servant temporary location in stack
 	size_t size; ///< Servant size
@@ -22,14 +22,14 @@ struct StatelessCreationStruct
 };
 
 template <>
-struct Type <StatelessCreationStruct> :
-	public TypeFixLen <StatelessCreationStruct>
+struct Type <StatelessCreationFrame> :
+	public TypeFixLen <StatelessCreationFrame>
 {};
 
 BRIDGE_BEGIN (ObjectFactory, CORBA_NIRVANA_REPOSITORY_ID (ObjectFactory))
 void* (*memory_allocate) (Bridge <ObjectFactory>*, size_t size, EnvironmentBridge*);
 void (*memory_release) (Bridge <ObjectFactory>*, void* p, size_t size, EnvironmentBridge*);
-void (*stateless_begin) (Bridge <ObjectFactory>*, Type <StatelessCreationStruct>::ABI_inout, EnvironmentBridge*);
+void (*stateless_begin) (Bridge <ObjectFactory>*, Type <StatelessCreationFrame>::ABI_inout, EnvironmentBridge*);
 void* (*stateless_end) (Bridge <ObjectFactory>*, ABI_in <bool> success, EnvironmentBridge*);
 const void* (*stateless_copy) (Bridge <ObjectFactory>*, const void* p, size_t size, EnvironmentBridge*);
 Interface* (*create_reference_counter) (Bridge <ObjectFactory>*, Interface*, EnvironmentBridge*);
@@ -44,8 +44,9 @@ class Client <T, ObjectFactory> :
 public:
 	/// \brief Allocates memory for servant.
 	///
-	/// If we currently in the free SD, this function creates a new
+	/// If we currently run out of SD, this operation creates a new
 	/// SD and enters into it. Then it allocates memory from the current SD heap.
+	/// This operation is not called for stateless servants.
 	///
 	/// \param size Amount of memory in bytes.
 	void* memory_allocate (size_t size);
@@ -57,7 +58,7 @@ public:
 	/// \param size Amount of memory in bytes.
 	void memory_release (void* p, size_t size);
 
-	void stateless_begin (T_inout <StatelessCreationStruct> scb);
+	void stateless_begin (T_inout <StatelessCreationFrame> scb);
 
 	void* stateless_end (T_in <bool> success);
 
@@ -88,7 +89,7 @@ void Client <T, ObjectFactory>::memory_release (void* p, size_t size)
 }
 
 template <class T>
-void Client <T, ObjectFactory>::stateless_begin (T_inout <StatelessCreationStruct> scs)
+void Client <T, ObjectFactory>::stateless_begin (T_inout <StatelessCreationFrame> scs)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
@@ -111,8 +112,9 @@ const void* Client <T, ObjectFactory>::stateless_copy (const void* src, size_t s
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
-	void* _ret = (_b._epv ().epv.stateless_copy) (&_b, src, size, &_env);
+	const void* _ret = (_b._epv ().epv.stateless_copy) (&_b, src, size, &_env);
 	_env.check ();
+	return _ret;
 }
 
 template <class T>

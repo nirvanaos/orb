@@ -1,5 +1,5 @@
 #include <CORBA/ReferenceCounterLink.h>
-#include <Nirvana/core_objects.h>
+#include <CORBA/core_objects.h>
 
 namespace CORBA {
 namespace Nirvana {

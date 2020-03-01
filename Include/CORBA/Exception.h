@@ -4,12 +4,13 @@
 #ifndef NIRVANA_ORB_EXCEPTION_H_
 #define NIRVANA_ORB_EXCEPTION_H_
 
-#include "I_ptr.h"
+#include "I_var.h"
 
 namespace CORBA {
 
 class TypeCode;
 typedef Nirvana::I_ptr <TypeCode> TypeCode_ptr;
+typedef Nirvana::I_var <TypeCode> TypeCode_var;
 
 class Exception
 {

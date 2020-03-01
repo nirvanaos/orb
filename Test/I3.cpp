@@ -1,4 +1,5 @@
 #include "I3.h"
+
 namespace TestORB {
 
 #ifndef TEST_NO_STATIC

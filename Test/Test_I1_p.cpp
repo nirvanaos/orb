@@ -1,7 +1,7 @@
 #include "Test_I1_s.h"
 #include <CORBA/ProxyFactory_s.h>
 #include <CORBA/LifeCycleRefCntLink.h>
-#include <Nirvana/SynchronizationDomain.h>
+#include <Nirvana/SyncDomainTraits.h>
 
 namespace Test {
 
@@ -16,7 +16,7 @@ public:
 	{
 		const ThisClass& _this = _implementation (_b);
 		_b = _this.target_;
-		Nirvana::SynchronizationDomain_ptr _sync_domain = _this.sync_domain_;
+		Nirvana::SyncDomainTraits_ptr _sync_domain = _this.sync_domain_;
 		Nirvana::ContextFrame _frame;
 		_sync_domain->enter (_frame);
 		CORBA::Long _ret = (_b->_epv ().epv.op1) (_b, p1, _env);
@@ -26,7 +26,7 @@ public:
 
 private:
 	CORBA::Nirvana::I_ptr <I1> target_;
-	Nirvana::SynchronizationDomain_var sync_domain_;
+	Nirvana::SyncDomainTraits_var sync_domain_;
 };
 
 class I1_proxy_factory :

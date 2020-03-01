@@ -9,7 +9,6 @@
 
 namespace CORBA {
 
-typedef Nirvana::I_var <TypeCode> TypeCode_var;
 typedef Nirvana::I_out <TypeCode> TypeCode_out;
 typedef Nirvana::I_inout <TypeCode> TypeCode_inout;
 

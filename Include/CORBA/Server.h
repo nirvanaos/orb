@@ -8,6 +8,5 @@
 #include "ImplementationStatic.h"
 #include "ImplementationLocalStatic.h"
 #include "PortableServer.h"
-#include "stateless.h"
 
 #endif
