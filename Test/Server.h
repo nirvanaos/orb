@@ -1,6 +1,7 @@
 #ifndef NIRVANA_TESTORB_SERVER_H_
 #define NIRVANA_TESTORB_SERVER_H_
 
+#include <Nirvana/Nirvana.h>
 #include <CORBA/Object_s.h>
 #include <CORBA/Implementation.h>
 #include <CORBA/ImplementationLocal.h>

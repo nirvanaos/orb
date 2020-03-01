@@ -1,6 +1,7 @@
 #ifndef NIRVANA_ORB_CORBA_H_
 #define NIRVANA_ORB_CORBA_H_
 
+#include <Nirvana/Nirvana.h>
 #include "ORB.h"
 #include "Object.h"
 #include "TypeCode.h"

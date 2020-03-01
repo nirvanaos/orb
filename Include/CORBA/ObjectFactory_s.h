@@ -17,93 +17,96 @@ public:
 	static const typename Bridge <ObjectFactory>::EPV epv_;
 
 protected:
-	static void* _memory_allocate (Bridge <ObjectFactory>* obj, size_t size, EnvironmentBridge* env)
+	static void* _memory_allocate (Bridge <ObjectFactory>* _b, size_t size, EnvironmentBridge* _env)
 	{
 		try {
-			return S::_implementation (obj).memory_allocate (size);
+			return S::_implementation (_b).memory_allocate (size);
 		} catch (const Exception & e) {
-			set_exception (env, e);
+			set_exception (_env, e);
 		} catch (...) {
-			set_unknown_exception (env);
-		}
-	}
-
-	static void _memory_release (Bridge <ObjectFactory>* obj, void* p, size_t size, EnvironmentBridge* env)
-	{
-		try {
-			S::_implementation (obj).memory_release (p, size);
-		} catch (const Exception & e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-	}
-
-	static void _stateless_begin (Bridge <ObjectFactory>*, ABI_inout <StatelessCreationBlock> scb, EnvironmentBridge*)
-	{
-		try {
-			S::_implementation (obj).stateless_begin (Type <StatelessCreationBlock>::inout (scb));
-		} catch (const Exception & e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-	}
-
-	static void* _stateless_end (Bridge <ObjectFactory>*, ABI_in <StatelessCreationBlock> scb, ABI_in <bool> success, EnvironmentBridge*)
-	{
-		try {
-			return S::_implementation (obj).stateless_end (Type <StatelessCreationBlock>::in (scb), Type <bool>::in (success));
-		} catch (const Exception & e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-	}
-
-	static const void* _stateless_copy (Bridge <ObjectFactory>*, const void* p, size_t size, EnvironmentBridge*)
-	{
-		try {
-			return S::_implementation (obj).stateless_copy (p, size);
-		} catch (const Exception & e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-	}
-
-	static Interface* _create_reference_counter (Bridge <ObjectFactory>* obj, Interface* dynamic, EnvironmentBridge* env)
-	{
-		try {
-			return TypeI <ReferenceCounter>::ret (S::_implementation (obj).create_reference_counter (TypeI <DynamicServant>::in (dynamic)));
-		} catch (const Exception & e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
 
-	static Interface* _create_servant (Bridge <ObjectFactory>* obj, Interface* impl, EnvironmentBridge* env)
+	static void _memory_release (Bridge <ObjectFactory>* _b, void* p, size_t size, EnvironmentBridge* _env)
 	{
 		try {
-			return TypeI <PortableServer::ServantBase>::ret (S::_implementation (obj).create_servant (TypeI <PortableServer::ServantBase>::in (impl)));
-		} catch (const Exception& e) {
-			set_exception (env, e);
+			S::_implementation (_b).memory_release (p, size);
+		} catch (const Exception & e) {
+			set_exception (_env, e);
 		} catch (...) {
-			set_unknown_exception (env);
+			set_unknown_exception (_env);
+		}
+	}
+
+	static void _stateless_begin (Bridge <ObjectFactory>* _b, Type <StatelessCreationStruct>::ABI_inout scs, EnvironmentBridge* _env)
+	{
+		try {
+			S::_implementation (_b).stateless_begin (Type <StatelessCreationStruct>::inout (scs));
+		} catch (const Exception & e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+	}
+
+	static void* _stateless_end (Bridge <ObjectFactory>* _b, ABI_in <bool> success, EnvironmentBridge* _env)
+	{
+		try {
+			return S::_implementation (_b).stateless_end (Type <bool>::in (success));
+		} catch (const Exception & e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
 
-	static Interface* _create_local_object (Bridge <ObjectFactory>* obj, Interface* impl, EnvironmentBridge* env)
+	static const void* _stateless_copy (Bridge <ObjectFactory>* _b, const void* p, size_t size, EnvironmentBridge* _env)
 	{
 		try {
-			return TypeI <Object>::ret (S::_implementation (obj).create_local_object (TypeI <Object>::in (impl)));
-		} catch (const Exception& e) {
-			set_exception (env, e);
+			return S::_implementation (_b).stateless_copy (p, size);
+		} catch (const Exception & e) {
+			set_exception (_env, e);
 		} catch (...) {
-			set_unknown_exception (env);
+			set_unknown_exception (_env);
+		}
+		return 0;
+	}
+
+	static Interface* _create_reference_counter (Bridge <ObjectFactory>* _b, Interface* dynamic, EnvironmentBridge* _env)
+	{
+		try {
+			return TypeI <ReferenceCounter>::ret (S::_implementation (_b).create_reference_counter (TypeI <DynamicServant>::in (dynamic)));
+		} catch (const Exception & e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return 0;
+	}
+
+	static Interface* _create_servant (Bridge <ObjectFactory>* _b, Interface* impl, EnvironmentBridge* _env)
+	{
+		try {
+			return TypeI <PortableServer::ServantBase>::ret (S::_implementation (_b).create_servant (TypeI <PortableServer::ServantBase>::in (impl)));
+		} catch (const Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return 0;
+	}
+
+	static Interface* _create_local_object (Bridge <ObjectFactory>* _b, Interface* impl, EnvironmentBridge* _env)
+	{
+		try {
+			return TypeI <Object>::ret (S::_implementation (_b).create_local_object (TypeI <Object>::in (impl)));
+		} catch (const Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}

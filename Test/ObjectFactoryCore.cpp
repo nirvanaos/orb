@@ -1,7 +1,11 @@
 #include "ObjectFactoryCore.h"
 #include <Nirvana/OLF.h>
 
-//#define TEST_MACRO
+namespace CORBA {
+namespace Nirvana {
+StatelessCreationStruct* ObjectFactoryCore::stateless_ = 0;
+}
+}
 
 #ifdef TEST_MACRO
 __pragma(comment (linker, "/include:" C_NAME_PREFIX "_exp_CORBA_Nirvana_g_object_factory"))\
