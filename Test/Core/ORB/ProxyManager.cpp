@@ -8,7 +8,7 @@ ProxyManager::ProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase
 	Bridge <Object> (proxy_impl),
 	servant_ (servant),
 	ref_cnt_ (0),
-	sync_domain_ (::Nirvana::g_current->sync_domain_traits ())
+	sync_domain_ (::Nirvana::SyncDomainTraits::_duplicate (::Nirvana::g_current->sync_domain_traits ()))
 {}
 
 Interface_ptr ProxyManager::_query_interface (const String& iid)

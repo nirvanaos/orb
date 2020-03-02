@@ -6,7 +6,7 @@ namespace CORBA {
 namespace Nirvana {
 namespace Core {
 
-POA_ptr RootPOA::singleton_;
+POA_ptr RootPOA::singleton_ = PortableServer::POA::_nil ();
 
 POA_var RootPOA::singleton ()
 {
