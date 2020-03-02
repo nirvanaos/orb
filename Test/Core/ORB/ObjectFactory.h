@@ -56,17 +56,28 @@ public:
 
 	static CORBA::Nirvana::ReferenceCounter_ptr create_reference_counter (CORBA::Nirvana::DynamicServant_ptr dynamic)
 	{
-		return (new ReferenceCounter (dynamic))->_get_ptr ();
+		return (new ReferenceCounter (offset_ptr (dynamic)))->_get_ptr ();
 	}
 
 	static PortableServer::Servant create_servant (PortableServer::Servant servant)
 	{
-		return (new ServantBase (servant))->_get_ptr ();
+		return (new ServantBase (offset_ptr (servant)))->_get_ptr ();
 	}
 
 	static Object_ptr create_local_object (Object_ptr servant)
 	{
-		return (new LocalObject (servant))->_get_ptr ();
+		return (new LocalObject (offset_ptr (servant)))->_get_ptr ();
+	}
+
+private:
+	template <class I>
+	static I_ptr <I> offset_ptr (I_ptr <I> p)
+	{
+		if (stateless_) {
+			void* vp = p;
+			p = reinterpret_cast <I*> ((Octet*)vp + stateless_->offset);
+		}
+		return p;
 	}
 
 private:

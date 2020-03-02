@@ -29,7 +29,7 @@ public:
 	}
 
 private:
-	static PortableServer::POA_var singleton_;
+	static PortableServer::POA_ptr singleton_;
 };
 
 }
