@@ -11,12 +11,12 @@ ProxyManager::ProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase
 	sync_domain_ (::Nirvana::SyncDomainTraits::_duplicate (::Nirvana::g_current->sync_domain_traits ()))
 {}
 
-Interface_ptr ProxyManager::_query_interface (const String& iid)
+Interface_ptr ProxyManager::_query_interface (const String& iid) const
 {
 	if (!iid.empty ()) {
 		switch (RepositoryId::check (Object::interface_id_, iid)) {
 			case RepositoryId::COMPATIBLE:
-				return this;
+				return &const_cast <ProxyManager&> (*this);
 			case RepositoryId::INCOMPATIBLE_VERSION:
 				return 0;
 		}

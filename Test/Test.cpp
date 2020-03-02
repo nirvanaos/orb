@@ -1,46 +1,12 @@
-#include "I1.h"
 #include "I3.h"
-#include "Core/Loader.h"
 #include <CORBA/PortableServer.h>
 #include <gtest/gtest.h>
 
-using namespace Test;
 using namespace std;
 
 namespace TestORB {
 
-/*
-void must_not_compile (const I3_var& var)
-{
-	I1_var i1 = var; // Implicit cast between var must cause a compilation error
-}
-*/
-
-void must_compile ()
-{
-#ifndef TEST_LOCAL_OBJECT
-	{
-		PortableServer::Servant servant = new DynamicI3 (1);
-		PortableServer::release (servant);
-	}
-#ifndef TEST_NO_POA
-	{
-		PortableServer::Servant servant = new PortableI3 (1);
-		PortableServer::release (servant);
-	}
-#endif
-#else
-#ifndef TEST_NO_POA
-	{
-		CORBA::LocalObject_ptr servant = new PortableI3 (1);
-		CORBA::release (servant);
-	}
-#endif
-#endif
-}
-
 int Instance::count_ = 0;
-Loader loader;
 
 void test_interface (I1_ptr p)
 {
@@ -168,7 +134,7 @@ protected:
 
 TYPED_TEST_SUITE (TestORB_I1, ServantTypesI1);
 
-TYPED_TEST (TestORB_I1, Inteface)
+TYPED_TEST (TestORB_I1, Interface)
 {
 	test_interface (TypeParam::incarnate ());
 }
@@ -231,7 +197,7 @@ protected:
 
 TYPED_TEST_SUITE (TestORB_I3, ServantTypesI3);
 
-TYPED_TEST (TestORB_I3, Inteface)
+TYPED_TEST (TestORB_I3, Interface)
 {
 	test_interface (TypeParam::incarnate ());
 }

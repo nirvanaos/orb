@@ -31,23 +31,21 @@ public:
 	void _remove_ref ()
 	{
 		if (!ref_cnt_.decrement ()) {
-			{
-				::Nirvana::Runnable_var gc = (new GarbageCollector (servant_))->_get_ptr ();
-				::Nirvana::DeadlineTime cur_dt = ::Nirvana::g_current->set_next_async_deadline (::Nirvana::INFINITE_DEADLINE);
-				try {
-					sync_domain_->async_call (gc);
-				} catch (...) {
-					::Nirvana::g_current->set_next_async_deadline (cur_dt);
-					throw;
-				}
+			::Nirvana::Runnable_var gc = (new GarbageCollector (servant_))->_get_ptr ();
+			::Nirvana::DeadlineTime cur_dt = ::Nirvana::g_current->set_next_async_deadline (::Nirvana::INFINITE_DEADLINE);
+			try {
+				sync_domain_->async_call (gc);
+			} catch (...) {
 				::Nirvana::g_current->set_next_async_deadline (cur_dt);
+				throw;
 			}
+			::Nirvana::g_current->set_next_async_deadline (cur_dt);
 		}
 	}
 
 	// AbstractBase
 
-	Interface_ptr _query_interface (const String& iid);
+	Interface_ptr _query_interface (const String& iid) const;
 
 	// ServantBase default implementation
 
@@ -58,7 +56,7 @@ public:
 
 	Boolean default_is_a (const String& type_id) const
 	{
-		Interface* itf = servant_->_query_interface (type_id);
+		Interface* itf = _query_interface (type_id);
 		if (itf)
 			return true;
 		else

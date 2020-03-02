@@ -1,8 +1,17 @@
 #include <CORBA/CORBA.h>
 #include <gtest/gtest.h>
 #include <Mock/MockMemory.h>
+#include "I3.h"
+#include <CORBA/PortableServer.h>
 
 using namespace std;
+
+/*
+void must_not_compile (const I3_var& var)
+{
+	I1_var i1 = var; // Implicit cast between var must cause a compilation error
+}
+*/
 
 namespace TestORB {
 
@@ -23,7 +32,7 @@ protected:
 	{
 		// Code here will be called immediately after the constructor (right
 		// before each test).
-		allocated_ = Nirvana::Test::allocated_bytes ();
+		allocated_ = ::Nirvana::Test::allocated_bytes ();
 	}
 
 	virtual void TearDown ()
@@ -31,7 +40,7 @@ protected:
 		// Code here will be called immediately after each test (right
 		// before the destructor).
 		if (!HasFatalFailure ())
-			EXPECT_EQ (Nirvana::Test::allocated_bytes (), allocated_);
+			EXPECT_EQ (::Nirvana::Test::allocated_bytes (), allocated_);
 	}
 
 private:
@@ -111,6 +120,36 @@ TEST_F (TestORB, Environment)
 	ex = ne2.exception ();
 	ASSERT_TRUE (ex);
 	EXPECT_STREQ (ex->_name (), TestException::__name ());
+}
+
+TEST_F (TestORB, ServantTypes)
+{
+#ifndef TEST_LOCAL_OBJECT
+	{
+		PortableServer::Servant servant = new DynamicI3 (1);
+		PortableServer::release (servant);
+	}
+#ifndef TEST_NO_POA
+	{
+		PortableServer::Servant servant = new PortableI3 (1);
+		PortableServer::release (servant);
+	}
+#endif
+#else
+	{
+		CORBA::LocalObject_ptr servant = new DynamicI3 (1);
+		EXPECT_FALSE (servant->_non_existent ());
+		CORBA::Object_ptr obj = servant;
+		EXPECT_TRUE (obj);
+		CORBA::release (servant);
+	}
+#ifndef TEST_NO_POA
+	{
+		CORBA::LocalObject_ptr servant = new PortableI3 (1);
+		CORBA::release (servant);
+	}
+#endif
+#endif
 }
 
 }

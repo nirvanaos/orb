@@ -28,8 +28,8 @@ public:
 	}
 
 	ServantBase (PortableServer::Servant servant) :
-		proxy_manager_ (servant),
-		is_active_ (false)
+		is_active_ (false),
+		proxy_manager_ (servant)
 	{}
 
 	PortableServer::Servant __core_servant ()
