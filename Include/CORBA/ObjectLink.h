@@ -11,14 +11,19 @@ class ObjectLink :
 	public Bridge <Object>
 {
 public:
+	operator Bridge <Object>& ()
+	{
+		return static_cast <Bridge <Object>&> (*_get_proxy (Object::interface_id_));
+	}
+
 	// Object operations
 
-	ImplementationDef_ptr _get_implementation ()
+	ImplementationDef_var _get_implementation ()
 	{
 		return object_->_get_implementation ();
 	}
 
-	InterfaceDef_ptr _get_interface ()
+	InterfaceDef_var _get_interface ()
 	{
 		return object_->_get_interface ();
 	}
@@ -53,7 +58,7 @@ protected:
 		return *this; // Do nothing
 	}
 
-	Interface* _get_proxy ();
+	Interface* _get_proxy (String_in iid = 0);
 
 private:
 	Object_var object_;

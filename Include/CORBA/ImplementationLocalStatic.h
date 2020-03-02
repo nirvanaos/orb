@@ -23,7 +23,7 @@ class ImplementationLocalStatic :
 public:
 	Interface_ptr _query_interface (const String& id)
 	{
-		return FindInterface <Primary, Bases..., Object>::find (*(S*)0, id);
+		return FindInterface <Primary, Bases...>::find (*(S*)0, id);
 	}
 
 	static I_ptr <Primary> _this ()

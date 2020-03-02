@@ -1,5 +1,5 @@
 #include "Loader.h"
-#include "ObjectFactoryCore.h"
+#include "ORB/ObjectFactory.h"
 #include <Nirvana/OLF.h>
 #include <Windows.h>
 
@@ -11,6 +11,7 @@ using namespace std;
 using namespace ::CORBA;
 using namespace ::CORBA::Nirvana;
 using namespace ::Nirvana;
+using ::CORBA::Nirvana::Core::ObjectFactory;
 
 bool Loader::is_section (const COFF::section* s, const char* name)
 {
@@ -87,8 +88,8 @@ void Loader::bind_olf (const void* data, size_t size)
 
 			case OLF_EXPORT_OBJECT: {
 				ExportObject* ps = reinterpret_cast <ExportObject*> (p);
-				PortableServer::ServantBase_var core_obj = ObjectFactoryCore::create_servant (TypeI <PortableServer::ServantBase>::in (ps->implementation));
-				ps->core_object = PortableServer::Servant(core_obj);
+				PortableServer::ServantBase_var core_obj = ObjectFactory::create_servant (TypeI <PortableServer::ServantBase>::in (ps->implementation));
+				ps->core_object = PortableServer::Servant (core_obj);
 				Object_var proxy = AbstractBase_ptr (core_obj)->_to_object ();
 				core_objects_.push_back (Interface_ptr (core_obj._retn ()));
 				exported_interfaces_.emplace (ps->name, Interface_var (proxy._retn ()));
@@ -98,7 +99,7 @@ void Loader::bind_olf (const void* data, size_t size)
 
 			case OLF_EXPORT_LOCAL: {
 				ExportLocal* ps = reinterpret_cast <ExportLocal*> (p);
-				Object_var core_obj = ObjectFactoryCore::create_local_object (TypeI <Object>::in (ps->implementation));
+				Object_var core_obj = ObjectFactory::create_local_object (TypeI <Object>::in (ps->implementation));
 				ps->core_object = Object_ptr (core_obj);
 				Object_var proxy = AbstractBase_ptr (Object_ptr (core_obj))->_to_object ();
 				core_objects_.push_back (Interface_var (core_obj._retn ()));
@@ -143,17 +144,17 @@ void Loader::bind_olf (const void* data, size_t size)
 					break;
 				}
 
-			case OLF_EXPORT_INTERFACE:
-				p += sizeof (ExportInterface) / sizeof (*p);
-				break;
+				case OLF_EXPORT_INTERFACE:
+					p += sizeof (ExportInterface) / sizeof (*p);
+					break;
 
-			case OLF_EXPORT_OBJECT:
-				p += sizeof (ExportObject) / sizeof (*p);
-				break;
+				case OLF_EXPORT_OBJECT:
+					p += sizeof (ExportObject) / sizeof (*p);
+					break;
 
-			case OLF_EXPORT_LOCAL:
-				p += sizeof (ExportLocal) / sizeof (*p);
-				break;
+				case OLF_EXPORT_LOCAL:
+					p += sizeof (ExportLocal) / sizeof (*p);
+					break;
 			}
 		}
 	}

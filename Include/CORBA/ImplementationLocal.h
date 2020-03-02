@@ -25,7 +25,7 @@ class ImplementationLocal :
 public:
 	Interface_ptr _query_interface (const String& id)
 	{
-		return FindInterface <Primary, Bases..., CORBA::Object>::find (static_cast <S&> (*this), id);
+		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);
 	}
 
 	I_ptr <Primary> _this ()

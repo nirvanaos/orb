@@ -36,6 +36,7 @@ struct Operation
 };
 
 /*
+~~~{.idl}
 pseudo interface ProxyFactory {
 	//! Returns ids of all interfaces.
 	const CountedArray <const char*>& interfaces ();
@@ -44,6 +45,7 @@ pseudo interface ProxyFactory {
 	Interface create_local_proxy (Object proxy, in LocalObjectRef target, short interface_idx, out DynamicServant deleter);
 	Interface create_remote_proxy (Object proxy, out DynamicServant deleter);
 };
+~~~
 */
 
 BRIDGE_BEGIN (ProxyFactory, CORBA_NIRVANA_REPOSITORY_ID (ProxyFactory))

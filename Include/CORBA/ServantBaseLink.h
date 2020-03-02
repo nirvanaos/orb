@@ -13,17 +13,17 @@ class ServantBaseLink :
 public:
 	operator Bridge <Object>& ()
 	{
-		return *Object_ptr (servant_base_);
+		return static_cast <Bridge <Object>&> (*_get_proxy (Object::interface_id_));
 	}
 
 	// ServantBase operations
 
-	PortableServer::POA_ptr _default_POA () const
+	PortableServer::POA_var _default_POA () const
 	{
 		return servant_base_->_default_POA ();
 	}
 
-	InterfaceDef_ptr _get_interface () const
+	InterfaceDef_var _get_interface () const
 	{
 		return servant_base_->_get_interface ();
 	}
@@ -38,10 +38,15 @@ public:
 		return false;
 	}
 
-	// Our extension
+	// Our extensions
 	Boolean _is_active () const
 	{
 		return !servant_base_->_non_existent ();
+	}
+
+	PortableServer::Servant __core_servant () const
+	{
+		return servant_base_;
 	}
 
 protected:
@@ -57,7 +62,7 @@ protected:
 
 	void _construct ();
 
-	Interface* _get_proxy ();
+	Interface* _get_proxy (String_in iid = 0);
 
 protected:
 	PortableServer::ServantBase_var servant_base_;

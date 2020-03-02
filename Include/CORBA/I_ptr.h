@@ -183,7 +183,7 @@ public:
 typedef I_ptr <Interface> Interface_ptr;
 
 template <class I>
-struct StaticInterface
+struct StaticI_ptr
 {
 	Bridge <I>* itf;
 

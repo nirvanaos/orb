@@ -3,6 +3,7 @@
 
 #include <Nirvana/NirvanaBase.h>
 #include "BasicTypes.h"
+#include "StringBase.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -36,7 +37,7 @@ public:
 		return *this;	// Do nothing
 	}
 
-	static Interface* _check (Interface* obj, const Char* interface_id);
+	static Interface* _check (Interface* obj, String_in interface_id);
 
 	static Interface* _nil ()
 	{

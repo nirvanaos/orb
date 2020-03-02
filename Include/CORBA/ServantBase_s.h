@@ -63,6 +63,18 @@ protected:
 		}
 		return 0;
 	}
+
+	static Interface* ___core_servant (Bridge <::PortableServer::ServantBase>* obj, EnvironmentBridge* env)
+	{
+		try {
+			return S::_implementation (obj).__core_servant ();
+		} catch (const Exception & e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return 0;
+	}
 };
 
 template <class S>
@@ -74,14 +86,14 @@ const Bridge <::PortableServer::ServantBase>::EPV Skeleton <S, ::PortableServer:
 	},
 	{ // base
 		S::template _wide < ::CORBA::AbstractBase, ::PortableServer::ServantBase>,
-		S::template _wide < ::CORBA::Object, ::PortableServer::ServantBase>,
 		S::template _wide <ReferenceCounter, ::PortableServer::ServantBase>
 	},
 	{ // epv
 		S::__default_POA,
 		S::__get_interface,
 		S::__is_a,
-		S::__non_existent
+		S::__non_existent,
+		S::___core_servant
 	}
 };
 

@@ -91,7 +91,7 @@ public:
 		{}
 	};
 
-	static const Nirvana::StaticInterface <TypeCode> _tc_BadKind;
+	static const Nirvana::StaticI_ptr <TypeCode> _tc_BadKind;
 
 	class Bounds : public UserException
 	{
@@ -105,7 +105,7 @@ public:
 		{}
 	};
 
-	static const Nirvana::StaticInterface <TypeCode> _tc_Bounds;
+	static const Nirvana::StaticI_ptr <TypeCode> _tc_Bounds;
 };
 
 namespace Nirvana {

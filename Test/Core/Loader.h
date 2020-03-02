@@ -1,5 +1,5 @@
-#ifndef NIRVANA_TESTORB_LOADER_H_
-#define NIRVANA_TESTORB_LOADER_H_
+#ifndef NIRVANA_ORB_CORE_LOADER_H_
+#define NIRVANA_ORB_CORE_LOADER_H_
 
 #include <CORBA/CORBA.h>
 #include <llvm/BinaryFormat/COFF.h>

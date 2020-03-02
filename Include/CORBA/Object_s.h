@@ -18,7 +18,7 @@ protected:
 	static Interface* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj)._get_implementation ();
+			return TypeI <ImplementationDef>::ret (S::_implementation (obj)._get_implementation ());
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -30,7 +30,7 @@ protected:
 	static Interface* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
-			return S::_implementation (obj)._get_interface ();
+			return TypeI <InterfaceDef>::ret (S::_implementation (obj)._get_interface ());
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {

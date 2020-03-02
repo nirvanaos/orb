@@ -69,8 +69,8 @@ class Client <T, Object> :
 	public T
 {
 public:
-	ImplementationDef_ptr _get_implementation ();
-	InterfaceDef_ptr _get_interface ();
+	ImplementationDef_var _get_implementation ();
+	InterfaceDef_var _get_interface ();
 	Boolean _is_a (String_in type_id);
 	Boolean _non_existent ();
 	Boolean _is_equivalent (Object_ptr other_object);
@@ -79,7 +79,7 @@ public:
 };
 
 template <class T>
-ImplementationDef_ptr Client <T, Object>::_get_implementation ()
+ImplementationDef_var Client <T, Object>::_get_implementation ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
@@ -89,7 +89,7 @@ ImplementationDef_ptr Client <T, Object>::_get_implementation ()
 }
 
 template <class T>
-InterfaceDef_ptr Client <T, Object>::_get_interface ()
+InterfaceDef_var Client <T, Object>::_get_interface ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));

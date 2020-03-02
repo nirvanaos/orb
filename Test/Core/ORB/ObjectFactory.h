@@ -1,17 +1,17 @@
-#ifndef NIRVANA_TESTORB_OBJECTFACTORYCORE_H_
-#define NIRVANA_TESTORB_OBJECTFACTORYCORE_H_
+#ifndef NIRVANA_ORB_CORE_OBJECTFACTORY_H_
+#define NIRVANA_ORB_CORE_OBJECTFACTORY_H_
 
-#include "Server.h"
 #include <CORBA/ObjectFactory_s.h>
-#include "ServantCore.h"
-#include "LocalObjectCore.h"
-#include "ReferenceCounterImpl.h"
+#include "ServantBase.h"
+#include "LocalObject.h"
+#include "ReferenceCounter.h"
 
 namespace CORBA {
 namespace Nirvana {
+namespace Core {
 
-class ObjectFactoryCore :
-	public ServantStatic <ObjectFactoryCore, ObjectFactory>
+class ObjectFactory :
+	public ServantStatic <ObjectFactory, CORBA::Nirvana::ObjectFactory>
 {
 public:
 	static void* memory_allocate (size_t size)
@@ -56,26 +56,24 @@ public:
 
 	static CORBA::Nirvana::ReferenceCounter_ptr create_reference_counter (CORBA::Nirvana::DynamicServant_ptr dynamic)
 	{
-		return (new ReferenceCounterCore (dynamic))->_get_ptr ();
+		return (new ReferenceCounter (dynamic))->_get_ptr ();
 	}
 
 	static PortableServer::Servant create_servant (PortableServer::Servant servant)
 	{
-		return (new ServantCore (servant))->_get_ptr ();
+		return (new ServantBase (servant))->_get_ptr ();
 	}
 
 	static Object_ptr create_local_object (Object_ptr servant)
 	{
-#ifndef TEST_LOCAL_OBJECT
-		assert (false);
-#endif
-		return (new LocalObjectCore (servant))->_get_ptr ();
+		return (new LocalObject (servant))->_get_ptr ();
 	}
 
 private:
 	static StatelessCreationFrame* stateless_;
 };
 
+}
 }
 }
 

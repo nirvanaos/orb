@@ -11,7 +11,7 @@ Interface* InterfaceEntry::find (const InterfaceEntry* begin, const InterfaceEnt
 		ie = begin;
 	else {
 		for (const InterfaceEntry* p = begin; p != end; ++p) {
-			if (RepositoryId::compatible (p->interface_id, id)) {
+			if (RepositoryId::compatible (p->interface_id, p->id_len, id)) {
 				ie = p;
 				break;
 			}

@@ -1,11 +1,12 @@
 // The Nirvana project.
 // Object Request Broker.
-#ifndef NIRVANA_ORB_REFERENCECOUNTERLINK_H_
-#define NIRVANA_ORB_REFERENCECOUNTERLINK_H_
+#ifndef NIRVANA_ORB_LIFECYCLESERVANT_H_
+#define NIRVANA_ORB_LIFECYCLESERVANT_H_
 
 #include "ReferenceCounter.h"
 #include "DynamicServant_s.h"
 #include "ServantImpl.h"
+#include "core_objects.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -19,9 +20,6 @@ class ReferenceCounterLink :
 {
 	ReferenceCounterLink (const ReferenceCounterLink&) = delete;
 public:
-	void* operator new (size_t size);
-	void operator delete (void* p, size_t size);
-
 	void _add_ref ()
 	{
 		reference_counter_->_add_ref ();
@@ -68,6 +66,18 @@ class LifeCycleServant :
 	public ReferenceCounterLink,
 	public LifeCycleRefCnt <S>
 {
+public:
+	void* operator new (size_t size)
+	{
+		assert (sizeof (S) == size);
+		return g_object_factory->memory_allocate (size);
+	}
+
+	void operator delete (void* p)
+	{
+		g_object_factory->memory_release (p, sizeof (S));
+	}
+
 protected:
 	LifeCycleServant () :
 		ReferenceCounterLink (Skeleton <S, DynamicServant>::epv_)

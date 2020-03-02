@@ -21,17 +21,17 @@ class InterfaceStatic <S, PortableServer::ServantBase> :
 public:
 	operator Bridge <Object>& () const
 	{
-		return *Object_ptr (servant_base ());
+		return static_cast <Bridge <Object>&> (*_get_proxy (Object::interface_id_));
 	}
 
 	// ServantBase operations
 
-	static PortableServer::POA_ptr _default_POA ()
+	static PortableServer::POA_var _default_POA ()
 	{
 		return servant_base ()->_default_POA ();
 	}
 
-	static InterfaceDef_ptr _get_interface ()
+	static InterfaceDef_var _get_interface ()
 	{
 		return servant_base ()->_get_interface ();
 	}
@@ -46,10 +46,15 @@ public:
 		return false;
 	}
 
-protected:
-	static Interface* _get_proxy ()
+	static PortableServer::Servant __core_servant ()
 	{
-		Interface* proxy = AbstractBase_ptr (servant_base ())->_query_interface (0);
+		return servant_base ();
+	}
+
+protected:
+	static Interface* _get_proxy (String_in iid = 0)
+	{
+		Interface* proxy = AbstractBase_ptr (servant_base ())->_query_interface (iid);
 		if (!proxy)
 			::Nirvana::throw_MARSHAL ();
 		return proxy;

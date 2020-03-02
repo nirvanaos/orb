@@ -9,13 +9,13 @@ namespace Nirvana {
 
 BRIDGE_BEGIN (::PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID (ServantBase))
 BASE_STRUCT_ENTRY (AbstractBase, CORBA_AbstractBase)
-BASE_STRUCT_ENTRY (Object, CORBA_Object)
 BASE_STRUCT_ENTRY (ReferenceCounter, CORBA_Nirvana_ReferenceCounter)
 BRIDGE_EPV
 Interface* (*default_POA) (Bridge < ::PortableServer::ServantBase>*, EnvironmentBridge*);
 Interface* (*get_interface) (Bridge < ::PortableServer::ServantBase>*, EnvironmentBridge*);
 ABI_boolean (*is_a) (Bridge < ::PortableServer::ServantBase>*, ABI_in <String> type_id, EnvironmentBridge*);
 ABI_boolean (*non_existent) (Bridge < ::PortableServer::ServantBase>*, EnvironmentBridge*);
+Interface* (*core_servant) (Bridge < ::PortableServer::ServantBase>*, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <class T>
@@ -23,14 +23,17 @@ class Client <T, ::PortableServer::ServantBase> :
 	public T
 {
 public:
-	::PortableServer::POA_ptr _default_POA ();
-	InterfaceDef_ptr _get_interface ();
+	::PortableServer::POA_var _default_POA ();
+	InterfaceDef_var _get_interface ();
 	Boolean _is_a (String_in type_id);
 	Boolean _non_existent ();
+
+	// Nirvana extension
+	::PortableServer::Servant __core_servant ();
 };
 
 template <class T>
-::PortableServer::POA_ptr Client <T, ::PortableServer::ServantBase>::_default_POA ()
+::PortableServer::POA_var Client <T, ::PortableServer::ServantBase>::_default_POA ()
 {
 	Environment _env;
 	Bridge <::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
@@ -40,7 +43,7 @@ template <class T>
 }
 
 template <class T>
-InterfaceDef_ptr Client <T, ::PortableServer::ServantBase>::_get_interface ()
+InterfaceDef_var Client <T, ::PortableServer::ServantBase>::_get_interface ()
 {
 	Environment _env;
 	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
@@ -65,6 +68,16 @@ Boolean Client <T, ::PortableServer::ServantBase>::_non_existent ()
 	Environment _env;
 	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
 	T_ret <Boolean> _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
+::PortableServer::Servant Client <T, ::PortableServer::ServantBase>::__core_servant ()
+{
+	Environment _env;
+	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
+	I_ret <::PortableServer::ServantBase> _ret = (_b._epv ().epv.core_servant) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -117,12 +130,9 @@ public:
 
 namespace PortableServer {
 
-typedef ::CORBA::Nirvana::I_ptr <ServantBase> Servant;
-
 class ServantBase :
 	public ::CORBA::Nirvana::ClientInterface <ServantBase, ::CORBA::Nirvana::ReferenceCounter>,
 	// Client methods from AbstractBase are not available directly on pointer to ServantBase.
-	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::Object>,
 	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::AbstractBase>
 {};
 

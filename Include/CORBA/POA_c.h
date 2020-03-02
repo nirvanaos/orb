@@ -8,8 +8,6 @@
 namespace PortableServer {
 
 class ServantBase;
-template <> class ::CORBA::Nirvana::I_ptr <ServantBase>;
-typedef ::CORBA::Nirvana::I_ptr <ServantBase> ServantBase_ptr;
 typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
 typedef ::CORBA::Nirvana::I_out <ServantBase> ServantBase_out;
 
@@ -22,6 +20,8 @@ typedef ::CORBA::Nirvana::I_out <POA> POA_out;
 
 namespace CORBA {
 namespace Nirvana {
+
+template <> class I_ptr <PortableServer::ServantBase>;
 
 BRIDGE_BEGIN (PortableServer::POA, PORTABLESERVER_REPOSITORY_ID (POA))
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
@@ -41,6 +41,8 @@ public:
 }
 
 namespace PortableServer {
+
+typedef ::CORBA::Nirvana::I_ptr <ServantBase> Servant;
 
 class POA : public CORBA::Nirvana::ClientInterface <POA, CORBA::Object>
 {};

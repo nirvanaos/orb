@@ -1,6 +1,6 @@
 #include "I1.h"
 #include "I3.h"
-#include "Loader.h"
+#include "Core/Loader.h"
 #include <CORBA/PortableServer.h>
 #include <gtest/gtest.h>
 

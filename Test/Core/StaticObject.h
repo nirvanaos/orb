@@ -1,25 +1,27 @@
-#ifndef NIRVANA_TESTORB_LOCALOBJECTSTATICCORE_H_
-#define NIRVANA_TESTORB_LOCALOBJECTSTATICCORE_H_
+#ifndef NIRVANA_TESTORB_STATICOBJECT_H_
+#define NIRVANA_TESTORB_STATICOBJECT_H_
 
-#include <CORBA/ImplementationStatic.h>
+#include <CORBA/AbstractBase_s.h>
+#include <CORBA/Object_s.h>
+#include <CORBA/ServantStatic.h>
 
 namespace CORBA {
 namespace Nirvana {
 
 template <class S>
-class LocalObjectStaticCore :
+class StaticObject :
 	public InterfaceStatic <S, AbstractBase>,
 	public InterfaceStaticBase <S, Object>
 {
 public:
 	// Object operations
 
-	static ImplementationDef_ptr _get_implementation ()
+	static ImplementationDef_var _get_implementation ()
 	{
 		return ImplementationDef::_nil ();
 	}
 
-	static InterfaceDef_ptr _get_interface ()
+	static InterfaceDef_var _get_interface ()
 	{
 		return InterfaceDef::_nil ();
 	}
@@ -45,7 +47,7 @@ public:
 
 	static ULong _hash (ULong maximum)
 	{
-		return 0;
+		return (ULong)(uintptr_t)&S::_query_interface % maximum;
 	}
 	// TODO: Other Object operations shall be here...
 };

@@ -57,7 +57,7 @@ protected:
 
 namespace Nirvana {
 
-typedef const StaticInterface <TypeCode> ExceptionEntry;
+typedef const StaticI_ptr <TypeCode> ExceptionEntry;
 
 extern void set_exception (EnvironmentBridge* environment, Long code, const char* rep_id, const void* param) NIRVANA_NOEXCEPT;
 extern void set_exception (EnvironmentBridge* environment, const Exception& e) NIRVANA_NOEXCEPT;

@@ -9,23 +9,22 @@ namespace Nirvana {
 
 using namespace std;
 
-bool RepositoryId::compatible (const Char* current, const Char* requested)
+RepositoryId::CheckResult RepositoryId::check (String_in current, String_in requested)
 {
-	if (current == requested)
-		return true;
-	return compatible (current, current ? strlen (current) : 0, requested, requested ? strlen (requested) : 0);
+	const String& cur_s = Type <String>::in (&requested);
+	return check (cur_s.c_str (), cur_s.length (), requested);
 }
 
-bool RepositoryId::compatible (const Char* current, String_in requested)
+RepositoryId::CheckResult RepositoryId::check (const Char* current, size_t current_len, String_in requested)
 {
 	const String& req_s = Type <String>::in (&requested);
-	return compatible (current, current ? strlen (current) : 0, req_s.c_str (), req_s.length ());
+	return check (current, current_len, req_s.c_str (), req_s.length ());
 }
 
-bool RepositoryId::compatible (const Char* current, size_t current_len, const Char* req_p, size_t req_l)
+RepositoryId::CheckResult RepositoryId::check (const Char* current, size_t current_len, const Char* req_p, size_t req_l)
 {
 	if (current == req_p)
-		return true;
+		return COMPATIBLE;
 	
 	static const Char IDL [] = "IDL";
 	static const size_t IDL_len = countof (IDL) - 1;
@@ -35,13 +34,13 @@ bool RepositoryId::compatible (const Char* current, size_t current_len, const Ch
 			const Char* minor = minor_version (current + IDL_len, current_len - IDL_len);
 			const Char* r_minor = minor_version (req_p + IDL_len, req_l - IDL_len);
 			if (minor - current == r_minor - req_p && equal (current, minor, req_p))
-				return minor_number (minor) >= minor_number (r_minor);
+				return minor_number (minor) >= minor_number (r_minor) ? COMPATIBLE : INCOMPATIBLE_VERSION;
 			else
-				return false;	// Type or major versions differ
+				return INCOMPATIBLE_VERSION;	// Type or major versions differ
 		} else
-			return false;
+			return OTHER_INTERFACE;
 	}
-	return current_len == req_l && equal (current, current + current_len, req_p);
+	return (current_len == req_l && equal (current, current + current_len, req_p)) ? COMPATIBLE : OTHER_INTERFACE;
 }
 
 bool RepositoryId::is_type (const Char* id, const Char* prefix, size_t cc)

@@ -4,7 +4,7 @@
 #ifndef NIRVANA_ORB_DYNAMICSERVANTIMPL_H_
 #define NIRVANA_ORB_DYNAMICSERVANTIMPL_H_
 
-#include "ReferenceCounterLink.h"
+#include "LifeCycleServant.h"
 
 namespace CORBA {
 namespace Nirvana {
