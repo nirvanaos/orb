@@ -31,18 +31,17 @@ public:
 	void _remove_ref ()
 	{
 		if (!ref_cnt_.decrement ()) {
-			::Nirvana::DeadlineTime dt = ::Nirvana::g_current->next_async_deadline ();
 			{
 				::Nirvana::Runnable_var gc = (new GarbageCollector (servant_))->_get_ptr ();
-				::Nirvana::g_current->next_async_deadline (::Nirvana::INFINITE_DEADLINE);
+				::Nirvana::DeadlineTime cur_dt = ::Nirvana::g_current->set_next_async_deadline (::Nirvana::INFINITE_DEADLINE);
 				try {
 					sync_domain_->async_call (gc);
 				} catch (...) {
-					::Nirvana::g_current->next_async_deadline (dt);
+					::Nirvana::g_current->set_next_async_deadline (cur_dt);
 					throw;
 				}
+				::Nirvana::g_current->set_next_async_deadline (cur_dt);
 			}
-			::Nirvana::g_current->next_async_deadline (dt);
 		}
 	}
 

@@ -315,7 +315,7 @@ struct Type <I_var <I> >
 		return var._retn ();
 	}
 
-	static Interface* VT_ret (I_ptr <I>& ptr)
+	static Interface* VT_ret (const I_ptr <I>& ptr)
 	{
 		return ptr;
 	}

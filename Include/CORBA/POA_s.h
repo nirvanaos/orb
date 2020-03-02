@@ -6,6 +6,7 @@
 
 #include "POA.h"
 #include "Object_s.h"
+#include "ImplementationLocal.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -44,6 +45,11 @@ const Bridge <PortableServer::POA>::EPV Skeleton <S, PortableServer::POA>::epv_ 
 		S::_activate_object
 	}
 };
+
+template <class S>
+class Servant <S, PortableServer::POA> :
+	public ImplementationLocal <S, PortableServer::POA>
+{};
 
 }
 }
