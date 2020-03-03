@@ -16,13 +16,13 @@ class ServantBase :
 {
 public:
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, const Char* id, EnvironmentBridge* env)
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, EnvironmentBridge* env)
 	{
 		return ServantTraits <ServantBase>::_wide <Base, Derived> (derived, id, env);
 	}
 
 	template <>
-	static Bridge <ReferenceCounter>* _wide <ReferenceCounter, PortableServer::ServantBase> (Bridge <PortableServer::ServantBase>* derived, const Char* id, EnvironmentBridge* env)
+	static Bridge <ReferenceCounter>* _wide <ReferenceCounter, PortableServer::ServantBase> (Bridge <PortableServer::ServantBase>* derived, String_in id, EnvironmentBridge* env)
 	{
 		return 0;
 	}

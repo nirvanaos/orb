@@ -39,7 +39,7 @@ const Bridge <PortableServer::POA>::EPV Skeleton <S, PortableServer::POA>::epv_ 
 		S::template __release <PortableServer::POA>
 	},
 	{ // base
-		S::template _wide <Object, PortableServer::POA>
+		S::template _wide_object <PortableServer::POA>
 	},
 	{ // epv
 		S::_activate_object

@@ -3,11 +3,6 @@
 namespace CORBA {
 namespace Nirvana {
 
-Interface* ServantPOA <Object>::_get_proxy (String_in iid)
-{
-	return ObjectLink::_get_proxy (iid);
-}
-
 Interface* ServantPOA <Object>::__get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 {
 	return Skeleton <ServantPOA <Object>, Object>::__get_interface (obj, env);

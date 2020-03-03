@@ -35,7 +35,7 @@ const Bridge < ::Test::I2>::EPV Skeleton <S, ::Test::I2>::epv_ = {
 		S::template __release < ::Test::I2>
 	},
 	{ // base
-		S::template _wide <Object, ::Test::I2>
+		S::template _wide_object <::Test::I2>
 	},
 	{ // epv
 		S::_op2

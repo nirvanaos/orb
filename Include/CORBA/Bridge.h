@@ -2,6 +2,7 @@
 #define NIRVANA_ORB_BRIDGE_H_
 
 #include "Interface.h"
+#include "StringBase.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -28,7 +29,7 @@ public:
 	template <class Base>
 	struct Wide
 	{
-		typedef Bridge <Base>* (*Func) (Bridge <I>*, const Char* base_id, Interface* environment);
+		typedef Bridge <Base>* (*Func) (Bridge <I>*, String_in base_id, Interface* environment);
 	};
 
 protected:

@@ -16,6 +16,13 @@ protected:
 	ProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase_ptr servant);
 
 public:
+	Bridge <Object>* _get_object (String_in iid)
+	{
+		if (RepositoryId::check (Object::interface_id_, iid) != RepositoryId::COMPATIBLE)
+			::Nirvana::throw_INV_OBJREF ();
+		return this;
+	}
+
 	void _add_ref ()
 	{
 		if (1 == ref_cnt_.increment ()) {

@@ -85,7 +85,7 @@ const Bridge <::PortableServer::ServantBase>::EPV Skeleton <S, ::PortableServer:
 		S::template __release <::PortableServer::ServantBase>
 	},
 	{ // base
-		S::template _wide < ::CORBA::AbstractBase, ::PortableServer::ServantBase>,
+		S::template _wide <AbstractBase, ::PortableServer::ServantBase>,
 		S::template _wide <ReferenceCounter, ::PortableServer::ServantBase>
 	},
 	{ // epv

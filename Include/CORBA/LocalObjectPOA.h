@@ -20,10 +20,9 @@ class ServantPOA <Object> :
 	public ObjectLink
 {
 public:
-	// Override operator from ServantBase
-	operator Bridge <Object>& ()
+	virtual Bridge <Object>* _get_object (String_in iid)
 	{
-		return static_cast <Bridge <Object>&> (*_get_proxy (Object::interface_id_));
+		return ObjectLink::_get_object (iid);
 	}
 
 	// Static overrides to resolve the ambiguity with ServantBase.
@@ -69,7 +68,10 @@ protected:
 		ObjectLink (Skeleton <ServantPOA <Object>, Object>::epv_)
 	{}
 
-	virtual Interface* _get_proxy (String_in iid = 0);
+	virtual Interface* _get_proxy ()
+	{
+		return ObjectLink::_get_proxy ();
+	}
 };
 
 template <>

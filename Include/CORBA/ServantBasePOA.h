@@ -15,10 +15,9 @@ class ServantPOA <PortableServer::ServantBase> :
 	public ServantBaseLink
 {
 public:
-	// Override operator from ServantBaseLink
-	operator Bridge <Object>& ()
+	virtual Bridge <Object>* _get_object (String_in iid)
 	{
-		return static_cast <Bridge <Object>&> (*_get_proxy (Object::interface_id_));
+		return ServantBaseLink::_get_object (iid);
 	}
 
 	// ServantBase operations
@@ -50,7 +49,7 @@ public:
 protected:
 	ServantPOA ();
 
-	virtual Interface* _get_proxy (String_in iid = 0);
+	virtual Interface* _get_proxy ();
 
 private:
 	friend class ServantTraitsPOA;

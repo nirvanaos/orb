@@ -121,13 +121,26 @@ public:
 	}
 
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, const Char* id, EnvironmentBridge* env)
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, EnvironmentBridge* env)
 	{
 		try {
 			if (!RepositoryId::compatible (Bridge <Base>::interface_id_, id))
 				::Nirvana::throw_MARSHAL ();
 			return &static_cast <Bridge <Base>&> (BaseImpl::_implementation (derived));
 		} catch (const Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return 0;
+	}
+
+	template <class Derived>
+	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, String_in id, EnvironmentBridge* env)
+	{
+		try {
+			return BaseImpl::_implementation (derived)._get_object (id);
+		} catch (const Exception & e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);

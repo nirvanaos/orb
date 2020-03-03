@@ -29,6 +29,6 @@ public:
 
 }
 
-extern const ImportInterfaceT <Current> g_current = { 0, 0, 0, {STATIC_BRIDGE (Core::Current, Nirvana::Current)} };
+extern const ImportInterfaceT <Current> g_current = { 0, 0, 0, STATIC_BRIDGE (Core::Current, Nirvana::Current) };
 
 }

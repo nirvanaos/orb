@@ -21,7 +21,7 @@ const Bridge <LocalObject>::EPV Skeleton <S, LocalObject>::epv_ = {
 		S::template __release <LocalObject>
 	},
 	{ // base
-		S::template _wide <Object, LocalObject>,
+		S::template _wide_object <LocalObject>,
 		S::template _wide <ReferenceCounter, LocalObject>
 	}
 };

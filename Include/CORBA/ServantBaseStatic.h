@@ -19,9 +19,9 @@ class InterfaceStatic <S, PortableServer::ServantBase> :
 	public InterfaceStaticBase <S, PortableServer::ServantBase>
 {
 public:
-	operator Bridge <Object>& () const
+	static Bridge <Object>* _get_object (String_in iid)
 	{
-		return static_cast <Bridge <Object>&> (*_get_proxy (Object::interface_id_));
+		return static_cast <Bridge <Object>*> (AbstractBase_ptr (servant_base ())->_query_interface (iid));
 	}
 
 	// ServantBase operations
@@ -52,9 +52,9 @@ public:
 	}
 
 protected:
-	static Interface* _get_proxy (String_in iid = 0)
+	static Interface* _get_proxy ()
 	{
-		Interface* proxy = AbstractBase_ptr (servant_base ())->_query_interface (iid);
+		Interface* proxy = AbstractBase_ptr (servant_base ())->_query_interface (0);
 		if (!proxy)
 			::Nirvana::throw_MARSHAL ();
 		return proxy;

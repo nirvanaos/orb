@@ -11,39 +11,36 @@ class ObjectLink :
 	public Bridge <Object>
 {
 public:
-	operator Bridge <Object>& ()
-	{
-		return static_cast <Bridge <Object>&> (*_get_proxy (Object::interface_id_));
-	}
+	Bridge <Object>* _get_object (String_in iid) const;
 
 	// Object operations
 
-	ImplementationDef_var _get_implementation ()
+	ImplementationDef_var _get_implementation () const
 	{
 		return object_->_get_implementation ();
 	}
 
-	InterfaceDef_var _get_interface ()
+	InterfaceDef_var _get_interface () const
 	{
 		return object_->_get_interface ();
 	}
 
-	Boolean _is_a (const String& type_id)
+	Boolean _is_a (const String& type_id) const
 	{
 		return object_->_is_a (type_id);
 	}
 
-	Boolean _non_existent ()
+	Boolean _non_existent () const
 	{
 		return object_->_non_existent ();
 	}
 
-	Boolean _is_equivalent (Object_ptr other_object)
+	Boolean _is_equivalent (Object_ptr other_object) const
 	{
 		return object_->_is_equivalent (other_object);
 	}
 
-	ULong _hash (ULong maximum)
+	ULong _hash (ULong maximum) const
 	{
 		return object_->_hash (maximum);
 	}
@@ -58,7 +55,7 @@ protected:
 		return *this; // Do nothing
 	}
 
-	Interface* _get_proxy (String_in iid = 0);
+	Interface* _get_proxy ();
 
 private:
 	Object_var object_;

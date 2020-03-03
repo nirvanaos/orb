@@ -11,10 +11,7 @@ class ServantBaseLink :
 	public Bridge <PortableServer::ServantBase>
 {
 public:
-	operator Bridge <Object>& ()
-	{
-		return static_cast <Bridge <Object>&> (*_get_proxy (Object::interface_id_));
-	}
+	Bridge <Object>* _get_object (String_in iid) const;
 
 	// ServantBase operations
 
@@ -62,7 +59,7 @@ protected:
 
 	void _construct ();
 
-	Interface* _get_proxy (String_in iid = 0);
+	Interface* _get_proxy ();
 
 protected:
 	PortableServer::ServantBase_var servant_base_;

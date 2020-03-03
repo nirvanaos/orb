@@ -10,12 +10,17 @@ ObjectLink::ObjectLink (const Bridge <Object>::EPV& epv) :
 		Object_ptr (&static_cast <Object&> (static_cast <Bridge <Object>&> (*this)))))
 {}
 
-Interface* ObjectLink::_get_proxy (String_in iid)
+Interface* ObjectLink::_get_proxy ()
 {
-	Interface* proxy = AbstractBase_ptr (object_)->_query_interface (iid);
+	Interface* proxy = AbstractBase_ptr (object_)->_query_interface (0);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
 	return interface_duplicate (proxy);
+}
+
+Bridge <Object>* ObjectLink::_get_object (String_in iid) const
+{
+	return static_cast <Bridge <Object>*> (AbstractBase_ptr (object_)->_query_interface (iid));
 }
 
 }

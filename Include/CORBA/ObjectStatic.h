@@ -18,9 +18,9 @@ class InterfaceStatic <S, Object> :
 	public InterfaceStaticBase <S, Object>
 {
 public:
-	operator Bridge <Object>& () const
+	static Bridge <Object>* _get_object (String_in iid)
 	{
-		return static_cast <Bridge <Object>&> (*_get_proxy (Object::interface_id_));
+		return static_cast <Bridge <Object>*> (AbstractBase_ptr (object ())->_query_interface (iid));
 	}
 
 	// Object operations
@@ -56,9 +56,10 @@ public:
 	}
 	// TODO: Other Object operations shall be here...
 
-	static Interface* _get_proxy (String_in iid = 0)
+protected:
+	static Interface* _get_proxy ()
 	{
-		Interface* proxy = AbstractBase_ptr (object ())->_query_interface (iid);
+		Interface* proxy = AbstractBase_ptr (object ())->_query_interface (0);
 		if (!proxy)
 			::Nirvana::throw_MARSHAL ();
 		return proxy;
