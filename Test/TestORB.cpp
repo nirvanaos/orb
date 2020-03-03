@@ -124,18 +124,16 @@ TEST_F (TestORB, Environment)
 
 TEST_F (TestORB, ServantTypes)
 {
-#ifndef TEST_LOCAL_OBJECT
 	{
-		PortableServer::Servant servant = new DynamicI3 (1);
+		PortableServer::Servant servant = new DynamicI1 (1);
 		PortableServer::release (servant);
 	}
 #ifndef TEST_NO_POA
 	{
-		PortableServer::Servant servant = new PortableI3 (1);
+		PortableServer::Servant servant = new PortableI1 (1);
 		PortableServer::release (servant);
 	}
 #endif
-#else
 	{
 		CORBA::LocalObject_ptr servant = new DynamicI3 (1);
 		EXPECT_FALSE (servant->_non_existent ());
@@ -148,7 +146,6 @@ TEST_F (TestORB, ServantTypes)
 		CORBA::LocalObject_ptr servant = new PortableI3 (1);
 		CORBA::release (servant);
 	}
-#endif
 #endif
 }
 
