@@ -187,7 +187,7 @@ struct StaticI_ptr
 {
 	Bridge <I>* itf;
 
-	operator CORBA::Nirvana::I_ptr <I> () const
+	operator I_ptr <I> () const
 	{
 		return static_cast <I*> (itf);
 	}
@@ -198,6 +198,12 @@ struct StaticI_ptr
 			::Nirvana::throw_INV_OBJREF ();
 		return static_cast <I*> (itf);
 	}
+
+	StaticI_ptr& operator = (I_ptr <I> ptr)
+	{
+		itf = ptr;
+		return *this;
+	}
 };
 
 }
@@ -205,12 +211,6 @@ struct StaticI_ptr
 /// CORBA::release
 template <class I> inline
 void release (const Nirvana::I_ptr <I>& ptr)
-{
-	Nirvana::interface_release (static_cast <Nirvana::Bridge <I>*> (ptr));
-}
-
-template <> inline
-void release (const Nirvana::I_ptr <Nirvana::Interface>& ptr)
 {
 	Nirvana::interface_release (ptr);
 }

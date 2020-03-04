@@ -7,23 +7,6 @@ namespace CORBA {
 namespace Nirvana {
 namespace Core {
 
-class GarbageCollector :
-	public ::Nirvana::Core::Runnable <GarbageCollector>
-{
-public:
-	GarbageCollector (Interface* itf) :
-		itf_ (itf)
-	{}
-
-	void run ()
-	{
-		interface_release (itf_);
-	}
-
-private:
-	Interface* itf_;
-};
-
 }
 }
 }

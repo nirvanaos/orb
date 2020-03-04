@@ -3,7 +3,7 @@
 
 #include <CORBA/Server.h>
 #include "../AtomicCounter.h"
-#include "GarbageCollector.h"
+#include <Nirvana/Syncronized.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -12,6 +12,7 @@ namespace Core {
 class ProxyManager :
 	public Bridge <Object>
 {
+	class GarbageCollector;
 protected:
 	ProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase_ptr servant);
 
@@ -23,11 +24,18 @@ public:
 		return this;
 	}
 
+	Object_ptr _get_ptr ()
+	{
+		return &static_cast <Object&> (static_cast <Bridge <Object>&> (*this));
+	}
+
 	void _add_ref ()
 	{
-		if (1 == ref_cnt_.increment ()) {
+		::Nirvana::Core::AtomicCounter::IntType cnt = ref_cnt_.increment ();
+		if (1 == cnt) {
 			try {
-				interface_duplicate (servant_);
+				::Nirvana::Synchronized sync (sync_domain_);
+				add_ref_1 ();
 			} catch (...) {
 				ref_cnt_.decrement ();
 				throw;
@@ -35,20 +43,8 @@ public:
 		}
 	}
 
-	void _remove_ref ()
-	{
-		if (!ref_cnt_.decrement ()) {
-			::Nirvana::Runnable_var gc = (new GarbageCollector (servant_))->_get_ptr ();
-			::Nirvana::DeadlineTime cur_dt = ::Nirvana::g_current->set_next_async_deadline (::Nirvana::INFINITE_DEADLINE);
-			try {
-				sync_domain_->async_call (gc);
-			} catch (...) {
-				::Nirvana::g_current->set_next_async_deadline (cur_dt);
-				throw;
-			}
-			::Nirvana::g_current->set_next_async_deadline (cur_dt);
-		}
-	}
+	virtual void add_ref_1 ();
+	virtual ::Nirvana::Core::AtomicCounter::UIntType _remove_ref ();
 
 	// AbstractBase
 
@@ -103,6 +99,8 @@ public:
 	{
 		return sync_domain_;
 	}
+
+	void run_garbage_collector (::Nirvana::Runnable_var gc) const;
 
 private:
 	AbstractBase_ptr servant_;

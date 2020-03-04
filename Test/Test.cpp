@@ -1,6 +1,6 @@
 #include "I3.h"
 #include <CORBA/PortableServer.h>
-#include <gtest/gtest.h>
+#include "TestORB.h"
 
 using namespace std;
 
@@ -105,7 +105,7 @@ typedef ::testing::Types <DynamicI1
 
 template <class Servant>
 class TestORB_I1 :
-	public ::testing::Test
+	public TestORB
 {
 protected:
 	TestORB_I1 ()
@@ -113,23 +113,6 @@ protected:
 
 	virtual ~TestORB_I1 ()
 	{}
-
-	// If the constructor and destructor are not enough for setting up
-	// and cleaning up each test, you can define the following methods:
-
-	virtual void SetUp ()
-	{
-		// Code here will be called immediately after the constructor (right
-		// before each test).
-		Instance::count_ = 0;
-	}
-
-	virtual void TearDown ()
-	{
-		// Code here will be called immediately after each test (right
-		// before the destructor).
-		ASSERT_EQ (Instance::count (), 0);
-	}
 };
 
 TYPED_TEST_SUITE (TestORB_I1, ServantTypesI1);
@@ -168,7 +151,7 @@ typedef ::testing::Types <DynamicI3
 
 template <class Servant>
 class TestORB_I3 :
-	public ::testing::Test
+	public TestORB
 {
 protected:
 	TestORB_I3 ()
@@ -176,23 +159,6 @@ protected:
 
 	virtual ~TestORB_I3 ()
 	{}
-
-	// If the constructor and destructor are not enough for setting up
-	// and cleaning up each test, you can define the following methods:
-
-	virtual void SetUp ()
-	{
-		// Code here will be called immediately after the constructor (right
-		// before each test).
-		Instance::count_ = 0;
-	}
-
-	virtual void TearDown ()
-	{
-		// Code here will be called immediately after each test (right
-		// before the destructor).
-		EXPECT_EQ (Instance::count (), 0);
-	}
 };
 
 TYPED_TEST_SUITE (TestORB_I3, ServantTypesI3);

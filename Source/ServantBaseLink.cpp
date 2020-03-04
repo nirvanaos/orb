@@ -12,10 +12,6 @@ void ServantBaseLink::_construct ()
 
 Interface* ServantBaseLink::_get_proxy ()
 {
-	if (!_is_active ()) {
-		::PortableServer::POA_var poa = _default_POA ();
-		String objid = poa->activate_object (PortableServer::Servant (this));
-	}
 	Interface* proxy = AbstractBase_ptr (servant_base_)->_query_interface (0);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();

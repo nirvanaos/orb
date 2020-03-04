@@ -1,8 +1,7 @@
 #include <CORBA/CORBA.h>
-#include <gtest/gtest.h>
-#include <Mock/MockMemory.h>
 #include "I3.h"
 #include <CORBA/PortableServer.h>
+#include "RootPOA.h"
 
 using namespace std;
 
@@ -14,38 +13,6 @@ void must_not_compile (const I3_var& var)
 */
 
 namespace TestORB {
-
-class TestORB :
-	public ::testing::Test
-{
-protected:
-	TestORB ()
-	{}
-
-	virtual ~TestORB ()
-	{}
-
-	// If the constructor and destructor are not enough for setting up
-	// and cleaning up each test, you can define the following methods:
-
-	virtual void SetUp ()
-	{
-		// Code here will be called immediately after the constructor (right
-		// before each test).
-		allocated_ = ::Nirvana::Test::allocated_bytes ();
-	}
-
-	virtual void TearDown ()
-	{
-		// Code here will be called immediately after each test (right
-		// before the destructor).
-		if (!HasFatalFailure ())
-			EXPECT_EQ (::Nirvana::Test::allocated_bytes (), allocated_);
-	}
-
-private:
-	size_t allocated_;
-};
 
 TEST_F (TestORB, RepositoryId)
 {

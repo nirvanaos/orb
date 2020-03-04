@@ -28,13 +28,17 @@ public:
 	}
 
 	ServantBase (PortableServer::Servant servant) :
-		is_active_ (false),
 		proxy_manager_ (servant)
 	{}
 
 	PortableServer::Servant __core_servant ()
 	{
 		return this;
+	}
+
+	Object_ptr proxy_manager ()
+	{
+		return proxy_manager_._get_ptr ();
 	}
 
 	Interface_ptr _query_interface (const String& iid)
@@ -58,12 +62,8 @@ public:
 
 	Boolean _non_existent () const
 	{
-		// This is our trick how to detect inactive object
-		return !is_active_;
+		return false;
 	}
-
-public:
-	bool is_active_;
 
 private:
 	ProxyObject proxy_manager_;

@@ -29,6 +29,17 @@ protected:
 		}
 		return Type <String>::ABI_ret ();
 	}
+
+	static void _deactivate_object (Bridge <PortableServer::POA>* obj, Type <String>::ABI_in objid, EnvironmentBridge* env)
+	{
+		try {
+			S::_implementation (obj).deactivate_object (TypeI <String>::in (objid));
+		} catch (const Exception & e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+	}
 };
 
 template <class S>
