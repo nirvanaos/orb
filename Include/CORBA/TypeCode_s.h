@@ -3,7 +3,7 @@
 
 #include "TypeCode_b.h"
 #include "ImplementationPseudoStatic.h"
-#include "TypeInterface.h"
+#include "Type_interface.h"
 
 namespace CORBA {
 namespace Nirvana {

@@ -3,7 +3,7 @@
 
 #include "TypeCode_b.h"
 #include "Client.h"
-#include "TypeInterface.h"
+#include "Type_interface.h"
 #include "UserException.h"
 #include "EnvironmentEx.h"
 

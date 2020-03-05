@@ -5,9 +5,14 @@
 using namespace std;
 
 /*
-void must_not_compile (const I3_var& var)
+void must_not_compile1 (const Test::I3_var& var)
 {
-	I1_var i1 = var; // Implicit cast between var must cause a compilation error
+	Test::I1_var i1 = var; // Implicit cast between var must cause a compilation error
+}
+
+bool must_not_compile2 (const Test::I3_ptr p1, const Test::I3_ptr p2)
+{
+	return p1 == p2;
 }
 */
 

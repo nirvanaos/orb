@@ -5,7 +5,7 @@
 #define NIRVANA_ORB_CLIENT_H_
 
 #include "Environment.h"
-#include "TypeInterface.h"
+#include "Type_interface.h"
 
 namespace CORBA {
 namespace Nirvana {

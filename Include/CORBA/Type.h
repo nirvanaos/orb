@@ -3,7 +3,7 @@
 
 #include "TypeVarLen.h"
 #include "TypeEnum.h"
-#include "TypeInterface.h"
+#include "Type_interface.h"
 
 // Compatibility with modern C11 mapping
 namespace IDL {

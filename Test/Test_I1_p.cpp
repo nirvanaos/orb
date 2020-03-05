@@ -1,6 +1,7 @@
 #include <CORBA/Server.h>
 #include "Test_I1_s.h"
 #include <CORBA/ProxyFactory_s.h>
+#include <CORBA/MarshalTraits.h>
 #include <Nirvana/Synchronized.h>
 
 namespace CORBA {

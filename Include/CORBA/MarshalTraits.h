@@ -8,11 +8,10 @@
 #include <Nirvana/basic_string.h>
 #include <Nirvana/vector.h>
 #include <Nirvana/ImportInterface.h>
-#include "LocalMarshal.h"
+#include "MarshalTraits_forward.h"
 
 namespace CORBA {
 namespace Nirvana {
-extern const ::Nirvana::ImportInterfaceT <LocalMarshal> g_local_marshal;
 }
 }
 
@@ -57,8 +56,6 @@ void basic_string <C, T, allocator <C> >::_local_unmarshal_inout ()
 
 namespace CORBA {
 namespace Nirvana {
-
-template <class T> struct MarshalTraits;
 
 template <class T>
 struct MarshalTraits

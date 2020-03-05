@@ -1,5 +1,5 @@
-#ifndef NIRVANA_ORB_TYPEINTERFACE_H_
-#define NIRVANA_ORB_TYPEINTERFACE_H_
+#ifndef NIRVANA_ORB_TYPE_INTERFACE_H_
+#define NIRVANA_ORB_TYPE_INTERFACE_H_
 
 #include "Type_forward.h"
 #include "I_var.h"

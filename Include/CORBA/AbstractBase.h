@@ -3,7 +3,7 @@
 
 #include <Nirvana/NirvanaBase.h>
 #include "Client.h"
-#include "TypeInterface.h"
+#include "Type_interface.h"
 #include "String.h"
 
 namespace CORBA {
