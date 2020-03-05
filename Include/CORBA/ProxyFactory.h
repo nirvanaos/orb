@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_PROXYFACTORY_H_
 
 #include "CORBA.h"
-#include <Nirvana/SyncDomainTraits.h>
+#include <Nirvana/SynchronizationContext.h>
 #include "DynamicServant.h"
 #include "LocalMarshal.h"
 
@@ -42,7 +42,7 @@ pseudo interface ProxyFactory {
 	//! Returns ids of all interfaces.
 	const CountedArray <const char*>& interfaces ();
 	const CountedArray <const Operation>& operations ();
-	Interface create_servant_proxy (Object proxy_manager, ::Nirvana::SyncDomainTraits sync, Interface servant, out DynamicServant deleter);
+	Interface create_servant_proxy (Object proxy_manager, ::Nirvana::SynchronizationContext sync, Interface servant, out DynamicServant deleter);
 	Interface create_local_proxy (Object proxy_manager, in LocalObjectRef target, short interface_idx, out DynamicServant deleter);
 	Interface create_remote_proxy (Object proxy_manager, out DynamicServant deleter);
 };
@@ -81,7 +81,7 @@ public:
 	}
 
 	Interface_ptr create_servant_proxy (I_in <Object> proxy_manager, 
-		I_in <::Nirvana::SyncDomainTraits> sync, I_in <Interface> servant, 
+		I_in <::Nirvana::SynchronizationContext> sync, I_in <Interface> servant, 
 		I_out <DynamicServant> deleter);
 
 	Interface_ptr create_local_proxy (I_in <Object> proxy_manager,
@@ -93,7 +93,7 @@ public:
 };
 
 template <class T>
-Interface_ptr Client <T, ProxyFactory>::create_servant_proxy (I_in <Object> proxy, I_in <::Nirvana::SyncDomainTraits> sync, I_in <Interface> servant, I_out <DynamicServant> deleter)
+Interface_ptr Client <T, ProxyFactory>::create_servant_proxy (I_in <Object> proxy, I_in <::Nirvana::SynchronizationContext> sync, I_in <Interface> servant, I_out <DynamicServant> deleter)
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));

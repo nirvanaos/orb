@@ -67,7 +67,7 @@ void ProxyObject::add_ref_1 ()
 				// Fallback to collect garbage in current thread.
 				// TODO: Log the error
 				try {
-					::Nirvana::Synchronized sync (sync_domain ());
+					::Nirvana::Synchronized sync (sync_context ());
 					implicit_deactivate ();
 				} catch (...) {
 					// TODO: Log the error

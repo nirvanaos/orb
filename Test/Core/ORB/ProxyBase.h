@@ -25,9 +25,9 @@ public:
 	InterfaceDef_var _get_interface () const
 	{
 		::Nirvana::ContextFrame frame;
-		sync_domain ()->enter (frame);
+		sync_context ()->enter (frame);
 		InterfaceDef_var ret = static_cast <const Proxy&> (*this).servant_->_get_interface ();
-		sync_domain ()->leave (frame);
+		sync_context ()->leave (frame);
 		return ret;
 	}
 
@@ -35,18 +35,18 @@ public:
 	{
 		const String tmp (type_id);
 		::Nirvana::ContextFrame frame;
-		sync_domain ()->enter (frame);
+		sync_context ()->enter (frame);
 		Boolean ret = static_cast <const Proxy&> (*this).servant_->_is_a (tmp);
-		sync_domain ()->leave (frame);
+		sync_context ()->leave (frame);
 		return ret;
 	}
 
 	Boolean _non_existent () const
 	{
 		::Nirvana::ContextFrame frame;
-		sync_domain ()->enter (frame);
+		sync_context ()->enter (frame);
 		Boolean ret = static_cast <const Proxy&> (*this).servant_->_non_existent ();
-		sync_domain ()->leave (frame);
+		sync_context ()->leave (frame);
 		return ret;
 	}
 

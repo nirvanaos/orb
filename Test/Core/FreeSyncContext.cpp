@@ -1,10 +1,10 @@
-#include <Nirvana/SyncDomainTraits_s.h>
+#include <Nirvana/SynchronizationContext_s.h>
 
 namespace Nirvana {
 namespace Core {
 
-class FreeSyncDomain :
-	public CORBA::Nirvana::ServantStatic <FreeSyncDomain, SyncDomainTraits>
+class FreeSyncContext :
+	public CORBA::Nirvana::ServantStatic <FreeSyncContext, SynchronizationContext>
 {
 public:
 	static void* copy_inout (const void* src, size_t size)
@@ -34,7 +34,7 @@ public:
 	}
 };
 
-extern const CORBA::Nirvana::StaticI_ptr <SyncDomainTraits> g_free_sync_domain = { STATIC_BRIDGE (FreeSyncDomain, SyncDomainTraits) };
+extern const CORBA::Nirvana::StaticI_ptr <SynchronizationContext> g_free_sync_context = { STATIC_BRIDGE (FreeSyncContext, SynchronizationContext) };
 
 }
 }

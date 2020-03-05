@@ -34,7 +34,7 @@ protected:
 	{
 		try {
 			return TypeI <Interface>::VT_ret (S::_implementation (obj).create_servant_proxy (TypeI <Object>::in (proxy), 
-				TypeI <::Nirvana::SyncDomainTraits>::in (servant), TypeI <Interface>::in (servant),
+				TypeI <::Nirvana::SynchronizationContext>::in (servant), TypeI <Interface>::in (servant),
 				TypeI <DynamicServant>::out (deleter)));
 		} catch (const Exception& e) {
 			set_exception (env, e);

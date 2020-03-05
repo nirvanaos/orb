@@ -34,7 +34,7 @@ public:
 		::Nirvana::Core::AtomicCounter::IntType cnt = ref_cnt_.increment ();
 		if (1 == cnt) {
 			try {
-				::Nirvana::Synchronized sync (sync_domain_);
+				::Nirvana::Synchronized sync (sync_context_);
 				add_ref_1 ();
 			} catch (...) {
 				ref_cnt_.decrement ();
@@ -95,9 +95,9 @@ public:
 		return primary_interface ()->_epv ().interface_id;
 	}
 
-	::Nirvana::SyncDomainTraits_ptr sync_domain () const
+	::Nirvana::SynchronizationContext_ptr sync_context () const
 	{
-		return sync_domain_;
+		return sync_context_;
 	}
 
 	void run_garbage_collector (::Nirvana::Runnable_var gc) const;
@@ -106,7 +106,7 @@ private:
 	AbstractBase_ptr servant_;
 	Interface_ptr servant_lifecycle_;
 	::Nirvana::Core::AtomicCounter ref_cnt_;
-	::Nirvana::SyncDomainTraits_var sync_domain_;
+	::Nirvana::SynchronizationContext_var sync_context_;
 };
 
 }

@@ -30,7 +30,7 @@ ProxyManager::ProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase
 	servant_ (servant),
 	servant_lifecycle_ (lifecycle),
 	ref_cnt_ (0),
-	sync_domain_ (::Nirvana::SyncDomainTraits::_duplicate (::Nirvana::g_current->sync_domain_traits ()))
+	sync_context_ (::Nirvana::SynchronizationContext::_duplicate (::Nirvana::g_current->synchronization_context ()))
 {}
 
 Interface_ptr ProxyManager::_query_interface (const String& iid) const
@@ -63,7 +63,7 @@ void ProxyManager::add_ref_1 ()
 		} catch (...) {
 			// Async call failed, maybe resources are exausted.
 			// Fallback to collect garbage in current thread.
-			::Nirvana::Synchronized sync (sync_domain_);
+			::Nirvana::Synchronized sync (sync_context_);
 			interface_release (servant_lifecycle_);
 			// Swallow exception
 		}
@@ -80,7 +80,7 @@ void ProxyManager::run_garbage_collector (::Nirvana::Runnable_var gc) const
 {
 	::Nirvana::DeadlineTime cur_dt = ::Nirvana::g_current->set_next_async_deadline (::Nirvana::INFINITE_DEADLINE);
 	try {
-		sync_domain_->async_call (gc);
+		sync_context_->async_call (gc);
 	} catch (...) {
 		::Nirvana::g_current->set_next_async_deadline (cur_dt);
 		throw;

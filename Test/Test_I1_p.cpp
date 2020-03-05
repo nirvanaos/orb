@@ -44,18 +44,18 @@ class ServantProxyBase :
 	public ProxyBase
 {
 protected:
-	ServantProxyBase (const Bridge <DynamicServant>::EPV& epv, Object_ptr proxy_manager, ::Nirvana::SyncDomainTraits_ptr sync) :
+	ServantProxyBase (const Bridge <DynamicServant>::EPV& epv, Object_ptr proxy_manager, ::Nirvana::SynchronizationContext_ptr sync) :
 		ProxyBase (epv, proxy_manager),
-		sync_domain_ (sync)
+		sync_context_ (sync)
 	{}
 
-	::Nirvana::SyncDomainTraits_ptr _sync_domain () const
+	::Nirvana::SynchronizationContext_ptr _sync_context () const
 	{
-		return sync_domain_;
+		return sync_context_;
 	}
 
 private:
-	::Nirvana::SyncDomainTraits_ptr sync_domain_;
+	::Nirvana::SynchronizationContext_ptr sync_context_;
 };
 
 template <class S>
@@ -78,7 +78,7 @@ public:
 	}
 
 protected:
-	ServantProxyBaseT (CORBA::Object_ptr proxy_manager, ::Nirvana::SyncDomainTraits_ptr sync, Interface_ptr servant) :
+	ServantProxyBaseT (CORBA::Object_ptr proxy_manager, ::Nirvana::SynchronizationContext_ptr sync, Interface_ptr servant) :
 		ServantProxyBase (ProxyLifeCycle <S>::epv_, proxy_manager, sync),
 		servant_ (I::_check (servant))
 	{}
@@ -102,22 +102,41 @@ class I1_ServantProxy :
 {
 	typedef CORBA::Nirvana::ServantProxyBaseT <I1_ServantProxy, I1> Base;
 public:
-	I1_ServantProxy (CORBA::Object_ptr proxy_manager, ::Nirvana::SyncDomainTraits_ptr sync,
+	I1_ServantProxy (CORBA::Object_ptr proxy_manager, ::Nirvana::SynchronizationContext_ptr sync,
 		CORBA::Nirvana::Interface_ptr servant) :
 		Base (proxy_manager, sync, servant)
 	{}
 
-	CORBA::Long op1 (CORBA::Long p1)
+	CORBA::Long op1 (CORBA::Long p1) const
 	{
-		Nirvana::Synchronized sync (_sync_domain ());
+		Nirvana::Synchronized sync (_sync_context ());
 		return _servant ()->op1 (p1);
 	}
 
-	void throw_NO_IMPLEMENT ();
-	I1_var object_op (I1_ptr in_obj, I1_var& out_obj, I1_var& inout_obj);
-	std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s);
-	std::vector <CORBA::Long> seq_op (const std::vector <CORBA::Long>& in_s, std::vector <CORBA::Long>& out_s, std::vector <CORBA::Long>& inout_s);
-	CORBA::Any any_op (const CORBA::Any& in_any, CORBA::Any& out_any, CORBA::Any& inout_any);
+	void throw_NO_IMPLEMENT () const
+	{
+		Nirvana::Synchronized sync (_sync_context ());
+		_servant ()->throw_NO_IMPLEMENT ();
+	}
+
+	I1_var object_op (I1_ptr in_obj, I1_var& out_obj, I1_var& inout_obj) const
+	{
+		I1_var _tmp_in_obj = I1::_duplicate (in_obj);
+		I1_var _tmp_out_obj = out_obj;
+		I1_var _tmp_inout_obj;
+		I1_var _ret;
+		{
+			Nirvana::Synchronized sync (_sync_context ());
+			_ret = _servant ()->object_op (_tmp_in_obj, _tmp_out_obj, _tmp_inout_obj);
+		}
+		out_obj = std::move (_tmp_out_obj);
+		inout_obj = std::move (_tmp_inout_obj);
+		return _ret;
+	}
+
+	std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s) const;
+	std::vector <CORBA::Long> seq_op (const std::vector <CORBA::Long>& in_s, std::vector <CORBA::Long>& out_s, std::vector <CORBA::Long>& inout_s) const;
+	CORBA::Any any_op (const CORBA::Any& in_any, CORBA::Any& out_any, CORBA::Any& inout_any) const;
 };
 
 class I1_proxy_factory :
@@ -126,7 +145,7 @@ class I1_proxy_factory :
 public:
 	CORBA::Nirvana::Interface_ptr create_servant_proxy (
 		CORBA::Object_ptr proxy_manager,
-		Nirvana::SyncDomainTraits_ptr sync, CORBA::Nirvana::Interface_ptr servant,
+		Nirvana::SynchronizationContext_ptr sync, CORBA::Nirvana::Interface_ptr servant,
 		CORBA::Nirvana::DynamicServant_ptr& deleter)
 	{
 		I1_ServantProxy* proxy =

@@ -5,15 +5,15 @@ namespace Nirvana {
 
 namespace Core {
 
-extern const CORBA::Nirvana::StaticI_ptr <SyncDomainTraits> g_free_sync_domain;
+extern const CORBA::Nirvana::StaticI_ptr <SynchronizationContext> g_free_sync_context;
 
 class Current :
 	public CORBA::Nirvana::ServantStatic <Current, Nirvana::Current>
 {
 public:
-	static SyncDomainTraits_ptr sync_domain_traits ()
+	static SynchronizationContext_ptr synchronization_context ()
 	{
-		return g_free_sync_domain;
+		return g_free_sync_context;
 	}
 
 	static DeadlineTime deadline ()
