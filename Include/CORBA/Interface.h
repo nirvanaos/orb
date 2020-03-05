@@ -48,7 +48,7 @@ private:
 	const EPV& _epv_ref;
 };
 
-NIRVANA_NODISCARD Interface* interface_duplicate (Interface* obj);
+Interface* interface_duplicate (Interface* obj);
 void interface_release (Nirvana::Interface* itf) NIRVANA_NOEXCEPT;
 
 typedef Interface EnvironmentBridge;

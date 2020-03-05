@@ -29,12 +29,12 @@ protected:
 	}
 
 	static Interface* _create_servant_proxy (Bridge <ProxyFactory>* obj, Interface* proxy,
-		Interface* servant, 
+		Interface* sync, Interface* servant,
 		Interface** deleter, EnvironmentBridge* env)
 	{
 		try {
-			return TypeI <Interface>::ret (S::_implementation (obj).create_servant_proxy (TypeI <Object>::in (proxy), 
-				TypeI <Object>::in (servant),
+			return TypeI <Interface>::VT_ret (S::_implementation (obj).create_servant_proxy (TypeI <Object>::in (proxy), 
+				TypeI <::Nirvana::SyncDomainTraits>::in (servant), TypeI <Interface>::in (servant),
 				TypeI <DynamicServant>::out (deleter)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
@@ -49,7 +49,7 @@ protected:
 		Interface** deleter, EnvironmentBridge* env)
 	{
 		try {
-			return TypeI <Interface>::ret (S::_implementation (obj).create_local_proxy (TypeI <Object>::in (proxy), 
+			return TypeI <Interface>::VT_ret (S::_implementation (obj).create_local_proxy (TypeI <Object>::in (proxy), 
 				*target, interface_idx,
 				TypeI <DynamicServant>::out (deleter)));
 		} catch (const Exception& e) {
