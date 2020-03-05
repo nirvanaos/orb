@@ -27,6 +27,7 @@ public:
 	void _remove_ref ()
 	{
 		ASSERT_GT (ref_cnt_, 1u);
+		--ref_cnt_;
 	}
 
 	CORBA::ULong _refcount_value ()

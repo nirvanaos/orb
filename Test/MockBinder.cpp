@@ -56,6 +56,7 @@ MockBinder::MockBinder () :
 
 MockBinder::~MockBinder ()
 {
+	module_.clear ();
 	EXPECT_EQ (ref_cnt_, 1);
 }
 
