@@ -24,6 +24,24 @@ public:
 		p_ (var.p_)
 	{}
 
+	template <class I1>
+	I_in (const I_ptr <I1>& src)
+	{
+		if (src.p_)
+			this->p_ = static_cast <I_ptr <I> > (*src.p_);
+		else
+			this->p_ = 0;
+	}
+
+	template <class I1>
+	I_in (const I_var <I1>& src)
+	{
+		if (src.p_)
+			this->p_ = static_cast <I_ptr> (*src.p_);
+		else
+			this->p_ = 0;
+	}
+
 	Interface* operator & () const
 	{
 		return p_;
@@ -376,7 +394,7 @@ struct Type <I_var <Interface> >
 		return var._retn ();
 	}
 
-	static Interface* VT_ret (I_ptr <Interface>& ptr)
+	static Interface* VT_ret (const I_ptr <Interface>& ptr)
 	{
 		return ptr;
 	}

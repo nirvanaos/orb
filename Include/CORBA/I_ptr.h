@@ -68,7 +68,7 @@ protected:
 
 protected:
 	friend class I_var <I>;
-	friend class I_in <I>;
+	template <class I1> friend class I_in;
 	friend class I_inout <I>;
 	template <class I1> friend class I_ptr;
 
@@ -79,14 +79,6 @@ protected:
 template <class I>
 class I_ptr : public I_ptr_base <I>
 {
-	/*
-	/// Obtaining I_ptr directly from a servant pointer is prohibited
-	I_ptr (Bridge <I>* p)
-#ifdef NIRVANA_C11
-		= delete
-#endif
-		;
-*/
 public:
 	I_ptr () NIRVANA_NOEXCEPT
 	{}

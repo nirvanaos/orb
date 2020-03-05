@@ -73,7 +73,7 @@ public:
 	InterfaceDef_var _get_interface ();
 	Boolean _is_a (String_in type_id);
 	Boolean _non_existent ();
-	Boolean _is_equivalent (Object_ptr other_object);
+	Boolean _is_equivalent (I_in <Object> other_object);
 	ULong _hash (ULong maximum);
 	// TODO: Other Object operations shall be here...
 };
@@ -119,11 +119,11 @@ Boolean Client <T, Object>::_non_existent ()
 }
 
 template <class T>
-Boolean Client <T, Object>::_is_equivalent (Object_ptr other_object)
+Boolean Client <T, Object>::_is_equivalent (I_in <Object> other_object)
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	T_ret <Boolean> _ret = (_b._epv ().epv.is_equivalent) (&_b, other_object, &_env);
+	T_ret <Boolean> _ret = (_b._epv ().epv.is_equivalent) (&_b, &other_object, &_env);
 	_env.check ();
 	return _ret;
 }
