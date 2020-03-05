@@ -33,7 +33,7 @@ protected:
 	static void _deactivate_object (Bridge <PortableServer::POA>* obj, Type <String>::ABI_in objid, EnvironmentBridge* env)
 	{
 		try {
-			S::_implementation (obj).deactivate_object (TypeI <String>::in (objid));
+			S::_implementation (obj).deactivate_object (Type <String>::in (objid));
 		} catch (const Exception & e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -53,7 +53,8 @@ const Bridge <PortableServer::POA>::EPV Skeleton <S, PortableServer::POA>::epv_ 
 		S::template _wide_object <PortableServer::POA>
 	},
 	{ // epv
-		S::_activate_object
+		S::_activate_object,
+		S::_deactivate_object
 	}
 };
 

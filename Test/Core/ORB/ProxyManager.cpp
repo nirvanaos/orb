@@ -13,6 +13,9 @@ public:
 		servant_ (servant)
 	{}
 
+	~GarbageCollector ()
+	{}
+
 	void run ()
 	{
 		interface_release (servant_);

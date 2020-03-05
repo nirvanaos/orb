@@ -38,10 +38,27 @@ public:
 
 private:
 
+	static bool is_section (const llvm::COFF::section* s, const char* name);
+
 	void bind_image (const void* image_base, const llvm::COFF::header* hdr);
 	void bind_olf (const void* data, size_t size);
 
-	static bool is_section (const llvm::COFF::section* s, const char* name);
+	template <class I>
+	void add_export (const char* name, CORBA::Nirvana::I_var <I>& core_obj)
+	{
+		CORBA::Nirvana::Interface_ptr proxy = CORBA::AbstractBase_ptr (core_obj)->_query_interface (CORBA::Object::interface_id_);
+		if (!proxy)
+			throw_OBJ_ADAPTER ();
+		auto ins = exported_interfaces_.emplace (name, proxy);
+		if (!ins.second)
+			throw_INV_OBJREF ();	// Duplicated name
+		try {
+			module_.core_objects.emplace_back (core_obj._retn ());
+		} catch (...) {
+			exported_interfaces_.erase (ins.first);
+			throw;
+		}
+	}
 
 	class NameKey
 	{

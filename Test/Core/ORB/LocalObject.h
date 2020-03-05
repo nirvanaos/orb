@@ -1,6 +1,7 @@
 #ifndef NIRVANA_ORB_CORE_LOCALOBJECT_H_
 #define NIRVANA_ORB_CORE_LOCALOBJECT_H_
 
+#include <CORBA/CORBA.h>
 #include <CORBA/ImplementationPseudo.h>
 #include "ProxyLocal.h"
 #include "ObjectImpl.h"

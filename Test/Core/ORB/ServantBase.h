@@ -1,6 +1,7 @@
 #ifndef NIRVANA_ORB_CORE_SERVANTBASE_H_
 #define NIRVANA_ORB_CORE_SERVANTBASE_H_
 
+#include <CORBA/CORBA.h>
 #include <CORBA/ImplementationPseudo.h>
 #include "ProxyObject.h"
 #include <CORBA/ReferenceCounter.h>

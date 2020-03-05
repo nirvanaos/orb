@@ -94,7 +94,8 @@ void MockBinder::bind_olf (const void* data, size_t size)
 
 			case OLF_EXPORT_INTERFACE: {
 				const ExportInterface* ps = reinterpret_cast <const ExportInterface*> (p);
-				exported_interfaces_.emplace (ps->name, interface_duplicate (ps->itf));
+				if (!exported_interfaces_.emplace (ps->name, ps->itf).second)
+					throw INV_OBJREF ();	// Duplicated name
 				p += sizeof (ExportInterface) / sizeof (*p);
 				break;
 			}
@@ -103,9 +104,7 @@ void MockBinder::bind_olf (const void* data, size_t size)
 				ExportObject* ps = reinterpret_cast <ExportObject*> (p);
 				PortableServer::ServantBase_var core_obj = ObjectFactory::create_servant (TypeI <PortableServer::ServantBase>::in (ps->implementation));
 				ps->core_object = PortableServer::Servant (core_obj);
-				Object_var proxy = AbstractBase_ptr (core_obj)->_to_object ();
-				module_.core_objects.push_back (Interface_ptr (core_obj._retn ()));
-				exported_interfaces_.emplace (ps->name, Interface_var (proxy._retn ()));
+				add_export (ps->name, core_obj);
 				p += sizeof (ExportObject) / sizeof (*p);
 				break;
 			}
@@ -114,9 +113,7 @@ void MockBinder::bind_olf (const void* data, size_t size)
 				ExportLocal* ps = reinterpret_cast <ExportLocal*> (p);
 				Object_var core_obj = ObjectFactory::create_local_object (TypeI <Object>::in (ps->implementation));
 				ps->core_object = Object_ptr (core_obj);
-				Object_var proxy = AbstractBase_ptr (Object_ptr (core_obj))->_to_object ();
-				module_.core_objects.push_back (Interface_var (core_obj._retn ()));
-				exported_interfaces_.emplace (ps->name, Interface_var (proxy._retn ()));
+				add_export (ps->name, core_obj);
 				p += sizeof (ExportLocal) / sizeof (*p);
 				break;
 			}

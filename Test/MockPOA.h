@@ -18,8 +18,9 @@ public:
 
 	~MockPOA ()
 	{
-		EXPECT_EQ (_refcount_value (), 1);
+		CORBA::release (PortableServer::POA_ptr (CORBA::Nirvana::Core::g_root_POA));
 		CORBA::Nirvana::Core::g_root_POA = PortableServer::POA::_nil ();
+		EXPECT_EQ (_refcount_value (), 1);
 	}
 };
 

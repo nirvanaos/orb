@@ -18,8 +18,7 @@ class ProxyObject :
 public:
 	ProxyObject (PortableServer::Servant servant, Interface_ptr lifecycle) :
 		ProxyBase (servant, lifecycle),
-		activation_cnt_ (0),
-		deactivator_launched_ (0)
+		implicit_activation_ (false)
 	{}
 
 	Boolean _is_equivalent (Object_ptr other) const
@@ -51,8 +50,6 @@ private:
 
 private:
 	std::atomic <ActivationState> activation_state_;
-	::Nirvana::Core::AtomicCounter activation_cnt_;
-	::Nirvana::Core::AtomicCounter deactivator_launched_;
 	String implicit_activated_id_;
 	bool implicit_activation_;
 };

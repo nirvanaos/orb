@@ -3,6 +3,7 @@
 #ifndef NIRVANA_ORB_SERVER_H_
 #define NIRVANA_ORB_SERVER_H_
 
+#include "CORBA.h"
 #include "Implementation.h"
 #include "ImplementationLocal.h"
 #include "ImplementationStatic.h"
