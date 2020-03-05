@@ -1,9 +1,17 @@
-#include "Loader.h"
-#include "ORB/ObjectFactory.h"
+#include "MockBinder.h"
+#include "Core/ORB/ObjectFactory.h"
 #include <Nirvana/OLF.h>
+#include <Nirvana/core_objects.h>
+
+// TODO: Make mock portable
 #include <Windows.h>
 
-namespace TestORB {
+namespace Nirvana {
+
+__declspec (allocate(OLF_BIND))
+const ImportInterfaceT <Binder> g_binder = { OLF_IMPORT_INTERFACE, "Nirvana/g_binder", Binder::interface_id_ };
+
+namespace Test {
 
 using namespace llvm;
 using ::Nirvana::Word;
@@ -13,7 +21,7 @@ using namespace ::CORBA::Nirvana;
 using namespace ::Nirvana;
 using ::CORBA::Nirvana::Core::ObjectFactory;
 
-bool Loader::is_section (const COFF::section* s, const char* name)
+bool MockBinder::is_section (const COFF::section* s, const char* name)
 {
 	const char* sn = s->Name;
 	char c;
@@ -29,8 +37,11 @@ bool Loader::is_section (const COFF::section* s, const char* name)
 		return true;
 }
 
-Loader::Loader ()
+MockBinder::MockBinder () :
+	ref_cnt_ (1)
 {
+	exported_interfaces_.emplace (g_binder.imp.name, _get_ptr ());
+
 	void* image_base = GetModuleHandleW (0);
 	const COFF::DOSHeader* dos_header = (const COFF::DOSHeader*)image_base;
 	if (dos_header->Magic != 'ZM')
@@ -40,13 +51,15 @@ Loader::Loader ()
 	if (*PE_magic != *(const uint32_t*)COFF::PEMagic)
 		throw INITIALIZE ();
 
-	bind (image_base, (COFF::header*)(PE_magic + 1));
+	bind_image (image_base, (COFF::header*)(PE_magic + 1));
 }
 
-Loader::~Loader ()
-{}
+MockBinder::~MockBinder ()
+{
+	EXPECT_EQ (ref_cnt_, 1);
+}
 
-void Loader::bind (const void* image_base, const COFF::header* hdr)
+void MockBinder::bind_image (const void* image_base, const COFF::header* hdr)
 {
 	const COFF::section* metadata = 0;
 
@@ -64,7 +77,7 @@ void Loader::bind (const void* image_base, const COFF::header* hdr)
 	bind_olf ((const uint8_t*)image_base + metadata->VirtualAddress, metadata->VirtualSize);
 }
 
-void Loader::bind_olf (const void* data, size_t size)
+void MockBinder::bind_olf (const void* data, size_t size)
 {
 	DWORD protection;
 	VirtualProtect ((void*)data, size, PAGE_READWRITE, &protection);
@@ -91,7 +104,7 @@ void Loader::bind_olf (const void* data, size_t size)
 				PortableServer::ServantBase_var core_obj = ObjectFactory::create_servant (TypeI <PortableServer::ServantBase>::in (ps->implementation));
 				ps->core_object = PortableServer::Servant (core_obj);
 				Object_var proxy = AbstractBase_ptr (core_obj)->_to_object ();
-				core_objects_.push_back (Interface_ptr (core_obj._retn ()));
+				module_.core_objects.push_back (Interface_ptr (core_obj._retn ()));
 				exported_interfaces_.emplace (ps->name, Interface_var (proxy._retn ()));
 				p += sizeof (ExportObject) / sizeof (*p);
 				break;
@@ -102,7 +115,7 @@ void Loader::bind_olf (const void* data, size_t size)
 				Object_var core_obj = ObjectFactory::create_local_object (TypeI <Object>::in (ps->implementation));
 				ps->core_object = Object_ptr (core_obj);
 				Object_var proxy = AbstractBase_ptr (Object_ptr (core_obj))->_to_object ();
-				core_objects_.push_back (Interface_var (core_obj._retn ()));
+				module_.core_objects.push_back (Interface_var (core_obj._retn ()));
 				exported_interfaces_.emplace (ps->name, Interface_var (proxy._retn ()));
 				p += sizeof (ExportLocal) / sizeof (*p);
 				break;
@@ -119,27 +132,8 @@ void Loader::bind_olf (const void* data, size_t size)
 			switch (*p) {
 				case OLF_IMPORT_INTERFACE: {
 					ImportInterface* ps = reinterpret_cast <ImportInterface*> (p);
-					auto pf = exported_interfaces_.find (ps->name);
-					if (pf != exported_interfaces_.end ()) {
-						Interface* itf = Interface_ptr (pf->second);
-						const Char* itf_id = itf->_epv ().interface_id;
-						if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, ps->interface_id))
-							ps->itf = itf;
-						else {
-							AbstractBase_ptr ab = AbstractBase::_nil ();
-							if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, Object::interface_id_))
-								ab = Object_ptr (static_cast <Object*> (itf));
-							if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, AbstractBase::interface_id_))
-								ab = static_cast <AbstractBase*> (itf);
-							else
-								throw INV_OBJREF ();
-							Interface* qi = ab->_query_interface (ps->interface_id);
-							if (!qi)
-								throw INV_OBJREF ();
-							ps->itf = qi;
-						}
-					} else
-						throw OBJECT_NOT_EXIST ();
+					module_.bound_interfaces.push_back (bind (ps->name, ps->interface_id));
+					ps->itf = Interface_ptr (module_.bound_interfaces.back ());
 					p += sizeof (ImportInterface) / sizeof (*p);
 					break;
 				}
@@ -161,4 +155,31 @@ void Loader::bind_olf (const void* data, size_t size)
 	VirtualProtect ((void*)data, size, protection, &protection);
 }
 
+Interface_var MockBinder::bind (const std::string& name, const std::string& iid)
+{
+	auto pf = exported_interfaces_.find (name.c_str ());
+	if (pf != exported_interfaces_.end ()) {
+		Interface* itf = Interface_ptr (pf->second);
+		const StringBase <Char> itf_id = itf->_epv ().interface_id;
+		if (!::CORBA::Nirvana::RepositoryId::compatible (itf_id, iid)) {
+			AbstractBase_ptr ab = AbstractBase::_nil ();
+			if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, Object::interface_id_))
+				ab = Object_ptr (static_cast <Object*> (itf));
+			if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, AbstractBase::interface_id_))
+				ab = static_cast <AbstractBase*> (itf);
+			else
+				throw INV_OBJREF ();
+			Interface* qi = ab->_query_interface (iid);
+			if (!qi)
+				throw INV_OBJREF ();
+			itf = qi;
+		}
+
+		return interface_duplicate (itf);
+
+	} else
+		throw OBJECT_NOT_EXIST ();
+}
+
+}
 }

@@ -11,8 +11,8 @@ class ProxyLocal :
 	public ProxyBase <ProxyLocal, Object>
 {
 public:
-	ProxyLocal (Object_ptr servant) :
-		ProxyBase (servant)
+	ProxyLocal (Object_ptr servant, Interface_ptr lifecycle) :
+		ProxyBase (servant, lifecycle)
 	{}
 
 	Boolean _is_equivalent (Object_ptr other_object)

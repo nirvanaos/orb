@@ -16,8 +16,8 @@ class LocalObject :
 	public ObjectImpl
 {
 public:
-	LocalObject (Object_ptr servant) :
-		proxy_manager_ (servant)
+	LocalObject (Object_ptr servant, Interface_ptr lifecycle) :
+		proxy_manager_ (servant, lifecycle)
 	{}
 
 	Interface_ptr _query_interface (const String& iid)

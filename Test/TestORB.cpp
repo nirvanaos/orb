@@ -1,7 +1,6 @@
 #include <CORBA/CORBA.h>
 #include "I3.h"
 #include <CORBA/PortableServer.h>
-#include "RootPOA.h"
 
 using namespace std;
 

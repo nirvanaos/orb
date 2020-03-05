@@ -14,7 +14,7 @@ class ProxyManager :
 {
 	class GarbageCollector;
 protected:
-	ProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase_ptr servant);
+	ProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase_ptr servant, Interface_ptr lifecycle);
 
 public:
 	Bridge <Object>* _get_object (String_in iid)
@@ -104,6 +104,7 @@ public:
 
 private:
 	AbstractBase_ptr servant_;
+	Interface_ptr servant_lifecycle_;
 	::Nirvana::Core::AtomicCounter ref_cnt_;
 	::Nirvana::SyncDomainTraits_var sync_domain_;
 };

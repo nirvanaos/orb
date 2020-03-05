@@ -27,8 +27,8 @@ public:
 		return 0;
 	}
 
-	ServantBase (PortableServer::Servant servant) :
-		proxy_manager_ (servant)
+	ServantBase (PortableServer::Servant servant, Interface_ptr lifecycle) :
+		proxy_manager_ (servant, lifecycle)
 	{}
 
 	PortableServer::Servant __core_servant ()

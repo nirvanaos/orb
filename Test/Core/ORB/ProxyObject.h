@@ -16,8 +16,8 @@ class ProxyObject :
 	typedef ProxyBase <ProxyObject, PortableServer::ServantBase> Base;
 	class Deactivator;
 public:
-	ProxyObject (PortableServer::Servant servant) :
-		ProxyBase (servant),
+	ProxyObject (PortableServer::Servant servant, Interface_ptr lifecycle) :
+		ProxyBase (servant, lifecycle),
 		activation_cnt_ (0),
 		deactivator_launched_ (0)
 	{}
@@ -39,9 +39,6 @@ private:
 		DEACTIVATION_CANCELLED
 	};
 
-	// Called in the servant synchronization context.
-	// Note that sync context may be out of synchronization domain
-	// for the stateless objects.
 	virtual void add_ref_1 ();
 
 	void implicit_deactivate ();

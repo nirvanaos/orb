@@ -51,8 +51,8 @@ public:
 	}
 
 protected:
-	ProxyBase (I_ptr <ImplItf> servant) :
-		ProxyManager (Skeleton <Proxy, Object>::epv_, servant),
+	ProxyBase (I_ptr <ImplItf> servant, Interface_ptr lifecycle) :
+		ProxyManager (Skeleton <Proxy, Object>::epv_, servant, lifecycle),
 		servant_ (servant)
 	{}
 

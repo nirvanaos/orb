@@ -22,9 +22,10 @@ private:
 	Interface* servant_;
 };
 
-ProxyManager::ProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase_ptr servant) :
+ProxyManager::ProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase_ptr servant, Interface_ptr lifecycle) :
 	Bridge <Object> (proxy_impl),
 	servant_ (servant),
+	servant_lifecycle_ (lifecycle),
 	ref_cnt_ (0),
 	sync_domain_ (::Nirvana::SyncDomainTraits::_duplicate (::Nirvana::g_current->sync_domain_traits ()))
 {}
@@ -47,7 +48,7 @@ Interface_ptr ProxyManager::_query_interface (const String& iid) const
 
 void ProxyManager::add_ref_1 ()
 {
-	interface_duplicate (servant_);
+	interface_duplicate (servant_lifecycle_);
 }
 
 ::Nirvana::Core::AtomicCounter::UIntType ProxyManager::_remove_ref ()
@@ -55,12 +56,12 @@ void ProxyManager::add_ref_1 ()
 	::Nirvana::Core::AtomicCounter::IntType cnt = ref_cnt_.decrement ();
 	if (!cnt) {
 		try {
-			run_garbage_collector ((new GarbageCollector (servant_))->_get_ptr ());
+			run_garbage_collector ((new GarbageCollector (servant_lifecycle_))->_get_ptr ());
 		} catch (...) {
 			// Async call failed, maybe resources are exausted.
 			// Fallback to collect garbage in current thread.
 			::Nirvana::Synchronized sync (sync_domain_);
-			interface_release (servant_);
+			interface_release (servant_lifecycle_);
 			// Swallow exception
 		}
 	} else if (cnt < 0) {

@@ -16,6 +16,7 @@ class ObjectFactory :
 public:
 	static void* memory_allocate (size_t size)
 	{
+		enter_sync_domain ();
 		return ::Nirvana::g_memory->allocate (0, size, 0);
 	}
 
@@ -61,12 +62,26 @@ public:
 
 	static PortableServer::Servant create_servant (PortableServer::Servant servant)
 	{
-		return (new ServantBase (offset_ptr (servant)))->_get_ptr ();
+		servant = offset_ptr (servant);
+		return create_servant (servant, (Interface*)servant);
+	}
+
+	// Directly called by the component loader
+	// Lifecycle is component interface
+	static PortableServer::Servant create_servant (PortableServer::Servant servant, Interface_ptr lifecycle)
+	{
+		return (new ServantBase (servant, lifecycle))->_get_ptr ();
 	}
 
 	static Object_ptr create_local_object (Object_ptr servant)
 	{
-		return (new LocalObject (offset_ptr (servant)))->_get_ptr ();
+		servant = offset_ptr (servant);
+		return create_local_object (servant, (Interface*)servant);
+	}
+
+	static Object_ptr create_local_object (Object_ptr servant, Interface_ptr lifecycle)
+	{
+		return (new LocalObject (servant, lifecycle))->_get_ptr ();
 	}
 
 private:
@@ -76,8 +91,14 @@ private:
 		if (stateless_) {
 			void* vp = p;
 			p = reinterpret_cast <I*> ((Octet*)vp + stateless_->offset);
-		}
+		} else
+			enter_sync_domain ();
 		return p;
+	}
+
+	static void enter_sync_domain ()
+	{
+		// If we currently run out of SD, create new SD and enter into it.
 	}
 
 private:

@@ -22,8 +22,12 @@ private:
 	ProxyObject& proxy_;
 };
 
+// Called in the servant synchronization context.
+// Note that sync context may be out of synchronization domain
+// for the stateless objects.
 void ProxyObject::add_ref_1 ()
 {
+	Base::add_ref_1 ();
 	if (!change_state (DEACTIVATION_SCHEDULED, DEACTIVATION_CANCELLED)) {
 		if (change_state (INACTIVE, ACTIVATION)) {
 			try {

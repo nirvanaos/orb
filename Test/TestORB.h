@@ -2,8 +2,9 @@
 #define NIRVANA_TESTORB_TEST_H_
 
 #include <gtest/gtest.h>
-#include <Mock/MockMemory.h>
-#include "RootPOA.h"
+#include <Mock/TestMock.h>
+#include "MockPOA.h"
+#include "MockBinder.h"
 
 namespace TestORB {
 
@@ -33,8 +34,9 @@ public:
 const long MAGIC_CONST = 1963;
 
 class TestORB :
-	public ::testing::Test
+	public ::Nirvana::Test::TestMock
 {
+	typedef ::Nirvana::Test::TestMock Base;
 protected:
 	TestORB ()
 	{}
@@ -49,23 +51,22 @@ protected:
 	{
 		// Code here will be called immediately after the constructor (right
 		// before each test).
+		Base::SetUp ();
 		Instance::count_ = 0;
-		allocated_ = ::Nirvana::Test::allocated_bytes ();
-		RootPOA::create ();
 	}
 
 	virtual void TearDown ()
 	{
 		// Code here will be called immediately after each test (right
 		// before the destructor).
-		RootPOA::destroy ();
-		ASSERT_EQ (Instance::count (), 0);
-		if (!HasFatalFailure ())
-			EXPECT_EQ (::Nirvana::Test::allocated_bytes (), allocated_);
+		EXPECT_EQ (Instance::count (), 0);
+		Base::TearDown ();
 	}
 
 private:
-	size_t allocated_;
+	// POA must be created before the binder.
+	::Nirvana::Test::MockPOA poa_;
+	::Nirvana::Test::MockBinder binder_;
 };
 
 }
