@@ -51,7 +51,7 @@ const ValueModifier VM_TRUNCATABLE = 3;
 
 namespace Nirvana {
 
-BRIDGE_BEGIN (TypeCode, CORBA_REPOSITORY_ID (TypeCode))
+BRIDGE_BEGIN (TypeCode, CORBA_REPOSITORY_ID ("TypeCode"))
 Boolean (*equal) (Bridge <TypeCode>*, Interface*, EnvironmentBridge*);
 Boolean (*equivalent) (Bridge <TypeCode>*, Interface*, EnvironmentBridge*);
 Interface* (*get_compact_typecode) (Bridge <TypeCode>*, EnvironmentBridge*);

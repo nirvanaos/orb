@@ -33,7 +33,7 @@ typedef Nirvana::I_inout <InterfaceDef> InterfaceDef_inout;
 namespace Nirvana {
 
 template <>
-const Char Bridge <Object>::interface_id_ [] = CORBA_REPOSITORY_ID (Object);
+const Char Bridge <Object>::interface_id_ [] = CORBA_REPOSITORY_ID ("Object");
 
 template <>
 struct Bridge <Object>::EPV

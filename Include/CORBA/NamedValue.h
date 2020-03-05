@@ -13,7 +13,7 @@ typedef Nirvana::I_inout <NamedValue> NamedValue_inout;
 
 namespace Nirvana {
 
-BRIDGE_BEGIN (NamedValue, CORBA_REPOSITORY_ID (NamedValue))
+BRIDGE_BEGIN (NamedValue, CORBA_REPOSITORY_ID ("NamedValue"))
 ABI_VT_ret <String> (*name) (Bridge <NamedValue>*, EnvironmentBridge*);
 ABI_VT_ret <Any> (*value) (Bridge <NamedValue>*, EnvironmentBridge*);
 Flags (*flags) (Bridge <NamedValue>*, EnvironmentBridge*);

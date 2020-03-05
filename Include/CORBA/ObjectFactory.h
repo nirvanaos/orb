@@ -26,7 +26,7 @@ struct Type <StatelessCreationFrame> :
 	public TypeFixLen <StatelessCreationFrame>
 {};
 
-BRIDGE_BEGIN (ObjectFactory, CORBA_NIRVANA_REPOSITORY_ID (ObjectFactory))
+BRIDGE_BEGIN (ObjectFactory, CORBA_NIRVANA_REPOSITORY_ID ("ObjectFactory"))
 void* (*memory_allocate) (Bridge <ObjectFactory>*, size_t size, EnvironmentBridge*);
 void (*memory_release) (Bridge <ObjectFactory>*, void* p, size_t size, EnvironmentBridge*);
 void (*stateless_begin) (Bridge <ObjectFactory>*, Type <StatelessCreationFrame>::ABI_inout, EnvironmentBridge*);

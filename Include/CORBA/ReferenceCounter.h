@@ -12,7 +12,7 @@ typedef I_ptr <ReferenceCounter> ReferenceCounter_ptr;
 typedef I_var <ReferenceCounter> ReferenceCounter_var;
 typedef I_out <ReferenceCounter> ReferenceCounter_out;
 
-BRIDGE_BEGIN (ReferenceCounter, CORBA_NIRVANA_REPOSITORY_ID (ReferenceCounter))
+BRIDGE_BEGIN (ReferenceCounter, CORBA_NIRVANA_REPOSITORY_ID ("ReferenceCounter"))
 void (*add_ref) (Bridge <ReferenceCounter>*, EnvironmentBridge*);
 void (*remove_ref) (Bridge <ReferenceCounter>*, EnvironmentBridge*);
 ULong (*refcount_value) (Bridge <ReferenceCounter>*, EnvironmentBridge*);

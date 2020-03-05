@@ -36,7 +36,7 @@ void set_exception (EnvironmentBridge* environment, const Exception& e) NIRVANA_
 
 void set_unknown_exception (EnvironmentBridge* environment) NIRVANA_NOEXCEPT
 {
-	set_exception (environment, SystemException::EC_UNKNOWN, CORBA_REPOSITORY_ID (UNKNOWN), nullptr);
+	set_exception (environment, SystemException::EC_UNKNOWN, CORBA_REPOSITORY_ID ("UNKNOWN"), nullptr);
 }
 
 }

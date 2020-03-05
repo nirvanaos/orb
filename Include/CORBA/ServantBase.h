@@ -7,7 +7,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-BRIDGE_BEGIN (::PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID (ServantBase))
+BRIDGE_BEGIN (::PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("ServantBase"))
 BASE_STRUCT_ENTRY (AbstractBase, CORBA_AbstractBase)
 BASE_STRUCT_ENTRY (ReferenceCounter, CORBA_Nirvana_ReferenceCounter)
 BRIDGE_EPV

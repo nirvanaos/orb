@@ -48,7 +48,7 @@ pseudo interface ProxyFactory {
 ~~~
 */
 
-BRIDGE_BEGIN (ProxyFactory, CORBA_NIRVANA_REPOSITORY_ID (ProxyFactory))
+BRIDGE_BEGIN (ProxyFactory, CORBA_NIRVANA_REPOSITORY_ID ("ProxyFactory"))
 const CountedArray <const char*> interfaces;
 const CountedArray <const Operation> operations;
 Interface* (*create_servant_proxy) (Bridge <ProxyFactory>*, Interface*,
