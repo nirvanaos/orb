@@ -9,7 +9,7 @@ class ProxyManager::GarbageCollector :
 	public ::Nirvana::Core::Runnable <GarbageCollector>
 {
 public:
-	GarbageCollector (Interface* servant) :
+	GarbageCollector (Interface_ptr servant) :
 		servant_ (servant)
 	{}
 
@@ -18,11 +18,11 @@ public:
 
 	void run ()
 	{
-		interface_release (servant_);
+		release (servant_);
 	}
 
 private:
-	Interface* servant_;
+	Interface_ptr servant_;
 };
 
 ProxyManager::ProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase_ptr servant, Interface_ptr lifecycle) :
@@ -51,7 +51,7 @@ Interface_ptr ProxyManager::_query_interface (const String& iid) const
 
 void ProxyManager::add_ref_1 ()
 {
-	interface_duplicate (servant_lifecycle_);
+	interface_duplicate (&servant_lifecycle_);
 }
 
 ::Nirvana::Core::AtomicCounter::UIntType ProxyManager::_remove_ref ()
@@ -64,7 +64,7 @@ void ProxyManager::add_ref_1 ()
 			// Async call failed, maybe resources are exausted.
 			// Fallback to collect garbage in current thread.
 			::Nirvana::Synchronized sync (sync_context_);
-			interface_release (servant_lifecycle_);
+			release (servant_lifecycle_);
 			// Swallow exception
 		}
 	} else if (cnt < 0) {

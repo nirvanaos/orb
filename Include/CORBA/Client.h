@@ -41,7 +41,7 @@ public:
 	// TODO: Change return type to I_var?
 	static NIRVANA_NODISCARD I_ptr <I> _duplicate (const I_ptr <I>& obj)
 	{
-		return static_cast <I*> (interface_duplicate (obj));
+		return static_cast <I*> (interface_duplicate (&obj));
 	}
 
 	static I_ptr <I> _nil ()

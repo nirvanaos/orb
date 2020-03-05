@@ -9,8 +9,9 @@ namespace Nirvana {
 
 template <class I> class I_ptr;
 template <class I> class I_var;
-template <class I> class I_in;
 template <class I> class I_inout;
+template <class I> class I_ret;
+template <class I> class ClientInterfacePrimary;
 
 #ifdef _DEBUG
 const uintptr_t UNINITIALIZED_PTR = 1;
@@ -51,13 +52,13 @@ public:
 		return p_;
 	}
 
-	operator bool () const NIRVANA_NOEXCEPT
+	explicit operator bool () const NIRVANA_NOEXCEPT
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)p_);
 		return p_ != 0;
 	}
 
-	operator bool () NIRVANA_NOEXCEPT
+	explicit operator bool () NIRVANA_NOEXCEPT
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)p_);
 		return p_ != 0;
@@ -68,7 +69,6 @@ protected:
 
 protected:
 	friend class I_var <I>;
-	template <class I1> friend class I_in;
 	friend class I_inout <I>;
 	template <class I1> friend class I_ptr;
 
@@ -123,9 +123,7 @@ public:
 		return *this;
 	}
 
-	/// When servant returns `I_ptr`, skeleton must be able to convert
-	/// it to the ABI return type `Interface*`
-	operator Bridge <I>* () const NIRVANA_NOEXCEPT
+	Bridge <I>* operator & () const NIRVANA_NOEXCEPT
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
 		return static_cast <Bridge <I>*> (this->p_);
@@ -147,6 +145,11 @@ public:
 		I_ptr_base <Interface> (src)
 	{}
 
+	template <class I>
+	I_ptr (const I_ptr <I>& src) :
+		I_ptr_base <Interface> (src.p_)
+	{}
+
 	I_ptr (const I_var <Interface>& var) NIRVANA_NOEXCEPT :
 		I_ptr_base <Interface> (var)
 	{}
@@ -165,7 +168,7 @@ public:
 		return *this;
 	}
 
-	operator Interface* () const NIRVANA_NOEXCEPT
+	Interface* operator & () const NIRVANA_NOEXCEPT
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
 		return this->p_;
@@ -193,7 +196,7 @@ struct StaticI_ptr
 
 	StaticI_ptr& operator = (I_ptr <I> ptr)
 	{
-		itf = ptr;
+		itf = &ptr;
 		return *this;
 	}
 };
@@ -204,7 +207,14 @@ struct StaticI_ptr
 template <class I> inline
 void release (const Nirvana::I_ptr <I>& ptr)
 {
-	Nirvana::interface_release (ptr);
+	Nirvana::interface_release (&ptr);
+}
+
+/// CORBA::is_nil()
+template <class I> inline
+bool is_nil (const Nirvana::I_ptr <I>& ptr)
+{
+	return !ptr;
 }
 
 }

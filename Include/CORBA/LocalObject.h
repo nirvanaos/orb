@@ -55,7 +55,7 @@ public:
 
 	/// When servant returns `I_ptr`, skeleton must be able to convert
 	/// it to the ABI return type `Interface*`
-	operator Bridge <LocalObject>* () const NIRVANA_NOEXCEPT
+	Bridge <LocalObject>* operator & () const NIRVANA_NOEXCEPT
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
 		return reinterpret_cast <Bridge <LocalObject>*> (this->p_);

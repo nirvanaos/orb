@@ -9,53 +9,11 @@ namespace Nirvana {
 
 typedef Interface* ABI_interface;
 
-//! I_in helper class for interface
-template <class I>
-class I_in
-{
-public:
-	I_in (const I_ptr <I>& ptr) :
-		p_ (ptr.p_)
-	{
-		assert (UNINITIALIZED_PTR != (uintptr_t)p_);
-	}
-
-	I_in (const I_var <I>& var) :
-		p_ (var.p_)
-	{}
-
-	template <class I1>
-	I_in (const I_ptr <I1>& src)
-	{
-		if (src.p_)
-			this->p_ = static_cast <I_ptr <I> > (*src.p_);
-		else
-			this->p_ = 0;
-	}
-
-	template <class I1>
-	I_in (const I_var <I1>& src)
-	{
-		if (src.p_)
-			this->p_ = static_cast <I_ptr> (*src.p_);
-		else
-			this->p_ = 0;
-	}
-
-	Interface* operator & () const
-	{
-		return p_;
-	}
-
-private:
-	Interface* p_;
-};
-
-template <class I> inline
-I_in <I> I_var <I>::in () const
-{
-	return *this;
-}
+#ifdef NIRVANA_C11
+template <class I> using I_in = I_ptr <I>;
+#else
+#define I_in I_ptr
+#endif
 
 //! I_inout helper class for interface
 template <class I>
@@ -193,7 +151,7 @@ public:
 
 	~I_ret ()
 	{
-		interface_release (ptr_);
+		release (ptr_);
 	}
 
 	operator I_ptr <I> ()
@@ -243,7 +201,7 @@ public:
 
 	~I_ret ()
 	{
-		interface_release (ptr_);
+		interface_release (&ptr_);
 	}
 
 	operator I_ptr <Interface> ()
@@ -325,17 +283,17 @@ struct Type <I_var <I> >
 
 	static Interface* ret (const I_ptr <I>& ptr)
 	{
-		return ptr;
+		return &ptr;
 	}
 
 	static Interface* ret (I_var <I>&& var)
 	{
-		return var._retn ();
+		return &var._retn ();
 	}
 
 	static Interface* VT_ret (const I_ptr <I>& ptr)
 	{
-		return ptr;
+		return &ptr;
 	}
 
 	// Valuetupe implementation mustn't return I_var
@@ -386,17 +344,17 @@ struct Type <I_var <Interface> >
 
 	static Interface* ret (const I_ptr <Interface>& ptr)
 	{
-		return ptr;
+		return &ptr;
 	}
 
 	static Interface* ret (I_var <Interface>&& var)
 	{
-		return var._retn ();
+		return &var._retn ();
 	}
 
 	static Interface* VT_ret (const I_ptr <Interface>& ptr)
 	{
-		return ptr;
+		return &ptr;
 	}
 
 	// Valuetupe implementation mustn't return I_var

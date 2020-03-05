@@ -25,7 +25,7 @@ public:
 	/// as class base and override operator Bridge <ReferenceCounter>&.
 	operator Bridge <ReferenceCounter>& ()
 	{
-		return *(this->_reference_counter ());
+		return *&this->_reference_counter ();
 	}
 };
 

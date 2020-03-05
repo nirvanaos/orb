@@ -115,7 +115,7 @@ Boolean Client <T, TypeCode>::equal (TypeCode_ptr other)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	Boolean _ret = (_b._epv ().epv.equal) (&_b, other, &_env);
+	Boolean _ret = (_b._epv ().epv.equal) (&_b, &other, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -125,7 +125,7 @@ Boolean Client <T, TypeCode>::equivalent (TypeCode_ptr other)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	Boolean _ret = (_b._epv ().epv.equivalent) (&_b, other, &_env);
+	Boolean _ret = (_b._epv ().epv.equivalent) (&_b, &other, &_env);
 	_env.check ();
 	return _ret;
 }

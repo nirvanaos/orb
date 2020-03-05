@@ -72,17 +72,20 @@ public:
 		return p_;
 	}
 
-	operator bool () const NIRVANA_NOEXCEPT
+	explicit operator bool () const NIRVANA_NOEXCEPT
 	{
 		return p_ != 0;
 	}
 
-	operator bool () NIRVANA_NOEXCEPT
+	explicit operator bool () NIRVANA_NOEXCEPT
 	{
 		return p_ != 0;
 	}
 
-	I_in <I> in () const;
+	I_ptr <I> in () const
+	{
+		return p_;
+	}
 
 	I_ptr <I> _retn () NIRVANA_NOEXCEPT
 	{
@@ -101,7 +104,6 @@ protected:
 
 protected:
 	friend class I_ptr_base <I>;
-	friend class I_in <I>;
 	friend class I_inout <I>;
 
 	I* p_;

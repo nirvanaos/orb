@@ -59,7 +59,7 @@ public:
 
 	Boolean default_is_a (const String& type_id) const
 	{
-		Interface* itf = _query_interface (type_id);
+		Interface_ptr itf = _query_interface (type_id);
 		if (itf)
 			return true;
 		else
@@ -75,7 +75,7 @@ public:
 
 	Boolean default_is_equivalent (Object_ptr other) const
 	{
-		return (static_cast <Bridge <Object>*> (other) == this);
+		return &other == this;
 	}
 
 	// Other methods

@@ -52,7 +52,7 @@ void* Any::prepare (TypeCode_ptr tc)
 
 void Any::set_type (TypeCode_ptr tc)
 {
-	ABI::type (static_cast <Nirvana::Bridge <TypeCode>*> (TypeCode::_duplicate (tc)));
+	ABI::type (static_cast <Nirvana::Bridge <TypeCode>*> (&TypeCode::_duplicate (tc)));
 }
 
 void Any::copy_from (TypeCode_ptr tc, const void* val)

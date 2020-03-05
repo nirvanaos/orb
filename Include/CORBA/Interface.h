@@ -55,12 +55,6 @@ typedef Interface EnvironmentBridge;
 
 }
 
-/// CORBA::is_nil()
-inline bool is_nil (Nirvana::Interface* itf)
-{
-	return !itf;
-}
-
 class Environment;
 
 }

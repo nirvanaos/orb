@@ -64,7 +64,7 @@ public:
 	static PortableServer::Servant create_servant (PortableServer::Servant servant)
 	{
 		servant = offset_ptr (servant);
-		return create_servant (servant, (Interface*)servant);
+		return create_servant (servant, servant);
 	}
 
 	// Directly called by the component loader
@@ -77,7 +77,7 @@ public:
 	static Object_ptr create_local_object (Object_ptr servant)
 	{
 		servant = offset_ptr (servant);
-		return create_local_object (servant, (Interface*)servant);
+		return create_local_object (servant, servant);
 	}
 
 	static Object_ptr create_local_object (Object_ptr servant, Interface_ptr lifecycle)
@@ -90,7 +90,7 @@ private:
 	static I_ptr <I> offset_ptr (I_ptr <I> p)
 	{
 		if (stateless_) {
-			void* vp = p;
+			void* vp = &p;
 			p = reinterpret_cast <I*> ((Octet*)vp + stateless_->offset);
 		} else
 			enter_sync_domain ();

@@ -18,12 +18,12 @@ public:
 
 	void _add_ref ()
 	{
-		interface_duplicate (proxy_manager_);
+		interface_duplicate (&proxy_manager_);
 	}
 
 	void _remove_ref ()
 	{
-		interface_release (proxy_manager_);
+		release (proxy_manager_);
 	}
 
 	DynamicServant_ptr _dynamic_servant ()
@@ -81,7 +81,7 @@ public:
 protected:
 	ServantProxyBaseT (CORBA::Object_ptr proxy_manager, ::Nirvana::SynchronizationContext_ptr sync, Interface_ptr servant) :
 		ServantProxyBase (ProxyLifeCycle <S>::epv_, proxy_manager, sync),
-		servant_ (I::_check (servant))
+		servant_ (I::_check (&servant))
 	{}
 
 	I_ptr <I> _servant () const

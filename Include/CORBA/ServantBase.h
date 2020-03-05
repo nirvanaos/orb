@@ -118,7 +118,7 @@ public:
 
 	/// When servant returns `I_ptr`, skeleton must be able to convert
 	/// it to the ABI return type `Interface*`
-	operator Bridge <::PortableServer::ServantBase>* () const NIRVANA_NOEXCEPT
+	Bridge <::PortableServer::ServantBase>* operator & () const NIRVANA_NOEXCEPT
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
 		return reinterpret_cast <Bridge <::PortableServer::ServantBase>*> (this->p_);

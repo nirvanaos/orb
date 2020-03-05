@@ -20,10 +20,10 @@ public:
 
 	String activate_object (PortableServer::Servant servant)
 	{
-		Bridge <PortableServer::ServantBase>* ps = servant->__core_servant ();
-		ServantBase* psc = static_cast <ServantBase*> (ps);
+		PortableServer::Servant ps = servant->__core_servant ();
+		ServantBase* psc = static_cast <ServantBase*> (&ps);
 		Object_ptr proxy = psc->proxy_manager ();
-		std::pair <AOM::iterator, bool> ins = active_object_map_.emplace (std::to_string ((uintptr_t)static_cast <const void*> (proxy)), 
+		std::pair <AOM::iterator, bool> ins = active_object_map_.emplace (std::to_string ((uintptr_t)&proxy), 
 			Object_var (Object::_duplicate (proxy)));
 		if (!ins.second)
 			throw PortableServer::POA::ServantAlreadyActive ();

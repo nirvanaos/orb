@@ -104,7 +104,7 @@ void MockBinder::bind_olf (const void* data, size_t size)
 			case OLF_EXPORT_OBJECT: {
 				ExportObject* ps = reinterpret_cast <ExportObject*> (p);
 				PortableServer::ServantBase_var core_obj = ObjectFactory::create_servant (TypeI <PortableServer::ServantBase>::in (ps->implementation));
-				ps->core_object = PortableServer::Servant (core_obj);
+				ps->core_object = &PortableServer::Servant (core_obj);
 				add_export (ps->name, core_obj);
 				p += sizeof (ExportObject) / sizeof (*p);
 				break;
@@ -113,7 +113,7 @@ void MockBinder::bind_olf (const void* data, size_t size)
 			case OLF_EXPORT_LOCAL: {
 				ExportLocal* ps = reinterpret_cast <ExportLocal*> (p);
 				Object_var core_obj = ObjectFactory::create_local_object (TypeI <Object>::in (ps->implementation));
-				ps->core_object = Object_ptr (core_obj);
+				ps->core_object = &Object_ptr (core_obj);
 				add_export (ps->name, core_obj);
 				p += sizeof (ExportLocal) / sizeof (*p);
 				break;
@@ -131,7 +131,7 @@ void MockBinder::bind_olf (const void* data, size_t size)
 				case OLF_IMPORT_INTERFACE: {
 					ImportInterface* ps = reinterpret_cast <ImportInterface*> (p);
 					module_.bound_interfaces.push_back (bind (ps->name, ps->interface_id));
-					ps->itf = Interface_ptr (module_.bound_interfaces.back ());
+					ps->itf = &Interface_ptr (module_.bound_interfaces.back ());
 					p += sizeof (ImportInterface) / sizeof (*p);
 					break;
 				}
@@ -157,7 +157,7 @@ Interface_var MockBinder::bind (const std::string& name, const std::string& iid)
 {
 	auto pf = exported_interfaces_.find (name.c_str ());
 	if (pf != exported_interfaces_.end ()) {
-		Interface* itf = Interface_ptr (pf->second);
+		Interface* itf = &pf->second;
 		const StringBase <Char> itf_id = itf->_epv ().interface_id;
 		if (!::CORBA::Nirvana::RepositoryId::compatible (itf_id, iid)) {
 			AbstractBase_ptr ab = AbstractBase::_nil ();

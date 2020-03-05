@@ -156,7 +156,7 @@ uintptr_t Client <T, LocalMarshal>::marshal_object (Object_ptr obj)
 {
 	Environment _env;
 	Bridge <LocalMarshal>& _b (T::_get_bridge (_env));
-	uintptr_t _ret = (_b._epv ().epv.marshal_object) (&_b, obj, &_env);
+	uintptr_t _ret = (_b._epv ().epv.marshal_object) (&_b, &obj, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -176,7 +176,7 @@ uintptr_t Client <T, LocalMarshal>::marshal_type_code (TypeCode_ptr tc)
 {
 	Environment _env;
 	Bridge <LocalMarshal>& _b (T::_get_bridge (_env));
-	uintptr_t _ret = (_b._epv ().epv.marshal_type_code) (&_b, tc, &_env);
+	uintptr_t _ret = (_b._epv ().epv.marshal_type_code) (&_b, &tc, &_env);
 	_env.check ();
 	return _ret;
 }

@@ -14,8 +14,12 @@ bool must_not_compile2 (const Test::I3_ptr p1, const Test::I3_ptr p2)
 {
 	return p1 == p2;
 }
-*/
 
+bool must_not_compile3 (const Test::I3_var p1, const Test::I3_var p2)
+{
+	return p1 == p2;
+}
+*/
 namespace TestORB {
 
 TEST_F (TestORB, RepositoryId)
