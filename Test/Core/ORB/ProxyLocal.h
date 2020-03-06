@@ -17,20 +17,15 @@ public:
 
 	Boolean _is_equivalent (Object_ptr other_object)
 	{
-		::Nirvana::ContextFrame frame;
-		sync_context ()->enter (frame);
-		Boolean ret = servant_->_is_equivalent (other_object);
-		sync_context ()->leave (frame);
-		return ret;
+		Object_var _tmp_other_object (Object::_duplicate (other_object));
+		::Nirvana::Synchronized sync (sync_context ());
+		return servant_->_is_equivalent (_tmp_other_object);
 	}
 
 	ULong _hash (ULong maximum)
 	{
-		::Nirvana::ContextFrame frame;
-		sync_context ()->enter (frame);
-		ULong ret = servant_->_hash (maximum);
-		sync_context ()->leave (frame);
-		return ret;
+		::Nirvana::Synchronized sync (sync_context ());
+		return servant_->_hash (maximum);
 	}
 
 	// TODO: Other Object operations shall be here...

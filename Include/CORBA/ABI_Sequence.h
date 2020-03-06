@@ -5,8 +5,6 @@
 #ifndef NIRVANA_ORB_ABI_SEQUENCE_H_
 #define NIRVANA_ORB_ABI_SEQUENCE_H_
 
-#include "Type_forward.h"
-
 namespace std {
 template <class T, class A> class vector;
 template <class T> class allocator;

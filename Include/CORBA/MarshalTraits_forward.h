@@ -1,6 +1,7 @@
 #ifndef NIRVANA_ORB_MARSHALTRAITS_FORWARD_H_
 #define NIRVANA_ORB_MARSHALTRAITS_FORWARD_H_
 
+#include <Nirvana/SynchronizationContext.h>
 #include <Nirvana/ImportInterface.h>
 #include "LocalMarshal.h"
 
@@ -13,27 +14,27 @@ namespace Nirvana {
 ~~~
 template <> struct MarshalTraits <T>
 {
-  /// Copy `inout` data from the current domain memory to target domain memory
-  /// \param src Source parameter.
-  /// \param sc Destination synchronization context.
-  /// \param dst Destination parameter.
-  static void copy_inout (const T& src, SynchronizationContext_ptr sc, T& dst);
+  /// Move `out` (or returned) data from current domain memory to target domain memory.
+  /// \param src Data in current domain memory.
+  /// \param sc Target synchronization context.
+  /// \param dst Data in the target domain memory.
+  static void move_out (T& src, ::Nirvana::SynchronizationContext_ptr sc, T& dst);
 
-  /// Move `out` (or returned) data from target domain memory back to current domain memory.
-  /// \param sc Source synchronization context.
-  /// \param src Source data. Memory will be released.
-  /// \param dst Destination parameter.
-  static void move_out (SynchronizationContext_ptr sc, T&& src, T& dst);
-
-  /// `true` if `copy_inout ()` and `move_out ()` methods are not trivial.
-  static const bool has_copy_inout;
+  /// `true` if `move_out ()` method is not trivial.
+  static const bool has_move_out;
 
   /// Copies `in` or `inout` data to local marshalling buffer.
   static void local_marshal (const T& src, T& dst);
 
   static void local_unmarshal_in (T& val);
 
+  /// 'true` if `local_unmarshal_in()` is not empty.
+  static const bool has_local_unmarshal_in;
+
   static void local_unmarshal_inout (T& val);
+
+  /// 'true` if `local_unmarshal_inout()` is not empty.
+  static const bool has_unmarshal_inout;
 };
 ~~~
 */

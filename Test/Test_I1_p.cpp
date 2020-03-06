@@ -110,33 +110,103 @@ public:
 
 	CORBA::Long op1 (CORBA::Long p1) const
 	{
-		Nirvana::Synchronized sync (_sync_context ());
+		::Nirvana::Synchronized sync (_sync_context ());
 		return _servant ()->op1 (p1);
 	}
 
 	void throw_NO_IMPLEMENT () const
 	{
-		Nirvana::Synchronized sync (_sync_context ());
+		::Nirvana::Synchronized sync (_sync_context ());
 		_servant ()->throw_NO_IMPLEMENT ();
 	}
 
 	I1_var object_op (I1_ptr in_obj, I1_var& out_obj, I1_var& inout_obj) const
 	{
-		I1_var _tmp_in_obj = I1::_duplicate (in_obj);
-		I1_var _tmp_out_obj = out_obj;
-		I1_var _tmp_inout_obj;
+		I1_var _tmp_in_obj (I1::_duplicate (in_obj));
+		I1_var _tmp_out_obj;
+		I1_var _tmp_inout_obj (inout_obj);
 		I1_var _ret;
 		{
-			Nirvana::Synchronized sync (_sync_context ());
+			::Nirvana::Synchronized sync (_sync_context ());
 			_ret = _servant ()->object_op (_tmp_in_obj, _tmp_out_obj, _tmp_inout_obj);
 		}
-		out_obj = std::move (_tmp_out_obj);
-		inout_obj = std::move (_tmp_inout_obj);
+		out_obj = _tmp_out_obj._retn ();
+		inout_obj = _tmp_inout_obj._retn ();
 		return _ret;
 	}
 
-	std::string string_op (const std::string& in_s, std::string& out_s, std::string& inout_s) const;
-	std::vector <CORBA::Long> seq_op (const std::vector <CORBA::Long>& in_s, std::vector <CORBA::Long>& out_s, std::vector <CORBA::Long>& inout_s) const;
+	CORBA::Nirvana::String string_op (const CORBA::Nirvana::String& in_s, CORBA::Nirvana::String& out_s, CORBA::Nirvana::String& inout_s) const
+	{
+		CORBA::Nirvana::String _ret;
+
+		// out parameters
+		CORBA::Nirvana::String _ret_out_s;
+		CORBA::Nirvana::String _ret_inout_s;
+
+		{
+			// in parameters
+			CORBA::Nirvana::String _tmp_in_s (in_s);
+
+			::Nirvana::Synchronized context;
+
+			// Copy inout parameters to the target context memory
+			_sync_context ()->enter_memory ();
+			CORBA::Nirvana::String _tmp_out_s;
+			CORBA::Nirvana::String _tmp_inout_s (inout_s);
+
+			// Enter into synchronization domain and perform call
+			_sync_context ()->enter (false);
+			CORBA::Nirvana::String _tmp_ret = _servant ()->string_op (_tmp_in_s, _tmp_out_s, _tmp_inout_s);
+
+			// Move output data back to the call context
+			CORBA::Nirvana::MarshalTraits <CORBA::Nirvana::String>::move_out (_tmp_out_s, context.call_context (), _ret_out_s);
+			CORBA::Nirvana::MarshalTraits <CORBA::Nirvana::String>::move_out (_tmp_inout_s, context.call_context (), _ret_inout_s);
+			CORBA::Nirvana::MarshalTraits <CORBA::Nirvana::String>::move_out (_tmp_ret, context.call_context (), _ret);
+
+			// Leave context
+		}
+		// Return data to the caller
+		_ret_out_s.swap (out_s);
+		_ret_inout_s.swap (inout_s);
+		return _ret;
+	}
+
+	std::vector <CORBA::Long> seq_op (const SeqLong& in_s, SeqLong& out_s, SeqLong& inout_s) const
+	{
+		SeqLong _ret;
+
+		// out parameters
+		SeqLong _ret_out_s;
+		SeqLong _ret_inout_s;
+
+		{
+			// in parameters
+			SeqLong _tmp_in_s (in_s);
+
+			::Nirvana::Synchronized context;
+
+			// Copy inout parameters to the target context memory
+			_sync_context ()->enter_memory ();
+			SeqLong _tmp_out_s;
+			SeqLong _tmp_inout_s (inout_s);
+
+			// Enter into synchronization domain and perform call
+			_sync_context ()->enter (false);
+			SeqLong _tmp_ret = _servant ()->seq_op (_tmp_in_s, _tmp_out_s, _tmp_inout_s);
+
+			// Move output data back to the call context
+			CORBA::Nirvana::MarshalTraits <SeqLong>::move_out (_tmp_out_s, context.call_context (), _ret_out_s);
+			CORBA::Nirvana::MarshalTraits <SeqLong>::move_out (_tmp_inout_s, context.call_context (), _ret_inout_s);
+			CORBA::Nirvana::MarshalTraits <SeqLong>::move_out (_tmp_ret, context.call_context (), _ret);
+
+			// Leave context
+		}
+		// Return data to the caller
+		_ret_out_s.swap (out_s);
+		_ret_inout_s.swap (inout_s);
+		return _ret;
+	}
+
 	CORBA::Any any_op (const CORBA::Any& in_any, CORBA::Any& out_any, CORBA::Any& inout_any) const;
 };
 

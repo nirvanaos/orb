@@ -7,21 +7,24 @@ class FreeSyncContext :
 	public CORBA::Nirvana::ServantStatic <FreeSyncContext, SynchronizationContext>
 {
 public:
-	static void* copy_inout (const void* src, size_t size)
-	{
-		return g_memory->copy (0, const_cast <void*> (src), size, 0);
-	}
+	static void enter_memory ()
+	{}
 
-	static void* move_out (void* src, size_t size)
+	static void enter (bool ret)
+	{}
+
+	static Pointer adopt_output (Pointer src, UWord& size)
 	{
 		return src;
 	}
 
-	void enter (ContextFrame& context)
-	{}
-
-	void leave (const ContextFrame& context)
-	{}
+	static Pointer allocate (UWord& size)
+	{
+		Pointer p = g_memory->allocate (0, size, 0);
+		UWord au = g_memory->query (p, MemQuery::ALLOCATION_UNIT);
+		size = round_up (size, au);
+		return p;
+	}
 
 	void async_call (Runnable_ptr runnable)
 	{
@@ -31,6 +34,11 @@ public:
 	static bool synchronized ()
 	{
 		return false;
+	}
+
+	static bool shared_memory (SynchronizationContext_ptr)
+	{
+		return true;
 	}
 };
 
