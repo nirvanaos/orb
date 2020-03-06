@@ -13,7 +13,7 @@ public:
 	static void enter (bool ret)
 	{}
 
-	static Pointer adopt_output (Pointer src, UWord& size)
+	static Pointer adopt_output (Pointer src, UWord data_size, UWord& allocated_size)
 	{
 		return src;
 	}

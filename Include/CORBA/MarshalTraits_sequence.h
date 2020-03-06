@@ -35,10 +35,11 @@ void MarshalTraits <Sequence <T> >::move_out (Sequence <T>& src, ::Nirvana::Sync
 			ABI& asrc = static_cast <ABI&> (src);
 			ABI& adst = static_cast <ABI&> (dst);
 			if (!MarshalTraits <T>::has_move_out) {
+				size_t size = asrc.size;
 				size_t cb = asrc.allocated;
-				adst.ptr = (T*)sc->adopt_output (src.ptr, cb);
+				adst.ptr = (T*)sc->adopt_output (src.ptr, size * sizeof (T), cb);
 				adst.allocated = cb;
-				adst.size = asrc.size;
+				adst.size = size;
 				asrc.reset ();
 			} else {
 				size_t size = asrc.size;
@@ -97,11 +98,11 @@ void MarshalTraits <Sequence <T> >::local_unmarshal_inout (Sequence <T>& val)
 {
 	if (!val.empty ()) {
 		ABI& aval = static_cast <ABI&> (val);
-		if (val.allocated)
-			g_local_marshal->adopt_memory (val.ptr, val.allocated);
+		if (aval.allocated)
+			g_local_marshal->adopt_memory (aval.ptr, aval.allocated);
 		else
 			aval.ptr = (T*)val.memory ()->copy (nullptr, aval.ptr, aval.allocated, 0);
-		if (MarshalTraits <T>::has_unmarshal_inout_) {
+		if (MarshalTraits <T>::has_unmarshal_inout) {
 			T* p = aval.ptr, * end = p + aval.size;
 			try {
 				do {

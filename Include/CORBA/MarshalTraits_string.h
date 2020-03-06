@@ -11,8 +11,8 @@ template <typename C>
 struct MarshalTraits <StringT <C> >
 {
   static const bool has_move_out = true;
-  static const bool has_unmarshal_in_ = false;
-  static const bool has_unmarshal_inout_ = true;
+  static const bool has_unmarshal_in = false;
+  static const bool has_unmarshal_inout = true;
  
   typedef ABI <StringT <C> > ABI;
 
@@ -22,10 +22,11 @@ struct MarshalTraits <StringT <C> >
   {
     assert (dst.empty ());
     if (!_small_copy (src, dst)) {
+      size_t size = src.size ();
       size_t cb = src.allocated ();
-      dst.large_pointer ((C*)sc->adopt_output (src.large_pointer (), cb));
+      dst.large_pointer ((C*)sc->adopt_output (src.large_pointer (), size * sizeof (C), cb));
       dst.allocated (cb);
-      dst.large_size (src.large_size ());
+      dst.large_size (size);
       src.reset ();
     }
   }
