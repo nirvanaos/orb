@@ -14,7 +14,7 @@ class I_var
 {
 public:
 	I_var () NIRVANA_NOEXCEPT :
-		p_ (0)
+		p_ (nullptr)
 	{}
 
 	I_var (I* p) NIRVANA_NOEXCEPT :
@@ -32,7 +32,7 @@ public:
 	I_var (I_var <I>&& src) NIRVANA_NOEXCEPT :
 		p_ (src.p_)
 	{
-		src.p_ = 0;
+		src.p_ = nullptr;
 	}
 
 	~I_var () NIRVANA_NOEXCEPT
@@ -57,8 +57,9 @@ public:
 	{
 		if (&src != this) {
 			reset (src.p_);
-			src.p_ = 0;
-		}
+			src.p_ = nullptr;
+		} else
+			src.reset (nullptr);
 		return *this;
 	}
 
@@ -74,12 +75,12 @@ public:
 
 	explicit operator bool () const NIRVANA_NOEXCEPT
 	{
-		return p_ != 0;
+		return p_ != nullptr;
 	}
 
 	explicit operator bool () NIRVANA_NOEXCEPT
 	{
-		return p_ != 0;
+		return p_ != nullptr;
 	}
 
 	I_ptr <I> in () const
@@ -90,7 +91,7 @@ public:
 	I_ptr <I> _retn () NIRVANA_NOEXCEPT
 	{
 		I_ptr <I> p (p_);
-		p_ = 0;
+		p_ = nullptr;
 		return p;
 	}
 
