@@ -58,8 +58,7 @@ public:
 		if (&src != this) {
 			reset (src.p_);
 			src.p_ = nullptr;
-		} else
-			src.reset (nullptr);
+		}
 		return *this;
 	}
 
