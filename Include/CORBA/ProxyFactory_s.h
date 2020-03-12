@@ -28,29 +28,13 @@ protected:
 		return nullptr;
 	}
 
-	static Interface* _create_servant_proxy (Bridge <ProxyFactory>* obj, Interface* proxy,
-		Interface* sync, Interface* servant,
+	static Interface* _create_platform_proxy (Bridge <ProxyFactory>* obj, Interface* proxy, 
+		Interface* target, UShort interface_idx,
 		Interface** deleter, EnvironmentBridge* env)
 	{
 		try {
-			return TypeI <Interface>::VT_ret (S::_implementation (obj).create_servant_proxy (TypeI <Object>::in (proxy), 
-				TypeI <::Nirvana::SynchronizationContext>::in (servant), TypeI <Interface>::in (servant),
-				TypeI <DynamicServant>::out (deleter)));
-		} catch (const Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
-	}
-
-	static Interface* _create_local_proxy (Bridge <ProxyFactory>* obj, Interface* proxy, 
-		const LocalObjectRef* target, UShort interface_idx,
-		Interface** deleter, EnvironmentBridge* env)
-	{
-		try {
-			return TypeI <Interface>::VT_ret (S::_implementation (obj).create_local_proxy (TypeI <Object>::in (proxy), 
-				*target, interface_idx,
+			return TypeI <Interface>::VT_ret (S::_implementation (obj).create_platform_proxy (TypeI <Object>::in (proxy), 
+				TypeI <PlatformObjRef>::in (target), interface_idx,
 				TypeI <DynamicServant>::out (deleter)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
@@ -70,7 +54,6 @@ const Bridge <ProxyFactory>::EPV Skeleton <S, ProxyFactory>::epv_ = {
 	},
 	{ // epv
 		S::_interfaces,
-		S::_create_servant_proxy,
 		S::_create_local_proxy
 	}
 };

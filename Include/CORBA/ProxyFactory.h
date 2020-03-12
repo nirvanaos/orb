@@ -2,9 +2,9 @@
 #define NIRVANA_ORB_PROXYFACTORY_H_
 
 #include "CORBA.h"
-#include <Nirvana/SynchronizationContext.h>
 #include "DynamicServant.h"
-#include "LocalMarshal.h"
+#include "PlatformObjRef.h"
+#include "PlatformCall.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -24,14 +24,15 @@ struct CountedArray
 class ServerRequest;
 class RemoteRequest;
 
+typedef PlatformMarshal_var (*PlatformRequestProc) (Interface*, PlatformCall_ptr call, ::Nirvana::Pointer* in_params,
+	PlatformUnmarshal_ptr unmarshaler, ::Nirvana::Pointer* out_params);
 typedef void (*ServerRequestProc) (Interface*, ServerRequest*, EnvironmentBridge*);
-typedef void (*LocalRequestProc) (Interface*, void*, EnvironmentBridge*);
 typedef void (*RemoteRequestProc) (Interface*, RemoteRequest*, EnvironmentBridge*);
 
 struct Operation
 {
 	const char* operation;
-	LocalRequestProc invoke_local;
+	PlatformRequestProc invoke_platform;
 	ServerRequestProc invoke_dii;
 	RemoteRequestProc invoke_remote;
 };
@@ -42,8 +43,7 @@ pseudo interface ProxyFactory {
 	//! Returns ids of all interfaces.
 	const CountedArray <const char*>& interfaces ();
 	const CountedArray <const Operation>& operations ();
-	Interface create_servant_proxy (Object proxy_manager, ::Nirvana::SynchronizationContext sync, Interface servant, out DynamicServant deleter);
-	Interface create_local_proxy (Object proxy_manager, in LocalObjectRef target, short interface_idx, out DynamicServant deleter);
+	Interface create_platform_proxy (Object proxy_manager, in PlatformObjRef target, short interface_idx, out DynamicServant deleter);
 	Interface create_remote_proxy (Object proxy_manager, out DynamicServant deleter);
 };
 ~~~
@@ -52,11 +52,8 @@ pseudo interface ProxyFactory {
 BRIDGE_BEGIN (ProxyFactory, CORBA_NIRVANA_REPOSITORY_ID ("ProxyFactory"))
 const CountedArray <const char*> interfaces;
 const CountedArray <const Operation> operations;
-Interface* (*create_servant_proxy) (Bridge <ProxyFactory>*, Interface*,
-	Interface*, Interface*,
-	Interface**, EnvironmentBridge*);
-Interface* (*create_local_proxy) (Bridge <ProxyFactory>*, Interface*,
-	const LocalObjectRef* target,
+Interface* (*create_platform_proxy) (Bridge <ProxyFactory>*, Interface*,
+	Interface*,
 	UShort interface_idx,
 	Interface**, EnvironmentBridge*);
 Interface* (*create_remote_proxy) (Bridge <ProxyFactory>*, Interface*,
@@ -80,12 +77,8 @@ public:
 		return T::_get_bridge (_env).operations;
 	}
 
-	Interface_ptr create_servant_proxy (I_in <Object> proxy_manager, 
-		I_in <::Nirvana::SynchronizationContext> sync, I_in <Interface> servant, 
-		I_out <DynamicServant> deleter);
-
-	Interface_ptr create_local_proxy (I_in <Object> proxy_manager,
-		const LocalObjectRef& target, UShort interface_idx, 
+	Interface_ptr create_platform_proxy (I_in <Object> proxy_manager,
+		I_in <PlatformObjRef> target, UShort interface_idx, 
 		I_out <DynamicServant> deleter);
 
 	Interface_ptr create_remote_proxy (I_in <Object> proxy_manager,
@@ -93,21 +86,13 @@ public:
 };
 
 template <class T>
-Interface_ptr Client <T, ProxyFactory>::create_servant_proxy (I_in <Object> proxy, I_in <::Nirvana::SynchronizationContext> sync, I_in <Interface> servant, I_out <DynamicServant> deleter)
+Interface_ptr Client <T, ProxyFactory>::create_platform_proxy (I_in <Object> obj,
+	I_in <PlatformObjRef> target, UShort interface_idx,
+	I_out <DynamicServant> deleter)
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	I_VT_ret <Interface> _ret = (_b._epv ().epv.create_servant_proxy) (&_b, &proxy, &sync, &servant, &deleter, &_env);
-	_env.check ();
-	return _ret;
-}
-
-template <class T>
-Interface_ptr Client <T, ProxyFactory>::create_local_proxy (I_in <Object> obj, const LocalObjectRef& target, UShort interface_idx, I_out <DynamicServant> deleter)
-{
-	Environment _env;
-	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	I_VT_ret <Interface> _ret = (_b._epv ().epv.create_local_proxy) (&_b, &obj, &target, interface_idx, &deleter, &_env);
+	I_VT_ret <Interface> _ret = (_b._epv ().epv.create_platform_proxy) (&_b, &obj, &target, interface_idx, &deleter, &_env);
 	_env.check ();
 	return _ret;
 }

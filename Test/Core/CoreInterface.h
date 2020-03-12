@@ -4,6 +4,7 @@
 namespace Nirvana {
 namespace Core {
 
+/// Core interface.
 class CoreInterface
 {
 public:
@@ -11,58 +12,59 @@ public:
 	virtual void core_remove_ref () = 0;
 };
 
+/// Core interface smart pointer.
 template <class I>
-class CoreI_var
+class CorePtr
 {
 public:
-	CoreI_var () :
+	CorePtr () :
 		p_ (nullptr)
 	{}
 
-	CoreI_var (I* p) :
+	/// Note that unlike I_var, CorePtr increments reference counter.
+	CorePtr (I* p) :
 		p_ (p)
-	{}
-
-	CoreI_var (const CoreI_var& src) :
-		p_ (src.p_)
 	{
-		if (p_)
-			p_->core_add_ref ();
+		if (p)
+			p->core_add_ref ();
 	}
 
-	CoreI_var (CoreI_var&& src) :
+	CorePtr (const CorePtr& src) :
+		CorePtr (src.p_)
+	{}
+
+	CorePtr (CorePtr&& src) :
 		p_ (src.p_)
 	{
 		src.p_ = nullptr;
 	}
 
-	~CoreI_var ()
+	~CorePtr ()
 	{
 		if (p_)
 			p_->core_remove_ref ();
 	}
 
-	CoreI_var& operator = (I* p)
+	/// Note that unlike I_var, CorePtr increments reference counter.
+	CorePtr& operator = (I* p)
 	{
 		reset (p);
 		return *this;
 	}
 
-	CoreI_var& operator = (const CoreI_var& src)
+	CorePtr& operator = (const CorePtr& src)
 	{
-		I* p = src.p_;
-		if (p_ != p) {
-			if (p)
-				p->core_add_ref ();
-			reset (p)
-		}
+		reset (src.p_);
 		return *this;
 	}
 
-	CoreI_var& operator = (CoreI_var&& src)
+	CorePtr& operator = (CorePtr&& src)
 	{
-		reset (src.p_);
-		src.p_ = nullptr;
+		if (this != &src) {
+			reset (nullptr);
+			p_ = src.p_;
+			src.p_ = nullptr;
+		}
 		return *this;
 	}
 
@@ -79,9 +81,14 @@ public:
 private:
 	void reset (I* p)
 	{
-		if (p_)
-			p_->core_remove_ref ();
-		p_ = p;
+		if (p != p_) {
+			if (p)
+				p->core_add_ref ();
+			I* tmp = p_;
+			p_ = p;
+			if (tmp)
+				tmp->core_remove_ref ();
+		}
 	}
 
 private:

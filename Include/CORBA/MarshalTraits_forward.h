@@ -1,46 +1,38 @@
 #ifndef NIRVANA_ORB_MARSHALTRAITS_FORWARD_H_
 #define NIRVANA_ORB_MARSHALTRAITS_FORWARD_H_
 
-#include <Nirvana/SynchronizationContext.h>
 #include <Nirvana/ImportInterface.h>
-#include "LocalMarshal.h"
+#include "PlatformMarshal.h"
+#include "PlatformUnmarshal.h"
 
 namespace CORBA {
 namespace Nirvana {
 
 /** For each structure, union or enum data type T, IDL compiler generates `CORBA::Nirvana::MarshalTraits <T>` structure.
-    This structure is intended for proxies and defines how the parameters are marshalled.
+    This structure is intended for proxies and defines how the parameters are marshalled inside one platform domain.
     It is not intended for the user code.
-~~~
+~~~{.c++}
 template <> struct MarshalTraits <T>
 {
-  /// Move `out` (or returned) data from current domain memory to target domain memory.
-  /// \param src Data in current domain memory.
-  /// \param sc Target synchronization context.
-  /// \param dst Data in the target domain memory.
-  static void move_out (T& src, ::Nirvana::SynchronizationContext_ptr sc, T& dst);
-
-  /// `true` if `move_out ()` method is not trivial.
-  static const bool has_move_out;
-
   /// Copies `in` or `inout` data to local marshalling buffer.
-  static void local_marshal (const T& src, T& dst);
+  static void marshal (const T& src, PlatformMarshal_ptr marshaler, Type <T>::ABI_type <T>& dst);
 
-  static void local_unmarshal_in (T& val);
+  /// Returns `true` if marshal is not simple copy in the specified context.
+  static bool has_marshal (PlatformMarshalContext mctx);
 
-  /// 'true` if `local_unmarshal_in()` is not empty.
-  static const bool has_local_unmarshal_in;
+  static void unmarshal_in (Type <T>::ABI_type <T>& src, PlatformUnmarshal_ptr unmarshaler, T& dst);
 
-  static void local_unmarshal_inout (T& val);
+  /// 'true` if `unmarshal_in()` is not simple copy in the specified context.
+  static bool has_unmarshal_in (PlatformMarshalContext mctx);
 
-  /// 'true` if `local_unmarshal_inout()` is not empty.
-  static const bool has_unmarshal_inout;
+  static void unmarshal_inout (Type <T>::ABI_type <T>& src, PlatformUnmarshal_ptr unmarshaler, T& dst);
+
+  /// 'true` if `unmarshal_inout()` is not simple copy in the specified context.
+  static const bool has_unmarshal_inout (PlatformMarshalContext mctx);;
 };
 ~~~
 */
 template <class T> struct MarshalTraits;
-
-extern const ::Nirvana::ImportInterfaceT <LocalMarshal> g_local_marshal;
 
 }
 }

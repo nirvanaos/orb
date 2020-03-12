@@ -14,7 +14,6 @@ const ImportInterfaceT <Binder> g_binder = { OLF_IMPORT_INTERFACE, "Nirvana/g_bi
 namespace Test {
 
 using namespace llvm;
-using ::Nirvana::Word;
 using namespace std;
 using namespace ::CORBA;
 using namespace ::CORBA::Nirvana;
@@ -82,8 +81,8 @@ void MockBinder::bind_olf (const void* data, size_t size)
 {
 	DWORD protection;
 	VirtualProtect ((void*)data, size, PAGE_READWRITE, &protection);
-	Word* p = (Word*)data;
-	Word* end = p + size / sizeof (Word);
+	int* p = (int*)data;
+	int* end = p + size / sizeof (int);
 
 	bool imp = false;
 	while (p != end && *p) {
@@ -125,7 +124,7 @@ void MockBinder::bind_olf (const void* data, size_t size)
 		}
 	}
 	if (imp) {
-		p = (Word*)data;
+		p = (int*)data;
 		while (p != end && *p) {
 			switch (*p) {
 				case OLF_IMPORT_INTERFACE: {

@@ -8,12 +8,15 @@
 namespace Nirvana {
 namespace Core {
 
+/// Core synchronization context.
 class SynchronizationContext :
 	public CoreInterface
 {
 public:
 	/// Returns current synchronization context
-	static CoreI_var <SynchronizationContext> current ();
+	/// Returns smart pointer to ensure that context won't be destroyed
+	/// until will be released.
+	static CorePtr <SynchronizationContext> current ();
 
 	/// Enter to the synchronization domain.
 	/// \param ret `true` on return to call source domain.

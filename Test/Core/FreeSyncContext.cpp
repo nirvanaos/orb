@@ -13,15 +13,15 @@ public:
 	static void enter (bool ret)
 	{}
 
-	static Pointer adopt_output (Pointer src, UWord data_size, UWord& allocated_size)
+	static Pointer adopt_output (Pointer src, Size data_size, Size& allocated_size)
 	{
 		return src;
 	}
 
-	static Pointer allocate (UWord& size)
+	static Pointer allocate (Size& size)
 	{
 		Pointer p = g_memory->allocate (0, size, 0);
-		UWord au = g_memory->query (p, MemQuery::ALLOCATION_UNIT);
+		Size au = (Size)g_memory->query (p, MemQuery::ALLOCATION_UNIT);
 		size = round_up (size, au);
 		return p;
 	}
