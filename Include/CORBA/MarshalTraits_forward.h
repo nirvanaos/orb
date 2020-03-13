@@ -1,10 +1,6 @@
 #ifndef NIRVANA_ORB_MARSHALTRAITS_FORWARD_H_
 #define NIRVANA_ORB_MARSHALTRAITS_FORWARD_H_
 
-#include <Nirvana/ImportInterface.h>
-#include "PlatformMarshal.h"
-#include "PlatformUnmarshal.h"
-
 namespace CORBA {
 namespace Nirvana {
 
@@ -14,21 +10,17 @@ namespace Nirvana {
 ~~~{.c++}
 template <> struct MarshalTraits <T>
 {
-  /// Copies `in` or `inout` data to local marshalling buffer.
-  static void marshal (const T& src, PlatformMarshal_ptr marshaler, Type <T>::ABI_type <T>& dst);
+  /// Copies input data to marshalling buffer.
+  static void marshal_in (const T& src, PlatformMarshal_ptr marshaler, Type <T>::ABI_type <T>& dst);
 
-  /// Returns `true` if marshal is not simple copy in the specified context.
-  static bool has_marshal (PlatformMarshalContext mctx);
+  /// Copies output data to marshalling buffer.
+  /// \param src Source value. After marshalling, the value can be released.
+  static void marshal_out (T& src, PlatformMarshal_ptr marshaler, Type <T>::ABI_type <T>& dst);
 
-  static void unmarshal_in (Type <T>::ABI_type <T>& src, PlatformUnmarshal_ptr unmarshaler, T& dst);
+  static void unmarshal (Type <T>::ABI_type <T>& src, PlatformUnmarshal_ptr unmarshaler, T& dst);
 
   /// 'true` if `unmarshal_in()` is not simple copy in the specified context.
-  static bool has_unmarshal_in (PlatformMarshalContext mctx);
-
-  static void unmarshal_inout (Type <T>::ABI_type <T>& src, PlatformUnmarshal_ptr unmarshaler, T& dst);
-
-  /// 'true` if `unmarshal_inout()` is not simple copy in the specified context.
-  static const bool has_unmarshal_inout (PlatformMarshalContext mctx);;
+  static bool has_unmarshal (PlatformMarshalContext mctx);
 };
 ~~~
 */

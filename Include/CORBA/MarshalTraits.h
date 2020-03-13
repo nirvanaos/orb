@@ -16,31 +16,31 @@ template <class T
 	, typename Enable = void
 #endif
 >
-struct MarshalTraitsSimple
+struct MarshalTraitsTrivial
 {
-	static const bool has_move_out = false;
-	static const bool has_unmarshal_in = false;
-	static const bool has_unmarshal_inout = false;
-
-	static void move_out (T& src, ::Nirvana::SynchronizationContext_ptr sc, T& dst)
+	static void marshal_in (const T& src, PlatformMarshal_ptr marshaler, T& dst) NIRVANA_NOEXCEPT
 	{
 		dst = src;
 	}
 
-	static void local_marshal (const T& src, T& dst) NIRVANA_NOEXCEPT
+	static void marshal_out (T& src, PlatformMarshal_ptr marshaler, T& dst) NIRVANA_NOEXCEPT
 	{
 		dst = src;
 	}
 
-	static void local_unmarshal_in (T& val) NIRVANA_NOEXCEPT
-	{}
+	static void unmarshal (T& src, PlatformUnmarshal_ptr unmarshaler, T& dst) NIRVANA_NOEXCEPT
+	{
+		dst = src;
+	}
 
-	static void local_unmarshal_inout (T& val) NIRVANA_NOEXCEPT
-	{}
+	static bool has_unmarshal (PlatformMarshalContext mctx)
+	{
+		return false;
+	}
 };
 
 template <class T> struct MarshalTraits :
-	MarshalTraitsSimple <T
+	MarshalTraitsTrivial <T
 #ifdef NIRVANA_C11
 	, typename std::enable_if <std::is_trivially_copyable <T>::value>::type
 #endif
@@ -49,48 +49,71 @@ template <class T> struct MarshalTraits :
 
 template <>
 struct MarshalTraits <TypeCode_var> :
-	public MarshalTraitsSimple <TypeCode_var>
+	public MarshalTraitsTrivial <TypeCode_var>
 {
-	static const bool has_unmarshal_in = true;
-	static const bool has_unmarshal_inout = true;
-
-	static void local_marshal (TypeCode_ptr src, TypeCode_var& dst)
+	static void marshal_in (const TypeCode_ptr src, PlatformMarshal_ptr marshaler, Interface*& dst)
 	{
-		reinterpret_cast <uintptr_t&> (dst) = g_local_marshal->marshal_type_code (src);
+		if (marshaler->context () == PlatformMarshalContext::OTHER_PROTECTION_DOMAIN)
+			reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_type_code (src);
+		else
+			dst = interface_duplicate (&src);
 	}
 
-	static void local_unmarshal_in (TypeCode_var& val)
+	static void marshal_out (TypeCode_var& src, PlatformMarshal_ptr marshaler, Interface*& dst)
 	{
-		val = g_local_marshal->unmarshal_type_code (reinterpret_cast <void*&> (val));
+		if (marshaler->context () == PlatformMarshalContext::OTHER_PROTECTION_DOMAIN) {
+			reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_type_code (src);
+			src._retn ();
+		} else
+			dst = &src._retn ();
 	}
 
-	static void local_unmarshal_inout (TypeCode_var& val)
+	static void unmarshal (Interface* src, PlatformUnmarshal_ptr unmarshaler, TypeCode_var& dst)
 	{
-		local_unmarshal_in (val);
+		if (unmarshaler->context () == PlatformMarshalContext::OTHER_PROTECTION_DOMAIN)
+			dst = unmarshaler->unmarshal_type_code (src);
+		else
+			dst = I_ret <TypeCode> (src);
+	}
+
+	static bool has_unmarshal (PlatformMarshalContext mctx)
+	{
+		return mctx == PlatformMarshalContext::OTHER_PROTECTION_DOMAIN;
 	}
 };
 
 template <class I> // I must derive from Object
 struct MarshalTraits <I_var <I> > :
-	public MarshalTraitsSimple <I_var <I> >
+	public MarshalTraitsTrivial <I_var <I> >
 {
-	static const bool has_unmarshal_in = true;
-	static const bool has_unmarshal_inout = true;
-
-	static void local_marshal (Object_ptr src, I_var <I>& dst)
+	static void marshal_in (const I_ptr <I> src, PlatformMarshal_ptr marshaler, Interface*& dst)
 	{
-		reinterpret_cast <uintptr_t&> (dst) = g_local_marshal->marshal_object (src);
+		if (marshaler->context () == PlatformMarshalContext::OTHER_PROTECTION_DOMAIN)
+			reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_object (src);
+		else
+			dst = interface_duplicate (&src);
 	}
 
-	static void local_unmarshal_in (I_var <I>& val)
+	static void marshal_out (I_var <I>& src, PlatformMarshal_ptr marshaler, Interface*& dst)
 	{
-		Interface_ptr ip = g_local_marshal->unmarshal_interface (reinterpret_cast <void*&> (val), Bridge <I>::interface_id_);
-		val = I_var <I> (static_cast <I*> (&ip));
+		if (marshaler->context () == PlatformMarshalContext::OTHER_PROTECTION_DOMAIN) {
+			reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_object (src);
+			src._retn ();
+		} else
+			dst = &src._retn ();
 	}
 
-	static void local_unmarshal_inout (I_var <I>& val)
+	static void unmarshal (Interface* src, PlatformUnmarshal_ptr unmarshaler, I_var <I>& dst)
 	{
-		local_unmarshal_in (val);
+		if (unmarshaler->context () == PlatformMarshalContext::OTHER_PROTECTION_DOMAIN)
+			dst = unmarshaler->unmarshal_type_code (src);
+		else
+			dst = I_ret <I> (src);
+	}
+
+	static bool has_unmarshal (PlatformMarshalContext mctx)
+	{
+		return mctx == PlatformMarshalContext::OTHER_PROTECTION_DOMAIN;
 	}
 };
 

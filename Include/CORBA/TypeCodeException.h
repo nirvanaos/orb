@@ -20,27 +20,24 @@ public:
 		TypeCodeBase::set_Bounds (_env);
 		return nullptr;
 	}
-
-	static void __local_marshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
-	{
-		set_BAD_TYPECODE (_env);
-	}
-
-	static void __local_unmarshal_in (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
-	{
-		set_BAD_TYPECODE (_env);
-	}
-
-	static void __local_unmarshal_inout (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
-	{
-		set_BAD_TYPECODE (_env);
-	}
 };
+
+template <class S, class Ex>
+class TypeCodeExceptionVoid :
+	public TypeCodeOpsEmpty <TypeCodeWithId <S, tk_except, Ex::repository_id_> >
+{};
+
+template <class S, class Ex>
+class TypeCodeExceptionData :
+	public TypeCodeWithId <S, tk_except, Ex::repository_id_>,
+	public TypeCodeOps <typename Ex::Data>
+{};
 
 template <class Ex>
 class TypeCodeException :
-	public TypeCodeWithId <TypeCodeException <Ex>, tk_except, Ex::repository_id_>,
-	public TypeCodeOps <Ex>,
+	public std::conditional <std::is_void <typename Ex::Data>::value,
+		TypeCodeExceptionVoid <TypeCodeException <Ex>, Ex>,
+		TypeCodeExceptionData <TypeCodeException <Ex>, Ex> >::type,
 	public TypeCodeExceptionBase
 {
 public:
@@ -56,21 +53,6 @@ public:
 
 	using TypeCodeExceptionBase::_member_name;
 	using TypeCodeExceptionBase::_member_type;
-
-	static void _copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src)
-	{
-		// For exceptions, src is pointer to Data, not the exception itself.
-		new (dst) Ex (reinterpret_cast <const typename Ex::Data*> (src));
-	}
-
-	static void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src)
-	{
-		_copy (dst, src);
-	}
-
-	using TypeCodeExceptionBase::__local_marshal;
-	using TypeCodeExceptionBase::__local_unmarshal_in;
-	using TypeCodeExceptionBase::__local_unmarshal_inout;
 };
 
 }

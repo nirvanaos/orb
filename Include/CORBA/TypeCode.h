@@ -57,6 +57,7 @@ public:
 	TypeCode_var concrete_base_type (); // raises (BadKind);
 
 	// Nirvana extensions
+	// NOTE: For exceptions, all methods below are related to the exception data, not the exception itself.
 
 	// Size of object.
 	ULong _size ();
@@ -67,7 +68,7 @@ public:
 	// Destroy object.
 	void _destruct (::Nirvana::Pointer p);
 
-	// Call copy constructor. NOTE: For exceptions, src is pointer to Data, not the exception itself.
+	// Call copy constructor.
 	void _copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src);
 
 	// Call move constructor. Fallbacks to copy constructor if no move constructor exists.

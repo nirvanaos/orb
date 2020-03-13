@@ -4,7 +4,7 @@
 #include "CORBA.h"
 #include "DynamicServant.h"
 #include "PlatformObjRef.h"
-#include "PlatformCall.h"
+#include "PlatformRequest.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -24,8 +24,12 @@ struct CountedArray
 class ServerRequest;
 class RemoteRequest;
 
-typedef PlatformMarshal_var (*PlatformRequestProc) (Interface*, PlatformCall_ptr call, ::Nirvana::Pointer* in_params,
-	PlatformUnmarshal_ptr unmarshaler, ::Nirvana::Pointer* out_params);
+typedef PlatformMarshal_var (*PlatformRequestProc) (Interface*, 
+	PlatformRequest_ptr call,
+	::Nirvana::Pointer* in_params, 
+	PlatformUnmarshal_var unmarshaler, // Unmarshaler should be released after the unmarshal completion.
+	::Nirvana::Pointer* out_params);
+
 typedef void (*ServerRequestProc) (Interface*, ServerRequest*, EnvironmentBridge*);
 typedef void (*RemoteRequestProc) (Interface*, RemoteRequest*, EnvironmentBridge*);
 
@@ -43,8 +47,8 @@ pseudo interface ProxyFactory {
 	//! Returns ids of all interfaces.
 	const CountedArray <const char*>& interfaces ();
 	const CountedArray <const Operation>& operations ();
-	Interface create_platform_proxy (Object proxy_manager, in PlatformObjRef target, short interface_idx, out DynamicServant deleter);
-	Interface create_remote_proxy (Object proxy_manager, out DynamicServant deleter);
+	Interface create_platform_proxy (PlatformObjRef target, short interface_idx, AbstractBase bases, out DynamicServant deleter);
+	Interface create_remote_proxy (RemoteObjRef target, AbstractBase bases, out DynamicServant deleter);
 };
 ~~~
 */
@@ -52,12 +56,12 @@ pseudo interface ProxyFactory {
 BRIDGE_BEGIN (ProxyFactory, CORBA_NIRVANA_REPOSITORY_ID ("ProxyFactory"))
 const CountedArray <const char*> interfaces;
 const CountedArray <const Operation> operations;
-Interface* (*create_platform_proxy) (Bridge <ProxyFactory>*, Interface*,
+Interface* (*create_platform_proxy) (Bridge <ProxyFactory>*, 
+	Interface*, UShort interface_idx,
+	Interface*, Interface**, EnvironmentBridge*);
+Interface* (*create_remote_proxy) (Bridge <ProxyFactory>*,
 	Interface*,
-	UShort interface_idx,
-	Interface**, EnvironmentBridge*);
-Interface* (*create_remote_proxy) (Bridge <ProxyFactory>*, Interface*,
-	Interface**, EnvironmentBridge*);
+	Interface*, Interface**, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <class T>
@@ -77,36 +81,37 @@ public:
 		return T::_get_bridge (_env).operations;
 	}
 
-	Interface_ptr create_platform_proxy (I_in <Object> proxy_manager,
+	Interface_ptr create_platform_proxy (
 		I_in <PlatformObjRef> target, UShort interface_idx, 
-		I_out <DynamicServant> deleter);
-
-	Interface_ptr create_remote_proxy (I_in <Object> proxy_manager,
-		I_out <DynamicServant> deleter);
+		I_in <AbstractBase> bases, I_out <DynamicServant> deleter);
+/*
+	Interface_ptr create_remote_proxy (I_in <RemoteObjRef> target,
+		I_in <AbstractBase> bases, I_out <DynamicServant> deleter);
+*/
 };
 
 template <class T>
-Interface_ptr Client <T, ProxyFactory>::create_platform_proxy (I_in <Object> obj,
+Interface_ptr Client <T, ProxyFactory>::create_platform_proxy (
 	I_in <PlatformObjRef> target, UShort interface_idx,
-	I_out <DynamicServant> deleter)
+	I_in <AbstractBase> bases, I_out <DynamicServant> deleter)
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	I_VT_ret <Interface> _ret = (_b._epv ().epv.create_platform_proxy) (&_b, &obj, &target, interface_idx, &deleter, &_env);
+	I_VT_ret <Interface> _ret = (_b._epv ().epv.create_platform_proxy) (&_b, &target, interface_idx, bases, &deleter, &_env);
 	_env.check ();
 	return _ret;
 }
-
+/*
 template <class T>
-Interface_ptr Client <T, ProxyFactory>::create_remote_proxy (I_in <Object> obj, I_out <DynamicServant> deleter)
+Interface_ptr Client <T, ProxyFactory>::create_remote_proxy (I_in <RemoteObjRef> target, I_in <AbstractBase> bases, I_out <DynamicServant> deleter)
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	I_VT_ret <Interface> _ret = (_b._epv ().epv.create_remote_proxy) (&_b, &obj, &deleter, &_env);
+	I_VT_ret <Interface> _ret = (_b._epv ().epv.create_remote_proxy) (&_b, &target, &deleter, &_env);
 	_env.check ();
 	return _ret;
 }
-
+*/
 class ProxyFactory : public ClientInterface <ProxyFactory>
 {};
 

@@ -3,7 +3,8 @@
 
 #include "MarshalTraits_forward.h"
 #include "sequence.h"
-#include <Nirvana/core_objects.h>
+#include "PlatformMarshal.h"
+#include "PlatformUnmarshal.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -11,106 +12,92 @@ namespace Nirvana {
 template <typename T>
 struct MarshalTraits <Sequence <T> >
 {
-	static const bool has_move_out = true;
-	static const bool has_unmarshal_in = MarshalTraits <T>::has_unmarshal_in;
-	static const bool has_unmarshal_inout = true;
+	typedef Sequence <T> Seq;
+	typedef ABI <Sequence <T> > SeqABI;
 
-	typedef ABI <Sequence <T> > ABI;
+	static void marshal_in (const Seq& src, PlatformMarshal_ptr marshaler, SeqABI& dst);
+	static void marshal_out (Seq& src, PlatformMarshal_ptr marshaler, SeqABI& dst);
+	static void unmarshal (SeqABI& src, PlatformUnmarshal_ptr unmarshaler, Seq& dst);
 
-	static void move_out (Sequence <T>& src, ::Nirvana::SynchronizationContext_ptr sc, Sequence <T>& dst);
-
-	static void local_marshal (const Sequence <T>& src, Sequence <T>& dst);
-	static void local_unmarshal_in (Sequence <T>& val);
-	static void local_unmarshal_inout (Sequence <T>& val);
+	static bool has_unmarshal (PlatformMarshalContext mctx)
+	{
+		return true;
+	}
 };
 
 template <typename T>
-void MarshalTraits <Sequence <T> >::move_out (Sequence <T>& src, ::Nirvana::SynchronizationContext_ptr sc, Sequence <T>& dst)
+void MarshalTraits <Sequence <T> >::marshal_in (const Seq& src, PlatformMarshal_ptr marshaler, SeqABI& dst)
 {
-	assert (dst.empty ());
-	if (!src.empty ()) {
-		if (::Nirvana::g_current->synchronization_context ()->shared_memory (sc))
-			src.swap (dst);
-		else {
-			ABI& asrc = static_cast <ABI&> (src);
-			ABI& adst = static_cast <ABI&> (dst);
-			if (!MarshalTraits <T>::has_move_out) {
-				size_t size = asrc.size;
-				size_t cb = asrc.allocated;
-				adst.ptr = (T*)sc->adopt_output (src.ptr, size * sizeof (T), cb);
-				adst.allocated = cb;
-				adst.size = size;
-				asrc.reset ();
-			} else {
-				size_t size = asrc.size;
-				size_t cb = size * sizeof (T);
-				adst.ptr = (T*)sc->allocate (cb);
-				adst.allocated = cb;
-				T* tsrc = asrc.ptr;
-				T* tdst = adst.ptr;
-				while (adst.size < size) {
-					MarshalTraits <T>::move_out (*tsrc, sc, *tdst);
-					++adst.size;
-				}
-				asrc.size = 0;
-				src.shrink_to_fit (); // Release memory
-			}
-		}
-	}
-}
-
-template <typename T>
-void MarshalTraits <Sequence <T> >::local_marshal (const Sequence <T>& src, Sequence <T>& dst)
-{
+	assert (&src != &dst);
 	if (src.empty ())
 		dst.reset ();
 	else {
-		ABI& asrc = static_cast <ABI&> (src);
-		ABI& adst = static_cast <ABI&> (dst);
+		SeqABI& asrc = static_cast <SeqABI&> (src);
 		if (std::is_trivially_copyable <T> ()) {
 			size_t cb = asrc.size * sizeof (T);
-			adst.ptr = (T*)g_local_marshal->marshal_memory (asrc.ptr, cb);
-			adst.allocated = cb;
-			adst.size = asrc.size;
+			dst.ptr = (ABI <T>*)marshaler->marshal_memory (asrc.ptr, cb, 0);
+			dst.allocated = cb;
+			dst.size = asrc.size;
 		} else {
 			size_t cb = asrc.size * sizeof (T);
 			void* buf;
-			adst.ptr = (T*)g_local_marshal->get_buffer (cb, buf);
-			T* dp = (T*)buf;
-			const T* sp = asrc.ptr, * end = sp + asrc.size;
+			dst.ptr = (ABI <T>*)marshaler->get_buffer (cb, buf);
+			ABI <T>* dp = (ABI <T>*)buf;
+			const T* sp = src.data (), * end = sp + src.size ();
 			do {
-				MarshalTraits <T>::local_marshal (*(sp++), *(dp++));
+				MarshalTraits <T>::marshal_in (*(sp++), marshaler, *(dp++));
 			} while (sp != end);
 		}
 	}
 }
 
 template <typename T>
-void MarshalTraits <Sequence <T> >::local_unmarshal_in (Sequence <T>& val)
+void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, PlatformMarshal_ptr marshaler, SeqABI& dst)
 {
-	if (MarshalTraits <T>::has_unmarshal_in)
-		for (T* p = val.data (), *end = p + val.size (); p != end; ++p)
-			MarshalTraits <T>::local_unmarshal_in (*p);
+	assert (&src != &dst);
+	if (src.empty ())
+		dst.reset ();
+	else {
+		SeqABI& asrc = static_cast <SeqABI&> (src);
+		if (std::is_trivially_copyable <T> ()) {
+			size_t cb = asrc.size * sizeof (T);
+			dst.ptr = (ABI <T>*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated ());
+			dst.allocated = cb;
+			dst.size = asrc.size;
+			asrc.reset ();
+		} else {
+			size_t cb = asrc.size * sizeof (T);
+			void* buf;
+			adst.ptr = (ABI <T>*)marshaler->get_buffer (cb, buf);
+			ABI <T>* dp = (ABI <T>*)buf;
+			const T* sp = src.data (), *end = sp + src.size ();
+			do {
+				MarshalTraits <T>::marshal_out (*(sp++), marshaler, *(dp++));
+			} while (sp != end);
+		}
+	}
 }
 
 template <typename T>
-void MarshalTraits <Sequence <T> >::local_unmarshal_inout (Sequence <T>& val)
+void MarshalTraits <Sequence <T> >::unmarshal (SeqABI& src, PlatformUnmarshal_ptr unmarshaler, Seq& dst)
 {
-	if (!val.empty ()) {
-		ABI& aval = static_cast <ABI&> (val);
-		if (aval.allocated)
-			g_local_marshal->adopt_memory (aval.ptr, aval.allocated);
+	if (src.empty ())
+		dst.reset ();
+	else {
+		SeqABI& adst = static_cast <SeqABI&> (dst);
+		if (src.allocated)
+			unmarshaler->adopt_memory (adst.ptr = src.ptr, src.allocated);
 		else
-			aval.ptr = (T*)val.memory ()->copy (nullptr, aval.ptr, aval.allocated, 0);
-		if (MarshalTraits <T>::has_unmarshal_inout) {
-			T* p = aval.ptr, * end = p + aval.size;
+			adst.ptr = (ABI <T>*)dst.memory ()->copy (nullptr, src.ptr, src.size * sizeof (T), 0);
+		if (MarshalTraits <T>::has_unmarshal (unmarshaler->context())) {
+			ABI <T>* sp = src.ptr, *end = sp + src.size;
+			T* dp = dst.data ();
 			try {
 				do {
-					MarshalTraits <T>::local_unmarshal_inout (*p);
-				} while (end != ++p);
+					MarshalTraits <T>::unmarshal (*(sp++), unmarshaler, *(dp++));
+				} while (sp != end);
 			} catch (...) {
-				aval.size = p - aval.ptr;
-				val.~vector ();
+				adst.size = dp - adst.ptr;
 				throw;
 			}
 		}

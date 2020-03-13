@@ -299,10 +299,10 @@ protected:
 		}
 	}
 
-	static void __local_marshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
+	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* marshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{
 		try {
-			S::_implementation (_b)._local_marshal (src, dst);
+			S::_implementation (_b)._marshal_in (src, TypeI <PlatformMarshal>::in (marshaler), dst);
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -310,10 +310,10 @@ protected:
 		}
 	}
 
-	static void __local_unmarshal_in (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
+	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* marshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{
 		try {
-			S::_implementation (_b)._local_unmarshal_in (val);
+			S::_implementation (_b)._marshal_in (src, TypeI <PlatformMarshal>::in (marshaler), dst);
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -321,10 +321,10 @@ protected:
 		}
 	}
 
-	static void __local_unmarshal_inout (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
+	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* unmarshaler, ::Nirvana::Pointer, EnvironmentBridge* _env)
 	{
 		try {
-			S::_implementation (_b)._local_unmarshal_inout (val);
+			S::_implementation (_b)._unmarshal (src, TypeI <PlatformUnmarshal>::in (unmarshaler), dst);
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -360,14 +360,15 @@ const Bridge <TypeCode>::EPV Skeleton <S, TypeCode>::epv_ = {
 		S::_member_visibility,
 		S::_type_modifier,
 		S::_concrete_base_type,
+
 		S::__size,
 		S::__construct,
 		S::__destruct,
 		S::__copy,
 		S::__move,
-		S::__local_marshal,
-		S::__local_unmarshal_in,
-		S::__local_unmarshal_inout
+		S::__marshal_in,
+		S::__marshal_out,
+		S::__unmarshal
 	}
 };
 

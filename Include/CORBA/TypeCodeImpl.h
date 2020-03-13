@@ -113,37 +113,54 @@ public:
 
 	static void _construct (::Nirvana::Pointer p)
 	{
+		check_pointer (p);
 		new (p) Valtype ();
 	}
 
 	static void _destruct (::Nirvana::Pointer p)
 	{
-		reinterpret_cast <Valtype*> (p)->~Valtype ();
+		if (p)
+			reinterpret_cast <Valtype*> (p)->~Valtype ();
 	}
 
 	static void _copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src)
 	{
+		check_pointer (dst);
+		check_pointer (src);
+		Type <Valtype>::check (*reinterpret_cast <const ABI <Valtype>*> (src));
 		new (dst) Valtype (*reinterpret_cast <const Valtype*> (src));
 	}
 
 	static void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src)
 	{
+		check_pointer (dst);
+		check_pointer (src);
+		Type <Valtype>::check (*reinterpret_cast <const ABI <Valtype>*> (src));
 		new (dst) Valtype (std::move (*reinterpret_cast <Valtype*> (src)));
 	}
 
-	static void _local_marshal (::Nirvana::ConstPointer src, ::Nirvana::Pointer dst)
+	static void _marshal_in (::Nirvana::ConstPointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst)
 	{
-		MarshalTraits <Valtype>::local_marshal (*reinterpret_cast <const Valtype*> (src), *reinterpret_cast <Valtype*> (dst));
+		check_pointer (dst);
+		check_pointer (src);
+		Type <Valtype>::check (*reinterpret_cast <const ABI <Valtype>*> (src));
+		MarshalTraits <Valtype>::marshal_in (*reinterpret_cast <const Valtype*> (src), marshaler, *reinterpret_cast <ABI <Valtype>*> (dst));
 	}
 
-	static void _local_unmarshal_in (::Nirvana::Pointer val)
+	static void _marshal_out (::Nirvana::Pointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst)
 	{
-		MarshalTraits <Valtype>::local_unmarshal_in (*reinterpret_cast <Valtype*> (val));
+		check_pointer (dst);
+		check_pointer (src);
+		Type <Valtype>::check (*reinterpret_cast <const ABI <Valtype>*> (src));
+		MarshalTraits <Valtype>::marshal_out (*reinterpret_cast <Valtype*> (src), marshaler, *reinterpret_cast <ABI <Valtype>*> (dst));
 	}
 
-	static void _local_unmarshal_inout (::Nirvana::Pointer val)
+	static void _unmarshal (::Nirvana::Pointer src, PlatformUnmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
 	{
-		MarshalTraits <Valtype>::local_unmarshal_inout (*reinterpret_cast <Valtype*> (val));
+		check_pointer (dst);
+		check_pointer (src);
+		Type <Valtype>::check (*reinterpret_cast <const ABI <Valtype>*> (src));
+		MarshalTraits <Valtype>::unmarshal (*reinterpret_cast <ABI <Valtype>*> (src), unmarshaler, *reinterpret_cast <Valtype*> (dst));
 	}
 };
 
@@ -167,13 +184,13 @@ public:
 	static void __move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::Pointer src, EnvironmentBridge* _env)
 	{}
 
-	static void __local_marshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
+	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* marshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{}
 
-	static void __local_unmarshal_in (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
+	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* marshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{}
 
-	static void __local_unmarshal_inout (Bridge <TypeCode>* _b, ::Nirvana::Pointer val, EnvironmentBridge* _env)
+	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* unmarshaler, ::Nirvana::Pointer, EnvironmentBridge* _env)
 	{}
 };
 
@@ -188,9 +205,9 @@ public:
 	using TypeCodeOpsEmptyBase::__destruct;
 	using TypeCodeOpsEmptyBase::__copy;
 	using TypeCodeOpsEmptyBase::__move;
-	using TypeCodeOpsEmptyBase::__local_marshal;
-	using TypeCodeOpsEmptyBase::__local_unmarshal_in;
-	using TypeCodeOpsEmptyBase::__local_unmarshal_inout;
+	using TypeCodeOpsEmptyBase::__marshal_in;
+	using TypeCodeOpsEmptyBase::__marshal_out;
+	using TypeCodeOpsEmptyBase::__unmarshal;
 };
 
 }

@@ -3,6 +3,8 @@
 
 #include "MarshalTraits_forward.h"
 #include "String.h"
+#include "PlatformMarshal.h"
+#include "PlatformUnmarshal.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -10,70 +12,82 @@ namespace Nirvana {
 template <typename C>
 struct MarshalTraits <StringT <C> >
 {
-  static const bool has_move_out = true;
-  static const bool has_unmarshal_in = false;
-  static const bool has_unmarshal_inout = true;
- 
-  typedef ABI <StringT <C> > ABI;
+	typedef StringT <C> Var;
+	typedef ABI <Var> ABI;
 
-  static bool _small_copy (const StringT <C>& src, StringT <C>& dst);
- 
-  static void move_out (StringT <C>& src, ::Nirvana::SynchronizationContext_ptr sc, StringT <C>& dst)
-  {
-    assert (dst.empty ());
-    if (!_small_copy (src, dst)) {
-      size_t size = src.size ();
-      size_t cb = src.allocated ();
-      dst.large_pointer ((C*)sc->adopt_output (src.large_pointer (), size * sizeof (C), cb));
-      dst.allocated (cb);
-      dst.large_size (size);
-      src.reset ();
-    }
-  }
+	static bool _small_copy (const ABI& src, ABI& dst);
 
-  static void local_marshal (const StringT <C>& src, StringT <C>& dst)
-  {
-    if (!_small_copy (src, dst)) {
-      size_t size = src.large_size ();
-      size_t cb = StringT <C>::byte_size (size);
-      dst.large_pointer ((C*)CORBA::Nirvana::g_local_marshal->marshal_memory (src.large_pointer (), cb));
-      dst.large_size (size);
-      dst.allocated (cb);
-    }
-  }
+	static void marshal_in (const Var& src, PlatformMarshal_ptr marshaler, ABI& dst);
 
-  static void local_unmarshal_in (StringT <C>& val) NIRVANA_NOEXCEPT
-  {}
+	static bool has_marshal_out (PlatformMarshalContext mctx)
+	{
+		return mctx != PlatformMarshalContext::SHARED_MEMORY;
+	}
 
-  static void local_unmarshal_inout (StringT <C>& val) NIRVANA_NOEXCEPT
-  {
-    if (val.is_large ()) {
-      size_t cb = val.allocated ();
-      if (cb)
-        CORBA::Nirvana::g_local_marshal->adopt_memory (val.large_pointer (), cb);
-      else
-        val.assign_internal (val.large_size (), val.large_pointer ());
-    }
-  }
+	static void marshal_out (Var& src, PlatformMarshal_ptr marshaler, ABI& dst);
+
+	static bool has_unmarshal (PlatformMarshalContext mctx)
+	{
+		return true;
+	}
+
+	static void unmarshal (ABI& src, PlatformUnmarshal_ptr unmarshaler, Var& dst)
+	{
+		if (src.is_large ()) {
+			size_t cb = src.allocated ();
+			if (cb)
+				unmarshaler->adopt_memory (src.large_pointer (), cb);
+			else
+				dst.assign_internal (src.large_size (), src.large_pointer ());
+		} else
+			static_cast <ABI&> (dst) = src;
+	}
 };
 
 template <typename C>
-bool MarshalTraits <StringT <C> >::_small_copy (const StringT <C>& src, StringT <C>& dst)
+void MarshalTraits <StringT <C> >::marshal_in (const Var& src, PlatformMarshal_ptr marshaler, ABI& dst)
 {
-  const C* p;
-  size_t len;
-  if (src.is_large ()) {
-    len = src.large_size ();
-    if (len > ABI::SMALL_CAPACITY)
-      return false;
-    p = src.large_pointer ();
-  } else {
-    p = src.small_pointer ();
-    len = src.small_size ();
-  }
-  ::Nirvana::real_copy (p, p + len + 1, dst.small_pointer ());
-  dst.small_size (len);
-  return true;
+	assert (&src != &dst);
+	if (!_small_copy (src, dst)) {
+		size_t size = src.large_size ();
+		size_t cb = StringT <C>::byte_size (size);
+		dst.large_pointer ((C*)marshaler->marshal_memory (src.large_pointer (), cb, 0));
+		dst.large_size (size);
+		dst.allocated (cb);
+	}
+}
+
+template <typename C>
+void MarshalTraits <StringT <C> >::marshal_out (Var& src, PlatformMarshal_ptr marshaler, ABI& dst)
+{
+	assert (&src != &dst);
+	if (!_small_copy (src, dst)) {
+		size_t size = src.large_size ();
+		size_t cb = StringT <C>::byte_size (size);
+		dst.large_pointer ((C*)marshaler->marshal_memory (src.large_pointer (), cb, src.allocated ()));
+		dst.large_size (size);
+		dst.allocated (cb);
+		src.reset ();
+	}
+}
+
+template <typename C>
+bool MarshalTraits <StringT <C> >::_small_copy (const ABI& src, ABI& dst)
+{
+	const C* p;
+	size_t len;
+	if (src.is_large ()) {
+		len = src.large_size ();
+		if (len > ABI::SMALL_CAPACITY)
+			return false;
+		p = src.large_pointer ();
+	} else {
+		p = src.small_pointer ();
+		len = src.small_size ();
+	}
+	::Nirvana::real_copy (p, p + len + 1, dst.small_pointer ());
+	dst.small_size (len);
+	return true;
 }
 
 }

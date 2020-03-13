@@ -45,18 +45,19 @@ class Client <T, PlatformUnmarshal> :
 public:
   PlatformMarshalContext context ();
 
-  void adopt_memory (void* p, size_t size);
-  Interface_var unmarshal_interface (const void* marshal_data, const Char* interface_id);
-  TypeCode_var unmarshal_type_code (const void* marshal_data);
+  void adopt_memory (::Nirvana::Pointer p, ::Nirvana::Size size);
+  Interface_var unmarshal_interface (::Nirvana::ConstPointer marshal_data, String_in iid);
+  TypeCode_var unmarshal_type_code (::Nirvana::ConstPointer marshal_data);
 };
 
 BRIDGE_BEGIN (PlatformUnmarshal, CORBA_NIRVANA_REPOSITORY_ID ("PlatformUnmarshal"))
-void (*adopt_memory) (Bridge <PlatformUnmarshal>*, void* p, size_t size, EnvironmentBridge*);
-Interface* (*unmarshal_interface) (Bridge <PlatformUnmarshal>*, const void*, const Char*, EnvironmentBridge*);
+void (*adopt_memory) (Bridge <PlatformUnmarshal>*, ::Nirvana::Pointer, ::Nirvana::Size, EnvironmentBridge*);
+Interface* (*unmarshal_interface) (Bridge <PlatformUnmarshal>*, ::Nirvana::ConstPointer, Type <String>::ABI_in, EnvironmentBridge*);
+Interface* (*unmarshal_type_code) (Bridge <PlatformUnmarshal>*, ::Nirvana::ConstPointer, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <class T>
-void Client <T, PlatformUnmarshal>::adopt_memory (void* p, size_t size)
+void Client <T, PlatformUnmarshal>::adopt_memory (::Nirvana::Pointer p, ::Nirvana::Size size)
 {
   Environment _env;
   Bridge <PlatformUnmarshal>& _b (T::_get_bridge (_env));
@@ -65,17 +66,17 @@ void Client <T, PlatformUnmarshal>::adopt_memory (void* p, size_t size)
 }
 
 template <class T>
-Interface_var Client <T, PlatformUnmarshal>::unmarshal_interface (const void* marshal_data, const Char* interface_id)
+Interface_var Client <T, PlatformUnmarshal>::unmarshal_interface (::Nirvana::ConstPointer marshal_data, String_in iid)
 {
   Environment _env;
   Bridge <PlatformUnmarshal>& _b (T::_get_bridge (_env));
-  I_ret <Interface> _ret = (_b._epv ().epv.unmarshal_interface) (&_b, marshal_data, interface_id, &_env);
+  I_ret <Interface> _ret = (_b._epv ().epv.unmarshal_interface) (&_b, marshal_data, &iid, &_env);
   _env.check ();
   return _ret;
 }
 
 template <class T>
-TypeCode_var Client <T, PlatformUnmarshal>::unmarshal_type_code (const void* marshal_data)
+TypeCode_var Client <T, PlatformUnmarshal>::unmarshal_type_code (::Nirvana::ConstPointer marshal_data)
 {
   Environment _env;
   Bridge <PlatformUnmarshal>& _b (T::_get_bridge (_env));

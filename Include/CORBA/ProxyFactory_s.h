@@ -28,12 +28,12 @@ protected:
 		return nullptr;
 	}
 
-	static Interface* _create_platform_proxy (Bridge <ProxyFactory>* obj, Interface* proxy, 
+	static Interface* _create_platform_proxy (Bridge <ProxyFactory>* obj,
 		Interface* target, UShort interface_idx,
 		Interface** deleter, EnvironmentBridge* env)
 	{
 		try {
-			return TypeI <Interface>::VT_ret (S::_implementation (obj).create_platform_proxy (TypeI <Object>::in (proxy), 
+			return TypeI <Interface>::VT_ret (S::_implementation (obj).create_platform_proxy (
 				TypeI <PlatformObjRef>::in (target), interface_idx,
 				TypeI <DynamicServant>::out (deleter)));
 		} catch (const Exception& e) {
@@ -54,7 +54,7 @@ const Bridge <ProxyFactory>::EPV Skeleton <S, ProxyFactory>::epv_ = {
 	},
 	{ // epv
 		S::_interfaces,
-		S::_create_local_proxy
+		S::_create_platform_proxy
 	}
 };
 

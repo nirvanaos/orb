@@ -12,6 +12,10 @@ struct OperationIndex
 /// Keeps reference to an object in the same platform domain.
 pseudo interface PlatformObjRef
 {
+  /// Returns Object proxy.
+  /// \param iid Repository id of the Object interface.
+  Object get_object (RepositoryId iid);
+
   /// Creates PlatformMarshal object.
   PlatformMarshal create_marshaler ();
 

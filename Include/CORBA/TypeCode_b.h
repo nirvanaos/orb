@@ -77,9 +77,9 @@ void (*_construct) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
 void (*_destruct) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
 void (*_copy) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::ConstPointer, EnvironmentBridge*);
 void (*_move) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::Pointer, EnvironmentBridge*);
-void (*_local_marshal) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, ::Nirvana::Pointer, EnvironmentBridge*);
-void (*_local_unmarshal_in) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
-void (*_local_unmarshal_inout) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
+void (*_marshal_in) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, Interface*, ::Nirvana::Pointer, EnvironmentBridge*);
+void (*_marshal_out) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*, ::Nirvana::Pointer, EnvironmentBridge*);
+void (*_unmarshal) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*, ::Nirvana::Pointer, EnvironmentBridge*);
 BRIDGE_END ()
 
 }
