@@ -21,7 +21,7 @@ class ClientBridge :
 	public Bridge <I>
 {
 protected:
-	Bridge <I>& _get_bridge (EnvironmentBase& env)
+	Bridge <I>& _get_bridge (EnvironmentBase& env) NIRVANA_NOEXCEPT
 	{
 		return *this;
 	}
