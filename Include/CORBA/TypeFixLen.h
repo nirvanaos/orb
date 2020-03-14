@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_TYPEFIXLEN_H_
 
 #include <Nirvana/NirvanaBase.h>
-#include "TypeByValue.h"
+#include "TypeByVal.h"
 #include "TypeByRef.h"
 #include <type_traits>
 
@@ -11,8 +11,20 @@ namespace Nirvana {
 
 /// Fixed-length data types.
 /// Passed by value if sizeof (T) <= sizeof (Nirvana::Word).
-template <class T>
-using TypeFixLen = typename std::conditional <sizeof (T) <= 2 * sizeof (::Nirvana::Word), TypeByValue <T>, TypeByRef <T> >::type;
+template <class T
+#ifdef NIRVANA_C11
+	, typename Enable = void
+#endif
+>
+using TypeFixLen = typename std::conditional <sizeof (T) <= 2 * sizeof (::Nirvana::Word), TypeByVal <T>, TypeByRef <T, T> >::type;
+
+template <class T> struct Type :
+	TypeFixLen <T
+#ifdef NIRVANA_C11
+	, typename std::enable_if <std::is_trivially_copyable <T>::value>::type
+#endif
+	>
+{};
 
 }
 }

@@ -31,7 +31,6 @@ typedef TypeCodeBasic <Boolean, tk_boolean> TC_boolean;
 typedef TypeCodeBasic <Char, tk_char> TC_char;
 typedef TypeCodeBasic <Octet, tk_octet> TC_octet;
 typedef TypeCodeBasic <Any, tk_any> TC_any;
-typedef TypeCodeBasic <TypeCode_var, tk_TypeCode> TC_TypeCode;
 typedef TypeCodeBasic <LongLong, tk_longlong> TC_longlong;
 typedef TypeCodeBasic <ULongLong, tk_ulonglong> TC_ulonglong;
 typedef TypeCodeBasic <LongDouble, tk_longdouble> TC_longdouble;

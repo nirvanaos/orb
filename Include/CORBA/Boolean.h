@@ -24,7 +24,7 @@ struct Type <bool>
 	typedef ABI_boolean ABI_type;
 
 	static const bool has_check = false;
-	void check (ABI_type&) {}
+	static void check (const ABI_type&) {}
 
 	typedef ABI_type ABI_in;
 	typedef ABI_type* ABI_out;

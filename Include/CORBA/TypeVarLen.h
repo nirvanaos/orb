@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_TYPEVARLEN_H_
 #define NIRVANA_ORB_TYPEVARLEN_H_
 
-#include "TypeFixLen.h"
+#include "TypeByRef.h"
 #include <utility>
 #include <new>
 
@@ -9,9 +9,9 @@ namespace CORBA {
 namespace Nirvana {
 
 template <class T>
-struct TypeVarLenBase : TypeFixLen <T>
+struct TypeVarLenBase : TypeByRef <T, ABI <T> >
 {
-	typedef TypeFixLen <T> Base;
+	typedef TypeByRef <T, ABI <T> > Base;
 	typedef typename Base::C_in C_in;
 	typedef typename Base::C_inout C_inout;
 	typedef typename Base::ABI_ret ABI_ret;
@@ -125,8 +125,6 @@ struct TypeVarLen <T, true> : TypeVarLenBase <T>
 	typedef TypeVarLenBase <T> Base;
 
 	static const bool has_check = true;
-
-	typedef ABI <T> ABI_type;
 
 	static void check_or_clear (T& v);
 

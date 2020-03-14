@@ -23,6 +23,9 @@ struct MarshalTraits <StringT <C> >
 
 	static void unmarshal (ABI& src, PlatformUnmarshal_ptr unmarshaler, Var& dst)
 	{
+		if (Type <Var>::has_check)
+			Type <Var>::check (src);
+
 		if (src.is_large ()) {
 			size_t cb = src.allocated ();
 			if (cb)
@@ -41,7 +44,7 @@ void MarshalTraits <StringT <C> >::marshal_in (const Var& src, PlatformMarshal_p
 	if (!_small_copy (src, dst)) {
 		size_t size = src.large_size ();
 		size_t cb = StringT <C>::byte_size (size);
-		dst.large_pointer ((C*)marshaler->marshal_memory (src.large_pointer (), cb, 0));
+		dst.large_pointer ((C*)marshaler->marshal_memory (const_cast <C*> (src.large_pointer ()), cb, 0));
 		dst.large_size (size);
 		dst.allocated (cb);
 	}

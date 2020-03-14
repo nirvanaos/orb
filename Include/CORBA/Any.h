@@ -3,7 +3,7 @@
 
 #include "TypeVarLen.h"
 #include "ABI_Any.h"
-#include "TypeCode.h"
+#include "TypeCode_forward.h"
 #include <Nirvana/basic_string.h>
 
 //#include "Fixed.h"

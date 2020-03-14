@@ -1,5 +1,5 @@
-#ifndef NIRVANA_ORB_TYPECODEOBJECT_H_
-#define NIRVANA_ORB_TYPECODEOBJECT_H_
+#ifndef NIRVANA_ORB_TC_OBJECT_H_
+#define NIRVANA_ORB_TC_OBJECT_H_
 
 #include "TypeCodeImpl.h"
 #include "../Object.h"

@@ -1,5 +1,5 @@
-#ifndef NIRVANA_ORB_TYPEBYVALUE_H_
-#define NIRVANA_ORB_TYPEBYVALUE_H_
+#ifndef NIRVANA_ORB_TYPEBYVAL_H_
+#define NIRVANA_ORB_TYPEBYVAL_H_
 
 #include "Type_forward.h"
 
@@ -8,7 +8,7 @@ namespace Nirvana {
 
 /// Data type, passed by value.
 template <class T>
-struct TypeByValue
+struct TypeByVal
 {
 	typedef T ABI_type;
 
@@ -16,12 +16,12 @@ struct TypeByValue
 	static void check (const ABI_type&)
 	{}
 
-	// ABI types
-	typedef T ABI_in;
-	typedef T* ABI_out;
-	typedef T* ABI_inout;
-	typedef T ABI_ret;
-	typedef T ABI_VT_ret;
+	// ABI data types
+	typedef ABI_type ABI_in;
+	typedef ABI_type* ABI_out;
+	typedef ABI_type* ABI_inout;
+	typedef ABI_type ABI_ret;
+	typedef ABI_type ABI_VT_ret;
 
 	// Client-side types
 

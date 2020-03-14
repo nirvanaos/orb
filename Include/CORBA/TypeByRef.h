@@ -7,13 +7,13 @@ namespace CORBA {
 namespace Nirvana {
 
 /// Data type, passed by reference.
-template <class T>
+template <class T, class ABI>
 struct TypeByRef
 {
-	typedef ABI <T> ABI_type;
+	typedef ABI ABI_type;
 
 	static const bool has_check = false;
-	static void check (ABI_type&)
+	static void check (const ABI_type&)
 	{}
 
 	// ABI data types
@@ -21,7 +21,7 @@ struct TypeByRef
 	typedef ABI_type* ABI_out;
 	typedef ABI_type* ABI_inout;
 	typedef ABI_type ABI_ret;
-	typedef const ABI_type* ABI_VT_ret;
+	typedef ABI_type ABI_VT_ret;
 
 	// Client-side types
 
@@ -48,7 +48,7 @@ struct TypeByRef
 			ref_ (v)
 		{}
 
-		ABI_type* operator & () const
+		ABI_inout operator & () const
 		{
 			return &reinterpret_cast <ABI_type&> (ref_);
 		}

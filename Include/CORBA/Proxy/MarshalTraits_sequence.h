@@ -89,6 +89,9 @@ void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, PlatformMarshal_ptr m
 template <typename T>
 void MarshalTraits <Sequence <T> >::unmarshal (SeqABI& src, PlatformUnmarshal_ptr unmarshaler, Seq& dst)
 {
+	if (Type <Seq>::has_check)
+		Type <Seq>::check (src);
+
 	if (src.empty ())
 		dst.reset ();
 	else {

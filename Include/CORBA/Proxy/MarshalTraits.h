@@ -18,19 +18,19 @@ template <class T
 >
 struct MarshalTraitsTrivial
 {
-	static void marshal_in (const T& src, PlatformMarshal_ptr marshaler, T& dst) NIRVANA_NOEXCEPT
+	static void marshal_in (const T& src, PlatformMarshal_ptr marshaler, typename Type <T>::ABI_type& dst) NIRVANA_NOEXCEPT
 	{
-		dst = src;
+		dst = (typename Type <T>::ABI_type&)src;
 	}
 
-	static void marshal_out (T& src, PlatformMarshal_ptr marshaler, T& dst) NIRVANA_NOEXCEPT
+	static void marshal_out (T& src, PlatformMarshal_ptr marshaler, typename Type <T>::ABI_type& dst) NIRVANA_NOEXCEPT
 	{
-		dst = src;
+		dst = (typename Type <T>::ABI_type&)src;
 	}
 
-	static void unmarshal (T& src, PlatformUnmarshal_ptr unmarshaler, T& dst) NIRVANA_NOEXCEPT
+	static void unmarshal (typename Type <T>::ABI_type& src, PlatformUnmarshal_ptr unmarshaler, T& dst) NIRVANA_NOEXCEPT
 	{
-		dst = src;
+		dst = Type <T>::in (src);
 	}
 };
 
@@ -76,7 +76,7 @@ struct MarshalTraits <I_var <I> >
 
 	static void unmarshal (Interface* src, PlatformUnmarshal_ptr unmarshaler, I_var <I>& dst)
 	{
-		dst = unmarshaler->unmarshal_type_code (src);
+		dst = static_cast <I*> (static_cast <Bridge <I>*> (unmarshaler->unmarshal_interface (src, Bridge <I>::interface_id_)));
 	}
 };
 
