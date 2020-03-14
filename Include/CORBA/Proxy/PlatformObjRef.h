@@ -61,6 +61,14 @@ pseudo interface PlatformObjRef
 namespace CORBA {
 namespace Nirvana {
 
+struct OperationIndex
+{
+  UShort interface_idx;
+  UShort operation_idx;
+};
+
+template <> struct Type <OperationIndex> : TypeFixLen <OperationIndex> {};
+
 class PlatformObjRef;
 typedef I_ptr <PlatformObjRef> PlatformObjRef_ptr;
 typedef I_var <PlatformObjRef> PlatformObjRef_var;

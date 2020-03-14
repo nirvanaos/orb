@@ -1,14 +1,14 @@
-#ifndef NIRVANA_ORB_TYPESCALAR_H_
-#define NIRVANA_ORB_TYPESCALAR_H_
+#ifndef NIRVANA_ORB_TYPEBYVALUE_H_
+#define NIRVANA_ORB_TYPEBYVALUE_H_
 
 #include "Type_forward.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-/// Scalar data type. Passes in parameter by value.
+/// Data type, passed by value.
 template <class T>
-struct TypeScalar
+struct TypeByValue
 {
 	typedef T ABI_type;
 

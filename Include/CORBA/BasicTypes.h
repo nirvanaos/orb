@@ -6,10 +6,10 @@
 
 #include <stdint.h>
 #include "Boolean.h"
-#include "TypeScalar.h"
+#include "TypeFixLen.h"
 
-#define DECLARE_BASIC_TYPE(t) namespace Nirvana { template <> struct Nirvana::Type <t> : Nirvana::TypeScalar <t> {}; }\
-typedef Nirvana::Type <t>::C_out t##_out; typedef Nirvana::Type <t>::C_inout t##_inout;
+#define DECLARE_BASIC_TYPE(T) namespace Nirvana { template <> struct Nirvana::Type <T> : Nirvana::TypeFixLen <T> {}; }\
+typedef Nirvana::Type <T>::C_out T##_out; typedef Nirvana::Type <T>::C_inout T##_inout;
 
 namespace CORBA {
 
