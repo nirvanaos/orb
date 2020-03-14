@@ -4,7 +4,7 @@
 #include "TypeCode.h"
 #include "ImplementationPseudoStatic.h"
 #include "Type_interface.h"
-#include "PlatformMarshal.h"
+#include "Proxy/PlatformMarshal.h"
 
 namespace CORBA {
 namespace Nirvana {

@@ -1,9 +1,8 @@
 #ifndef NIRVANA_ORB_TYPECODE_H_
 #define NIRVANA_ORB_TYPECODE_H_
 
-#include "TypeCode_b.h"
 #include "Client.h"
-#include "Type_interface.h"
+#include "TypeEnum.h"
 #include "UserException.h"
 #include "EnvironmentEx.h"
 #include <Nirvana/ImportInterface.h>
