@@ -11,8 +11,8 @@ namespace Nirvana {
 void EnvironmentBase::exception_free ()
 {
 	if (data_.is_small) {
-		TypeCode_ptr tc = ((const Exception*)(data_.small))->__type_code ();
-		tc->_destruct (data_.small);
+		// Call virtual destructor
+		((Exception*)(data_.small))->~Exception ();
 	} else
 		delete data_.ptr;
 	data_.is_small = 0;
@@ -50,50 +50,66 @@ void EnvironmentBase::exception (Exception* ex)
 	data_.ptr = ex;
 }
 
-void EnvironmentBase::exception_set (Long code, const char* rep_id, const void* param, 
+void EnvironmentBase::exception_set (Long code, String_in rep_id, const void* param, 
 	const ExceptionEntry* user_exceptions)
 {
 	exception_free ();
-	if (code > Exception::EC_NO_EXCEPTION && rep_id) {
-		try {
-			TypeCode_ptr etc;
-			if (code >= Exception::EC_SYSTEM_EXCEPTION) {
-				etc = SystemException::_get_type_code (rep_id, code);
-				assert (etc->_size () <= sizeof (data_.small));
-			} else {
-				etc = _tc_UNKNOWN;
-				if (user_exceptions) {
-					for (const ExceptionEntry* p = user_exceptions; p->itf; ++p) {
-						TypeCode_ptr tc = *p;
-						if (RepositoryId::compatible (tc->id (), rep_id)) {
-							etc = tc;
-							break;
-						}
-					}
+	if (code > Exception::EC_NO_EXCEPTION && !static_cast <const String&> (rep_id).empty ()) {
+		if (Exception::EC_USER_EXCEPTION == code && user_exceptions) {
+			for (const ExceptionEntry* p = user_exceptions; p->rep_id; ++p) {
+				if (RepositoryId::compatible (p->rep_id, rep_id)) {
+					set_user (*p, param);
+					return;
 				}
 			}
-			set (etc, param);
-		} catch (...) {
 		}
+		const ExceptionEntry* ee = SystemException::_get_exception_entry (rep_id, code);
+		assert (ee && ee->size <= sizeof (data_.small));
+		set_system (*ee, param);
 	}
 }
 
-void EnvironmentBase::set (TypeCode_ptr tc, const void* data)
+bool EnvironmentBase::set (const ExceptionEntry& ee)
 {
-	ULong size = tc->_size ();
-	void* p;
+	size_t size = ee.size;
+	Exception* p;
 	if (size <= sizeof (data_.small))
-		p = data_.small;
-	else
-		p = ::Nirvana::g_memory->allocate (nullptr, size, 0);
-	tc->_copy (p, data);
+		p = (Exception*)data_.small;
+	else {
+		try {
+			p = (Exception*)::Nirvana::g_memory->allocate (nullptr, size, 0);
+		} catch (...) {
+			new (data_.small) NO_MEMORY ();
+			return false;
+		}
+	}
+	ee.construct (p);
+	return true;
 }
 
-void EnvironmentBase::set (const Exception* ex)
+void EnvironmentBase::set_user (const ExceptionEntry& ee, const void* data)
+{
+	if (set (ee) && data && ee.size > sizeof (UserException)) {
+		Exception& e = *exception ();
+		TypeCode_ptr tc = e.__type_code ();
+		tc->_copy (e.__data (), data);
+	}
+}
+
+void EnvironmentBase::set_system (const ExceptionEntry& ee, const void* data)
+{
+	if (set (ee) && data) {
+		SystemException& e = static_cast <SystemException&> (*exception ());
+		e.minor (((SystemException::Data*)data)->minor);
+		e.completed (((SystemException::Data*)data)->completed);
+	}
+}
+
+void EnvironmentBase::move_from (EnvironmentBase& src) NIRVANA_NOEXCEPT
 {
 	exception_free ();
-	if (ex)
-		set (ex->__type_code (), ex->__data ());
+	data_ = src.data_;
+	src.data_.reset ();
 }
 
 }

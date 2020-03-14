@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_MARSHALTRAITS_STRING_H_
 
 #include "MarshalTraits_forward.h"
-#include "String.h"
+#include "../String.h"
 #include "PlatformMarshal.h"
 #include "PlatformUnmarshal.h"
 
@@ -19,17 +19,7 @@ struct MarshalTraits <StringT <C> >
 
 	static void marshal_in (const Var& src, PlatformMarshal_ptr marshaler, ABI& dst);
 
-	static bool has_marshal_out (PlatformMarshalContext mctx)
-	{
-		return mctx != PlatformMarshalContext::SHARED_MEMORY;
-	}
-
 	static void marshal_out (Var& src, PlatformMarshal_ptr marshaler, ABI& dst);
-
-	static bool has_unmarshal (PlatformMarshalContext mctx)
-	{
-		return true;
-	}
 
 	static void unmarshal (ABI& src, PlatformUnmarshal_ptr unmarshaler, Var& dst)
 	{

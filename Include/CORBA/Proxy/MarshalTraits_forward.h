@@ -18,9 +18,6 @@ template <> struct MarshalTraits <T>
   static void marshal_out (T& src, PlatformMarshal_ptr marshaler, Type <T>::ABI_type <T>& dst);
 
   static void unmarshal (Type <T>::ABI_type <T>& src, PlatformUnmarshal_ptr unmarshaler, T& dst);
-
-  /// 'true` if `unmarshal_in()` is not simple copy in the specified context.
-  static bool has_unmarshal (PlatformMarshalContext mctx);
 };
 ~~~
 */

@@ -1,8 +1,8 @@
 #ifndef NIRVANA_ORB_PROXYFACTORY_H_
 #define NIRVANA_ORB_PROXYFACTORY_H_
 
-#include "CORBA.h"
-#include "DynamicServant.h"
+#include "../CORBA.h"
+#include "../DynamicServant.h"
 #include "PlatformObjRef.h"
 #include "PlatformRequest.h"
 
@@ -35,7 +35,7 @@ typedef void (*RemoteRequestProc) (Interface*, RemoteRequest*, EnvironmentBridge
 
 struct Operation
 {
-	const char* operation;
+	const char* name;
 	PlatformRequestProc invoke_platform;
 	ServerRequestProc invoke_dii;
 	RemoteRequestProc invoke_remote;

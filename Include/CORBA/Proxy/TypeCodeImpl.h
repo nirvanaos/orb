@@ -1,14 +1,13 @@
 #ifndef NIRVANA_ORB_TYPECODEIMPL_H_
 #define NIRVANA_ORB_TYPECODEIMPL_H_
 
-#include "TypeCode_s.h"
-#include "Exception.h"
+#include "../TypeCode_s.h"
+#include "../Exception.h"
+#include "MarshalTraits.h"
 #include <new>
 
 namespace CORBA {
 namespace Nirvana {
-
-template <class T> struct MarshalTraits;
 
 class TypeCodeBase
 {
@@ -113,7 +112,7 @@ public:
 
 	static void _construct (::Nirvana::Pointer p)
 	{
-		check_pointer (p);
+		_check_pointer (p);
 		new (p) Valtype ();
 	}
 
@@ -125,40 +124,40 @@ public:
 
 	static void _copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src)
 	{
-		check_pointer (dst);
-		check_pointer (src);
+		_check_pointer (dst);
+		_check_pointer (src);
 		Type <Valtype>::check (*reinterpret_cast <const ABI <Valtype>*> (src));
 		new (dst) Valtype (*reinterpret_cast <const Valtype*> (src));
 	}
 
 	static void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src)
 	{
-		check_pointer (dst);
-		check_pointer (src);
+		_check_pointer (dst);
+		_check_pointer (src);
 		Type <Valtype>::check (*reinterpret_cast <const ABI <Valtype>*> (src));
 		new (dst) Valtype (std::move (*reinterpret_cast <Valtype*> (src)));
 	}
 
 	static void _marshal_in (::Nirvana::ConstPointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst)
 	{
-		check_pointer (dst);
-		check_pointer (src);
+		_check_pointer (dst);
+		_check_pointer (src);
 		Type <Valtype>::check (*reinterpret_cast <const ABI <Valtype>*> (src));
 		MarshalTraits <Valtype>::marshal_in (*reinterpret_cast <const Valtype*> (src), marshaler, *reinterpret_cast <ABI <Valtype>*> (dst));
 	}
 
 	static void _marshal_out (::Nirvana::Pointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst)
 	{
-		check_pointer (dst);
-		check_pointer (src);
+		_check_pointer (dst);
+		_check_pointer (src);
 		Type <Valtype>::check (*reinterpret_cast <const ABI <Valtype>*> (src));
 		MarshalTraits <Valtype>::marshal_out (*reinterpret_cast <Valtype*> (src), marshaler, *reinterpret_cast <ABI <Valtype>*> (dst));
 	}
 
 	static void _unmarshal (::Nirvana::Pointer src, PlatformUnmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
 	{
-		check_pointer (dst);
-		check_pointer (src);
+		_check_pointer (dst);
+		_check_pointer (src);
 		Type <Valtype>::check (*reinterpret_cast <const ABI <Valtype>*> (src));
 		MarshalTraits <Valtype>::unmarshal (*reinterpret_cast <ABI <Valtype>*> (src), unmarshaler, *reinterpret_cast <Valtype*> (dst));
 	}

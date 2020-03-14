@@ -12,9 +12,28 @@ class Environment :
 	public Nirvana::LocalImpl <Environment>
 {
 public:
-	void clear ()
+	Environment () {}
+
+	Environment (Environment&& src) NIRVANA_NOEXCEPT
 	{
-		exception_free ();
+		move_from (src);
+	}
+
+	Environment (Nirvana::EnvironmentBase&& src) NIRVANA_NOEXCEPT
+	{
+		move_from (src);
+	}
+
+	Environment& operator = (Environment&& src) NIRVANA_NOEXCEPT
+	{
+		move_from (src);
+		return *this;
+	}
+
+	Environment& operator = (Nirvana::EnvironmentBase&& src) NIRVANA_NOEXCEPT
+	{
+		move_from (src);
+		return *this;
 	}
 };
 

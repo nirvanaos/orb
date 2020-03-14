@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_MARSHALTRAITS_SEQUENCE_H_
 
 #include "MarshalTraits_forward.h"
-#include "sequence.h"
+#include "../sequence.h"
 #include "PlatformMarshal.h"
 #include "PlatformUnmarshal.h"
 
@@ -18,11 +18,6 @@ struct MarshalTraits <Sequence <T> >
 	static void marshal_in (const Seq& src, PlatformMarshal_ptr marshaler, SeqABI& dst);
 	static void marshal_out (Seq& src, PlatformMarshal_ptr marshaler, SeqABI& dst);
 	static void unmarshal (SeqABI& src, PlatformUnmarshal_ptr unmarshaler, Seq& dst);
-
-	static bool has_unmarshal (PlatformMarshalContext mctx)
-	{
-		return true;
-	}
 };
 
 template <typename T>
@@ -59,21 +54,34 @@ void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, PlatformMarshal_ptr m
 		dst.reset ();
 	else {
 		SeqABI& asrc = static_cast <SeqABI&> (src);
+		dst.size = asrc.size;
 		if (std::is_trivially_copyable <T> ()) {
 			size_t cb = asrc.size * sizeof (T);
 			dst.ptr = (ABI <T>*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated ());
 			dst.allocated = cb;
-			dst.size = asrc.size;
 			asrc.reset ();
 		} else {
-			size_t cb = asrc.size * sizeof (T);
-			void* buf;
-			adst.ptr = (ABI <T>*)marshaler->get_buffer (cb, buf);
-			ABI <T>* dp = (ABI <T>*)buf;
-			const T* sp = src.data (), *end = sp + src.size ();
+			const T* sp = src.data (), * end = sp + src.size ();
+			ABI <T>* dp;
+			size_t cb;
+			PlatformMarshalContext mctx = marshaler->context ();
+			if (PlatformMarshalContext::SHARED_MEMORY == mctx)
+				dp = (ABI <T>*)sp;
+			else {
+				cb = asrc.size * sizeof (T);
+				void* buf;
+				dst.ptr = (ABI <T>*)marshaler->get_buffer (cb, buf);
+				dp = (ABI <T>*)buf;
+			}
+
 			do {
 				MarshalTraits <T>::marshal_out (*(sp++), marshaler, *(dp++));
 			} while (sp != end);
+
+			if (PlatformMarshalContext::SHARED_MEMORY == mctx)
+				dst.ptr = (ABI <T>*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated ());
+
+			dst.allocated = cb;
 		}
 	}
 }
@@ -89,7 +97,7 @@ void MarshalTraits <Sequence <T> >::unmarshal (SeqABI& src, PlatformUnmarshal_pt
 			unmarshaler->adopt_memory (adst.ptr = src.ptr, src.allocated);
 		else
 			adst.ptr = (ABI <T>*)dst.memory ()->copy (nullptr, src.ptr, src.size * sizeof (T), 0);
-		if (MarshalTraits <T>::has_unmarshal (unmarshaler->context())) {
+		if (!std::is_trivially_copyable <T> ()) {
 			ABI <T>* sp = src.ptr, *end = sp + src.size;
 			T* dp = dst.data ();
 			try {

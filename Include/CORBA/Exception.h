@@ -5,6 +5,7 @@
 #define NIRVANA_ORB_EXCEPTION_H_
 
 #include "I_var.h"
+#include <new>
 
 namespace CORBA {
 
@@ -20,14 +21,19 @@ public:
 	virtual ~Exception ()
 	{}
 	virtual void _raise () const = 0;
-	virtual const char* _name () const = 0;
-	virtual const char* _rep_id () const = 0;
+	virtual const char* _name () const NIRVANA_NOEXCEPT = 0;
+	virtual const char* _rep_id () const NIRVANA_NOEXCEPT = 0;
 
 	// Nirvana specific
-	virtual Long __code () const = 0;
-	virtual TypeCode_ptr __type_code () const = 0;
+	virtual Long __code () const NIRVANA_NOEXCEPT = 0;
+	virtual TypeCode_ptr __type_code () const NIRVANA_NOEXCEPT = 0;
 
-	const void* __data () const
+	const void* __data () const NIRVANA_NOEXCEPT
+	{
+		return this + 1;
+	}
+
+	void* __data () NIRVANA_NOEXCEPT
 	{
 		return this + 1;
 	}
@@ -37,27 +43,22 @@ public:
 		EC_USER_EXCEPTION = -2,
 		EC_SYSTEM_EXCEPTION = -1
 	};
-
-	/// Create dynamically allocated copy of the exception object.
-	/// Then it must be deleted by operator `delete`.
-	Exception* __clone () const;
-
-protected:
-	Exception ()
-	{}
-
-	Exception (const Exception&)
-	{}
-
-	Exception& operator = (const Exception&)
-	{
-		return *this;
-	}
 };
 
 namespace Nirvana {
 
-typedef const StaticI_ptr <TypeCode> ExceptionEntry;
+struct ExceptionEntry
+{
+	const Char* rep_id;
+	size_t size;
+	void (*construct) (void*);
+};
+
+template <class E>
+void construct (void* p)
+{
+	new (p) E ();
+}
 
 extern void set_exception (EnvironmentBridge* environment, Long code, const char* rep_id, const void* param) NIRVANA_NOEXCEPT;
 extern void set_exception (EnvironmentBridge* environment, const Exception& e) NIRVANA_NOEXCEPT;
@@ -67,28 +68,32 @@ extern void set_unknown_exception (EnvironmentBridge* environment) NIRVANA_NOEXC
 } // namespace CORBA
 
 #ifdef NIRVANA_C11
-#define NIRVANA_DEFAULT_CONSTRUCTORS(t) t (const t&) = default; t (t&&) = default;
+#define NIRVANA_DEFAULT_CONSTRUCTORS(T) T (const T&) = default; T (T&&) = default;
 #else
-#define NIRVANA_DEFAULT_CONSTRUCTORS(t)
+#define NIRVANA_DEFAULT_CONSTRUCTORS(T)
 #endif
 
-#define DECLARE_EXCEPTION(e) \
-NIRVANA_DEFAULT_CONSTRUCTORS(e)\
-virtual void _raise () const;\
-virtual const char* _rep_id () const;\
+#define DECLARE_EXCEPTION(E) public: E () {}\
+NIRVANA_DEFAULT_CONSTRUCTORS (E)\
+virtual void _raise () const { throw *this; }\
+virtual const char* _rep_id () const NIRVANA_NOEXCEPT { return repository_id_; }\
 static const char repository_id_ [];\
-virtual const char* _name () const;\
-static constexpr const char* __name () { return #e; }\
-virtual ::CORBA::TypeCode_ptr __type_code () const;\
-static const e* _downcast (const ::CORBA::Exception* ep);\
-static e* _downcast (::CORBA::Exception* ep) { return const_cast <e*> (_downcast ((const ::CORBA::Exception*)ep)); }\
-static const e* _narrow (const ::CORBA::Exception* ep) { return _downcast (ep); }\
-static e* _narrow (::CORBA::Exception* ep) { return _downcast (ep); }
+virtual const char* _name () const NIRVANA_NOEXCEPT { return __name (); }\
+static constexpr const char* __name () NIRVANA_NOEXCEPT { return #E; }\
+virtual ::CORBA::TypeCode_ptr __type_code () const NIRVANA_NOEXCEPT;\
+static const E* _downcast (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT;\
+static E* _downcast (::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return const_cast <E*> (_downcast ((const ::CORBA::Exception*)ep)); }\
+static const E* _narrow (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return _downcast (ep); }\
+static E* _narrow (::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return _downcast (ep); }
 
-#define DEFINE_EXCEPTION(e, rep_id) \
-void e::_raise () const { throw *this; } \
-const char e::repository_id_ [] = rep_id; \
-const char* e::_rep_id () const { return repository_id_; } \
-const char* e::_name () const { return __name (); }
+#define DEFINE_EXCEPTION1(prefix, ns, E, major, minor)\
+extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_##E{ ::Nirvana::OLF_IMPORT_INTERFACE, #ns "/_tc_" #E, ::CORBA::TypeCode::interface_id_ };\
+::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }\
+const char E::repository_id_ [] = "IDL:" prefix #ns "/" #E ":" #major "." #minor;
+
+#define DEFINE_EXCEPTION2(prefix, ns1, ns2, E, major, minor)\
+extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_##E{ ::Nirvana::OLF_IMPORT_INTERFACE, #ns1 "/" #ns2 "/_tc_" #E, ::CORBA::TypeCode::interface_id_ };\
+::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }\
+const char repository_id_ [] = "IDL:" prefix #ns1 "/" #ns2 "/" #E ":" #major "." #minor;
 
 #endif

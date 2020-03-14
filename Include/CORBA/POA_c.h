@@ -54,29 +54,17 @@ public:
 	{
 	public:
 		DECLARE_EXCEPTION (ServantAlreadyActive);
-
-		ServantAlreadyActive ()
-		{}
-
-		ServantAlreadyActive (const Data*)
-		{}
 	};
 
-	static const CORBA::Nirvana::StaticI_ptr <CORBA::TypeCode> _tc_ServantAlreadyActive;
+	static const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_ServantAlreadyActive;
 
 	class ObjectNotActive : public ::CORBA::UserException
 	{
 	public:
 		DECLARE_EXCEPTION (ObjectNotActive);
-
-		ObjectNotActive ()
-		{}
-
-		ObjectNotActive (const Data*)
-		{}
 	};
 
-	static const CORBA::Nirvana::StaticI_ptr <CORBA::TypeCode> _tc_ObjectNotActive;
+	static const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_ObjectNotActive;
 
 };
 

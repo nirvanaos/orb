@@ -44,8 +44,8 @@ pseudo interface PlatformMarshal
 #ifndef NIRVANA_ORB_PLATFORMMARSHAL_H_
 #define NIRVANA_ORB_PLATFORMMARSHAL_H_
 
-#include "Object.h"
-#include "TypeCode_b.h"
+#include "../Object.h"
+#include "../TypeCode.h"
 #include "PlatformMarshalContext.h"
 
 namespace CORBA {

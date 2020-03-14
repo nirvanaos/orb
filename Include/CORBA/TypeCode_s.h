@@ -1,9 +1,10 @@
 #ifndef NIRVANA_ORB_TYPECODE_S_H_
 #define NIRVANA_ORB_TYPECODE_S_H_
 
-#include "TypeCode_b.h"
+#include "TypeCode.h"
 #include "ImplementationPseudoStatic.h"
 #include "Type_interface.h"
+#include "PlatformMarshal.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -321,7 +322,7 @@ protected:
 		}
 	}
 
-	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* unmarshaler, ::Nirvana::Pointer, EnvironmentBridge* _env)
+	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* unmarshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{
 		try {
 			S::_implementation (_b)._unmarshal (src, TypeI <PlatformUnmarshal>::in (unmarshaler), dst);

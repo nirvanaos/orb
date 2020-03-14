@@ -6,6 +6,7 @@
 #include "Type_interface.h"
 #include "UserException.h"
 #include "EnvironmentEx.h"
+#include <Nirvana/ImportInterface.h>
 
 namespace CORBA {
 
@@ -13,6 +14,12 @@ typedef Nirvana::I_out <TypeCode> TypeCode_out;
 typedef Nirvana::I_inout <TypeCode> TypeCode_inout;
 
 namespace Nirvana {
+
+class PlatformMarshal;
+typedef I_ptr <PlatformMarshal> PlatformMarshal_ptr;
+
+class PlatformUnmarshal;
+typedef I_ptr <PlatformUnmarshal> PlatformUnmarshal_ptr;
 
 template <class T>
 class Client <T, TypeCode> :
@@ -73,6 +80,10 @@ public:
 
 	// Call move constructor. Fallbacks to copy constructor if no move constructor exists.
 	void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src);
+
+	void _marshal_in (::Nirvana::ConstPointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst);
+	void _marshal_out (::Nirvana::Pointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst);
+	void _unmarshal (::Nirvana::Pointer src, PlatformUnmarshal_ptr marshaler, ::Nirvana::Pointer dst);
 };
 
 }
@@ -84,29 +95,17 @@ public:
 	{
 	public:
 		DECLARE_EXCEPTION (BadKind);
-
-		BadKind ()
-		{}
-
-		BadKind (const Data*)
-		{}
 	};
 
-	static const Nirvana::StaticI_ptr <TypeCode> _tc_BadKind;
+	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_BadKind;
 
 	class Bounds : public UserException
 	{
 	public:
 		DECLARE_EXCEPTION (Bounds);
-
-		Bounds ()
-		{}
-
-		Bounds (const Data*)
-		{}
 	};
 
-	static const Nirvana::StaticI_ptr <TypeCode> _tc_Bounds;
+	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Bounds;
 };
 
 namespace Nirvana {

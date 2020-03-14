@@ -1,23 +1,8 @@
-#include <CORBA/Exception.h>
-#include <CORBA/TypeCode.h>
-#include <CORBA/system_exceptions.h>
+#include <CORBA/SystemException.h>
+#include <CORBA/RepositoryId.h>
+#include <CORBA/Environment_c.h>
 
 namespace CORBA {
-
-Exception* Exception::__clone () const
-{
-	Octet* pex = nullptr;
-	try {
-		TypeCode_ptr tc = __type_code ();
-		size_t cb = tc->_size ();
-		pex = new Octet [cb];
-		tc->_copy (pex, __data ());
-		return (Exception*)pex;
-	} catch (...) {
-		delete [] pex;
-		throw;
-	}
-}
 
 namespace Nirvana {
 

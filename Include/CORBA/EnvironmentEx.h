@@ -2,7 +2,6 @@
 #define NIRVANA_ORB_ENVIRONMENTEX_H_
 
 #include "EnvironmentImpl.h"
-#include "TypeCodeException.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -25,7 +24,7 @@ private:
 
 template <class ... Exceptions>
 const ExceptionEntry EnvironmentEx <Exceptions...>::user_exceptions_[] = {
-	{ STATIC_BRIDGE (TypeCodeException <Exceptions>, TypeCode) }...,
+	{ Exceptions::repository_id_, sizeof (Exceptions), ::CORBA::Nirvana::construct <Exceptions> }...,
 	{0}
 };
 

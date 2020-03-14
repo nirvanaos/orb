@@ -2,7 +2,6 @@
 #define NIRVANA_ORB_TYPECODEBASIC_H_
 
 #include "TypeCodeImpl.h"
-#include "TypeCode.h"
 
 namespace CORBA {
 namespace Nirvana {

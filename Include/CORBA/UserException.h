@@ -7,27 +7,27 @@ namespace CORBA {
 
 class UserException : public Exception
 {
-	virtual Long __code () const
+	virtual Long __code () const NIRVANA_NOEXCEPT
 	{
 		return EC_USER_EXCEPTION;
 	}
 public:
-	static const UserException* _downcast (const Exception* ep)
+	static const UserException* _downcast (const Exception* ep) NIRVANA_NOEXCEPT
 	{
 		return (ep && (ep->__code () < 0)) ? static_cast <const UserException*> (ep) : 0;
 	}
 
-	static UserException* _downcast (Exception* ep)
+	static UserException* _downcast (Exception* ep) NIRVANA_NOEXCEPT
 	{
 		return const_cast <UserException*> (_downcast ((const Exception*)ep));
 	}
 
-	static const UserException* _narrow (const Exception* ep)
+	static const UserException* _narrow (const Exception* ep) NIRVANA_NOEXCEPT
 	{
 		return _downcast (ep);
 	}
 
-	static UserException* _narrow (Exception* ep)
+	static UserException* _narrow (Exception* ep) NIRVANA_NOEXCEPT
 	{
 		return _downcast (ep);
 	}
@@ -39,16 +39,16 @@ protected:
 
 }
 
-#define DEFINE_USER_EXCEPTION(e, rep_id) \
-::CORBA::Nirvana::ExceptionEntry _tc_##e { STATIC_BRIDGE (::CORBA::Nirvana::TypeCodeException <e>, ::CORBA::TypeCode) };\
-::CORBA::TypeCode_ptr e::__type_code () const { return _tc_##e; } \
-const e* e::_downcast (const ::CORBA::Exception* ep) { return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), rep_id)) ? static_cast <const e*> (ep) : nullptr; } \
-DEFINE_EXCEPTION(e, rep_id)
+#define DEFINE_USER_EXCEPTION(E)const E* E::_downcast (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT {\
+return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), repository_id_)) ? &static_cast <const E&> (*ep) : 0; }
 
-#define DEFINE_INTERFACE_EXCEPTION(I, e, rep_id) \
-::CORBA::Nirvana::ExceptionEntry I::_tc_##e { STATIC_BRIDGE (::CORBA::Nirvana::TypeCodeException <I::e>, ::CORBA::TypeCode) };\
-::CORBA::TypeCode_ptr I::e::__type_code () const { return _tc_##e; } \
-const I::e* I::e::_downcast (const ::CORBA::Exception* ep) { return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), rep_id)) ? static_cast <const I::e*> (ep) : nullptr; } \
-DEFINE_EXCEPTION(I::e, rep_id)
+#define DEFINE_USER_EXCEPTION1(prefix, ns, E, major, minor) DEFINE_EXCEPTION1 (prefix, ns, E, major, minor) DEFINE_USER_EXCEPTION (E)
+#define DEFINE_USER_EXCEPTION2(prefix, ns1, ns2, E, major, minor) DEFINE_EXCEPTION2 (prefix, ns1, ns2, E, major, minor) DEFINE_USER_EXCEPTION (E)
+
+#define DEFINE_CORBA_INTERFACE_EXCEPTION(ns, I, E)\
+const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> I::_tc_##E { ::Nirvana::OLF_IMPORT_INTERFACE, #ns "/" #I "/_tc_" #E, ::CORBA::TypeCode::interface_id_ };\
+::CORBA::TypeCode_ptr I::E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }\
+const char I::E::repository_id_ [] = "IDL:omg.org/" #ns "/" #E ":1.0";\
+DEFINE_USER_EXCEPTION(I::E)
 
 #endif

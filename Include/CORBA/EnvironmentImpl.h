@@ -12,7 +12,7 @@ class EnvironmentBase :
 	public Bridge < ::CORBA::Environment>
 {
 public:
-	void exception_set (Long code, const char* rep_id, const void* param,
+	void exception_set (Long code, String_in rep_id, const void* param,
 		const ExceptionEntry* user_exceptions = 0);
 
 	const Char* exception_id () const;
@@ -20,6 +20,11 @@ public:
 	const void* exception_value () const;
 
 	void exception_free ();
+
+	void clear ()
+	{
+		exception_free ();
+	}
 
 	Exception* exception () const
 	{
@@ -30,15 +35,8 @@ public:
 	}
 
 	void exception (Exception* ex);
-	void set (const Exception* ex);
 
 	void check () const;
-
-	EnvironmentBase& operator = (const EnvironmentBase& src)
-	{
-		set (src.exception ());
-		return *this;
-	}
 
 protected:
 	EnvironmentBase (const EPV& epv) :
@@ -53,15 +51,12 @@ protected:
 			exception_free ();
 	}
 
-	void move_from (EnvironmentBase& src) NIRVANA_NOEXCEPT
-	{
-		exception_free ();
-		data_ = src.data_;
-		src.data_.reset ();
-	}
+	void move_from (EnvironmentBase& src) NIRVANA_NOEXCEPT;
 
 private:
-	void set (TypeCode_ptr tc, const void* data);
+	bool set (const ExceptionEntry& ee);
+	void set_system (const ExceptionEntry& ee, const void* data);
+	void set_user (const ExceptionEntry& ee, const void* data);
 
 private:
 	union Data
@@ -69,6 +64,8 @@ private:
 		int small [(sizeof (SystemException) + sizeof (int) - 1) / sizeof (int)];
 		struct
 		{
+			// If small data contains Exception object, the first word of it
+			// contains pointer to the virtual table and can't be zero.
 			uintptr_t is_small;
 			Exception* ptr;
 		};

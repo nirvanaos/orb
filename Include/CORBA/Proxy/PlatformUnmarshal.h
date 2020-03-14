@@ -22,8 +22,8 @@ pseudo interface PlatformUnmarshal
 #ifndef NIRVANA_ORB_PLATFORMUNMARSHAL_H_
 #define NIRVANA_ORB_PLATFORMUNMARSHAL_H_
 
-#include "Object.h"
-#include "TypeCode_b.h"
+#include "../Object.h"
+#include "../TypeCode.h"
 #include "PlatformMarshalContext.h"
 
 namespace CORBA {

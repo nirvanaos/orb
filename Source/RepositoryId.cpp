@@ -11,13 +11,13 @@ using namespace std;
 
 RepositoryId::CheckResult RepositoryId::check (String_in current, String_in requested)
 {
-	const String& cur_s = Type <String>::in (&current);
+	const String& cur_s = static_cast <const String&> (current);
 	return check (cur_s.c_str (), cur_s.length (), requested);
 }
 
 RepositoryId::CheckResult RepositoryId::check (const Char* current, size_t current_len, String_in requested)
 {
-	const String& req_s = Type <String>::in (&requested);
+	const String& req_s = static_cast <const String&> (requested);
 	return check (current, current_len, req_s.c_str (), req_s.length ());
 }
 

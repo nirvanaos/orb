@@ -2,6 +2,9 @@
 #ifndef NIRVANA_ORB_PLATFORMMARSHALCONTEXT_H_
 #define NIRVANA_ORB_PLATFORMMARSHALCONTEXT_H_
 
+#include "../TypeEnum.h"
+#include <Nirvana/throw_exception.h>
+
 namespace CORBA {
 namespace Nirvana {
 

@@ -31,6 +31,8 @@ public:
 	static CheckResult check (const Char* current, size_t current_len, String_in requested);
 	static CheckResult check (const Char* current, size_t current_len, const Char* req_p, size_t req_l);
 
+	static int compare (const Char* current, size_t current_len, String_in requested);
+
 private:
 	static bool is_type (const Char* id, const Char* prefix, size_t cc);
 	static const Char* version (const Char* id, const Char* end);

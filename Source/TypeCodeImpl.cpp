@@ -1,4 +1,4 @@
-#include <CORBA/TypeCodeImpl.h>
+#include <CORBA/Proxy/TypeCodeImpl.h>
 #include <CORBA/TypeCode.h>
 #include <string.h>
 

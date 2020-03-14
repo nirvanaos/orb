@@ -66,7 +66,7 @@ public:
 		return _downcast (ep);
 	}
 
-	static TypeCode_ptr _get_type_code (const char* rep_id, int hint = EC_SYSTEM_EXCEPTION);
+	static const Nirvana::ExceptionEntry* _get_exception_entry (String_in rep_id, int hint = EC_SYSTEM_EXCEPTION);
 
 #define EXCEPTION_CODE(e) EC_##e,
 
@@ -97,16 +97,6 @@ protected:
 		data_.completed = status;
 	}
 
-	SystemException (const Data* data)
-	{
-		if (data)
-			data_ = *data;
-		else {
-			data_.minor = 0;
-			data_.completed = COMPLETED_NO;
-		}
-	}
-
 	SystemException& operator = (const SystemException& src)
 	{
 		data_ = src.data_;
@@ -116,7 +106,13 @@ protected:
 private:
 	Data data_;
 
-	static const Nirvana::ExceptionEntry type_codes_ [KNOWN_SYSTEM_EXCEPTIONS];
+	struct ExceptionEntry
+	{
+		Nirvana::ExceptionEntry ee;
+		size_t rep_id_len;
+	};
+
+	static const ExceptionEntry exception_entries_ [KNOWN_SYSTEM_EXCEPTIONS];
 };
 
 }

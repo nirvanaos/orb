@@ -1,9 +1,9 @@
 #include <CORBA/POA.h>
-#include <CORBA/TypeCodeException.h>
+#include <Nirvana/OLF.h>
 
 namespace PortableServer {
 
-DEFINE_INTERFACE_EXCEPTION (POA, ServantAlreadyActive, PORTABLESERVER_REPOSITORY_ID ("POA/ServantAlreadyActive"));
-DEFINE_INTERFACE_EXCEPTION (POA, ObjectNotActive, PORTABLESERVER_REPOSITORY_ID ("POA/ObjectNotActive"));
+DEFINE_CORBA_INTERFACE_EXCEPTION (PortableServer, POA, ServantAlreadyActive);
+DEFINE_CORBA_INTERFACE_EXCEPTION (PortableServer, POA, ObjectNotActive);
 
 }

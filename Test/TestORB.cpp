@@ -55,10 +55,6 @@ TEST_F (TestORB, UserException)
 {
 	TestException e;
 	EXPECT_THROW (e._raise (), TestException);
-
-	CORBA::Exception* copy = e.__clone ();
-	EXPECT_THROW (copy->_raise (), TestException);
-	delete copy;
 }
 
 TEST_F (TestORB, CORBA_Environment)
