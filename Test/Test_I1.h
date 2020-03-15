@@ -24,7 +24,7 @@ BRIDGE_BEGIN (::Test::I1, "IDL:Test/I1:1.0")
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV
 Long (*op1) (Bridge < ::Test::I1>*, Long p1, EnvironmentBridge*);
-void (*throw_NO_IMPLEMENT) (Bridge < ::Test::I1>*, EnvironmentBridge*);
+void (*throw_no_implement) (Bridge < ::Test::I1>*, EnvironmentBridge*);
 Interface* (*object_op) (Bridge < ::Test::I1>*, Interface* in_obj, Interface** out_obj, Interface** inout_obj, EnvironmentBridge*);
 ABI_ret <String> (*string_op) (Bridge < ::Test::I1>*, ABI_in <String> in_s, ABI_out <String> out_s, ABI_inout <String> inout_s, EnvironmentBridge*);
 ABI_ret < ::Test::SeqLong> (*seq_op) (Bridge < ::Test::I1>*, ABI_in < ::Test::SeqLong> in_s, ABI_out < ::Test::SeqLong> out_s, ABI_inout < ::Test::SeqLong> inout_s, EnvironmentBridge*);
@@ -37,7 +37,7 @@ class Client <T, ::Test::I1> :
 {
 public:
 	Long op1 (Long p1);
-	void throw_NO_IMPLEMENT ();
+	void throw_no_implement ();
 	::Test::I1_var object_op (I_in < ::Test::I1> in_obj, I_out < ::Test::I1> out_obj, I_inout < ::Test::I1> inout_obj);
 	String string_op (CORBA::String_in, CORBA::String_out, CORBA::String_inout);
 	::Test::SeqLong seq_op (Type <::Test::SeqLong>::C_in in_s, ::Test::SeqLong_out out_s, ::Test::SeqLong_inout inout_s);
@@ -55,11 +55,11 @@ Long Client <T, ::Test::I1>::op1 (Long p1)
 }
 
 template <class T>
-void Client <T, ::Test::I1>::throw_NO_IMPLEMENT ()
+void Client <T, ::Test::I1>::throw_no_implement ()
 {
 	Environment _env;
 	Bridge < ::Test::I1>& _b (T::_get_bridge (_env));
-	(_b._epv ().epv.throw_NO_IMPLEMENT) (&_b, &_env);
+	(_b._epv ().epv.throw_no_implement) (&_b, &_env);
 	_env.check ();
 }
 

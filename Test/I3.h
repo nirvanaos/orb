@@ -27,7 +27,7 @@ public:
 		return p1 + addendum_;
 	}
 
-	static void throw_NO_IMPLEMENT ()
+	static void throw_no_implement ()
 	{
 		throw NO_IMPLEMENT ();
 	}
@@ -70,7 +70,7 @@ public:
 		return p1 + addendum_;
 	}
 
-	virtual void throw_NO_IMPLEMENT ()
+	virtual void throw_no_implement ()
 	{
 		throw NO_IMPLEMENT ();
 	}
@@ -130,7 +130,7 @@ public:
 		return p1 + MAGIC_CONST;
 	}
 
-	static void throw_NO_IMPLEMENT ()
+	static void throw_no_implement ()
 	{
 		throw NO_IMPLEMENT ();
 	}
@@ -172,7 +172,7 @@ public:
 		return p1 + addendum_;
 	}
 
-	void throw_NO_IMPLEMENT ()
+	void throw_no_implement ()
 	{
 		throw NO_IMPLEMENT ();
 	}

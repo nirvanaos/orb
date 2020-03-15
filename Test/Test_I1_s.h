@@ -29,7 +29,7 @@ protected:
 	static void _throw_NO_IMPLEMENT (Bridge < ::Test::I1>* _b, EnvironmentBridge* _env)
 	{
 		try {
-			S::_implementation (_b).throw_NO_IMPLEMENT ();
+			S::_implementation (_b).throw_no_implement ();
 		} catch (const Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -127,7 +127,7 @@ class ServantPOA < ::Test::I1> :
 {
 public:
 	virtual Long op1 (Long p1) = 0;
-	virtual void throw_NO_IMPLEMENT () = 0;
+	virtual void throw_no_implement () = 0;
 	virtual ::Test::I1_ptr object_op (::Test::I1_ptr in_obj, ::Test::I1_var& out_obj, ::Test::I1_var& inout_obj) = 0;
 	virtual std::string string_op (const std::string&, std::string&, std::string&) = 0;
 	virtual std::vector <Long> seq_op (const std::vector <Long>& in_s, std::vector <Long>& out_s, std::vector <Long>& inout_s) = 0;

@@ -16,18 +16,6 @@ public:
 	static const typename Bridge <ProxyFactory>::EPV epv_;
 
 protected:
-	static const CountedArray <const Char*>* _interfaces (Bridge <ProxyFactory>* obj, EnvironmentBridge* env)
-	{
-		try {
-			return S::_implementation (obj).interfaces ();
-		} catch (const Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
-	}
-
 	static Interface* _create_platform_proxy (Bridge <ProxyFactory>* obj,
 		Interface* target, UShort interface_idx,
 		Interface** deleter, EnvironmentBridge* env)
@@ -53,7 +41,8 @@ const Bridge <ProxyFactory>::EPV Skeleton <S, ProxyFactory>::epv_ = {
 		S::template __release <ProxyFactory>
 	},
 	{ // epv
-		S::_interfaces,
+		&S::base_interfaces_,
+		&S::operations_,
 		S::_create_platform_proxy
 	}
 };

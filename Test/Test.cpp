@@ -130,7 +130,7 @@ TYPED_TEST (TestORB_I1, Performance)
 TYPED_TEST (TestORB_I1, Exception)
 {
 	I1_ptr p = TypeParam::incarnate ();
-	EXPECT_THROW (p->throw_NO_IMPLEMENT (), NO_IMPLEMENT);
+	EXPECT_THROW (p->throw_no_implement (), NO_IMPLEMENT);
 	release (p);
 }
 
