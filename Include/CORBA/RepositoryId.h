@@ -38,6 +38,9 @@ private:
 	static const Char* version (const Char* id, const Char* end);
 	static const Char* minor_version (const Char* ver, const Char* end);
 	static ULong minor_number (const Char* minor_version);
+
+private:
+	static const Char IDL_ [];
 };
 
 }
