@@ -13,20 +13,20 @@ class EnvironmentBase :
 {
 public:
 	void exception_set (Long code, String_in rep_id, const void* param,
-		const ExceptionEntry* user_exceptions = 0);
+		const ExceptionEntry* user_exceptions = 0) NIRVANA_NOEXCEPT;
 
-	const Char* exception_id () const;
+	const Char* exception_id () const NIRVANA_NOEXCEPT;
 
-	const void* exception_value () const;
+	const void* exception_value () const NIRVANA_NOEXCEPT;
 
-	void exception_free ();
+	void exception_free () NIRVANA_NOEXCEPT;
 
-	void clear ()
+	void clear () NIRVANA_NOEXCEPT
 	{
 		exception_free ();
 	}
 
-	Exception* exception () const
+	Exception* exception () const NIRVANA_NOEXCEPT
 	{
 		if (data_.is_small)
 			return (Exception*)(data_.small);
@@ -34,18 +34,18 @@ public:
 			return data_.ptr;
 	}
 
-	void exception (Exception* ex);
+	void exception (Exception* ex) NIRVANA_NOEXCEPT;
 
 	void check () const;
 
 protected:
-	EnvironmentBase (const EPV& epv) :
+	EnvironmentBase (const EPV& epv) NIRVANA_NOEXCEPT :
 		Bridge < ::CORBA::Environment> (epv)
 	{
 		data_.reset ();
 	}
 
-	~EnvironmentBase ()
+	~EnvironmentBase () NIRVANA_NOEXCEPT
 	{
 		if (data_.is_small || data_.ptr)
 			exception_free ();
@@ -54,10 +54,10 @@ protected:
 	void move_from (EnvironmentBase& src) NIRVANA_NOEXCEPT;
 
 private:
-	bool set (const ExceptionEntry& ee);
-	void set_system (const ExceptionEntry& ee, const void* data);
-	void set_user (const ExceptionEntry& ee, const void* data);
-	bool set_user (String_in rep_id, const void* param, const ExceptionEntry* user_exceptions);
+	bool set (const ExceptionEntry& ee) NIRVANA_NOEXCEPT;
+	void set_system (const ExceptionEntry& ee, const void* data) NIRVANA_NOEXCEPT;
+	void set_user (const ExceptionEntry& ee, const void* data) NIRVANA_NOEXCEPT;
+	bool set_user (String_in rep_id, const void* param, const ExceptionEntry* user_exceptions) NIRVANA_NOEXCEPT;
 
 private:
 	union Data

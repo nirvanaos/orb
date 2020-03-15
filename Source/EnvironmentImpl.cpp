@@ -9,7 +9,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-void EnvironmentBase::exception_free ()
+void EnvironmentBase::exception_free () NIRVANA_NOEXCEPT
 {
 	if (data_.is_small) {
 		// Call virtual destructor
@@ -27,7 +27,7 @@ void EnvironmentBase::check () const
 		ex->_raise ();
 }
 
-const Char* EnvironmentBase::exception_id () const
+const Char* EnvironmentBase::exception_id () const NIRVANA_NOEXCEPT
 {
 	const Exception* ex = exception ();
 	if (ex)
@@ -36,7 +36,7 @@ const Char* EnvironmentBase::exception_id () const
 		return nullptr;
 }
 
-const void* EnvironmentBase::exception_value () const
+const void* EnvironmentBase::exception_value () const NIRVANA_NOEXCEPT
 {
 	const Exception* ex = exception ();
 	if (ex)
@@ -45,14 +45,14 @@ const void* EnvironmentBase::exception_value () const
 		return nullptr;
 }
 
-void EnvironmentBase::exception (Exception* ex)
+void EnvironmentBase::exception (Exception* ex) NIRVANA_NOEXCEPT
 {
 	exception_free ();
 	data_.ptr = ex;
 }
 
 void EnvironmentBase::exception_set (Long code, String_in rep_id, const void* param, 
-	const ExceptionEntry* user_exceptions)
+	const ExceptionEntry* user_exceptions) NIRVANA_NOEXCEPT
 {
 	exception_free ();
 	if (code > Exception::EC_NO_EXCEPTION && !static_cast <const String&> (rep_id).empty ()) {
@@ -60,9 +60,14 @@ void EnvironmentBase::exception_set (Long code, String_in rep_id, const void* pa
 			if (RepositoryId::compatible (UnknownUserException::repository_id_, rep_id) && param) {
 				const Any* pa = (const Any*)param;
 				TypeCode_ptr tc = pa->type ();
-				assert (tc->kind () == tk_except);
-				if (tc->kind () == tk_except && set_user (tc->id (), pa->data (), user_exceptions))
-					return;
+				if (tc) {
+					try {
+						assert (tc->kind () == tk_except);
+						if (tc->kind () == tk_except && set_user (tc->id (), pa->data (), user_exceptions))
+							return;
+					} catch (...) {
+					}
+				}
 			} else if (set_user (rep_id, param, user_exceptions))
 				return;
 		}
@@ -72,7 +77,8 @@ void EnvironmentBase::exception_set (Long code, String_in rep_id, const void* pa
 	}
 }
 
-bool EnvironmentBase::set_user (String_in rep_id, const void* param, const ExceptionEntry* user_exceptions)
+bool EnvironmentBase::set_user (String_in rep_id, const void* param,
+	const ExceptionEntry* user_exceptions) NIRVANA_NOEXCEPT
 {
 	for (const ExceptionEntry* p = user_exceptions; p->rep_id; ++p) {
 		if (RepositoryId::compatible (p->rep_id, rep_id)) {
@@ -83,34 +89,37 @@ bool EnvironmentBase::set_user (String_in rep_id, const void* param, const Excep
 	return false;
 }
 
-bool EnvironmentBase::set (const ExceptionEntry& ee)
+bool EnvironmentBase::set (const ExceptionEntry& ee) NIRVANA_NOEXCEPT
 {
 	size_t size = ee.size;
 	Exception* p;
-	if (size <= sizeof (data_.small))
-		p = (Exception*)data_.small;
-	else {
-		try {
+	try {
+		if (size <= sizeof (data_.small))
+			p = (Exception*)data_.small;
+		else
 			p = (Exception*)::Nirvana::g_memory->allocate (nullptr, size, 0);
-		} catch (...) {
-			new (data_.small) NO_MEMORY ();
-			return false;
-		}
+		ee.construct (p);
+		return true;
+	} catch (...) {
+		new (data_.small) NO_MEMORY ();
+		return false;
 	}
-	ee.construct (p);
-	return true;
 }
 
-void EnvironmentBase::set_user (const ExceptionEntry& ee, const void* data)
+void EnvironmentBase::set_user (const ExceptionEntry& ee, const void* data) NIRVANA_NOEXCEPT
 {
 	if (set (ee) && data && ee.size > sizeof (UserException)) {
-		Exception& e = *exception ();
-		TypeCode_ptr tc = e.__type_code ();
-		tc->_copy (e.__data (), data);
+		try {
+			Exception& e = *exception ();
+			TypeCode_ptr tc = e.__type_code ();
+			tc->_copy (e.__data (), data);
+		} catch (...) {
+			new (data_.small) NO_MEMORY ();
+		}
 	}
 }
 
-void EnvironmentBase::set_system (const ExceptionEntry& ee, const void* data)
+void EnvironmentBase::set_system (const ExceptionEntry& ee, const void* data) NIRVANA_NOEXCEPT
 {
 	if (set (ee) && data) {
 		SystemException& e = static_cast <SystemException&> (*exception ());
