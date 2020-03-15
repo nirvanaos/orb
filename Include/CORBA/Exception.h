@@ -39,7 +39,8 @@ public:
 	}
 
 	enum {
-		EC_NO_EXCEPTION = -3,
+		EC_NO_EXCEPTION = -4,
+		EC_UNKNOWN_USER_EXCEPTION = -3,
 		EC_USER_EXCEPTION = -2,
 		EC_SYSTEM_EXCEPTION = -1
 	};

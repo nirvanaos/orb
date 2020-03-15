@@ -1,229 +1,112 @@
-#include <CORBA/Server.h>
+#include <CORBA/Proxy/Proxy.h>
 #include "Test_I1_s.h"
-#include <CORBA/ProxyFactory_s.h>
-#include <CORBA/MarshalTraits.h>
-
-namespace CORBA {
-namespace Nirvana {
-
-class ProxyBase :
-	public Bridge <DynamicServant>
-{
-public:
-	Bridge <Object>* _get_object (String_in iid)
-	{
-		return static_cast <Bridge <Object>*> (AbstractBase_ptr (proxy_manager_)->_query_interface (iid));
-	}
-
-	void _add_ref ()
-	{
-		interface_duplicate (&proxy_manager_);
-	}
-
-	void _remove_ref ()
-	{
-		release (proxy_manager_);
-	}
-
-	DynamicServant_ptr _dynamic_servant ()
-	{
-		return &static_cast <DynamicServant&> (static_cast <Bridge <DynamicServant>&> (*this));
-	}
-
-protected:
-	ProxyBase (const Bridge <DynamicServant>::EPV& epv, Object_ptr proxy_manager) :
-		Bridge <DynamicServant> (epv),
-		proxy_manager_ (proxy_manager)
-	{}
-
-private:
-	Object_ptr proxy_manager_;
-};
-
-class ServantProxyBase :
-	public ProxyBase
-{
-protected:
-	ServantProxyBase (const Bridge <DynamicServant>::EPV& epv, Object_ptr proxy_manager, ::Nirvana::SynchronizationContext_ptr sync) :
-		ProxyBase (epv, proxy_manager),
-		sync_context_ (sync)
-	{}
-
-	::Nirvana::SynchronizationContext_ptr _sync_context () const
-	{
-		return sync_context_;
-	}
-
-private:
-	::Nirvana::SynchronizationContext_ptr sync_context_;
-};
-
-template <class S>
-class ProxyLifeCycle :
-	public ServantTraits <S>,
-	public LifeCycleRefCnt <S>,
-	public Skeleton <S, DynamicServant>
-{};
-
-template <class S, class I>
-class ServantProxyBaseT :
-	public ServantProxyBase,
-	public ProxyLifeCycle <S>,
-	public InterfaceImplBase <S, I>
-{
-public:
-	Interface* _proxy ()
-	{
-		return &static_cast <Bridge <I>&> (*this);
-	}
-
-protected:
-	ServantProxyBaseT (CORBA::Object_ptr proxy_manager, ::Nirvana::SynchronizationContext_ptr sync, Interface_ptr servant) :
-		ServantProxyBase (ProxyLifeCycle <S>::epv_, proxy_manager, sync),
-		servant_ (I::_check (&servant))
-	{}
-
-	I_ptr <I> _servant () const
-	{
-		return servant_;
-	}
-
-private:
-	I_ptr <I> servant_;
-};
-
-}
-}
 
 namespace Test {
 
-class I1_ServantProxy :
-	public CORBA::Nirvana::ServantProxyBaseT <I1_ServantProxy, I1>
+class _ProxyFactory_I1 :
+	public CORBA::Nirvana::ServantStatic <_ProxyFactory_I1, CORBA::Nirvana::ProxyFactory>
 {
-	typedef CORBA::Nirvana::ServantProxyBaseT <I1_ServantProxy, I1> Base;
 public:
-	I1_ServantProxy (CORBA::Object_ptr proxy_manager, ::Nirvana::SynchronizationContext_ptr sync,
-		CORBA::Nirvana::Interface_ptr servant) :
-		Base (proxy_manager, sync, servant)
+	inline CORBA::Nirvana::Interface_ptr create_platform_proxy (
+		CORBA::Nirvana::PlatformObjRef_ptr proxy_manager,
+		CORBA::UShort interface_idx, CORBA::AbstractBase_ptr bases,
+		CORBA::Nirvana::DynamicServant_ptr& deleter);
+
+	typedef CORBA::Long _op1_in;
+	typedef CORBA::Long _op1_out;
+
+	static CORBA::Nirvana::PlatformMarshal_var _op1_PlatformRequest (CORBA::Nirvana::Interface* target,
+		CORBA::Nirvana::PlatformRequest_ptr call,
+		::Nirvana::ConstPointer* in_params,
+		CORBA::Nirvana::PlatformUnmarshal_var unmarshaler,
+		::Nirvana::Pointer* out_params)
+	{
+		try {
+			const _op1_in& in = *(const _op1_in*)in_params;
+			_op1_out& out = *(_op1_out*)out_params;
+			out = I1::_check (target)->op1 (in);
+			return CORBA::Nirvana::PlatformMarshal::_nil ();
+		} catch (const CORBA::UserException& e) {
+			call->user_exception (e);
+		} catch (const CORBA::SystemException & e) {
+			call->system_exception (e);
+		} catch (...) {
+			call->unknown_exception ();
+		}
+	}
+
+	struct _object_op_in
+	{
+		CORBA::Nirvana::Interface* in_obj;
+		CORBA::Nirvana::Interface* inout_obj;
+	};
+
+	struct _object_op_out
+	{
+		CORBA::Nirvana::Interface* out_obj;
+		CORBA::Nirvana::Interface* inout_obj;
+		CORBA::Nirvana::Interface* _ret;
+	};
+};
+
+class _PlatformProxy_I1 :
+	public CORBA::Nirvana::PlatformProxyBaseT <_PlatformProxy_I1, I1>
+{
+	typedef CORBA::Nirvana::PlatformProxyBaseT <_PlatformProxy_I1, I1> Base;
+public:
+	_PlatformProxy_I1 (CORBA::Nirvana::PlatformObjRef_ptr proxy_manager, CORBA::UShort interface_idx) :
+		Base (proxy_manager, interface_idx)
 	{}
 
 	CORBA::Long op1 (CORBA::Long p1) const
 	{
-		::Nirvana::Synchronized sync (_sync_context ());
-		return _servant ()->op1 (p1);
+		_ProxyFactory_I1::_op1_out _out;
+		CORBA::Nirvana::PlatformMarshal_var _m;
+		_target ()->call (CORBA::Nirvana::OperationIndex{ _interface_idx (), 0 },
+			&p1, sizeof (p1), _m, &_out, sizeof (_out));
+		return _out;
 	}
 
 	void throw_NO_IMPLEMENT () const
 	{
-		::Nirvana::Synchronized sync (_sync_context ());
-		_servant ()->throw_NO_IMPLEMENT ();
+		CORBA::Nirvana::PlatformMarshal_var _m;
+		_target ()->call (CORBA::Nirvana::OperationIndex{ _interface_idx (), 1 },
+			0, 0, _m, 0, 0);
 	}
 
 	I1_var object_op (I1_ptr in_obj, I1_var& out_obj, I1_var& inout_obj) const
 	{
-		I1_var _tmp_in_obj (I1::_duplicate (in_obj));
-		I1_var _tmp_out_obj;
-		I1_var _tmp_inout_obj (inout_obj);
+		_ProxyFactory_I1::_object_op_in _in;
+		::CORBA::Nirvana::PlatformMarshal_var _m = _target ()->create_marshaler ();
+		::CORBA::Nirvana::MarshalTraits <I1_var>::marshal_in (in_obj, _m, _in.in_obj);
+		::CORBA::Nirvana::MarshalTraits <I1_var>::marshal_in (inout_obj, _m, _in.inout_obj);
+		_ProxyFactory_I1::_object_op_out _out;
+		::CORBA::Nirvana::PlatformUnmarshal_var _u = _target ()->call (CORBA::Nirvana::OperationIndex{ _interface_idx (), 2 },
+			&_in, sizeof (_in), _m, &_out, sizeof (_out));
+		::CORBA::Nirvana::MarshalTraits <I1_var>::unmarshal (_out.out_obj, _u, out_obj);
+		::CORBA::Nirvana::MarshalTraits <I1_var>::unmarshal (_out.inout_obj, _u, inout_obj);
 		I1_var _ret;
-		{
-			::Nirvana::Synchronized sync (_sync_context ());
-			_ret = _servant ()->object_op (_tmp_in_obj, _tmp_out_obj, _tmp_inout_obj);
-		}
-		out_obj = _tmp_out_obj._retn ();
-		inout_obj = _tmp_inout_obj._retn ();
+		::CORBA::Nirvana::MarshalTraits <I1_var>::unmarshal (_out._ret, _u, _ret);
 		return _ret;
 	}
 
-	CORBA::Nirvana::String string_op (const CORBA::Nirvana::String& in_s, CORBA::Nirvana::String& out_s, CORBA::Nirvana::String& inout_s) const
-	{
-		CORBA::Nirvana::String _ret;
+	CORBA::Nirvana::String string_op (const CORBA::Nirvana::String& in_s, CORBA::Nirvana::String& out_s, CORBA::Nirvana::String& inout_s) const;
 
-		// out parameters
-		CORBA::Nirvana::String _ret_out_s;
-		CORBA::Nirvana::String _ret_inout_s;
-
-		{
-			// in parameters
-			CORBA::Nirvana::String _tmp_in_s (in_s);
-
-			::Nirvana::Synchronized context;
-
-			// Copy inout parameters to the target context memory
-			_sync_context ()->enter_memory ();
-			CORBA::Nirvana::String _tmp_out_s;
-			CORBA::Nirvana::String _tmp_inout_s (inout_s);
-
-			// Enter into synchronization domain and perform call
-			_sync_context ()->enter (false);
-			CORBA::Nirvana::String _tmp_ret = _servant ()->string_op (_tmp_in_s, _tmp_out_s, _tmp_inout_s);
-
-			// Move output data back to the call context
-			CORBA::Nirvana::MarshalTraits <CORBA::Nirvana::String>::move_out (_tmp_out_s, context.call_context (), _ret_out_s);
-			CORBA::Nirvana::MarshalTraits <CORBA::Nirvana::String>::move_out (_tmp_inout_s, context.call_context (), _ret_inout_s);
-			CORBA::Nirvana::MarshalTraits <CORBA::Nirvana::String>::move_out (_tmp_ret, context.call_context (), _ret);
-
-			// Leave context
-		}
-		// Return data to the caller
-		_ret_out_s.swap (out_s);
-		_ret_inout_s.swap (inout_s);
-		return _ret;
-	}
-
-	std::vector <CORBA::Long> seq_op (const SeqLong& in_s, SeqLong& out_s, SeqLong& inout_s) const
-	{
-		SeqLong _ret;
-
-		// out parameters
-		SeqLong _ret_out_s;
-		SeqLong _ret_inout_s;
-
-		{
-			// in parameters
-			SeqLong _tmp_in_s (in_s);
-
-			::Nirvana::Synchronized context;
-
-			// Copy inout parameters to the target context memory
-			_sync_context ()->enter_memory ();
-			SeqLong _tmp_out_s;
-			SeqLong _tmp_inout_s (inout_s);
-
-			// Enter into synchronization domain and perform call
-			_sync_context ()->enter (false);
-			SeqLong _tmp_ret = _servant ()->seq_op (_tmp_in_s, _tmp_out_s, _tmp_inout_s);
-
-			// Move output data back to the call context
-			CORBA::Nirvana::MarshalTraits <SeqLong>::move_out (_tmp_out_s, context.call_context (), _ret_out_s);
-			CORBA::Nirvana::MarshalTraits <SeqLong>::move_out (_tmp_inout_s, context.call_context (), _ret_inout_s);
-			CORBA::Nirvana::MarshalTraits <SeqLong>::move_out (_tmp_ret, context.call_context (), _ret);
-
-			// Leave context
-		}
-		// Return data to the caller
-		_ret_out_s.swap (out_s);
-		_ret_inout_s.swap (inout_s);
-		return _ret;
-	}
+	std::vector <CORBA::Long> seq_op (const SeqLong& in_s, SeqLong& out_s, SeqLong& inout_s) const;
 
 	CORBA::Any any_op (const CORBA::Any& in_any, CORBA::Any& out_any, CORBA::Any& inout_any) const;
 };
 
-class I1_proxy_factory :
-	public CORBA::Nirvana::ServantStatic <I1_proxy_factory, CORBA::Nirvana::ProxyFactory>
+inline
+CORBA::Nirvana::Interface_ptr _ProxyFactory_I1::create_platform_proxy (
+	CORBA::Nirvana::PlatformObjRef_ptr proxy_manager,
+	CORBA::UShort interface_idx, CORBA::AbstractBase_ptr bases,
+	CORBA::Nirvana::DynamicServant_ptr& deleter)
 {
-public:
-	CORBA::Nirvana::Interface_ptr create_servant_proxy (
-		CORBA::Object_ptr proxy_manager,
-		Nirvana::SynchronizationContext_ptr sync, CORBA::Nirvana::Interface_ptr servant,
-		CORBA::Nirvana::DynamicServant_ptr& deleter)
-	{
-		I1_ServantProxy* proxy =
-			Nirvana::stateless_create <I1_ServantProxy> (proxy_manager, sync, servant);
-		deleter = proxy->_dynamic_servant ();
-		return proxy->_proxy ();
-	}
-
-};
+	_PlatformProxy_I1* proxy =
+		Nirvana::stateless_create <_PlatformProxy_I1> (proxy_manager, interface_idx);
+	deleter = proxy->_dynamic_servant ();
+	return proxy->_proxy ();
+}
 
 }

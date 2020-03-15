@@ -36,9 +36,9 @@ typedef I_out <PlatformRequest> PlatformRequest_out;
 
 BRIDGE_BEGIN (PlatformRequest, CORBA_NIRVANA_REPOSITORY_ID ("PlatformRequest"))
 Interface* (*create_marshaler) (Bridge <PlatformRequest>*, EnvironmentBridge*);
-void (*system_exception) (Bridge <PlatformMarshal>*, Long, Type <String>::ABI_in, ULong, ABI_enum);
-void (*user_exception) (Bridge <PlatformMarshal>*, Interface*, ::Nirvana::ConstPointer);
-void (*unknown_exception) (Bridge <PlatformMarshal>*);
+void (*system_exception) (Bridge <PlatformRequest>*, Long, Type <String>::ABI_in, ULong, ABI_enum);
+void (*user_exception) (Bridge <PlatformRequest>*, Interface*, ::Nirvana::ConstPointer);
+void (*unknown_exception) (Bridge <PlatformRequest>*);
 BRIDGE_END ()
 
 
@@ -48,11 +48,19 @@ class Client <T, PlatformRequest> :
 {
 public:
 	PlatformMarshal_var create_marshaler ();
+
 	void system_exception (
 		Long code, String_in id, ULong minor, CompletionStatus completed) NIRVANA_NOEXCEPT;
+	void system_exception (const SystemException& e) NIRVANA_NOEXCEPT;
+
 	void user_exception (I_in <TypeCode> tc, ::Nirvana::ConstPointer data) NIRVANA_NOEXCEPT;
+	void user_exception (const UserException& e) NIRVANA_NOEXCEPT;
+
 	void unknown_exception () NIRVANA_NOEXCEPT;
 };
+
+class PlatformRequest : public ClientInterface <PlatformRequest>
+{};
 
 template <class T>
 PlatformMarshal_var Client <T, PlatformRequest>::create_marshaler ()
@@ -90,6 +98,18 @@ void Client <T, PlatformRequest>::unknown_exception () NIRVANA_NOEXCEPT
 	Environment* _env = nullptr;
 	Bridge <PlatformRequest>& _b (T::_get_bridge (*_env));
 	(_b._epv ().epv.unknown_exception) (&_b);
+}
+
+template <class T>
+void Client <T, PlatformRequest>::system_exception (const SystemException& e) NIRVANA_NOEXCEPT
+{
+	system_exception (e.__code (), e._rep_id (), e.minor (), e.completed ());
+}
+
+template <class T>
+void Client <T, PlatformRequest>::user_exception (const UserException& e) NIRVANA_NOEXCEPT
+{
+	user_exception (e.__type_code (), e.__data ());
 }
 
 }

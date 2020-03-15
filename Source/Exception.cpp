@@ -1,6 +1,7 @@
 #include <CORBA/SystemException.h>
 #include <CORBA/RepositoryId.h>
 #include <CORBA/Environment_c.h>
+#include <CORBA/UnknownUserException.h>
 
 namespace CORBA {
 
@@ -16,7 +17,13 @@ void set_exception (EnvironmentBridge* environment, Long code, const char* rep_i
 
 void set_exception (EnvironmentBridge* environment, const Exception& e) NIRVANA_NOEXCEPT
 {
-	set_exception (environment, e.__code (), e._rep_id (), e.__data ());
+	const void* data;
+	const UnknownUserException* uue = UnknownUserException::_downcast (&e);
+	if (uue)
+		data = uue->exception ().data ();
+	else
+		data = e.__data ();
+	set_exception (environment, e.__code (), e._rep_id (), data);
 }
 
 void set_unknown_exception (EnvironmentBridge* environment) NIRVANA_NOEXCEPT

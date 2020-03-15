@@ -11,6 +11,7 @@ class UserException : public Exception
 	{
 		return EC_USER_EXCEPTION;
 	}
+
 public:
 	static const UserException* _downcast (const Exception* ep) NIRVANA_NOEXCEPT
 	{

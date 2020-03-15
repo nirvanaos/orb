@@ -26,7 +26,7 @@ class RemoteRequest;
 
 typedef PlatformMarshal_var (*PlatformRequestProc) (Interface*, 
 	PlatformRequest_ptr call,
-	::Nirvana::Pointer* in_params, 
+	::Nirvana::ConstPointer* in_params, 
 	PlatformUnmarshal_var unmarshaler, // Unmarshaler should be released after the unmarshal completion.
 	::Nirvana::Pointer* out_params);
 
