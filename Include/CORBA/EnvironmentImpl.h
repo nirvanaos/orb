@@ -57,6 +57,7 @@ private:
 	bool set (const ExceptionEntry& ee);
 	void set_system (const ExceptionEntry& ee, const void* data);
 	void set_user (const ExceptionEntry& ee, const void* data);
+	bool set_user (String_in rep_id, const void* param, const ExceptionEntry* user_exceptions);
 
 private:
 	union Data

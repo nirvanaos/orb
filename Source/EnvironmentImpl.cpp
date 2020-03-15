@@ -2,6 +2,7 @@
 #include <CORBA/exceptions.h>
 #include <CORBA/RepositoryId.h>
 #include <CORBA/TypeCode.h>
+#include <CORBA/UnknownUserException.h>
 #include <Nirvana/Memory.h>
 #include <Nirvana/core_objects.h>
 
@@ -56,17 +57,30 @@ void EnvironmentBase::exception_set (Long code, String_in rep_id, const void* pa
 	exception_free ();
 	if (code > Exception::EC_NO_EXCEPTION && !static_cast <const String&> (rep_id).empty ()) {
 		if (Exception::EC_USER_EXCEPTION == code && user_exceptions) {
-			for (const ExceptionEntry* p = user_exceptions; p->rep_id; ++p) {
-				if (RepositoryId::compatible (p->rep_id, rep_id)) {
-					set_user (*p, param);
+			if (RepositoryId::compatible (UnknownUserException::repository_id_, rep_id) && param) {
+				const Any* pa = (const Any*)param;
+				TypeCode_ptr tc = pa->type ();
+				assert (tc->kind () == tk_except);
+				if (tc->kind () == tk_except && set_user (tc->id (), pa->data (), user_exceptions))
 					return;
-				}
-			}
+			} else if (set_user (rep_id, param, user_exceptions))
+				return;
 		}
 		const ExceptionEntry* ee = SystemException::_get_exception_entry (rep_id, code);
 		assert (ee && ee->size <= sizeof (data_.small));
 		set_system (*ee, param);
 	}
+}
+
+bool EnvironmentBase::set_user (String_in rep_id, const void* param, const ExceptionEntry* user_exceptions)
+{
+	for (const ExceptionEntry* p = user_exceptions; p->rep_id; ++p) {
+		if (RepositoryId::compatible (p->rep_id, rep_id)) {
+			set_user (*p, param);
+			return true;
+		}
+	}
+	return false;
 }
 
 bool EnvironmentBase::set (const ExceptionEntry& ee)
