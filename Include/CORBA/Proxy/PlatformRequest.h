@@ -79,7 +79,6 @@ void Client <T, PlatformRequest>::system_exception (
 	Environment* _env = nullptr;
 	Bridge <PlatformRequest>& _b (T::_get_bridge (*_env));
 	(_b._epv ().epv.system_exception) (&_b, code, &id, minor, completed);
-	_env.check ();
 }
 
 template <class T>
@@ -89,7 +88,6 @@ void Client <T, PlatformRequest>::user_exception (
 	Environment* _env = nullptr;
 	Bridge <PlatformRequest>& _b (T::_get_bridge (*_env));
 	(_b._epv ().epv.user_exception) (&_b, &tc, data);
-	_env.check ();
 }
 
 template <class T>

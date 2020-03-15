@@ -3,7 +3,7 @@
 
 #include <CORBA/Server.h>
 #include "../AtomicCounter.h"
-#include <Nirvana/Synchronized.h>
+#include "../Synchronized.h"
 
 namespace CORBA {
 namespace Nirvana {

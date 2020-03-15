@@ -15,7 +15,8 @@ struct Type <Sequence <T> > :
 	public TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check>
 {
 	typedef TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check> Base;
-	typedef ABI <Sequence <ABI <T> > > ABI_type;
+	typedef typename Type <T>::ABI_type T_ABI;
+	typedef ABI <Sequence <T_ABI> > ABI_type;
 
 	static void check (const ABI_type& v);
 
@@ -99,7 +100,7 @@ void Type <Sequence <T> >::check (const ABI_type& v)
 	}
 
 	if (Type <T>::has_check) {
-		for (const ABI <T>* p = v.ptr, *end = p + v.size; p != end; ++p)
+		for (const T_ABI* p = v.ptr, *end = p + v.size; p != end; ++p)
 			Type <T>::check (*p);
 	}
 }
