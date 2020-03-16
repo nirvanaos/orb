@@ -1,11 +1,9 @@
 #ifndef NIRVANA_ORB_PROXYFACTORY_H_
 #define NIRVANA_ORB_PROXYFACTORY_H_
 
-#include "../CORBA.h"
-#include "../DynamicServant.h"
+#include "InterfaceMetadata.h"
 #include "PlatformObjRef.h"
-#include "PlatformRequest.h"
-#include <Nirvana/ImportInterface.h>
+#include "../DynamicServant.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -14,45 +12,6 @@ class ProxyFactory;
 typedef I_ptr <ProxyFactory> ProxyFactory_ptr;
 typedef I_var <ProxyFactory> ProxyFactory_var;
 typedef I_out <ProxyFactory> ProxyFactory_out;
-
-// TODO: Define.
-class RemoteRequest;
-typedef RemoteRequest* RemoteRequest_ptr;
-
-/// Function to serve request from the same platform domain.
-typedef PlatformMarshal_var (*PlatformRequestProc) (Interface* target, 
-	PlatformRequest_ptr call,
-	::Nirvana::ConstPointer* in_params, 
-	PlatformUnmarshal_var unmarshaler, // Unmarshaler should be released after the unmarshal completion.
-	::Nirvana::Pointer* out_params);
-
-/// Function to serve remote request or request from other platform domain.
-typedef void (*RemoteRequestProc) (Interface* target, RemoteRequest* call);
-
-/// Counted array for metadata.
-template <class T>
-struct CountedArray
-{
-	const T* p;
-	ULong size;
-};
-
-/// Parameter metadata.
-struct Parameter
-{
-	const Char* name;
-	const ::Nirvana::ImportInterfaceT <TypeCode>& type;
-};
-
-struct Operation
-{
-	const char* name;
-	CountedArray <Parameter> input;
-	CountedArray <Parameter> output;
-	const ::Nirvana::ImportInterfaceT <TypeCode>& return_type;
-	PlatformRequestProc invoke_platform;
-	RemoteRequestProc invoke_remote;
-};
 
 /*
 ~~~{.idl}
@@ -67,8 +26,7 @@ pseudo interface ProxyFactory {
 */
 
 BRIDGE_BEGIN (ProxyFactory, CORBA_NIRVANA_REPOSITORY_ID ("ProxyFactory"))
-const CountedArray <const Char*>* base_interfaces;
-const CountedArray <Operation>* operations;
+const InterfaceMetadata* metadata;
 Interface* (*create_platform_proxy) (Bridge <ProxyFactory>*, 
 	Interface*, UShort interface_idx,
 	Interface**, EnvironmentBridge*);
@@ -82,16 +40,10 @@ class Client <T, ProxyFactory> :
 	public T
 {
 public:
-	const CountedArray <const Char*>* interfaces ()
+	const InterfaceMetadata* metadata ()
 	{
 		Environment _env;
-		return T::_get_bridge (_env).interfaces;
-	}
-
-	const CountedArray <Operation>* operations ()
-	{
-		Environment _env;
-		return T::_get_bridge (_env).operations;
+		return T::_get_bridge (_env).metadata;
 	}
 
 	Interface_ptr create_platform_proxy (

@@ -133,13 +133,13 @@ public:
 	// Nirvana extensions
 	// NOTE: For exceptions, all methods below are related to the exception data, not the exception itself.
 
-	// Size of object.
+	// Size of the object.
 	ULong _size ();
 
-	// Call default constructor.
+	// Call the default constructor.
 	void _construct (::Nirvana::Pointer p);
 
-	// Destroy object.
+	// Destroy the object.
 	void _destruct (::Nirvana::Pointer p);
 
 	// Call copy constructor.
@@ -150,7 +150,7 @@ public:
 
 	void _marshal_in (::Nirvana::ConstPointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst);
 	void _marshal_out (::Nirvana::Pointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst);
-	void _unmarshal (::Nirvana::Pointer src, PlatformUnmarshal_ptr marshaler, ::Nirvana::Pointer dst);
+	void _unmarshal (::Nirvana::Pointer src, PlatformUnmarshal_ptr unmarshaler, ::Nirvana::Pointer dst);
 };
 
 }

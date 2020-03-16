@@ -9,7 +9,9 @@
 namespace CORBA {
 namespace Nirvana {
 
-class PlatformProxyBase :
+template <class I> class PlatformProxy;
+
+class PlatformProxyRoot :
 	public Bridge <DynamicServant>
 {
 public:
@@ -48,7 +50,7 @@ public:
 	}
 
 protected:
-	PlatformProxyBase (const Bridge <DynamicServant>::EPV& epv, 
+	PlatformProxyRoot (const Bridge <DynamicServant>::EPV& epv, 
 		PlatformObjRef_ptr proxy_manager, UShort interface_idx) :
 		Bridge <DynamicServant> (epv),
 		proxy_manager_ (proxy_manager),
@@ -67,11 +69,11 @@ class ProxyLifeCycle :
 	public Skeleton <S, DynamicServant>
 {};
 
-template <class S, class I>
-class PlatformProxyBaseT :
-	public PlatformProxyBase,
-	public ProxyLifeCycle <S>,
-	public InterfaceImplBase <S, I>
+template <class I>
+class PlatformProxyBase :
+	public PlatformProxyRoot,
+	public ProxyLifeCycle <PlatformProxy <I> >,
+	public InterfaceImplBase <PlatformProxy <I>, I>
 {
 public:
 	Interface* _proxy ()
@@ -80,8 +82,8 @@ public:
 	}
 
 protected:
-	PlatformProxyBaseT (PlatformObjRef_ptr proxy_manager, UShort interface_idx) :
-		PlatformProxyBase (ProxyLifeCycle <S>::epv_, proxy_manager, interface_idx)
+	PlatformProxyBase (PlatformObjRef_ptr proxy_manager, UShort interface_idx) :
+		PlatformProxyRoot (ProxyLifeCycle <PlatformProxy <I> >::epv_, proxy_manager, interface_idx)
 	{}
 };
 

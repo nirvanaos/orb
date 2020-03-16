@@ -41,8 +41,7 @@ const Bridge <ProxyFactory>::EPV Skeleton <S, ProxyFactory>::epv_ = {
 		S::template __release <ProxyFactory>
 	},
 	{ // epv
-		&S::base_interfaces_,
-		&S::operations_,
+		&S::metadata_,
 		S::_create_platform_proxy
 	}
 };

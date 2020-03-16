@@ -213,6 +213,28 @@ public:
 	using TypeCodeOpsEmptyBase::__unmarshal;
 };
 
+// for tk_string, tk_sequence, and tk_array
+template <ULong bound = 0>
+class TypeCodeLength
+{
+public:
+	static ULong _length (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	{
+		return bound;
+	}
+};
+
+// for tk_sequence, tk_array, tk_value_box and tk_alias
+template <const ::Nirvana::ImportInterfaceT <TypeCode>* ptc>
+class TypeCodeContentType
+{
+public:
+	static Interface* _content_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	{
+		return &TypeCode_ptr (*ptc);
+	}
+};
+
 }
 }
 

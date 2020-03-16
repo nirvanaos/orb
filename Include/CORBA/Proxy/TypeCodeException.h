@@ -6,6 +6,8 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <class Ex> class TypeCodeException;
+
 class TypeCodeExceptionBase
 {
 public:
@@ -22,22 +24,22 @@ public:
 	}
 };
 
-template <class S, class Ex>
+template <class Ex>
 class TypeCodeExceptionVoid :
-	public TypeCodeOpsEmpty <TypeCodeWithId <S, tk_except, Ex::repository_id_> >
+	public TypeCodeOpsEmpty <TypeCodeWithId <TypeCodeException <Ex>, tk_except, Ex::repository_id_> >
 {};
 
-template <class S, class Ex>
+template <class Ex>
 class TypeCodeExceptionData :
-	public TypeCodeWithId <S, tk_except, Ex::repository_id_>,
+	public TypeCodeWithId <TypeCodeException <Ex>, tk_except, Ex::repository_id_>,
 	public TypeCodeOps <typename Ex::Data>
 {};
 
 template <class Ex>
 class TypeCodeException :
 	public std::conditional <std::is_void <typename Ex::Data>::value,
-		TypeCodeExceptionVoid <TypeCodeException <Ex>, Ex>,
-		TypeCodeExceptionData <TypeCodeException <Ex>, Ex> >::type,
+		TypeCodeExceptionVoid <Ex>,
+		TypeCodeExceptionData <Ex> >::type,
 	public TypeCodeExceptionBase
 {
 public:

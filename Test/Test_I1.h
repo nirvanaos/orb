@@ -10,10 +10,14 @@ typedef CORBA::Nirvana::I_ptr <I1> I1_ptr;
 typedef CORBA::Nirvana::I_var <I1> I1_var;
 typedef CORBA::Nirvana::I_out <I1> I1_out;
 
+extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_I1;
+
 typedef CORBA::Nirvana::Sequence <CORBA::Long> SeqLong;
 typedef CORBA::Nirvana::Type <SeqLong>::C_var SeqLong_var;
 typedef CORBA::Nirvana::Type <SeqLong>::C_out SeqLong_out;
 typedef CORBA::Nirvana::Type <SeqLong>::C_inout SeqLong_inout;
+
+extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_SeqLong;
 
 }
 

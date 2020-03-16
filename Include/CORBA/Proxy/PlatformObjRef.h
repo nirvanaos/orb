@@ -51,6 +51,7 @@ pseudo interface PlatformObjRef : Object
 #ifndef NIRVANA_ORB_PLATFORMOBJREF_H_
 #define NIRVANA_ORB_PLATFORMOBJREF_H_
 
+#include "../CORBA.h"
 #include "PlatformMarshal.h"
 #include "PlatformUnmarshal.h"
 

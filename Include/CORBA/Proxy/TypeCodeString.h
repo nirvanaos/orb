@@ -2,32 +2,23 @@
 #define NIRVANA_ORB_TYPECODESTRING_H_
 
 #include "TypeCodeImpl.h"
-#include <Nirvana/basic_string.h>
+#include "../String.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-class TypeCodeStringBase
-{
-public:
-	static ULong _length (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
-	{
-		return 0;
-	}
-};
-
-template <typename Valtype, TCKind TK>
+template <typename Valtype, TCKind TK, ULong bound = 0>
 class TypeCodeString :
-	public TypeCodeImpl <TypeCodeString <Valtype, TK>, TK>,
+	public TypeCodeImpl <TypeCodeString <Valtype, TK, bound>, TK>,
 	public TypeCodeOps <Valtype>,
-	public TypeCodeStringBase
+	public TypeCodeLength <bound>
 {
 public:
-	using TypeCodeStringBase::_length;
+	using TypeCodeLength <bound>::_length;
 };
 
-typedef TypeCodeString <std::basic_string <Char>, tk_string> TC_string;
-typedef TypeCodeString <std::basic_string <WChar>, tk_wstring> TC_wstring;
+typedef TypeCodeString <String, tk_string> TC_string;
+typedef TypeCodeString <WString, tk_wstring> TC_wstring;
 
 }
 }

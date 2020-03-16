@@ -7,7 +7,7 @@ pseudo interface PlatformRequest
 {
 	/// Returns a marshaler associated with this call.
 	/// If the marshaler does not exist, it will be created.
-	PlatformMarshal marshaler ();
+	readonly attribute PlatformMarshal marshaler;
 
 	void system_exception (long code, RepositoryId id, unsigned long minor, CompletionStatus completed);
 
@@ -35,7 +35,7 @@ typedef I_out <PlatformRequest> PlatformRequest_out;
 
 
 BRIDGE_BEGIN (PlatformRequest, CORBA_NIRVANA_REPOSITORY_ID ("PlatformRequest"))
-Interface* (*create_marshaler) (Bridge <PlatformRequest>*, EnvironmentBridge*);
+Interface* (*marshaler) (Bridge <PlatformRequest>*, EnvironmentBridge*);
 void (*system_exception) (Bridge <PlatformRequest>*, Long, Type <String>::ABI_in, ULong, ABI_enum);
 void (*user_exception) (Bridge <PlatformRequest>*, Interface*, ::Nirvana::ConstPointer);
 void (*unknown_exception) (Bridge <PlatformRequest>*);
@@ -47,7 +47,7 @@ class Client <T, PlatformRequest> :
 	public T
 {
 public:
-	PlatformMarshal_var create_marshaler ();
+	PlatformMarshal_var marshaler ();
 
 	void system_exception (
 		Long code, String_in id, ULong minor, CompletionStatus completed) NIRVANA_NOEXCEPT;
@@ -63,11 +63,11 @@ class PlatformRequest : public ClientInterface <PlatformRequest>
 {};
 
 template <class T>
-PlatformMarshal_var Client <T, PlatformRequest>::create_marshaler ()
+PlatformMarshal_var Client <T, PlatformRequest>::marshaler ()
 {
 	Environment _env;
 	Bridge <PlatformRequest>& _b (T::_get_bridge (_env));
-	I_ret <PlatformMarshal> _ret = (_b._epv ().epv.create_marshaler) (&_b, &_env);
+	I_ret <PlatformMarshal> _ret = (_b._epv ().epv.marshaler) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }

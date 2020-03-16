@@ -243,6 +243,33 @@ void Client <T, TypeCode>::_move (::Nirvana::Pointer dst, ::Nirvana::Pointer src
 	_env.check ();
 }
 
+template <class T>
+void Client <T, TypeCode>::_marshal_in (::Nirvana::ConstPointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst)
+{
+	Environment _env;
+	Bridge <TypeCode>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv._marshal_in) (&_b, src, &marshaler, dst, &_env);
+	_env.check ();
+}
+
+template <class T>
+void Client <T, TypeCode>::_marshal_out (::Nirvana::Pointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst)
+{
+	Environment _env;
+	Bridge <TypeCode>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv._marshal_out) (&_b, src, &marshaler, dst, &_env);
+	_env.check ();
+}
+
+template <class T>
+void Client <T, TypeCode>::_unmarshal (::Nirvana::Pointer src, PlatformUnmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
+{
+	Environment _env;
+	Bridge <TypeCode>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv._unmarshal) (&_b, src, &unmarshaler, dst, &_env);
+	_env.check ();
+}
+
 }
 }
 
