@@ -29,12 +29,12 @@ class TypeCodeException <::Test::MyException> :
 	public TypeCodeExceptionWithData <::Test::MyException, 1>
 {};
 
+const Char ProxyFactoryImpl <::Test::I1>::name_ [] = "I1";
+
 template <>
-class ProxyFactoryImpl <::Test::I1> :
-	public ProxyFactoryBase <::Test::I1>
+struct ProxyTraits <::Test::I1>
 {
-public:
-	static const InterfaceMetadata metadata_;
+	static const Operation operations_ [];
 
 	// long op1 (long p1);
 
@@ -124,9 +124,6 @@ public:
 			_call->unknown_exception ();
 		}
 	}
-
-private:
-	static const Operation operations_ [];
 };
 
 template <>
@@ -134,7 +131,7 @@ class PlatformProxy <::Test::I1> :
 	public PlatformProxyBase <::Test::I1>
 {
 	typedef PlatformProxyBase <::Test::I1> Base;
-	typedef ProxyFactoryImpl <::Test::I1> Factory;
+	typedef ProxyTraits <::Test::I1> Traits;
 public:
 	PlatformProxy (PlatformObjRef_ptr proxy_manager, CORBA::UShort interface_idx) :
 		Base (proxy_manager, interface_idx)
@@ -142,7 +139,7 @@ public:
 
 	Long op1 (Long p1) const
 	{
-		Factory::op1_out _out;
+		Traits::op1_out _out;
 		PlatformMarshal_var _m;
 		_target ()->call (CORBA::Nirvana::OperationIndex{ _interface_idx (), 0 },
 			&p1, sizeof (p1), _m, &_out, sizeof (_out));
@@ -158,11 +155,11 @@ public:
 
 	::Test::I1_var object_op (::Test::I1_ptr in_obj, ::Test::I1_var& out_obj, ::Test::I1_var& inout_obj) const
 	{
-		Factory::object_op_in _in;
+		Traits::object_op_in _in;
 		PlatformMarshal_var _m = _target ()->create_marshaler ();
 		_marshal_in (in_obj, _m, _in.in_obj);
 		_marshal_in (inout_obj, _m, _in.inout_obj);
-		Factory::object_op_out _out;
+		Traits::object_op_out _out;
 		PlatformUnmarshal_var _u = _target ()->call (CORBA::Nirvana::OperationIndex{ _interface_idx (), 2 },
 			&_in, sizeof (_in), _m, &_out, sizeof (_out));
 		_unmarshal (_out.out_obj, _u, out_obj);
@@ -179,18 +176,18 @@ public:
 	Any any_op (const Any& in_any, Any& out_any, Any& inout_any) const;
 };
 
-const ::CORBA::Nirvana::Parameter ProxyFactoryImpl <::Test::I1>::op1_in_params_ [] {
+const Parameter ProxyTraits <::Test::I1>::op1_in_params_ [] {
 	{ "p1", ::CORBA::_tc_long }
 };
 
-const Operation ProxyFactoryImpl <::Test::I1>::operations_ [] {
+const Operation ProxyTraits <::Test::I1>::operations_ [] {
 	{ "op1", { op1_in_params_, countof (op1_in_params_) }, {0, 0}, ::CORBA::_tc_long },
 	{ "throw_no_implement", { 0, 0 }, {0, 0}, ::CORBA::_tc_void }
 };
 
 const InterfaceMetadata ProxyFactoryImpl <::Test::I1>::metadata_ {
 	{0, 0},
-  {operations_, countof (operations_)}
+  {ProxyTraits <::Test::I1>::operations_, countof (ProxyTraits <::Test::I1>::operations_)}
 };
 
 }

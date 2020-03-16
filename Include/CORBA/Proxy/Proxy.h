@@ -19,7 +19,7 @@ namespace Nirvana {
 template <class I> class ProxyFactoryImpl;
 
 /// Proxy factory implements ProxyFactory and TypeCode interfaces.
-template <class I> class ProxyFactoryBase :
+template <class I> class ProxyFactoryImpl :
 	public InterfaceStaticBase <ProxyFactoryImpl <I>, AbstractBase>,
 	public TypeCodeWithId <ProxyFactoryImpl <I>, tk_objref, I::interface_id_>,
 	public TypeCodeOps <I_var <I> >,
@@ -33,6 +33,8 @@ public:
 	}
 
 	// ProxyFactory
+	static const InterfaceMetadata metadata_;
+
 	Interface_ptr create_platform_proxy (
 		PlatformObjRef_ptr proxy_manager, UShort interface_idx,
 		DynamicServant_var& deleter)
@@ -52,6 +54,8 @@ public:
 
 	static const Char name_ [];
 };
+
+template <class I> struct ProxyTraits;
 
 }
 }

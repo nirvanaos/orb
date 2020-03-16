@@ -9,19 +9,6 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <>
-const Parameter TypeCodeMembers <MyException>::members_ [] = {
-	{ "param", _tc_string }
-};
-
-template <>
-class TypeCodeException <MyException> :
-	public TypeCodeExceptionWithData <MyException, 1>
-{};
-
-
-extern const StaticI_ptr <TypeCode> test{STATIC_BRIDGE(TypeCodeException <MyException>, TypeCode)};
-
 Boolean TypeCodeBase::equal (TCKind tk, TypeCode_ptr other)
 {
 	return tk == other->kind ();
