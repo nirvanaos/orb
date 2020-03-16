@@ -8,7 +8,7 @@ namespace CORBA {
 namespace Nirvana {
 
 class TC_TypeCode :
-	public TypeCodeWithId <TC_TypeCode, tk_TypeCode, TypeCode::interface_id_>,
+	public TypeCodeImpl <TC_TypeCode, tk_TypeCode>,
 	public TypeCodeOps <TypeCode_var>
 {
 public:

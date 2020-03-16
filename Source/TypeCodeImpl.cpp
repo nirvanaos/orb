@@ -2,8 +2,25 @@
 #include <CORBA/TypeCode.h>
 #include <string.h>
 
+// DEBUG
+#include <CORBA/Proxy/TypeCodeException.h>
+#include <CORBA/tc_constants.h>
+
 namespace CORBA {
 namespace Nirvana {
+
+template <>
+const Parameter TypeCodeMembers <MyException>::members_ [] = {
+	{ "param", _tc_string }
+};
+
+template <>
+class TypeCodeException <MyException> :
+	public TypeCodeExceptionWithData <MyException, 1>
+{};
+
+
+extern const StaticI_ptr <TypeCode> test{STATIC_BRIDGE(TypeCodeException <MyException>, TypeCode)};
 
 Boolean TypeCodeBase::equal (TCKind tk, TypeCode_ptr other)
 {

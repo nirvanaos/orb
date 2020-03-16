@@ -167,7 +167,7 @@ public:
 	}
 };
 
-class TypeCodeOpsEmptyBase
+class TypeCodeOpsEmpty
 {
 public:
 	static ULong __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
@@ -195,22 +195,6 @@ public:
 
 	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* unmarshaler, ::Nirvana::Pointer, EnvironmentBridge* _env)
 	{}
-};
-
-template <class Base>
-class TypeCodeOpsEmpty : 
-	public Base,
-	public TypeCodeOpsEmptyBase
-{
-public:
-	using TypeCodeOpsEmptyBase::__size;
-	using TypeCodeOpsEmptyBase::__construct;
-	using TypeCodeOpsEmptyBase::__destruct;
-	using TypeCodeOpsEmptyBase::__copy;
-	using TypeCodeOpsEmptyBase::__move;
-	using TypeCodeOpsEmptyBase::__marshal_in;
-	using TypeCodeOpsEmptyBase::__marshal_out;
-	using TypeCodeOpsEmptyBase::__unmarshal;
 };
 
 // for tk_string, tk_sequence, and tk_array

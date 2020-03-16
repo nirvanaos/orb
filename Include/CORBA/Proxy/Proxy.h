@@ -1,6 +1,7 @@
 #ifndef NIRVANA_ORB_PROXY_H_
 #define NIRVANA_ORB_PROXY_H_
 
+#include "../CORBA.h"
 #include "ProxyFactory_s.h"
 #include "MarshalTraits.h"
 #include "PlatformObjRef.h"
@@ -9,6 +10,7 @@
 #include "TypeCodeInterface.h"
 #include "TypeCodeString.h"
 #include "TypeCodeSequence.h"
+#include "TypeCodeException.h"
 #include <Nirvana/stateless.h>
 
 namespace CORBA {

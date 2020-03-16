@@ -23,6 +23,6 @@ public:
 }
 }
 
-#define DEFINE_INTERFACE_TC(I) template <> const Char TypeCodeInterface <I>::name_ [] = #I;
+#define DEFINE_INTERFACE_TC(ns, I) template <> const Char TypeCodeInterface <ns::I>::name_ [] = #I;
 
 #endif

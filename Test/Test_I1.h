@@ -19,10 +19,45 @@ typedef CORBA::Nirvana::Type <SeqLong>::C_inout SeqLong_inout;
 
 extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_SeqLong;
 
+class MyException : public CORBA::UserException
+{
+public:
+	DECLARE_EXCEPTION (MyException);
+
+	struct Data
+	{
+		CORBA::Nirvana::String param;
+	}
+	data_;
+
+	const CORBA::Nirvana::String& param () const
+	{
+		return data_.param;
+	}
+
+	void param (const CORBA::Nirvana::String& val)
+	{
+		data_.param = val;
+	}
+};
+
+extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_MyException;
+
 }
 
 namespace CORBA {
 namespace Nirvana {
+
+template <>
+struct ABI <::Test::MyException::Data>
+{
+	ABI <String> param;
+};
+
+template <>
+struct Type <::Test::MyException::Data> :
+	TypeVarLen <::Test::MyException::Data, Type <String>::has_check>
+{};
 
 BRIDGE_BEGIN (::Test::I1, "IDL:Test/I1:1.0")
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
