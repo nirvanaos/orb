@@ -9,6 +9,7 @@ void MarshalTraits <Any>::marshal_in (const Any& src, PlatformMarshal_ptr marsha
 	if (!tc)
 		dst.reset ();
 	else {
+		dst.type ((::Nirvana::Pointer)marshaler->marshal_type_code (tc));
 		::Nirvana::ConstPointer psrc;
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
@@ -22,7 +23,6 @@ void MarshalTraits <Any>::marshal_in (const Any& src, PlatformMarshal_ptr marsha
 			psrc = src.small_pointer ();
 		}
 		tc->_marshal_in (psrc, marshaler, pdst);
-		dst.type ((::Nirvana::Pointer)marshaler->marshal_type_code (tc));
 	}
 }
 
@@ -32,6 +32,7 @@ void MarshalTraits <Any>::marshal_out (Any& src, PlatformMarshal_ptr marshaler, 
 	if (!tc)
 		dst.reset ();
 	else {
+		dst.type ((::Nirvana::Pointer)marshaler->marshal_type_code (tc));
 		::Nirvana::Pointer psrc;
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
@@ -51,7 +52,6 @@ void MarshalTraits <Any>::marshal_out (Any& src, PlatformMarshal_ptr marshaler, 
 			psrc = src.small_pointer ();
 		}
 		tc->_marshal_out (psrc, marshaler, pdst);
-		dst.type ((::Nirvana::Pointer)marshaler->marshal_type_code (tc));
 		release (tc);
 		src.reset ();
 	}
