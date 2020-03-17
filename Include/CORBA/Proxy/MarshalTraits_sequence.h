@@ -81,6 +81,10 @@ void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, PlatformMarshal_ptr m
 
 			if (PlatformMarshalContext::SHARED_MEMORY == mctx)
 				dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated ());
+			else {
+				Seq tmp;
+				src.swap (tmp);
+			}
 
 			dst.allocated = cb;
 		}
@@ -96,14 +100,15 @@ void MarshalTraits <Sequence <T> >::unmarshal (SeqABI& src, PlatformUnmarshal_pt
 	if (!src.size)
 		dst.reset ();
 	else {
-		SeqABI& adst = static_cast <SeqABI&> (dst);
+		Seq tmp;
+		SeqABI& adst = static_cast <SeqABI&> (tmp);
 		if (src.allocated)
 			unmarshaler->adopt_memory (adst.ptr = src.ptr, src.allocated);
 		else
 			adst.ptr = (T_ABI*)dst.memory ()->copy (nullptr, src.ptr, src.size * sizeof (T), 0);
 		if (!std::is_trivially_copyable <T> ()) {
 			T_ABI* sp = src.ptr, *end = sp + src.size;
-			T* dp = dst.data ();
+			T* dp = adst.ptr;
 			try {
 				do {
 					MarshalTraits <T>::unmarshal (*(sp++), unmarshaler, *(dp++));
@@ -113,6 +118,7 @@ void MarshalTraits <Sequence <T> >::unmarshal (SeqABI& src, PlatformUnmarshal_pt
 				throw;
 			}
 		}
+		tmp.swap (dst);
 	}
 }
 

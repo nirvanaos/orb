@@ -221,6 +221,7 @@ public:
 
 private:
 	friend struct Nirvana::Type <Any>;
+	friend struct Nirvana::MarshalTraits <Any>;
 
 	void copy_from (const Any& src);
 	void* prepare (TypeCode_ptr tc);
