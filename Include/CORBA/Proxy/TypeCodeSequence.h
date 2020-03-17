@@ -9,8 +9,7 @@ namespace Nirvana {
 
 template <typename T, const ::Nirvana::ImportInterfaceT <TypeCode>* ptc, ULong bound = 0>
 class TypeCodeSequence :
-	public TypeCodeImpl <TypeCodeSequence <T, ptc, bound>, tk_sequence>,
-	public TypeCodeOps <Sequence <T> >,
+	public TypeCodeStatic <TypeCodeSequence <T, ptc, bound>, TypeCodeTK <tk_sequence>, TypeCodeOps <Sequence <T> > >,
 	public TypeCodeLength <bound>,
 	public TypeCodeContentType <ptc>
 {

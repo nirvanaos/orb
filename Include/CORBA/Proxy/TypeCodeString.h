@@ -7,10 +7,9 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <typename Valtype, TCKind TK, ULong bound = 0>
+template <typename Valtype, TCKind tk, ULong bound = 0>
 class TypeCodeString :
-	public TypeCodeImpl <TypeCodeString <Valtype, TK, bound>, TK>,
-	public TypeCodeOps <Valtype>,
+	public TypeCodeStatic <TypeCodeString <Valtype, tk, bound>, TypeCodeTK <tk>, TypeCodeOps <Valtype> >,
 	public TypeCodeLength <bound>
 {
 public:

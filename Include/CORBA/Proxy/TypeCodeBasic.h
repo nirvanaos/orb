@@ -9,15 +9,13 @@ namespace Nirvana {
 /// TypeCode implementation for basic types
 template <typename Valtype, TCKind tk>
 class TypeCodeBasic :
-	public TypeCodeImpl <TypeCodeBasic <Valtype, tk>, tk>,
-	public TypeCodeOps <Valtype>
+	public TypeCodeStatic <TypeCodeBasic <Valtype, tk>, TypeCodeTK <tk>, TypeCodeOps <Valtype> >
 {};
 
 /// TypeCode implementation for empty types
 template <TCKind tk>
 class TypeCodeEmpty :
-	TypeCodeImpl <TypeCodeEmpty <tk>, tk>,
-	public TypeCodeOpsEmpty
+	public TypeCodeStatic <TypeCodeEmpty <tk>, TypeCodeTK <tk>, TypeCodeOpsEmpty>
 {};
 
 typedef TypeCodeEmpty <tk_null> TC_null;

@@ -37,10 +37,9 @@ public:
 	static void set_Bounds (EnvironmentBridge* env);
 };
 
-template <class S, TCKind tk>
-class TypeCodeImpl :
-	public TypeCodeBase,
-	public ServantStatic <S, TypeCode>
+template <TCKind tk>
+class TypeCodeTK :
+	public TypeCodeBase
 {
 public:
 	static Boolean equal (TypeCode_ptr other)
@@ -53,36 +52,15 @@ public:
 		return TypeCodeBase::equivalent (tk, other);
 	}
 
-	static Interface* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
-	{
-		return InterfaceStatic <S, TypeCode>::_bridge ();
-	}
-
 	static Type <TCKind>::ABI_ret _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return tk;
 	}
-
-	using TypeCodeBase::_id;
-	using TypeCodeBase::_name;
-	using TypeCodeBase::_member_count;
-	using TypeCodeBase::_member_name;
-	using TypeCodeBase::_member_type;
-	using TypeCodeBase::_member_label;
-	using TypeCodeBase::_discriminator_type;
-	using TypeCodeBase::_default_index;
-	using TypeCodeBase::_length;
-	using TypeCodeBase::_content_type;
-	using TypeCodeBase::_fixed_digits;
-	using TypeCodeBase::_fixed_scale;
-	using TypeCodeBase::_member_visibility;
-	using TypeCodeBase::_type_modifier;
-	using TypeCodeBase::_concrete_base_type;
 };
 
-template <class S, TCKind tk, const char* rep_id>
+template <TCKind tk, const char* rep_id>
 class TypeCodeWithId :
-	public TypeCodeImpl <S, tk>
+	public TypeCodeTK <tk>
 {
 public:
 	static Boolean equal (TypeCode_ptr other)
@@ -105,7 +83,7 @@ template <typename Valtype>
 class TypeCodeOps
 {
 public:
-	static ULong _size ()
+	static ULong __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return sizeof (Valtype);
 	}
@@ -195,6 +173,67 @@ public:
 
 	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* unmarshaler, ::Nirvana::Pointer, EnvironmentBridge* _env)
 	{}
+};
+
+template <class S, class Impl, class Ops>
+class TypeCodeImpl :
+	public S, public Impl, public Ops
+{
+public:
+	using Impl::_kind;
+	using Impl::_id;
+	using Impl::_name;
+	using Impl::_member_count;
+	using Impl::_member_name;
+	using Impl::_member_type;
+	using Impl::_member_label;
+	using Impl::_discriminator_type;
+	using Impl::_default_index;
+	using Impl::_length;
+	using Impl::_content_type;
+	using Impl::_fixed_digits;
+	using Impl::_fixed_scale;
+	using Impl::_member_visibility;
+	using Impl::_type_modifier;
+	using Impl::_concrete_base_type;
+
+	using Ops::__size;
+};
+
+template <class S, class Impl>
+class TypeCodeImplOpsEmpty :
+	public TypeCodeImpl <S, Impl, TypeCodeOpsEmpty>
+{
+public:
+	using TypeCodeOpsEmpty::__construct;
+	using TypeCodeOpsEmpty::__destruct;
+	using TypeCodeOpsEmpty::__copy;
+	using TypeCodeOpsEmpty::__move;
+	using TypeCodeOpsEmpty::__marshal_in;
+	using TypeCodeOpsEmpty::__marshal_out;
+	using TypeCodeOpsEmpty::__unmarshal;
+};
+
+template <class S, class Impl, class Ops>
+class TypeCodeStatic :
+	public TypeCodeImpl <ServantStatic <S, TypeCode>, Impl, Ops>
+{
+public:
+	static Interface* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	{
+		return InterfaceStaticBase <S, TypeCode>::_bridge ();
+	}
+};
+
+template <class S, class Impl>
+class TypeCodeStatic <S, Impl, TypeCodeOpsEmpty> :
+	public TypeCodeImplOpsEmpty <ServantStatic <S, TypeCode>, Impl>
+{
+public:
+	static Interface* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	{
+		return InterfaceStaticBase <S, TypeCode>::_bridge ();
+	}
 };
 
 // for tk_string, tk_sequence, and tk_array

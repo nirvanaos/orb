@@ -2,10 +2,6 @@
 #include <CORBA/TypeCode.h>
 #include <string.h>
 
-// DEBUG
-#include <CORBA/Proxy/TypeCodeException.h>
-#include <CORBA/tc_constants.h>
-
 namespace CORBA {
 namespace Nirvana {
 

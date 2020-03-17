@@ -8,8 +8,7 @@ namespace CORBA {
 namespace Nirvana {
 
 class TC_TypeCode :
-	public TypeCodeImpl <TC_TypeCode, tk_TypeCode>,
-	public TypeCodeOps <TypeCode_var>
+	public TypeCodeStatic <TC_TypeCode, TypeCodeTK <tk_TypeCode>, TypeCodeOps <TypeCode_var> >
 {
 public:
 	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env)

@@ -11,7 +11,7 @@ template <class E> class TypeCodeException;
 
 template <class E>
 class TypeCodeExceptionBase :
-	public TypeCodeNoMembers <TypeCodeWithId <TypeCodeException <E>, tk_except, E::repository_id_> >
+	public TypeCodeNoMembers <TypeCodeWithId <tk_except, E::repository_id_> >
 {
 public:
 	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
@@ -22,26 +22,21 @@ public:
 
 template <class E>
 class TypeCodeExceptionSystem :
-	public TypeCodeExceptionBase <E>,
-	public TypeCodeOps <SystemException::Data>
+	public TypeCodeStatic <TypeCodeException <E>, TypeCodeExceptionBase <E>, TypeCodeOps <SystemException::Data> >
 {};
 
 template <class E>
 class TypeCodeExceptionEmpty :
-	public TypeCodeExceptionBase <E>,
-	public TypeCodeOpsEmpty
+	public TypeCodeStatic <TypeCodeException <E>, TypeCodeExceptionBase <E>, TypeCodeOpsEmpty>
 {};
 
 template <class E, size_t N>
 class TypeCodeExceptionWithData :
-	public TypeCodeWithMembers <TypeCodeException <E>, N, TypeCodeExceptionBase <E>>,
-	public TypeCodeOps <typename E::Data>
+	public TypeCodeStatic <TypeCodeException <E>,
+	TypeCodeWithMembers <TypeCodeException <E>, N, TypeCodeExceptionBase <E> >, TypeCodeOps <typename E::Data> >
 {};
 
 }
 }
-
-#define IMPLEMENT_EXCEPTION_TC1(ns, E) namespace ns { typedef TypeCodeException <E> TC_##E; }\
-NIRVANA_EXPORT_INTERFACE1 (ns, ns::E::repository_id_, TC_##E, CORBA::Nirvana::TypeCode)
 
 #endif

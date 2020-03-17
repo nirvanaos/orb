@@ -8,8 +8,7 @@ namespace CORBA {
 namespace Nirvana {
 
 class TC_Object :
-	public TypeCodeWithId <TC_Object, tk_objref, Object::interface_id_>,
-	public TypeCodeOps <Object_var>
+	public TypeCodeStatic <TC_Object, TypeCodeWithId <tk_objref, Object::interface_id_>, TypeCodeOps <Object_var> >
 {
 public:
 	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
