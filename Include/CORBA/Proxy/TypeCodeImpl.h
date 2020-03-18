@@ -145,7 +145,8 @@ public:
 	}
 };
 
-class TypeCodeOpsEmpty
+template <>
+class TypeCodeOps <void>
 {
 public:
 	static ULong __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
@@ -176,7 +177,7 @@ public:
 };
 
 template <class S, class Impl, class Ops>
-class TypeCodeImpl :
+class TypeCodeImplBase :
 	public S, public Impl, public Ops
 {
 public:
@@ -198,43 +199,39 @@ public:
 	using Impl::_concrete_base_type;
 
 	using Ops::__size;
+
+	// The get_compact_typecode operation strips out all optional name and member
+	// name fields, but it leaves all alias typecodes intact.
+	TypeCode_var get_compact_typecode ()
+	{
+		// Currently, we don't strip names, just return this type code.
+		return TypeCode::_duplicate (&static_cast <TypeCode&> (static_cast <Bridge <TypeCode>&> (static_cast <S&> (*this))));
+	}
 };
 
+template <class S, class Impl, class Ops>
+class TypeCodeImpl :
+	public TypeCodeImplBase <S, Impl, Ops>
+{};
+
 template <class S, class Impl>
-class TypeCodeImplOpsEmpty :
-	public TypeCodeImpl <S, Impl, TypeCodeOpsEmpty>
+class TypeCodeImpl <S, Impl, TypeCodeOps <void> > :
+	public TypeCodeImplBase <S, Impl, TypeCodeOps <void> >
 {
 public:
-	using TypeCodeOpsEmpty::__construct;
-	using TypeCodeOpsEmpty::__destruct;
-	using TypeCodeOpsEmpty::__copy;
-	using TypeCodeOpsEmpty::__move;
-	using TypeCodeOpsEmpty::__marshal_in;
-	using TypeCodeOpsEmpty::__marshal_out;
-	using TypeCodeOpsEmpty::__unmarshal;
+	using TypeCodeOps <void>::__construct;
+	using TypeCodeOps <void>::__destruct;
+	using TypeCodeOps <void>::__copy;
+	using TypeCodeOps <void>::__move;
+	using TypeCodeOps <void>::__marshal_in;
+	using TypeCodeOps <void>::__marshal_out;
+	using TypeCodeOps <void>::__unmarshal;
 };
 
 template <class S, class Impl, class Ops>
 class TypeCodeStatic :
 	public TypeCodeImpl <ServantStatic <S, TypeCode>, Impl, Ops>
-{
-public:
-	static Interface* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
-	{
-		return InterfaceStaticBase <S, TypeCode>::_bridge ();
-	}
-};
-
-template <class S, class Impl>
-class TypeCodeStatic <S, Impl, TypeCodeOpsEmpty> :
-	public TypeCodeImplOpsEmpty <ServantStatic <S, TypeCode>, Impl>
-{
-public:
-	static Interface* _get_compact_typecode (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
-	{
-		return InterfaceStaticBase <S, TypeCode>::_bridge ();
-	}
-};
+{};
 
 // for tk_string, tk_sequence, and tk_array
 template <ULong bound = 0>
@@ -254,7 +251,8 @@ class TypeCodeContentType
 public:
 	static Interface* _content_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
-		return &TypeCode_ptr (*ptc);
+		TypeCode_ptr tc (*ptc);
+		return (tc->_epv ().header.duplicate) (&tc, _env);
 	}
 };
 

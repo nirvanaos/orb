@@ -6,27 +6,6 @@
 namespace CORBA {
 namespace Nirvana {
 
-class TypeCodeMembersEmpty
-{
-public:
-	static ULong _member_count (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
-	{
-		return 0;
-	}
-
-	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
-	{
-		TypeCodeBase::set_Bounds (_env);
-		return nullptr;
-	}
-
-	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
-	{
-		TypeCodeBase::set_Bounds (_env);
-		return nullptr;
-	}
-};
-
 template <ULong N>
 class TypeCodeMemberCount
 {
@@ -46,42 +25,59 @@ protected:
 	static const Parameter members_ [];
 };
 
-template <class Base>
-class TypeCodeNoMembers :
+template <ULong member_count, class Base, class Members>
+class TypeCodeWithMembersImpl :
 	public Base,
-	public TypeCodeMembersEmpty
+	public TypeCodeMemberCount <member_count>,
+	public Members
 {
 public:
-	using TypeCodeMembersEmpty::_member_count;
-	using TypeCodeMembersEmpty::_member_name;
-	using TypeCodeMembersEmpty::_member_type;
-};
-
-template <class T, size_t N, class Base>
-class TypeCodeWithMembers :
-	public Base,
-	public TypeCodeMemberCount <N>,
-	public TypeCodeMembers <T>
-{
-public:
-	using TypeCodeMemberCount <N>::_member_count;
+	using TypeCodeMemberCount <member_count>::_member_count;
 
 	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
 	{
-		if (index >= N) {
+		if (index >= member_count) {
 			TypeCodeBase::set_Bounds (_env);
 			return nullptr;
 		} else
-			return TypeCodeMembers <T>::members_ [index].name;
+			return Members::members_ [index].name;
 	}
 
 	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
 	{
-		if (index >= N) {
+		if (index >= member_count) {
 			TypeCodeBase::set_Bounds (_env);
 			return nullptr;
-		} else
-			return &TypeCode::_duplicate (TypeCode_ptr (TypeCodeMembers <T>::members_ [index].type));
+		} else {
+			TypeCode_ptr tc (Members::members_ [index].type);
+			return (tc->_epv ().header.duplicate) (&tc, _env);
+		}
+	}
+};
+
+template <class T, ULong member_count, class Base>
+class TypeCodeWithMembers :
+	public TypeCodeWithMembersImpl <member_count, Base, TypeCodeMembers <T> >
+{};
+
+template <class T, class Base>
+class TypeCodeWithMembers <T, 0, Base> :
+	public Base,
+	public TypeCodeMemberCount <0>
+{
+public:
+	using TypeCodeMemberCount <0>::_member_count;
+
+	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
+	{
+		TypeCodeBase::set_Bounds (_env);
+		return nullptr;
+	}
+
+	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
+	{
+		TypeCodeBase::set_Bounds (_env);
+		return nullptr;
 	}
 };
 

@@ -16,6 +16,20 @@ class TypeCodeSequence :
 public:
 	using TypeCodeLength <bound>::_length;
 	using TypeCodeContentType <ptc>::_content_type;
+
+	static Boolean equal (TypeCode_ptr other)
+	{
+		return TypeCodeTK <tk_sequence>::equal (other)
+			&& other->length () == bound
+			&& other->content_type ()->equal (*ptc);
+	}
+
+	static Boolean equivalent (TypeCode_ptr other)
+	{
+		return TypeCodeTK <tk_sequence>::equivalent (other)
+			&& other->length () == bound
+			&& other->content_type ()->equivalent (*ptc);
+	}
 };
 
 }

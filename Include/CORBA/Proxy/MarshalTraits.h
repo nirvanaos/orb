@@ -86,12 +86,13 @@ void _marshal_in (const T& src, PlatformMarshal_ptr marshaler, ABI& dst)
 	MarshalTraits <T>::marshal_in (src, marshaler, dst);
 }
 
-template <class I>
+template <class I> inline
 void _marshal_in (const I_ptr <I> src, PlatformMarshal_ptr marshaler, Interface*& dst)
 {
 	MarshalTraits <I_var <I> >::marshal_in (src, marshaler, dst);
 }
 
+inline
 void _marshal_in (const TypeCode_ptr src, PlatformMarshal_ptr marshaler, Interface*& dst)
 {
 	MarshalTraits <TypeCode_var>::marshal_in (src, marshaler, dst);

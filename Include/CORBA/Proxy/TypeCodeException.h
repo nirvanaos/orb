@@ -10,8 +10,8 @@ namespace Nirvana {
 template <class E> class TypeCodeException;
 
 template <class E>
-class TypeCodeExceptionBase :
-	public TypeCodeNoMembers <TypeCodeWithId <tk_except, E::repository_id_> >
+class TypeCodeExceptionRoot :
+	public TypeCodeStatic <TypeCodeException <E>, TypeCodeWithId <tk_except, E::repository_id_>, TypeCodeOps <typename E::Data> >
 {
 public:
 	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
@@ -20,20 +20,20 @@ public:
 	}
 };
 
+class SystemExceptionMembers
+{
+protected:
+	static const Parameter members_ [];
+};
+
 template <class E>
 class TypeCodeExceptionSystem :
-	public TypeCodeStatic <TypeCodeException <E>, TypeCodeExceptionBase <E>, TypeCodeOps <SystemException::Data> >
+	public TypeCodeWithMembersImpl <2, TypeCodeExceptionRoot <E>, SystemExceptionMembers>
 {};
 
-template <class E>
-class TypeCodeExceptionEmpty :
-	public TypeCodeStatic <TypeCodeException <E>, TypeCodeExceptionBase <E>, TypeCodeOpsEmpty>
-{};
-
-template <class E, size_t N>
-class TypeCodeExceptionWithData :
-	public TypeCodeStatic <TypeCodeException <E>,
-	TypeCodeWithMembers <TypeCodeException <E>, N, TypeCodeExceptionBase <E> >, TypeCodeOps <typename E::Data> >
+template <class E, ULong member_count>
+class TypeCodeExceptionImpl :
+	public TypeCodeWithMembers <TypeCodeException <E>, member_count, TypeCodeExceptionRoot <E> >
 {};
 
 }

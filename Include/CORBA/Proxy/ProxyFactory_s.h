@@ -46,10 +46,17 @@ const Bridge <ProxyFactory>::EPV Skeleton <S, ProxyFactory>::epv_ = {
 	}
 };
 
+/// Proxy factory implements ProxyFactory and TypeCode interfaces.
 template <class S>
 class ServantStatic <S, ProxyFactory> :
-	public ImplementationPseudoStatic <S, ProxyFactory>
-{};
+	public ImplementationPseudoStatic <S, ProxyFactory, TypeCode, AbstractBase>
+{
+public:
+	Interface_ptr _query_interface (const String& id)
+	{
+		return FindInterface <ProxyFactory, TypeCode>::find (*(S*)0, id);
+	}
+};
 
 }
 }

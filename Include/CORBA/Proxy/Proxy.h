@@ -20,18 +20,9 @@ template <class I> class ProxyFactoryImpl;
 
 /// Proxy factory implements ProxyFactory and TypeCode interfaces.
 template <class I> class ProxyFactoryImpl :
-	public InterfaceStaticBase <ProxyFactoryImpl <I>, AbstractBase>,
-	public TypeCodeWithId <ProxyFactoryImpl <I>, tk_objref, I::interface_id_>,
-	public TypeCodeOps <I_var <I> >,
-	public InterfaceStaticBase <ProxyFactoryImpl <I>, ProxyFactory>
+	public TypeCodeImpl <ServantStatic <ProxyFactoryImpl <I>, ProxyFactory>, TypeCodeWithId <tk_objref, I::interface_id_>, TypeCodeOps <I_var <I> > >
 {
 public:
-	// AbstractBase
-	Interface_ptr _query_interface (const String& id)
-	{
-		return FindInterface <ProxyFactory, TypeCode>::find (*(ProxyFactoryImpl <I>*)0, id);
-	}
-
 	// ProxyFactory
 	static const InterfaceMetadata metadata_;
 
@@ -46,7 +37,6 @@ public:
 	}
 
 	// TypeCode
-
 	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return name_;
@@ -59,5 +49,7 @@ template <class I> struct ProxyTraits;
 
 }
 }
+
+#define IMPLEMENT_PROXY_FACTORY(ns, I) const Char ProxyFactoryImpl <ns::I>::name_ [] = #I
 
 #endif

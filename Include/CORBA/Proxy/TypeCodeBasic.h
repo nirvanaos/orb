@@ -15,7 +15,7 @@ class TypeCodeBasic :
 /// TypeCode implementation for empty types
 template <TCKind tk>
 class TypeCodeEmpty :
-	public TypeCodeStatic <TypeCodeEmpty <tk>, TypeCodeTK <tk>, TypeCodeOpsEmpty>
+	public TypeCodeStatic <TypeCodeEmpty <tk>, TypeCodeTK <tk>, TypeCodeOps <void> >
 {};
 
 typedef TypeCodeEmpty <tk_null> TC_null;

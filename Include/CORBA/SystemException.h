@@ -10,7 +10,7 @@
 
 namespace CORBA {
 
-enum CompletionStatus
+enum CompletionStatus : ULong
 {
 	COMPLETED_YES,
 	COMPLETED_NO,

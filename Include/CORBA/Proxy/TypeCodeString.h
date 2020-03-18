@@ -14,6 +14,18 @@ class TypeCodeString :
 {
 public:
 	using TypeCodeLength <bound>::_length;
+
+	static Boolean equal (TypeCode_ptr other)
+	{
+		return TypeCodeTK <tk_sequence>::equal (other)
+			&& other->length () == bound;
+	}
+
+	static Boolean equivalent (TypeCode_ptr other)
+	{
+		return TypeCodeTK <tk_sequence>::equivalent (other)
+			&& other->length () == bound;
+	}
 };
 
 typedef TypeCodeString <String, tk_string> TC_string;

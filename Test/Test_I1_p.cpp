@@ -26,10 +26,10 @@ struct MarshalTraits <::Test::MyException::Data>
 
 template <>
 class TypeCodeException <::Test::MyException> :
-	public TypeCodeExceptionWithData <::Test::MyException, 1>
+	public TypeCodeExceptionImpl <::Test::MyException, 1>
 {};
 
-const Char ProxyFactoryImpl <::Test::I1>::name_ [] = "I1";
+IMPLEMENT_PROXY_FACTORY(::Test, I1);
 
 template <>
 struct ProxyTraits <::Test::I1>

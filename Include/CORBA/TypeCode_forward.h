@@ -11,7 +11,7 @@ namespace CORBA {
 class Any;
 class TypeCode;
 
-enum TCKind
+enum TCKind : Nirvana::ABI_enum
 {
 	tk_null, tk_void,
 	tk_short, tk_long, tk_ushort, tk_ulong,
