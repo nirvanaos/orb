@@ -21,7 +21,7 @@ struct TypeByRef
 	typedef ABI_type* ABI_out;
 	typedef ABI_type* ABI_inout;
 	typedef ABI_type ABI_ret;
-	typedef ABI_type ABI_VT_ret;
+	typedef const ABI_type* ABI_VT_ret;
 
 	// Client-side types
 
