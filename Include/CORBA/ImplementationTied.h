@@ -124,7 +124,7 @@ public:
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, EnvironmentBridge* env)
 	{
 		try {
-			if (!RepositoryId::compatible (Bridge <Base>::interface_id_, id))
+			if (!RepositoryId::compatible (Bridge <Base>::repository_id_, id))
 				::Nirvana::throw_MARSHAL ();
 			return &static_cast <Bridge <Base>&> (BaseImpl::_implementation (derived));
 		} catch (const Exception& e) {

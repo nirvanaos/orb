@@ -87,12 +87,12 @@ static const E* _narrow (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return
 static E* _narrow (::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return _downcast (ep); }
 
 #define DEFINE_EXCEPTION1(prefix, ns, E, major, minor)\
-extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_##E{ ::Nirvana::OLF_IMPORT_INTERFACE, #ns "/_tc_" #E, ::CORBA::TypeCode::interface_id_ };\
+extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_##E{ ::Nirvana::OLF_IMPORT_INTERFACE, #ns "/_tc_" #E, ::CORBA::TypeCode::repository_id_ };\
 ::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }\
 const char E::repository_id_ [] = "IDL:" prefix #ns "/" #E ":" #major "." #minor;
 
 #define DEFINE_EXCEPTION2(prefix, ns1, ns2, E, major, minor)\
-extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_##E{ ::Nirvana::OLF_IMPORT_INTERFACE, #ns1 "/" #ns2 "/_tc_" #E, ::CORBA::TypeCode::interface_id_ };\
+extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_##E{ ::Nirvana::OLF_IMPORT_INTERFACE, #ns1 "/" #ns2 "/_tc_" #E, ::CORBA::TypeCode::repository_id_ };\
 ::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }\
 const char repository_id_ [] = "IDL:" prefix #ns1 "/" #ns2 "/" #E ":" #major "." #minor;
 

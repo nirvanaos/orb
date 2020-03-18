@@ -16,7 +16,7 @@ public:
 template <class S>
 const Bridge <LocalObject>::EPV Skeleton <S, LocalObject>::epv_ = {
 	{ // interface
-		Bridge <LocalObject>::interface_id_,
+		Bridge <LocalObject>::repository_id_,
 		S::template __duplicate <LocalObject>,
 		S::template __release <LocalObject>
 	},

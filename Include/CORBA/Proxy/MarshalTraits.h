@@ -76,7 +76,7 @@ struct MarshalTraits <I_var <I> >
 
 	static void unmarshal (Interface* src, PlatformUnmarshal_ptr unmarshaler, I_var <I>& dst)
 	{
-		dst = static_cast <I*> (static_cast <Bridge <I>*> (unmarshaler->unmarshal_interface (src, Bridge <I>::interface_id_)));
+		dst = static_cast <I*> (static_cast <Bridge <I>*> (unmarshaler->unmarshal_interface (src, Bridge <I>::repository_id_)));
 	}
 };
 

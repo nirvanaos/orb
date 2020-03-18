@@ -36,8 +36,8 @@ private:
 
 template <class S, class Primary, class ... I>
 const InterfaceEntry InterfaceFinder <S, Primary, I...>::itable_ [] = {
-	{ Bridge <Primary>::interface_id_, countof (Bridge <Primary>::interface_id_) - 1, cast <Primary> },
-	{ Bridge <I>::interface_id_, countof (Bridge <I>::interface_id_) - 1, cast <I> }...
+	{ Bridge <Primary>::repository_id_, countof (Bridge <Primary>::repository_id_) - 1, cast <Primary> },
+	{ Bridge <I>::repository_id_, countof (Bridge <I>::repository_id_) - 1, cast <I> }...
 };
 
 template <class Primary, class ... I>

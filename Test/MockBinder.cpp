@@ -9,7 +9,7 @@
 namespace Nirvana {
 
 __declspec (allocate(OLF_BIND))
-const ImportInterfaceT <Binder> g_binder = { OLF_IMPORT_INTERFACE, "Nirvana/g_binder", Binder::interface_id_ };
+const ImportInterfaceT <Binder> g_binder = { OLF_IMPORT_INTERFACE, "Nirvana/g_binder", Binder::repository_id_ };
 
 namespace Test {
 
@@ -160,9 +160,9 @@ Interface_var MockBinder::bind (const std::string& name, const std::string& iid)
 		const StringBase <Char> itf_id = itf->_epv ().interface_id;
 		if (!::CORBA::Nirvana::RepositoryId::compatible (itf_id, iid)) {
 			AbstractBase_ptr ab = AbstractBase::_nil ();
-			if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, Object::interface_id_))
+			if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, Object::repository_id_))
 				ab = Object_ptr (static_cast <Object*> (itf));
-			if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, AbstractBase::interface_id_))
+			if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, AbstractBase::repository_id_))
 				ab = static_cast <AbstractBase*> (itf);
 			else
 				throw INV_OBJREF ();

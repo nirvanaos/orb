@@ -30,7 +30,7 @@ protected:
 template <class S>
 const Bridge < ::Test::I2>::EPV Skeleton <S, ::Test::I2>::epv_ = {
 	{ // header
-		Bridge < ::Test::I2>::interface_id_,
+		Bridge < ::Test::I2>::repository_id_,
 		S::template __duplicate < ::Test::I2>,
 		S::template __release < ::Test::I2>
 	},

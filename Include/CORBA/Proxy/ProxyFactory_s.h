@@ -36,7 +36,7 @@ protected:
 template <class S>
 const Bridge <ProxyFactory>::EPV Skeleton <S, ProxyFactory>::epv_ = {
 	{ // header
-		Bridge <ProxyFactory>::interface_id_,
+		Bridge <ProxyFactory>::repository_id_,
 		S::template __duplicate <ProxyFactory>,
 		S::template __release <ProxyFactory>
 	},

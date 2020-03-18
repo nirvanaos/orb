@@ -47,7 +47,7 @@ return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), reposi
 #define DEFINE_USER_EXCEPTION2(prefix, ns1, ns2, E, major, minor) DEFINE_EXCEPTION2 (prefix, ns1, ns2, E, major, minor) DEFINE_USER_EXCEPTION (E)
 
 #define DEFINE_CORBA_INTERFACE_EXCEPTION(ns, I, E)\
-const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> I::_tc_##E { ::Nirvana::OLF_IMPORT_INTERFACE, #ns "/" #I "/_tc_" #E, ::CORBA::TypeCode::interface_id_ };\
+const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> I::_tc_##E { ::Nirvana::OLF_IMPORT_INTERFACE, #ns "/" #I "/_tc_" #E, ::CORBA::TypeCode::repository_id_ };\
 ::CORBA::TypeCode_ptr I::E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }\
 const char I::E::repository_id_ [] = "IDL:omg.org/" #ns "/" #E ":1.0";\
 DEFINE_USER_EXCEPTION(I::E)

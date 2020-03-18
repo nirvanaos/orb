@@ -19,7 +19,7 @@ protected:
 public:
 	Bridge <Object>* _get_object (String_in iid)
 	{
-		if (RepositoryId::check (Object::interface_id_, iid) != RepositoryId::COMPATIBLE)
+		if (RepositoryId::check (Object::repository_id_, iid) != RepositoryId::COMPATIBLE)
 			::Nirvana::throw_INV_OBJREF ();
 		return this;
 	}

@@ -40,7 +40,7 @@ public:
 	template <class I>
 	I_ptr <I> _query_interface ()
 	{
-		return static_cast <I*> (_query_interface (Bridge <I>::interface_id_));
+		return static_cast <I*> (_query_interface (Bridge <I>::repository_id_));
 	}
 };
 

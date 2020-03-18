@@ -203,4 +203,4 @@ typedef ::CORBA::Nirvana::ProxyFactoryImpl <I1> _I1_ProxyFactory;
 
 NIRVANA_EXPORT_INTERFACE1 (Test, "Test/_tc_SeqLong", _TC_SeqLong, CORBA::TypeCode);
 NIRVANA_EXPORT_INTERFACE1 (Test, Test::MyException::repository_id_, _TC_MyException, CORBA::TypeCode);
-NIRVANA_EXPORT_INTERFACE1 (Test, Test::I1::interface_id_, _I1_ProxyFactory, CORBA::AbstractBase);
+NIRVANA_EXPORT_INTERFACE1 (Test, Test::I1::repository_id_, _I1_ProxyFactory, CORBA::AbstractBase);

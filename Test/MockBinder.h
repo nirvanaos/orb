@@ -47,7 +47,7 @@ private:
 	template <class I>
 	void add_export (const char* name, CORBA::Nirvana::I_var <I>& core_obj)
 	{
-		CORBA::Nirvana::Interface_ptr proxy = CORBA::AbstractBase_ptr (core_obj)->_query_interface (CORBA::Object::interface_id_);
+		CORBA::Nirvana::Interface_ptr proxy = CORBA::AbstractBase_ptr (core_obj)->_query_interface (CORBA::Object::repository_id_);
 		if (!proxy)
 			throw_OBJ_ADAPTER ();
 		auto ins = exported_interfaces_.emplace (name, proxy);

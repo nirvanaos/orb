@@ -23,7 +23,7 @@ public:
 	}
 
 	/// Interface repository id
-	static const Char interface_id_ [];
+	static const Char repository_id_ [];
 
 	/// Helper for widening to a base interface
 	template <class Base>
@@ -45,7 +45,7 @@ protected:
 #define BASE_STRUCT_ENTRY(type, name) MyBridge::Wide <type>::Func name;\
 operator const MyBridge::Wide < type>::Func () const { return name; }
 
-#define BRIDGE_BEGIN(I, id) template <> const Char Bridge <I>::interface_id_ [] = id;\
+#define BRIDGE_BEGIN(I, id) template <> const Char Bridge <I>::repository_id_ [] = id;\
 template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EPV header; struct {
 #define BRIDGE_EPV } base; struct {
 #define BRIDGE_END() } epv;};

@@ -51,7 +51,7 @@ public:
 
 	static I_ptr <I> _check (Interface* bridge)
 	{
-		return static_cast <I*> (Interface::_check (bridge, Bridge <I>::interface_id_));
+		return static_cast <I*> (Interface::_check (bridge, Bridge <I>::repository_id_));
 	}
 
 	operator I_ptr <Interface> ()
@@ -72,7 +72,7 @@ protected:
 	{
 		Primary& t = static_cast <Primary&> (*this);
 		typename Bridge <Primary>:: template Wide <Base>::Func func = t._epv ().base;
-		Bridge <Base>* ret = (func)(&t, Bridge <Base>::interface_id_, &env);
+		Bridge <Base>* ret = (func)(&t, Bridge <Base>::repository_id_, &env);
 		env.check ();
 		return ret;
 	}

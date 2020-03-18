@@ -45,7 +45,7 @@ protected:
 template <class S>
 const Bridge <PortableServer::POA>::EPV Skeleton <S, PortableServer::POA>::epv_ = {
 	{ // header
-		Bridge <PortableServer::POA>::interface_id_,
+		Bridge <PortableServer::POA>::repository_id_,
 		S::template __duplicate <PortableServer::POA>,
 		S::template __release <PortableServer::POA>
 	},

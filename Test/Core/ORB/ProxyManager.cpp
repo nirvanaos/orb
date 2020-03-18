@@ -36,7 +36,7 @@ ProxyManager::ProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase
 Interface_ptr ProxyManager::_query_interface (const String& iid) const
 {
 	if (!iid.empty ()) {
-		switch (RepositoryId::check (Object::interface_id_, iid)) {
+		switch (RepositoryId::check (Object::repository_id_, iid)) {
 			case RepositoryId::COMPATIBLE:
 				return &const_cast <ProxyManager&> (*this);
 			case RepositoryId::INCOMPATIBLE_VERSION:
