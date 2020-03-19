@@ -42,47 +42,53 @@ class TypeCodeTK :
 	public TypeCodeBase
 {
 public:
+	static const TCKind tk_ = tk;
+
 	static Boolean equal (TypeCode_ptr other)
 	{
-		return TypeCodeBase::equal (tk, other);
+		return TypeCodeBase::equal (tk_, other);
 	}
 
 	static Boolean equivalent (TypeCode_ptr other)
 	{
-		return TypeCodeBase::equivalent (tk, other);
+		return TypeCodeBase::equivalent (tk_, other);
 	}
 
 	static Type <TCKind>::ABI_ret _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
-		return tk;
+		return tk_;
 	}
 };
 
-template <TCKind tk, const char* rep_id>
+template <TCKind tk, class T>
 class TypeCodeWithId :
 	public TypeCodeTK <tk>
 {
 public:
+	typedef T RepositoryType;
+
 	static Boolean equal (TypeCode_ptr other)
 	{
-		return TypeCodeBase::equal (tk, rep_id, other);
+		return TypeCodeBase::equal (tk, RepositoryType::repository_id_, other);
 	}
 
 	static Boolean equivalent (TypeCode_ptr other)
 	{
-		return TypeCodeBase::equivalent (tk, rep_id, other);
+		return TypeCodeBase::equivalent (tk, RepositoryType::repository_id_, other);
 	}
 
 	static const char* _id (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
-		return rep_id;
+		return RepositoryType::repository_id_;
 	}
 };
 
-template <typename Valtype>
+template <typename T>
 class TypeCodeOps
 {
 public:
+	typedef T Valtype;
+
 	static ULong __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return sizeof (Valtype);
@@ -149,6 +155,8 @@ template <>
 class TypeCodeOps <void>
 {
 public:
+	typedef void Valtype;
+
 	static ULong __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return 0;
@@ -244,7 +252,7 @@ public:
 	}
 };
 
-// for tk_sequence, tk_array, tk_value_box and tk_alias
+// for tk_sequence, tk_array, tk_value_box, tk_alias
 template <const ::Nirvana::ImportInterfaceT <TypeCode>* ptc>
 class TypeCodeContentType
 {
@@ -253,6 +261,19 @@ public:
 	{
 		TypeCode_ptr tc (*ptc);
 		return (tc->_epv ().header.duplicate) (&tc, _env);
+	}
+};
+
+// for tk_struct, tk_union, tk_enum, tk_value, tk_except
+template <ULong member_count>
+class TypeCodeMemberCount
+{
+public:
+	static const ULong member_count_ = member_count;
+
+	static ULong _member_count (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	{
+		return member_count_;
 	}
 };
 

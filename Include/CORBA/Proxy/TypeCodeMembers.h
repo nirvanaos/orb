@@ -1,22 +1,11 @@
 #ifndef NIRVANA_ORB_TYPECODEMEMBERS_H_
 #define NIRVANA_ORB_TYPECODEMEMBERS_H_
 
+#include "TypeCodeImpl.h"
 #include "InterfaceMetadata.h"
 
 namespace CORBA {
 namespace Nirvana {
-
-template <ULong N>
-class TypeCodeMemberCount
-{
-public:
-	static const ULong member_count_ = N;
-
-	static ULong _member_count (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
-	{
-		return member_count_;
-	}
-};
 
 template <class T>
 class TypeCodeMembers

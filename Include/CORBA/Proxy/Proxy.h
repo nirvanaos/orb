@@ -20,7 +20,7 @@ template <class I> class ProxyFactoryImpl;
 
 /// Proxy factory implements ProxyFactory and TypeCode interfaces.
 template <class I> class ProxyFactoryImpl :
-	public TypeCodeImpl <ServantStatic <ProxyFactoryImpl <I>, ProxyFactory>, TypeCodeWithId <tk_objref, I::repository_id_>, TypeCodeOps <I_var <I> > >
+	public TypeCodeImpl <ServantStatic <ProxyFactoryImpl <I>, ProxyFactory>, TypeCodeWithId <tk_objref, I>, TypeCodeOps <I_var <I> > >
 {
 public:
 	// ProxyFactory

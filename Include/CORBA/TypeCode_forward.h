@@ -9,7 +9,6 @@
 namespace CORBA {
 
 class Any;
-class TypeCode;
 
 enum TCKind : Nirvana::ABI_enum
 {
@@ -41,15 +40,6 @@ const ValueModifier VM_ABSTRACT = 2;
 const ValueModifier VM_TRUNCATABLE = 3;
 
 namespace Nirvana {
-
-template <> struct Type <TCKind> : TypeEnum <TCKind>
-{
-	static void check (TypeEnum <TCKind>::ABI_type tk)
-	{
-		if (tk > tk_local_interface)
-			::Nirvana::throw_BAD_PARAM ();
-	}
-};
 
 class PlatformMarshal;
 typedef I_ptr <PlatformMarshal> PlatformMarshal_ptr;
@@ -174,6 +164,8 @@ public:
 
 	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Bounds;
 };
+
+extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_TCKind;
 
 }
 

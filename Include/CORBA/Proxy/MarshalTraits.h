@@ -7,6 +7,7 @@
 
 #include "MarshalTraits_string.h"
 #include "MarshalTraits_sequence.h"
+#include "MarshalTraits_any.h"
 
 namespace CORBA {
 namespace Nirvana {
