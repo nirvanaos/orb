@@ -4,6 +4,7 @@
 #include "Exception.h"
 #include "system_exceptions.h"
 #include "TypeEnum.h"
+#include <Nirvana/ImportInterface.h>
 
 #define OMGVMCID 0x4f4d0000
 #define MAKE_MINOR(vmcid, c) (vmcid | c)
@@ -120,20 +121,16 @@ namespace Nirvana {
 
 template <>
 struct Type <CompletionStatus> :
-	public TypeEnum <CompletionStatus>
-{
-	static void check (ABI_enum val)
-	{
-		if (val > COMPLETED_MAYBE)
-			::Nirvana::throw_BAD_PARAM ();
-	}
+	public TypeEnum <CompletionStatus, COMPLETED_MAYBE>
+{};
 
-	static const Char repository_id_ [];
-};
-
-const Char Type <CompletionStatus>::repository_id_ [] = CORBA_REPOSITORY_ID ("CompletionStatus");
+template <>
+const Char RepIdOf <CompletionStatus>::repository_id_ [] = CORBA_REPOSITORY_ID ("CompletionStatus");
 
 }
+
+extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_CompletionStatus;
+
 }
 
 #endif

@@ -7,18 +7,11 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <> struct Type <TCKind> : TypeEnum <TCKind>
-{
-	static void check (ABI_enum val)
-	{
-		if (val > tk_local_interface)
-			::Nirvana::throw_BAD_PARAM ();
-	}
+template <> struct Type <TCKind> : TypeEnum <TCKind, tk_local_interface>
+{};
 
-	static const Char repository_id_ [];
-};
-
-const Char Type <TCKind>::repository_id_ [] = CORBA_REPOSITORY_ID ("TCKind");
+template <>
+const Char RepIdOf <TCKind>::repository_id_ [] = CORBA_REPOSITORY_ID ("TCKind");
 
 template <class T>
 Boolean Client <T, TypeCode>::equal (TypeCode_ptr other)

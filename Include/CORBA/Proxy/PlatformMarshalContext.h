@@ -15,14 +15,9 @@ enum class PlatformMarshalContext : ABI_enum
 	OTHER_PROTECTION_DOMAIN
 };
 
-template <> struct Type <PlatformMarshalContext> : TypeEnum <PlatformMarshalContext>
-{
-	static void check (ABI_enum val)
-	{
-		if (val > (ABI_enum)PlatformMarshalContext::OTHER_PROTECTION_DOMAIN)
-			::Nirvana::throw_BAD_PARAM ();
-	}
-};
+template <> struct Type <PlatformMarshalContext> : 
+	TypeEnum <PlatformMarshalContext, (ABI_enum)PlatformMarshalContext::OTHER_PROTECTION_DOMAIN>
+{};
 
 }
 }

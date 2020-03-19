@@ -1,5 +1,6 @@
+#include <CORBA/CORBA.h>
 #include <CORBA/Proxy/TypeCodeString.h>
-#include <Nirvana/OLF.h>
+#include "tc_impex.h"
 
 namespace CORBA {
 
@@ -35,30 +36,26 @@ extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_void{ 0, nullptr, nullpt
 } NIRVANA_EXPORT_INTERFACE1 (CORBA, "CORBA/_tc_void", TC_void, CORBA::TypeCode);
 */
 
-#define TC_IMPEX(t) namespace CORBA {\
-extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_##t = { 0, nullptr, nullptr, STATIC_BRIDGE (TC_##t, TypeCode) };\
-} NIRVANA_EXPORT_INTERFACE1 (CORBA, "CORBA/_tc_" #t, TC_##t, CORBA::TypeCode)
-
 #define TC_IMPL_SCALAR(T, t) namespace CORBA {typedef Nirvana::TypeCodeScalar <T, tk_##t> TC_##t;} TC_IMPEX(t)
 
-TC_IMPL_SCALAR (void, void);
-TC_IMPL_SCALAR (Short, short);
-TC_IMPL_SCALAR (Long, long);
-TC_IMPL_SCALAR (UShort, ushort);
-TC_IMPL_SCALAR (ULong, ulong);
-TC_IMPL_SCALAR (Float, float);
-TC_IMPL_SCALAR (Double, double);
-TC_IMPL_SCALAR (Boolean, boolean);
-TC_IMPL_SCALAR (Char, char);
-TC_IMPL_SCALAR (Octet, octet);
-TC_IMPL_SCALAR (LongLong, longlong);
-TC_IMPL_SCALAR (ULongLong, ulonglong);
-TC_IMPL_SCALAR (LongDouble, longdouble);
-TC_IMPL_SCALAR (WChar, wchar);
-TC_IMPL_SCALAR (Any, any);
-TC_IMPEX (TypeCode);
-TC_IMPEX (Object);
-TC_IMPEX (string);
-TC_IMPEX (wstring);
+TC_IMPL_SCALAR (void, void)
+TC_IMPL_SCALAR (Short, short)
+TC_IMPL_SCALAR (Long, long)
+TC_IMPL_SCALAR (UShort, ushort)
+TC_IMPL_SCALAR (ULong, ulong)
+TC_IMPL_SCALAR (Float, float)
+TC_IMPL_SCALAR (Double, double)
+TC_IMPL_SCALAR (Boolean, boolean)
+TC_IMPL_SCALAR (Char, char)
+TC_IMPL_SCALAR (Octet, octet)
+TC_IMPL_SCALAR (LongLong, longlong)
+TC_IMPL_SCALAR (ULongLong, ulonglong)
+TC_IMPL_SCALAR (LongDouble, longdouble)
+TC_IMPL_SCALAR (WChar, wchar)
+TC_IMPL_SCALAR (Any, any)
+TC_IMPEX (TypeCode)
+TC_IMPEX (Object)
+TC_IMPEX (string)
+TC_IMPEX (wstring)
 //TC_IMPEX (ValueBase)
 

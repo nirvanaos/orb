@@ -7,6 +7,13 @@
 namespace CORBA {
 namespace Nirvana {
 
+/// Bind repository id to a type.
+template <typename T>
+struct RepIdOf
+{
+	static const Char repository_id_ [];
+};
+
 /// The ABI for a particular interface I.
 /// A "bridge" between the client and servant sides.
 template <class I>
