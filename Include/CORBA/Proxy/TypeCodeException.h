@@ -20,7 +20,7 @@ public:
 	}
 };
 
-template <class E, ULong member_count>
+template <class E, ULong member_count = 0>
 class TypeCodeExceptionImpl :
 	public TypeCodeWithMembers <TypeCodeException <E>, member_count, TypeCodeExceptionRoot <E> >
 {};

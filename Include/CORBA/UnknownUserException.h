@@ -6,6 +6,8 @@
 
 namespace CORBA {
 
+extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_UnknownUserException;
+
 class UnknownUserException : public UserException
 {
 public:
@@ -21,8 +23,6 @@ public:
 private:
 	Data data_;
 };
-
-extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_UnknownUserException;
 
 }
 

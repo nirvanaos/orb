@@ -1,14 +1,13 @@
 #include <CORBA/CORBA.h>
-#include <CORBA/Proxy/TypeCodeException.h>
 #include <CORBA/Proxy/TypeCodeEnum.h>
+#include <CORBA/Proxy/TypeCodeException.h>
 #include "tc_impex.h"
 
 namespace CORBA {
 namespace Nirvana {
 
 const Char TypeCodeEnum <CompletionStatus>::name_ [] = "CompletionStatus";
-const Char* const TypeCodeEnum <CompletionStatus>::members_ [] =
-{
+const Char* const TypeCodeEnum <CompletionStatus>::members_ [] = {
 	"COMPLETED_YES",
 	"COMPLETED_NO",
 	"COMPLETED_MAYBE"
@@ -41,4 +40,5 @@ SYSTEM_EXCEPTIONS(TC_EXCEPTION)
 }
 
 TC_IMPEX (CompletionStatus)
-SYSTEM_EXCEPTIONS(TC_IMPEX)
+
+SYSTEM_EXCEPTIONS(TC_IMPEX_BY_ID)

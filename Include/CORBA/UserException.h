@@ -40,16 +40,18 @@ protected:
 
 }
 
-#define DEFINE_USER_EXCEPTION(E)const E* E::_downcast (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT {\
-return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), repository_id_)) ? &static_cast <const E&> (*ep) : 0; }
+#define DEFINE_USER_EXC(E)const E* E::_downcast (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT {\
+return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), E::repository_id_)) ? &static_cast <const E&> (*ep) : 0; }\
 
-#define DEFINE_USER_EXCEPTION1(prefix, ns, E, major, minor) DEFINE_EXCEPTION1 (prefix, ns, E, major, minor) DEFINE_USER_EXCEPTION (E)
-#define DEFINE_USER_EXCEPTION2(prefix, ns1, ns2, E, major, minor) DEFINE_EXCEPTION2 (prefix, ns1, ns2, E, major, minor) DEFINE_USER_EXCEPTION (E)
+#define DEFINE_USER_EXCEPTION(E, rep_id) const ::CORBA::Char E::repository_id_ [] = rep_id;\
+__declspec (allocate(OLF_BIND)) extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>\
+_tc_##E = { ::Nirvana::OLF_IMPORT_INTERFACE, E::repository_id_, ::CORBA::TypeCode::repository_id_ };\
+DEFINE_USER_EXC (E)\
+::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 
 #define DEFINE_CORBA_INTERFACE_EXCEPTION(ns, I, E)\
-const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> I::_tc_##E { ::Nirvana::OLF_IMPORT_INTERFACE, E::repository_id_, ::CORBA::TypeCode::repository_id_ };\
-::CORBA::TypeCode_ptr I::E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }\
-const char I::E::repository_id_ [] = "IDL:omg.org/" #ns "/" #E ":1.0";\
-DEFINE_USER_EXCEPTION(I::E)
+const ::CORBA::Char I::E::repository_id_ [] = "IDL:omg.org/" #ns "/" #I "/" #E ":1.0";\
+DEFINE_USER_EXC (I::E)\
+::CORBA::TypeCode_ptr I::E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 
 #endif

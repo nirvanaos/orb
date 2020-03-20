@@ -1,8 +1,8 @@
 // Nirvana project
-// BasicTypes - CORBA basic data types
+// basic_types.h - CORBA basic data types
 
-#ifndef NIRVANA_ORB_BASICTYPES_H_
-#define NIRVANA_ORB_BASICTYPES_H_
+#ifndef NIRVANA_ORB_BASIC_TYPES_H_
+#define NIRVANA_ORB_BASIC_TYPES_H_
 
 #include <stdint.h>
 #include "Boolean.h"

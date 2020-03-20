@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_INTERFACE_H_
 
 #include <Nirvana/NirvanaBase.h>
-#include "BasicTypes.h"
+#include "basic_types.h"
 #include "StringBase.h"
 
 namespace CORBA {

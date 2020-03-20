@@ -16,7 +16,7 @@ enum class PlatformMarshalContext : ABI_enum
 };
 
 template <> struct Type <PlatformMarshalContext> : 
-	TypeEnum <PlatformMarshalContext, (ABI_enum)PlatformMarshalContext::OTHER_PROTECTION_DOMAIN>
+	TypeEnum <PlatformMarshalContext, PlatformMarshalContext::OTHER_PROTECTION_DOMAIN>
 {};
 
 }

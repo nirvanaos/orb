@@ -6,7 +6,7 @@
 #define NIRVANA_ORB_ABI_STRING_H_
 
 #include <Nirvana/NirvanaBase.h>
-#include "BasicTypes.h"
+#include "basic_types.h"
 
 namespace std {
 template <class C, class T, class A> class basic_string;

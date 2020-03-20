@@ -50,22 +50,21 @@ typedef ::CORBA::Nirvana::I_ptr <ServantBase> Servant;
 class POA : public CORBA::Nirvana::ClientInterface <POA, CORBA::Object>
 {
 public:
+	static const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_ServantAlreadyActive;
+
 	class ServantAlreadyActive : public ::CORBA::UserException
 	{
 	public:
 		DECLARE_EXCEPTION (ServantAlreadyActive);
 	};
 
-	static const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_ServantAlreadyActive;
+	static const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_ObjectNotActive;
 
 	class ObjectNotActive : public ::CORBA::UserException
 	{
 	public:
 		DECLARE_EXCEPTION (ObjectNotActive);
 	};
-
-	static const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_ObjectNotActive;
-
 };
 
 }

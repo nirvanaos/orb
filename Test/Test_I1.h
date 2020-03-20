@@ -19,6 +19,8 @@ typedef CORBA::Nirvana::Type <SeqLong>::C_inout SeqLong_inout;
 
 extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_SeqLong;
 
+extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_MyException;
+
 class MyException : public CORBA::UserException
 {
 public:
@@ -40,8 +42,6 @@ public:
 		data_.param = val;
 	}
 };
-
-extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_MyException;
 
 }
 

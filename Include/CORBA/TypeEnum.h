@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_TYPEENUM_H_
 #define NIRVANA_ORB_TYPEENUM_H_
 
-#include "BasicTypes.h"
+#include "basic_types.h"
 #include <Nirvana/throw_exception.h>
 
 namespace CORBA {
@@ -10,12 +10,12 @@ namespace Nirvana {
 typedef ULong ABI_enum;
 
 /// Base for enum data types
-template <class T, ABI_enum last>
+template <class T, T last>
 struct TypeEnum
 {
 	static_assert (sizeof (T) == sizeof (ABI_enum), "IDL enumerations must be declared as 32-bit.");
 	static const bool has_check = true;
-	static const ABI_enum count_ = last + 1;
+	static const ABI_enum count_ = (ABI_enum)last + 1;
 
 	typedef ABI_enum ABI_type;
 

@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_FIXED_H_
 #define NIRVANA_ORB_FIXED_H_
 
-#include "BasicTypes.h"
+#include "basic_types.h"
 #include <iosfwd>
 
 namespace CORBA {

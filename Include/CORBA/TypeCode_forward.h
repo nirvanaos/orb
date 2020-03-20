@@ -148,21 +148,21 @@ public:
 class TypeCode : public ::CORBA::Nirvana::ClientInterface <TypeCode>
 {
 public:
+	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_BadKind;
+
 	class BadKind : public UserException
 	{
 	public:
 		DECLARE_EXCEPTION (BadKind);
 	};
 
-	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_BadKind;
+	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Bounds;
 
 	class Bounds : public UserException
 	{
 	public:
 		DECLARE_EXCEPTION (Bounds);
 	};
-
-	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Bounds;
 };
 
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_TCKind;

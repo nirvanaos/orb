@@ -5,21 +5,24 @@
 #include <algorithm>
 #include <string.h>
 
-#define DEFINE_SYS_EXCEPTION(E)\
-Long E::__code () const NIRVANA_NOEXCEPT { return EC_##E; }\
-const E* E::_downcast (const Exception* ep) NIRVANA_NOEXCEPT { return (ep && (EC_##E == ep->__code ())) ? static_cast <const E*> (ep) : 0; }\
-
-#define DEFINE_SYSTEM_EXCEPTION(E) DEFINE_EXCEPTION1("omg.org/", CORBA, E, 1, 0) DEFINE_SYS_EXCEPTION(E)
-#define DEFINE_NIRVANA_EXCEPTION(E) DEFINE_EXCEPTION1("", CORBA, E, 1, 0) DEFINE_SYS_EXCEPTION(E)
-
-#define EXCEPTION_ENTRY(E) { { E::repository_id_, sizeof (E), ::CORBA::Nirvana::construct <E> }, countof (E::repository_id_) - 1 },
-
 namespace CORBA {
 
 using namespace Nirvana;
 using namespace std;
 
-CORBA_EXCEPTIONS (DEFINE_SYSTEM_EXCEPTION)
+#define DEFINE_SYS_EXCEPTION(E)\
+const E* E::_downcast (const Exception* ep) NIRVANA_NOEXCEPT { return (ep && (EC_##E == ep->__code ())) ? static_cast <const E*> (ep) : 0; }\
+::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
+
+#define DEFINE_CORBA_EXCEPTION(E) const Char E::repository_id_ [] = "IDL:omg.org/CORBA/" #E ":1.0";\
+DEFINE_SYS_EXCEPTION(E)
+
+#define DEFINE_NIRVANA_EXCEPTION(E) const Char E::repository_id_ [] = "IDL:CORBA/" #E ":1.0";\
+DEFINE_SYS_EXCEPTION(E)
+
+#define EXCEPTION_ENTRY(E) { { E::repository_id_, sizeof (E), ::CORBA::Nirvana::construct <E> }, countof (E::repository_id_) - 1 },
+
+CORBA_EXCEPTIONS (DEFINE_CORBA_EXCEPTION)
 NIRVANA_EXCEPTIONS (DEFINE_NIRVANA_EXCEPTION)
 
 const SystemException::ExceptionEntry SystemException::exception_entries_ [SystemException::KNOWN_SYSTEM_EXCEPTIONS] = {
