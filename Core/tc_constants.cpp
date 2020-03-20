@@ -11,22 +11,24 @@ class TypeCodeScalar : public TypeCodeStatic <TypeCodeScalar <T, tk>, TypeCodeTK
 
 }
 
+using namespace Nirvana;
+
 class TC_TypeCode :
-	public Nirvana::TypeCodeStatic <TC_TypeCode, Nirvana::TypeCodeTK <tk_TypeCode>, Nirvana::TypeCodeOps <TypeCode_var> >
+	public TypeCodeStatic <TC_TypeCode, TypeCodeTK <tk_TypeCode>, TypeCodeOps <TypeCode_var> >
 {};
 
 class TC_Object :
-	public Nirvana::TypeCodeStatic <TC_Object, Nirvana::TypeCodeWithId <tk_objref, Object>, Nirvana::TypeCodeOps <Object_var> >
+	public TypeCodeStatic <TC_Object, TypeCodeWithId <tk_objref, Object>, TypeCodeOps <Object_var> >
 {
 public:
-	static const char* _name (Nirvana::Bridge <TypeCode>* _b, Nirvana::EnvironmentBridge* _env)
+	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return "Object";
 	}
 };
 
-typedef Nirvana::TypeCodeString <Nirvana::String, 0> TC_string;
-typedef Nirvana::TypeCodeString <Nirvana::WString, 0> TC_wstring;
+typedef TypeCodeString <String, 0> TC_string;
+typedef TypeCodeString <WString, 0> TC_wstring;
 
 }
 /*

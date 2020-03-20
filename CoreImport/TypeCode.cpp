@@ -3,13 +3,15 @@
 
 namespace CORBA {
 
-__declspec (allocate(OLF_BIND))
-extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_TCKind = { ::Nirvana::OLF_IMPORT_INTERFACE, Nirvana::RepIdOf <TCKind>::repository_id_, TypeCode::repository_id_ };
+using namespace ::Nirvana;
 
 __declspec (allocate(OLF_BIND))
-const ::Nirvana::ImportInterfaceT <TypeCode> TypeCode::_tc_BadKind = { ::Nirvana::OLF_IMPORT_INTERFACE, TypeCode::BadKind::repository_id_, TypeCode::repository_id_ };
+extern const ImportInterfaceT <TypeCode> _tc_TCKind = { OLF_IMPORT_INTERFACE, Nirvana::RepIdOf <TCKind>::repository_id_, TypeCode::repository_id_ };
 
 __declspec (allocate(OLF_BIND))
-const ::Nirvana::ImportInterfaceT <TypeCode> TypeCode::_tc_Bounds = { ::Nirvana::OLF_IMPORT_INTERFACE, TypeCode::Bounds::repository_id_, TypeCode::repository_id_ };
+const ImportInterfaceT <TypeCode> TypeCode::_tc_BadKind = { OLF_IMPORT_INTERFACE, TypeCode::BadKind::repository_id_, TypeCode::repository_id_ };
+
+__declspec (allocate(OLF_BIND))
+const ImportInterfaceT <TypeCode> TypeCode::_tc_Bounds = { OLF_IMPORT_INTERFACE, TypeCode::Bounds::repository_id_, TypeCode::repository_id_ };
 
 }

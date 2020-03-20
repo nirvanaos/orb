@@ -1,4 +1,4 @@
-#include <CORBA/TypeCode.h>
+#include <CORBA/CORBA.h>
 #include <CORBA/Proxy/TypeCodeEnum.h>
 #include <CORBA/Proxy/TypeCodeException.h>
 #include "tc_impex.h"
@@ -42,6 +42,6 @@ typedef Nirvana::TypeCodeException <TypeCode::Bounds> TC_TypeCode_Bounds;
 
 TC_IMPEX_BY_ID (TCKind)
 
-INTERFACE_EXC_IMPEX (TypeCode, BadKind)
-INTERFACE_EXC_IMPEX (TypeCode, Bounds)
+INTERFACE_EXC_IMPEX (CORBA, TypeCode, BadKind)
+INTERFACE_EXC_IMPEX (CORBA, TypeCode, Bounds)
 
