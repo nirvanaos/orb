@@ -42,7 +42,7 @@ public:
 		return hdr + 1;
 	}
 
-	void operator delete (void* p, size_t size)
+	void operator delete (void* p)
 	{
 		size_t* hdr = (size_t*)p - 1;
 		g_object_factory->memory_release (hdr, *hdr);

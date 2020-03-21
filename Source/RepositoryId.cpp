@@ -82,8 +82,12 @@ ULong RepositoryId::minor_number (const Char* minor_version)
 int RepositoryId::compare (const Char* cur, size_t cur_l, String_in requested)
 {
 	const String& req_s = static_cast <const String&> (requested);
-	const Char* req = req_s.c_str ();
-	const Char* req_end = req + req_s.length ();
+	return compare (cur, cur_l, req_s.c_str (), req_s.length ());
+}
+
+int RepositoryId::compare (const Char* cur, size_t cur_l, const Char* req, size_t req_l)
+{
+	const Char* req_end = req + req_l;
 	const Char* cur_end = cur + cur_l;
 
 	const size_t IDL_len = countof (IDL_) - 1;

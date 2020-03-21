@@ -16,9 +16,7 @@ typedef I_out <ProxyFactory> ProxyFactory_out;
 /*
 ~~~{.idl}
 pseudo interface ProxyFactory {
-	//! Returns ids of base interfaces.
-	const CountedArray <const char*>& interfaces ();
-	const CountedArray <const Operation>& operations ();
+	const InterfaceMetadata* metadata ();
 	Interface create_platform_proxy (PlatformObjRef target, short interface_idx, out DynamicServant deleter);
 	Interface create_remote_proxy (RemoteObjRef target, out DynamicServant deleter);
 };

@@ -11,8 +11,7 @@ namespace Nirvana {
 
 template <class I> class PlatformProxy;
 
-class PlatformProxyRoot :
-	public Bridge <DynamicServant>
+class PlatformProxyRoot
 {
 public:
 	Bridge <Object>* _get_object (String_in iid) const
@@ -34,11 +33,6 @@ public:
 		release (proxy_manager_);
 	}
 
-	DynamicServant_ptr _dynamic_servant ()
-	{
-		return &static_cast <DynamicServant&> (static_cast <Bridge <DynamicServant>&> (*this));
-	}
-
 	PlatformObjRef_ptr _target () const
 	{
 		return proxy_manager_;
@@ -50,9 +44,7 @@ public:
 	}
 
 protected:
-	PlatformProxyRoot (const Bridge <DynamicServant>::EPV& epv, 
-		PlatformObjRef_ptr proxy_manager, UShort interface_idx) :
-		Bridge <DynamicServant> (epv),
+	PlatformProxyRoot (PlatformObjRef_ptr proxy_manager, UShort interface_idx) :
 		proxy_manager_ (proxy_manager),
 		interface_idx_ (interface_idx)
 	{}
@@ -66,8 +58,14 @@ template <class S>
 class ProxyLifeCycle :
 	public ServantTraits <S>,
 	public LifeCycleRefCnt <S>,
-	public Skeleton <S, DynamicServant>
-{};
+	public InterfaceImplBase <S, DynamicServant>
+{
+public:
+	DynamicServant_ptr _dynamic_servant ()
+	{
+		return &static_cast <DynamicServant&> (static_cast <Bridge <DynamicServant>&> (*this));
+	}
+};
 
 template <class I>
 class PlatformProxyBase :

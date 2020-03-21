@@ -2,13 +2,12 @@
 #define NIRVANA_ORB_CORE_OBJECTIMPL_H_
 
 #include <CORBA/CORBA.h>
-#include <CORBA/ImplementationPseudo.h>
 
 namespace CORBA {
 namespace Nirvana {
 namespace Core {
 
-/// Implements Object operations
+/// Implements Object operations over ServantBase.
 class ObjectImpl
 {
 public:

@@ -1,20 +1,20 @@
-#ifndef NIRVANA_ORB_CORE_PROXYMANAGER_H_
-#define NIRVANA_ORB_CORE_PROXYMANAGER_H_
+#ifndef NIRVANA_ORB_CORE_SERVANTPROXYMANAGER_H_
+#define NIRVANA_ORB_CORE_SERVANTPROXYMANAGER_H_
 
 #include <CORBA/Server.h>
-#include "../AtomicCounter.h"
-#include "../Synchronized.h"
+#include <Core/AtomicCounter.h>
+#include <Core/Synchronized.h>
 
 namespace CORBA {
 namespace Nirvana {
 namespace Core {
 
-class ProxyManager :
+class ServantProxyManager :
 	public Bridge <Object>
 {
 	class GarbageCollector;
 protected:
-	ProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase_ptr servant, Interface_ptr lifecycle);
+	ServantProxyManager (const Bridge <Object>::EPV& proxy_impl, AbstractBase_ptr servant, Interface_ptr lifecycle);
 
 public:
 	Bridge <Object>* _get_object (String_in iid)
@@ -34,7 +34,7 @@ public:
 		::Nirvana::Core::AtomicCounter::IntType cnt = ref_cnt_.increment ();
 		if (1 == cnt) {
 			try {
-				::Nirvana::Synchronized sync (sync_context_);
+				::Nirvana::Core::Synchronized sync (sync_context_);
 				add_ref_1 ();
 			} catch (...) {
 				ref_cnt_.decrement ();
@@ -80,7 +80,7 @@ public:
 
 	// Other methods
 
-	const ProxyManager& defaults () const
+	const ServantProxyManager& defaults () const
 	{
 		return *this;
 	}
@@ -95,18 +95,21 @@ public:
 		return primary_interface ()->_epv ().interface_id;
 	}
 
-	::Nirvana::SynchronizationContext_ptr sync_context () const
+	::Nirvana::Core::SynchronizationContext* sync_context () const
 	{
 		return sync_context_;
 	}
 
-	void run_garbage_collector (::Nirvana::Runnable_var gc) const;
+	void run_garbage_collector (::Nirvana::Core::Core_var <::Nirvana::Core::Runnable> gc) const
+	{
+		sync_context_->async_call (gc, ::Nirvana::INFINITE_DEADLINE);
+	}
 
 private:
 	AbstractBase_ptr servant_;
 	Interface_ptr servant_lifecycle_;
 	::Nirvana::Core::AtomicCounter ref_cnt_;
-	::Nirvana::SynchronizationContext_var sync_context_;
+	::Nirvana::Core::Core_var <::Nirvana::Core::SynchronizationContext> sync_context_;
 };
 
 }
