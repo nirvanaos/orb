@@ -14,13 +14,12 @@ namespace Nirvana {
 template <class S>
 class InterfaceImpl <S, LocalObject> :
 	public InterfaceImpl <S, AbstractBase>,
-	public Skeleton <S, Object>,
-	public InterfaceImplBase <S, LocalObject>,
+	public Skeleton <S, LocalObject>,
 	public ObjectLink
 {
 protected:
 	InterfaceImpl () :
-		ObjectLink (Skeleton <S, Object>::epv_)
+		ObjectLink (Skeleton <S, LocalObject>::epv_, *this)
 	{}
 
 	InterfaceImpl (const InterfaceImpl&) :

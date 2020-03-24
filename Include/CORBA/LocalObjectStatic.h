@@ -1,10 +1,11 @@
-#ifndef NIRVANA_ORB_OBJECTSTATIC_H_
-#define NIRVANA_ORB_OBJECTSTATIC_H_
+#ifndef NIRVANA_ORB_LOCALOBJECTSTATIC_H_
+#define NIRVANA_ORB_LOCALOBJECTSTATIC_H_
 
 #include <Nirvana/NirvanaBase.h>
 #include <Nirvana/OLF.h>
 #include "AbstractBaseStatic.h"
-#include "Object_s.h"
+#include "ReferenceCounterStatic.h"
+#include "LocalObject_s.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -13,9 +14,10 @@ namespace Nirvana {
 //! \tparam S Servant class.
 //! \tparam Primary Primary interface.
 template <class S>
-class InterfaceStatic <S, Object> :
+class InterfaceStatic <S, LocalObject> :
 	public InterfaceStatic <S, AbstractBase>,
-	public InterfaceStaticBase <S, Object>
+	public InterfaceStatic <S, ReferenceCounter>,
+	public InterfaceStaticBase <S, LocalObject>
 {
 public:
 	static Bridge <Object>* _get_object (String_in iid)
@@ -25,36 +27,10 @@ public:
 
 	// Object operations
 
-	static ImplementationDef_var _get_implementation ()
-	{
-		return object ()->_get_implementation ();
-	}
-
-	static InterfaceDef_var _get_interface ()
-	{
-		return object ()->_get_interface ();
-	}
-
-	static Boolean _is_a (const String& type_id)
-	{
-		return object ()->_is_a (type_id);
-	}
-
 	static Boolean _non_existent ()
 	{
-		return object ()->_non_existent ();
+		return false;
 	}
-
-	static Boolean _is_equivalent (Object_ptr other_object)
-	{
-		return object ()->_is_equivalent (other_object);
-	}
-
-	static ULong _hash (ULong maximum)
-	{
-		return object ()->_hash (maximum);
-	}
-	// TODO: Other Object operations shall be here...
 
 protected:
 	static Interface* _get_proxy ()
@@ -75,8 +51,8 @@ private:
 };
 
 template <class S> __declspec (allocate(OLF_BIND))
-const ::Nirvana::ExportLocal InterfaceStatic <S, Object>::export_struct_{ ::Nirvana::OLF_EXPORT_LOCAL, S::constant_name
-, STATIC_BRIDGE (S, Object) };
+const ::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ ::Nirvana::OLF_EXPORT_LOCAL, S::constant_name
+, STATIC_BRIDGE (S, LocalObject), STATIC_BRIDGE (S, AbstractBase) };
 
 }
 }

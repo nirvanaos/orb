@@ -17,6 +17,7 @@ BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)
 BRIDGE_EPV
+ABI_boolean (*non_existent) (Bridge <LocalObject>*, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <> /// We can obtain I_ptr <LocalObject> directly from servant pointer
@@ -62,12 +63,33 @@ public:
 	}
 };
 
+template <class T>
+class Client <T, LocalObject> :
+	public T
+{
+public:
+	Boolean _non_existent ();
+};
+
+template <class T>
+Boolean Client <T, LocalObject>::_non_existent ()
+{
+	Environment _env;
+	Bridge <LocalObject>& _b (T::_get_bridge (_env));
+	T_ret <Boolean> _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
+	_env.check ();
+	return _ret;
+}
+
 }
 
 typedef Nirvana::I_ptr <LocalObject> LocalObject_ptr;
 
 class LocalObject : public Nirvana::ClientInterface <LocalObject, Object, Nirvana::ReferenceCounter>
-{};
+{
+public:
+	using ClientInterfacePrimary <LocalObject>::_non_existent;
+};
 
 }
 

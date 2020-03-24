@@ -3,20 +3,26 @@
 namespace CORBA {
 namespace Nirvana {
 
-Interface* ServantPOA <Object>::__get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
+PortableServer::POA_var ServantPOA <LocalObject>::_default_POA ()
 {
-	return Skeleton <ServantPOA <Object>, Object>::__get_interface (obj, env);
+	return PortableServer::POA::_nil ();
 }
 
-ABI_boolean ServantPOA <Object>::__is_a (Bridge <Object>* obj, ABI_in <String> type_id, EnvironmentBridge* env)
+InterfaceDef_var ServantPOA <LocalObject>::_get_interface ()
 {
-	return Skeleton <ServantPOA <Object>, Object>::__is_a (obj, type_id, env);
+	return ObjectLink::_get_interface ();
 }
 
-ABI_boolean ServantPOA <Object>::__non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
+Boolean ServantPOA <LocalObject>::_is_a (const String& type_id)
 {
-	return Skeleton <ServantPOA <Object>, Object>::__non_existent (obj, env);
+	return ObjectLink::_is_a (type_id);
 }
+
+Boolean ServantPOA <LocalObject>::_non_existent ()
+{
+	return ObjectLink::_non_existent ();
+}
+
 
 }
 }

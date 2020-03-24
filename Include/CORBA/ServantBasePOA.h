@@ -42,8 +42,7 @@ public:
 
 	virtual Boolean _non_existent ()
 	{
-		_check_construct ();
-		return ServantBaseLink::_non_existent ();
+		return false;
 	}
 
 protected:

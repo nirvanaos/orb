@@ -1,53 +1,37 @@
 #ifndef NIRVANA_ORB_OBJECTLINK_H_
 #define NIRVANA_ORB_OBJECTLINK_H_
 
-#include "Object.h"
+#include "LocalObject.h"
 
 namespace CORBA {
 namespace Nirvana {
 
 //! \brief Implements delegate to the core Object implementation.
 class ObjectLink :
-	public Bridge <Object>
+	public Bridge <LocalObject>
 {
 public:
 	Bridge <Object>* _get_object (String_in iid) const;
 
 	// Object operations
 
-	ImplementationDef_var _get_implementation () const
+	Boolean _non_existent () const
 	{
-		return object_->_get_implementation ();
+		return false;
 	}
 
-	InterfaceDef_var _get_interface () const
+	InterfaceDef_var _get_interface ()
 	{
 		return object_->_get_interface ();
 	}
 
-	Boolean _is_a (const String& type_id) const
+	Boolean _is_a (const String& type_id)
 	{
 		return object_->_is_a (type_id);
 	}
 
-	Boolean _non_existent () const
-	{
-		return object_->_non_existent ();
-	}
-
-	Boolean _is_equivalent (Object_ptr other_object) const
-	{
-		return object_->_is_equivalent (other_object);
-	}
-
-	ULong _hash (ULong maximum) const
-	{
-		return object_->_hash (maximum);
-	}
-	// TODO: Other Object operations shall be here...
-
 protected:
-	ObjectLink (const Bridge <Object>::EPV& epv);
+	ObjectLink (const Bridge <LocalObject>::EPV& epv, Bridge <AbstractBase>& ab);
 
 	ObjectLink (const ObjectLink&) = delete;
 	ObjectLink& operator = (const ObjectLink&)

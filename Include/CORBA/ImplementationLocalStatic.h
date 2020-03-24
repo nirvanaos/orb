@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_IMPLEMENTATIONLOCALSTATIC_H_
 #define NIRVANA_ORB_IMPLEMENTATIONLOCALSTATIC_H_
 
-#include "ObjectStatic.h"
+#include "LocalObjectStatic.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -16,7 +16,7 @@ namespace Nirvana {
 
 template <class S, class Primary, class ... Bases>
 class ImplementationLocalStatic :
-	public InterfaceStatic <S, Object>,
+	public InterfaceStatic <S, LocalObject>,
 	public InterfaceStatic <S, Bases>...,
 	public InterfaceStatic <S, Primary>
 {
@@ -28,7 +28,7 @@ public:
 
 	static I_ptr <Primary> _this ()
 	{
-		return static_cast <Primary*> (InterfaceStatic <S, Object>::_get_proxy ());
+		return static_cast <Primary*> (InterfaceStatic <S, LocalObject>::_get_proxy ());
 	}
 };
 

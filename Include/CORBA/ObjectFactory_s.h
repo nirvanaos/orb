@@ -99,10 +99,10 @@ protected:
 		return 0;
 	}
 
-	static Interface* _create_local_object (Bridge <ObjectFactory>* _b, Interface* impl, EnvironmentBridge* _env)
+	static Interface* _create_local_object (Bridge <ObjectFactory>* _b, Interface* impl, Interface* ab, EnvironmentBridge* _env)
 	{
 		try {
-			return TypeI <Object>::ret (S::_implementation (_b).create_local_object (TypeI <Object>::in (impl)));
+			return TypeI <Object>::ret (S::_implementation (_b).create_local_object (TypeI <LocalObject>::in (impl), TypeI <LocalObject>::in (ab)));
 		} catch (const Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
