@@ -35,12 +35,6 @@ class TestException : public CORBA::UserException
 {
 public:
 	DECLARE_EXCEPTION (TestException);
-
-	TestException ()
-	{}
-
-	TestException (const Data*)
-	{}
 };
 
 DEFINE_USER_EXCEPTION (TestException, "IDL:TestORB/TestException:1.0")

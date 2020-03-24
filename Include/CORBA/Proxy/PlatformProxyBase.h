@@ -81,7 +81,7 @@ public:
 
 protected:
 	PlatformProxyBase (PlatformObjRef_ptr proxy_manager, UShort interface_idx) :
-		PlatformProxyRoot (ProxyLifeCycle <PlatformProxy <I> >::epv_, proxy_manager, interface_idx)
+		PlatformProxyRoot (proxy_manager, interface_idx)
 	{}
 };
 
