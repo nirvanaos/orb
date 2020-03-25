@@ -1,7 +1,7 @@
 #ifndef NIRVANA_ORB_SERVANTBASELINK_H_
 #define NIRVANA_ORB_SERVANTBASELINK_H_
 
-#include "ServantBase_s.h"
+#include "servant_core.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -11,23 +11,26 @@ class ServantBaseLink :
 	public Bridge <PortableServer::ServantBase>
 {
 public:
-	Bridge <Object>* _get_object (String_in iid) const;
+	Bridge <Object>* _get_object (String_in iid) const
+	{
+		return get_object_from_core (core_object_, iid);
+	}
 
 	// ServantBase operations
 
 	PortableServer::POA_var _default_POA () const
 	{
-		return servant_base_->_default_POA ();
+		return core_object_->_default_POA ();
 	}
 
 	InterfaceDef_var _get_interface () const
 	{
-		return servant_base_->_get_interface ();
+		return core_object_->_get_interface ();
 	}
 
 	Boolean _is_a (const String& type_id) const
 	{
-		return servant_base_->_is_a (type_id);
+		return core_object_->_is_a (type_id);
 	}
 
 	Boolean _non_existent () const
@@ -38,12 +41,12 @@ public:
 	// Our extensions
 	Boolean _is_active () const
 	{
-		return !servant_base_->_non_existent ();
+		return !core_object_->_non_existent ();
 	}
 
 	PortableServer::Servant __core_servant () const
 	{
-		return servant_base_;
+		return core_object_;
 	}
 
 protected:
@@ -59,10 +62,13 @@ protected:
 
 	void _construct ();
 
-	Interface* _get_proxy ();
+	Interface* _get_proxy ()
+	{
+		return get_proxy (core_object_);
+	}
 
 protected:
-	PortableServer::ServantBase_var servant_base_;
+	PortableServer::ServantBase_var core_object_;
 };
 
 }

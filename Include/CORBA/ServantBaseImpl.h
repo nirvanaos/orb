@@ -3,6 +3,7 @@
 
 #include "AbstractBaseImpl.h"
 #include "ServantBaseLink.h"
+#include "ServantBase_s.h"
 
 namespace CORBA {
 namespace Nirvana {

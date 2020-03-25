@@ -3,6 +3,7 @@
 
 #include "AbstractBasePOA.h"
 #include "ServantBaseLink.h"
+#include "ServantBase_s.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -55,7 +56,7 @@ private:
 
 	void _check_construct ()
 	{
-		if (!ServantBaseLink::servant_base_)
+		if (!ServantBaseLink::core_object_)
 			_construct ();
 	}
 };

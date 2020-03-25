@@ -7,6 +7,7 @@
 namespace CORBA {
 
 class LocalObject;
+typedef Nirvana::I_ptr <LocalObject> LocalObject_ptr;
 typedef Nirvana::I_var <LocalObject> LocalObject_var;
 typedef Nirvana::I_out <LocalObject> LocalObject_out;
 typedef Nirvana::I_inout <LocalObject> LocalObject_inout;
@@ -82,8 +83,6 @@ Boolean Client <T, LocalObject>::_non_existent ()
 }
 
 }
-
-typedef Nirvana::I_ptr <LocalObject> LocalObject_ptr;
 
 class LocalObject : public Nirvana::ClientInterface <LocalObject, Object, Nirvana::ReferenceCounter>
 {

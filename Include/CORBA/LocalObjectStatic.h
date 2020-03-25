@@ -6,6 +6,7 @@
 #include "AbstractBaseStatic.h"
 #include "ReferenceCounterStatic.h"
 #include "LocalObject_s.h"
+#include "local_core.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -22,10 +23,7 @@ class InterfaceStatic <S, LocalObject> :
 public:
 	static Bridge <Object>* _get_object (String_in iid)
 	{
-		if (RepositoryId::compatible (export_struct_.core_object->_epv ().header.interface_id, iid))
-			return export_struct_.core_object;
-		else
-			::Nirvana::throw_INV_OBJREF ();
+		return get_object_from_core (core_object (), iid);
 	}
 
 	// Object operations
@@ -38,16 +36,13 @@ public:
 protected:
 	static Interface* _get_proxy ()
 	{
-		Interface* proxy = AbstractBase_ptr (object ())->_query_interface (0);
-		if (!proxy)
-			::Nirvana::throw_MARSHAL ();
-		return proxy;
+		return get_proxy (core_object ());
 	}
 
 private:
-	static Object_ptr object ()
+	static LocalObject_ptr core_object ()
 	{
-		return static_cast <Object*> (export_struct_.core_object);
+		return static_cast <LocalObject*> (export_struct_.core_object);
 	}
 
 	static __declspec (allocate(OLF_BIND)) const ::Nirvana::ExportLocal export_struct_;

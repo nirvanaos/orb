@@ -66,7 +66,7 @@ public:
 
 	ReferenceCounter_var create_reference_counter (I_in <DynamicServant> dynamic);
 	PortableServer::ServantBase_var create_servant (I_in <PortableServer::ServantBase> impl);
-	Object_var create_local_object (I_in <LocalObject> impl, I_in <AbstractBase> abstract_base);
+	LocalObject_var create_local_object (I_in <LocalObject> impl, I_in <AbstractBase> abstract_base);
 };
 
 template <class T>
@@ -138,11 +138,11 @@ PortableServer::ServantBase_var Client <T, ObjectFactory>::create_servant (I_in 
 }
 
 template <class T>
-Object_var Client <T, ObjectFactory>::create_local_object (I_in <LocalObject> impl, I_in <AbstractBase> abstract_base)
+LocalObject_var Client <T, ObjectFactory>::create_local_object (I_in <LocalObject> impl, I_in <AbstractBase> abstract_base)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
-	I_ret <Object> _ret = (_b._epv ().epv.create_local_object) (&_b, &impl, &abstract_base, &_env);
+	I_ret <LocalObject> _ret = (_b._epv ().epv.create_local_object) (&_b, &impl, &abstract_base, &_env);
 	_env.check ();
 	return _ret;
 }

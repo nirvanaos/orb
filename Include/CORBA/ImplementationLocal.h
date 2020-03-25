@@ -30,7 +30,7 @@ public:
 
 	I_ptr <Primary> _this ()
 	{
-		return static_cast <Primary*> (ObjectLink::_get_proxy ());
+		return static_cast <Primary*> (LocalObjectLink::_get_proxy ());
 	}
 
 protected:

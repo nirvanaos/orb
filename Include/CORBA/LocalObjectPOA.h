@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_LOCALOBJECTPOA_H_
 
 #include "ServantBasePOA.h"
-#include "ObjectLink.h"
+#include "LocalObjectLink.h"
 #include "LocalObject_s.h"
 
 #ifdef _MSC_BUILD
@@ -16,12 +16,12 @@ template <>
 class ServantPOA <LocalObject> :
 	public virtual ServantPOA <PortableServer::ServantBase>,
 	public Skeleton <ServantPOA <LocalObject>, LocalObject>,
-	public ObjectLink
+	public LocalObjectLink
 {
 public:
 	virtual Bridge <Object>* _get_object (String_in iid)
 	{
-		return ObjectLink::_get_object (iid);
+		return LocalObjectLink::_get_object (iid);
 	}
 
 	// Object operations
@@ -35,12 +35,12 @@ public:
 
 protected:
 	ServantPOA () :
-		ObjectLink (Skeleton <ServantPOA <LocalObject>, LocalObject>::epv_, *this)
+		LocalObjectLink (Skeleton <ServantPOA <LocalObject>, LocalObject>::epv_, *this)
 	{}
 
 	virtual Interface* _get_proxy ()
 	{
-		return ObjectLink::_get_proxy ();
+		return LocalObjectLink::_get_proxy ();
 	}
 };
 

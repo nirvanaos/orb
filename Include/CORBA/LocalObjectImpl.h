@@ -2,9 +2,8 @@
 #define NIRVANA_ORB_LOCALOBJECTIMPL_H_
 
 #include "AbstractBaseImpl.h"
-#include "Object_s.h"
+#include "LocalObjectLink.h"
 #include "LocalObject_s.h"
-#include "ObjectLink.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -15,11 +14,11 @@ template <class S>
 class InterfaceImpl <S, LocalObject> :
 	public InterfaceImpl <S, AbstractBase>,
 	public Skeleton <S, LocalObject>,
-	public ObjectLink
+	public LocalObjectLink
 {
 protected:
 	InterfaceImpl () :
-		ObjectLink (Skeleton <S, LocalObject>::epv_, *this)
+		LocalObjectLink (Skeleton <S, LocalObject>::epv_, *this)
 	{}
 
 	InterfaceImpl (const InterfaceImpl&) :

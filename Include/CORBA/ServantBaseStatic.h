@@ -6,6 +6,7 @@
 #include "AbstractBaseStatic.h"
 #include "ReferenceCounterStatic.h"
 #include "ServantBase_s.h"
+#include "servant_core.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -19,11 +20,9 @@ class InterfaceStatic <S, PortableServer::ServantBase> :
 	public InterfaceStaticBase <S, PortableServer::ServantBase>
 {
 public:
-	// In the final implementation this method won't be called for servants.
-	// So we could replace the implementation to throw_BAD_OPERATION() call.
 	static Bridge <Object>* _get_object (String_in iid)
 	{
-		return static_cast <Bridge <Object>*> (AbstractBase_ptr (servant_base ())->_query_interface (iid));
+		return get_object_from_core (servant_base (), iid);
 	}
 
 	// ServantBase operations
@@ -56,10 +55,7 @@ public:
 protected:
 	static Interface* _get_proxy ()
 	{
-		Interface* proxy = AbstractBase_ptr (servant_base ())->_query_interface (0);
-		if (!proxy)
-			::Nirvana::throw_MARSHAL ();
-		return proxy;
+		return get_proxy (servant_base ());
 	}
 
 private:
