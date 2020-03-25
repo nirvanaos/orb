@@ -22,7 +22,10 @@ class InterfaceStatic <S, LocalObject> :
 public:
 	static Bridge <Object>* _get_object (String_in iid)
 	{
-		return static_cast <Bridge <Object>*> (AbstractBase_ptr (object ())->_query_interface (iid));
+		if (RepositoryId::compatible (export_struct_.core_object->_epv ().header.interface_id, iid))
+			return export_struct_.core_object;
+		else
+			::Nirvana::throw_INV_OBJREF ();
 	}
 
 	// Object operations

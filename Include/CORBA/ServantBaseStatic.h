@@ -19,6 +19,8 @@ class InterfaceStatic <S, PortableServer::ServantBase> :
 	public InterfaceStaticBase <S, PortableServer::ServantBase>
 {
 public:
+	// In the final implementation this method won't be called for servants.
+	// So we could replace the implementation to throw_BAD_OPERATION() call.
 	static Bridge <Object>* _get_object (String_in iid)
 	{
 		return static_cast <Bridge <Object>*> (AbstractBase_ptr (servant_base ())->_query_interface (iid));

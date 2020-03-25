@@ -21,7 +21,10 @@ Interface* ObjectLink::_get_proxy ()
 
 Bridge <Object>* ObjectLink::_get_object (String_in iid) const
 {
-	return &Object_ptr (object_);
+	if (RepositoryId::compatible (object_->_epv ().header.interface_id, iid))
+		return &Object_ptr (object_);
+	else
+		::Nirvana::throw_INV_OBJREF ();
 }
 
 }
