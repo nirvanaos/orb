@@ -8,4 +8,6 @@ namespace CORBA {
 
 SYSTEM_EXCEPTIONS (IMPORT_TC)
 
+IMPORT_TC (UnknownUserException)
+
 }
