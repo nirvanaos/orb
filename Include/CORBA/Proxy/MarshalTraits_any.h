@@ -12,6 +12,8 @@ namespace Nirvana {
 template <>
 struct MarshalTraits <Any>
 {
+	static const bool has_marshal = true;
+
 	typedef ABI <Any> ABI;
 
 	static void marshal_in (const Any& src, PlatformMarshal_ptr marshaler, ABI& dst);

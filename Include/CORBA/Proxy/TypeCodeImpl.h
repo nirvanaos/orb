@@ -124,6 +124,11 @@ public:
 		new (dst) Valtype (std::move (*reinterpret_cast <Valtype*> (src)));
 	}
 
+	static ABI_boolean __has_marshal (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	{
+		return MarshalTraits <Valtype>::has_marshal;
+	}
+
 	static void _marshal_in (::Nirvana::ConstPointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
@@ -174,6 +179,11 @@ public:
 	static void __move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::Pointer src, EnvironmentBridge* _env)
 	{}
 
+	static ABI_boolean __has_marshal (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	{
+		return 0;
+	}
+
 	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* marshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{}
 
@@ -207,6 +217,7 @@ public:
 	using Impl::_concrete_base_type;
 
 	using Ops::__size;
+	using Ops::__has_marshal;
 
 	// The get_compact_typecode operation strips out all optional name and member
 	// name fields, but it leaves all alias typecodes intact.

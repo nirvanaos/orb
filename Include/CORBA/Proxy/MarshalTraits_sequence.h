@@ -12,6 +12,8 @@ namespace Nirvana {
 template <typename T>
 struct MarshalTraits <Sequence <T> >
 {
+	static const bool has_marshal = true;
+
 	typedef Sequence <T> Seq;
 	typedef ABI <Sequence <T> > SeqABI;
 	typedef typename Type <T>::ABI_type T_ABI;
@@ -29,7 +31,7 @@ void MarshalTraits <Sequence <T> >::marshal_in (const Seq& src, PlatformMarshal_
 		dst.reset ();
 	else {
 		const SeqABI& asrc = static_cast <const SeqABI&> (src);
-		if (std::is_trivially_copyable <T> ()) {
+		if (!MarshalTraits <T>::has_marshal) {
 			size_t cb = asrc.size * sizeof (T);
 			dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, 0);
 			dst.allocated = cb;
@@ -56,7 +58,7 @@ void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, PlatformMarshal_ptr m
 	else {
 		SeqABI& asrc = static_cast <SeqABI&> (src);
 		dst.size = asrc.size;
-		if (std::is_trivially_copyable <T> ()) {
+		if (!MarshalTraits <T>::has_marshal) {
 			size_t cb = asrc.size * sizeof (T);
 			dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated ());
 			dst.allocated = cb;
@@ -106,7 +108,7 @@ void MarshalTraits <Sequence <T> >::unmarshal (SeqABI& src, PlatformUnmarshal_pt
 			unmarshaler->adopt_memory (adst.ptr = src.ptr, src.allocated);
 		else
 			adst.ptr = (T_ABI*)dst.memory ()->copy (nullptr, src.ptr, src.size * sizeof (T), 0);
-		if (!std::is_trivially_copyable <T> ()) {
+		if (MarshalTraits <T>::has_marshal) {
 			T_ABI* sp = src.ptr, *end = sp + src.size;
 			T* dp = adst.ptr;
 			try {

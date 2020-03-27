@@ -300,6 +300,18 @@ protected:
 		}
 	}
 
+	static ABI_boolean __has_marshal (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	{
+		try {
+			return Type <Boolean>::ret (S::_implementation (_b)._has_marshal ());
+		} catch (const Exception & e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return 0;
+	}
+
 	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* marshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{
 		try {
@@ -367,6 +379,7 @@ const Bridge <TypeCode>::EPV Skeleton <S, TypeCode>::epv_ = {
 		S::__destruct,
 		S::__copy,
 		S::__move,
+		S::__has_marshal,
 		S::__marshal_in,
 		S::__marshal_out,
 		S::__unmarshal

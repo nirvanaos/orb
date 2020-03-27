@@ -8,6 +8,8 @@ namespace Nirvana {
 template <>
 struct MarshalTraits <::Test::MyException::Data>
 {
+	static const bool has_marshal = true;
+
 	static void marshal_in (const ::Test::MyException::Data& src, PlatformMarshal_ptr marshaler, ABI <::Test::MyException::Data>& dst) NIRVANA_NOEXCEPT
 	{
 		_marshal_in (src.param, marshaler, dst.param);

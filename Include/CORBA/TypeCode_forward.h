@@ -73,6 +73,7 @@ void (*_construct) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
 void (*_destruct) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
 void (*_copy) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::ConstPointer, EnvironmentBridge*);
 void (*_move) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::Pointer, EnvironmentBridge*);
+ABI_boolean (*_has_marshal) (Bridge <TypeCode>*, EnvironmentBridge*);
 void (*_marshal_in) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, Interface*, ::Nirvana::Pointer, EnvironmentBridge*);
 void (*_marshal_out) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*, ::Nirvana::Pointer, EnvironmentBridge*);
 void (*_unmarshal) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*, ::Nirvana::Pointer, EnvironmentBridge*);
@@ -137,6 +138,9 @@ public:
 
 	// Call move constructor. Fallbacks to copy constructor if no move constructor exists.
 	void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src);
+
+	// If returns `false` then `marshaler` and `unmarshaler` parameters may be `nil`.
+	Boolean _has_marshal ();
 
 	void _marshal_in (::Nirvana::ConstPointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst);
 	void _marshal_out (::Nirvana::Pointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst);

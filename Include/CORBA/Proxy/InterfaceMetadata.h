@@ -44,6 +44,8 @@ struct Operation
 	CountedArray <Parameter> output;
 	const ::Nirvana::ImportInterfaceT <TypeCode>& return_type;
 	PlatformRequestProc invoke_platform;
+
+	/// May be null. In this case request will be converted into platform request.
 	RemoteRequestProc invoke_remote;
 };
 

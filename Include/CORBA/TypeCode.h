@@ -250,6 +250,16 @@ void Client <T, TypeCode>::_move (::Nirvana::Pointer dst, ::Nirvana::Pointer src
 }
 
 template <class T>
+Boolean Client <T, TypeCode>::_has_marshal ()
+{
+	Environment _env;
+	Bridge <TypeCode>& _b (T::_get_bridge (_env));
+	Type <Boolean>::C_ret _ret ((_b._epv ().epv._has_marshal) (&_b, &_env));
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
 void Client <T, TypeCode>::_marshal_in (::Nirvana::ConstPointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst)
 {
 	Environment _env;

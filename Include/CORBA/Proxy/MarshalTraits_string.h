@@ -12,6 +12,8 @@ namespace Nirvana {
 template <typename C>
 struct MarshalTraits <StringT <C> >
 {
+	static const bool has_marshal = true;
+
 	typedef StringT <C> Var;
 	typedef ABI <Var> ABI;
 

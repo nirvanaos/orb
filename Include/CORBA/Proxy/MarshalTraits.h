@@ -19,6 +19,8 @@ template <class T
 >
 struct MarshalTraitsTrivial
 {
+	static const bool has_marshal = false;
+
 	static void marshal_in (const T& src, PlatformMarshal_ptr marshaler, typename Type <T>::ABI_type& dst) NIRVANA_NOEXCEPT
 	{
 		dst = (typename Type <T>::ABI_type&)src;
@@ -46,6 +48,8 @@ template <class T> struct MarshalTraits :
 template <>
 struct MarshalTraits <TypeCode_var>
 {
+	static const bool has_marshal = true;
+
 	static void marshal_in (const TypeCode_ptr src, PlatformMarshal_ptr marshaler, Interface*& dst)
 	{
 		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_type_code (src);
@@ -65,6 +69,8 @@ struct MarshalTraits <TypeCode_var>
 template <class I> // I must derive from Object
 struct MarshalTraits <I_var <I> >
 {
+	static const bool has_marshal = true;
+
 	static void marshal_in (const I_ptr <I> src, PlatformMarshal_ptr marshaler, Interface*& dst)
 	{
 		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_object (src);
