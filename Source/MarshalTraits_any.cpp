@@ -3,7 +3,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-void MarshalTraits <Any>::marshal_in (const Any& src, PlatformMarshal_ptr marshaler, ABI& dst)
+void MarshalTraits <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst)
 {
 	TypeCode_ptr tc = src.type ();
 	if (!tc)
@@ -26,7 +26,7 @@ void MarshalTraits <Any>::marshal_in (const Any& src, PlatformMarshal_ptr marsha
 	}
 }
 
-void MarshalTraits <Any>::marshal_out (Any& src, PlatformMarshal_ptr marshaler, ABI& dst)
+void MarshalTraits <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst)
 {
 	TypeCode_ptr tc = src.type ();
 	if (!tc)
@@ -37,7 +37,7 @@ void MarshalTraits <Any>::marshal_out (Any& src, PlatformMarshal_ptr marshaler, 
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
 			psrc = src.large_pointer ();
-			if (PlatformMarshalContext::SHARED_MEMORY == marshaler->context ()) {
+			if (MarshalContext::SHARED_MEMORY == marshaler->context ()) {
 				dst = src;
 				src.reset ();
 				pdst = dst.large_pointer ();
@@ -57,7 +57,7 @@ void MarshalTraits <Any>::marshal_out (Any& src, PlatformMarshal_ptr marshaler, 
 	}
 }
 
-void MarshalTraits <Any>::unmarshal (ABI& src, PlatformUnmarshal_ptr unmarshaler, Any& dst)
+void MarshalTraits <Any>::unmarshal (ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
 {
 	TypeCode* ptc = src.type ();
 	if (!ptc)

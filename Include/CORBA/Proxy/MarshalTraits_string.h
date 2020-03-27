@@ -3,8 +3,8 @@
 
 #include "MarshalTraits_forward.h"
 #include "../String.h"
-#include "PlatformMarshal.h"
-#include "PlatformUnmarshal.h"
+#include "Marshal.h"
+#include "Unmarshal.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -19,11 +19,11 @@ struct MarshalTraits <StringT <C> >
 
 	static bool _small_copy (const ABI& src, ABI& dst);
 
-	static void marshal_in (const Var& src, PlatformMarshal_ptr marshaler, ABI& dst);
+	static void marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst);
 
-	static void marshal_out (Var& src, PlatformMarshal_ptr marshaler, ABI& dst);
+	static void marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst);
 
-	static void unmarshal (ABI& src, PlatformUnmarshal_ptr unmarshaler, Var& dst)
+	static void unmarshal (ABI& src, Unmarshal_ptr unmarshaler, Var& dst)
 	{
 		if (Type <Var>::has_check)
 			Type <Var>::check (src);
@@ -40,7 +40,7 @@ struct MarshalTraits <StringT <C> >
 };
 
 template <typename C>
-void MarshalTraits <StringT <C> >::marshal_in (const Var& src, PlatformMarshal_ptr marshaler, ABI& dst)
+void MarshalTraits <StringT <C> >::marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst)
 {
 	assert (&src != &dst);
 	if (!_small_copy (src, dst)) {
@@ -53,7 +53,7 @@ void MarshalTraits <StringT <C> >::marshal_in (const Var& src, PlatformMarshal_p
 }
 
 template <typename C>
-void MarshalTraits <StringT <C> >::marshal_out (Var& src, PlatformMarshal_ptr marshaler, ABI& dst)
+void MarshalTraits <StringT <C> >::marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst)
 {
 	assert (&src != &dst);
 	if (!_small_copy (src, dst)) {

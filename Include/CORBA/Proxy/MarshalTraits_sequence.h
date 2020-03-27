@@ -3,8 +3,8 @@
 
 #include "MarshalTraits_forward.h"
 #include "../sequence.h"
-#include "PlatformMarshal.h"
-#include "PlatformUnmarshal.h"
+#include "Marshal.h"
+#include "Unmarshal.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -18,13 +18,13 @@ struct MarshalTraits <Sequence <T> >
 	typedef ABI <Sequence <T> > SeqABI;
 	typedef typename Type <T>::ABI_type T_ABI;
 
-	static void marshal_in (const Seq& src, PlatformMarshal_ptr marshaler, SeqABI& dst);
-	static void marshal_out (Seq& src, PlatformMarshal_ptr marshaler, SeqABI& dst);
-	static void unmarshal (SeqABI& src, PlatformUnmarshal_ptr unmarshaler, Seq& dst);
+	static void marshal_in (const Seq& src, Marshal_ptr marshaler, SeqABI& dst);
+	static void marshal_out (Seq& src, Marshal_ptr marshaler, SeqABI& dst);
+	static void unmarshal (SeqABI& src, Unmarshal_ptr unmarshaler, Seq& dst);
 };
 
 template <typename T>
-void MarshalTraits <Sequence <T> >::marshal_in (const Seq& src, PlatformMarshal_ptr marshaler, SeqABI& dst)
+void MarshalTraits <Sequence <T> >::marshal_in (const Seq& src, Marshal_ptr marshaler, SeqABI& dst)
 {
 	assert (&src != &dst);
 	if (src.empty ())
@@ -50,7 +50,7 @@ void MarshalTraits <Sequence <T> >::marshal_in (const Seq& src, PlatformMarshal_
 }
 
 template <typename T>
-void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, PlatformMarshal_ptr marshaler, SeqABI& dst)
+void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, Marshal_ptr marshaler, SeqABI& dst)
 {
 	assert (&src != &dst);
 	if (src.empty ())
@@ -67,8 +67,8 @@ void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, PlatformMarshal_ptr m
 			const T* sp = src.data (), * end = sp + src.size ();
 			T_ABI* dp;
 			size_t cb;
-			PlatformMarshalContext mctx = marshaler->context ();
-			if (PlatformMarshalContext::SHARED_MEMORY == mctx)
+			MarshalContext mctx = marshaler->context ();
+			if (MarshalContext::SHARED_MEMORY == mctx)
 				dp = (T_ABI*)sp;
 			else {
 				cb = asrc.size * sizeof (T);
@@ -81,7 +81,7 @@ void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, PlatformMarshal_ptr m
 				MarshalTraits <T>::marshal_out (*(sp++), marshaler, *(dp++));
 			} while (sp != end);
 
-			if (PlatformMarshalContext::SHARED_MEMORY == mctx)
+			if (MarshalContext::SHARED_MEMORY == mctx)
 				dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated ());
 			else {
 				Seq tmp;
@@ -94,7 +94,7 @@ void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, PlatformMarshal_ptr m
 }
 
 template <typename T>
-void MarshalTraits <Sequence <T> >::unmarshal (SeqABI& src, PlatformUnmarshal_ptr unmarshaler, Seq& dst)
+void MarshalTraits <Sequence <T> >::unmarshal (SeqABI& src, Unmarshal_ptr unmarshaler, Seq& dst)
 {
 	if (Type <Seq>::has_check)
 		Type <Seq>::check (src);

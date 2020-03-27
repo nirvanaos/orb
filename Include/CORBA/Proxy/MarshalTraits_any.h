@@ -3,8 +3,8 @@
 
 #include "MarshalTraits_forward.h"
 #include "../Any.h"
-#include "PlatformMarshal.h"
-#include "PlatformUnmarshal.h"
+#include "Marshal.h"
+#include "Unmarshal.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -16,9 +16,9 @@ struct MarshalTraits <Any>
 
 	typedef ABI <Any> ABI;
 
-	static void marshal_in (const Any& src, PlatformMarshal_ptr marshaler, ABI& dst);
-	static void marshal_out (Any& src, PlatformMarshal_ptr marshaler, ABI& dst);
-	static void unmarshal (ABI& src, PlatformUnmarshal_ptr unmarshaler, Any& dst);
+	static void marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst);
+	static void marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst);
+	static void unmarshal (ABI& src, Unmarshal_ptr unmarshaler, Any& dst);
 };
 
 }

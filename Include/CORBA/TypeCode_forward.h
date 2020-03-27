@@ -41,11 +41,11 @@ const ValueModifier VM_TRUNCATABLE = 3;
 
 namespace Nirvana {
 
-class PlatformMarshal;
-typedef I_ptr <PlatformMarshal> PlatformMarshal_ptr;
+class Marshal;
+typedef I_ptr <Marshal> Marshal_ptr;
 
-class PlatformUnmarshal;
-typedef I_ptr <PlatformUnmarshal> PlatformUnmarshal_ptr;
+class Unmarshal;
+typedef I_ptr <Unmarshal> Unmarshal_ptr;
 
 BRIDGE_BEGIN (TypeCode, CORBA_REPOSITORY_ID ("TypeCode"))
 Boolean (*equal) (Bridge <TypeCode>*, Interface*, EnvironmentBridge*);
@@ -142,9 +142,9 @@ public:
 	// If returns `false` then `marshaler` and `unmarshaler` parameters may be `nil`.
 	Boolean _has_marshal ();
 
-	void _marshal_in (::Nirvana::ConstPointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst);
-	void _marshal_out (::Nirvana::Pointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst);
-	void _unmarshal (::Nirvana::Pointer src, PlatformUnmarshal_ptr unmarshaler, ::Nirvana::Pointer dst);
+	void _marshal_in (::Nirvana::ConstPointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst);
+	void _marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst);
+	void _unmarshal (::Nirvana::Pointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst);
 };
 
 }

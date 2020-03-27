@@ -129,7 +129,7 @@ public:
 		return MarshalTraits <Valtype>::has_marshal;
 	}
 
-	static void _marshal_in (::Nirvana::ConstPointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst)
+	static void _marshal_in (::Nirvana::ConstPointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
@@ -138,7 +138,7 @@ public:
 		MarshalTraits <Valtype>::marshal_in (*reinterpret_cast <const Valtype*> (src), marshaler, *reinterpret_cast <typename Type <Valtype>::ABI_type*> (dst));
 	}
 
-	static void _marshal_out (::Nirvana::Pointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst)
+	static void _marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
@@ -147,7 +147,7 @@ public:
 		MarshalTraits <Valtype>::marshal_out (*reinterpret_cast <Valtype*> (src), marshaler, *reinterpret_cast <typename Type <Valtype>::ABI_type*> (dst));
 	}
 
-	static void _unmarshal (::Nirvana::Pointer src, PlatformUnmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
+	static void _unmarshal (::Nirvana::Pointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);

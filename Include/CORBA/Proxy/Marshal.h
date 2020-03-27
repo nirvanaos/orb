@@ -4,11 +4,11 @@ module CORBA {
 module Nirvana {
 
 /// Marshals data between objects in the same platform domain.
-pseudo interface PlatformMarshal
+pseudo interface Marshal
 {
   /// Returns marshal context.
 	/// Used for proxy code optimization.
-  attribute readonly PlatformMarshalContext context;
+  attribute readonly MarshalContext context;
 
   /// \brief Marshals memory block to the target memory space.
   ///
@@ -18,7 +18,7 @@ pseudo interface PlatformMarshal
   ///                      If size = 0 on return, the memory block is owned by the marshaling system
   ///                      and mustn't be released.
   ///                      If size if not zero, the memory block may be adopted by the message recipient
-  ///                      on the other side by `PlatformUnmarshal::adopt_memory()` call.
+  ///                      on the other side by `Unmarshal::adopt_memory()` call.
   /// \param release_size  If != 0 then source memory block at address p with size release_size must be released
   ///                      after marshaling.
   /// \return Address of the memory block at target memory space.
@@ -41,33 +41,33 @@ pseudo interface PlatformMarshal
 }
 ~~~
 */
-#ifndef NIRVANA_ORB_PLATFORMMARSHAL_H_
-#define NIRVANA_ORB_PLATFORMMARSHAL_H_
+#ifndef NIRVANA_ORB_MARSHAL_H_
+#define NIRVANA_ORB_MARSHAL_H_
 
 #include "../Object.h"
 #include "../TypeCode.h"
-#include "PlatformMarshalContext.h"
+#include "MarshalContext.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-class PlatformMarshal;
-typedef I_ptr <PlatformMarshal> PlatformMarshal_ptr;
-typedef I_var <PlatformMarshal> PlatformMarshal_var;
-typedef I_out <PlatformMarshal> PlatformMarshal_out;
+class Marshal;
+typedef I_ptr <Marshal> Marshal_ptr;
+typedef I_var <Marshal> Marshal_var;
+typedef I_out <Marshal> Marshal_out;
 
-/// \interface PlatformMarshal
+/// \interface Marshal
 ///
 /// \brief Controls marshaling between different protection domains on the one system.
 
 template <class T>
-class Client <T, PlatformMarshal> :
+class Client <T, Marshal> :
 	public T
 {
 public:
-	PlatformMarshalContext context ();
+	MarshalContext context ();
 
-	/// \fn uintptr_t PlatformMarshal::marshal_memory (const void* p, size_t& size);
+	/// \fn uintptr_t Marshal::marshal_memory (const void* p, size_t& size);
 	///
 	/// \brief Marshals memory block to another protection domain memory space.
 	///
@@ -77,13 +77,13 @@ public:
 	///   If size = 0 on return, the memory block is owned by the marshaling system
 	///   and mustn't be released.
 	///   If size if not zero, the memory block may be adopted by the message recipient
-	///   on the other side by `PlatformUnmarshal::adopt_memory()` call.
+	///   on the other side by `Unmarshal::adopt_memory()` call.
 	///
 	/// \return An uintptr_t represents address of the memory block at target memory space.
 
 	::Nirvana::UIntPtr marshal_memory (::Nirvana::Pointer p, ::Nirvana::Size& size, ::Nirvana::Size release_size);
 
-	/// \fn uintptr_t PlatformMarshal::get_buffer (size_t& size, void*& buf_ptr);
+	/// \fn uintptr_t Marshal::get_buffer (size_t& size, void*& buf_ptr);
 	///
 	/// \brief Allocates the uninitialized memory block and map it to the target memory space.
 	///   The caller gets pointer to the block and fill it with data.
@@ -99,55 +99,55 @@ public:
 	::Nirvana::UIntPtr marshal_type_code (TypeCode_ptr);
 };
 
-BRIDGE_BEGIN (PlatformMarshal, CORBA_NIRVANA_REPOSITORY_ID ("PlatformMarshal"))
-ABI_enum (*context) (Bridge <PlatformMarshal>*, EnvironmentBridge*);
-::Nirvana::UIntPtr (*marshal_memory) (Bridge <PlatformMarshal>*, ::Nirvana::Pointer, ::Nirvana::Size*, ::Nirvana::Size, EnvironmentBridge*);
-::Nirvana::UIntPtr (*get_buffer) (Bridge <PlatformMarshal>*, ::Nirvana::Size* size, ::Nirvana::Pointer* buf_ptr, EnvironmentBridge*);
-::Nirvana::UIntPtr (*marshal_object) (Bridge <PlatformMarshal>*, Interface*, EnvironmentBridge*);
-::Nirvana::UIntPtr (*marshal_type_code) (Bridge <PlatformMarshal>*, Interface*, EnvironmentBridge*);
+BRIDGE_BEGIN (Marshal, CORBA_NIRVANA_REPOSITORY_ID ("Marshal"))
+ABI_enum (*context) (Bridge <Marshal>*, EnvironmentBridge*);
+::Nirvana::UIntPtr (*marshal_memory) (Bridge <Marshal>*, ::Nirvana::Pointer, ::Nirvana::Size*, ::Nirvana::Size, EnvironmentBridge*);
+::Nirvana::UIntPtr (*get_buffer) (Bridge <Marshal>*, ::Nirvana::Size* size, ::Nirvana::Pointer* buf_ptr, EnvironmentBridge*);
+::Nirvana::UIntPtr (*marshal_object) (Bridge <Marshal>*, Interface*, EnvironmentBridge*);
+::Nirvana::UIntPtr (*marshal_type_code) (Bridge <Marshal>*, Interface*, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <class T>
-::Nirvana::UIntPtr Client <T, PlatformMarshal>::marshal_memory (::Nirvana::Pointer p, ::Nirvana::Size& size, ::Nirvana::Size release_size)
+::Nirvana::UIntPtr Client <T, Marshal>::marshal_memory (::Nirvana::Pointer p, ::Nirvana::Size& size, ::Nirvana::Size release_size)
 {
 	Environment _env;
-	Bridge <PlatformMarshal>& _b (T::_get_bridge (_env));
+	Bridge <Marshal>& _b (T::_get_bridge (_env));
 	::Nirvana::UIntPtr _ret = (_b._epv ().epv.marshal_memory) (&_b, p, &size, release_size, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-::Nirvana::UIntPtr Client <T, PlatformMarshal>::get_buffer (::Nirvana::Size& size, ::Nirvana::Pointer& buf_ptr)
+::Nirvana::UIntPtr Client <T, Marshal>::get_buffer (::Nirvana::Size& size, ::Nirvana::Pointer& buf_ptr)
 {
 	Environment _env;
-	Bridge <PlatformMarshal>& _b (T::_get_bridge (_env));
+	Bridge <Marshal>& _b (T::_get_bridge (_env));
 	::Nirvana::UIntPtr _ret = (_b._epv ().epv.get_buffer) (&_b, &size, &buf_ptr, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-::Nirvana::UIntPtr Client <T, PlatformMarshal>::marshal_object (Object_ptr obj)
+::Nirvana::UIntPtr Client <T, Marshal>::marshal_object (Object_ptr obj)
 {
 	Environment _env;
-	Bridge <PlatformMarshal>& _b (T::_get_bridge (_env));
+	Bridge <Marshal>& _b (T::_get_bridge (_env));
 	::Nirvana::UIntPtr _ret = (_b._epv ().epv.marshal_object) (&_b, &obj, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-::Nirvana::UIntPtr Client <T, PlatformMarshal>::marshal_type_code (TypeCode_ptr tc)
+::Nirvana::UIntPtr Client <T, Marshal>::marshal_type_code (TypeCode_ptr tc)
 {
 	Environment _env;
-	Bridge <PlatformMarshal>& _b (T::_get_bridge (_env));
+	Bridge <Marshal>& _b (T::_get_bridge (_env));
 	::Nirvana::UIntPtr _ret = (_b._epv ().epv.marshal_type_code) (&_b, &tc, &_env);
 	_env.check ();
 	return _ret;
 }
 
-class PlatformMarshal : public ClientInterface <PlatformMarshal>
+class Marshal : public ClientInterface <Marshal>
 {};
 
 }

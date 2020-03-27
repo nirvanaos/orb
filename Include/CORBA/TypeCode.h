@@ -260,7 +260,7 @@ Boolean Client <T, TypeCode>::_has_marshal ()
 }
 
 template <class T>
-void Client <T, TypeCode>::_marshal_in (::Nirvana::ConstPointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst)
+void Client <T, TypeCode>::_marshal_in (::Nirvana::ConstPointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -269,7 +269,7 @@ void Client <T, TypeCode>::_marshal_in (::Nirvana::ConstPointer src, PlatformMar
 }
 
 template <class T>
-void Client <T, TypeCode>::_marshal_out (::Nirvana::Pointer src, PlatformMarshal_ptr marshaler, ::Nirvana::Pointer dst)
+void Client <T, TypeCode>::_marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -278,7 +278,7 @@ void Client <T, TypeCode>::_marshal_out (::Nirvana::Pointer src, PlatformMarshal
 }
 
 template <class T>
-void Client <T, TypeCode>::_unmarshal (::Nirvana::Pointer src, PlatformUnmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
+void Client <T, TypeCode>::_unmarshal (::Nirvana::Pointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));

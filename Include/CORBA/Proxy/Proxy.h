@@ -5,9 +5,9 @@
 #include "../FindInterface.h"
 #include "ProxyFactory_s.h"
 #include "MarshalTraits.h"
-#include "PlatformObjRef.h"
-#include "PlatformRequest.h"
-#include "PlatformProxyBase.h"
+#include "IOReference.h"
+#include "IORequest.h"
+#include "ProxyBase.h"
 #include "TypeCodeString.h"
 #include "TypeCodeSequence.h"
 #include "TypeCodeException.h"
@@ -26,12 +26,12 @@ public:
 	// ProxyFactory
 	static const InterfaceMetadata metadata_;
 
-	Interface_ptr create_platform_proxy (
-		PlatformObjRef_ptr proxy_manager, UShort interface_idx,
+	Interface_ptr create_proxy (
+		IOReference_ptr proxy_manager, UShort interface_idx,
 		DynamicServant_var& deleter)
 	{
-		PlatformProxy <I>* proxy =
-			::Nirvana::stateless_create <PlatformProxy <I> > (proxy_manager, interface_idx);
+		Proxy <I>* proxy =
+			::Nirvana::stateless_create <Proxy <I> > (proxy_manager, interface_idx);
 		deleter = proxy->_dynamic_servant ();
 		return proxy->_proxy ();
 	}

@@ -1,23 +1,23 @@
-#ifndef NIRVANA_ORB_PLATFORMPROXYBASE_H_
-#define NIRVANA_ORB_PLATFORMPROXYBASE_H_
+#ifndef NIRVANA_ORB_PROXYBASE_H_
+#define NIRVANA_ORB_PROXYBASE_H_
 
 #include "../CORBA.h"
 #include "../ServantImpl.h"
 #include "../DynamicServant_s.h"
-#include "PlatformObjRef.h"
+#include "IOReference.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-template <class I> class PlatformProxy;
+template <class I> class Proxy;
 
-class PlatformProxyRoot
+class ProxyRoot
 {
 public:
 	Bridge <Object>* _get_object (String_in iid) const
 	{
 		Environment env;
-		typename Bridge <PlatformObjRef>:: template Wide <Object>::Func func = proxy_manager_->_epv ().base;
+		typename Bridge <IOReference>:: template Wide <Object>::Func func = proxy_manager_->_epv ().base;
 		Bridge <Object>* ret = (func)(&proxy_manager_, iid, &env);
 		env.check ();
 		return ret;
@@ -33,7 +33,7 @@ public:
 		release (proxy_manager_);
 	}
 
-	PlatformObjRef_ptr _target () const
+	IOReference_ptr _target () const
 	{
 		return proxy_manager_;
 	}
@@ -44,13 +44,13 @@ public:
 	}
 
 protected:
-	PlatformProxyRoot (PlatformObjRef_ptr proxy_manager, UShort interface_idx) :
+	ProxyRoot (IOReference_ptr proxy_manager, UShort interface_idx) :
 		proxy_manager_ (proxy_manager),
 		interface_idx_ (interface_idx)
 	{}
 
 private:
-	PlatformObjRef_ptr proxy_manager_;
+	IOReference_ptr proxy_manager_;
 	UShort interface_idx_;
 };
 
@@ -68,10 +68,10 @@ public:
 };
 
 template <class I>
-class PlatformProxyBase :
-	public PlatformProxyRoot,
-	public ProxyLifeCycle <PlatformProxy <I> >,
-	public InterfaceImplBase <PlatformProxy <I>, I>
+class ProxyBase :
+	public ProxyRoot,
+	public ProxyLifeCycle <Proxy <I> >,
+	public InterfaceImplBase <Proxy <I>, I>
 {
 public:
 	Interface* _proxy ()
@@ -80,8 +80,8 @@ public:
 	}
 
 protected:
-	PlatformProxyBase (PlatformObjRef_ptr proxy_manager, UShort interface_idx) :
-		PlatformProxyRoot (proxy_manager, interface_idx)
+	ProxyBase (IOReference_ptr proxy_manager, UShort interface_idx) :
+		ProxyRoot (proxy_manager, interface_idx)
 	{}
 };
 

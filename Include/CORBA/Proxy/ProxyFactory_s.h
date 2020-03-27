@@ -16,13 +16,13 @@ public:
 	static const typename Bridge <ProxyFactory>::EPV epv_;
 
 protected:
-	static Interface* _create_platform_proxy (Bridge <ProxyFactory>* obj,
+	static Interface* _create_proxy (Bridge <ProxyFactory>* obj,
 		Interface* target, UShort interface_idx,
 		Interface** deleter, EnvironmentBridge* env)
 	{
 		try {
-			return TypeI <Interface>::VT_ret (S::_implementation (obj).create_platform_proxy (
-				TypeI <PlatformObjRef>::in (target), interface_idx,
+			return TypeI <Interface>::VT_ret (S::_implementation (obj).create_proxy (
+				TypeI <IOReference>::in (target), interface_idx,
 				TypeI <DynamicServant>::out (deleter)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
@@ -42,7 +42,7 @@ const Bridge <ProxyFactory>::EPV Skeleton <S, ProxyFactory>::epv_ = {
 	},
 	{ // epv
 		&S::metadata_,
-		S::_create_platform_proxy
+		S::_create_proxy
 	}
 };
 

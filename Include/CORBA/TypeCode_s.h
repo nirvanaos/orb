@@ -4,7 +4,7 @@
 #include "TypeCode.h"
 #include "ImplementationPseudoStatic.h"
 #include "Type_interface.h"
-#include "Proxy/PlatformMarshal.h"
+#include "Proxy/Marshal.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -315,7 +315,7 @@ protected:
 	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* marshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{
 		try {
-			S::_implementation (_b)._marshal_in (src, TypeI <PlatformMarshal>::in (marshaler), dst);
+			S::_implementation (_b)._marshal_in (src, TypeI <Marshal>::in (marshaler), dst);
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -326,7 +326,7 @@ protected:
 	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* marshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{
 		try {
-			S::_implementation (_b)._marshal_in (src, TypeI <PlatformMarshal>::in (marshaler), dst);
+			S::_implementation (_b)._marshal_in (src, TypeI <Marshal>::in (marshaler), dst);
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -337,7 +337,7 @@ protected:
 	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* unmarshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{
 		try {
-			S::_implementation (_b)._unmarshal (src, TypeI <PlatformUnmarshal>::in (unmarshaler), dst);
+			S::_implementation (_b)._unmarshal (src, TypeI <Unmarshal>::in (unmarshaler), dst);
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
