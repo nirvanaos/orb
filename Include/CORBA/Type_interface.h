@@ -34,7 +34,7 @@ public:
 protected:
 	/// Using I_ptr as inout parameter is error prone and prohibited.
 	I_inout (I_ptr <I>& p) :
-		ref_ (p.p_)
+		ref_ (reinterpret_cast <Interface*&> (p.p_))
 	{}
 
 protected:

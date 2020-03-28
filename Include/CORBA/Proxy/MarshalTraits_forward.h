@@ -18,20 +18,31 @@ template <> struct MarshalTraits <T>
   /// \param dst         Destination value ABI.
   static void marshal_in (const T& src, Marshal_ptr marshaler, Type <T>::ABI_type <T>& dst);
 
-  /// Moves output data to the marshaling buffer.
+  /// \brief Moves output data to the marshaling buffer.
   /// \param src         Source value. After marshalling, the value can be released.
   /// \param marshaler   Marshaler interface. May be `nil` if MarshalTraits::has_marshal is `false`.
   /// \param dst         Destination value ABI.
   static void marshal_out (T& src, Marshal_ptr marshaler, Type <T>::ABI_type <T>& dst);
 
-  /// Moves data from marshaling buffer to the local variable.
+  /// \brief Moves data from marshaling buffer to the local variable.
   /// \param src         Source value ABI.
   /// \param unmarshaler Unmarshaler interface. May be `nil` if MarshalTraits::has_marshal is `false`.
   /// \param dst         Destination value.
   static void unmarshal (Type <T>::ABI_type <T>& src, Unmarshal_ptr unmarshaler, T& dst);
 
-  /// `true` if marshal operations are not trivial copy.
+  /// \brief `true` if marshal operations are not trivial copy.
   static const bool has_marshal;
+
+  /// \brief Serialize
+  /// \param src         Source value ABI.
+  /// \param stream      Output stream.
+  static void serialize (const Type <T>::ABI_type <T>& src, Serialize_ptr stream);
+
+  /// \brief Deserialize
+  /// \param stream      Input stream.
+  /// \param marshaler   Marshaler interface. May be `nil` if MarshalTraits::has_marshal is `false`.
+  /// \param dst         Destination value ABI.
+  static void deserialize (Deserialize_ptr stream, Marshal_ptr marshaler, Type <T>::ABI_type <T>& dst);
 };
 ~~~
 */

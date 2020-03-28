@@ -1,3 +1,4 @@
+/// \file InterfaceMetadata.h
 #ifndef NIRVANA_ORB_INTERFACEMETADATA_H_
 #define NIRVANA_ORB_INTERFACEMETADATA_H_
 
@@ -30,18 +31,23 @@ struct Parameter
 	const ::Nirvana::ImportInterfaceT <TypeCode>& type;
 };
 
+/// Operation metadata.
 struct Operation
 {
-	const char* name;
+	const Char* name;
 	CountedArray <Parameter> input;
 	CountedArray <Parameter> output;
 	const ::Nirvana::ImportInterfaceT <TypeCode>& return_type;
 	PlatformRequestProc invoke;
 };
 
+/// Interface metadata.
 struct InterfaceMetadata
 {
-	CountedArray <const Char*> base_interfaces;
+	/// List of all interfaces. Primary interface must be first.
+	CountedArray <const Char*> interfaces;
+
+	/// List of all operations for the primary interface.
 	CountedArray <Operation> operations;
 };
 

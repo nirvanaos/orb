@@ -3,7 +3,8 @@
 module CORBA {
 module Nirvana {
 
-/// \brief Interface to the implementation of the some Inter-ORB protocol.
+/// \brief Interoperable Object Request.
+///        Interface to the implementation of the some Inter-ORB protocol.
 pseudo interface IORequest
 {
 	/// Returns a marshaler associated with this call.

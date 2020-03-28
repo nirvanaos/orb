@@ -37,7 +37,7 @@ public:
 	const InterfaceMetadata* metadata ()
 	{
 		Environment _env;
-		return T::_get_bridge (_env)._epv ().metadata;
+		return T::_get_bridge (_env)._epv ().epv.metadata;
 	}
 
 	Interface_ptr create_proxy (

@@ -9,7 +9,8 @@ struct OperationIndex
 	unsigned short operation_idx;
 };
 
-/// \brief Interface to the implementation of the some Inter-ORB protocol.
+/// \brief Interoperable Object Reference.
+///        Interface to the implementation of the some Inter-ORB protocol.
 pseudo interface IOReference : Object
 {
 	/// Creates Marshal object.
@@ -92,7 +93,7 @@ public:
 		::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size);
 };
 
-class IOReference : public ClientInterface <IOReference>
+class IOReference : public ClientInterface <IOReference, Object>
 {};
 
 template <class T>

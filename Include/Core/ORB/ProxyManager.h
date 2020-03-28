@@ -1,16 +1,20 @@
+/// \file ProxyManager.h
 #ifndef NIRVANA_ORB_CORE_PROXYMANAGER_H_
 #define NIRVANA_ORB_CORE_PROXYMANAGER_H_
 
 #include <CORBA/Proxy/Proxy.h>
+#include <Core/Array.h>
 
 namespace CORBA {
 namespace Nirvana {
 namespace Core {
 
+/// \brief Base for all proxies.
+///        Implements AbstractBase and DII for proxies.
 class ProxyManager
 {
 public:
-	ProxyManager (Interface* obj_proxy, const Char* primary_iid, bool remote);
+	ProxyManager (IOReference_ptr ior, String_in primary_iid);
 
 	struct InterfaceEntry
 	{
@@ -20,15 +24,32 @@ public:
 		DynamicServant_ptr deleter;
 		CountedArray <Operation> operations;
 
-		bool operator < (const InterfaceEntry& rhs) const
+		~InterfaceEntry () NIRVANA_NOEXCEPT
 		{
-			return RepositoryId::compare (iid, iid_len, rhs.iid, rhs.iid_len) < 0;
+			if (deleter)
+				deleter->_delete ();
 		}
 	};
 
+	struct OperationEntry
+	{
+		const Char* name;
+		size_t name_len;
+		OperationIndex idx;
+	};
+
+	InterfaceEntry* find_interface (String_in iid);
+	OperationEntry* find_operation (String_in name);
+
 private:
-	InterfaceEntry* interfaces_;
-	ULong interface_cnt_;
+	struct IEPred;
+	struct OEPred;
+
+	void create_proxy (IOReference_ptr ior, InterfaceEntry& ie);
+
+private:
+	::Nirvana::Core::Array <InterfaceEntry> interfaces_;
+	::Nirvana::Core::Array <OperationEntry> operations_;
 };
 
 }
