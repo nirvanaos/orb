@@ -49,7 +49,6 @@ struct Bridge <Object>::EPV
 
 	struct
 	{
-		Interface* (*get_implementation) (Bridge <Object>*, EnvironmentBridge*);
 		Interface* (*get_interface) (Bridge <Object>*, EnvironmentBridge*);
 		ABI_boolean (*is_a) (Bridge <Object>*, ABI_in <String> type_id, EnvironmentBridge*);
 		ABI_boolean (*non_existent) (Bridge <Object>*, EnvironmentBridge*);
@@ -81,11 +80,7 @@ public:
 template <class T>
 ImplementationDef_var Client <T, Object>::_get_implementation ()
 {
-	Environment _env;
-	Bridge <Object>& _b (T::_get_bridge (_env));
-	I_ret <ImplementationDef> _ret = (_b._epv ().epv.get_implementation) (&_b, &_env);
-	_env.check ();
-	return _ret;
+	return ImplementationDef::_nil ();
 }
 
 template <class T>

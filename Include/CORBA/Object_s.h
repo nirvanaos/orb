@@ -15,18 +15,6 @@ public:
 	static const typename Bridge <Object>::EPV epv_;
 
 protected:
-	static Interface* __get_implementation (Bridge <Object>* obj, EnvironmentBridge* env)
-	{
-		try {
-			return TypeI <ImplementationDef>::ret (S::_implementation (obj)._get_implementation ());
-		} catch (const Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return 0;
-	}
-
 	static Interface* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
 	{
 		try {
@@ -100,7 +88,6 @@ const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 		S::template _wide <AbstractBase, Object>
 	},
 	{ // epv
-		S::__get_implementation,
 		S::__get_interface,
 		S::__is_a,
 		S::__non_existent,

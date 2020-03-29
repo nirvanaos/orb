@@ -19,7 +19,7 @@ namespace Nirvana {
 typedef int ABI_boolean;
 
 template <>
-struct Type <bool>
+struct Type <Boolean>
 {
 	typedef ABI_boolean ABI_type;
 
@@ -35,7 +35,7 @@ struct Type <bool>
 	class C_in
 	{
 	public:
-		C_in (bool b) :
+		C_in (Boolean b) :
 			b_ (b)
 		{}
 
@@ -45,13 +45,13 @@ struct Type <bool>
 		}
 
 	private:
-		bool b_;
+		Boolean b_;
 	};
 
 	class C_inout
 	{
 	public:
-		C_inout (bool& b) :
+		C_inout (Boolean& b) :
 			ref_ (b),
 			abi_ (b)
 		{}
@@ -67,7 +67,7 @@ struct Type <bool>
 		}
 
 	protected:
-		C_inout (bool& b, ABI_type init) :
+		C_inout (Boolean& b, ABI_type init) :
 			ref_ (b),
 			abi_ (init)
 		{}
@@ -80,7 +80,7 @@ struct Type <bool>
 	class C_out : public C_inout
 	{
 	public:
-		C_out (bool& b) :
+		C_out (Boolean& b) :
 			C_inout (b, 0)
 		{}
 	};
@@ -92,13 +92,13 @@ struct Type <bool>
 			b_ (abi != 0)
 		{}
 
-		operator bool () const
+		operator Boolean () const
 		{
 			return b_;
 		}
 
 	private:
-		bool b_;
+		Boolean b_;
 	};
 
 	typedef C_ret C_VT_ret;
@@ -119,20 +119,20 @@ struct Type <bool>
 		return inout (p);
 	}
 
-	static ABI_ret ret (bool b)
+	static ABI_ret ret (Boolean b)
 	{
 		return b;
 	}
 
-	static ABI_VT_ret VT_ret (bool b)
+	static ABI_VT_ret VT_ret (Boolean b)
 	{
 		return b;
 	}
 };
 
-typedef Type <bool>::C_in Boolean_in;
-typedef Type <bool>::C_out Boolean_out;
-typedef Type <bool>::C_inout Boolean_inout;
+typedef Type <Boolean>::C_in Boolean_in;
+typedef Type <Boolean>::C_out Boolean_out;
+typedef Type <Boolean>::C_inout Boolean_inout;
 
 }
 }

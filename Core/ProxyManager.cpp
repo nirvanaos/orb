@@ -52,7 +52,12 @@ int ProxyManager::OEPred::compare (const Char* lhs, size_t lhs_len, const Char* 
 	return lexicographical_compare (lhs, lhs + lhs_len, rhs, rhs + rhs_len);
 }
 
-ProxyManager::ProxyManager (IOReference_ptr ior, String_in primary_iid)
+const Parameter ProxyManager::is_a_param_ = { "logical_type_id", _tc_string };
+
+ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Bridge <Object>::EPV& epv_obj,
+	String_in primary_iid, const Operation object_ops [3], Interface* object_impl) :
+	Bridge <IOReference> (epv_ior),
+	Bridge <Object> (epv_obj)
 {
 	ProxyFactory_var proxy_factory = g_binder->bind <ProxyFactory> (primary_iid);
 
@@ -61,61 +66,70 @@ ProxyManager::ProxyManager (IOReference_ptr ior, String_in primary_iid)
 		throw OBJ_ADAPTER (); // TODO: Log
 
 	ULong itf_cnt = metadata->interfaces.size;
-	if (!itf_cnt)
+	if (!itf_cnt || itf_cnt > numeric_limits <UShort>::max ())
 		throw OBJ_ADAPTER (); // TODO: Log
 	interfaces_.allocate (itf_cnt + 1);
 	InterfaceEntry* ie = interfaces_.begin ();
+	InterfaceEntry* const iend = interfaces_.end ();
 
-	{
-		Object_ptr obj_proxy = ior;
-		const Char* obj_iid = obj_proxy->_epv ().header.interface_id;
-		ie->iid = obj_iid;
-		ie->iid_len = strlen (obj_iid);
-		ie->proxy = &obj_proxy;
-		// TODO: ie->operations = ???
+	{ // Interface Object
+		ie->iid = Object::repository_id_;
+		ie->iid_len = countof (Object::repository_id_);
+		ie->proxy = &static_cast <Bridge <Object>&> (*this);
+		ie->operations.p = object_ops;
+		ie->operations.size = 3;
+		ie->implementation = object_impl;
+		++ie;
 	}
 
-	{
+	const Char* proxy_primary_iid;
+
+	{ // Fill interface table
 		const Char* const* itf = metadata->interfaces.p;
-		const Char* const* end = itf + itf_cnt;
+		
+		// Primary interface must be first
+		proxy_primary_iid = *itf;
+		if (!RepositoryId::compatible (proxy_primary_iid, primary_iid))
+			throw_OBJ_ADAPTER (); // TODO: Log
+
 		do {
-			++ie;
 			const Char* iid = *itf;
 			if (!iid)
 				throw OBJ_ADAPTER (); // TODO: Log
 			ie->iid = iid;
 			ie->iid_len = strlen (iid);
-		} while (end != ++itf);
+			++itf;
+		} while (iend != ++ie);
 	}
 
-	sort (interfaces_.begin (), interfaces_.end (), IEPred ());
+	sort (interfaces_.begin (), iend, IEPred ());
 
+	// Create base proxies
 	ie = interfaces_.begin ();
-	InterfaceEntry* end = interfaces_.end ();
 	InterfaceEntry* primary = nullptr;
 	do {
-		if (!ie->proxy) {
-			if (RepositoryId::compatible (ie->iid, ie->iid_len, primary_iid)) {
-				if (primary)
-					throw OBJ_ADAPTER (); // TODO: Log
-				primary = ie;
-			} else
-				create_proxy (ior, *ie);
-		}
-	} while (end != ++ie);
+		const Char* iid = ie->iid;
+		if (iid == proxy_primary_iid)
+			primary = ie;
+		else if (iid == Object::repository_id_)
+			object_itf_idx_ = (UShort)(ie - interfaces_.begin ());
+		else
+			create_proxy (*ie);
+	} while (iend != ++ie);
 
-	if (!primary)
-		throw OBJ_ADAPTER (); // TODO: Log
+	// Create primary proxy
+	assert (primary);
+	proxy_factory->create_proxy (ior (), (UShort)(primary - interfaces_.begin ()), primary->deleter);
+	ie->operations = metadata->operations;
 
-	proxy_factory->create_proxy (ior, (UShort)(primary - interfaces_.begin ()), primary->deleter);
-	primary->operations = metadata->operations;
-
+	// Total count of operations
 	size_t op_cnt = 0;
 	ie = interfaces_.begin ();
 	do {
 		op_cnt += ie->operations.size;
-	} while (end != ++ie);
+	} while (iend != ++ie);
 
+	// Fill operation table
 	operations_.allocate (op_cnt);
 	OperationEntry* op = operations_.begin ();
 	ie = interfaces_.begin ();
@@ -132,13 +146,13 @@ ProxyManager::ProxyManager (IOReference_ptr ior, String_in primary_iid)
 			op->idx = idx;
 			++idx.operation_idx;
 		}
-	} while (end != ++ie);
+	} while (iend != ++ie);
 
 	sort (operations_.begin (), operations_.end (), OEPred ());
 	// TODO: Check name uniqueness?
 }
 
-void ProxyManager::create_proxy (IOReference_ptr ior, InterfaceEntry& ie)
+void ProxyManager::create_proxy (InterfaceEntry& ie)
 {
 	if (!ie.proxy) {
 		StringBase <Char> iid (ie.iid);
@@ -156,29 +170,29 @@ void ProxyManager::create_proxy (IOReference_ptr ior, InterfaceEntry& ie)
 		const Char* const* base_end = base + md->interfaces.size;
 		++base;
 		for (; base != base_end; ++base) {
-			InterfaceEntry* base_ie = find_interface (iid);
+			InterfaceEntry* base_ie = const_cast <InterfaceEntry*> (find_interface (iid));
 			if (!base_ie)
 				throw_OBJ_ADAPTER (); // TODO: Log
-			create_proxy (ior, *base_ie);
+			create_proxy (*base_ie);
 		}
-		pf->create_proxy (ior, (UShort)(&ie - interfaces_.begin ()), ie.deleter);
+		pf->create_proxy (ior (), (UShort)(&ie - interfaces_.begin ()), ie.deleter);
 		ie.operations = md->operations;
 	}
 }
 
-ProxyManager::InterfaceEntry* ProxyManager::find_interface (String_in iid)
+const ProxyManager::InterfaceEntry* ProxyManager::find_interface (String_in iid) const
 {
 	const String& siid = static_cast <const String&> (iid);
-	InterfaceEntry* pf = lower_bound (interfaces_.begin (), interfaces_.end (), siid, IEPred ());
+	const InterfaceEntry* pf = lower_bound (interfaces_.begin (), interfaces_.end (), siid, IEPred ());
 	if (pf != interfaces_.end () && RepositoryId::compatible (pf->iid, pf->iid_len, siid))
 		return pf;
 	return nullptr;
 }
 
-ProxyManager::OperationEntry* ProxyManager::find_operation (String_in name)
+const ProxyManager::OperationEntry* ProxyManager::find_operation (String_in name) const
 {
 	const String& sname = static_cast <const String&> (name);
-	OperationEntry* pf = lower_bound (operations_.begin (), operations_.end (), sname, OEPred ());
+	const OperationEntry* pf = lower_bound (operations_.begin (), operations_.end (), sname, OEPred ());
 	if (pf != operations_.end () && !OEPred () (sname, *pf))
 		return pf;
 	return nullptr;

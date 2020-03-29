@@ -46,6 +46,27 @@ template <class T> struct MarshalTraits :
 {};
 
 template <>
+struct MarshalTraits <Boolean>
+{
+	static const bool has_marshal = false;
+
+	static void marshal_in (const Boolean src, Marshal_ptr marshaler, ABI_boolean& dst) NIRVANA_NOEXCEPT
+	{
+		dst = src;
+	}
+
+	static void marshal_out (Boolean src, Marshal_ptr marshaler, ABI_boolean& dst) NIRVANA_NOEXCEPT
+	{
+		dst = src;
+	}
+
+	static void unmarshal (ABI_boolean src, Unmarshal_ptr unmarshaler, Boolean& dst) NIRVANA_NOEXCEPT
+	{
+		dst = src != 0;
+	}
+};
+
+template <>
 struct MarshalTraits <TypeCode_var>
 {
 	static const bool has_marshal = true;
