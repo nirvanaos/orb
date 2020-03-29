@@ -10,7 +10,7 @@ namespace CORBA {
 namespace Nirvana {
 
 /// Function to serve request.
-typedef void (*PlatformRequestProc) (Interface* target,
+typedef void (*RequestProc) (Interface* target,
 	IORequest_ptr call,
 	::Nirvana::ConstPointer* in_params,
 	Unmarshal_var unmarshaler, // Unmarshaler should be released after the unmarshal completion.
@@ -38,7 +38,7 @@ struct Operation
 	CountedArray <Parameter> input;
 	CountedArray <Parameter> output;
 	const ::Nirvana::ImportInterfaceT <TypeCode>& return_type;
-	PlatformRequestProc invoke;
+	RequestProc invoke;
 };
 
 /// Interface metadata.

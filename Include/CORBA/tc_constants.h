@@ -27,6 +27,7 @@ extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Object;
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_string;
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_wstring;
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_ValueBase;
+extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_InterfaceDef;
 
 }
 

@@ -76,9 +76,9 @@ BRIDGE_BEGIN (IOReference, CORBA_NIRVANA_REPOSITORY_ID ("IOReference"))
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV
 Interface* (*create_marshaler) (Bridge <IOReference>*, EnvironmentBridge*);
-Interface* (*call) (Bridge <IOReference>*, Type <OperationIndex>::ABI_in op,
-	::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size, Interface** marshaler,
-	::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size, EnvironmentBridge*);
+Interface* (*call) (Bridge <IOReference>*, Type <OperationIndex>::ABI_in,
+	::Nirvana::ConstPointer, ::Nirvana::Size, Interface**,
+	::Nirvana::Pointer, ::Nirvana::Size, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <class T>

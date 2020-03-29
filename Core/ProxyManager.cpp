@@ -54,8 +54,13 @@ int ProxyManager::OEPred::compare (const Char* lhs, size_t lhs_len, const Char* 
 
 const Parameter ProxyManager::is_a_param_ = { "logical_type_id", _tc_string };
 
+// Implicit operation names
+const Char ProxyManager::op_get_interface_ [] = "_get_interface";
+const Char ProxyManager::op_is_a_ []= "_is_a";
+const Char ProxyManager::op_non_existent_ [] = "_non_existent";
+
 ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Bridge <Object>::EPV& epv_obj,
-	String_in primary_iid, const Operation object_ops [3], Interface* object_impl) :
+	String_in primary_iid, const Operation object_ops [3], void* object_impl) :
 	Bridge <IOReference> (epv_ior),
 	Bridge <Object> (epv_obj)
 {
@@ -70,7 +75,6 @@ ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Brid
 		throw OBJ_ADAPTER (); // TODO: Log
 	interfaces_.allocate (itf_cnt + 1);
 	InterfaceEntry* ie = interfaces_.begin ();
-	InterfaceEntry* const iend = interfaces_.end ();
 
 	{ // Interface Object
 		ie->iid = Object::repository_id_;
@@ -78,7 +82,7 @@ ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Brid
 		ie->proxy = &static_cast <Bridge <Object>&> (*this);
 		ie->operations.p = object_ops;
 		ie->operations.size = 3;
-		ie->implementation = object_impl;
+		ie->implementation = (Interface*)object_impl;
 		++ie;
 	}
 
@@ -90,7 +94,7 @@ ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Brid
 		// Primary interface must be first
 		proxy_primary_iid = *itf;
 		if (!RepositoryId::compatible (proxy_primary_iid, primary_iid))
-			throw_OBJ_ADAPTER (); // TODO: Log
+			throw OBJ_ADAPTER (); // TODO: Log
 
 		do {
 			const Char* iid = *itf;
@@ -99,10 +103,10 @@ ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Brid
 			ie->iid = iid;
 			ie->iid_len = strlen (iid);
 			++itf;
-		} while (iend != ++ie);
+		} while (interfaces_.end () != ++ie);
 	}
 
-	sort (interfaces_.begin (), iend, IEPred ());
+	sort (interfaces_.begin (), interfaces_.end (), IEPred ());
 
 	// Create base proxies
 	ie = interfaces_.begin ();
@@ -115,7 +119,7 @@ ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Brid
 			object_itf_idx_ = (UShort)(ie - interfaces_.begin ());
 		else
 			create_proxy (*ie);
-	} while (iend != ++ie);
+	} while (interfaces_.end () != ++ie);
 
 	// Create primary proxy
 	assert (primary);
@@ -127,7 +131,7 @@ ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Brid
 	ie = interfaces_.begin ();
 	do {
 		op_cnt += ie->operations.size;
-	} while (iend != ++ie);
+	} while (interfaces_.end () != ++ie);
 
 	// Fill operation table
 	operations_.allocate (op_cnt);
@@ -146,7 +150,7 @@ ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Brid
 			op->idx = idx;
 			++idx.operation_idx;
 		}
-	} while (iend != ++ie);
+	} while (interfaces_.end () != ++ie);
 
 	sort (operations_.begin (), operations_.end (), OEPred ());
 	// TODO: Check name uniqueness?
@@ -159,20 +163,20 @@ void ProxyManager::create_proxy (InterfaceEntry& ie)
 		ProxyFactory_var pf = g_binder->bind <ProxyFactory> (iid);
 		const InterfaceMetadata* md = pf->metadata ();
 		if (!md)
-			throw_OBJ_ADAPTER (); // TODO: Log
+			throw OBJ_ADAPTER (); // TODO: Log
 		const Char* const* base = md->interfaces.p;
 		if (!base)
-			throw_OBJ_ADAPTER (); // TODO: Log
+			throw OBJ_ADAPTER (); // TODO: Log
 		if (!RepositoryId::compatible (*base, iid))
-			throw_OBJ_ADAPTER (); // TODO: Log
+			throw OBJ_ADAPTER (); // TODO: Log
 		if (!md->interfaces.size)
-			throw_OBJ_ADAPTER (); // TODO: Log
+			throw OBJ_ADAPTER (); // TODO: Log
 		const Char* const* base_end = base + md->interfaces.size;
 		++base;
 		for (; base != base_end; ++base) {
 			InterfaceEntry* base_ie = const_cast <InterfaceEntry*> (find_interface (iid));
 			if (!base_ie)
-				throw_OBJ_ADAPTER (); // TODO: Log
+				throw OBJ_ADAPTER (); // TODO: Log
 			create_proxy (*base_ie);
 		}
 		pf->create_proxy (ior (), (UShort)(&ie - interfaces_.begin ()), ie.deleter);

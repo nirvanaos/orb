@@ -133,7 +133,7 @@ void _marshal_out (T& src, Marshal_ptr marshaler, ABI& dst)
 }
 
 template <class T, class ABI> inline
-void _unmarshal (ABI& src, Unmarshal_ptr unmarshaler, T& dst)
+void _unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, T& dst)
 {
 	MarshalTraits <T>::unmarshal (src, unmarshaler, dst);
 }

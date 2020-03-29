@@ -130,7 +130,7 @@ struct ProxyTraits <::Test::I1>
 				// Call
 				_ret = Test::I1::_check (target)->object_op (in_obj, out_obj, inout_obj);
 
-				// Release input params data
+				// Input params out of scope here
 			}
 
 			// Marshal output

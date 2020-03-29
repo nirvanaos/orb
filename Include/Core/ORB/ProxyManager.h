@@ -61,7 +61,7 @@ public:
 
 protected:
 	ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Bridge <Object>::EPV& epv_obj,
-		String_in primary_iid, const Operation object_ops [3], Interface* object_impl);
+		String_in primary_iid, const Operation object_ops [3], void* object_impl);
 
 	IOReference_ptr ior ()
 	{
@@ -91,6 +91,11 @@ protected:
 		OperationIndex idx;
 	};
 
+	::Nirvana::Core::Array <InterfaceEntry>& interfaces ()
+	{
+		return interfaces_;
+	}
+
 	const InterfaceEntry* find_interface (String_in iid) const;
 	const OperationEntry* find_operation (String_in name) const;
 
@@ -99,13 +104,6 @@ protected:
 		return object_itf_idx_;
 	}
 
-	struct BooleanRet
-	{
-		ABI_boolean _ret;
-	};
-
-	static const Parameter is_a_param_;
-
 	// Object operation indexes
 	enum
 	{
@@ -113,6 +111,32 @@ protected:
 		OBJ_OP_IS_A,
 		OBJ_OP_NON_EXISTENT
 	};
+
+	// Metadata details
+
+	// Output param structure for Boolean returning operations.
+	struct BooleanRet
+	{
+		ABI_boolean _ret;
+	};
+
+	struct get_interface_out
+	{
+		Interface* _ret;
+	};
+
+	struct is_a_in
+	{
+		ABI <String> logical_type_id;
+	};
+
+	// Input parameter metadata for `is_a` operation.
+	static const Parameter is_a_param_;
+
+	// Implicit operation names
+	static const Char op_get_interface_ [];
+	static const Char op_is_a_ [];
+	static const Char op_non_existent_ [];
 
 private:
 	struct IEPred;
