@@ -41,6 +41,19 @@ protected:
 	}
 };
 
+template <class S>
+const Bridge <IOReference>::EPV Skeleton <S, IOReference>::epv_ = {
+	{ // header
+		Bridge <IOReference>::repository_id_,
+		S::template __duplicate <IOReference>,
+		S::template __release <IOReference>
+	},
+	{ // epv
+		S::_create_marshaler,
+		S::_call
+	}
+};
+
 }
 }
 
