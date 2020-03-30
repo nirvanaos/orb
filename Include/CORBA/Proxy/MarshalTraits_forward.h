@@ -28,7 +28,7 @@ template <> struct MarshalTraits <T>
   /// \param src         Source value ABI.
   /// \param unmarshaler Unmarshaler interface. May be `nil` if MarshalTraits::has_marshal is `false`.
   /// \param dst         Destination value.
-  static void unmarshal (Type <T>::ABI_type <T>& src, Unmarshal_ptr unmarshaler, T& dst);
+  static void unmarshal (const Type <T>::ABI_type <T>& src, Unmarshal_ptr unmarshaler, T& dst);
 
   /// \brief `true` if marshal operations are not trivial copy.
   static const bool has_marshal;

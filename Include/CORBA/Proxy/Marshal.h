@@ -22,7 +22,7 @@ pseudo interface Marshal
   /// \param release_size  If != 0 then source memory block at address p with size release_size must be released
   ///                      after marshaling.
   /// \return Address of the memory block at target memory space.
-  ::Nirvana::UIntPtr marshal_memory (::Nirvana::Pointer p, inout :Nirvana::Size size, :Nirvana::Size release_size);
+  ::Nirvana::UIntPtr marshal_memory (::Nirvana::ConstPointer p, inout :Nirvana::Size size, :Nirvana::Size release_size);
 
   /// \brief Allocates the uninitialized memory block and map it to the target memory space.
   ///   The caller gets pointer to the block and fill it with data.
@@ -81,7 +81,7 @@ public:
 	///
 	/// \return An uintptr_t represents address of the memory block at target memory space.
 
-	::Nirvana::UIntPtr marshal_memory (::Nirvana::Pointer p, ::Nirvana::Size& size, ::Nirvana::Size release_size);
+	::Nirvana::UIntPtr marshal_memory (::Nirvana::ConstPointer p, ::Nirvana::Size& size, ::Nirvana::Size release_size);
 
 	/// \fn uintptr_t Marshal::get_buffer (size_t& size, void*& buf_ptr);
 	///
@@ -101,14 +101,14 @@ public:
 
 BRIDGE_BEGIN (Marshal, CORBA_NIRVANA_REPOSITORY_ID ("Marshal"))
 ABI_enum (*context) (Bridge <Marshal>*, EnvironmentBridge*);
-::Nirvana::UIntPtr (*marshal_memory) (Bridge <Marshal>*, ::Nirvana::Pointer, ::Nirvana::Size*, ::Nirvana::Size, EnvironmentBridge*);
+::Nirvana::UIntPtr (*marshal_memory) (Bridge <Marshal>*, ::Nirvana::ConstPointer, ::Nirvana::Size*, ::Nirvana::Size, EnvironmentBridge*);
 ::Nirvana::UIntPtr (*get_buffer) (Bridge <Marshal>*, ::Nirvana::Size* size, ::Nirvana::Pointer* buf_ptr, EnvironmentBridge*);
 ::Nirvana::UIntPtr (*marshal_object) (Bridge <Marshal>*, Interface*, EnvironmentBridge*);
 ::Nirvana::UIntPtr (*marshal_type_code) (Bridge <Marshal>*, Interface*, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <class T>
-::Nirvana::UIntPtr Client <T, Marshal>::marshal_memory (::Nirvana::Pointer p, ::Nirvana::Size& size, ::Nirvana::Size release_size)
+::Nirvana::UIntPtr Client <T, Marshal>::marshal_memory (::Nirvana::ConstPointer p, ::Nirvana::Size& size, ::Nirvana::Size release_size)
 {
 	Environment _env;
 	Bridge <Marshal>& _b (T::_get_bridge (_env));

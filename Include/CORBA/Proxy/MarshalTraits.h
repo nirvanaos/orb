@@ -31,7 +31,7 @@ struct MarshalTraitsTrivial
 		dst = (typename Type <T>::ABI_type&)src;
 	}
 
-	static void unmarshal (typename Type <T>::ABI_type& src, Unmarshal_ptr unmarshaler, T& dst) NIRVANA_NOEXCEPT
+	static void unmarshal (const typename Type <T>::ABI_type& src, Unmarshal_ptr unmarshaler, T& dst) NIRVANA_NOEXCEPT
 	{
 		dst = Type <T>::in (src);
 	}

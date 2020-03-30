@@ -57,20 +57,20 @@ void MarshalTraits <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst
 	}
 }
 
-void MarshalTraits <Any>::unmarshal (ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
+void MarshalTraits <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
 {
 	TypeCode* ptc = src.type ();
 	if (!ptc)
 		dst.reset ();
 	else {
 		TypeCode_var tc = unmarshaler->unmarshal_type_code (ptc);
-		::Nirvana::Pointer psrc;
+		::Nirvana::ConstPointer psrc;
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
 			psrc = src.large_pointer ();
 			size_t size = src.large_size ();
 			if (size)
-				unmarshaler->adopt_memory (pdst = psrc, size);
+				unmarshaler->adopt_memory (pdst = const_cast <::Nirvana::Pointer> (psrc), size);
 			else
 				pdst = ::Nirvana::g_memory->allocate (0, size, 0);
 			try {

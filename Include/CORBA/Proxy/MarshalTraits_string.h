@@ -23,7 +23,7 @@ struct MarshalTraits <StringT <C> >
 
 	static void marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst);
 
-	static void unmarshal (ABI& src, Unmarshal_ptr unmarshaler, Var& dst)
+	static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst)
 	{
 		if (Type <Var>::has_check)
 			Type <Var>::check (src);

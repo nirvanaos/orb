@@ -76,7 +76,7 @@ void (*_move) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::Pointer, Envir
 ABI_boolean (*_has_marshal) (Bridge <TypeCode>*, EnvironmentBridge*);
 void (*_marshal_in) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, Interface*, ::Nirvana::Pointer, EnvironmentBridge*);
 void (*_marshal_out) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*, ::Nirvana::Pointer, EnvironmentBridge*);
-void (*_unmarshal) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*, ::Nirvana::Pointer, EnvironmentBridge*);
+void (*_unmarshal) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, Interface*, ::Nirvana::Pointer, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <class T>
@@ -144,7 +144,7 @@ public:
 
 	void _marshal_in (::Nirvana::ConstPointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst);
 	void _marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst);
-	void _unmarshal (::Nirvana::Pointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst);
+	void _unmarshal (::Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst);
 };
 
 }

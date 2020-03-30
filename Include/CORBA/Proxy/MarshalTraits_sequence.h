@@ -20,7 +20,7 @@ struct MarshalTraits <Sequence <T> >
 
 	static void marshal_in (const Seq& src, Marshal_ptr marshaler, SeqABI& dst);
 	static void marshal_out (Seq& src, Marshal_ptr marshaler, SeqABI& dst);
-	static void unmarshal (SeqABI& src, Unmarshal_ptr unmarshaler, Seq& dst);
+	static void unmarshal (const SeqABI& src, Unmarshal_ptr unmarshaler, Seq& dst);
 };
 
 template <typename T>
@@ -94,7 +94,7 @@ void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, Marshal_ptr marshaler
 }
 
 template <typename T>
-void MarshalTraits <Sequence <T> >::unmarshal (SeqABI& src, Unmarshal_ptr unmarshaler, Seq& dst)
+void MarshalTraits <Sequence <T> >::unmarshal (const SeqABI& src, Unmarshal_ptr unmarshaler, Seq& dst)
 {
 	if (Type <Seq>::has_check)
 		Type <Seq>::check (src);

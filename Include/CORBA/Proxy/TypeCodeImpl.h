@@ -147,12 +147,12 @@ public:
 		MarshalTraits <Valtype>::marshal_out (*reinterpret_cast <Valtype*> (src), marshaler, *reinterpret_cast <typename Type <Valtype>::ABI_type*> (dst));
 	}
 
-	static void _unmarshal (::Nirvana::Pointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
+	static void _unmarshal (::Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
 		// Do not call check() here, unmarshal() will check.
-		MarshalTraits <Valtype>::unmarshal (*reinterpret_cast <typename Type <Valtype>::ABI_type*> (src), unmarshaler, *reinterpret_cast <Valtype*> (dst));
+		MarshalTraits <Valtype>::unmarshal (*reinterpret_cast <const typename Type <Valtype>::ABI_type*> (src), unmarshaler, *reinterpret_cast <Valtype*> (dst));
 	}
 };
 
@@ -190,7 +190,7 @@ public:
 	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* marshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{}
 
-	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* unmarshaler, ::Nirvana::Pointer, EnvironmentBridge* _env)
+	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* unmarshaler, ::Nirvana::Pointer, EnvironmentBridge* _env)
 	{}
 };
 

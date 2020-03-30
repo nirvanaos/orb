@@ -278,7 +278,7 @@ void Client <T, TypeCode>::_marshal_out (::Nirvana::Pointer src, Marshal_ptr mar
 }
 
 template <class T>
-void Client <T, TypeCode>::_unmarshal (::Nirvana::Pointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
+void Client <T, TypeCode>::_unmarshal (::Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));

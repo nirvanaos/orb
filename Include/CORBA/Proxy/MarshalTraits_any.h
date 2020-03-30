@@ -18,7 +18,7 @@ struct MarshalTraits <Any>
 
 	static void marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst);
 	static void marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst);
-	static void unmarshal (ABI& src, Unmarshal_ptr unmarshaler, Any& dst);
+	static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst);
 };
 
 }

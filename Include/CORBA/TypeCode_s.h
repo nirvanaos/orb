@@ -334,7 +334,7 @@ protected:
 		}
 	}
 
-	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* unmarshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
+	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* unmarshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{
 		try {
 			S::_implementation (_b)._unmarshal (src, TypeI <Unmarshal>::in (unmarshaler), dst);

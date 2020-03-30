@@ -13,7 +13,8 @@ class ProxyObject :
 {
 	typedef ServantProxyBase Base;
 	class Deactivator;
-public:
+
+protected:
 	ProxyObject (PortableServer::Servant servant) :
 		ServantProxyBase (servant, object_ops_, this),
 		servant_ (servant),

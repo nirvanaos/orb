@@ -76,7 +76,7 @@ struct ABI <Any>
 		type_code |= 1;
 	}
 
-	size_t large_size ()
+	size_t large_size () const
 	{
 		return data.size;
 	}

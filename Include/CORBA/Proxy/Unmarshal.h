@@ -10,7 +10,7 @@ pseudo interface Unmarshal
 	/// Used for proxy code optimization.
 	attribute readonly MarshalContext context;
 
-	void adopt_memory (::Nirvana::Pointer p, ::Nirvana::Size size);
+	void adopt_memory (::Nirvana::ConstPointer p, ::Nirvana::Size size);
 	Interface unmarshal_interface (::Nirvana::ConstPointer marshal_data, RepositoryId iid);
 	TypeCode unmarshal_type_code (::Nirvana::ConstPointer marshal_data);
 };
@@ -45,19 +45,19 @@ class Client <T, Unmarshal> :
 public:
 	MarshalContext context ();
 
-	void adopt_memory (::Nirvana::Pointer p, ::Nirvana::Size size);
+	void adopt_memory (::Nirvana::ConstPointer p, ::Nirvana::Size size);
 	NIRVANA_NODISCARD Interface* unmarshal_interface (::Nirvana::ConstPointer marshal_data, String_in iid);
 	TypeCode_var unmarshal_type_code (::Nirvana::ConstPointer marshal_data);
 };
 
 BRIDGE_BEGIN (Unmarshal, CORBA_NIRVANA_REPOSITORY_ID ("Unmarshal"))
-void (*adopt_memory) (Bridge <Unmarshal>*, ::Nirvana::Pointer, ::Nirvana::Size, EnvironmentBridge*);
+void (*adopt_memory) (Bridge <Unmarshal>*, ::Nirvana::ConstPointer, ::Nirvana::Size, EnvironmentBridge*);
 Interface* (*unmarshal_interface) (Bridge <Unmarshal>*, ::Nirvana::ConstPointer, Type <String>::ABI_in, EnvironmentBridge*);
 Interface* (*unmarshal_type_code) (Bridge <Unmarshal>*, ::Nirvana::ConstPointer, EnvironmentBridge*);
 BRIDGE_END ()
 
 template <class T>
-void Client <T, Unmarshal>::adopt_memory (::Nirvana::Pointer p, ::Nirvana::Size size)
+void Client <T, Unmarshal>::adopt_memory (::Nirvana::ConstPointer p, ::Nirvana::Size size)
 {
 	Environment _env;
 	Bridge <Unmarshal>& _b (T::_get_bridge (_env));

@@ -62,6 +62,14 @@ protected:
 		sync_context_->async_call (gc, ::Nirvana::INFINITE_DEADLINE);
 	}
 
+public:
+	Marshal_var create_marshaler ();
+
+	Unmarshal_var call (OperationIndex op,
+		::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size,
+		Marshal_var& marshaler,
+		::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size);
+
 private:
 	static const Char* primary_interface_id (AbstractBase_ptr servant)
 	{
