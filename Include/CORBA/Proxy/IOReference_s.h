@@ -31,7 +31,7 @@ protected:
 	{
 		try {
 			return TypeI <Unmarshal>::ret (S::_implementation (_b).call (Type <OperationIndex>::in (op),
-				in_params, in_params_size, TypeI <Marshal>::inout, out_params, out_params_size));
+				in_params, in_params_size, TypeI <Marshal>::inout (marshaler), out_params, out_params_size));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -47,6 +47,9 @@ const Bridge <IOReference>::EPV Skeleton <S, IOReference>::epv_ = {
 		Bridge <IOReference>::repository_id_,
 		S::template __duplicate <IOReference>,
 		S::template __release <IOReference>
+	},
+	{ // base
+		S::template _wide_object
 	},
 	{ // epv
 		S::_create_marshaler,

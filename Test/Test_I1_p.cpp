@@ -20,7 +20,7 @@ struct MarshalTraits <::Test::MyException::Data>
 		_marshal_out (src.param, marshaler, dst.param);
 	}
 
-	static void unmarshal (ABI <::Test::MyException::Data>& src, Unmarshal_ptr unmarshaler, ::Test::MyException::Data& dst) NIRVANA_NOEXCEPT
+	static void unmarshal (const ABI <::Test::MyException::Data>& src, Unmarshal_ptr unmarshaler, ::Test::MyException::Data& dst) NIRVANA_NOEXCEPT
 	{
 		_unmarshal (src.param, unmarshaler, dst.param);
 	}
