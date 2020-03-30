@@ -8,6 +8,7 @@
 #include <CORBA/Proxy/IOReference_s.h>
 #include <Core/AtomicCounter.h>
 #include <Core/Synchronized.h>
+#include "ServantMarshaler.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -17,7 +18,7 @@ namespace Core {
 class ServantProxyBase :
 	public ServantTraits <ServantProxyBase>,
 	public LifeCycleRefCnt <ServantProxyBase>,
-	public InterfaceImplBase < ServantProxyBase, AbstractBase>,
+	public InterfaceImplBase <ServantProxyBase, AbstractBase>,
 	public Skeleton <ServantProxyBase, Object>,
 	public Skeleton <ServantProxyBase, IOReference>,
 	public ProxyManager
@@ -63,7 +64,10 @@ protected:
 	}
 
 public:
-	Marshal_var create_marshaler ();
+	Marshal_var create_marshaler () const
+	{
+		return (new ServantMarshaler (sync_context_->memory ()))->marshaler ();
+	}
 
 	Unmarshal_var call (OperationIndex op,
 		::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size,

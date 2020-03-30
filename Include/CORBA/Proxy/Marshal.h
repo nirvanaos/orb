@@ -102,7 +102,7 @@ public:
 BRIDGE_BEGIN (Marshal, CORBA_NIRVANA_REPOSITORY_ID ("Marshal"))
 ABI_enum (*context) (Bridge <Marshal>*, EnvironmentBridge*);
 ::Nirvana::UIntPtr (*marshal_memory) (Bridge <Marshal>*, ::Nirvana::ConstPointer, ::Nirvana::Size*, ::Nirvana::Size, EnvironmentBridge*);
-::Nirvana::UIntPtr (*get_buffer) (Bridge <Marshal>*, ::Nirvana::Size* size, ::Nirvana::Pointer* buf_ptr, EnvironmentBridge*);
+::Nirvana::UIntPtr (*get_buffer) (Bridge <Marshal>*, ::Nirvana::Size*, ::Nirvana::Pointer*, EnvironmentBridge*);
 ::Nirvana::UIntPtr (*marshal_object) (Bridge <Marshal>*, Interface*, EnvironmentBridge*);
 ::Nirvana::UIntPtr (*marshal_type_code) (Bridge <Marshal>*, Interface*, EnvironmentBridge*);
 BRIDGE_END ()
