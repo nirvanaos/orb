@@ -9,12 +9,41 @@
 namespace CORBA {
 namespace Nirvana {
 
-/// Function to serve request.
-typedef void (*RequestProc) (Interface* target,
-	IORequest_ptr call,
-	::Nirvana::ConstPointer* in_params,
-	Unmarshal_var unmarshaler, // Unmarshaler should be released after the unmarshal completion.
-	::Nirvana::Pointer* out_params);
+/// \brief Function to serve request.
+/// \param servant               Interface to servant implementation.
+///                              This interface haven't to be checked. The Proxy Manager
+///                              guarantees that it is compatible with the proxy primary interface.
+/// \param call                  IORequest object.
+/// \param in_params             Pointer to the input parameters structure.
+///                              The order of values in the structure must correspond to order
+///                              of the `input` parameters in the operation metadata.
+/// \param [in, out] unmarshaler Unmarshaler should be released after the unmarshal completion.
+/// \param [out] out_params      Pointer to the output parameters structure.
+///                              The order of values in the structure must correspond to order
+///                              of the `output` parameters in the operation metadata.
+///                              The return value, if it is not void, must be at the end of structure.
+typedef void (*RequestProc) (Interface* servant, Interface* call,
+	::Nirvana::ConstPointer in_params,
+	Interface** unmarshaler,
+	::Nirvana::Pointer out_params);
+
+template <class I, void (*proc) (I*, IORequest_ptr, ::Nirvana::ConstPointer, Unmarshal_var, ::Nirvana::Pointer)>
+void RqProcWrapper (Interface* servant, Interface* call,
+	::Nirvana::ConstPointer in_params,
+	Interface** unmarshaler,
+	::Nirvana::Pointer out_params)
+{
+	try {
+		IORequest_ptr rq = IORequest::_check (call);
+		try {
+			proc ((I*)(void*)servant, rq, in_params, TypeI <Unmarshal>::inout (unmarshaler), out_params);
+			rq->success ();
+		} catch (const Exception & e) {
+			rq->exception (e);
+		}
+	} catch (...) {
+	}
+}
 
 /// Counted array for metadata.
 template <class T>

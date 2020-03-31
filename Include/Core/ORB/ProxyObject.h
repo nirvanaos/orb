@@ -41,23 +41,23 @@ private:
 		return activation_state_.compare_exchange_strong (from, to);
 	}
 
-	static void get_interface_request (Interface* target,
+	static void get_interface_request (ProxyObject* servant,
 		IORequest_ptr call,
-		::Nirvana::ConstPointer* in_params,
+		::Nirvana::ConstPointer in_params,
 		Unmarshal_var unmarshaler,
-		::Nirvana::Pointer* out_params);
+		::Nirvana::Pointer out_params);
 
-	static void is_a_request (Interface* target,
+	static void is_a_request (ProxyObject* servant,
 		IORequest_ptr call,
-		::Nirvana::ConstPointer* in_params,
+		::Nirvana::ConstPointer in_params,
 		Unmarshal_var unmarshaler,
-		::Nirvana::Pointer* out_params);
+		::Nirvana::Pointer out_params);
 
-	static void non_existent_request (Interface* target,
+	static void non_existent_request (ProxyObject* servant,
 		IORequest_ptr call,
-		::Nirvana::ConstPointer* in_params,
+		::Nirvana::ConstPointer in_params,
 		Unmarshal_var unmarshaler,
-		::Nirvana::Pointer* out_params);
+		::Nirvana::Pointer out_params);
 
 private:
 	PortableServer::Servant servant_;

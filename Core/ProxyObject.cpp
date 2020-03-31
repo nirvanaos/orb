@@ -94,66 +94,45 @@ void ProxyObject::implicit_deactivate ()
 	}
 }
 
-void ProxyObject::get_interface_request (Interface* target,
-	IORequest_ptr call,
-	::Nirvana::ConstPointer* in_params,
-	Unmarshal_var unmarshaler,
-	::Nirvana::Pointer* out_params)
+void ProxyObject::get_interface_request (ProxyObject* _servant, IORequest_ptr _rq,
+	::Nirvana::ConstPointer _in_params,
+	Unmarshal_var _unmarshal,
+	::Nirvana::Pointer _out_params)
 {
-	try {
-		InterfaceDef_var _ret = ((ProxyObject*)(void*)target)->servant_->_get_interface ();
-		get_interface_out& _out = *(get_interface_out*)out_params;
-		Marshal_var _m = call->marshaler ();
-		_marshal_out (_ret, _m, _out._ret);
-	} catch (const CORBA::SystemException & e) {
-		call->system_exception (e);
-	} catch (...) {
-		call->unknown_exception ();
-	}
+	InterfaceDef_var _ret = _servant->servant_->_get_interface ();
+	get_interface_out& _out = *(get_interface_out*)_out_params;
+	Marshal_ptr _m = _rq->marshaler ();
+	_marshal_out (_ret, _m, _out._ret);
 }
 
-void ProxyObject::is_a_request (Interface* target,
-	IORequest_ptr call,
-	::Nirvana::ConstPointer* in_params,
+void ProxyObject::is_a_request (ProxyObject* _servant, IORequest_ptr _rq,
+	::Nirvana::ConstPointer in_params,
 	Unmarshal_var unmarshaler,
-	::Nirvana::Pointer* out_params)
+	::Nirvana::Pointer out_params)
 {
-	try {
-		String iid;
-		_unmarshal (((const is_a_in*)in_params)->logical_type_id, unmarshaler, iid);
-		unmarshaler = Unmarshal::_nil ();
-		Boolean _ret = ((ProxyObject*)(void*)target)->servant_->_is_a (iid);
-		BooleanRet& _out = *(BooleanRet*)out_params;
-		_marshal_out (_ret, Marshal::_nil (), _out._ret);
-	} catch (const CORBA::SystemException & e) {
-		call->system_exception (e);
-	} catch (...) {
-		call->unknown_exception ();
-	}
+	String logical_type_id;
+	_unmarshal (((const is_a_in*)in_params)->logical_type_id, unmarshaler, logical_type_id);
+	unmarshaler = Unmarshal::_nil ();
+	Boolean _ret = _servant->servant_->_is_a (logical_type_id);
+	BooleanRet& _out = *(BooleanRet*)out_params;
+	_marshal_out (_ret, Marshal::_nil (), _out._ret);
 }
 
-void ProxyObject::non_existent_request (Interface* target,
-	IORequest_ptr call,
-	::Nirvana::ConstPointer* in_params,
+void ProxyObject::non_existent_request (ProxyObject* _servant, IORequest_ptr _rq,
+	::Nirvana::ConstPointer in_params,
 	Unmarshal_var unmarshaler,
-	::Nirvana::Pointer* out_params)
+	::Nirvana::Pointer out_params)
 {
-	try {
-		Boolean _ret = ((ProxyObject*)(void*)target)->servant_->_non_existent ();
-		BooleanRet& _out = *(BooleanRet*)out_params;
-		Marshal_var _m;
-		_marshal_out (_ret, Marshal::_nil (), _out._ret);
-	} catch (const CORBA::SystemException & e) {
-		call->system_exception (e);
-	} catch (...) {
-		call->unknown_exception ();
-	}
+	Boolean _ret = _servant->servant_->_non_existent ();
+	BooleanRet& _out = *(BooleanRet*)out_params;
+	Marshal_var _m;
+	_marshal_out (_ret, Marshal::_nil (), _out._ret);
 }
 
 const Operation ProxyObject::object_ops_ [3] = {
-	{ op_get_interface_, {0, 0}, {0, 0}, _tc_InterfaceDef, get_interface_request },
-	{ op_is_a_, {&is_a_param_, 1}, {0, 0}, _tc_boolean, is_a_request },
-	{ op_non_existent_, {0, 0}, {0, 0}, _tc_boolean, non_existent_request }
+	{ op_get_interface_, {0, 0}, {0, 0}, _tc_InterfaceDef, RqProcWrapper <ProxyObject, get_interface_request> },
+	{ op_is_a_, {&is_a_param_, 1}, {0, 0}, _tc_boolean, RqProcWrapper <ProxyObject, is_a_request> },
+	{ op_non_existent_, {0, 0}, {0, 0}, _tc_boolean, RqProcWrapper <ProxyObject, non_existent_request> }
 };
 
 }

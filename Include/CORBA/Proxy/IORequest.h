@@ -11,11 +11,13 @@ pseudo interface IORequest
 	/// If the marshaler does not exist, it will be created.
 	readonly attribute Marshal marshaler;
 
-	void system_exception (long code, RepositoryId id, unsigned long minor, CompletionStatus completed);
+	/// Return exception to caller.
+	void exception (Exception e);
 
-	void user_exception (TypeCode tc, ::Nirvana::ConstPointer data);
-
-	void unknown_exception ();
+	/// Marks request as successful.
+	/// If request procedure return without the explicit call of success (), request will
+	/// return UNKNOWN exception to caller.
+	void success ();
 };
 
 }
@@ -40,7 +42,7 @@ BRIDGE_BEGIN (IORequest, CORBA_NIRVANA_REPOSITORY_ID ("IORequest"))
 Interface* (*marshaler) (Bridge <IORequest>*, EnvironmentBridge*);
 void (*system_exception) (Bridge <IORequest>*, Long, Type <String>::ABI_in, ULong, ABI_enum);
 void (*user_exception) (Bridge <IORequest>*, Interface*, ::Nirvana::ConstPointer);
-void (*unknown_exception) (Bridge <IORequest>*);
+void (*success) (Bridge <IORequest>*, EnvironmentBridge*);
 BRIDGE_END ()
 
 
@@ -49,67 +51,43 @@ class Client <T, IORequest> :
 	public T
 {
 public:
-	Marshal_var marshaler ();
-
-	void system_exception (
-		Long code, String_in id, ULong minor, CompletionStatus completed) NIRVANA_NOEXCEPT;
-	void system_exception (const SystemException& e) NIRVANA_NOEXCEPT;
-
-	void user_exception (I_in <TypeCode> tc, ::Nirvana::ConstPointer data) NIRVANA_NOEXCEPT;
-	void user_exception (const UserException& e) NIRVANA_NOEXCEPT;
-
-	void unknown_exception () NIRVANA_NOEXCEPT;
+	Marshal_ptr marshaler ();
+	void exception (const Exception& e) NIRVANA_NOEXCEPT;
+	void success ();
 };
 
 class IORequest : public ClientInterface <IORequest>
 {};
 
 template <class T>
-Marshal_var Client <T, IORequest>::marshaler ()
+Marshal_ptr Client <T, IORequest>::marshaler ()
 {
 	Environment _env;
 	Bridge <IORequest>& _b (T::_get_bridge (_env));
-	I_ret <Marshal> _ret = (_b._epv ().epv.marshaler) (&_b, &_env);
+	I_VT_ret <Marshal> _ret = (_b._epv ().epv.marshaler) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-void Client <T, IORequest>::system_exception (
-	Long code, String_in id, ULong minor, CompletionStatus completed) NIRVANA_NOEXCEPT
+void Client <T, IORequest>::exception (const Exception& e) NIRVANA_NOEXCEPT
 {
 	Environment* _env = nullptr;
 	Bridge <IORequest>& _b (T::_get_bridge (*_env));
-	(_b._epv ().epv.system_exception) (&_b, code, &id, minor, completed);
+	const SystemException* pse = SystemException::_downcast (&e);
+	if (pse)
+		(_b._epv ().epv.system_exception) (&_b, pse->__code (), &String_in (pse->_rep_id ()), pse->minor (), pse->completed ());
+	else
+		(_b._epv ().epv.user_exception) (&_b, &e.__type_code (), e.__data ());
 }
 
 template <class T>
-void Client <T, IORequest>::user_exception (
-	I_in <TypeCode> tc, ::Nirvana::ConstPointer data) NIRVANA_NOEXCEPT
+void Client <T, IORequest>::success ()
 {
-	Environment* _env = nullptr;
-	Bridge <IORequest>& _b (T::_get_bridge (*_env));
-	(_b._epv ().epv.user_exception) (&_b, &tc, data);
-}
-
-template <class T>
-void Client <T, IORequest>::unknown_exception () NIRVANA_NOEXCEPT
-{
-	Environment* _env = nullptr;
-	Bridge <IORequest>& _b (T::_get_bridge (*_env));
-	(_b._epv ().epv.unknown_exception) (&_b);
-}
-
-template <class T>
-void Client <T, IORequest>::system_exception (const SystemException& e) NIRVANA_NOEXCEPT
-{
-	system_exception (e.__code (), e._rep_id (), e.minor (), e.completed ());
-}
-
-template <class T>
-void Client <T, IORequest>::user_exception (const UserException& e) NIRVANA_NOEXCEPT
-{
-	user_exception (e.__type_code (), e.__data ());
+	Environment _env;
+	Bridge <IORequest>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.success) (&_b, &_env);
+	_env.check ();
 }
 
 }
