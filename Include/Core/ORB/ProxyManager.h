@@ -144,6 +144,10 @@ private:
 
 	void create_proxy (InterfaceEntry& ie);
 
+	static void check_metadata (const InterfaceMetadata* metadata, String_in primary);
+	static void check_parameters (CountedArray <Parameter> parameters);
+	static void check_type_code (const ::Nirvana::ImportInterfaceT <TypeCode>& tc);
+
 private:
 	::Nirvana::Core::Array <InterfaceEntry> interfaces_;
 	::Nirvana::Core::Array <OperationEntry> operations_;
