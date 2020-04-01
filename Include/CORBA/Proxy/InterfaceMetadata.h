@@ -27,7 +27,7 @@ typedef void (*RequestProc) (Interface* servant, Interface* call,
 	Interface** unmarshaler,
 	::Nirvana::Pointer out_params);
 
-template <class I, void (*proc) (I*, IORequest_ptr, ::Nirvana::ConstPointer, Unmarshal_var, ::Nirvana::Pointer)>
+template <class I, void (*proc) (I_ptr <I>, IORequest_ptr, ::Nirvana::ConstPointer, Unmarshal_var, ::Nirvana::Pointer)>
 void RqProcWrapper (Interface* servant, Interface* call,
 	::Nirvana::ConstPointer in_params,
 	Interface** unmarshaler,
@@ -36,10 +36,10 @@ void RqProcWrapper (Interface* servant, Interface* call,
 	try {
 		IORequest_ptr rq = IORequest::_check (call);
 		try {
-			proc ((I*)(void*)servant, rq, in_params, TypeI <Unmarshal>::inout (unmarshaler), out_params);
+			proc (&static_cast <I&> (*servant), rq, in_params, TypeI <Unmarshal>::inout (unmarshaler), out_params);
 			rq->success ();
-		} catch (const Exception & e) {
-			rq->exception (e);
+		} catch (Exception & e) {
+			rq->exception (std::move (e));
 		}
 	} catch (...) {
 	}

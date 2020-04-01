@@ -41,112 +41,82 @@ struct ProxyTraits <::Test::I1>
 
 	// long op1 (long p1);
 
-	typedef Long _op1_in;
-	typedef Long _op1_out;
-	static const Parameter _op1_in_params_ [1];
+	typedef Long op1_in;
+	typedef Long op1_out;
+	static const Parameter op1_in_params_ [1];
 
-	static void _op1_request (Interface* target,
-		IORequest_ptr call,
-		::Nirvana::ConstPointer* in_params,
-		Unmarshal_var unmarshaler,
-		::Nirvana::Pointer* out_params)
+	static void op1_request (::Test::I1_ptr _servant,
+		IORequest_ptr _call,
+		::Nirvana::ConstPointer _in_params,
+		Unmarshal_var _u,
+		::Nirvana::Pointer _out_params)
 	{
-		try {
-
-			const _op1_in& in = *(const _op1_in*)in_params;
-			_op1_out& out = *(_op1_out*)out_params;
-			out = Test::I1::_check (target)->op1 (in);
-
-		} catch (const CORBA::UserException & e) {
-			call->user_exception (e);
-		} catch (const CORBA::SystemException & e) {
-			call->system_exception (e);
-		} catch (...) {
-			call->unknown_exception ();
-		}
+		const op1_in& _in = *(const op1_in*)_in_params;
+		op1_out& _out = *(op1_out*)_out_params;
+		_out = _servant->op1 (_in);
 	}
 
 	// void throw_no_implement ();
 
-	static void _throw_no_implement_request (Interface* target,
-		IORequest_ptr call,
-		::Nirvana::ConstPointer* in_params,
-		Unmarshal_var unmarshaler,
-		::Nirvana::Pointer* out_params)
+	static void throw_no_implement_request (::Test::I1_ptr _servant,
+		IORequest_ptr _call,
+		::Nirvana::ConstPointer _in_params,
+		Unmarshal_var _u,
+		::Nirvana::Pointer _out_params)
 	{
-		try {
-
-			Test::I1::_check (target)->throw_no_implement ();
-
-		} catch (const CORBA::UserException & e) {
-			call->user_exception (e);
-		} catch (const CORBA::SystemException & e) {
-			call->system_exception (e);
-		} catch (...) {
-			call->unknown_exception ();
-		}
+		_servant->throw_no_implement ();
 	}
 
 	// I1 object_op (I1 in_obj, out I1 out_obj, inout I1 inout_obj);
 
-	struct _object_op_in
+	struct object_op_in
 	{
 		Interface* in_obj;
 		Interface* inout_obj;
 	};
-	static const Parameter _object_op_in_params_ [2];
+	static const Parameter object_op_in_params_ [2];
 
-	struct _object_op_out
+	struct object_op_out
 	{
 		Interface* out_obj;
 		Interface* inout_obj;
 		Interface* _ret;
 	};
-	static const Parameter _object_op_out_params_ [2];
+	static const Parameter object_op_out_params_ [2];
 
-	static void _object_op_request (Interface* target,
+	static void object_op_request (::Test::I1_ptr _servant,
 		IORequest_ptr _call,
-		::Nirvana::ConstPointer* _in_ptr,
+		::Nirvana::ConstPointer _in_ptr,
 		Unmarshal_var _u,
-		::Nirvana::Pointer* _out_ptr)
+		::Nirvana::Pointer _out_ptr)
 	{
-		try {
-
-			const _object_op_in& _in = *(const _object_op_in*)_in_ptr;
+		const object_op_in& _in = *(const object_op_in*)_in_ptr;
 			
-			// out and inout params
-			I_var <::Test::I1> out_obj;
-			I_var <::Test::I1> inout_obj;
-			I_var <::Test::I1> _ret;
-			_unmarshal (_in.inout_obj, _u, inout_obj);
-			{
-				// in params
-				I_var <::Test::I1> in_obj;
-				_unmarshal (_in.in_obj, _u, in_obj);
+		// out and inout params
+		I_var <::Test::I1> out_obj;
+		I_var <::Test::I1> inout_obj;
+		I_var <::Test::I1> _ret;
+		_unmarshal (_in.inout_obj, _u, inout_obj);
+		{
+			// in params
+			I_var <::Test::I1> in_obj;
+			_unmarshal (_in.in_obj, _u, in_obj);
 
-				// Release resources
-				_u = Unmarshal::_nil ();
+			// Release resources
+			_u = Unmarshal::_nil ();
 
-				// Call
-				_ret = Test::I1::_check (target)->object_op (in_obj, out_obj, inout_obj);
+			// Call
+			_ret = _servant->object_op (in_obj, out_obj, inout_obj);
 
-				// Input params out of scope here
-			}
-
-			// Marshal output
-			_object_op_out& _out = *(_object_op_out*)_out_ptr;
-			Marshal_var _m = _call->marshaler ();
-			_marshal_out (out_obj, _m, _out.out_obj);
-			_marshal_out (inout_obj, _m, _out.inout_obj);
-			_marshal_out (_ret, _m, _out._ret);
-
-		} catch (const CORBA::UserException & e) {
-			_call->user_exception (e);
-		} catch (const CORBA::SystemException & e) {
-			_call->system_exception (e);
-		} catch (...) {
-			_call->unknown_exception ();
+			// Input params out of scope here
 		}
+
+		// Marshal output
+		object_op_out& _out = *(object_op_out*)_out_ptr;
+		Marshal_var _m = _call->marshaler ();
+		_marshal_out (out_obj, _m, _out.out_obj);
+		_marshal_out (inout_obj, _m, _out.inout_obj);
+		_marshal_out (_ret, _m, _out._ret);
 	}
 };
 
@@ -163,7 +133,7 @@ public:
 
 	Long op1 (Long p1) const
 	{
-		Traits::_op1_out _out;
+		Traits::op1_out _out;
 		Marshal_var _m;
 		_target ()->call (CORBA::Nirvana::OperationIndex{ _interface_idx (), 0 },
 			&p1, sizeof (p1), _m, &_out, sizeof (_out));
@@ -179,11 +149,11 @@ public:
 
 	::Test::I1_var object_op (::Test::I1_ptr in_obj, ::Test::I1_var& out_obj, ::Test::I1_var& inout_obj) const
 	{
-		Traits::_object_op_in _in;
+		Traits::object_op_in _in;
 		Marshal_var _m = _target ()->create_marshaler ();
 		_marshal_in (in_obj, _m, _in.in_obj);
 		_marshal_in (inout_obj, _m, _in.inout_obj);
-		Traits::_object_op_out _out;
+		Traits::object_op_out _out;
 		Unmarshal_var _u = _target ()->call (CORBA::Nirvana::OperationIndex{ _interface_idx (), 2 },
 			&_in, sizeof (_in), _m, &_out, sizeof (_out));
 		_unmarshal (_out.out_obj, _u, out_obj);
@@ -200,24 +170,25 @@ public:
 	Any any_op (const Any& in_any, Any& out_any, Any& inout_any) const;
 };
 
-const Parameter ProxyTraits <::Test::I1>::_op1_in_params_ [1] = {
+const Parameter ProxyTraits <::Test::I1>::op1_in_params_ [1] = {
 	{ "p1", ::CORBA::_tc_long }
 };
 
-const Parameter ProxyTraits <::Test::I1>::_object_op_in_params_ [2] = {
+const Parameter ProxyTraits <::Test::I1>::object_op_in_params_ [2] = {
 	{ "in_obj", ::Test::_tc_I1 },
 	{ "inout_obj", ::Test::_tc_I1 }
 };
 
-const Parameter ProxyTraits <::Test::I1>::_object_op_out_params_ [2] = {
+const Parameter ProxyTraits <::Test::I1>::object_op_out_params_ [2] = {
 	{ "out_obj", ::Test::_tc_I1 },
 	{ "inout_obj", ::Test::_tc_I1 }
 };
 
 const Operation ProxyTraits <::Test::I1>::operations_ [] = {
-	{ "op1", { _op1_in_params_, countof (_op1_in_params_) }, {0, 0}, ::CORBA::_tc_long, _op1_request },
-	{ "throw_no_implement", { 0, 0 }, {0, 0}, ::CORBA::_tc_void, _throw_no_implement_request },
-	{ "object_op", { _object_op_in_params_, countof (_object_op_in_params_) }, { _object_op_out_params_, countof (_object_op_out_params_) }, ::Test::_tc_I1, _object_op_request }
+	{ "op1", { op1_in_params_, countof (op1_in_params_) }, {0, 0}, ::CORBA::_tc_long, RqProcWrapper <::Test::I1, op1_request> },
+	{ "throw_no_implement", { 0, 0 }, {0, 0}, ::CORBA::_tc_void, RqProcWrapper <::Test::I1, throw_no_implement_request> },
+	{ "object_op", { object_op_in_params_, countof (object_op_in_params_) },
+{ object_op_out_params_, countof (object_op_out_params_) }, ::Test::_tc_I1, RqProcWrapper <::Test::I1, object_op_request> }
 };
 
 const Char* const ProxyTraits <::Test::I1>::interfaces_ [] = {

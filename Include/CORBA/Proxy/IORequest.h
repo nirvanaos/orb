@@ -9,10 +9,11 @@ pseudo interface IORequest
 {
 	/// Returns a marshaler associated with this call.
 	/// If the marshaler does not exist, it will be created.
+	/// Caller mustn't duplicate this interface.
 	readonly attribute Marshal marshaler;
 
 	/// Return exception to caller.
-	void exception (Exception e);
+	void exception (inout any e);
 
 	/// Marks request as successful.
 	/// If request procedure return without the explicit call of success (), request will
@@ -40,8 +41,7 @@ typedef I_out <IORequest> IORequest_out;
 
 BRIDGE_BEGIN (IORequest, CORBA_NIRVANA_REPOSITORY_ID ("IORequest"))
 Interface* (*marshaler) (Bridge <IORequest>*, EnvironmentBridge*);
-void (*system_exception) (Bridge <IORequest>*, Long, Type <String>::ABI_in, ULong, ABI_enum);
-void (*user_exception) (Bridge <IORequest>*, Interface*, ::Nirvana::ConstPointer);
+void (*exception) (Bridge <IORequest>*, Type <Any>::ABI_inout);
 void (*success) (Bridge <IORequest>*, EnvironmentBridge*);
 BRIDGE_END ()
 
@@ -52,7 +52,7 @@ class Client <T, IORequest> :
 {
 public:
 	Marshal_ptr marshaler ();
-	void exception (const Exception& e) NIRVANA_NOEXCEPT;
+	void exception (Exception& e) NIRVANA_NOEXCEPT;
 	void success ();
 };
 
@@ -70,15 +70,13 @@ Marshal_ptr Client <T, IORequest>::marshaler ()
 }
 
 template <class T>
-void Client <T, IORequest>::exception (const Exception& e) NIRVANA_NOEXCEPT
+void Client <T, IORequest>::exception (Exception& e) NIRVANA_NOEXCEPT
 {
+	Any any;
+	any <<= (std::move (e));
 	Environment* _env = nullptr;
 	Bridge <IORequest>& _b (T::_get_bridge (*_env));
-	const SystemException* pse = SystemException::_downcast (&e);
-	if (pse)
-		(_b._epv ().epv.system_exception) (&_b, pse->__code (), &String_in (pse->_rep_id ()), pse->minor (), pse->completed ());
-	else
-		(_b._epv ().epv.user_exception) (&_b, &e.__type_code (), e.__data ());
+	(_b._epv ().epv.exception) (&_b, &Any_inout (any));
 }
 
 template <class T>

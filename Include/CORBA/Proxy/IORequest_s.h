@@ -25,30 +25,23 @@ protected:
 		return nullptr;
 	}
 
-	static void _system_exception (Bridge <IORequest>* _b, Long code, Type <String>::ABI_in rep_id, ULong minor, ABI_enum completed)
+	static void _exception (Bridge <IORequest>* _b, Type <Any>::ABI_inout exc)
 	{
 		try {
-			S::_implementation (_b).system_exception (code, Type <String>::in (rep_id), minor, Type <CompletionStatus>::in (completed));
+			S::_implementation (_b).exception (Type <Any>::inout (exc));
 		} catch (...) {
 			// Swallow exception. TODO: Log.
 		}
 	}
 
-	static void _user_exception (Bridge <IORequest>* _b, Interface* tc, ::Nirvana::ConstPointer data)
+	static void _success (Bridge <IORequest>* _b, EnvironmentBridge* _env)
 	{
 		try {
-			S::_implementation (_b).user_exception (TypeI <TypeCode>::in (tc), data);
+			S::_implementation (_b).success ();
+		} catch (const Exception & e) {
+			set_exception (_env, e);
 		} catch (...) {
-			// Swallow exception. TODO: Log.
-		}
-	}
-
-	static void _unknown_exception (Bridge <IORequest>* _b)
-	{
-		try {
-			S::_implementation (_b).unkown_exception ();
-		} catch (...) {
-			// Swallow exception. TODO: Log.
+			set_unknown_exception (_env);
 		}
 	}
 };
@@ -62,9 +55,8 @@ const Bridge <IORequest>::EPV Skeleton <S, IORequest>::epv_ = {
 	},
 	{ // epv
 		S::_get_marshaler,
-		S::_system_exception,
-		S::_user_exception,
-		S::_unknown_exception
+		S::_exception,
+		S::_success
 	}
 };
 

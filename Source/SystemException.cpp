@@ -51,15 +51,24 @@ const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (String_in 
 		hint = EC_SYSTEM_EXCEPTION;
 	}
 
-	if (Exception::EC_SYSTEM_EXCEPTION == hint) {
-		const ExceptionEntry* pe = lower_bound (begin (exception_entries_), end (exception_entries_), rep_id, Pred ());
-		if (pe != end (exception_entries_)) {
-			if (Nirvana::RepositoryId::compatible (pe->ee.rep_id, pe->rep_id_len, rep_id))
-				return &(pe->ee);
-		}
+	const ExceptionEntry* pe = lower_bound (begin (exception_entries_), end (exception_entries_), rep_id, Pred ());
+	if (pe != end (exception_entries_)) {
+		if (Nirvana::RepositoryId::compatible (pe->ee.rep_id, pe->rep_id_len, rep_id))
+			return &(pe->ee);
 	}
 
-	return &exception_entries_ [EC_UNKNOWN].ee;
+	if (Exception::EC_SYSTEM_EXCEPTION == hint)
+		return &exception_entries_ [EC_UNKNOWN].ee;
+	else
+		return nullptr;
+}
+
+const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (TypeCode_ptr tc)
+{
+	if (tc && tc->kind () == tk_except)
+		return _get_exception_entry (tc->id ());
+	else
+		return nullptr;
 }
 
 }

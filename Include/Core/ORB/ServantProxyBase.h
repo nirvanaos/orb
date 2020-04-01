@@ -6,6 +6,7 @@
 #include <CORBA/AbstractBase_s.h>
 #include <CORBA/Object_s.h>
 #include <CORBA/Proxy/IOReference_s.h>
+#include <CORBA/Proxy/IORequest_s.h>
 #include <Core/AtomicCounter.h>
 #include <Core/Synchronized.h>
 #include "ServantMarshaler.h"
@@ -58,10 +59,93 @@ protected:
 		return sync_context_;
 	}
 
+	virtual ::Nirvana::Core::SynchronizationContext* get_sync_context (OperationIndex op)
+	{
+		return sync_context_;
+	}
+
 	void run_garbage_collector (::Nirvana::Core::Core_var <::Nirvana::Core::Runnable> gc) const
 	{
 		sync_context_->async_call (gc, ::Nirvana::INFINITE_DEADLINE);
 	}
+
+	template <class I, void (*proc) (I*, IORequest_ptr, ::Nirvana::ConstPointer, Unmarshal_var, ::Nirvana::Pointer)>
+	static void ObjProcWrapper (Interface* servant, Interface* call,
+		::Nirvana::ConstPointer in_params,
+		Interface** unmarshaler,
+		::Nirvana::Pointer out_params)
+	{
+		try {
+			IORequest_ptr rq = IORequest::_check (call);
+			try {
+				proc ((I*)(void*)servant, rq, in_params, TypeI <Unmarshal>::inout (unmarshaler), out_params);
+				rq->success ();
+			} catch (Exception& e) {
+				rq->exception (e);
+			}
+		} catch (...) {
+		}
+	}
+
+	class Request :
+		public ImplementationPseudo <Request, IORequest>,
+		public LifeCycleNoCopy <Request>
+	{
+	public:
+		Request (const ServantProxyBase& proxy) :
+			proxy_ (proxy),
+			success_ (false)
+		{
+			exception_.reset ();
+		}
+
+		Marshal_ptr marshaler ()
+		{
+			if (!marshaler_)
+				marshaler_ = proxy_.create_marshaler ();
+			return marshaler_;
+		}
+
+		void exception (Any& exc)
+		{
+			TypeCode_ptr tc = exc.type ();
+			if (tc) {
+				Marshal_ptr m = Marshal::_nil ();
+				if (tc->_has_marshal ())
+					m = marshaler ();
+				MarshalTraits <Any>::marshal_out (exc, m, exception_);
+			}
+		}
+
+		void success ()
+		{
+			success_ = true;
+		}
+
+		Unmarshal_var check ()
+		{
+			Unmarshal_var u = ServantMarshaler::unmarshaler (marshaler_._retn ());
+			if (!success_) {
+				if (exception_.type ()) {
+					Any exc;
+					MarshalTraits <Any>::unmarshal (exception_, u, exc);
+					const SystemException* pse;
+					if (exc >>= pse)
+						pse->_raise ();
+					else
+						throw UnknownUserException (std::move (exc));
+				} else
+					throw UNKNOWN ();
+			}
+			return u;
+		}
+
+	private:
+		const ServantProxyBase& proxy_;
+		Marshal_var marshaler_;
+		ABI <Any> exception_;
+		bool success_;
+	};
 
 public:
 	Marshal_var create_marshaler () const
@@ -72,7 +156,24 @@ public:
 	Unmarshal_var call (OperationIndex op,
 		::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size,
 		Marshal_var& marshaler,
-		::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size);
+		::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size)
+	{
+		::Nirvana::UWord idx = op.interface_idx;
+		if (idx >= interfaces ().size ())
+			throw BAD_OPERATION ();
+		const InterfaceEntry& ie = interfaces () [idx];
+		idx = op.operation_idx;
+		if (idx >= ie.operations.size)
+			throw BAD_OPERATION ();
+		Unmarshal_var u = ServantMarshaler::unmarshaler (marshaler);
+		marshaler._retn ();
+		Request request (*this);
+		{
+			::Nirvana::Core::Synchronized sync (get_sync_context (op));
+			(ie.operations.p [idx].invoke) (ie.implementation, &request._get_ptr (), in_params, &TypeI <Unmarshal>::C_inout (u), out_params);
+		}
+		return request.check ();
+	}
 
 private:
 	static const Char* primary_interface_id (AbstractBase_ptr servant)

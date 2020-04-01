@@ -30,6 +30,11 @@ public:
 		return &static_cast <Unmarshal&> (static_cast <Bridge <Unmarshal>&> (*this));
 	}
 
+	static Unmarshal_ptr unmarshaler (Marshal_ptr marshaler)
+	{
+		return Unmarshal::_check (static_cast <Bridge <Unmarshal>*> (static_cast <ServantMarshaler*> (&marshaler)));
+	}
+
 	using InterfaceImplBase <ServantMarshaler, Marshal>::_context;
 	using InterfaceImplBase <ServantMarshaler, Unmarshal>::_context;
 	MarshalContext context ();

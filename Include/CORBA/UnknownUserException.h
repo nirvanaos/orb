@@ -20,6 +20,10 @@ public:
 		return data_;
 	}
 
+	UnknownUserException (Any&& exc) :
+		data_ (std::move (exc))
+	{}
+
 private:
 	Data data_;
 };

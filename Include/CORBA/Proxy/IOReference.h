@@ -86,9 +86,9 @@ class Client <T, IOReference> :
 	public T
 {
 public:
-	Marshal_ptr create_marshaler ();
+	Marshal_var create_marshaler ();
 
-	Unmarshal_ptr call (Type <OperationIndex>::C_in op,
+	Unmarshal_var call (Type <OperationIndex>::C_in op,
 		::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size, TypeI <Marshal>::C_inout marshaler,
 		::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size);
 };
@@ -97,7 +97,7 @@ class IOReference : public ClientInterface <IOReference, Object>
 {};
 
 template <class T>
-Marshal_ptr Client <T, IOReference>::create_marshaler ()
+Marshal_var Client <T, IOReference>::create_marshaler ()
 {
 	Environment _env;
 	Bridge <IOReference>& _b (T::_get_bridge (_env));
@@ -107,7 +107,7 @@ Marshal_ptr Client <T, IOReference>::create_marshaler ()
 }
 
 template <class T>
-Unmarshal_ptr Client <T, IOReference>::call (Type <OperationIndex>::C_in op,
+Unmarshal_var Client <T, IOReference>::call (Type <OperationIndex>::C_in op,
 	::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size, TypeI <Marshal>::C_inout marshaler,
 	::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size)
 {

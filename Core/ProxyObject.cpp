@@ -130,9 +130,9 @@ void ProxyObject::non_existent_request (ProxyObject* _servant, IORequest_ptr _rq
 }
 
 const Operation ProxyObject::object_ops_ [3] = {
-	{ op_get_interface_, {0, 0}, {0, 0}, _tc_InterfaceDef, RqProcWrapper <ProxyObject, get_interface_request> },
-	{ op_is_a_, {&is_a_param_, 1}, {0, 0}, _tc_boolean, RqProcWrapper <ProxyObject, is_a_request> },
-	{ op_non_existent_, {0, 0}, {0, 0}, _tc_boolean, RqProcWrapper <ProxyObject, non_existent_request> }
+	{ op_get_interface_, {0, 0}, {0, 0}, _tc_InterfaceDef, ObjProcWrapper <ProxyObject, get_interface_request> },
+	{ op_is_a_, {&is_a_param_, 1}, {0, 0}, _tc_boolean, ObjProcWrapper <ProxyObject, is_a_request> },
+	{ op_non_existent_, {0, 0}, {0, 0}, _tc_boolean, ObjProcWrapper <ProxyObject, non_existent_request> }
 };
 
 }

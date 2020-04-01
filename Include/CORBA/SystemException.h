@@ -68,7 +68,8 @@ public:
 		return _downcast (ep);
 	}
 
-	static const Nirvana::ExceptionEntry* _get_exception_entry (String_in rep_id, int hint = EC_SYSTEM_EXCEPTION);
+	static const Nirvana::ExceptionEntry* _get_exception_entry (String_in rep_id, int hint = Exception::EC_USER_EXCEPTION);
+	static const Nirvana::ExceptionEntry* _get_exception_entry (TypeCode_ptr tc);
 
 #define EXCEPTION_CODE(e) EC_##e,
 
