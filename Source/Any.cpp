@@ -90,6 +90,53 @@ void Any::type (TypeCode_ptr alias)
 	}
 }
 
+static_assert (Nirvana::ABI <Any>::SMALL_CAPACITY >= sizeof (SystemException), "Any data must fit SystemException.");
+
+void Any::exception (const Exception& e)
+{
+	clear ();
+	const SystemException* pse = SystemException::_downcast (&e);
+	if (pse) {
+		const Nirvana::ExceptionEntry* pee = SystemException::_get_exception_entry (e._rep_id (), e.__code ());
+		assert (pee);
+		(pee->construct) (small_pointer ());
+		set_type (e.__type_code ());
+	} else
+		copy_from (e.__type_code (), e.__data ());
+}
+
+void Any::exception (Exception&& e)
+{
+	if (SystemException::_downcast (&e))
+		exception ((const Exception&)e);
+	else
+		move_from (e.__type_code (), e.__data ());
+}
+
+bool Any::is_system_exception () const
+{
+	return SystemException::_get_exception_entry (type ());
+}
+
+const void* Any::data () const
+{
+	assert (!empty ());
+	if (is_large ())
+		return large_pointer ();
+	else if (is_system_exception ())
+		return ((const SystemException*)small_pointer ())->__data ();
+	else
+		return small_pointer ();
+}
+
+const SystemException* Any::system_exception () const
+{
+	if (!is_large () && is_system_exception ())
+		return (const SystemException*)small_pointer ();
+	else
+		return nullptr;
+}
+
 void Any::operator <<= (from_boolean from)
 {
 	clear ();
@@ -152,6 +199,26 @@ Boolean Any::operator >>= (to_octet to) const
 		return true;
 	} else
 		return false;
+}
+
+void operator <<= (Any& any, const Exception& e)
+{
+	any.exception (e);
+}
+
+void operator <<= (Any& any, Exception&& e)
+{
+	any.exception (std::move (e));
+}
+
+Boolean operator >>= (const Any& any, const SystemException*& sep)
+{
+	const SystemException* se = any.system_exception ();
+	if (se) {
+		sep = se;
+		return true;
+	}
+	return false;
 }
 
 }

@@ -60,11 +60,7 @@ public:
 
 	void type (TypeCode_ptr alias);
 
-	const void* data () const
-	{
-		assert (!empty ());
-		return is_large () ? large_pointer () : small_pointer ();
-	}
+	const void* data () const;
 
 	bool empty () const
 	{
@@ -73,26 +69,34 @@ public:
 
 	void clear ();
 
+	void exception (const Exception& ex);
+	void exception (Exception&& ex);
+	const SystemException* system_exception () const;
+
 	// special helper types needed for boolean, octet, char,
 	// and bounded string insertion
+	
 	struct from_boolean
 	{
 		from_boolean (Boolean b) : val (b)
 		{}
 		Boolean val;
 	};
+
 	struct from_octet
 	{
 		from_octet (Octet o) : val (o)
 		{}
 		Octet val;
 	};
+
 	struct from_char
 	{
 		from_char (Char c) : val (c)
 		{}
 		Char val;
 	};
+
 	struct from_wchar
 	{
 		from_wchar (WChar wc) : val (wc)
@@ -226,6 +230,8 @@ private:
 	void copy_from (const Any& src);
 	void* prepare (TypeCode_ptr tc);
 	void set_type (TypeCode_ptr tc);
+	bool is_system_exception () const;
+	static bool is_system_exception (String_in rep_id);
 
 	// these functions are private and not implemented
 	// hiding these causes compile-time errors for
@@ -287,6 +293,7 @@ void operator <<= (Any&, std::wstring&&);
 void operator <<= (Any&, const Any&);
 void operator <<= (Any&, Any&&);
 void operator <<= (Any&, const Exception&);
+void operator <<= (Any&, Exception&&);
 
 Boolean operator >>= (const Any&, Short&);
 Boolean operator >>= (const Any&, UShort&);
