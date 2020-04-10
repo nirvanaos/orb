@@ -3,9 +3,9 @@
 
 #include <CORBA/CORBA.h>
 #include <CORBA/ObjectFactory_s.h>
-#include "ServantBase.h"
-#include "LocalObject.h"
-#include "ReferenceCounter.h"
+#include <Core/ORB/ServantBase.h>
+#include <Core/ORB/LocalObject.h>
+#include <Core/ORB/ReferenceCounter.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -61,28 +61,14 @@ public:
 		return (new ReferenceCounter (offset_ptr (dynamic)))->_get_ptr ();
 	}
 
-	static PortableServer::Servant create_servant (PortableServer::Servant servant)
+	static PortableServer::ServantBase_var create_servant (PortableServer::Servant servant)
 	{
-		servant = offset_ptr (servant);
-		return create_servant (servant, servant);
+		return (new ServantBase (offset_ptr (servant)))->_get_ptr ();
 	}
 
-	// Directly called by the component loader
-	// Lifecycle is component interface
-	static PortableServer::Servant create_servant (PortableServer::Servant servant, Interface_ptr lifecycle)
+	static LocalObject_var create_local_object (LocalObject_ptr servant, AbstractBase_ptr abstract_base)
 	{
-		return (new ServantBase (servant, lifecycle))->_get_ptr ();
-	}
-
-	static Object_ptr create_local_object (Object_ptr servant)
-	{
-		servant = offset_ptr (servant);
-		return create_local_object (servant, servant);
-	}
-
-	static Object_ptr create_local_object (Object_ptr servant, Interface_ptr lifecycle)
-	{
-		return (new LocalObject (servant, lifecycle))->_get_ptr ();
+		return (new LocalObject (offset_ptr (servant), offset_ptr (abstract_base)))->_get_ptr ();
 	}
 
 private:

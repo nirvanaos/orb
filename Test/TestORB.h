@@ -3,8 +3,8 @@
 
 #include <gtest/gtest.h>
 #include <Mock/TestMock.h>
-//#include "Mock/MockPOA.h"
-//#include "Mock/MockBinder.h"
+#include "Mock/MockPOA.h"
+#include "Mock/MockBinder.h"
 
 namespace TestORB {
 
@@ -65,8 +65,8 @@ protected:
 
 private:
 	// POA must be created before the binder.
-//	::Nirvana::Test::MockPOA poa_;
-//	::Nirvana::Test::MockBinder binder_;
+	::Nirvana::Test::MockPOA poa_;
+	::Nirvana::Test::MockBinder binder_;
 };
 
 }

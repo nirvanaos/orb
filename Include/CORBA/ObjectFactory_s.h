@@ -102,7 +102,7 @@ protected:
 	static Interface* _create_local_object (Bridge <ObjectFactory>* _b, Interface* impl, Interface* ab, EnvironmentBridge* _env)
 	{
 		try {
-			return TypeI <LocalObject>::ret (S::_implementation (_b).create_local_object (TypeI <LocalObject>::in (impl), TypeI <LocalObject>::in (ab)));
+			return TypeI <LocalObject>::ret (S::_implementation (_b).create_local_object (TypeI <LocalObject>::in (impl), TypeI <AbstractBase>::in (ab)));
 		} catch (const Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {

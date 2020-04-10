@@ -20,6 +20,8 @@ public:
 	using ServantTraits <T>::_implementation;
 	using LifeCycleNoCopy <T>::__duplicate;
 	using LifeCycleNoCopy <T>::__release;
+	using Skeleton <T, I>::__non_existent;
+	ServantTraits <T>::_wide_object;
 
 	template <class Base, class Derived>
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, EnvironmentBridge* env)
@@ -32,6 +34,17 @@ public:
 	{
 		return nullptr; // ReferenceCounter base is not implemented, return nullptr.
 	}
+
+	I_ptr <I> _get_ptr ()
+	{
+		return I_ptr <I> (&static_cast <I&> (static_cast <Bridge <I>&> (*this)));
+	}
+
+protected:
+	template <class ... Args>
+	CoreImpl (Args ... args) :
+		Proxy (std::forward <Args> (args)...)
+	{}
 };
 
 }

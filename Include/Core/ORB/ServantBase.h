@@ -13,7 +13,15 @@ namespace Core {
 class ServantBase :
 	public CoreImpl <ServantBase, PortableServer::ServantBase, ProxyObject>
 {
+	typedef CoreImpl <ServantBase, PortableServer::ServantBase, ProxyObject> Base;
 public:
+	using Skeleton <ServantBase, PortableServer::ServantBase>::__get_interface;
+	using Skeleton <ServantBase, PortableServer::ServantBase>::__is_a;
+
+	ServantBase (PortableServer::Servant servant) :
+		Base (servant)
+	{}
+
 	// ServantBase default implementation
 
 	PortableServer::Servant __core_servant ()

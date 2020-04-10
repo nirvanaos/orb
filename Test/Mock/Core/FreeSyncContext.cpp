@@ -1,4 +1,4 @@
-#include <Nirvana/SynchronizationContext_s.h>
+#include <Core/SynchronizationContext.h>
 
 namespace Nirvana {
 namespace Core {
