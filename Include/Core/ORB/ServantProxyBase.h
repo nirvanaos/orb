@@ -33,6 +33,11 @@ public:
 		return this;
 	}
 
+	Object_ptr get_proxy ()
+	{
+		return &static_cast <Object&> (static_cast <Bridge <Object>&> (*this));
+	}
+
 	void _add_ref ()
 	{
 		::Nirvana::Core::AtomicCounter::IntType cnt = ref_cnt_.increment ();
@@ -150,7 +155,7 @@ protected:
 public:
 	Marshal_var create_marshaler () const
 	{
-		return (new ServantMarshaler (sync_context_->memory ()))->marshaler ();
+		return (new ServantMarshaler (sync_context_))->marshaler ();
 	}
 
 	Unmarshal_var call (OperationIndex op,

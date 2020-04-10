@@ -15,6 +15,12 @@ class TypeCodeException <PortableServer::POA::ObjectNotActive> :
 	public TypeCodeExceptionImpl <PortableServer::POA::ObjectNotActive>
 {};
 
+namespace Core {
+
+StaticI_ptr <PortableServer::POA> g_root_POA = { 0 };
+
+}
+
 }
 }
 

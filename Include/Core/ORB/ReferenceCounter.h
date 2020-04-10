@@ -4,7 +4,7 @@
 #include <CORBA/ReferenceCounter_s.h>
 #include <CORBA/DynamicServant_s.h>
 #include <CORBA/ImplementationPseudo.h>
-#include "../AtomicCounter.h"
+#include <Core/AtomicCounter.h>
 
 namespace CORBA {
 namespace Nirvana {

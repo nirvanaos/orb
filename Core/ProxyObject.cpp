@@ -94,31 +94,7 @@ void ProxyObject::implicit_deactivate ()
 	}
 }
 
-void ProxyObject::get_interface_request (ProxyObject* _servant, IORequest_ptr _rq,
-	::Nirvana::ConstPointer _in_params,
-	Unmarshal_var _unmarshal,
-	::Nirvana::Pointer _out_params)
-{
-	InterfaceDef_var _ret = _servant->servant_->_get_interface ();
-	get_interface_out& _out = *(get_interface_out*)_out_params;
-	Marshal_ptr _m = _rq->marshaler ();
-	_marshal_out (_ret, _m, _out._ret);
-}
-
-void ProxyObject::is_a_request (ProxyObject* _servant, IORequest_ptr _rq,
-	::Nirvana::ConstPointer in_params,
-	Unmarshal_var unmarshaler,
-	::Nirvana::Pointer out_params)
-{
-	String logical_type_id;
-	_unmarshal (((const is_a_in*)in_params)->logical_type_id, unmarshaler, logical_type_id);
-	unmarshaler = Unmarshal::_nil ();
-	Boolean _ret = _servant->servant_->_is_a (logical_type_id);
-	BooleanRet& _out = *(BooleanRet*)out_params;
-	_marshal_out (_ret, Marshal::_nil (), _out._ret);
-}
-
-void ProxyObject::non_existent_request (ProxyObject* _servant, IORequest_ptr _rq,
+inline void ProxyObject::non_existent_request (ProxyObject* _servant, IORequest_ptr _rq,
 	::Nirvana::ConstPointer in_params,
 	Unmarshal_var unmarshaler,
 	::Nirvana::Pointer out_params)
@@ -130,8 +106,8 @@ void ProxyObject::non_existent_request (ProxyObject* _servant, IORequest_ptr _rq
 }
 
 const Operation ProxyObject::object_ops_ [3] = {
-	{ op_get_interface_, {0, 0}, {0, 0}, _tc_InterfaceDef, ObjProcWrapper <ProxyObject, get_interface_request> },
-	{ op_is_a_, {&is_a_param_, 1}, {0, 0}, _tc_boolean, ObjProcWrapper <ProxyObject, is_a_request> },
+	{ op_get_interface_, {0, 0}, {0, 0}, _tc_InterfaceDef, nullptr },
+	{ op_is_a_, {&is_a_param_, 1}, {0, 0}, _tc_boolean, nullptr },
 	{ op_non_existent_, {0, 0}, {0, 0}, _tc_boolean, ObjProcWrapper <ProxyObject, non_existent_request> }
 };
 

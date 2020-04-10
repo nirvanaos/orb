@@ -4,6 +4,7 @@
 
 #include <CORBA/Proxy/Proxy.h>
 #include <Core/Array.h>
+#include <Core/Synchronized.h>
 
 namespace CORBA {
 namespace Nirvana {
@@ -29,12 +30,15 @@ public:
 
 	InterfaceDef_var _get_interface () const
 	{
+		::Nirvana::Core::Synchronized sync (::Nirvana::Core::SynchronizationContext::not_synchronized ());
 		return InterfaceDef::_nil (); // TODO: Implement.
 	}
 
 	Boolean _is_a (const String& type_id) const
 	{
-		return find_interface (type_id) != nullptr;
+		String tmp (type_id);
+		::Nirvana::Core::Synchronized sync (::Nirvana::Core::SynchronizationContext::not_synchronized ());
+		return find_interface (tmp) != nullptr;
 	}
 
 	Boolean _non_existent ()

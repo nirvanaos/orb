@@ -9,7 +9,7 @@ namespace CORBA {
 namespace Nirvana {
 namespace Core {
 
-extern StaticI_ptr <PortableServer::POA> g_root_POA;
+extern StaticI_ptr <PortableServer::POA> g_root_POA; // Temporary solution
 
 class POA :
 	public Servant <POA, PortableServer::POA>
@@ -21,8 +21,8 @@ public:
 	String activate_object (PortableServer::Servant servant)
 	{
 		PortableServer::Servant ps = servant->__core_servant ();
-		ServantBase* psc = static_cast <ServantBase*> (&ps);
-		Object_ptr proxy = psc->proxy_manager ();
+		ServantBase* core_obj = static_cast <ServantBase*> (&ps);
+		Object_ptr proxy = core_obj->get_proxy ();
 		std::pair <AOM::iterator, bool> ins = active_object_map_.emplace (std::to_string ((uintptr_t)&proxy), 
 			Object_var (Object::_duplicate (proxy)));
 		if (!ins.second)
