@@ -51,11 +51,21 @@ public:
 };
 
 BRIDGE_BEGIN (Unmarshal, CORBA_NIRVANA_REPOSITORY_ID ("Unmarshal"))
-ABI_enum (*context) (Bridge <Unmarshal>*, EnvironmentBridge*);
+ABI_enum (*_get_context) (Bridge <Unmarshal>*, EnvironmentBridge*);
 void (*adopt_memory) (Bridge <Unmarshal>*, ::Nirvana::ConstPointer, ::Nirvana::Size, EnvironmentBridge*);
 Interface* (*unmarshal_interface) (Bridge <Unmarshal>*, ::Nirvana::ConstPointer, Type <String>::ABI_in, EnvironmentBridge*);
 Interface* (*unmarshal_type_code) (Bridge <Unmarshal>*, ::Nirvana::ConstPointer, EnvironmentBridge*);
 BRIDGE_END ()
+
+template <class T>
+MarshalContext Client <T, Unmarshal>::context ()
+{
+	Environment _env;
+	Bridge <Marshal>& _b (T::_get_bridge (_env));
+	Type <MarshalContext>::C_ret _ret = (_b._epv ().epv._get_context) (&_b, &_env);
+	_env.check ();
+	return _ret;
+}
 
 template <class T>
 void Client <T, Unmarshal>::adopt_memory (::Nirvana::ConstPointer p, ::Nirvana::Size size)

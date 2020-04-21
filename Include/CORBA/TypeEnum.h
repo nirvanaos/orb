@@ -78,18 +78,18 @@ struct TypeEnum
 	{
 	public:
 		C_ret (ABI_ret val) :
-			val_ ((T)val)
+			val_ (val)
 		{
 			Type <T>::check (val_);
 		}
 
 		operator T ()
 		{
-			return val_;
+			return (T)val_;
 		}
 
 	private:
-		T val_;
+		ABI_ret val_;
 	};
 
 	static T in (ABI_in v)

@@ -36,9 +36,11 @@ typedef Nirvana::TypeCodeEnum <CompletionStatus> TC_CompletionStatus;
 #define TC_EXCEPTION(E) typedef Nirvana::TypeCodeException <E> TC_##E;
 
 SYSTEM_EXCEPTIONS(TC_EXCEPTION)
+TC_EXCEPTION(UnknownUserException)
 
 }
 
 TC_IMPEX (CompletionStatus)
 
 SYSTEM_EXCEPTIONS(TC_IMPEX_BY_ID)
+TC_IMPEX_BY_ID(UnknownUserException)

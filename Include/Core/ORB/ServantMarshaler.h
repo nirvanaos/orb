@@ -63,7 +63,7 @@ public:
 		return Unmarshal::_check (static_cast <Bridge <Unmarshal>*> (static_cast <ServantMarshaler*> (&marshaler)));
 	}
 
-	MarshalContext context ()
+	MarshalContext context () const
 	{
 		if (shared_memory ())
 			return MarshalContext::SHARED_MEMORY;
