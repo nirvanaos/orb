@@ -86,7 +86,7 @@ private:
 
 	struct Module
 	{
-		// Release bound interfaces firts, then delete core objects.
+		// Release bound interfaces first, then delete core objects.
 		std::list <CORBA::Nirvana::Interface_var> bound_interfaces;
 		std::list <CORBA::Nirvana::Interface_var> core_objects;
 

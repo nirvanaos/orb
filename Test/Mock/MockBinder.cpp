@@ -1,5 +1,5 @@
 #include "MockBinder.h"
-#include "Core/ORB/ObjectFactory.h"
+#include "ObjectFactory.h"
 #include <Nirvana/OLF.h>
 #include <Nirvana/core_objects.h>
 
