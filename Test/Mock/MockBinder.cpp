@@ -13,149 +13,143 @@ const ImportInterfaceT <Binder> g_binder = { OLF_IMPORT_INTERFACE, "Nirvana/g_bi
 
 namespace Test {
 
-using namespace llvm;
 using namespace std;
 using namespace ::CORBA;
 using namespace ::CORBA::Nirvana;
 using namespace ::Nirvana;
 using ::CORBA::Nirvana::Core::ObjectFactory;
 
-bool MockBinder::is_section (const COFF::section* s, const char* name)
-{
-	const char* sn = s->Name;
-	char c;
-	while ((c = *name) && *sn == c) {
-		++sn;
-		++name;
-	}
-	if (c)
-		return false;
-	if (sn - s->Name < COFF::NameSize)
-		return !*sn;
-	else
-		return true;
-}
+const size_t MockBinder::Iterator::command_sizes_ [OLF_EXPORT_LOCAL] = {
+	sizeof (ImportInterface),
+	sizeof (ExportInterface),
+	sizeof (ExportObject),
+	sizeof (ExportLocal)
+};
 
 MockBinder::MockBinder () :
 	ref_cnt_ (1)
 {
 	exported_interfaces_.emplace (g_binder.imp.name, _get_ptr ());
 
-	void* image_base = GetModuleHandleW (0);
-	const COFF::DOSHeader* dos_header = (const COFF::DOSHeader*)image_base;
-	if (dos_header->Magic != 'ZM')
-		throw INITIALIZE ();
+	module_.initialize (GetModuleHandleW (0));
 
-	const uint32_t* PE_magic = (const uint32_t*)((const uint8_t*)image_base + dos_header->AddressOfNewExeHeader);
-	if (*PE_magic != *(const uint32_t*)COFF::PEMagic)
-		throw INITIALIZE ();
-
-	bind_image (image_base, (COFF::header*)(PE_magic + 1));
+	module_bind (module_);
 }
 
 MockBinder::~MockBinder ()
 {
-	module_.clear ();
+	module_unbind (module_);
 	EXPECT_EQ (ref_cnt_, 1);
 }
 
-void MockBinder::bind_image (const void* image_base, const COFF::header* hdr)
+void MockBinder::module_bind (Module& module)
 {
-	const COFF::section* metadata = 0;
+	DWORD protection;
+	VirtualProtect ((void*)module.olf_section, module.olf_size, PAGE_READWRITE, &protection);
 
-	const COFF::section* s = (const COFF::section*)((const uint8_t*)(hdr + 1) + hdr->SizeOfOptionalHeader);
-	for (uint32_t cnt = hdr->NumberOfSections; cnt; --cnt, ++s) {
-		if (is_section (s, OLF_BIND)) {
-			metadata = s;
-			break;
+	try {
+		// Pass 1
+		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
+			switch (*it.cur ()) {
+				case OLF_EXPORT_INTERFACE:
+				{
+					const ExportInterface* ps = reinterpret_cast <const ExportInterface*> (it.cur ());
+					add_export (module, ps->name, ps->itf);
+					break;
+				}
+			}
+		}
+
+		// Pass 2
+		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
+			switch (*it.cur ()) {
+				case OLF_EXPORT_OBJECT: {
+					ExportObject* ps = reinterpret_cast <ExportObject*> (it.cur ());
+					PortableServer::ServantBase_var core_obj = ObjectFactory::create_servant (TypeI <PortableServer::ServantBase>::in (ps->servant_base));
+					Object_ptr obj = AbstractBase_ptr (core_obj)->_query_interface <Object> ();
+					ps->core_object = &core_obj._retn ();
+					add_export (module, ps->name, obj);
+					break;
+				}
+
+				case OLF_EXPORT_LOCAL: {
+					ExportLocal* ps = reinterpret_cast <ExportLocal*> (it.cur ());
+					LocalObject_ptr core_obj = ObjectFactory::create_local_object (TypeI <LocalObject>::in (ps->local_object), TypeI <AbstractBase>::in (ps->abstract_base));
+					Object_ptr obj = core_obj;
+					ps->core_object = &core_obj;
+					add_export (module, ps->name, obj);
+					break;
+				}
+			}
+		}
+
+		// Pass 3
+		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
+			switch (*it.cur ()) {
+				case OLF_IMPORT_INTERFACE: {
+					ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
+					ps->itf = &bind (ps->name, ps->interface_id)._retn ();
+					break;
+				}
+			}
+		}
+	} catch (...) {
+		module_unbind (module);
+		VirtualProtect ((void*)module.olf_section, module.olf_size, protection, &protection);
+		throw;
+	}
+
+	VirtualProtect ((void*)module.olf_section, module.olf_size, protection, &protection);
+}
+
+void MockBinder::module_unbind (Module& module)
+{
+	// Pass 1
+	for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
+		switch (*it.cur ()) {
+			case OLF_IMPORT_INTERFACE: {
+				ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
+				CORBA::Nirvana::interface_release (ps->itf);
+				break;
+			}
 		}
 	}
 
-	if (!metadata)
-		throw INITIALIZE ();
-
-	bind_olf ((const uint8_t*)image_base + metadata->VirtualAddress, metadata->VirtualSize);
-}
-
-void MockBinder::bind_olf (const void* data, size_t size)
-{
-	DWORD protection;
-	VirtualProtect ((void*)data, size, PAGE_READWRITE, &protection);
-	int* p = (int*)data;
-	int* end = p + size / sizeof (int);
-
-	bool imp = false;
-	while (p != end && *p) {
-		switch (*p) {
-			case OLF_IMPORT_INTERFACE:
-				imp = true;
-				p += sizeof (ImportInterface) / sizeof (*p);
-				break;
-
-			case OLF_EXPORT_INTERFACE: {
-				const ExportInterface* ps = reinterpret_cast <const ExportInterface*> (p);
-				if (!exported_interfaces_.emplace (ps->name, ps->itf).second)
-					throw INV_OBJREF ();	// Duplicated name
-				p += sizeof (ExportInterface) / sizeof (*p);
-				break;
-			}
-
+	// Pass 2
+	for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
+		switch (*it.cur ()) {
 			case OLF_EXPORT_OBJECT: {
-				ExportObject* ps = reinterpret_cast <ExportObject*> (p);
-				PortableServer::ServantBase_var core_obj = ObjectFactory::create_servant (TypeI <PortableServer::ServantBase>::in (ps->implementation));
-				ps->core_object = &PortableServer::Servant (core_obj);
-				add_export (ps->name, core_obj);
-				p += sizeof (ExportObject) / sizeof (*p);
+				ExportObject* ps = reinterpret_cast <ExportObject*> (it.cur ());
+				CORBA::Nirvana::interface_release (ps->core_object);
 				break;
 			}
 
 			case OLF_EXPORT_LOCAL: {
-				ExportLocal* ps = reinterpret_cast <ExportLocal*> (p);
-				Object_var core_obj = ObjectFactory::create_local_object (TypeI <Object>::in (ps->implementation));
-				ps->core_object = &Object_ptr (core_obj);
-				add_export (ps->name, core_obj);
-				p += sizeof (ExportLocal) / sizeof (*p);
+				ExportLocal* ps = reinterpret_cast <ExportLocal*> (it.cur ());
+				CORBA::Nirvana::interface_release (ps->core_object);
 				break;
-			}
-
-			default:
-				throw INTERNAL ();
-				break;
-		}
-	}
-	if (imp) {
-		p = (int*)data;
-		while (p != end && *p) {
-			switch (*p) {
-				case OLF_IMPORT_INTERFACE: {
-					ImportInterface* ps = reinterpret_cast <ImportInterface*> (p);
-					module_.bound_interfaces.push_back (bind (ps->name, ps->interface_id));
-					ps->itf = &Interface_ptr (module_.bound_interfaces.back ());
-					p += sizeof (ImportInterface) / sizeof (*p);
-					break;
-				}
-
-				case OLF_EXPORT_INTERFACE:
-					p += sizeof (ExportInterface) / sizeof (*p);
-					break;
-
-				case OLF_EXPORT_OBJECT:
-					p += sizeof (ExportObject) / sizeof (*p);
-					break;
-
-				case OLF_EXPORT_LOCAL:
-					p += sizeof (ExportLocal) / sizeof (*p);
-					break;
 			}
 		}
 	}
-	VirtualProtect ((void*)data, size, protection, &protection);
+}
+
+void MockBinder::add_export (Module& module, const char* name, CORBA::Nirvana::Interface_ptr itf)
+{
+	auto ins = exported_interfaces_.emplace (name, itf);
+	if (!ins.second)
+		throw_INV_OBJREF ();	// Duplicated name
+	try {
+		module_.interfaces_.push_back (ins.first);
+	} catch (...) {
+		exported_interfaces_.erase (ins.first);
+		throw;
+	}
 }
 
 Interface_var MockBinder::bind (const std::string& name, const std::string& iid)
 {
-	auto pf = exported_interfaces_.find (name.c_str ());
-	if (pf != exported_interfaces_.end ()) {
+	auto pf = exported_interfaces_.lower_bound (name);
+	if (pf != exported_interfaces_.end () && pf->first.compatible (name)) {
 		Interface* itf = &pf->second;
 		const StringBase <Char> itf_id = itf->_epv ().interface_id;
 		if (!::CORBA::Nirvana::RepositoryId::compatible (itf_id, iid)) {
@@ -176,6 +170,19 @@ Interface_var MockBinder::bind (const std::string& name, const std::string& iid)
 
 	} else
 		throw OBJECT_NOT_EXIST ();
+}
+
+void MockBinder::Iterator::check ()
+{
+	if (cur_ptr_ >= end_)
+		cur_ptr_ = end_;
+	else {
+		Word cmd = *cur_ptr_;
+		if (OLF_END == cmd)
+			cur_ptr_ = end_;
+		else if (cmd > OLF_EXPORT_LOCAL)
+			throw CORBA::INITIALIZE ();
+	}
 }
 
 }

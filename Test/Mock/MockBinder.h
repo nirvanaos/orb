@@ -3,7 +3,7 @@
 
 #include <Nirvana/Nirvana.h>
 #include <Nirvana/Binder_s.h>
-#include <llvm/BinaryFormat/COFF.h>
+#include <Core/ModuleInfo.h>
 #include <list>
 #include <map>
 #include <gtest/gtest.h>
@@ -38,63 +38,90 @@ public:
 	CORBA::Nirvana::Interface_var bind (const std::string& name, const std::string& iid);
 
 private:
-
-	static bool is_section (const llvm::COFF::section* s, const char* name);
-
-	void bind_image (const void* image_base, const llvm::COFF::header* hdr);
-	void bind_olf (const void* data, size_t size);
-
-	template <class I>
-	void add_export (const char* name, CORBA::Nirvana::I_var <I>& core_obj)
+	class Iterator
 	{
-		CORBA::Nirvana::Interface_ptr proxy = CORBA::AbstractBase_ptr (core_obj)->_query_interface (CORBA::Object::repository_id_);
-		if (!proxy)
-			throw_OBJ_ADAPTER ();
-		auto ins = exported_interfaces_.emplace (name, proxy);
-		if (!ins.second)
-			throw_INV_OBJREF ();	// Duplicated name
-		try {
-			module_.core_objects.emplace_back (core_obj._retn ());
-		} catch (...) {
-			exported_interfaces_.erase (ins.first);
-			throw;
+	public:
+		Iterator (const void* data, size_t size) :
+			cur_ptr_ ((OLF_Command*)data),
+			end_ ((OLF_Command*)((uint8_t*)data + size))
+		{
+			check ();
 		}
-	}
+
+		bool end () const
+		{
+			return cur_ptr_ == end_;
+		}
+
+		OLF_Command* cur () const
+		{
+			return cur_ptr_;
+		}
+
+		void next ()
+		{
+			if (!end ()) {
+				Word idx = (Word)(*cur_ptr_) - 1;
+				assert (idx >= 0);
+				cur_ptr_ = (OLF_Command*)((uint8_t*)cur_ptr_ + command_sizes_ [idx]);
+				check ();
+			}
+		}
+
+	private:
+		void check ();
+
+	private:
+		OLF_Command* cur_ptr_;
+		OLF_Command* end_;
+
+		static const size_t command_sizes_ [OLF_EXPORT_LOCAL];
+	};
+
+	struct Module;
+	
+	void module_bind (Module& module);
+	void module_unbind (Module& module);
+
+	void add_export (Module& module, const char* name, CORBA::Nirvana::Interface_ptr itf);
 
 	class NameKey
 	{
 	public:
 		NameKey (const char* name) :
 			name_ (name),
-			end_ (name + strlen (name))
+			len_ (strlen (name))
+		{}
+
+		NameKey (const std::string& s) :
+			name_ (s.c_str ()),
+			len_ (s.length ())
 		{}
 
 		bool operator < (const NameKey& rhs) const
 		{
-			return std::lexicographical_compare (name_, end_, rhs.name_, rhs.end_);
+			return CORBA::Nirvana::RepositoryId::compare (name_, len_, rhs.name_, rhs.len_);
+		}
+
+		bool compatible (const std::string& s) const
+		{
+			return CORBA::Nirvana::RepositoryId::compatible (name_, len_, s);
 		}
 
 	private:
 		const char* name_;
-		const char* end_;
+		const size_t len_;
 	};
 
 private:
 	CORBA::ULong ref_cnt_;
-	
-	std::map <NameKey, CORBA::Nirvana::Interface_ptr> exported_interfaces_;
 
-	struct Module
+	typedef std::map <NameKey, CORBA::Nirvana::Interface_ptr> ExportedInterfaces;
+	ExportedInterfaces exported_interfaces_;
+
+	struct Module : Core::ModuleInfo
 	{
-		// Release bound interfaces first, then delete core objects.
-		std::list <CORBA::Nirvana::Interface_var> bound_interfaces;
-		std::list <CORBA::Nirvana::Interface_var> core_objects;
-
-		void clear ()
-		{
-			bound_interfaces.clear ();
-			core_objects.clear ();
-		}
+		std::vector <ExportedInterfaces::iterator> interfaces_;
 	} module_;
 };
 

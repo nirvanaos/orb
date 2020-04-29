@@ -39,6 +39,21 @@ private:
 	static const Char* version (const Char* id, const Char* end);
 	static const Char* minor_version (const Char* ver, const Char* end);
 	static ULong minor_number (const Char* minor_version);
+	
+	struct Version
+	{
+		ULong major, minor;
+
+		int compare (const Version& rhs) const
+		{
+			int cmp = major - rhs.major;
+			if (!cmp)
+				cmp = minor - rhs.minor;
+			return cmp;
+		}
+	};
+
+	static bool get_version (const Char* sver, Version&);
 
 private:
 	static const Char IDL_ [];

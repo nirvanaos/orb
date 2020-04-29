@@ -4,7 +4,7 @@
 #include <Nirvana/OLF.h>
 
 #define TC_IMPEX_EX(T, id) namespace CORBA {\
-extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_##T = { 0, nullptr, nullptr, STATIC_BRIDGE (TC_##T, TypeCode) };\
+extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_##T = { ::Nirvana::OLF_IMPORT_INTERFACE, nullptr, nullptr, STATIC_BRIDGE (TC_##T, TypeCode) };\
 } NIRVANA_EXPORT_INTERFACE1 (CORBA, id, TC_##T, CORBA::TypeCode);
 
 // Import and export for type code
@@ -13,7 +13,7 @@ extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_##T = { 0, nullptr, null
 
 // Import and export for interface exception
 #define INTERFACE_EXC_IMPEX(ns, I, E) namespace ns {\
-const ::Nirvana::ImportInterfaceT <CORBA::TypeCode> I::_tc_##E = { 0, 0, 0, STATIC_BRIDGE (TC_##I##_##E, CORBA::TypeCode) };\
+const ::Nirvana::ImportInterfaceT <CORBA::TypeCode> I::_tc_##E = { ::Nirvana::OLF_IMPORT_INTERFACE, 0, 0, STATIC_BRIDGE (TC_##I##_##E, CORBA::TypeCode) };\
 } NIRVANA_EXPORT_INTERFACE1 (ns, ns::I::E::repository_id_, TC_##I##_##E, CORBA::TypeCode);
 
 #endif

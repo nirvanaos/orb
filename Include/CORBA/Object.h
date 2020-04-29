@@ -142,7 +142,7 @@ class Object :
 	public Nirvana::ClientBase <Object, AbstractBase> // AbstractBase operations are not available directly on Object_ptr.
 {};
 
-inline Object_ptr AbstractBase::_to_object ()
+inline Object_var AbstractBase::_to_object ()
 {
 	return Object::_duplicate (_query_interface <Object> ());
 }

@@ -65,7 +65,7 @@ public:
 		return _duplicate (obj);
 	}
 
-	inline Object_ptr _to_object ();
+	inline Object_var _to_object ();
 	inline ValueBase* _to_value ();
 };
 

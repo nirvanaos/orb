@@ -33,9 +33,11 @@ RepositoryId::CheckResult RepositoryId::check (const Char* cur, size_t cur_l, co
 	if (is_type (cur, IDL_, IDL_len)) {
 		if (is_type (req, IDL_, IDL_len)) {
 			const Char* cur_name = cur + IDL_len + 1;
-			const Char* cur_minor = minor_version (cur_name, cur + cur_l);
+			const Char* cur_end = cur + cur_l;
+			const Char* cur_minor = minor_version (version (cur_name, cur_end), cur_end);
 			const Char* req_name = req + IDL_len + 1;
-			const Char* req_minor = minor_version (req_name, req + req_l);
+			const Char* req_end = req + req_l;
+			const Char* req_minor = minor_version (version (req_name, req_end), req_end);
 			if (cur_minor - cur_name == req_minor - req_name && equal (cur_name, cur_minor, req_name))
 				return minor_number (cur_minor) >= minor_number (req_minor) ? COMPATIBLE : INCOMPATIBLE_VERSION;
 		}
@@ -55,21 +57,18 @@ const Char* RepositoryId::version (const Char* begin, const Char* end)
 		if (':' == *p)
 			return p;
 	}
-	assert (false);
 	return end;
 }
 
-const Char* RepositoryId::minor_version (const Char* begin, const Char* end)
+const Char* RepositoryId::minor_version (const Char* ver, const Char* end)
 {
-	begin = version (begin, end);
-	if (':' == *begin)
-		return find (begin + 1, end, '.');
+	if (':' == *ver)
+		return find (ver + 1, end, '.');
 	return end;
 }
 
 ULong RepositoryId::minor_number (const Char* minor_version)
 {
-	assert ('.' == *minor_version);
 	if ('.' == *minor_version) {
 		Char* end;
 		ULong ret = strtoul (minor_version + 1, &end, 10);
@@ -77,6 +76,17 @@ ULong RepositoryId::minor_number (const Char* minor_version)
 		return ret;
 	} else
 		return 0;
+}
+
+bool RepositoryId::get_version (const Char* sver, Version& ver)
+{
+	if (':' == *sver) {
+		Char* end;
+		ver.major = strtoul (sver + 1, &end, 10);
+		ver.minor = minor_number (end);
+		return true;
+	}
+	return false;
 }
 
 int RepositoryId::compare (const Char* cur, size_t cur_l, String_in requested)
@@ -95,7 +105,20 @@ int RepositoryId::compare (const Char* cur, size_t cur_l, const Char* req, size_
 	if (is_type (cur, IDL_, IDL_len) && is_type (req, IDL_, IDL_len)) {
 		cur += IDL_len + 1;
 		req += IDL_len + 1;
-		return lexicographical_compare (cur, version (cur, cur_end), req, version (req, req_end));
+		const Char* cur_ver = version (cur, cur_end);
+		const Char* req_ver = version (req, req_end);
+		int ret = lexicographical_compare (cur, cur_ver, req, req_ver);
+		if (!ret) {
+			Version vcur, vreq;
+			if (!get_version (cur_ver, vcur)) {
+				if (get_version (req_ver, vreq))
+					ret = -1;
+			} else if (get_version (req_ver, vreq))
+				ret = vcur.compare (vreq);
+			else
+				ret = 1;
+		}
+		return ret;
 	} else
 		return lexicographical_compare (cur, cur_end, req, req_end);
 }
