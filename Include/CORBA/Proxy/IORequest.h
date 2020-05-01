@@ -52,7 +52,7 @@ class Client <T, IORequest> :
 {
 public:
 	Marshal_ptr marshaler ();
-	void exception (Exception& e) NIRVANA_NOEXCEPT;
+	void exception (Exception&& e) NIRVANA_NOEXCEPT;
 	void success ();
 };
 
@@ -70,7 +70,7 @@ Marshal_ptr Client <T, IORequest>::marshaler ()
 }
 
 template <class T>
-void Client <T, IORequest>::exception (Exception& e) NIRVANA_NOEXCEPT
+void Client <T, IORequest>::exception (Exception&& e) NIRVANA_NOEXCEPT
 {
 	Any any;
 	any <<= (std::move (e));

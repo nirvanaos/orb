@@ -1,5 +1,6 @@
 #include <Core/ORB/ProxyObject.h>
 #include <Core/Runnable.h>
+#include <CORBA/POA.h>
 
 namespace CORBA {
 namespace Nirvana {

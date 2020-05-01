@@ -86,7 +86,7 @@ protected:
 				proc ((I*)(void*)servant, rq, in_params, TypeI <Unmarshal>::inout (unmarshaler), out_params);
 				rq->success ();
 			} catch (Exception& e) {
-				rq->exception (e);
+				rq->exception (std::move (e));
 			}
 		} catch (...) {
 		}

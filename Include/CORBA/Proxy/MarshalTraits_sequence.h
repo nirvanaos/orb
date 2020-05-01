@@ -60,11 +60,11 @@ void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, Marshal_ptr marshaler
 		dst.size = asrc.size;
 		if (!MarshalTraits <T>::has_marshal) {
 			size_t cb = asrc.size * sizeof (T);
-			dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated ());
+			dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated);
 			dst.allocated = cb;
 			asrc.reset ();
 		} else {
-			const T* sp = src.data (), * end = sp + src.size ();
+			T* sp = src.data (), * end = sp + src.size ();
 			T_ABI* dp;
 			size_t cb;
 			MarshalContext mctx = marshaler->context ();
@@ -82,7 +82,7 @@ void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, Marshal_ptr marshaler
 			} while (sp != end);
 
 			if (MarshalContext::SHARED_MEMORY == mctx)
-				dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated ());
+				dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated);
 			else {
 				Seq tmp;
 				src.swap (tmp);
