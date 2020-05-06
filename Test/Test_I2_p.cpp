@@ -64,6 +64,7 @@ const Char* const ProxyTraits <::Test::I2>::interfaces_ [] = {
 	::Test::I2::repository_id_
 };
 
+template <>
 const InterfaceMetadata ProxyFactoryImpl <::Test::I2>::metadata_ = {
 	{ProxyTraits <::Test::I2>::interfaces_, countof (ProxyTraits <::Test::I2>::interfaces_)},
 	{ProxyTraits <::Test::I2>::operations_, countof (ProxyTraits <::Test::I2>::operations_)}

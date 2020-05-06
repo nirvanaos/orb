@@ -6,7 +6,10 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <>
 const Char TypeCodeEnum <TCKind>::name_ [] = "TCKind";
+
+template <>
 const Char* const TypeCodeEnum <TCKind>::members_ [] = {
 	"tk_null", "tk_void",
 	"tk_short", "tk_long", "tk_ushort", "tk_ulong",

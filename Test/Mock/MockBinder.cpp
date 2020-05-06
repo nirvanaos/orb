@@ -166,7 +166,7 @@ Interface_var MockBinder::bind (const std::string& name, const std::string& iid)
 			itf = qi;
 		}
 
-		return interface_duplicate (itf);
+		return Interface_ptr (interface_duplicate (itf));
 
 	} else
 		throw OBJECT_NOT_EXIST ();

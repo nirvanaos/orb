@@ -21,7 +21,7 @@ public:
 	using LifeCycleNoCopy <T>::__duplicate;
 	using LifeCycleNoCopy <T>::__release;
 	using Skeleton <T, I>::__non_existent;
-	ServantTraits <T>::_wide_object;
+	using ServantTraits <T>::_wide_object;
 
 	template <class Base, class Derived>
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, EnvironmentBridge* env)

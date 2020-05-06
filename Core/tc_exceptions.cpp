@@ -6,7 +6,10 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <>
 const Char TypeCodeEnum <CompletionStatus>::name_ [] = "CompletionStatus";
+
+template <>
 const Char* const TypeCodeEnum <CompletionStatus>::members_ [] = {
 	"COMPLETED_YES",
 	"COMPLETED_NO",

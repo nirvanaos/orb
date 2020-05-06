@@ -31,7 +31,8 @@ class TypeCodeException <::Test::MyException> :
 	public TypeCodeExceptionImpl <::Test::MyException, 1>
 {};
 
-const Parameter TypeCodeMembers <TypeCodeException <::Test::MyException> >::members_ [] = { "param", _tc_string };
+template <>
+const Parameter TypeCodeMembers <TypeCodeException <::Test::MyException> >::members_ [] = { { "param", _tc_string } };
 
 IMPLEMENT_PROXY_FACTORY(::Test, I1);
 
@@ -427,6 +428,7 @@ const Char* const ProxyTraits <::Test::I1>::interfaces_ [] = {
 	::Test::I1::repository_id_
 };
 
+template <>
 const InterfaceMetadata ProxyFactoryImpl <::Test::I1>::metadata_ = {
 	{ProxyTraits <::Test::I1>::interfaces_, countof (ProxyTraits <::Test::I1>::interfaces_)},
   {ProxyTraits <::Test::I1>::operations_, countof (ProxyTraits <::Test::I1>::operations_)}

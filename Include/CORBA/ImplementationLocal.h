@@ -18,9 +18,9 @@ namespace Nirvana {
 
 template <class S, class Primary, class ... Bases>
 class ImplementationLocal :
-	public InterfaceImpl <S, LocalObject>,
 	public InterfaceImpl <S, Bases>...,
-	public InterfaceImpl <S, Primary>
+	public InterfaceImpl <S, Primary>,
+	public InterfaceImpl <S, LocalObject> // LocalObject implementation must be constructed after all interfaces.
 {
 public:
 	Interface_ptr _query_interface (const String& id)

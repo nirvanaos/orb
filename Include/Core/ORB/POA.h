@@ -15,9 +15,6 @@ class POA :
 	public Servant <POA, PortableServer::POA>
 {
 public:
-	virtual ~POA ()
-	{}
-
 	String activate_object (PortableServer::Servant servant)
 	{
 		PortableServer::Servant ps = servant->__core_servant ();
