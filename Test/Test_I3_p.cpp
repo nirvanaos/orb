@@ -35,14 +35,20 @@ struct ProxyTraits <::Test::I3>
 
 template <>
 class Proxy <::Test::I3> :
-	public ProxyBase <::Test::I3>
+	public ProxyBase <::Test::I3>,
+	public ProxyBaseInterface <::Test::I2>,
+	public ProxyBaseInterface <::Test::I1>
 {
 	typedef ProxyBase <::Test::I3> Base;
 	typedef ProxyTraits <::Test::I3> Traits;
 public:
 	Proxy (IOReference_ptr proxy_manager, CORBA::UShort interface_idx) :
 		Base (proxy_manager, interface_idx)
-	{}
+	{
+		AbstractBase_ptr ab = Object_ptr (proxy_manager);
+		ProxyBaseInterface <::Test::I2>::init (ab);
+		ProxyBaseInterface <::Test::I1>::init (ab);
+	}
 
 	Long op3 (Long p1) const
 	{

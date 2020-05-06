@@ -54,6 +54,26 @@ private:
 	UShort interface_idx_;
 };
 
+template <class I>
+class ProxyBaseInterface
+{
+public:
+	void init (AbstractBase_ptr ab)
+	{
+		proxy_ = static_cast <Bridge <I>*> (ab->_query_interface (I::repository_id_));
+		if (!proxy_)
+			throw OBJ_ADAPTER ();
+	}
+
+	Bridge <I>* get () const
+	{
+		return proxy_;
+	}
+
+private:
+	Bridge <I>* proxy_;
+};
+
 template <class S>
 class ProxyLifeCycle :
 	public ServantTraits <S>,
@@ -64,6 +84,21 @@ public:
 	DynamicServant_ptr _dynamic_servant ()
 	{
 		return &static_cast <DynamicServant&> (static_cast <Bridge <DynamicServant>&> (*this));
+	}
+
+	template <class Base, class Derived>
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, EnvironmentBridge* env)
+	{
+		try {
+			if (!RepositoryId::compatible (Bridge <Base>::repository_id_, id))
+				::Nirvana::throw_INV_OBJREF ();
+			return static_cast <ProxyBaseInterface <Base>&> (S::_implementation (derived)).get ();
+		} catch (const Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return nullptr;
 	}
 };
 
