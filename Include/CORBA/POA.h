@@ -21,11 +21,11 @@ String Client <T, PortableServer::POA>::activate_object (I_in <PortableServer::S
 }
 
 template <class T>
-void Client <T, PortableServer::POA>::deactivate_object (String_in objid)
+void Client <T, PortableServer::POA>::deactivate_object (String_in oid)
 {
 	Environment _env;
 	Bridge <PortableServer::POA>& _b (T::_get_bridge (_env));
-	(_b._epv ().epv.deactivate_object) (&_b, &objid, &_env);
+	(_b._epv ().epv.deactivate_object) (&_b, &oid, &_env);
 	_env.check ();
 }
 

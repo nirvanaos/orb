@@ -15,9 +15,9 @@ class POA :
 	public Servant <POA, PortableServer::POA>
 {
 public:
-	String activate_object (PortableServer::Servant servant)
+	String activate_object (PortableServer::Servant p_servant)
 	{
-		PortableServer::Servant ps = servant->__core_servant ();
+		PortableServer::Servant ps = p_servant->__core_servant ();
 		ServantBase* core_obj = static_cast <ServantBase*> (&ps);
 		Object_ptr proxy = core_obj->get_proxy ();
 		std::pair <AOM::iterator, bool> ins = active_object_map_.emplace (std::to_string ((uintptr_t)&proxy), 
@@ -27,9 +27,9 @@ public:
 		return ins.first->first;
 	}
 
-	void deactivate_object (const String& id)
+	void deactivate_object (const String& oid)
 	{
-		if (!active_object_map_.erase (id))
+		if (!active_object_map_.erase (oid))
 			throw PortableServer::POA::ObjectNotActive ();
 	}
 

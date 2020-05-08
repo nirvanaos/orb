@@ -74,8 +74,15 @@ protected:
 		}
 		return 0;
 	}
+	// TODO: Other Object operations shall be here...
+
+	// Internals
+	static Interface* __get_servant (Bridge <Object>* obj, EnvironmentBridge* env)
+	{
+		set_MARSHAL (env);
+		return 0;
+	}
 };
-// TODO: Other Object operations shall be here...
 
 template <class S>
 const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
@@ -94,6 +101,9 @@ const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 		S::__is_equivalent,
 		S::__hash
 		// TODO: Other Object operations shall be here...
+	},
+	{
+		S::__get_servant
 	}
 };
 

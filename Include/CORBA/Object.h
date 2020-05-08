@@ -16,6 +16,14 @@ struct IOR;
 
 }
 
+namespace PortableServer {
+
+class ServantBase;
+typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
+typedef ::CORBA::Nirvana::I_out <ServantBase> ServantBase_out;
+
+}
+
 namespace CORBA {
 
 typedef Nirvana::Interface ImplementationDef; // Not defined, unused
@@ -59,6 +67,7 @@ struct Bridge <Object>::EPV
 
 	struct
 	{
+		Interface* (*get_servant) (Bridge <Object>*, EnvironmentBridge*);
 		const IOP::IOR* (*object_reference) (ABI_in <Boolean> local);
 	} internal;
 };

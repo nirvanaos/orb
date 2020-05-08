@@ -47,6 +47,26 @@ private:
 		Unmarshal_var unmarshaler,
 		::Nirvana::Pointer out_params);
 
+	PortableServer::ServantBase_var _get_servant () const
+	{
+		if (sync_context () == ::Nirvana::Core::SynchronizationContext::current ())
+			return PortableServer::ServantBase::_duplicate (servant_);
+		else
+			throw MARSHAL ();
+	}
+
+	static Interface* __get_servant (Bridge <Object>* obj, EnvironmentBridge* env)
+	{
+		try {
+			return TypeI <PortableServer::ServantBase>::ret (static_cast <ProxyObject&> (_implementation (obj))._get_servant ());
+		} catch (const Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return 0;
+	}
+
 private:
 	PortableServer::Servant servant_;
 	std::atomic <ActivationState> activation_state_;

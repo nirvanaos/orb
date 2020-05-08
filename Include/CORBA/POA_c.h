@@ -8,10 +8,6 @@
 
 namespace PortableServer {
 
-class ServantBase;
-typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
-typedef ::CORBA::Nirvana::I_out <ServantBase> ServantBase_out;
-
 class POA;
 typedef ::CORBA::Nirvana::I_ptr <POA> POA_ptr;
 typedef ::CORBA::Nirvana::I_var <POA> POA_var;
@@ -37,7 +33,7 @@ class Client <T, PortableServer::POA> :
 {
 public:
 	String activate_object (I_in <PortableServer::ServantBase> servant);
-	void deactivate_object (String_in objid);
+	void deactivate_object (String_in oid);
 };
 
 }
