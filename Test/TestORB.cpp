@@ -29,15 +29,10 @@ TEST_F (TestORB, RepositoryId)
 	EXPECT_FALSE (CORBA::Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/type:1.1"));
 	EXPECT_FALSE (CORBA::Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/other:1.0"));
 	EXPECT_FALSE (CORBA::Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "aaa/bbb/type:1.0"));
+
+	EXPECT_LT (CORBA::Nirvana::RepositoryId::compare (::Test::I1::repository_id_, size (::Test::I1::repository_id_),
+		::Test::I3::repository_id_, size (::Test::I3::repository_id_)), 0);
 }
-
-class TestException : public CORBA::UserException
-{
-public:
-	DECLARE_EXCEPTION (TestException);
-};
-
-DEFINE_USER_EXCEPTION (TestException, "IDL:TestORB/TestException:1.0")
 
 TEST_F (TestORB, SystemException)
 {
@@ -47,8 +42,8 @@ TEST_F (TestORB, SystemException)
 
 TEST_F (TestORB, UserException)
 {
-	TestException e;
-	EXPECT_THROW (e._raise (), TestException);
+	::Test::MyException e;
+	EXPECT_THROW (e._raise (), ::Test::MyException);
 }
 
 TEST_F (TestORB, CORBA_Environment)
@@ -79,12 +74,12 @@ TEST_F (TestORB, Environment)
 	ASSERT_TRUE (ex);
 	EXPECT_STREQ (ex->_name (), "NO_MEMORY");
 
-	CORBA::Nirvana::EnvironmentEx <TestException> nex;
-	CORBA::Nirvana::set_exception (&nex, TestException ());
+	CORBA::Nirvana::EnvironmentEx <::Test::MyException> nex;
+	CORBA::Nirvana::set_exception (&nex, ::Test::MyException ());
 	CORBA::Nirvana::Environment ne2 (move (nex));
 	ex = ne2.exception ();
 	ASSERT_TRUE (ex);
-	EXPECT_STREQ (ex->_name (), TestException::__name ());
+	EXPECT_STREQ (ex->_name (), ::Test::MyException::__name ());
 }
 
 TEST_F (TestORB, ServantTypes)

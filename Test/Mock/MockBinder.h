@@ -75,7 +75,7 @@ private:
 		OLF_Command* cur_ptr_;
 		OLF_Command* end_;
 
-		static const size_t command_sizes_ [OLF_EXPORT_LOCAL];
+		static const size_t command_sizes_ [OLF_IMPORT_OBJECT];
 	};
 
 	struct Module;
@@ -100,7 +100,7 @@ private:
 
 		bool operator < (const NameKey& rhs) const
 		{
-			return CORBA::Nirvana::RepositoryId::compare (name_, len_, rhs.name_, rhs.len_);
+			return CORBA::Nirvana::RepositoryId::compare (name_, len_, rhs.name_, rhs.len_) < 0;
 		}
 
 		bool compatible (const std::string& s) const

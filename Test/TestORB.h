@@ -64,9 +64,8 @@ protected:
 	}
 
 private:
-	// POA must be created before the binder.
-	::Nirvana::Test::MockPOA poa_;
 	::Nirvana::Test::MockBinder binder_;
+	::Nirvana::Test::MockPOA poa_;
 };
 
 }

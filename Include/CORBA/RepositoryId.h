@@ -55,6 +55,8 @@ private:
 
 	static bool get_version (const Char* sver, Version&);
 
+	static int lex_compare (const Char* lhs, const Char* lhs_end, const Char* rhs, const Char* rhs_end);
+
 private:
 	static const Char IDL_ [];
 };

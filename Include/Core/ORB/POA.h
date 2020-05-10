@@ -15,11 +15,20 @@ class POA :
 	public Servant <POA, PortableServer::POA>
 {
 public:
-	String activate_object (PortableServer::Servant p_servant)
+	static Type <String>::ABI_ret _activate_object (Bridge <PortableServer::POA>* obj, Interface* servant, EnvironmentBridge* env)
 	{
-		PortableServer::Servant ps = p_servant->__core_servant ();
-		ServantBase* core_obj = static_cast <ServantBase*> (&ps);
-		Object_ptr proxy = core_obj->get_proxy ();
+		try {
+			return Type <String>::ret (_implementation (obj).activate_object (TypeI <Object>::in (servant)));
+		} catch (const Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return Type <String>::ABI_ret ();
+	}
+
+	String activate_object (Object_ptr proxy)
+	{
 		std::pair <AOM::iterator, bool> ins = active_object_map_.emplace (std::to_string ((uintptr_t)&proxy), 
 			Object_var (Object::_duplicate (proxy)));
 		if (!ins.second)

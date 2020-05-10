@@ -107,7 +107,7 @@ int RepositoryId::compare (const Char* cur, size_t cur_l, const Char* req, size_
 		req += IDL_len + 1;
 		const Char* cur_ver = version (cur, cur_end);
 		const Char* req_ver = version (req, req_end);
-		int ret = lexicographical_compare (cur, cur_ver, req, req_ver);
+		int ret = lex_compare (cur, cur_ver, req, req_ver);
 		if (!ret) {
 			Version vcur, vreq;
 			if (!get_version (cur_ver, vcur)) {
@@ -120,7 +120,26 @@ int RepositoryId::compare (const Char* cur, size_t cur_l, const Char* req, size_
 		}
 		return ret;
 	} else
-		return lexicographical_compare (cur, cur_end, req, req_end);
+		return lex_compare (cur, cur_end, req, req_end);
+}
+
+int RepositoryId::lex_compare (const Char* lhs, const Char* lhs_end, const Char* rhs, const Char* rhs_end)
+{
+	for (;;) {
+		if (lhs == lhs_end) {
+			if (rhs == rhs_end)
+				return 0;
+			else
+				return -1;
+		} else if (rhs == rhs_end)
+			return 1;
+
+		int ret = *lhs - *rhs;
+		if (ret)
+			return ret;
+		++lhs;
+		++rhs;
+	}
 }
 
 }

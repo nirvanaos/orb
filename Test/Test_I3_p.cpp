@@ -74,5 +74,17 @@ const Char* const ProxyTraits <::Test::I3>::interfaces_ [] = {
 	::Test::I1::repository_id_
 };
 
+template <>
+const InterfaceMetadata ProxyFactoryImpl <::Test::I3>::metadata_ = {
+	{ProxyTraits <::Test::I3>::interfaces_, countof (ProxyTraits <::Test::I3>::interfaces_)},
+	{ProxyTraits <::Test::I3>::operations_, countof (ProxyTraits <::Test::I3>::operations_)}
+};
+
 }
 }
+
+namespace Test {
+typedef ::CORBA::Nirvana::ProxyFactoryImpl <I3> _I3_ProxyFactory;
+}
+
+NIRVANA_EXPORT_INTERFACE1 (Test, Test::I3::repository_id_, _I3_ProxyFactory, CORBA::AbstractBase);

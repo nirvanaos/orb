@@ -12,6 +12,7 @@
 #include "TypeCodeSequence.h"
 #include "TypeCodeException.h"
 #include <Nirvana/stateless.h>
+#include <Nirvana/OLF.h>
 
 namespace CORBA {
 namespace Nirvana {

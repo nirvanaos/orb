@@ -19,11 +19,12 @@ using namespace ::CORBA::Nirvana;
 using namespace ::Nirvana;
 using ::CORBA::Nirvana::Core::ObjectFactory;
 
-const size_t MockBinder::Iterator::command_sizes_ [OLF_EXPORT_LOCAL] = {
+const size_t MockBinder::Iterator::command_sizes_ [OLF_IMPORT_OBJECT] = {
 	sizeof (ImportInterface),
 	sizeof (ExportInterface),
 	sizeof (ExportObject),
-	sizeof (ExportLocal)
+	sizeof (ExportLocal),
+	sizeof (ImportInterface)
 };
 
 MockBinder::MockBinder () :
@@ -48,7 +49,8 @@ void MockBinder::module_bind (Module& module)
 	VirtualProtect ((void*)module.olf_section, module.olf_size, PAGE_READWRITE, &protection);
 
 	try {
-		// Pass 1
+
+		// Pass 1: Export pseudo objects.
 		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
 			switch (*it.cur ()) {
 				case OLF_EXPORT_INTERFACE:
@@ -60,7 +62,18 @@ void MockBinder::module_bind (Module& module)
 			}
 		}
 
-		// Pass 2
+		// Pass 2: Import pseudo objects.
+		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
+			switch (*it.cur ()) {
+				case OLF_IMPORT_INTERFACE: {
+					ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
+					ps->itf = &bind (ps->name, ps->interface_id)._retn ();
+					break;
+				}
+			}
+		}
+
+		// Pass 3: Export objects.
 		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
 			switch (*it.cur ()) {
 				case OLF_EXPORT_OBJECT: {
@@ -83,10 +96,10 @@ void MockBinder::module_bind (Module& module)
 			}
 		}
 
-		// Pass 3
+		// Pass 4: Import objects.
 		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
 			switch (*it.cur ()) {
-				case OLF_IMPORT_INTERFACE: {
+				case OLF_IMPORT_OBJECT: {
 					ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
 					ps->itf = &bind (ps->name, ps->interface_id)._retn ();
 					break;
@@ -180,7 +193,7 @@ void MockBinder::Iterator::check ()
 		Word cmd = *cur_ptr_;
 		if (OLF_END == cmd)
 			cur_ptr_ = end_;
-		else if (cmd > OLF_EXPORT_LOCAL)
+		else if (cmd > OLF_IMPORT_OBJECT)
 			throw CORBA::INITIALIZE ();
 	}
 }
