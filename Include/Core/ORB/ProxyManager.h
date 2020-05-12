@@ -19,11 +19,15 @@ public:
 	// Abstract base
 	Interface* _query_interface (const String& type_id) const
 	{
-		const InterfaceEntry* ie = find_interface (type_id);
-		if (ie)
-			return ie->proxy;
-		else
-			return nullptr;
+		if (type_id.empty ())
+			return primary_interface_->proxy;
+		else {
+			const InterfaceEntry* ie = find_interface (type_id);
+			if (ie)
+				return ie->proxy;
+			else
+				return nullptr;
+		}
 	}
 
 	// Object operations
@@ -151,11 +155,25 @@ private:
 	static void check_metadata (const InterfaceMetadata* metadata, String_in primary);
 	static void check_parameters (CountedArray <Parameter> parameters);
 	static void check_type_code (const ::Nirvana::ImportInterfaceT <TypeCode>& tc);
+	
+	template <class It, class Pr>
+	static bool is_unique (It begin, It end, Pr pred)
+	{
+		if (begin != end) {
+			It prev = begin;
+			for (It p = begin; ++p != end; prev = p) {
+				if (!pred (*prev, *p))
+					return false;
+			}
+		}
+		return true;
+	}
 
 private:
 	::Nirvana::Core::Array <InterfaceEntry> interfaces_;
 	::Nirvana::Core::Array <OperationEntry> operations_;
 
+	const InterfaceEntry* primary_interface_;
 	UShort object_itf_idx_;
 };
 

@@ -31,17 +31,17 @@ struct ProxyManager::OEPred
 {
 	bool operator () (const OperationEntry& lhs, const OperationEntry& rhs) const
 	{
-		return compare (lhs.name, lhs.name_len, rhs.name, rhs.name_len) < 0;
+		return compare (lhs.name, lhs.name_len, rhs.name, rhs.name_len);
 	}
 
 	bool operator () (const String& lhs, const OperationEntry& rhs) const
 	{
-		return compare (lhs.data (), lhs.size (), rhs.name, rhs.name_len) < 0;
+		return compare (lhs.data (), lhs.size (), rhs.name, rhs.name_len);
 	}
 
 	bool operator () (const OperationEntry& lhs, const String& rhs) const
 	{
-		return compare (lhs.name, lhs.name_len, rhs.data (), rhs.size ()) < 0;
+		return compare (lhs.name, lhs.name_len, rhs.data (), rhs.size ());
 	}
 
 	// Operation names in CORBA are case-insensitive
@@ -50,10 +50,10 @@ struct ProxyManager::OEPred
 		return tolower (c1) < tolower (c2);
 	}
 
-	static int compare (const Char* lhs, size_t lhs_len, const Char* rhs, size_t rhs_len);
+	static bool compare (const Char* lhs, size_t lhs_len, const Char* rhs, size_t rhs_len);
 };
 
-int ProxyManager::OEPred::compare (const Char* lhs, size_t lhs_len, const Char* rhs, size_t rhs_len)
+bool ProxyManager::OEPred::compare (const Char* lhs, size_t lhs_len, const Char* rhs, size_t rhs_len)
 {
 	return lexicographical_compare (lhs, lhs + lhs_len, rhs, rhs + rhs_len, less_no_case);
 }
@@ -153,7 +153,7 @@ ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Brid
 	sort (interfaces_.begin (), interfaces_.end (), IEPred ());
 
 	// Check that all interfaces are unique
-	if (unique (interfaces_.begin (), interfaces_.end (), IEPred ()) != interfaces_.end ())
+	if (!is_unique (interfaces_.begin (), interfaces_.end (), IEPred ()))
 		throw OBJ_ADAPTER (); // TODO: Log
 
 	// Create base proxies
@@ -173,6 +173,7 @@ ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Brid
 	assert (primary);
 	primary->proxy = &proxy_factory->create_proxy (ior (), (UShort)(primary - interfaces_.begin ()), primary->deleter);
 	primary->operations = metadata->operations;
+	primary_interface_ = primary;
 
 	// Total count of operations
 	size_t op_cnt = 0;
@@ -195,6 +196,7 @@ ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Brid
 			op->name_len = strlen (name);
 			op->idx = idx;
 			++idx.operation_idx;
+			++op;
 		}
 	} while (interfaces_.end () != ++ie);
 
@@ -202,7 +204,7 @@ ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Brid
 	
 	// Check name uniqueness
 
-	if (unique (operations_.begin (), operations_.end (), OEPred ()) != operations_.end ())
+	if (!is_unique (operations_.begin (), operations_.end (), OEPred ()))
 		throw OBJ_ADAPTER (); // TODO: Log
 }
 
