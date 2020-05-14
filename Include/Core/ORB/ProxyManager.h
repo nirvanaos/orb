@@ -71,6 +71,8 @@ protected:
 	ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Bridge <Object>::EPV& epv_obj,
 		String_in primary_iid, const Operation object_ops [3], void* object_impl);
 
+	~ProxyManager ();
+
 	IOReference_ptr ior ()
 	{
 		return &static_cast <IOReference&> (static_cast <Bridge <IOReference>&> (*this));
@@ -84,12 +86,6 @@ protected:
 		DynamicServant_ptr deleter;
 		Interface* implementation;
 		CountedArray <Operation> operations;
-
-		~InterfaceEntry () NIRVANA_NOEXCEPT
-		{
-			if (deleter)
-				deleter->_delete ();
-		}
 	};
 
 	struct OperationEntry

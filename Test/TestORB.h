@@ -3,7 +3,6 @@
 
 #include <gtest/gtest.h>
 #include <Mock/TestMock.h>
-#include "Mock/MockPOA.h"
 #include "Mock/MockBinder.h"
 
 namespace TestORB {
@@ -65,7 +64,6 @@ protected:
 
 private:
 	::Nirvana::Test::MockBinder binder_;
-	::Nirvana::Test::MockPOA poa_;
 };
 
 }

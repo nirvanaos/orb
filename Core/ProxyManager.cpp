@@ -208,6 +208,14 @@ ProxyManager::ProxyManager (const Bridge <IOReference>::EPV& epv_ior, const Brid
 		throw OBJ_ADAPTER (); // TODO: Log
 }
 
+ProxyManager::~ProxyManager ()
+{
+	for (InterfaceEntry* ie = interfaces_.begin (); ie != interfaces_.end (); ++ie) {
+		if (ie->deleter)
+			ie->deleter->_delete ();
+	}
+}
+
 void ProxyManager::create_proxy (InterfaceEntry& ie)
 {
 	if (!ie.proxy) {

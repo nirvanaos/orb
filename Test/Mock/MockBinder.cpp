@@ -2,6 +2,7 @@
 #include "ObjectFactory.h"
 #include <Nirvana/OLF.h>
 #include <Nirvana/core_objects.h>
+#include "Core/ORB/POA.h"
 
 // TODO: Make mock portable
 #include <Windows.h>
@@ -40,6 +41,7 @@ MockBinder::MockBinder () :
 MockBinder::~MockBinder ()
 {
 	module_unbind (module_);
+	interface_release (CORBA::Nirvana::Core::g_root_POA.itf);
 	EXPECT_EQ (ref_cnt_, 1);
 }
 
@@ -72,6 +74,10 @@ void MockBinder::module_bind (Module& module)
 				}
 			}
 		}
+
+		// Create POA
+		PortableServer::Servant_var <CORBA::Nirvana::Core::POA> poa = new CORBA::Nirvana::Core::POA;
+		CORBA::Nirvana::Core::g_root_POA = poa->_this ();
 
 		// Pass 3: Export objects.
 		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
