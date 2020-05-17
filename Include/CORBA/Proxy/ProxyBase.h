@@ -3,6 +3,7 @@
 
 #include "../CORBA.h"
 #include "../ServantImpl.h"
+#include "../ServantMemory.h"
 #include "../DynamicServant_s.h"
 #include "IOReference.h"
 
@@ -11,7 +12,7 @@ namespace Nirvana {
 
 template <class I> class Proxy;
 
-class ProxyRoot
+class ProxyRoot : public ServantMemory
 {
 public:
 	Bridge <Object>* _get_object (String_in iid) const

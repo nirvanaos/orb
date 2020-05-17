@@ -92,13 +92,19 @@ bool EnvironmentBase::set_user (String_in rep_id, const void* param,
 bool EnvironmentBase::set (const ExceptionEntry& ee) NIRVANA_NOEXCEPT
 {
 	size_t size = ee.size;
-	Exception* p;
 	try {
 		if (size <= sizeof (data_.small))
-			p = (Exception*)data_.small;
-		else
-			p = (Exception*)::Nirvana::g_memory->allocate (nullptr, size, 0);
-		ee.construct (p);
+			ee.construct (data_.small);
+		else {
+			Octet* p = new Octet [size];
+			try {
+				ee.construct (p);
+			} catch (...) {
+				delete [] p;
+				throw;
+			}
+			data_.ptr = (Exception*)p;
+		}
 		return true;
 	} catch (...) {
 		new (data_.small) NO_MEMORY ();
