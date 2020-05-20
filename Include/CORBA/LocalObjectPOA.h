@@ -19,10 +19,7 @@ class ServantPOA <LocalObject> :
 	public LocalObjectLink
 {
 public:
-	virtual Bridge <Object>* _get_object (String_in iid)
-	{
-		return LocalObjectLink::_get_object (iid);
-	}
+	virtual Bridge <Object>* _get_object (String_in iid);
 
 	// Object operations
 
@@ -35,12 +32,16 @@ public:
 
 protected:
 	ServantPOA () :
-		LocalObjectLink (Skeleton <ServantPOA <LocalObject>, LocalObject>::epv_, *this)
+		LocalObjectLink (Skeleton <ServantPOA <LocalObject>, LocalObject>::epv_)
 	{}
 
-	virtual Interface* _get_proxy ()
+	virtual Interface* _get_proxy ();
+
+private:
+	void _check_construct ()
 	{
-		return LocalObjectLink::_get_proxy ();
+		if (!LocalObjectLink::core_object_)
+			LocalObjectLink::_construct (*this);
 	}
 };
 

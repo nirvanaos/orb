@@ -24,13 +24,17 @@ public:
 	}
 
 protected:
-	LocalObjectLink (const Bridge <LocalObject>::EPV& epv, Bridge <AbstractBase>& ab);
+	LocalObjectLink (const Bridge <LocalObject>::EPV& epv) :
+		Bridge <LocalObject> (epv)
+	{}
 
 	LocalObjectLink (const LocalObjectLink&) = delete;
 	LocalObjectLink& operator = (const LocalObjectLink&)
 	{
 		return *this; // Do nothing
 	}
+
+	void _construct (Bridge <AbstractBase>& ab);
 
 	Interface* _get_proxy ()
 	{

@@ -12,10 +12,11 @@ namespace Nirvana {
 void EnvironmentBase::exception_free () NIRVANA_NOEXCEPT
 {
 	if (data_.is_small) {
-		// Call virtual destructor
-		((Exception*)(data_.small))->~Exception ();
-	} else
-		delete data_.ptr;
+		((Exception*)&data_)->~Exception ();
+	} else if (data_.ptr) {
+		data_.ptr->~Exception ();
+		::Nirvana::g_memory->release (data_.ptr, data_.size);
+	}
 	data_.is_small = 0;
 	data_.ptr = nullptr;
 }
@@ -72,7 +73,7 @@ void EnvironmentBase::exception_set (Long code, String_in rep_id, const void* pa
 				return;
 		}
 		const ExceptionEntry* ee = SystemException::_get_exception_entry (rep_id, code);
-		assert (ee && ee->size <= sizeof (data_.small));
+		assert (ee && ee->size <= sizeof (data_));
 		set_system (*ee, param);
 	}
 }
@@ -93,21 +94,22 @@ bool EnvironmentBase::set (const ExceptionEntry& ee) NIRVANA_NOEXCEPT
 {
 	size_t size = ee.size;
 	try {
-		if (size <= sizeof (data_.small))
-			ee.construct (data_.small);
+		if (size <= sizeof (data_))
+			ee.construct (&data_);
 		else {
-			Octet* p = new Octet [size];
+			Exception* p = (Exception*)::Nirvana::g_memory->allocate (nullptr, size, 0);
 			try {
 				ee.construct (p);
 			} catch (...) {
-				delete [] p;
+				::Nirvana::g_memory->release (p, size);
 				throw;
 			}
 			data_.ptr = (Exception*)p;
+			data_.size = size;
 		}
 		return true;
 	} catch (...) {
-		new (data_.small) NO_MEMORY ();
+		new (&data_) NO_MEMORY ();
 		return false;
 	}
 }
@@ -120,7 +122,7 @@ void EnvironmentBase::set_user (const ExceptionEntry& ee, const void* data) NIRV
 			TypeCode_ptr tc = e.__type_code ();
 			tc->_copy (e.__data (), data);
 		} catch (...) {
-			new (data_.small) NO_MEMORY ();
+			new (&data_) NO_MEMORY ();
 		}
 	}
 }

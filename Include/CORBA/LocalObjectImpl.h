@@ -18,8 +18,10 @@ class InterfaceImpl <S, LocalObject> :
 {
 protected:
 	InterfaceImpl () :
-		LocalObjectLink (Skeleton <S, LocalObject>::epv_, *this)
-	{}
+		LocalObjectLink (Skeleton <S, LocalObject>::epv_)
+	{
+		_construct (*this);
+	}
 
 	InterfaceImpl (const InterfaceImpl&) :
 		InterfaceImpl ()

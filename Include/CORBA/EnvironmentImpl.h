@@ -69,6 +69,7 @@ private:
 			// contains pointer to the virtual table and can't be zero.
 			uintptr_t is_small;
 			Exception* ptr;
+			size_t size;
 		};
 
 		void reset ()
