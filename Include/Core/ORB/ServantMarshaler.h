@@ -60,7 +60,11 @@ public:
 
 	static Unmarshal_ptr unmarshaler (Marshal_ptr marshaler)
 	{
-		return Unmarshal::_check (static_cast <Bridge <Unmarshal>*> (static_cast <ServantMarshaler*> (&marshaler)));
+		ServantMarshaler* obj = static_cast <ServantMarshaler*> (&marshaler);
+		if (obj)
+			return obj->unmarshaler ();
+		else
+			return Unmarshal::_nil ();
 	}
 
 	MarshalContext context () const

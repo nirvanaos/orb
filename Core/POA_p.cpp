@@ -31,7 +31,7 @@ struct ProxyTraits <::PortableServer::POA>
 	static void activate_object_request (::PortableServer::POA_ptr _servant,
 		IORequest_ptr _call,
 		::Nirvana::ConstPointer _in_ptr,
-		Unmarshal_var _u,
+		Unmarshal_var& _u,
 		::Nirvana::Pointer _out_ptr)
 	{
 		const activate_object_in& _in = *(const activate_object_in*)_in_ptr;
@@ -48,7 +48,7 @@ struct ProxyTraits <::PortableServer::POA>
 		}
 		// Marshal output
 		activate_object_out& _out = *(activate_object_out*)_out_ptr;
-		Marshal_var _m = _call->marshaler ();
+		Marshal_ptr _m = _call->marshaler ();
 		_marshal_out (ret, _m, _out._ret);
 	}
 
@@ -64,7 +64,7 @@ struct ProxyTraits <::PortableServer::POA>
 	static void deactivate_object_request (::PortableServer::POA_ptr _servant,
 		IORequest_ptr _call,
 		::Nirvana::ConstPointer _in_ptr,
-		Unmarshal_var _u,
+		Unmarshal_var& _u,
 		::Nirvana::Pointer _out_ptr)
 	{
 		const deactivate_object_in& _in = *(const deactivate_object_in*)_in_ptr;

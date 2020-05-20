@@ -22,7 +22,7 @@ struct ProxyTraits <::Test::I2>
 	static void op2_request (::Test::I2_ptr _servant,
 		IORequest_ptr _call,
 		::Nirvana::ConstPointer _in_params,
-		Unmarshal_var _u,
+		Unmarshal_var& _u,
 		::Nirvana::Pointer _out_params)
 	{
 		const op2_in& _in = *(const op2_in*)_in_params;

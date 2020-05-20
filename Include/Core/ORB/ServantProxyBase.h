@@ -114,12 +114,8 @@ protected:
 		void exception (Any& exc)
 		{
 			TypeCode_ptr tc = exc.type ();
-			if (tc) {
-				Marshal_ptr m = Marshal::_nil ();
-				if (tc->_has_marshal ())
-					m = marshaler ();
-				MarshalTraits <Any>::marshal_out (exc, m, exception_);
-			}
+			if (tc)
+				MarshalTraits <Any>::marshal_out (exc, marshaler (), exception_);
 		}
 
 		void success ()

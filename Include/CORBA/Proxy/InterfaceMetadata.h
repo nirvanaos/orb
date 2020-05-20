@@ -27,7 +27,7 @@ typedef void (*RequestProc) (Interface* servant, Interface* call,
 	Interface** unmarshaler,
 	::Nirvana::Pointer out_params);
 
-template <class I, void (*proc) (I_ptr <I>, IORequest_ptr, ::Nirvana::ConstPointer, Unmarshal_var, ::Nirvana::Pointer)>
+template <class I, void (*proc) (I_ptr <I>, IORequest_ptr, ::Nirvana::ConstPointer, Unmarshal_var&, ::Nirvana::Pointer)>
 void RqProcWrapper (Interface* servant, Interface* call,
 	::Nirvana::ConstPointer in_params,
 	Interface** unmarshaler,

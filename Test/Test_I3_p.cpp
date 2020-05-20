@@ -24,7 +24,7 @@ struct ProxyTraits <::Test::I3>
 	static void op3_request (::Test::I3_ptr _servant,
 		IORequest_ptr _call,
 		::Nirvana::ConstPointer _in_params,
-		Unmarshal_var _u,
+		Unmarshal_var& _u,
 		::Nirvana::Pointer _out_params)
 	{
 		const op3_in& _in = *(const op3_in*)_in_params;

@@ -51,7 +51,7 @@ struct ProxyTraits <::Test::I1>
 	static void op1_request (::Test::I1_ptr _servant,
 		IORequest_ptr _call,
 		::Nirvana::ConstPointer _in_params,
-		Unmarshal_var _u,
+		Unmarshal_var& _u,
 		::Nirvana::Pointer _out_params)
 	{
 		const op1_in& _in = *(const op1_in*)_in_params;
@@ -64,7 +64,7 @@ struct ProxyTraits <::Test::I1>
 	static void throw_no_implement_request (::Test::I1_ptr _servant,
 		IORequest_ptr _call,
 		::Nirvana::ConstPointer _in_params,
-		Unmarshal_var _u,
+		Unmarshal_var& _u,
 		::Nirvana::Pointer _out_params)
 	{
 		_servant->throw_no_implement ();
@@ -90,7 +90,7 @@ struct ProxyTraits <::Test::I1>
 	static void object_op_request (::Test::I1_ptr _servant,
 		IORequest_ptr _call,
 		::Nirvana::ConstPointer _in_ptr,
-		Unmarshal_var _u,
+		Unmarshal_var& _u,
 		::Nirvana::Pointer _out_ptr)
 	{
 		const object_op_in& _in = *(const object_op_in*)_in_ptr;
@@ -116,7 +116,7 @@ struct ProxyTraits <::Test::I1>
 
 		// Marshal output
 		object_op_out& _out = *(object_op_out*)_out_ptr;
-		Marshal_var _m = _call->marshaler ();
+		Marshal_ptr _m = _call->marshaler ();
 		_marshal_out (out_obj, _m, _out.out_obj);
 		_marshal_out (inout_obj, _m, _out.inout_obj);
 		_marshal_out (_ret, _m, _out._ret);
@@ -142,7 +142,7 @@ struct ProxyTraits <::Test::I1>
 	static void string_op_request (::Test::I1_ptr _servant,
 		IORequest_ptr _call,
 		::Nirvana::ConstPointer _in_ptr,
-		Unmarshal_var _u,
+		Unmarshal_var& _u,
 		::Nirvana::Pointer _out_ptr)
 	{
 		const string_op_in& _in = *(const string_op_in*)_in_ptr;
@@ -168,7 +168,7 @@ struct ProxyTraits <::Test::I1>
 
 		// Marshal output
 		string_op_out& _out = *(string_op_out*)_out_ptr;
-		Marshal_var _m = _call->marshaler ();
+		Marshal_ptr _m = _call->marshaler ();
 		_marshal_out (out_s, _m, _out.out_s);
 		_marshal_out (inout_s, _m, _out.inout_s);
 		_marshal_out (_ret, _m, _out._ret);
@@ -194,7 +194,7 @@ struct ProxyTraits <::Test::I1>
 	static void seq_op_request (::Test::I1_ptr _servant,
 		IORequest_ptr _call,
 		::Nirvana::ConstPointer _in_ptr,
-		Unmarshal_var _u,
+		Unmarshal_var& _u,
 		::Nirvana::Pointer _out_ptr)
 	{
 		const seq_op_in& _in = *(const seq_op_in*)_in_ptr;
@@ -220,7 +220,7 @@ struct ProxyTraits <::Test::I1>
 
 		// Marshal output
 		seq_op_out& _out = *(seq_op_out*)_out_ptr;
-		Marshal_var _m = _call->marshaler ();
+		Marshal_ptr _m = _call->marshaler ();
 		_marshal_out (out_s, _m, _out.out_s);
 		_marshal_out (inout_s, _m, _out.inout_s);
 		_marshal_out (_ret, _m, _out._ret);
@@ -246,7 +246,7 @@ struct ProxyTraits <::Test::I1>
 	static void any_op_request (::Test::I1_ptr _servant,
 		IORequest_ptr _call,
 		::Nirvana::ConstPointer _in_ptr,
-		Unmarshal_var _u,
+		Unmarshal_var& _u,
 		::Nirvana::Pointer _out_ptr)
 	{
 		const any_op_in& _in = *(const any_op_in*)_in_ptr;
@@ -272,7 +272,7 @@ struct ProxyTraits <::Test::I1>
 
 		// Marshal output
 		any_op_out& _out = *(any_op_out*)_out_ptr;
-		Marshal_var _m = _call->marshaler ();
+		Marshal_ptr _m = _call->marshaler ();
 		_marshal_out (out_any, _m, _out.out_any);
 		_marshal_out (inout_any, _m, _out.inout_any);
 		_marshal_out (_ret, _m, _out._ret);
