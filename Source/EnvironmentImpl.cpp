@@ -71,6 +71,7 @@ void EnvironmentBase::exception_set (Long code, String_in rep_id, const void* pa
 				}
 			} else if (set_user (rep_id, param, user_exceptions))
 				return;
+			code = Exception::EC_SYSTEM_EXCEPTION; // Will set UNKNOWN
 		}
 		const ExceptionEntry* ee = SystemException::_get_exception_entry (rep_id, code);
 		assert (ee && ee->size <= sizeof (data_));

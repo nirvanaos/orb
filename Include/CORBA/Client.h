@@ -39,7 +39,7 @@ public:
 	typedef I_inout <I> _inout_type;
 
 	// TODO: Change return type to I_var?
-	static NIRVANA_NODISCARD I_ptr <I> _duplicate (const I_ptr <I>& obj)
+	static NIRVANA_NODISCARD I_ptr <I> _duplicate (I_ptr <I> obj)
 	{
 		return static_cast <I*> (interface_duplicate (&obj));
 	}
