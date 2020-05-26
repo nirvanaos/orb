@@ -130,8 +130,9 @@ protected:
 				if (exception_.type ()) {
 					Any exc;
 					MarshalTraits <Any>::unmarshal (exception_, u, exc);
-					const SystemException* pse;
-					if (exc >>= pse)
+					Octet tmp [sizeof (SystemException)];
+					SystemException* pse = (SystemException*)tmp;
+					if (exc >>= *pse)
 						pse->_raise ();
 					else
 						throw UnknownUserException (std::move (exc));

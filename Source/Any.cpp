@@ -90,28 +90,7 @@ void Any::type (TypeCode_ptr alias)
 	}
 }
 
-static_assert (Nirvana::ABI <Any>::SMALL_CAPACITY >= sizeof (SystemException), "Any data must fit SystemException.");
-
-void Any::exception (const Exception& e)
-{
-	clear ();
-	const SystemException* pse = SystemException::_downcast (&e);
-	if (pse) {
-		const Nirvana::ExceptionEntry* pee = SystemException::_get_exception_entry (e._rep_id (), e.__code ());
-		assert (pee);
-		(pee->construct) (small_pointer ());
-		set_type (e.__type_code ());
-	} else
-		copy_from (e.__type_code (), e.__data ());
-}
-
-void Any::exception (Exception&& e)
-{
-	if (SystemException::_downcast (&e))
-		exception ((const Exception&)e);
-	else
-		move_from (e.__type_code (), e.__data ());
-}
+static_assert (Nirvana::ABI <Any>::SMALL_CAPACITY >= sizeof (SystemException::Data), "Any data must fit SystemException::Data.");
 
 bool Any::is_system_exception () const
 {
@@ -120,21 +99,13 @@ bool Any::is_system_exception () const
 
 const void* Any::data () const
 {
-	assert (!empty ());
+	assert (type ());
 	if (is_large ())
 		return large_pointer ();
 	else if (is_system_exception ())
 		return ((const SystemException*)small_pointer ())->__data ();
 	else
 		return small_pointer ();
-}
-
-const SystemException* Any::system_exception () const
-{
-	if (!is_large () && is_system_exception ())
-		return (const SystemException*)small_pointer ();
-	else
-		return nullptr;
 }
 
 void Any::operator <<= (from_boolean from)
@@ -203,20 +174,33 @@ Boolean Any::operator >>= (to_octet to) const
 
 void operator <<= (Any& any, const Exception& e)
 {
-	any.exception (e);
+	any.copy_from (e.__type_code (), e.__data ());
 }
 
 void operator <<= (Any& any, Exception&& e)
 {
-	any.exception (std::move (e));
+	any.move_from (e.__type_code (), e.__data ());
 }
 
-Boolean operator >>= (const Any& any, const SystemException*& sep)
+Boolean operator >>= (const Any& any, SystemException& se)
 {
-	const SystemException* se = any.system_exception ();
-	if (se) {
-		sep = se;
-		return true;
+	TypeCode_ptr tc = any.type ();
+	if (tc && tc->kind () == tk_except) {
+		const Char* id = tc->id ();
+		const Char standard_prefix [] = "IDL:omg.org/CORBA/";
+		const Char nirvana_prefix [] = "IDL:CORBA/";
+		if (
+			!strncmp(standard_prefix, id, countof (standard_prefix) - 1)
+		||
+			!strncmp (nirvana_prefix, id, countof (nirvana_prefix) - 1)
+		) {
+			const Nirvana::ExceptionEntry* pee = SystemException::_get_exception_entry (id, Exception::EC_SYSTEM_EXCEPTION);
+			assert (pee);
+			(pee->construct) (&se);
+			if (Nirvana::RepositoryId::compatible (pee->rep_id, id))
+				tc->_copy (se.__data (), any.data ());
+			return true;
+		}
 	}
 	return false;
 }

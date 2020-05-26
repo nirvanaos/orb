@@ -62,16 +62,7 @@ public:
 
 	const void* data () const;
 
-	bool empty () const
-	{
-		return !type ();
-	}
-
 	void clear ();
-
-	void exception (const Exception& ex);
-	void exception (Exception&& ex);
-	const SystemException* system_exception () const;
 
 	// special helper types needed for boolean, octet, char,
 	// and bounded string insertion
@@ -264,7 +255,7 @@ struct Type <Any> : public TypeVarLen <Any, true>
 	{
 		Any& val = Base::out (p);
 		// Must be empty
-		if (!val.empty ())
+		if (val.type ())
 			::Nirvana::throw_BAD_PARAM ();
 		return val;
 	}
@@ -307,7 +298,7 @@ Boolean operator >>= (const Any&, LongDouble&);
 Boolean operator >>= (const Any&, const std::string*&);
 Boolean operator >>= (const Any&, const std::wstring*&);
 Boolean operator >>= (const Any&, const Any*&);
-Boolean operator >>= (const Any&, const SystemException*&);
+Boolean operator >>= (const Any&, SystemException&);
 
 }
 

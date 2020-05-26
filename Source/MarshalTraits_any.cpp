@@ -89,7 +89,7 @@ void MarshalTraits <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, 
 			else
 				tc->_unmarshal (psrc, unmarshaler, pdst);
 		}
-		dst.type (tc._retn ());
+		dst.set_type (tc._retn ());
 	}
 }
 
