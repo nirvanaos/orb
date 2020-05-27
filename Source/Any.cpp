@@ -92,18 +92,11 @@ void Any::type (TypeCode_ptr alias)
 
 static_assert (Nirvana::ABI <Any>::SMALL_CAPACITY >= sizeof (SystemException::Data), "Any data must fit SystemException::Data.");
 
-bool Any::is_system_exception () const
-{
-	return SystemException::_get_exception_entry (type ());
-}
-
 const void* Any::data () const
 {
 	assert (type ());
 	if (is_large ())
 		return large_pointer ();
-	else if (is_system_exception ())
-		return ((const SystemException*)small_pointer ())->__data ();
 	else
 		return small_pointer ();
 }
@@ -197,8 +190,10 @@ Boolean operator >>= (const Any& any, SystemException& se)
 			const Nirvana::ExceptionEntry* pee = SystemException::_get_exception_entry (id, Exception::EC_SYSTEM_EXCEPTION);
 			assert (pee);
 			(pee->construct) (&se);
+			const SystemException::Data& data = *(const SystemException::Data*)any.data ();
+			se.completed (data.completed);
 			if (Nirvana::RepositoryId::compatible (pee->rep_id, id))
-				tc->_copy (se.__data (), any.data ());
+				se.minor (data.minor);
 			return true;
 		}
 	}

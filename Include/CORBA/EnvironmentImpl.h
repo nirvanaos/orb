@@ -29,7 +29,7 @@ public:
 	Exception* exception () const NIRVANA_NOEXCEPT
 	{
 		if (data_.is_small)
-			return (Exception*)(data_.small);
+			return (Exception*)(&data_);
 		else
 			return data_.ptr;
 	}

@@ -326,7 +326,7 @@ protected:
 	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* marshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
 	{
 		try {
-			S::_implementation (_b)._marshal_in (src, TypeI <Marshal>::in (marshaler), dst);
+			S::_implementation (_b)._marshal_out (src, TypeI <Marshal>::in (marshaler), dst);
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {

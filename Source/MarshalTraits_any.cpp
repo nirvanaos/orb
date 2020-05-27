@@ -83,11 +83,7 @@ void MarshalTraits <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, 
 		} else {
 			pdst = dst.small_pointer ();
 			psrc = src.small_pointer ();
-			const ExceptionEntry* ee = SystemException::_get_exception_entry (tc);
-			if (ee)
-				(ee->construct) (pdst);
-			else
-				tc->_unmarshal (psrc, unmarshaler, pdst);
+			tc->_unmarshal (psrc, unmarshaler, pdst);
 		}
 		dst.set_type (tc._retn ());
 	}

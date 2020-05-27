@@ -221,8 +221,6 @@ private:
 	void copy_from (const Any& src);
 	void* prepare (TypeCode_ptr tc);
 	void set_type (TypeCode_ptr tc);
-	bool is_system_exception () const;
-	static bool is_system_exception (String_in rep_id);
 
 	// these functions are private and not implemented
 	// hiding these causes compile-time errors for
