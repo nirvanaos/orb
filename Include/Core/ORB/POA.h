@@ -29,6 +29,8 @@ public:
 
 	String activate_object (Object_ptr proxy)
 	{
+		if (active_object_map_.empty ())
+			_add_ref ();
 		std::pair <AOM::iterator, bool> ins = active_object_map_.emplace (std::to_string ((uintptr_t)&proxy), 
 			Object_var (Object::_duplicate (proxy)));
 		if (!ins.second)
@@ -40,6 +42,8 @@ public:
 	{
 		if (!active_object_map_.erase (oid))
 			throw PortableServer::POA::ObjectNotActive ();
+		if (active_object_map_.empty ())
+			_remove_ref ();
 	}
 
 private:
