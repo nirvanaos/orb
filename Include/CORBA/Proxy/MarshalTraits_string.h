@@ -30,9 +30,10 @@ struct MarshalTraits <StringT <C> >
 
 		if (src.is_large ()) {
 			size_t cb = src.allocated ();
-			if (cb)
+			if (cb) {
 				unmarshaler->adopt_memory (src.large_pointer (), cb);
-			else
+				static_cast <ABI&> (dst) = src;
+			} else
 				dst.assign_internal (src.large_size (), src.large_pointer ());
 		} else
 			static_cast <ABI&> (dst) = src;

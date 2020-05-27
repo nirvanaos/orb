@@ -99,11 +99,13 @@ struct ProxyTraits <::Test::I1>
 		I_var <::Test::I1> out_obj;
 		I_var <::Test::I1> inout_obj;
 		I_var <::Test::I1> _ret;
-		_unmarshal (_in.inout_obj, _u, inout_obj);
 		{
 			// in params
 			I_var <::Test::I1> in_obj;
+
+			// Unmarshal in and inout
 			_unmarshal (_in.in_obj, _u, in_obj);
+			_unmarshal (_in.inout_obj, _u, inout_obj);
 
 			// Release resources
 			_u = Unmarshal::_nil ();
@@ -151,11 +153,13 @@ struct ProxyTraits <::Test::I1>
 		String out_s;
 		String inout_s;
 		String _ret;
-		_unmarshal (_in.inout_s, _u, inout_s);
 		{
 			// in params
 			String in_s;
+
+			// Unmarshal in and inout
 			_unmarshal (_in.in_s, _u, in_s);
+			_unmarshal (_in.inout_s, _u, inout_s);
 
 			// Release resources
 			_u = Unmarshal::_nil ();
@@ -203,11 +207,13 @@ struct ProxyTraits <::Test::I1>
 		Test::SeqLong out_s;
 		Test::SeqLong inout_s;
 		Test::SeqLong _ret;
-		_unmarshal (_in.inout_s, _u, inout_s);
 		{
 			// in params
 			Test::SeqLong in_s;
+
+			// Unmarshal in and inout
 			_unmarshal (_in.in_s, _u, in_s);
+			_unmarshal (_in.inout_s, _u, inout_s);
 
 			// Release resources
 			_u = Unmarshal::_nil ();
@@ -255,11 +261,13 @@ struct ProxyTraits <::Test::I1>
 		Any out_any;
 		Any inout_any;
 		Any _ret;
-		_unmarshal (_in.inout_any, _u, inout_any);
 		{
 			// in params
 			Any in_any;
+
+			// Unmarshal in and inout
 			_unmarshal (_in.in_any, _u, in_any);
+			_unmarshal (_in.inout_any, _u, inout_any);
 
 			// Release resources
 			_u = Unmarshal::_nil ();

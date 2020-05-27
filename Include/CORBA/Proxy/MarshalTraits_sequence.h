@@ -104,10 +104,12 @@ void MarshalTraits <Sequence <T> >::unmarshal (const SeqABI& src, Unmarshal_ptr 
 	else {
 		Seq tmp;
 		SeqABI& adst = static_cast <SeqABI&> (tmp);
-		if (src.allocated)
-			unmarshaler->adopt_memory (adst.ptr = src.ptr, src.allocated);
-		else
-			adst.ptr = (T_ABI*)dst.memory ()->copy (nullptr, src.ptr, src.size * sizeof (T), 0);
+		if (src.allocated) {
+			unmarshaler->adopt_memory (src.ptr, src.allocated);
+			adst.ptr = src.ptr;
+			adst.allocated = src.allocated;
+		} else
+			adst.ptr = (T*)::Nirvana::MemoryHelper::assign (0, adst.allocated, 0, src.size * sizeof (T), src.ptr);
 		if (MarshalTraits <T>::has_marshal) {
 			T_ABI* sp = src.ptr, *end = sp + src.size;
 			T* dp = adst.ptr;
@@ -120,6 +122,7 @@ void MarshalTraits <Sequence <T> >::unmarshal (const SeqABI& src, Unmarshal_ptr 
 				throw;
 			}
 		}
+		adst.size = src.size;
 		tmp.swap (dst);
 	}
 }
