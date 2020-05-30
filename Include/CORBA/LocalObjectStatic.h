@@ -45,7 +45,7 @@ private:
 		return static_cast <LocalObject*> (export_struct_.core_object);
 	}
 
-	static __declspec (allocate(OLF_BIND)) const ::Nirvana::ExportLocal export_struct_;
+	static __declspec (allocate (OLF_BIND)) const ::Nirvana::ExportLocal export_struct_;
 };
 
 template <class S> __declspec (allocate(OLF_BIND))

@@ -2,8 +2,6 @@
 #include <CORBA/Proxy/TypeCodeException.h>
 #include "tc_impex.h"
 
-__pragma(comment (linker, "/include:__exp_PortableServer__POA_ProxyFactory"))
-
 namespace CORBA {
 namespace Nirvana {
 

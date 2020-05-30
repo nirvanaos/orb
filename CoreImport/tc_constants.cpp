@@ -3,7 +3,7 @@
 
 namespace CORBA {
 
-#define IMPORT_TC(tc) __declspec (allocate(OLF_BIND)) extern const ::Nirvana::ImportInterfaceT <TypeCode> tc =\
+#define IMPORT_TC(tc) __declspec (allocate (OLF_BIND)) extern const ::Nirvana::ImportInterfaceT <TypeCode> tc =\
 { ::Nirvana::OLF_IMPORT_INTERFACE, "CORBA/" #tc, TypeCode::repository_id_ }
 
 IMPORT_TC (_tc_void);
@@ -25,9 +25,9 @@ IMPORT_TC (_tc_TypeCode);
 IMPORT_TC (_tc_string);
 IMPORT_TC (_tc_wstring);
 
-__declspec (allocate(OLF_BIND))
+__declspec (allocate (OLF_BIND))
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Object = { ::Nirvana::OLF_IMPORT_INTERFACE, Object::repository_id_, TypeCode::repository_id_ };
-__declspec (allocate(OLF_BIND))
+__declspec (allocate (OLF_BIND))
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_ValueBase = { ::Nirvana::OLF_IMPORT_INTERFACE, CORBA_REPOSITORY_ID ("ValueBase"), TypeCode::repository_id_ };;
 
 }
