@@ -64,12 +64,12 @@ private:
 		return static_cast <PortableServer::ServantBase*> (export_struct_.core_object);
 	}
 
-	static __declspec (allocate(OLF_BIND)) const ::Nirvana::ExportObject export_struct_;
+	static NIRVANA_OLF_SECTION const ::Nirvana::ExportObject export_struct_;
 };
 
-template <class S> __declspec (allocate(OLF_BIND))
+template <class S> NIRVANA_OLF_SECTION
 const ::Nirvana::ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_{ ::Nirvana::OLF_EXPORT_OBJECT, S::constant_name
-, STATIC_BRIDGE (S, PortableServer::ServantBase) };
+, STATIC_BRIDGE (PortableServer::ServantBase, S) };
 
 }
 }

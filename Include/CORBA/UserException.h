@@ -44,7 +44,7 @@ protected:
 return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), E::repository_id_)) ? &static_cast <const E&> (*ep) : 0; }\
 
 #define DEFINE_USER_EXCEPTION(E, rep_id) const ::CORBA::Char E::repository_id_ [] = rep_id;\
-__declspec (allocate (OLF_BIND)) extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>\
+NIRVANA_OLF_SECTION extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>\
 _tc_##E = { ::Nirvana::OLF_IMPORT_INTERFACE, E::repository_id_, ::CORBA::TypeCode::repository_id_ };\
 DEFINE_USER_EXC (E)\
 ::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }

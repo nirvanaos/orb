@@ -45,12 +45,12 @@ private:
 		return static_cast <LocalObject*> (export_struct_.core_object);
 	}
 
-	static __declspec (allocate (OLF_BIND)) const ::Nirvana::ExportLocal export_struct_;
+	static NIRVANA_OLF_SECTION const ::Nirvana::ExportLocal export_struct_;
 };
 
-template <class S> __declspec (allocate(OLF_BIND))
+template <class S> NIRVANA_OLF_SECTION
 const ::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ ::Nirvana::OLF_EXPORT_LOCAL, S::constant_name
-, STATIC_BRIDGE (S, LocalObject), STATIC_BRIDGE (S, AbstractBase) };
+, STATIC_BRIDGE (LocalObject, S), STATIC_BRIDGE (AbstractBase, S) };
 
 }
 }

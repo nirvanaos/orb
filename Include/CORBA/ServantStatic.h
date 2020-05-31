@@ -52,7 +52,7 @@ public:
 	static const typename Bridge <I>::EPV* bridge_;
 };
 
-#define STATIC_BRIDGE(S, I) reinterpret_cast <::CORBA::Nirvana::Bridge <I>*> (&::CORBA::Nirvana::InterfaceStaticBase < S, I>::bridge_)
+#define STATIC_BRIDGE(I, ...) reinterpret_cast <::CORBA::Nirvana::Bridge <I>*> (&::CORBA::Nirvana::InterfaceStaticBase <__VA_ARGS__, I>::bridge_)
 
 template <class S, class I>
 const typename Bridge <I>::EPV* InterfaceStaticBase <S, I>::bridge_ = &InterfaceStaticBase <S, I>::epv_;

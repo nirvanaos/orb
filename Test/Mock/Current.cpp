@@ -17,6 +17,6 @@ public:
 
 }
 
-extern const ImportInterfaceT <Current> g_current = { OLF_IMPORT_INTERFACE, 0, 0, STATIC_BRIDGE (Core::Current, Nirvana::Current) };
+extern const ImportInterfaceT <Current> g_current = { OLF_IMPORT_INTERFACE, 0, 0, STATIC_BRIDGE (Nirvana::Current, Core::Current) };
 
 }

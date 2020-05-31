@@ -153,9 +153,13 @@ const InterfaceMetadata ProxyFactoryImpl <::PortableServer::POA>::metadata_ = {
 
 }
 }
-
+/*
 namespace PortableServer {
 typedef ::CORBA::Nirvana::ProxyFactoryImpl <POA> _POA_ProxyFactory;
 }
-
-NIRVANA_EXPORT_INTERFACE1 (PortableServer, PortableServer::POA::repository_id_, _POA_ProxyFactory, CORBA::AbstractBase);
+*/
+//NIRVANA_EXPORT_INTERFACE1 (PortableServer, PortableServer::POA::repository_id_, _POA_ProxyFactory, CORBA::AbstractBase);
+NIRVANA_LINK_SYMBOL (_exp_PortableServer_POA_ProxyFactory)
+extern "C" NIRVANA_OLF_SECTION
+const Nirvana::ExportInterface _exp_PortableServer_POA_ProxyFactory = { Nirvana::OLF_EXPORT_INTERFACE, PortableServer::POA::repository_id_,
+STATIC_BRIDGE (CORBA::AbstractBase, ::CORBA::Nirvana::ProxyFactoryImpl <PortableServer::POA>) };

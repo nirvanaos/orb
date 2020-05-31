@@ -9,7 +9,7 @@
 
 namespace Nirvana {
 
-__declspec (allocate (OLF_BIND))
+NIRVANA_OLF_SECTION
 const ImportInterfaceT <Binder> g_binder = { OLF_IMPORT_INTERFACE, "Nirvana/g_binder", Binder::repository_id_ };
 
 namespace Test {

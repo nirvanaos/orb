@@ -31,12 +31,6 @@ typedef TypeCodeString <String, 0> TC_string;
 typedef TypeCodeString <WString, 0> TC_wstring;
 
 }
-/*
-namespace CORBA {
-typedef Nirvana::TypeCodeScalar <void, tk_void> TC_void;
-extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_void{ 0, nullptr, nullptr, STATIC_BRIDGE (TC_void, TypeCode) };
-} NIRVANA_EXPORT_INTERFACE1 (CORBA, "CORBA/_tc_void", TC_void, CORBA::TypeCode);
-*/
 
 #define TC_IMPL_SCALAR(T, t) namespace CORBA {typedef Nirvana::TypeCodeScalar <T, tk_##t> TC_##t;} TC_IMPEX(t)
 
