@@ -77,4 +77,4 @@ namespace Test {
 typedef ::CORBA::Nirvana::ProxyFactoryImpl <I2> _I2_ProxyFactory;
 }
 
-NIRVANA_EXPORT_INTERFACE1 (Test, Test::I2::repository_id_, _I2_ProxyFactory, CORBA::AbstractBase);
+NIRVANA_EXPORT (_exp_Test_I2_ProxyFactory, Test::I2::repository_id_, CORBA::AbstractBase, CORBA::Nirvana::ProxyFactoryImpl <Test::I2>)

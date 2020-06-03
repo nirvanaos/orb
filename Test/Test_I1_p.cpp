@@ -445,14 +445,6 @@ const InterfaceMetadata ProxyFactoryImpl <::Test::I1>::metadata_ = {
 }
 }
 
-namespace Test {
-
-typedef ::CORBA::Nirvana::TypeCodeSequence <::CORBA::Long, &CORBA::_tc_long> _TC_SeqLong;
-typedef ::CORBA::Nirvana::TypeCodeException <MyException> _TC_MyException;
-typedef ::CORBA::Nirvana::ProxyFactoryImpl <I1> _I1_ProxyFactory;
-
-}
-
-NIRVANA_EXPORT_INTERFACE1 (Test, "Test/_tc_SeqLong", _TC_SeqLong, CORBA::TypeCode);
-NIRVANA_EXPORT_INTERFACE1 (Test, Test::MyException::repository_id_, _TC_MyException, CORBA::TypeCode);
-NIRVANA_EXPORT_INTERFACE1 (Test, Test::I1::repository_id_, _I1_ProxyFactory, CORBA::AbstractBase);
+NIRVANA_EXPORT (_exp_Test_TC_SeqLong, "Test/_tc_SeqLong", CORBA::TypeCode, CORBA::Nirvana::TypeCodeSequence <CORBA::Long, &CORBA::_tc_long>)
+NIRVANA_EXPORT (_exp_Test_TC_MyException, Test::MyException::repository_id_, CORBA::TypeCode, CORBA::Nirvana::TypeCodeException <Test::MyException>)
+NIRVANA_EXPORT (_exp_Test_I1_ProxyFactory, Test::I1::repository_id_, CORBA::AbstractBase, CORBA::Nirvana::ProxyFactoryImpl <Test::I1>)
