@@ -43,7 +43,7 @@ TC_EXCEPTION(UnknownUserException)
 
 }
 
-TC_IMPEX (CompletionStatus)
+TC_IMPEX_BY_ID (CompletionStatus)
 
 SYSTEM_EXCEPTIONS(TC_IMPEX_BY_ID)
 TC_IMPEX_BY_ID(UnknownUserException)

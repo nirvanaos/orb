@@ -27,31 +27,29 @@ public:
 	}
 };
 
-typedef TypeCodeString <String, 0> TC_string;
-typedef TypeCodeString <WString, 0> TC_wstring;
-
 }
 
-#define TC_IMPL_SCALAR(T, t) namespace CORBA {typedef Nirvana::TypeCodeScalar <T, tk_##t> TC_##t;} TC_IMPEX(t)
+#define TC_IMPL_SCALAR(T, t) TC_IMPEX(t, CORBA::Nirvana::TypeCodeScalar <T, CORBA::tk_##t>)
 
 TC_IMPL_SCALAR (void, void)
-TC_IMPL_SCALAR (Short, short)
-TC_IMPL_SCALAR (Long, long)
-TC_IMPL_SCALAR (UShort, ushort)
-TC_IMPL_SCALAR (ULong, ulong)
-TC_IMPL_SCALAR (Float, float)
-TC_IMPL_SCALAR (Double, double)
-TC_IMPL_SCALAR (Boolean, boolean)
-TC_IMPL_SCALAR (Char, char)
-TC_IMPL_SCALAR (Octet, octet)
-TC_IMPL_SCALAR (LongLong, longlong)
-TC_IMPL_SCALAR (ULongLong, ulonglong)
-TC_IMPL_SCALAR (LongDouble, longdouble)
-TC_IMPL_SCALAR (WChar, wchar)
-TC_IMPL_SCALAR (Any, any)
-TC_IMPEX (TypeCode)
+TC_IMPL_SCALAR (CORBA::Short, short)
+TC_IMPL_SCALAR (CORBA::Long, long)
+TC_IMPL_SCALAR (CORBA::UShort, ushort)
+TC_IMPL_SCALAR (CORBA::ULong, ulong)
+TC_IMPL_SCALAR (CORBA::Float, float)
+TC_IMPL_SCALAR (CORBA::Double, double)
+TC_IMPL_SCALAR (CORBA::Boolean, boolean)
+TC_IMPL_SCALAR (CORBA::Char, char)
+TC_IMPL_SCALAR (CORBA::Octet, octet)
+TC_IMPL_SCALAR (CORBA::LongLong, longlong)
+TC_IMPL_SCALAR (CORBA::ULongLong, ulonglong)
+TC_IMPL_SCALAR (CORBA::LongDouble, longdouble)
+TC_IMPL_SCALAR (CORBA::WChar, wchar)
+TC_IMPL_SCALAR (CORBA::Any, any)
+TC_IMPEX (TypeCode, CORBA::TC_TypeCode)
+TC_IMPEX (string, CORBA::Nirvana::TypeCodeString <CORBA::Nirvana::String, 0>)
+TC_IMPEX (wstring, CORBA::Nirvana::TypeCodeString <CORBA::Nirvana::WString, 0>)
 TC_IMPEX_BY_ID (Object)
-TC_IMPEX (string)
-TC_IMPEX (wstring)
+
 //TC_IMPEX (ValueBase)
 
