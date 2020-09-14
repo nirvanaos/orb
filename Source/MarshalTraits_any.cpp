@@ -13,8 +13,8 @@ void MarshalTraits <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI
 		::Nirvana::ConstPointer psrc;
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
-			::Nirvana::Size size = tc->_size ();
-			::Nirvana::UIntPtr p = marshaler->get_buffer (size, pdst);
+			size_t size = tc->_size ();
+			uintptr_t p = marshaler->get_buffer (size, pdst);
 			dst.large_pointer ((::Nirvana::Pointer)p, size);
 			pdst = dst.large_pointer ();
 			psrc = src.large_pointer ();
@@ -42,8 +42,8 @@ void MarshalTraits <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst
 				src.reset ();
 				pdst = dst.large_pointer ();
 			} else {
-				::Nirvana::Size size = tc->_size ();
-				::Nirvana::UIntPtr p = marshaler->get_buffer (size, pdst);
+				size_t size = tc->_size ();
+				uintptr_t p = marshaler->get_buffer (size, pdst);
 				dst.large_pointer ((::Nirvana::Pointer)p, size);
 				pdst = dst.large_pointer ();
 			}

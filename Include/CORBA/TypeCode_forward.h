@@ -68,7 +68,7 @@ Visibility (*member_visibility) (Bridge <TypeCode>*, ULong index, EnvironmentBri
 ValueModifier (*type_modifier) (Bridge <TypeCode>*, EnvironmentBridge*);
 Interface* (*concrete_base_type) (Bridge <TypeCode>*, EnvironmentBridge*);
 
-ULong (*_size) (Bridge <TypeCode>*, EnvironmentBridge*);
+::Nirvana::Size (*_size) (Bridge <TypeCode>*, EnvironmentBridge*);
 void (*_construct) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
 void (*_destruct) (Bridge <TypeCode>*, ::Nirvana::Pointer, EnvironmentBridge*);
 void (*_copy) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::ConstPointer, EnvironmentBridge*);
@@ -125,7 +125,7 @@ public:
 	// NOTE: For exceptions, all methods below are related to the exception data, not the exception itself.
 
 	// Size of the object.
-	ULong _size ();
+	::Nirvana::Size _size ();
 
 	// Call the default constructor.
 	void _construct (::Nirvana::Pointer p);

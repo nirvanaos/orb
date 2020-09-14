@@ -89,7 +89,7 @@ class TypeCodeOps
 public:
 	typedef T Valtype;
 
-	static ULong __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static size_t __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return sizeof (Valtype);
 	}
@@ -162,7 +162,7 @@ class TypeCodeOps <void>
 public:
 	typedef void Valtype;
 
-	static ULong __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static size_t __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		return 0;
 	}

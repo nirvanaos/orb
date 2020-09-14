@@ -39,7 +39,7 @@ void* Any::prepare (TypeCode_ptr tc)
 	clear ();
 	void* dst = nullptr;
 	if (tc) {
-		ULong size = tc->_size ();
+		size_t size = tc->_size ();
 		if (!size)
 			::Nirvana::throw_BAD_TYPECODE ();
 		if (size <= SMALL_CAPACITY)

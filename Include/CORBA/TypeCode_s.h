@@ -244,7 +244,7 @@ protected:
 		return 0;
 	}
 
-	static ULong __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static ::Nirvana::Size __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
 	{
 		try {
 			return S::_implementation (_b)._size ();

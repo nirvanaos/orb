@@ -204,11 +204,11 @@ TypeCode_var Client <T, TypeCode>::concrete_base_type ()
 }
 
 template <class T>
-ULong Client <T, TypeCode>::_size ()
+::Nirvana::Size Client <T, TypeCode>::_size ()
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	ULong _ret = (_b._epv ().epv._size) (&_b, &_env);
+	::Nirvana::Size _ret = (_b._epv ().epv._size) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
