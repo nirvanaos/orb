@@ -114,8 +114,8 @@ public:
 		return BaseImpl::_implementation (itf);
 	}
 
-	template <class I>
-	static T& _implementation (Bridge <I>* bridge)
+	template <class I1>
+	static T& _implementation (Bridge <I1>* bridge)
 	{
 		return *(BaseImpl::_implementation (bridge).ptr_);
 	}
@@ -148,16 +148,16 @@ public:
 		return 0;
 	}
 
-	template <class I>
-	static Bridge <I>* _duplicate (Bridge <I>* itf)
+	template <class I1>
+	static Bridge <I1>* _duplicate (Bridge <I1>* itf)
 	{
 		if (itf)
 			BaseImpl::_implementation (itf)._add_ref ();
 		return itf;
 	}
 
-	template <class I>
-	static void _release (Bridge <I>* itf)
+	template <class I1>
+	static void _release (Bridge <I1>* itf)
 	{
 		if (itf)
 			BaseImpl::_implementation (itf)._remove_ref ();

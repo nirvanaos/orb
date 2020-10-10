@@ -177,6 +177,11 @@ public:
 
 typedef I_ptr <Interface> Interface_ptr;
 
+inline I_ptr <Interface> Interface::_nil ()
+{
+	return I_ptr <Interface> ((Interface*)nullptr);
+}
+
 template <class I>
 struct StaticI_ptr
 {

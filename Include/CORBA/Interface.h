@@ -8,6 +8,10 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <class I> class I_ptr;
+class Interface;
+template <> class I_ptr <Interface>;
+
 /// Base for all interface ABIs.
 /// Provides life-cycle management and interface identification.
 class Interface
@@ -39,10 +43,7 @@ public:
 
 	static Interface* _check (Interface* obj, String_in interface_id);
 
-	static Interface* _nil ()
-	{
-		return 0;
-	}
+	static I_ptr <Interface> _nil ();
 
 private:
 	const EPV& _epv_ref;

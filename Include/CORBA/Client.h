@@ -46,7 +46,7 @@ public:
 
 	static I_ptr <I> _nil ()
 	{
-		return I_ptr <I> ((I*)0);
+		return I_ptr <I> ((I*)nullptr);
 	}
 
 	static I_ptr <I> _check (Interface* bridge)

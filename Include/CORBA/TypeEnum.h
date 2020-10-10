@@ -62,7 +62,7 @@ struct TypeEnum
 			}
 		}
 
-		ABI_type* operator & () const
+		ABI_type* operator & ()
 		{
 			return &val_;
 		}

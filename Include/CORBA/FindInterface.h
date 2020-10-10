@@ -25,10 +25,7 @@ class InterfaceFinder
 	}
 
 public:
-	static Interface_ptr find (S& servant, const String& id)
-	{
-		return InterfaceEntry::find (itable_, itable_ + countof (itable_), &servant, id);
-	}
+	static Interface_ptr find (S& servant, const String& id);
 
 private:
 	static const InterfaceEntry itable_ [];
@@ -39,6 +36,12 @@ const InterfaceEntry InterfaceFinder <S, Primary, I...>::itable_ [] = {
 	{ Bridge <Primary>::repository_id_, countof (Bridge <Primary>::repository_id_) - 1, cast <Primary> },
 	{ Bridge <I>::repository_id_, countof (Bridge <I>::repository_id_) - 1, cast <I> }...
 };
+
+template <class S, class Primary, class ... I>
+inline Interface_ptr InterfaceFinder <S, Primary, I...>::find (S& servant, const String& id)
+{
+	return InterfaceEntry::find (itable_, itable_ + countof (itable_), &servant, id);
+}
 
 template <class Primary, class ... I>
 class FindInterface
