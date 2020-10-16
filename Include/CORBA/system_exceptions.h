@@ -43,10 +43,10 @@
 */ M (UNKNOWN) /* the unknown exception
 */
 
-/// Nirvana system exceptions
+/// Nirvana system exceptions. Currently, we do not define one.
 #define NIRVANA_EXCEPTIONS(M)/*
-*/ M (MEM_NOT_ALLOCATED) /* memory is not allocated
-*/ M (MEM_NOT_COMMITTED) /* memory is not committed
+ M (MEM_NOT_ALLOCATED) /* memory is not allocated
+ M (MEM_NOT_COMMITTED) /* memory is not committed
 */
 
 #define SYSTEM_EXCEPTIONS(M) \
