@@ -44,10 +44,7 @@
 */
 
 /// Nirvana system exceptions. Currently, we do not define one.
-#define NIRVANA_EXCEPTIONS(M)/*
- M (MEM_NOT_ALLOCATED) /* memory is not allocated
- M (MEM_NOT_COMMITTED) /* memory is not committed
-*/
+#define NIRVANA_EXCEPTIONS(M)
 
 #define SYSTEM_EXCEPTIONS(M) \
 CORBA_EXCEPTIONS (M)\
