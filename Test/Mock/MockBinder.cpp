@@ -4,8 +4,11 @@
 #include <Nirvana/core_objects.h>
 #include "Core/ORB/POA.h"
 
-// TODO: Make mock portable
+#ifdef _WIN32
 #include <Windows.h>
+#else
+#include <sys/mman.h>
+#endif
 
 namespace Nirvana {
 
@@ -47,8 +50,12 @@ MockBinder::~MockBinder ()
 
 void MockBinder::module_bind (Module& module)
 {
+#ifdef _WIN32
 	DWORD protection;
 	VirtualProtect ((void*)module.olf_section, module.olf_size, PAGE_READWRITE, &protection);
+#else
+	mprotect (olf_section, module.olf_size, PROT_READ | PROT_WRITE);
+#endif
 
 	try {
 
@@ -118,7 +125,11 @@ void MockBinder::module_bind (Module& module)
 		throw;
 	}
 
+#ifdef _WIN32
 	VirtualProtect ((void*)module.olf_section, module.olf_size, protection, &protection);
+#else
+	mprotect (olf_section, module.olf_size, PROT_READ);
+#endif
 }
 
 void MockBinder::module_unbind (Module& module)
