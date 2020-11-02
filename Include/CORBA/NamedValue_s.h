@@ -13,7 +13,7 @@ public:
 	static const typename Bridge <NamedValue>::EPV epv_;
 
 protected:
-	static const ABI_VT_ret <String> _name (Bridge <NamedValue>* obj, EnvironmentBridge* env)
+	static const ABI_VT_ret <String> _name (Bridge <NamedValue>* obj, Interface* env)
 	{
 		try {
 			return Type <String>::VT_ret (S::_implementation (obj).name ());
@@ -25,7 +25,7 @@ protected:
 		return 0;
 	}
 
-	static const ABI_VT_ret <Any> _value (Bridge <NamedValue>* obj, EnvironmentBridge* env)
+	static const ABI_VT_ret <Any> _value (Bridge <NamedValue>* obj, Interface* env)
 	{
 		try {
 			return Type <Any>::VT_ret (S::_implementation (obj).value ());
@@ -37,7 +37,7 @@ protected:
 		return 0;
 	}
 
-	static Flags _flags (Bridge <NamedValue>* obj, EnvironmentBridge* env)
+	static Flags _flags (Bridge <NamedValue>* obj, Interface* env)
 	{
 		try {
 			return S::_implementation (obj).flags ();

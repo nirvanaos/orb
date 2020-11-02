@@ -62,12 +62,12 @@ struct Type <::Test::MyException::Data> :
 BRIDGE_BEGIN (::Test::I1, "IDL:Test/I1:1.0")
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV
-Long (*op1) (Bridge < ::Test::I1>*, Long p1, EnvironmentBridge*);
-void (*throw_no_implement) (Bridge < ::Test::I1>*, EnvironmentBridge*);
-Interface* (*object_op) (Bridge < ::Test::I1>*, Interface* in_obj, Interface** out_obj, Interface** inout_obj, EnvironmentBridge*);
-ABI_ret <String> (*string_op) (Bridge < ::Test::I1>*, ABI_in <String> in_s, ABI_out <String> out_s, ABI_inout <String> inout_s, EnvironmentBridge*);
-ABI_ret < ::Test::SeqLong> (*seq_op) (Bridge < ::Test::I1>*, ABI_in < ::Test::SeqLong> in_s, ABI_out < ::Test::SeqLong> out_s, ABI_inout < ::Test::SeqLong> inout_s, EnvironmentBridge*);
-ABI_ret <Any> (*any_op) (Bridge < ::Test::I1>*, ABI_in <Any>, ABI_out <Any>, ABI_inout <Any>, EnvironmentBridge*);
+Long (*op1) (Bridge < ::Test::I1>*, Long p1, Interface*);
+void (*throw_no_implement) (Bridge < ::Test::I1>*, Interface*);
+Interface* (*object_op) (Bridge < ::Test::I1>*, Interface* in_obj, Interface** out_obj, Interface** inout_obj, Interface*);
+ABI_ret <String> (*string_op) (Bridge < ::Test::I1>*, ABI_in <String> in_s, ABI_out <String> out_s, ABI_inout <String> inout_s, Interface*);
+ABI_ret < ::Test::SeqLong> (*seq_op) (Bridge < ::Test::I1>*, ABI_in < ::Test::SeqLong> in_s, ABI_out < ::Test::SeqLong> out_s, ABI_inout < ::Test::SeqLong> inout_s, Interface*);
+ABI_ret <Any> (*any_op) (Bridge < ::Test::I1>*, ABI_in <Any>, ABI_out <Any>, ABI_inout <Any>, Interface*);
 BRIDGE_END ()
 
 template <class T>

@@ -88,7 +88,7 @@ class EnvironmentImpl :
 {
 public:
 	template <class I>
-	static Interface* __duplicate (Interface* itf, EnvironmentBridge* env)
+	static Interface* __duplicate (Interface* itf, Interface* env)
 	{
 		set_NO_IMPLEMENT (env);
 		return 0;

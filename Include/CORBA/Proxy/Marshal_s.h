@@ -13,7 +13,7 @@ public:
 	static const typename Bridge <Marshal>::EPV epv_;
 
 protected:
-	static ABI_enum _context (Bridge <Marshal>* _b, EnvironmentBridge* _env)
+	static ABI_enum _context (Bridge <Marshal>* _b, Interface* _env)
 	{
 		try {
 			return Type <MarshalContext>::ret (S::_implementation (_b).context ());
@@ -26,7 +26,7 @@ protected:
 	}
 
 	static ::Nirvana::UIntPtr _marshal_memory (Bridge <Marshal>* _b, ::Nirvana::ConstPointer p,
-		::Nirvana::Size* size, ::Nirvana::Size release_size, EnvironmentBridge* _env)
+		::Nirvana::Size* size, ::Nirvana::Size release_size, Interface* _env)
 	{
 		try {
 			return S::_implementation (_b).marshal_memory (p, Type <::Nirvana::Size>::inout (size), release_size);
@@ -39,7 +39,7 @@ protected:
 	}
 
 	static ::Nirvana::UIntPtr _get_buffer (Bridge <Marshal>* _b, ::Nirvana::Size* size,
-		::Nirvana::Pointer* buf_ptr, EnvironmentBridge* _env)
+		::Nirvana::Pointer* buf_ptr, Interface* _env)
 	{
 		try {
 			return S::_implementation (_b).get_buffer (Type <::Nirvana::Size>::inout (size),
@@ -52,7 +52,7 @@ protected:
 		return 0;
 	}
 
-	static ::Nirvana::UIntPtr _marshal_object (Bridge <Marshal>* _b, Interface* obj, EnvironmentBridge* _env)
+	static ::Nirvana::UIntPtr _marshal_object (Bridge <Marshal>* _b, Interface* obj, Interface* _env)
 	{
 		try {
 			return S::_implementation (_b).marshal_object (TypeI <Object>::in (obj));
@@ -64,7 +64,7 @@ protected:
 		return 0;
 	}
 
-	static ::Nirvana::UIntPtr _marshal_type_code (Bridge <Marshal>* _b, Interface* tc, EnvironmentBridge* _env)
+	static ::Nirvana::UIntPtr _marshal_type_code (Bridge <Marshal>* _b, Interface* tc, Interface* _env)
 	{
 		try {
 			return S::_implementation (_b).marshal_type_code (TypeI <TypeCode>::in (tc));

@@ -57,17 +57,17 @@ struct Bridge <Object>::EPV
 
 	struct
 	{
-		Interface* (*get_interface) (Bridge <Object>*, EnvironmentBridge*);
-		ABI_boolean (*is_a) (Bridge <Object>*, ABI_in <String> type_id, EnvironmentBridge*);
-		ABI_boolean (*non_existent) (Bridge <Object>*, EnvironmentBridge*);
-		ABI_boolean (*is_equivalent) (Bridge <Object>*, Interface*, EnvironmentBridge*);
-		ULong (*hash) (Bridge <Object>*, ULong maximum, EnvironmentBridge*);
+		Interface* (*get_interface) (Bridge <Object>*, Interface*);
+		ABI_boolean (*is_a) (Bridge <Object>*, ABI_in <String> type_id, Interface*);
+		ABI_boolean (*non_existent) (Bridge <Object>*, Interface*);
+		ABI_boolean (*is_equivalent) (Bridge <Object>*, Interface*, Interface*);
+		ULong (*hash) (Bridge <Object>*, ULong maximum, Interface*);
 		// TODO: Other Object operations shall be here...
 	} epv;
 
 	struct
 	{
-		Interface* (*get_servant) (Bridge <Object>*, EnvironmentBridge*);
+		Interface* (*get_servant) (Bridge <Object>*, Interface*);
 		const IOP::IOR* (*object_reference) (ABI_in <Boolean> local);
 	} internal;
 };

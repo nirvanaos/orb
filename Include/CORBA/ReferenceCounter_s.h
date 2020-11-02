@@ -13,7 +13,7 @@ public:
 	static const typename Bridge <ReferenceCounter>::EPV epv_;
 
 protected:
-	static void __add_ref (Bridge <ReferenceCounter>* obj, EnvironmentBridge* env)
+	static void __add_ref (Bridge <ReferenceCounter>* obj, Interface* env)
 	{
 		try {
 			S::_implementation (obj)._add_ref ();
@@ -24,7 +24,7 @@ protected:
 		}
 	}
 
-	static void __remove_ref (Bridge <ReferenceCounter>* obj, EnvironmentBridge* env)
+	static void __remove_ref (Bridge <ReferenceCounter>* obj, Interface* env)
 	{
 		try {
 			S::_implementation (obj)._remove_ref ();
@@ -35,7 +35,7 @@ protected:
 		}
 	}
 
-	static ULong __refcount_value (Bridge <ReferenceCounter>* obj, EnvironmentBridge* env)
+	static ULong __refcount_value (Bridge <ReferenceCounter>* obj, Interface* env)
 	{
 		try {
 			return S::_implementation (obj)._refcount_value ();

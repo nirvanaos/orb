@@ -50,7 +50,7 @@ TEST_F (TestORB, CORBA_Environment)
 {
 	CORBA::Environment_ptr env;
 	CORBA::ORB::create_environment (env);
-	CORBA::Nirvana::EnvironmentBridge* eb = env;
+	CORBA::Nirvana::Interface* eb = env;
 	CORBA::Nirvana::set_exception (eb, CORBA::NO_MEMORY ());
 	const CORBA::Exception* ex = env->exception ();
 	ASSERT_TRUE (ex);

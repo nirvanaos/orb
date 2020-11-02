@@ -11,11 +11,11 @@ BRIDGE_BEGIN (::PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("Serv
 BASE_STRUCT_ENTRY (AbstractBase, CORBA_AbstractBase)
 BASE_STRUCT_ENTRY (ReferenceCounter, CORBA_Nirvana_ReferenceCounter)
 BRIDGE_EPV
-Interface* (*default_POA) (Bridge < ::PortableServer::ServantBase>*, EnvironmentBridge*);
-Interface* (*get_interface) (Bridge < ::PortableServer::ServantBase>*, EnvironmentBridge*);
-ABI_boolean (*is_a) (Bridge < ::PortableServer::ServantBase>*, ABI_in <String> type_id, EnvironmentBridge*);
-ABI_boolean (*non_existent) (Bridge < ::PortableServer::ServantBase>*, EnvironmentBridge*);
-Interface* (*core_servant) (Bridge < ::PortableServer::ServantBase>*, EnvironmentBridge*);
+Interface* (*default_POA) (Bridge < ::PortableServer::ServantBase>*, Interface*);
+Interface* (*get_interface) (Bridge < ::PortableServer::ServantBase>*, Interface*);
+ABI_boolean (*is_a) (Bridge < ::PortableServer::ServantBase>*, ABI_in <String> type_id, Interface*);
+ABI_boolean (*non_existent) (Bridge < ::PortableServer::ServantBase>*, Interface*);
+Interface* (*core_servant) (Bridge < ::PortableServer::ServantBase>*, Interface*);
 BRIDGE_END ()
 
 template <class T>

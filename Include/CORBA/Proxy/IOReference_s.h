@@ -13,7 +13,7 @@ public:
 	static const typename Bridge <IOReference>::EPV epv_;
 
 protected:
-	static Interface* _create_marshaler (Bridge <IOReference>* _b, EnvironmentBridge* _env)
+	static Interface* _create_marshaler (Bridge <IOReference>* _b, Interface* _env)
 	{
 		try {
 			return TypeI <Marshal>::ret (S::_implementation (_b).create_marshaler ());
@@ -27,7 +27,7 @@ protected:
 
 	static Interface* _call (Bridge <IOReference>* _b, Type <OperationIndex>::ABI_in op,
 		::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size, Interface** marshaler,
-		::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size, EnvironmentBridge* _env)
+		::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size, Interface* _env)
 	{
 		try {
 			return TypeI <Unmarshal>::ret (S::_implementation (_b).call (Type <OperationIndex>::in (op),

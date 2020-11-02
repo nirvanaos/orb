@@ -5,7 +5,7 @@
 #include "Bridge.h"
 #include "system_exceptions.h"
 
-#define DECLARE_FUNCTION(e) void set_##e (EnvironmentBridge* env);
+#define DECLARE_FUNCTION(e) void set_##e (Interface* env);
 
 namespace CORBA {
 namespace Nirvana {

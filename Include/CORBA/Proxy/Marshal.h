@@ -100,11 +100,11 @@ public:
 };
 
 BRIDGE_BEGIN (Marshal, CORBA_NIRVANA_REPOSITORY_ID ("Marshal"))
-ABI_enum (*_get_context) (Bridge <Marshal>*, EnvironmentBridge*);
-::Nirvana::UIntPtr (*marshal_memory) (Bridge <Marshal>*, ::Nirvana::ConstPointer, ::Nirvana::Size*, ::Nirvana::Size, EnvironmentBridge*);
-::Nirvana::UIntPtr (*get_buffer) (Bridge <Marshal>*, ::Nirvana::Size*, ::Nirvana::Pointer*, EnvironmentBridge*);
-::Nirvana::UIntPtr (*marshal_object) (Bridge <Marshal>*, Interface*, EnvironmentBridge*);
-::Nirvana::UIntPtr (*marshal_type_code) (Bridge <Marshal>*, Interface*, EnvironmentBridge*);
+ABI_enum (*_get_context) (Bridge <Marshal>*, Interface*);
+::Nirvana::UIntPtr (*marshal_memory) (Bridge <Marshal>*, ::Nirvana::ConstPointer, ::Nirvana::Size*, ::Nirvana::Size, Interface*);
+::Nirvana::UIntPtr (*get_buffer) (Bridge <Marshal>*, ::Nirvana::Size*, ::Nirvana::Pointer*, Interface*);
+::Nirvana::UIntPtr (*marshal_object) (Bridge <Marshal>*, Interface*, Interface*);
+::Nirvana::UIntPtr (*marshal_type_code) (Bridge <Marshal>*, Interface*, Interface*);
 BRIDGE_END ()
 
 template <class T>

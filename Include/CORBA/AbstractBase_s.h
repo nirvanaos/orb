@@ -16,7 +16,7 @@ public:
 	static const typename Bridge <AbstractBase>::EPV epv_;
 
 protected:
-	static Interface* __query_interface (Bridge <AbstractBase>* base, ABI_in <String> id, EnvironmentBridge* env)
+	static Interface* __query_interface (Bridge <AbstractBase>* base, ABI_in <String> id, Interface* env)
 	{
 		Interface* ret = 0;
 		try {

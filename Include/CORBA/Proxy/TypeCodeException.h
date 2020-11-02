@@ -14,7 +14,7 @@ class TypeCodeExceptionRoot :
 	public TypeCodeStatic <TypeCodeException <E>, TypeCodeWithId <tk_except, E>, TypeCodeOps <typename E::Data> >
 {
 public:
-	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static const char* _name (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return E::__name ();
 	}

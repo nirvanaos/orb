@@ -13,7 +13,7 @@ public:
 	static const typename Bridge <IORequest>::EPV epv_;
 
 protected:
-	static Interface* _get_marshaler (Bridge <IORequest>* _b, EnvironmentBridge* _env)
+	static Interface* _get_marshaler (Bridge <IORequest>* _b, Interface* _env)
 	{
 		try {
 			return TypeI <Marshal>::VT_ret (S::_implementation (_b).marshaler ());
@@ -34,7 +34,7 @@ protected:
 		}
 	}
 
-	static void _success (Bridge <IORequest>* _b, EnvironmentBridge* _env)
+	static void _success (Bridge <IORequest>* _b, Interface* _env)
 	{
 		try {
 			S::_implementation (_b).success ();

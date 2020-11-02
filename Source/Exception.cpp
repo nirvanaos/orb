@@ -5,7 +5,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-void set_exception (I_ptr <EnvironmentBridge> environment, Exception::Code code, const Char* rep_id, const void* param) NIRVANA_NOEXCEPT
+void set_exception (Interface_ptr environment, Exception::Code code, const Char* rep_id, const void* param) NIRVANA_NOEXCEPT
 {
 	if (environment && RepositoryId::compatible (environment->_epv ().interface_id, Bridge < ::CORBA::Environment>::repository_id_)) {
 		Bridge < ::CORBA::Environment>* b = &static_cast <Bridge < ::CORBA::Environment>&> (*&environment);
@@ -13,12 +13,12 @@ void set_exception (I_ptr <EnvironmentBridge> environment, Exception::Code code,
 	}
 }
 
-void set_exception (I_ptr <EnvironmentBridge> environment, const Exception& e) NIRVANA_NOEXCEPT
+void set_exception (Interface_ptr environment, const Exception& e) NIRVANA_NOEXCEPT
 {
 	set_exception (environment, e.__code (), e._rep_id (), e.__data ());
 }
 
-void set_unknown_exception (I_ptr <EnvironmentBridge> environment) NIRVANA_NOEXCEPT
+void set_unknown_exception (Interface_ptr environment) NIRVANA_NOEXCEPT
 {
 	set_exception (environment, SystemException::EC_UNKNOWN, CORBA_REPOSITORY_ID ("UNKNOWN"), nullptr);
 }

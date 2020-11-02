@@ -18,7 +18,7 @@ public:
 	static const typename Bridge <PortableServer::POA>::EPV epv_;
 
 protected:
-	static Type <String>::ABI_ret _activate_object (Bridge <PortableServer::POA>* obj, Interface* servant, EnvironmentBridge* env)
+	static Type <String>::ABI_ret _activate_object (Bridge <PortableServer::POA>* obj, Interface* servant, Interface* env)
 	{
 		try {
 			return Type <String>::ret (S::_implementation (obj).activate_object (TypeI <PortableServer::ServantBase>::in (servant)));
@@ -30,7 +30,7 @@ protected:
 		return Type <String>::ABI_ret ();
 	}
 
-	static void _deactivate_object (Bridge <PortableServer::POA>* obj, Type <String>::ABI_in objid, EnvironmentBridge* env)
+	static void _deactivate_object (Bridge <PortableServer::POA>* obj, Type <String>::ABI_in objid, Interface* env)
 	{
 		try {
 			S::_implementation (obj).deactivate_object (Type <String>::in (objid));

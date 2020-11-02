@@ -18,7 +18,7 @@ public:
 	}
 
 protected:
-	static void __delete (Bridge <DynamicServant>* obj, EnvironmentBridge* env)
+	static void __delete (Bridge <DynamicServant>* obj, Interface* env)
 	{
 		try {
 			S::_implementation (obj)._delete ();

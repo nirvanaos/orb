@@ -13,7 +13,7 @@ public:
 	static const typename Bridge <LocalObject>::EPV epv_;
 
 protected:
-	static ABI_boolean __non_existent (Bridge <LocalObject>* obj, EnvironmentBridge* env)
+	static ABI_boolean __non_existent (Bridge <LocalObject>* obj, Interface* env)
 	{
 		try {
 			return S::_implementation (obj)._non_existent ();

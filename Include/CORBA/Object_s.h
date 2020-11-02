@@ -15,7 +15,7 @@ public:
 	static const typename Bridge <Object>::EPV epv_;
 
 protected:
-	static Interface* __get_interface (Bridge <Object>* obj, EnvironmentBridge* env)
+	static Interface* __get_interface (Bridge <Object>* obj, Interface* env)
 	{
 		try {
 			return TypeI <InterfaceDef>::ret (S::_implementation (obj)._get_interface ());
@@ -27,7 +27,7 @@ protected:
 		return 0;
 	}
 
-	static ABI_boolean __is_a (Bridge <Object>* obj, ABI_in <String> type_id, EnvironmentBridge* env)
+	static ABI_boolean __is_a (Bridge <Object>* obj, ABI_in <String> type_id, Interface* env)
 	{
 		try {
 			return S::_implementation (obj)._is_a (Type <String>::in (type_id));
@@ -39,7 +39,7 @@ protected:
 		return 0;
 	}
 
-	static ABI_boolean __non_existent (Bridge <Object>* obj, EnvironmentBridge* env)
+	static ABI_boolean __non_existent (Bridge <Object>* obj, Interface* env)
 	{
 		try {
 			return S::_implementation (obj)._non_existent ();
@@ -51,7 +51,7 @@ protected:
 		return 0;
 	}
 
-	static ABI_boolean __is_equivalent (Bridge <Object>* obj, Interface* other_object, EnvironmentBridge* env)
+	static ABI_boolean __is_equivalent (Bridge <Object>* obj, Interface* other_object, Interface* env)
 	{
 		try {
 			return S::_implementation (obj)._is_equivalent (TypeI <Object>::in (other_object));
@@ -63,7 +63,7 @@ protected:
 		return 0;
 	}
 
-	static ULong __hash (Bridge <Object>* obj, ULong maximum, EnvironmentBridge* env)
+	static ULong __hash (Bridge <Object>* obj, ULong maximum, Interface* env)
 	{
 		try {
 			return S::_implementation (obj)._hash (maximum);
@@ -77,7 +77,7 @@ protected:
 	// TODO: Other Object operations shall be here...
 
 	// Internals
-	static Interface* __get_servant (Bridge <Object>* obj, EnvironmentBridge* env)
+	static Interface* __get_servant (Bridge <Object>* obj, Interface* env)
 	{
 		set_MARSHAL (env);
 		return 0;

@@ -14,7 +14,7 @@ public:
 	static const typename Bridge < ::Test::I2>::EPV epv_;
 
 protected:
-	static Long _op2 (Bridge < ::Test::I2>* _b, Long p1, EnvironmentBridge* _env)
+	static Long _op2 (Bridge < ::Test::I2>* _b, Long p1, Interface* _env)
 	{
 		try {
 			return S::_implementation (_b).op2 (p1);

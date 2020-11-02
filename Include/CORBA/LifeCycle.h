@@ -12,7 +12,7 @@ class LifeCycleStatic
 {
 public:
 	template <class I>
-	static Interface* __duplicate (Interface* itf, EnvironmentBridge*)
+	static Interface* __duplicate (Interface* itf, Interface*)
 	{
 		return itf;
 	}
@@ -29,7 +29,7 @@ class LifeCycleDynamic
 {
 public:
 	template <class I>
-	static Interface* __duplicate (Interface* itf, EnvironmentBridge* env)
+	static Interface* __duplicate (Interface* itf, Interface* env)
 	{
 		try {
 			return S::_duplicate (static_cast <Bridge <I>*> (itf));
@@ -79,7 +79,7 @@ class LifeCycleNoCopy
 {
 public:
 	template <class I>
-	static Interface* __duplicate (Interface* itf, EnvironmentBridge* env)
+	static Interface* __duplicate (Interface* itf, Interface* env)
 	{
 		set_NO_IMPLEMENT (env);
 		return 0;

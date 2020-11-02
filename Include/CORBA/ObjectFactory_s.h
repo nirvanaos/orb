@@ -17,7 +17,7 @@ public:
 	static const typename Bridge <ObjectFactory>::EPV epv_;
 
 protected:
-	static void* _memory_allocate (Bridge <ObjectFactory>* _b, size_t size, EnvironmentBridge* _env)
+	static void* _memory_allocate (Bridge <ObjectFactory>* _b, size_t size, Interface* _env)
 	{
 		try {
 			return S::_implementation (_b).memory_allocate (size);
@@ -29,7 +29,7 @@ protected:
 		return 0;
 	}
 
-	static void _memory_release (Bridge <ObjectFactory>* _b, void* p, size_t size, EnvironmentBridge* _env)
+	static void _memory_release (Bridge <ObjectFactory>* _b, void* p, size_t size, Interface* _env)
 	{
 		try {
 			S::_implementation (_b).memory_release (p, size);
@@ -40,7 +40,7 @@ protected:
 		}
 	}
 
-	static void _stateless_begin (Bridge <ObjectFactory>* _b, Type <StatelessCreationFrame>::ABI_inout scs, EnvironmentBridge* _env)
+	static void _stateless_begin (Bridge <ObjectFactory>* _b, Type <StatelessCreationFrame>::ABI_inout scs, Interface* _env)
 	{
 		try {
 			S::_implementation (_b).stateless_begin (Type <StatelessCreationFrame>::inout (scs));
@@ -51,7 +51,7 @@ protected:
 		}
 	}
 
-	static void* _stateless_end (Bridge <ObjectFactory>* _b, ABI_in <bool> success, EnvironmentBridge* _env)
+	static void* _stateless_end (Bridge <ObjectFactory>* _b, ABI_in <bool> success, Interface* _env)
 	{
 		try {
 			return S::_implementation (_b).stateless_end (Type <bool>::in (success));
@@ -63,7 +63,7 @@ protected:
 		return 0;
 	}
 
-	static const void* _stateless_copy (Bridge <ObjectFactory>* _b, const void* p, size_t size, EnvironmentBridge* _env)
+	static const void* _stateless_copy (Bridge <ObjectFactory>* _b, const void* p, size_t size, Interface* _env)
 	{
 		try {
 			return S::_implementation (_b).stateless_copy (p, size);
@@ -75,7 +75,7 @@ protected:
 		return 0;
 	}
 
-	static Interface* _create_reference_counter (Bridge <ObjectFactory>* _b, Interface* dynamic, EnvironmentBridge* _env)
+	static Interface* _create_reference_counter (Bridge <ObjectFactory>* _b, Interface* dynamic, Interface* _env)
 	{
 		try {
 			return TypeI <ReferenceCounter>::ret (S::_implementation (_b).create_reference_counter (TypeI <DynamicServant>::in (dynamic)));
@@ -87,7 +87,7 @@ protected:
 		return 0;
 	}
 
-	static Interface* _create_servant (Bridge <ObjectFactory>* _b, Interface* impl, EnvironmentBridge* _env)
+	static Interface* _create_servant (Bridge <ObjectFactory>* _b, Interface* impl, Interface* _env)
 	{
 		try {
 			return TypeI <PortableServer::ServantBase>::ret (S::_implementation (_b).create_servant (TypeI <PortableServer::ServantBase>::in (impl)));
@@ -99,7 +99,7 @@ protected:
 		return 0;
 	}
 
-	static Interface* _create_local_object (Bridge <ObjectFactory>* _b, Interface* impl, Interface* ab, EnvironmentBridge* _env)
+	static Interface* _create_local_object (Bridge <ObjectFactory>* _b, Interface* impl, Interface* ab, Interface* _env)
 	{
 		try {
 			return TypeI <LocalObject>::ret (S::_implementation (_b).create_local_object (TypeI <LocalObject>::in (impl), TypeI <AbstractBase>::in (ab)));

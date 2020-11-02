@@ -18,7 +18,7 @@ public:
 protected:
 	static Interface* _create_proxy (Bridge <ProxyFactory>* obj,
 		Interface* target, UShort interface_idx,
-		Interface** deleter, EnvironmentBridge* env)
+		Interface** deleter, Interface* env)
 	{
 		try {
 			return TypeI <Interface>::VT_ret (S::_implementation (obj).create_proxy (

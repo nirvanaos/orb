@@ -27,14 +27,14 @@ struct Type <StatelessCreationFrame> :
 {};
 
 BRIDGE_BEGIN (ObjectFactory, CORBA_NIRVANA_REPOSITORY_ID ("ObjectFactory"))
-void* (*memory_allocate) (Bridge <ObjectFactory>*, size_t size, EnvironmentBridge*);
-void (*memory_release) (Bridge <ObjectFactory>*, void* p, size_t size, EnvironmentBridge*);
-void (*stateless_begin) (Bridge <ObjectFactory>*, Type <StatelessCreationFrame>::ABI_inout, EnvironmentBridge*);
-void* (*stateless_end) (Bridge <ObjectFactory>*, ABI_in <bool> success, EnvironmentBridge*);
-const void* (*stateless_copy) (Bridge <ObjectFactory>*, const void* p, size_t size, EnvironmentBridge*);
-Interface* (*create_reference_counter) (Bridge <ObjectFactory>*, Interface*, EnvironmentBridge*);
-Interface* (*create_servant) (Bridge <ObjectFactory>*, Interface*, EnvironmentBridge*);
-Interface* (*create_local_object) (Bridge <ObjectFactory>*, Interface*, Interface*, EnvironmentBridge*);
+void* (*memory_allocate) (Bridge <ObjectFactory>*, size_t size, Interface*);
+void (*memory_release) (Bridge <ObjectFactory>*, void* p, size_t size, Interface*);
+void (*stateless_begin) (Bridge <ObjectFactory>*, Type <StatelessCreationFrame>::ABI_inout, Interface*);
+void* (*stateless_end) (Bridge <ObjectFactory>*, ABI_in <bool> success, Interface*);
+const void* (*stateless_copy) (Bridge <ObjectFactory>*, const void* p, size_t size, Interface*);
+Interface* (*create_reference_counter) (Bridge <ObjectFactory>*, Interface*, Interface*);
+Interface* (*create_servant) (Bridge <ObjectFactory>*, Interface*, Interface*);
+Interface* (*create_local_object) (Bridge <ObjectFactory>*, Interface*, Interface*, Interface*);
 BRIDGE_END ()
 
 template <class T>

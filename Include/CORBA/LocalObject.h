@@ -18,7 +18,7 @@ BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)
 BRIDGE_EPV
-ABI_boolean (*non_existent) (Bridge <LocalObject>*, EnvironmentBridge*);
+ABI_boolean (*non_existent) (Bridge <LocalObject>*, Interface*);
 BRIDGE_END ()
 
 template <> /// We can obtain I_ptr <LocalObject> directly from servant pointer

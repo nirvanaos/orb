@@ -40,9 +40,9 @@ typedef I_out <IORequest> IORequest_out;
 
 
 BRIDGE_BEGIN (IORequest, CORBA_NIRVANA_REPOSITORY_ID ("IORequest"))
-Interface* (*marshaler) (Bridge <IORequest>*, EnvironmentBridge*);
+Interface* (*marshaler) (Bridge <IORequest>*, Interface*);
 void (*exception) (Bridge <IORequest>*, Type <Any>::ABI_inout);
-void (*success) (Bridge <IORequest>*, EnvironmentBridge*);
+void (*success) (Bridge <IORequest>*, Interface*);
 BRIDGE_END ()
 
 

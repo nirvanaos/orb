@@ -23,8 +23,8 @@ template <> class I_ptr <PortableServer::ServantBase>;
 BRIDGE_BEGIN (PortableServer::POA, PORTABLESERVER_REPOSITORY_ID ("POA"))
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV
-Type <String>::ABI_ret (*activate_object) (Bridge <PortableServer::POA>*, Interface*, EnvironmentBridge*);
-void (*deactivate_object) (Bridge <PortableServer::POA>*, Type <String>::ABI_in, EnvironmentBridge*);
+Type <String>::ABI_ret (*activate_object) (Bridge <PortableServer::POA>*, Interface*, Interface*);
+void (*deactivate_object) (Bridge <PortableServer::POA>*, Type <String>::ABI_in, Interface*);
 BRIDGE_END ()
 
 template <class T>

@@ -18,7 +18,7 @@ typedef I_var <DynamicServant> DynamicServant_var;
 typedef I_out <DynamicServant> DynamicServant_out;
 
 BRIDGE_BEGIN (DynamicServant, CORBA_NIRVANA_REPOSITORY_ID ("DynamicServant"))
-void (*_delete) (Bridge <DynamicServant>*, EnvironmentBridge*);
+void (*_delete) (Bridge <DynamicServant>*, Interface*);
 BRIDGE_END ()
 
 template <class T>

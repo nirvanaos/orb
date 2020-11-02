@@ -23,7 +23,7 @@ class TypeCodeWithMembersImpl :
 public:
 	using TypeCodeMemberCount <member_count>::_member_count;
 
-	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
+	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
 		if (index >= member_count) {
 			TypeCodeBase::set_Bounds (_env);
@@ -32,7 +32,7 @@ public:
 			return Members::members_ [index].name;
 	}
 
-	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
+	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
 		if (index >= member_count) {
 			TypeCodeBase::set_Bounds (_env);
@@ -57,13 +57,13 @@ class TypeCodeWithMembers <T, 0, Base> :
 public:
 	using TypeCodeMemberCount <0>::_member_count;
 
-	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
+	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
 		TypeCodeBase::set_Bounds (_env);
 		return nullptr;
 	}
 
-	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
+	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
 		TypeCodeBase::set_Bounds (_env);
 		return nullptr;

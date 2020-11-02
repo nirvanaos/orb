@@ -38,7 +38,7 @@ public:
 	}
 
 	// TypeCode
-	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static const char* _name (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return name_;
 	}

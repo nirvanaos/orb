@@ -14,12 +14,12 @@ class TypeCodeEnum :
 public:
 	using TypeCodeMemberCount <Type <E>::count_>::_member_count;
 
-	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static const char* _name (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return name_;
 	}
 
-	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env)
+	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
 		if (index >= Type <E>::count_) {
 			TypeCodeBase::set_Bounds (_env);

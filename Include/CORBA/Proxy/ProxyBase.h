@@ -88,7 +88,7 @@ public:
 	}
 
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, EnvironmentBridge* env)
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, Interface* env)
 	{
 		try {
 			if (!RepositoryId::compatible (Bridge <Base>::repository_id_, id))

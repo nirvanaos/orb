@@ -27,7 +27,7 @@ namespace Nirvana {
 // AbstractBase
 
 BRIDGE_BEGIN (AbstractBase, CORBA_REPOSITORY_ID ("AbstractBase"))
-	Interface* (*query_interface) (Bridge <AbstractBase>*, ABI_in <String>, EnvironmentBridge*);
+	Interface* (*query_interface) (Bridge <AbstractBase>*, ABI_in <String>, Interface*);
 BRIDGE_END ()
 
 template <class T>

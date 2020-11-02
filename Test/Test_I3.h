@@ -21,7 +21,7 @@ BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BASE_STRUCT_ENTRY (::Test::I1, Test_I1)
 BASE_STRUCT_ENTRY (::Test::I2, Test_I2)
 BRIDGE_EPV
-Long (*op3) (Bridge < ::Test::I3>*, Long p1, EnvironmentBridge*);
+Long (*op3) (Bridge < ::Test::I3>*, Long p1, Interface*);
 BRIDGE_END ()
 
 template <class T>

@@ -17,24 +17,24 @@ public:
 	static Boolean equal (TCKind tk, const char* id, TypeCode_ptr other);
 	static Boolean equivalent (TCKind tk, const char* id, TypeCode_ptr other);
 
-	static const char* _id (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
-	static const char* _name (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
-	static ULong _member_count (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
-	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
-	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
-	static const Any* _member_label (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
-	static Interface* _discriminator_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
-	static Long _default_index (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
-	static ULong _length (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
-	static Interface* _content_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
-	static UShort _fixed_digits (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
-	static Short _fixed_scale (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
-	static Visibility _member_visibility (Bridge <TypeCode>* _b, ULong index, EnvironmentBridge* _env);
-	static ValueModifier _type_modifier (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
-	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env);
+	static const char* _id (Bridge <TypeCode>* _b, Interface* _env);
+	static const char* _name (Bridge <TypeCode>* _b, Interface* _env);
+	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env);
+	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env);
+	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env);
+	static const Any* _member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env);
+	static Interface* _discriminator_type (Bridge <TypeCode>* _b, Interface* _env);
+	static Long _default_index (Bridge <TypeCode>* _b, Interface* _env);
+	static ULong _length (Bridge <TypeCode>* _b, Interface* _env);
+	static Interface* _content_type (Bridge <TypeCode>* _b, Interface* _env);
+	static UShort _fixed_digits (Bridge <TypeCode>* _b, Interface* _env);
+	static Short _fixed_scale (Bridge <TypeCode>* _b, Interface* _env);
+	static Visibility _member_visibility (Bridge <TypeCode>* _b, ULong index, Interface* _env);
+	static ValueModifier _type_modifier (Bridge <TypeCode>* _b, Interface* _env);
+	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, Interface* _env);
 
-	static void set_BadKind (EnvironmentBridge* env);
-	static void set_Bounds (EnvironmentBridge* env);
+	static void set_BadKind (Interface* env);
+	static void set_Bounds (Interface* env);
 };
 
 template <TCKind tk>
@@ -54,7 +54,7 @@ public:
 		return TypeCodeBase::equivalent (tk_, other);
 	}
 
-	static Type <TCKind>::ABI_ret _kind (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static Type <TCKind>::ABI_ret _kind (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return tk_;
 	}
@@ -77,7 +77,7 @@ public:
 		return TypeCodeBase::equivalent (tk, RepositoryType::repository_id_, other);
 	}
 
-	static const char* _id (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static const char* _id (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return RepositoryType::repository_id_;
 	}
@@ -89,7 +89,7 @@ class TypeCodeOps
 public:
 	typedef T Valtype;
 
-	static size_t __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static size_t __size (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return sizeof (Valtype);
 	}
@@ -124,7 +124,7 @@ public:
 		new (dst) Valtype (std::move (*reinterpret_cast <Valtype*> (src)));
 	}
 
-	static ABI_boolean __has_marshal (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static ABI_boolean __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return MarshalTraits <Valtype>::has_marshal;
 	}
@@ -162,35 +162,35 @@ class TypeCodeOps <void>
 public:
 	typedef void Valtype;
 
-	static size_t __size (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static size_t __size (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return 0;
 	}
 
-	static void __construct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, EnvironmentBridge* _env)
+	static void __construct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, Interface* _env)
 	{}
 
-	static void __destruct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, EnvironmentBridge* _env)
+	static void __destruct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, Interface* _env)
 	{}
 
-	static void __copy (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::ConstPointer src, EnvironmentBridge* _env)
+	static void __copy (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::ConstPointer src, Interface* _env)
 	{}
 
-	static void __move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::Pointer src, EnvironmentBridge* _env)
+	static void __move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::Pointer src, Interface* _env)
 	{}
 
-	static ABI_boolean __has_marshal (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static ABI_boolean __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return 0;
 	}
 
-	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* marshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
+	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{}
 
-	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* marshaler, ::Nirvana::Pointer dst, EnvironmentBridge* _env)
+	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{}
 
-	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* unmarshaler, ::Nirvana::Pointer, EnvironmentBridge* _env)
+	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* unmarshaler, ::Nirvana::Pointer, Interface* _env)
 	{}
 };
 
@@ -257,7 +257,7 @@ template <ULong bound = 0>
 class TypeCodeLength
 {
 public:
-	static ULong _length (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static ULong _length (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return bound;
 	}
@@ -268,7 +268,7 @@ template <const ::Nirvana::ImportInterfaceT <TypeCode>* ptc>
 class TypeCodeContentType
 {
 public:
-	static Interface* _content_type (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static Interface* _content_type (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		TypeCode_ptr tc (*ptc);
 		return (tc->_epv ().header.duplicate) (&tc, _env);
@@ -282,7 +282,7 @@ class TypeCodeMemberCount
 public:
 	static const ULong member_count_ = member_count;
 
-	static ULong _member_count (Bridge <TypeCode>* _b, EnvironmentBridge* _env)
+	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return member_count_;
 	}

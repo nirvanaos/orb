@@ -61,9 +61,9 @@ void construct (void* p)
 	new (p) E ();
 }
 
-extern void set_exception (I_ptr <EnvironmentBridge> environment, Exception::Code code, const Char* rep_id, const void* param) NIRVANA_NOEXCEPT;
-extern void set_exception (I_ptr <EnvironmentBridge> environment, const Exception& e) NIRVANA_NOEXCEPT;
-extern void set_unknown_exception (I_ptr <EnvironmentBridge> environment) NIRVANA_NOEXCEPT;
+extern void set_exception (Interface_ptr environment, Exception::Code code, const Char* rep_id, const void* param) NIRVANA_NOEXCEPT;
+extern void set_exception (Interface_ptr environment, const Exception& e) NIRVANA_NOEXCEPT;
+extern void set_unknown_exception (Interface_ptr environment) NIRVANA_NOEXCEPT;
 
 }
 } // namespace CORBA

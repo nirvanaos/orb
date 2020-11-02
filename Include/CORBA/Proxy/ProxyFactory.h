@@ -26,7 +26,7 @@ BRIDGE_BEGIN (ProxyFactory, CORBA_NIRVANA_REPOSITORY_ID ("ProxyFactory"))
 const InterfaceMetadata* metadata;
 Interface* (*create_proxy) (Bridge <ProxyFactory>*, 
 	Interface*, UShort interface_idx,
-	Interface**, EnvironmentBridge*);
+	Interface**, Interface*);
 BRIDGE_END ()
 
 template <class T>

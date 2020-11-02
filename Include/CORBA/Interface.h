@@ -52,8 +52,6 @@ private:
 Interface* interface_duplicate (Interface* obj);
 void interface_release (Nirvana::Interface* itf) NIRVANA_NOEXCEPT;
 
-typedef Interface EnvironmentBridge;
-
 }
 
 class Environment;

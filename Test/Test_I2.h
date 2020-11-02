@@ -18,7 +18,7 @@ namespace Nirvana {
 BRIDGE_BEGIN (::Test::I2, "IDL:Test/I2:1.0")
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV
-Long (*op2) (Bridge < ::Test::I2>*, Long p1, EnvironmentBridge*);
+Long (*op2) (Bridge < ::Test::I2>*, Long p1, Interface*);
 BRIDGE_END ()
 
 template <class T>
