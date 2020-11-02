@@ -19,7 +19,7 @@ enum CompletionStatus : uint32_t
 	COMPLETED_MAYBE
 };
 
-class SystemException : public Exception
+class NIRVANA_NOVTABLE SystemException : public Exception
 {
 public:
 	struct Data

@@ -13,7 +13,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <>
-class ServantPOA <LocalObject> :
+class NIRVANA_NOVTABLE ServantPOA <LocalObject> :
 	public virtual ServantPOA <PortableServer::ServantBase>,
 	public Skeleton <ServantPOA <LocalObject>, LocalObject>,
 	public LocalObjectLink

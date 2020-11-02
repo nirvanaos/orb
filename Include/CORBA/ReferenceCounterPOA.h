@@ -8,7 +8,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <>
-class ServantPOA <ReferenceCounter> :
+class NIRVANA_NOVTABLE ServantPOA <ReferenceCounter> :
 	public ServantPOA <DynamicServant>,
 	public InterfaceImpl <ServantPOA <ReferenceCounter>, ReferenceCounter>
 {

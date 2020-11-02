@@ -20,7 +20,7 @@ namespace Nirvana {
 //! \tparam Bases All base interfaces derived directly or indirectly.
 
 template <class Primary, class ... Bases>
-class ImplementationPseudoPOA :
+class NIRVANA_NOVTABLE ImplementationPseudoPOA :
 	public virtual ServantPOA <ReferenceCounter>,
 	public virtual ServantPOA <Bases>...,
 	public InterfaceImpl <ServantPOA <Primary>, Primary>

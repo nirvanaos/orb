@@ -10,7 +10,7 @@ namespace Nirvana {
 //! POA implementation of AbstractBase
 
 template <>
-class ServantPOA <AbstractBase> :
+class NIRVANA_NOVTABLE ServantPOA <AbstractBase> :
 	public ServantPOA <ReferenceCounter>,
 	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>
 {

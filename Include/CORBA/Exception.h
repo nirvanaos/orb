@@ -13,7 +13,7 @@ class TypeCode;
 typedef Nirvana::I_ptr <TypeCode> TypeCode_ptr;
 typedef Nirvana::I_var <TypeCode> TypeCode_var;
 
-class Exception
+class NIRVANA_NOVTABLE Exception
 {
 public:
 	typedef int_fast16_t Code;

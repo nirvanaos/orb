@@ -10,7 +10,7 @@ namespace Nirvana {
 
 // POA implementation of PortableServer::ServantBase
 template <>
-class ServantPOA <PortableServer::ServantBase> :
+class NIRVANA_NOVTABLE ServantPOA <PortableServer::ServantBase> :
 	public virtual ServantPOA <AbstractBase>,
 	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>,
 	public ServantBaseLink

@@ -15,7 +15,7 @@ namespace Nirvana {
 //! \tparam Bases All base interfaces derived directly.
 
 template <class Primary, class ... Bases>
-class ImplementationLocalPOA :
+class NIRVANA_NOVTABLE ImplementationLocalPOA :
 	public virtual ServantPOA <LocalObject>,
 	public virtual ServantPOA <Bases>...,
 	public InterfaceImpl <ServantPOA <Primary>, Primary>

@@ -11,7 +11,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <>
-class ServantPOA <DynamicServant> :
+class NIRVANA_NOVTABLE ServantPOA <DynamicServant> :
 	public ServantTraitsPOA,
 	public LifeCycleServant <ServantPOA <DynamicServant> >
 {
