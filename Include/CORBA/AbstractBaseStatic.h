@@ -2,7 +2,7 @@
 #define NIRVANA_ORB_ABSTRACTBASESTATIC_H_
 
 #include "AbstractBase_s.h"
-#include "LifeCycle.h"
+#include "LifeCycleStatic.h"
 #include "ServantStatic.h"
 
 namespace CORBA {

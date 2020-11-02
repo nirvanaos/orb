@@ -3,6 +3,7 @@
 
 #include <Nirvana/Nirvana.h>
 #include <Nirvana/Binder_s.h>
+#include <CORBA/LifeCycleRefCnt.h>
 #include <Core/ModuleInfo.h>
 #include <list>
 #include <map>

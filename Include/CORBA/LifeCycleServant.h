@@ -7,6 +7,7 @@
 #include "DynamicServant_s.h"
 #include "ServantImpl.h"
 #include "ServantMemory.h"
+#include "LifeCycleRefCnt.h"
 
 namespace CORBA {
 namespace Nirvana {

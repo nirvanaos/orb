@@ -6,6 +6,7 @@
 #define NIRVANA_ORB_IMPLEMENTATIONPSEUDOSTATIC_H_
 
 #include "ServantStatic.h"
+#include "LifeCycleStatic.h"
 
 namespace CORBA {
 namespace Nirvana {

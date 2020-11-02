@@ -10,6 +10,7 @@
 #include <Core/AtomicCounter.h>
 #include <Core/Synchronized.h>
 #include <CORBA/ImplementationPseudo.h>
+#include <CORBA/LifeCycleNoCopy.h>
 #include "ServantMarshaler.h"
 
 namespace CORBA {

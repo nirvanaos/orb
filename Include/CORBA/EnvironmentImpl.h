@@ -4,6 +4,7 @@
 #include "ServantImpl.h"
 #include "Environment_s.h"
 #include "SystemException.h"
+#include "set_exception.h"
 
 namespace CORBA {
 namespace Nirvana {

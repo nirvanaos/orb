@@ -3,6 +3,7 @@
 #define NIRVANA_ORB_CORE_COREIMPL_H_
 
 #include <CORBA/Server.h>
+#include <CORBA/LifeCycleNoCopy.h>
 
 namespace CORBA {
 namespace Nirvana {

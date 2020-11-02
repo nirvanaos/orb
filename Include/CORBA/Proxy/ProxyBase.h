@@ -5,6 +5,7 @@
 #include "../ServantImpl.h"
 #include "../ServantMemory.h"
 #include "../DynamicServant_s.h"
+#include "../LifeCycleRefCnt.h"
 #include "IOReference.h"
 
 namespace CORBA {
