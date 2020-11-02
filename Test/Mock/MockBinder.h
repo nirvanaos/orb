@@ -128,7 +128,8 @@ private:
 	{
 	public:
 		Module () :
-			ref_cnt_ (1)
+			ref_cnt_ (1),
+			module_entry_ (nullptr)
 		{}
 
 		const void* base_address ()
@@ -143,12 +144,14 @@ private:
 
 		void _remove_ref ()
 		{
-			++ref_cnt_;
+			ASSERT_GT (ref_cnt_, 1U);
+			--ref_cnt_;
 		}
 
 		std::vector <ExportedInterfaces::iterator> interfaces_;
 
 		CORBA::ULong ref_cnt_;
+		ImportInterface* module_entry_;
 	} module_;
 };
 

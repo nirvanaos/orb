@@ -46,7 +46,7 @@ MockBinder::~MockBinder ()
 	module_unbind (module_);
 	interface_release (CORBA::Nirvana::Core::g_root_POA.itf);
 	EXPECT_EQ (ref_cnt_, 1);
-//	EXPECT_EQ (module_.ref_cnt_, 1);
+	EXPECT_EQ (module_.ref_cnt_, 1);
 }
 
 void MockBinder::module_bind (Module& module)
@@ -60,34 +60,39 @@ void MockBinder::module_bind (Module& module)
 
 	try {
 
-		// Pass 0: Bind g_module
-		ImportInterface* module_entry = nullptr;
+		// Pass 1: Export pseudo objects and bind g_module.
 		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
-			if (OLF_IMPORT_INTERFACE == *it.cur ()) {
-				ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
-				if (!strcmp (ps->name, "Nirvana/g_module")) {
-					if (!CORBA::Nirvana::RepositoryId::compatible (Module::repository_id_, ps->interface_id))
-						throw_INV_OBJREF ();
-					ps->itf = &module_;
-					module_entry = ps;
-					break;
+			switch (*it.cur ()) {
+				case OLF_EXPORT_INTERFACE:
+				{
+					const ExportInterface* ps = reinterpret_cast <const ExportInterface*> (it.cur ());
+					add_export (module, ps->name, ps->itf);
 				}
+				break;
+
+				case OLF_IMPORT_INTERFACE:
+				{
+					ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
+					if (!strcmp (ps->name, "Nirvana/g_module")) {
+						if (!CORBA::Nirvana::RepositoryId::compatible (Module::repository_id_, ps->interface_id))
+							throw_INV_OBJREF ();
+						if (module.module_entry_)
+							throw_INITIALIZE (); // Duplicated g_module import.
+						ps->itf = &module_;
+						module.module_entry_ = ps;
+					}
+				}
+				break;
 			}
 		}
 
-		// Pass 1: Export pseudo objects.
-		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
-			if (OLF_EXPORT_INTERFACE  == *it.cur ()) {
-				const ExportInterface* ps = reinterpret_cast <const ExportInterface*> (it.cur ());
-				add_export (module, ps->name, ps->itf);
-			}
-		}
+		EXPECT_EQ (module.ref_cnt_, 1);
 
 		// Pass 2: Import pseudo objects.
 		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
 			if (OLF_IMPORT_INTERFACE  == *it.cur ()) {
 				ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
-				if (ps != module_entry)
+				if (ps != module.module_entry_)
 					ps->itf = &bind (ps->name, ps->interface_id)._retn ();
 			}
 		}
@@ -99,23 +104,25 @@ void MockBinder::module_bind (Module& module)
 		// Pass 3: Export objects.
 		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
 			switch (*it.cur ()) {
-				case OLF_EXPORT_OBJECT: {
+				case OLF_EXPORT_OBJECT:
+				{
 					ExportObject* ps = reinterpret_cast <ExportObject*> (it.cur ());
 					PortableServer::ServantBase_var core_obj = ObjectFactory::create_servant (TypeI <PortableServer::ServantBase>::in (ps->servant_base));
 					Object_ptr obj = AbstractBase_ptr (core_obj)->_query_interface <Object> ();
 					ps->core_object = &core_obj._retn ();
 					add_export (module, ps->name, obj);
-					break;
 				}
+				break;
 
-				case OLF_EXPORT_LOCAL: {
+				case OLF_EXPORT_LOCAL:
+				{
 					ExportLocal* ps = reinterpret_cast <ExportLocal*> (it.cur ());
 					LocalObject_ptr core_obj = ObjectFactory::create_local_object (TypeI <LocalObject>::in (ps->local_object), TypeI <AbstractBase>::in (ps->abstract_base));
 					Object_ptr obj = core_obj;
 					ps->core_object = &core_obj;
 					add_export (module, ps->name, obj);
-					break;
 				}
+				break;
 			}
 		}
 
@@ -144,11 +151,12 @@ void MockBinder::module_unbind (Module& module)
 	// Pass 1
 	for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
 		switch (*it.cur ()) {
-			case OLF_IMPORT_INTERFACE: {
+			case OLF_IMPORT_INTERFACE:
+			case OLF_IMPORT_OBJECT:
 				ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
-				CORBA::Nirvana::interface_release (ps->itf);
+				if (ps != module.module_entry_)
+					CORBA::Nirvana::interface_release (ps->itf);
 				break;
-			}
 		}
 	}
 
