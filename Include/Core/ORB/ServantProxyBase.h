@@ -9,6 +9,7 @@
 #include <CORBA/Proxy/IORequest_s.h>
 #include <Core/AtomicCounter.h>
 #include <Core/Synchronized.h>
+#include <CORBA/ImplementationPseudo.h>
 #include "ServantMarshaler.h"
 
 namespace CORBA {

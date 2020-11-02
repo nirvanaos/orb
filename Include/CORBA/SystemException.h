@@ -12,7 +12,7 @@
 
 namespace CORBA {
 
-enum CompletionStatus : ULong
+enum CompletionStatus : uint32_t
 {
 	COMPLETED_YES,
 	COMPLETED_NO,
@@ -24,7 +24,7 @@ class SystemException : public Exception
 public:
 	struct Data
 	{
-		ULong minor;
+		uint32_t minor;
 		CompletionStatus completed;
 	};
 
@@ -68,12 +68,14 @@ public:
 		return _downcast (ep);
 	}
 
-	static const Nirvana::ExceptionEntry* _get_exception_entry (String_in rep_id, int hint = Exception::EC_USER_EXCEPTION);
+	static const Nirvana::ExceptionEntry* _get_exception_entry (String_in rep_id, Code hint = Exception::EC_USER_EXCEPTION);
 	static const Nirvana::ExceptionEntry* _get_exception_entry (TypeCode_ptr tc);
+
+	static void _raise_code (Code ec);
 
 #define EXCEPTION_CODE(e) EC_##e,
 
-	enum
+	enum : Code
 	{
 		// System exception codes
 		SYSTEM_EXCEPTIONS (EXCEPTION_CODE)

@@ -52,7 +52,7 @@ void EnvironmentBase::exception (Exception* ex) NIRVANA_NOEXCEPT
 	data_.ptr = ex;
 }
 
-void EnvironmentBase::exception_set (Long code, String_in rep_id, const void* param, 
+void EnvironmentBase::exception_set (Short code, String_in rep_id, const void* param,
 	const ExceptionEntry* user_exceptions) NIRVANA_NOEXCEPT
 {
 	exception_free ();
@@ -73,7 +73,7 @@ void EnvironmentBase::exception_set (Long code, String_in rep_id, const void* pa
 				return;
 			code = Exception::EC_SYSTEM_EXCEPTION; // Will set UNKNOWN
 		}
-		const ExceptionEntry* ee = SystemException::_get_exception_entry (rep_id, code);
+		const ExceptionEntry* ee = SystemException::_get_exception_entry (rep_id, (Exception::Code)code);
 		assert (ee && ee->size <= sizeof (data_));
 		set_system (*ee, param);
 	}

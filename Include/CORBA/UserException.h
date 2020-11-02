@@ -7,7 +7,7 @@ namespace CORBA {
 
 class UserException : public Exception
 {
-	virtual Long __code () const NIRVANA_NOEXCEPT
+	virtual Code __code () const NIRVANA_NOEXCEPT
 	{
 		return EC_USER_EXCEPTION;
 	}

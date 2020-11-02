@@ -16,6 +16,7 @@ typedef Nirvana::I_var <TypeCode> TypeCode_var;
 class Exception
 {
 public:
+	typedef int_fast16_t Code;
 	typedef void Data;
 
 	virtual ~Exception ()
@@ -25,7 +26,7 @@ public:
 	virtual const Char* _rep_id () const NIRVANA_NOEXCEPT = 0;
 
 	// Nirvana specific
-	virtual Long __code () const NIRVANA_NOEXCEPT = 0;
+	virtual Code __code () const NIRVANA_NOEXCEPT = 0;
 	virtual TypeCode_ptr __type_code () const NIRVANA_NOEXCEPT = 0;
 
 	const void* __data () const NIRVANA_NOEXCEPT
@@ -38,7 +39,7 @@ public:
 		return this + 1;
 	}
 
-	enum {
+	enum : Code {
 		EC_NO_EXCEPTION = -3,
 		EC_USER_EXCEPTION = -2,
 		EC_SYSTEM_EXCEPTION = -1
@@ -60,7 +61,7 @@ void construct (void* p)
 	new (p) E ();
 }
 
-extern void set_exception (I_ptr <EnvironmentBridge> environment, Long code, const Char* rep_id, const void* param) NIRVANA_NOEXCEPT;
+extern void set_exception (I_ptr <EnvironmentBridge> environment, Exception::Code code, const Char* rep_id, const void* param) NIRVANA_NOEXCEPT;
 extern void set_exception (I_ptr <EnvironmentBridge> environment, const Exception& e) NIRVANA_NOEXCEPT;
 extern void set_unknown_exception (I_ptr <EnvironmentBridge> environment) NIRVANA_NOEXCEPT;
 

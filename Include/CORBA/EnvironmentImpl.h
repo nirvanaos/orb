@@ -12,7 +12,7 @@ class EnvironmentBase :
 	public Bridge < ::CORBA::Environment>
 {
 public:
-	void exception_set (Long code, String_in rep_id, const void* param,
+	void exception_set (Short code, String_in rep_id, const void* param,
 		const ExceptionEntry* user_exceptions = 0) NIRVANA_NOEXCEPT;
 
 	const Char* exception_id () const NIRVANA_NOEXCEPT;

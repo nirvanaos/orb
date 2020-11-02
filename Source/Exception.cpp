@@ -3,10 +3,9 @@
 #include <CORBA/Environment_c.h>
 
 namespace CORBA {
-
 namespace Nirvana {
 
-void set_exception (I_ptr <EnvironmentBridge> environment, Long code, const Char* rep_id, const void* param) NIRVANA_NOEXCEPT
+void set_exception (I_ptr <EnvironmentBridge> environment, Exception::Code code, const Char* rep_id, const void* param) NIRVANA_NOEXCEPT
 {
 	if (environment && RepositoryId::compatible (environment->_epv ().interface_id, Bridge < ::CORBA::Environment>::repository_id_)) {
 		Bridge < ::CORBA::Environment>* b = &static_cast <Bridge < ::CORBA::Environment>&> (*&environment);
@@ -25,6 +24,5 @@ void set_unknown_exception (I_ptr <EnvironmentBridge> environment) NIRVANA_NOEXC
 }
 
 }
-
 }
 

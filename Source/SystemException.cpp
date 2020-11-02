@@ -29,7 +29,7 @@ const SystemException::ExceptionEntry SystemException::exception_entries_ [Syste
 	SYSTEM_EXCEPTIONS (EXCEPTION_ENTRY)
 };
 
-const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (String_in rep_id, int hint)
+const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (String_in rep_id, Code hint)
 {
 	struct Pred
 	{
@@ -69,6 +69,16 @@ const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (TypeCode_p
 		return _get_exception_entry (tc->id ());
 	else
 		return nullptr;
+}
+
+void SystemException::_raise_code (Code ec)
+{
+	if (ec >= 0 && ec < KNOWN_SYSTEM_EXCEPTIONS) {
+		uint8_t buf [sizeof (SystemException)];
+		(exception_entries_ [ec].ee.construct) (buf);
+		((SystemException*)buf)->_raise ();
+	} else
+		throw UNKNOWN ();
 }
 
 }

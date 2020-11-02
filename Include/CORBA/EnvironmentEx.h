@@ -13,7 +13,7 @@ class EnvironmentEx :
 public:
 	EnvironmentEx () {}
 
-	void exception_set (Long code, const char* rep_id, const void* param)
+	void exception_set (Short code, const char* rep_id, const void* param)
 	{
 		EnvironmentBase::exception_set (code, rep_id, param, user_exceptions_);
 	}
