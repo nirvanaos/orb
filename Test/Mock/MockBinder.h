@@ -3,6 +3,7 @@
 
 #include <Nirvana/Nirvana.h>
 #include <Nirvana/Binder_s.h>
+#include <Nirvana/Module_s.h>
 #include <CORBA/LifeCycleRefCnt.h>
 #include <Core/ModuleInfo.h>
 #include <list>
@@ -79,7 +80,7 @@ private:
 		static const size_t command_sizes_ [OLF_IMPORT_OBJECT];
 	};
 
-	struct Module;
+	class Module;
 	
 	void module_bind (Module& module);
 	void module_unbind (Module& module);
@@ -120,9 +121,34 @@ private:
 	typedef std::map <NameKey, CORBA::Nirvana::Interface_ptr> ExportedInterfaces;
 	ExportedInterfaces exported_interfaces_;
 
-	struct Module : Core::ModuleInfo
+	class Module : 
+		public CORBA::Nirvana::Servant <Module, ::Nirvana::Module>,
+		public CORBA::Nirvana::LifeCycleRefCnt <Module>,
+		public Core::ModuleInfo
 	{
+	public:
+		Module () :
+			ref_cnt_ (1)
+		{}
+
+		const void* base_address ()
+		{
+			return Core::ModuleInfo::base_address;
+		}
+
+		void _add_ref ()
+		{
+			++ref_cnt_;
+		}
+
+		void _remove_ref ()
+		{
+			++ref_cnt_;
+		}
+
 		std::vector <ExportedInterfaces::iterator> interfaces_;
+
+		CORBA::ULong ref_cnt_;
 	} module_;
 };
 

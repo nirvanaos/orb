@@ -46,6 +46,7 @@ MockBinder::~MockBinder ()
 	module_unbind (module_);
 	interface_release (CORBA::Nirvana::Core::g_root_POA.itf);
 	EXPECT_EQ (ref_cnt_, 1);
+//	EXPECT_EQ (module_.ref_cnt_, 1);
 }
 
 void MockBinder::module_bind (Module& module)
@@ -59,26 +60,35 @@ void MockBinder::module_bind (Module& module)
 
 	try {
 
-		// Pass 1: Export pseudo objects.
+		// Pass 0: Bind g_module
+		ImportInterface* module_entry = nullptr;
 		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
-			switch (*it.cur ()) {
-				case OLF_EXPORT_INTERFACE:
-				{
-					const ExportInterface* ps = reinterpret_cast <const ExportInterface*> (it.cur ());
-					add_export (module, ps->name, ps->itf);
+			if (OLF_IMPORT_INTERFACE == *it.cur ()) {
+				ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
+				if (!strcmp (ps->name, "Nirvana/g_module")) {
+					if (!CORBA::Nirvana::RepositoryId::compatible (Module::repository_id_, ps->interface_id))
+						throw_INV_OBJREF ();
+					ps->itf = &module_;
+					module_entry = ps;
 					break;
 				}
 			}
 		}
 
+		// Pass 1: Export pseudo objects.
+		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
+			if (OLF_EXPORT_INTERFACE  == *it.cur ()) {
+				const ExportInterface* ps = reinterpret_cast <const ExportInterface*> (it.cur ());
+				add_export (module, ps->name, ps->itf);
+			}
+		}
+
 		// Pass 2: Import pseudo objects.
 		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
-			switch (*it.cur ()) {
-				case OLF_IMPORT_INTERFACE: {
-					ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
+			if (OLF_IMPORT_INTERFACE  == *it.cur ()) {
+				ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
+				if (ps != module_entry)
 					ps->itf = &bind (ps->name, ps->interface_id)._retn ();
-					break;
-				}
 			}
 		}
 
@@ -111,12 +121,9 @@ void MockBinder::module_bind (Module& module)
 
 		// Pass 4: Import objects.
 		for (Iterator it (module.olf_section, module.olf_size); !it.end (); it.next ()) {
-			switch (*it.cur ()) {
-				case OLF_IMPORT_OBJECT: {
-					ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
-					ps->itf = &bind (ps->name, ps->interface_id)._retn ();
-					break;
-				}
+			if (OLF_IMPORT_OBJECT  == *it.cur ()) {
+				ImportInterface* ps = reinterpret_cast <ImportInterface*> (it.cur ());
+				ps->itf = &bind (ps->name, ps->interface_id)._retn ();
 			}
 		}
 	} catch (...) {
