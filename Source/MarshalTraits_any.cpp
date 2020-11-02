@@ -85,7 +85,7 @@ void MarshalTraits <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, 
 			psrc = src.small_pointer ();
 			tc->_unmarshal (psrc, unmarshaler, pdst);
 		}
-		dst.set_type (tc._retn ());
+		dst.set_type (std::move (tc));
 	}
 }
 

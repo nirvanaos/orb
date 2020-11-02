@@ -221,6 +221,7 @@ private:
 	void copy_from (const Any& src);
 	void* prepare (TypeCode_ptr tc);
 	void set_type (TypeCode_ptr tc);
+	void set_type (TypeCode_var&& tc);
 
 	// these functions are private and not implemented
 	// hiding these causes compile-time errors for

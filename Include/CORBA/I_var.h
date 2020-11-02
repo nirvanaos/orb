@@ -17,7 +17,7 @@ public:
 		p_ (nullptr)
 	{}
 
-	I_var (I_ptr <I> p) NIRVANA_NOEXCEPT :
+	I_var (const I_ptr <I>& p) NIRVANA_NOEXCEPT :
 		p_ (p.p_)
 	{}
 
@@ -36,7 +36,7 @@ public:
 		interface_release (p_);
 	}
 
-	I_var& operator = (I_ptr <I> p) NIRVANA_NOEXCEPT
+	I_var& operator = (const I_ptr <I>& p) NIRVANA_NOEXCEPT
 	{
 		reset (p.p_);
 		return *this;
