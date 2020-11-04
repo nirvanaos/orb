@@ -40,6 +40,7 @@ public:
 	{
 		uint_least16_t major, minor;
 
+		Version () {}
 		Version (const Char* sver);
 
 		int compare (const Version& rhs) const
