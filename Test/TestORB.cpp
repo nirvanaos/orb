@@ -30,8 +30,8 @@ TEST_F (TestORB, RepositoryId)
 	EXPECT_FALSE (CORBA::Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/other:1.0"));
 	EXPECT_FALSE (CORBA::Nirvana::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "aaa/bbb/type:1.0"));
 
-	EXPECT_LT (CORBA::Nirvana::RepositoryId::compare (::Test::I1::repository_id_, size (::Test::I1::repository_id_),
-		::Test::I3::repository_id_, size (::Test::I3::repository_id_)), 0);
+	EXPECT_LT (CORBA::Nirvana::RepositoryId::compare (::Test::I1::repository_id_, size (::Test::I1::repository_id_) - 1,
+		::Test::I3::repository_id_, size (::Test::I3::repository_id_) - 1), 0);
 }
 
 TEST_F (TestORB, SystemException)

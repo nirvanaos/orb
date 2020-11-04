@@ -34,15 +34,13 @@ public:
 	static int compare (const Char* current, size_t current_len, String_in requested);
 	static int compare (const Char* current, size_t current_len, const Char* req_p, size_t req_l);
 
-private:
-	static bool is_type (const Char* id, const Char* prefix, size_t cc);
 	static const Char* version (const Char* id, const Char* end);
-	static const Char* minor_version (const Char* ver, const Char* end);
-	static ULong minor_number (const Char* minor_version);
-	
+
 	struct Version
 	{
-		ULong major, minor;
+		uint_least16_t major, minor;
+
+		Version (const Char* sver);
 
 		int compare (const Version& rhs) const
 		{
@@ -51,10 +49,24 @@ private:
 				cmp = minor - rhs.minor;
 			return cmp;
 		}
+
+		bool operator < (const Version& rhs) const
+		{
+			return compare (rhs) < 0;
+		}
+
+		bool compatible (const Version& requested) const
+		{
+			return major == requested.major && minor >= requested.minor;
+		}
 	};
 
-	static bool get_version (const Char* sver, Version&);
-
+private:
+	static bool is_type (const Char* id, const Char* prefix, size_t prefix_l);
+	static const Char* minor_version (const Char* ver, const Char* end);
+	static uint_least16_t minor_number (const Char* minor_version);
+	static uint_least16_t strtou16 (const Char* ver, const Char*& end);
+	
 	static int lex_compare (const Char* lhs, const Char* lhs_end, const Char* rhs, const Char* rhs_end);
 
 private:

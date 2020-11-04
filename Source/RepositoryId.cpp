@@ -1,4 +1,5 @@
 #include <Nirvana/NirvanaBase.h>
+#include <Nirvana/throw_exception.h>
 #include <CORBA/RepositoryId.h>
 #include <CORBA/String.h>
 #include <string.h>
@@ -10,6 +11,17 @@ namespace Nirvana {
 using namespace std;
 
 const Char RepositoryId::IDL_ [] = "IDL";
+
+RepositoryId::Version::Version (const Char* sver) :
+	major (0),
+	minor (0)
+{
+	if (':' == *sver) {
+		const Char* end;
+		major = strtou16 (sver + 1, end);
+		minor = minor_number (end);
+	}
+}
 
 RepositoryId::CheckResult RepositoryId::check (String_in current, String_in requested)
 {
@@ -46,16 +58,20 @@ RepositoryId::CheckResult RepositoryId::check (const Char* cur, size_t cur_l, co
 	return (cur_l == req_l && equal (cur, cur + cur_l, req)) ? COMPATIBLE : OTHER_INTERFACE;
 }
 
-bool RepositoryId::is_type (const Char* id, const Char* prefix, size_t cc)
+bool RepositoryId::is_type (const Char* id, const Char* prefix, size_t prefix_l)
 {
-	return equal (id, id + cc, prefix) && (id [cc] == ':');
+	return equal (id, id + prefix_l, prefix) && (id [prefix_l] == ':');
 }
 
 const Char* RepositoryId::version (const Char* begin, const Char* end)
 {
 	for (const Char* p = end - 1; p > begin; --p) {
-		if (':' == *p)
+		Char c = *p;
+		assert (c); // Don't forget to exclude null terminating character from the length.
+		if (':' == c)
 			return p;
+		else if (c != '.' && !('0' <= c && c <= '9'))
+			break;
 	}
 	return end;
 }
@@ -67,26 +83,34 @@ const Char* RepositoryId::minor_version (const Char* ver, const Char* end)
 	return end;
 }
 
-ULong RepositoryId::minor_number (const Char* minor_version)
+uint_least16_t RepositoryId::strtou16 (const Char* ver, const Char*& end)
 {
-	if ('.' == *minor_version) {
-		Char* end;
-		ULong ret = strtoul (minor_version + 1, &end, 10);
-		assert (!*end);
-		return ret;
-	} else
-		return 0;
+	uint_least16_t n = 0;
+	for (Char c; c = *ver; ++ver) {
+		if ('0' <= c && c <= '9') {
+			if (n > USHRT_MAX / 10)
+				::Nirvana::throw_INV_OBJREF ();
+			n *= 10;
+			uint_least16_t d = c - '0';
+			if (d > USHRT_MAX - n)
+				::Nirvana::throw_INV_OBJREF ();
+			n += d;
+		} else
+			break;
+	}
+	end = ver;
+	return n;
 }
 
-bool RepositoryId::get_version (const Char* sver, Version& ver)
+uint_least16_t RepositoryId::minor_number (const Char* minor_version)
 {
-	if (':' == *sver) {
-		Char* end;
-		ver.major = strtoul (sver + 1, &end, 10);
-		ver.minor = minor_number (end);
-		return true;
-	}
-	return false;
+	if ('.' == *minor_version) {
+		const Char* end;
+		uint_least16_t n = strtou16 (minor_version + 1, end);
+		assert (!*end || '.' == *end);
+		return n;
+	} else
+		return 0;
 }
 
 int RepositoryId::compare (const Char* cur, size_t cur_l, String_in requested)
@@ -108,16 +132,8 @@ int RepositoryId::compare (const Char* cur, size_t cur_l, const Char* req, size_
 		const Char* cur_ver = version (cur, cur_end);
 		const Char* req_ver = version (req, req_end);
 		int ret = lex_compare (cur, cur_ver, req, req_ver);
-		if (!ret) {
-			Version vcur, vreq;
-			if (!get_version (cur_ver, vcur)) {
-				if (get_version (req_ver, vreq))
-					ret = -1;
-			} else if (get_version (req_ver, vreq))
-				ret = vcur.compare (vreq);
-			else
-				ret = 1;
-		}
+		if (!ret)
+			ret = Version (cur_ver).compare (Version (req_ver));
 		return ret;
 	} else
 		return lex_compare (cur, cur_end, req, req_end);
