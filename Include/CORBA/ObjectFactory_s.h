@@ -63,18 +63,6 @@ protected:
 		return 0;
 	}
 
-	static const void* _stateless_copy (Bridge <ObjectFactory>* _b, const void* p, size_t size, Interface* _env)
-	{
-		try {
-			return S::_implementation (_b).stateless_copy (p, size);
-		} catch (const Exception & e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
-		return 0;
-	}
-
 	static Interface* _create_reference_counter (Bridge <ObjectFactory>* _b, Interface* dynamic, Interface* _env)
 	{
 		try {
@@ -124,7 +112,6 @@ const Bridge <ObjectFactory>::EPV Skeleton <S, ObjectFactory>::epv_ = {
 		S::_memory_release,
 		S::_stateless_begin,
 		S::_stateless_end,
-		S::_stateless_copy,
 		S::_create_reference_counter,
 		S::_create_servant,
 		S::_create_local_object

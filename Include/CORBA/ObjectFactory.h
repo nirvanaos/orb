@@ -31,7 +31,6 @@ void* (*memory_allocate) (Bridge <ObjectFactory>*, size_t size, Interface*);
 void (*memory_release) (Bridge <ObjectFactory>*, void* p, size_t size, Interface*);
 void (*stateless_begin) (Bridge <ObjectFactory>*, Type <StatelessCreationFrame>::ABI_inout, Interface*);
 void* (*stateless_end) (Bridge <ObjectFactory>*, ABI_in <bool> success, Interface*);
-const void* (*stateless_copy) (Bridge <ObjectFactory>*, const void* p, size_t size, Interface*);
 Interface* (*create_reference_counter) (Bridge <ObjectFactory>*, Interface*, Interface*);
 Interface* (*create_servant) (Bridge <ObjectFactory>*, Interface*, Interface*);
 Interface* (*create_local_object) (Bridge <ObjectFactory>*, Interface*, Interface*, Interface*);
@@ -59,10 +58,7 @@ public:
 	void memory_release (void* p, size_t size);
 
 	void stateless_begin (T_inout <StatelessCreationFrame> scb);
-
 	void* stateless_end (T_in <bool> success);
-
-	const void* stateless_copy (const void* src, size_t size);
 
 	ReferenceCounter_var create_reference_counter (I_in <DynamicServant> dynamic);
 	PortableServer::ServantBase_var create_servant (I_in <PortableServer::ServantBase> impl);
@@ -103,16 +99,6 @@ void* Client <T, ObjectFactory>::stateless_end (T_in <bool> success)
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
 	void* _ret = (_b._epv ().epv.stateless_end) (&_b, &success, &_env);
-	_env.check ();
-	return _ret;
-}
-
-template <class T>
-const void* Client <T, ObjectFactory>::stateless_copy (const void* src, size_t size)
-{
-	Environment _env;
-	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
-	const void* _ret = (_b._epv ().epv.stateless_copy) (&_b, src, size, &_env);
 	_env.check ();
 	return _ret;
 }
