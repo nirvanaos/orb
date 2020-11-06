@@ -70,8 +70,15 @@ public:
 
 	static const Nirvana::ExceptionEntry* _get_exception_entry (String_in rep_id, Code hint = Exception::EC_USER_EXCEPTION);
 	static const Nirvana::ExceptionEntry* _get_exception_entry (TypeCode_ptr tc);
+	
+	static const Nirvana::ExceptionEntry* _get_exception_entry (Code code)
+	{
+		if (code < 0 || code >= KNOWN_SYSTEM_EXCEPTIONS)
+			code = EC_UNKNOWN;
+		return &exception_entries_ [code].ee;
+	}
 
-	static void _raise_code (Code ec);
+	static void _raise_by_code (Code ec);
 
 #define EXCEPTION_CODE(e) EC_##e,
 

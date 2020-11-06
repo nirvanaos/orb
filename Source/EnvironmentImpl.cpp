@@ -56,24 +56,28 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, const void* p
 	const ExceptionEntry* user_exceptions) NIRVANA_NOEXCEPT
 {
 	exception_free ();
-	if (code > Exception::EC_NO_EXCEPTION && !static_cast <const String&> (rep_id).empty ()) {
-		if (Exception::EC_USER_EXCEPTION == code && user_exceptions) {
-			if (RepositoryId::compatible (UnknownUserException::repository_id_, rep_id) && param) {
-				const Any* pa = (const Any*)param;
-				TypeCode_ptr tc = pa->type ();
-				if (tc) {
-					try {
-						assert (tc->kind () == tk_except);
-						if (tc->kind () == tk_except && set_user (tc->id (), pa->data (), user_exceptions))
-							return;
-					} catch (...) {
+	if (code > Exception::EC_NO_EXCEPTION) {
+		const ExceptionEntry* ee;
+		if (!static_cast <const String&> (rep_id).empty ()) {
+			if (Exception::EC_USER_EXCEPTION == code && user_exceptions) {
+				if (RepositoryId::compatible (UnknownUserException::repository_id_, rep_id) && param) {
+					const Any* pa = (const Any*)param;
+					TypeCode_ptr tc = pa->type ();
+					if (tc) {
+						try {
+							assert (tc->kind () == tk_except);
+							if (tc->kind () == tk_except && set_user (tc->id (), pa->data (), user_exceptions))
+								return;
+						} catch (...) {
+						}
 					}
-				}
-			} else if (set_user (rep_id, param, user_exceptions))
-				return;
-			code = Exception::EC_SYSTEM_EXCEPTION; // Will set UNKNOWN
-		}
-		const ExceptionEntry* ee = SystemException::_get_exception_entry (rep_id, (Exception::Code)code);
+				} else if (set_user (rep_id, param, user_exceptions))
+					return;
+				code = Exception::EC_SYSTEM_EXCEPTION; // Will set UNKNOWN
+			}
+			ee = SystemException::_get_exception_entry (rep_id, (Exception::Code)code);
+		} else
+			ee = SystemException::_get_exception_entry (code);
 		assert (ee && ee->size <= sizeof (data_));
 		set_system (*ee, param);
 	}

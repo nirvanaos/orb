@@ -71,7 +71,7 @@ const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (TypeCode_p
 		return nullptr;
 }
 
-void SystemException::_raise_code (Code ec)
+void SystemException::_raise_by_code (Code ec)
 {
 	if (ec >= 0 && ec < KNOWN_SYSTEM_EXCEPTIONS) {
 		uint8_t buf [sizeof (SystemException)];
