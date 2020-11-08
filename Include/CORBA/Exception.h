@@ -5,6 +5,8 @@
 #define NIRVANA_ORB_EXCEPTION_H_
 
 #include "I_var.h"
+#include <CORBA/ABI_string.h>
+#include <exception>
 #include <new>
 
 namespace CORBA {
@@ -13,7 +15,7 @@ class TypeCode;
 typedef Nirvana::I_ptr <TypeCode> TypeCode_ptr;
 typedef Nirvana::I_var <TypeCode> TypeCode_var;
 
-class NIRVANA_NOVTABLE Exception
+class NIRVANA_NOVTABLE Exception : public std::exception
 {
 public:
 	typedef int_fast16_t Code;
@@ -77,14 +79,15 @@ extern void set_unknown_exception (Interface_ptr environment) NIRVANA_NOEXCEPT;
 #define DECLARE_EXCEPTION(E) public: E () {}\
 NIRVANA_DEFAULT_CONSTRUCTORS (E)\
 virtual void _raise () const { throw *this; }\
-virtual const ::CORBA::Char* _rep_id () const NIRVANA_NOEXCEPT { return repository_id_; }\
-static const ::CORBA::Char repository_id_ [];\
-virtual const ::CORBA::Char* _name () const NIRVANA_NOEXCEPT { return __name (); }\
-static constexpr const ::CORBA::Char* __name () NIRVANA_NOEXCEPT { return #E; }\
+virtual const char* _rep_id () const NIRVANA_NOEXCEPT { return repository_id_; }\
+static const char repository_id_ [];\
+virtual const char* _name () const NIRVANA_NOEXCEPT { return __name (); }\
+static constexpr const char* __name () NIRVANA_NOEXCEPT { return #E; }\
 virtual ::CORBA::TypeCode_ptr __type_code () const NIRVANA_NOEXCEPT;\
 static const E* _downcast (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT;\
 static E* _downcast (::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return const_cast <E*> (_downcast ((const ::CORBA::Exception*)ep)); }\
 static const E* _narrow (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return _downcast (ep); }\
-static E* _narrow (::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return _downcast (ep); }
+static E* _narrow (::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return _downcast (ep); }\
+virtual const char* what () const NIRVANA_NOEXCEPT { return __name (); }
 
 #endif

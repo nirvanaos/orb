@@ -12,6 +12,7 @@ namespace std {
 template <class C, class T, class A> class basic_string;
 template <class C> struct char_traits;
 template <class T> class allocator;
+template <typename C, class T> class basic_string <C, T, allocator <C> >;
 }
 
 namespace CORBA {
