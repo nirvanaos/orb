@@ -99,8 +99,8 @@ protected:
 		public LifeCycleNoCopy <Request>
 	{
 	public:
-		Request (const ServantProxyBase& proxy) :
-			proxy_ (proxy),
+		Request () :
+			sync_context_ (::Nirvana::Core::SynchronizationContext::current ()),
 			success_ (false)
 		{
 			exception_.reset ();
@@ -109,7 +109,7 @@ protected:
 		Marshal_ptr marshaler ()
 		{
 			if (!marshaler_)
-				marshaler_ = proxy_.create_marshaler ();
+				marshaler_ = (new ServantMarshaler (sync_context_))->marshaler ();
 			return marshaler_;
 		}
 
@@ -145,7 +145,7 @@ protected:
 		}
 
 	private:
-		const ServantProxyBase& proxy_;
+		::Nirvana::Core::Core_var <::Nirvana::Core::SynchronizationContext> sync_context_;
 		Marshal_var marshaler_;
 		ABI <Any> exception_;
 		bool success_;
@@ -171,7 +171,7 @@ public:
 			throw BAD_OPERATION ();
 		Unmarshal_var u = ServantMarshaler::unmarshaler (marshaler);
 		marshaler._retn ();
-		Request request (*this);
+		Request request;
 		{
 			::Nirvana::Core::Synchronized sync (get_sync_context (op));
 			(ie.operations.p [idx].invoke) (ie.implementation, &request._get_ptr (), in_params, &TypeI <Unmarshal>::C_inout (u), out_params);
