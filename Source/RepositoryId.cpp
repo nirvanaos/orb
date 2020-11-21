@@ -86,7 +86,7 @@ const Char* RepositoryId::minor_version (const Char* ver, const Char* end)
 uint_least16_t RepositoryId::strtou16 (const Char* ver, const Char*& end)
 {
 	uint_least16_t n = 0;
-	for (Char c; c = *ver; ++ver) {
+	for (Char c; (c = *ver); ++ver) {
 		if ('0' <= c && c <= '9') {
 			if (n > USHRT_MAX / 10)
 				::Nirvana::throw_INV_OBJREF ();

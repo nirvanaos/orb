@@ -5,7 +5,7 @@
 #define NIRVANA_ORB_EXCEPTION_H_
 
 #include "I_var.h"
-#include <CORBA/ABI_string.h>
+#include <CORBA/ABI_String.h>
 #include <exception>
 #include <new>
 
