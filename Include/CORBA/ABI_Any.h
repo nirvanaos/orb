@@ -8,6 +8,7 @@
 
 #include <Nirvana/NirvanaBase.h>
 #include "Type_forward.h"
+#include <assert.h>
 
 namespace CORBA {
 

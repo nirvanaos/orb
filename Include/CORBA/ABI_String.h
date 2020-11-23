@@ -7,6 +7,7 @@
 
 #include <Nirvana/NirvanaBase.h>
 #include "basic_types.h"
+#include <assert.h>
 
 namespace std {
 template <class C, class T, class A> class basic_string;

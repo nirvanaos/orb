@@ -3,6 +3,7 @@
 
 #include "Bridge.h"
 #include <Nirvana/throw_exception.h>
+#include <assert.h>
 
 namespace CORBA {
 namespace Nirvana {
