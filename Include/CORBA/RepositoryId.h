@@ -60,7 +60,14 @@ public:
 		{
 			return major == requested.major && minor >= requested.minor;
 		}
+
+		bool operator == (const Version& rhs) const
+		{
+			return major == rhs.major && minor == rhs.minor;
+		}
 	};
+
+	static int lex_compare (const Char* lhs, const Char* lhs_end, const Char* rhs, const Char* rhs_end);
 
 private:
 	static bool is_type (const Char* id, const Char* prefix, size_t prefix_l);
@@ -68,8 +75,6 @@ private:
 	static uint_least16_t minor_number (const Char* minor_version);
 	static uint_least16_t strtou16 (const Char* ver, const Char*& end);
 	
-	static int lex_compare (const Char* lhs, const Char* lhs_end, const Char* rhs, const Char* rhs_end);
-
 private:
 	static const Char IDL_ [];
 };

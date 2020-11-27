@@ -46,6 +46,16 @@ public:
 	}
 #endif
 
+	StringBase (const C* p, size_t cc)
+	{
+		if (p && cc) {
+			this->large_pointer (const_cast <C*> (p));
+			this->large_size (cc);
+			this->allocated (0);
+		} else
+			this->reset ();
+	}
+
 	StringBase (int i)
 	{
 		assert (i == 0);
