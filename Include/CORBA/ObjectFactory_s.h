@@ -26,7 +26,7 @@ protected:
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return 0;
+		return nullptr;
 	}
 
 	static void _memory_release (Bridge <ObjectFactory>* _b, void* p, size_t size, Interface* _env)
@@ -60,7 +60,7 @@ protected:
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return 0;
+		return nullptr;
 	}
 
 	static Interface* _create_reference_counter (Bridge <ObjectFactory>* _b, Interface* dynamic, Interface* _env)
@@ -72,7 +72,7 @@ protected:
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return 0;
+		return nullptr;
 	}
 
 	static Interface* _create_servant (Bridge <ObjectFactory>* _b, Interface* impl, Interface* _env)
@@ -84,7 +84,7 @@ protected:
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return 0;
+		return nullptr;
 	}
 
 	static Interface* _create_local_object (Bridge <ObjectFactory>* _b, Interface* impl, Interface* ab, Interface* _env)
@@ -96,7 +96,7 @@ protected:
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return 0;
+		return nullptr;
 	}
 };
 
