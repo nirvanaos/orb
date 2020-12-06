@@ -6,6 +6,9 @@ using namespace std;
 
 namespace TestORB {
 
+using namespace CORBA;
+using namespace Test;
+
 int Instance::count_ = 0;
 
 void test_interface (I1_ptr p)

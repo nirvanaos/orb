@@ -1,8 +1,8 @@
 #include "I1.h"
 
-using namespace Test;
+namespace Test {
 
-namespace TestORB {
+using namespace CORBA;
 
 #ifndef TEST_NO_STATIC
 const char StaticI1::constant_name[] = "Test/g_I1";

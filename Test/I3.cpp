@@ -1,6 +1,6 @@
 #include "I3.h"
 
-namespace TestORB {
+namespace Test {
 
 #ifndef TEST_NO_STATIC
 const char StaticI3::constant_name[] = "Test/g_I3";

@@ -3,6 +3,7 @@
 #include <CORBA/PortableServer.h>
 
 using namespace std;
+using namespace Test;
 
 /*
 void must_not_compile1 (const Test::I3_var& var)
