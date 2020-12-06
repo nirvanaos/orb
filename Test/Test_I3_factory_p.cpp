@@ -41,6 +41,8 @@ struct ProxyTraits <::Test::I3_factory>
 	}
 };
 
+IMPLEMENT_PROXY_FACTORY (::Test, I3_factory);
+
 template <>
 class Proxy <::Test::I3_factory> :
 	public ProxyBase <::Test::I3_factory>
@@ -77,5 +79,13 @@ const Char* const ProxyTraits <::Test::I3_factory>::interfaces_ [] = {
 	::Test::I3_factory::repository_id_
 };
 
+template <>
+const InterfaceMetadata ProxyFactoryImpl <::Test::I3_factory>::metadata_ = {
+	{ProxyTraits <::Test::I3_factory>::interfaces_, countof (ProxyTraits <::Test::I3_factory>::interfaces_)},
+	{ProxyTraits <::Test::I3_factory>::operations_, countof (ProxyTraits <::Test::I3_factory>::operations_)}
+};
+
 }
 }
+
+NIRVANA_EXPORT (_exp_Test_I3_factory_ProxyFactory, Test::I3_factory::repository_id_, CORBA::AbstractBase, CORBA::Nirvana::ProxyFactoryImpl <Test::I3_factory>)
