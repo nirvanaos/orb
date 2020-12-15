@@ -2,14 +2,12 @@
 #include "ImplI1.h"
 #include "Test_I3_s.h"
 #include "Test_I3_factory_s.h"
-#include "TestORB.h"
 
 namespace Test {
 
 // Tied implementation
 
 class TiedI3 :
-	public TestORB::Instance,
 	public ImplI1
 {
 public:
@@ -47,7 +45,7 @@ class I3_tied :
 public:
 	static I3_var create (CORBA::Long addendum)
 	{
-		return PortableServer::Servant_var <POA_Test::I3_tie <TiedI3> > (new POA_Test::I3_tie <TiedI3> (new TiedI3 (TestORB::MAGIC_CONST)))->_this ();
+		return PortableServer::Servant_var <POA_Test::I3_tie <TiedI3> > (new POA_Test::I3_tie <TiedI3> (new TiedI3 (addendum)))->_this ();
 	}
 };
 
@@ -68,7 +66,7 @@ class I3_tied_derived :
 public:
 	static I3_var create (CORBA::Long addendum)
 	{
-		return PortableServer::Servant_var <TiedDerivedI3> (new TiedDerivedI3 (TestORB::MAGIC_CONST))->_this ();
+		return PortableServer::Servant_var <TiedDerivedI3> (new TiedDerivedI3 (addendum))->_this ();
 	}
 };
 

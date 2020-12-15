@@ -7,29 +7,6 @@
 
 namespace TestORB {
 
-class Instance
-{
-public:
-	static int count ()
-	{
-		return count_;
-	}
-
-protected:
-	Instance ()
-	{
-		++count_;
-	}
-
-	~Instance ()
-	{
-		--count_;
-	}
-
-public:
-	static int count_;
-};
-
 const long MAGIC_CONST = 1963;
 
 class TestORB :
@@ -51,14 +28,12 @@ protected:
 		// Code here will be called immediately after the constructor (right
 		// before each test).
 		Base::SetUp ();
-		Instance::count_ = 0;
 	}
 
 	virtual void TearDown ()
 	{
 		// Code here will be called immediately after each test (right
 		// before the destructor).
-		EXPECT_EQ (Instance::count (), 0);
 		Base::TearDown ();
 	}
 

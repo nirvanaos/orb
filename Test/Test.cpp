@@ -15,8 +15,6 @@ namespace TestORB {
 using namespace CORBA;
 using namespace Test;
 
-int Instance::count_ = 0;
-
 void test_interface (I1_ptr p)
 {
 	ASSERT_FALSE (is_nil (p));
@@ -61,8 +59,6 @@ void test_interface (I1_ptr p)
 		EXPECT_STREQ (inout.c_str (), "in string");
 	}
 
-	int icnt = Instance::count ();
-
 	{
 		I1_var out, inout (I1::_duplicate (p));
 		I1_var ret = p->object_op (p, out, inout);
@@ -70,8 +66,6 @@ void test_interface (I1_ptr p)
 		EXPECT_TRUE (inout && inout->_is_equivalent (p));
 		EXPECT_TRUE (ret && ret->_is_equivalent (p));
 	}
-
-	ASSERT_EQ (Instance::count (), icnt);
 
 	{
 		vector <Long> out = { 1, 2, 3, 4 }, inout = { 5, 6, 7, 8 };

@@ -10,7 +10,7 @@ class I1_portable :
 public:
 	static I1_var create (CORBA::Long addendum)
 	{
-		return PortableServer::Servant_var <PortableI1> (new PortableI1 (TestORB::MAGIC_CONST))->_this ();
+		return PortableServer::Servant_var <PortableI1> (new PortableI1 (addendum))->_this ();
 	}
 };
 

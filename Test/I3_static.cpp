@@ -9,7 +9,6 @@ namespace Test {
 
 class I3_static :
 	public CORBA::Nirvana::ServantStatic <I3_static, I3>,
-	public TestORB::Instance,
 	public ImplI1
 {
 public:

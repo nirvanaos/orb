@@ -10,7 +10,7 @@ class I1_dynamic :
 public:
 	static I1_var create (CORBA::Long addendum)
 	{
-		return PortableServer::Servant_var <DynamicI1> (new DynamicI1 (TestORB::MAGIC_CONST))->_this ();
+		return PortableServer::Servant_var <DynamicI1> (new DynamicI1 (addendum))->_this ();
 	}
 };
 

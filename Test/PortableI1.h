@@ -3,7 +3,6 @@
 
 #include "ImplI1.h"
 #include "Test_I1_s.h"
-#include "TestORB.h"
 
 namespace Test {
 
@@ -11,7 +10,6 @@ namespace Test {
 
 class PortableI1 :
 	public POA_Test::I1,
-	public TestORB::Instance,
 	public ImplI1
 {
 public:

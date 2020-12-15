@@ -4,7 +4,7 @@
 #include <Nirvana/static.h>
 #include "Test_I1_factory.h"
 
-NIRVANA_STATIC ((Test, I1_tied), Test::I1_factory)
-NIRVANA_STATIC ((Test, I1_tied_derived), Test::I1_factory)
+NIRVANA_STATIC ((Test, I1_tied), ::Test::I1_factory)
+NIRVANA_STATIC ((Test, I1_tied_derived), ::Test::I1_factory)
 
 #endif

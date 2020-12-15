@@ -2,6 +2,7 @@
 #include "PortableI1.h"
 #include "DynamicI3.h"
 #include "PortableI3.h"
+#include "TestORB.h"
 
 using namespace std;
 using namespace Test;

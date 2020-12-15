@@ -4,6 +4,6 @@
 #include <Nirvana/static.h>
 #include "Test_I3.h"
 
-NIRVANA_STATIC ((Test, I3_static), Test::I3)
+NIRVANA_STATIC ((Test, I3_static), ::Test::I3)
 
 #endif
