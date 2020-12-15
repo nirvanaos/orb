@@ -64,11 +64,12 @@ private:
 		return static_cast <PortableServer::ServantBase*> (export_struct_.core_object);
 	}
 
+public:
 	static NIRVANA_OLF_SECTION const ::Nirvana::ExportObject export_struct_;
 };
 
 template <class S> NIRVANA_OLF_SECTION
-const ::Nirvana::ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_{ ::Nirvana::OLF_EXPORT_OBJECT, S::constant_name
+const ::Nirvana::ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_{ ::Nirvana::OLF_EXPORT_OBJECT, ::Nirvana::StaticId <S>::static_id_
 , STATIC_BRIDGE (PortableServer::ServantBase, S) };
 
 }

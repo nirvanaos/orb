@@ -135,7 +135,11 @@ void MockBinder::module_bind (Module& module)
 		}
 	} catch (...) {
 		module_unbind (module);
+#ifdef _WIN32
 		VirtualProtect ((void*)module.olf_section, module.olf_size, protection, &protection);
+#else
+		mprotect (olf_section, module.olf_size, PROT_READ);
+#endif
 		throw;
 	}
 
@@ -201,7 +205,7 @@ Interface_var MockBinder::bind (const std::string& name, const std::string& iid)
 			AbstractBase_ptr ab = AbstractBase::_nil ();
 			if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, Object::repository_id_))
 				ab = Object_ptr (static_cast <Object*> (itf));
-			if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, AbstractBase::repository_id_))
+			else if (::CORBA::Nirvana::RepositoryId::compatible (itf_id, AbstractBase::repository_id_))
 				ab = static_cast <AbstractBase*> (itf);
 			else
 				throw INV_OBJREF ();

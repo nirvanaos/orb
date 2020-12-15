@@ -1,5 +1,11 @@
-#include "I3.h"
-#include <CORBA/PortableServer.h>
+#include "I1_static.h"
+#include "I1_dynamic.h"
+#include "I1_portable.h"
+#include "I1_tied.h"
+#include "I3_static.h"
+#include "I3_dynamic.h"
+#include "I3_portable.h"
+#include "I3_tied.h"
 #include "TestORB.h"
 
 using namespace std;
@@ -93,20 +99,20 @@ void test_performance (I1_ptr p)
 
 // The fixture for testing simple interface.
 
-typedef ::testing::Types <DynamicI1
+typedef ::testing::Types <I1_dynamic
 #ifndef TEST_NO_POA
-	, PortableI1
+	, I1_portable
 #endif
 #ifndef TEST_NO_STATIC
-	, StaticI1
+	, I1_static
 #endif
 #ifndef TEST_NO_TIED
-	, TiedI1
-	, TiedDerivedI1
+	, I1_tied
+	, I1_tied_derived
 #endif
 > ServantTypesI1;
 
-template <class Servant>
+template <class Factory>
 class TestORB_I1 :
 	public TestORB
 {
@@ -116,43 +122,58 @@ protected:
 
 	virtual ~TestORB_I1 ()
 	{}
+
+	static I1_ptr incarnate (I1_factory_ptr factory)
+	{
+		return factory->create (MAGIC_CONST);
+	}
+
+	static I1_ptr incarnate (I1_ptr obj)
+	{
+		return obj;
+	}
+
+	static I1_ptr incarnate ()
+	{
+		return incarnate (::Nirvana::Static <Factory>::ptr ());
+	}
 };
 
 TYPED_TEST_SUITE (TestORB_I1, ServantTypesI1);
 
 TYPED_TEST (TestORB_I1, Interface)
 {
-	test_interface (TypeParam::incarnate ());
+	test_interface (TestORB_I1 <TypeParam>::incarnate ());
 }
 
 TYPED_TEST (TestORB_I1, Performance)
 {
-	test_performance (TypeParam::incarnate ());
+	test_performance (TestORB_I1 <TypeParam>::incarnate ());
 }
 
 TYPED_TEST (TestORB_I1, Exception)
 {
-	I1_ptr p = TypeParam::incarnate ();
+	I1_ptr p = TestORB_I1 <TypeParam>::incarnate ();
 	EXPECT_THROW (p->throw_no_implement (), NO_IMPLEMENT);
 	release (p);
 }
 
 // The fixture for testing complex interface.
 
-typedef ::testing::Types <DynamicI3
+typedef ::testing::Types <I3_dynamic
 #ifndef TEST_NO_POA
-	, PortableI3
+	, I3_portable
 #endif
 #ifndef TEST_NO_STATIC
-	, StaticI3
+	, I3_static
 #endif
 #ifndef TEST_NO_TIED
-	, TiedI3
-	, TiedDerivedI3
+	, I3_tied
+	, I3_tied_derived
 #endif
 > ServantTypesI3;
 
-template <class Servant>
+template <class Factory>
 class TestORB_I3 :
 	public TestORB
 {
@@ -162,23 +183,38 @@ protected:
 
 	virtual ~TestORB_I3 ()
 	{}
+
+	static I3_ptr incarnate (I3_factory_ptr factory)
+	{
+		return factory->create (MAGIC_CONST);
+	}
+
+	static I3_ptr incarnate (I3_ptr obj)
+	{
+		return obj;
+	}
+
+	static I3_ptr incarnate ()
+	{
+		return incarnate (::Nirvana::Static <Factory>::ptr ());
+	}
 };
 
 TYPED_TEST_SUITE (TestORB_I3, ServantTypesI3);
 
 TYPED_TEST (TestORB_I3, Interface)
 {
-	test_interface (TypeParam::incarnate ());
+	test_interface (TestORB_I3 <TypeParam>::incarnate ());
 }
 
 TYPED_TEST (TestORB_I3, Performance)
 {
-	test_performance (TypeParam::incarnate ());
+	test_performance (TestORB_I3 <TypeParam>::incarnate ());
 }
 
 TYPED_TEST (TestORB_I3, MultiInherit)
 {
-	I3_var p = TypeParam::incarnate ();
+	I3_var p = TestORB_I3 <TypeParam>::incarnate ();
 
 	EXPECT_EQ (p->op1 (1), MAGIC_CONST + 1);
 	EXPECT_EQ (p->op2 (1), 2 * MAGIC_CONST + 1);

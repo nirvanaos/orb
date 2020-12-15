@@ -45,11 +45,12 @@ private:
 		return static_cast <LocalObject*> (export_struct_.core_object);
 	}
 
+public:
 	static NIRVANA_OLF_SECTION const ::Nirvana::ExportLocal export_struct_;
 };
 
 template <class S> NIRVANA_OLF_SECTION
-const ::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ ::Nirvana::OLF_EXPORT_LOCAL, S::constant_name
+const ::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ ::Nirvana::OLF_EXPORT_LOCAL, ::Nirvana::StaticId <S>::static_id_
 , STATIC_BRIDGE (LocalObject, S), STATIC_BRIDGE (AbstractBase, S) };
 
 }

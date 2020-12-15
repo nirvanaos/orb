@@ -1,12 +1,8 @@
-#include "I1.h"
+#include "ImplI1.h"
 
 namespace Test {
 
 using namespace CORBA;
-
-#ifndef TEST_NO_STATIC
-const char StaticI1::constant_name[] = "Test/g_I1";
-#endif
 
 I1_var ImplI1::object_op (I1_ptr in_obj, I1_var& out_obj, I1_var& inout_obj)
 {

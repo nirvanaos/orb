@@ -1,6 +1,7 @@
-#include <CORBA/CORBA.h>
-#include "I3.h"
-#include <CORBA/PortableServer.h>
+#include "DynamicI1.h"
+#include "PortableI1.h"
+#include "DynamicI3.h"
+#include "PortableI3.h"
 
 using namespace std;
 using namespace Test;
