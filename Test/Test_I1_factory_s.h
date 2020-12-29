@@ -3,7 +3,7 @@
 #define IDL_TEST_I1_FACTORY_S_H_
 
 #include "Test_I1_factory.h"
-#include "Server.h"
+#include <CORBA/Server.h>
 
 namespace CORBA {
 namespace Nirvana {

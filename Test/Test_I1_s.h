@@ -3,7 +3,7 @@
 #define IDL_TEST_I1_S_H_
 
 #include "Test_I1.h"
-#include "Server.h"
+#include <CORBA/Server.h>
 
 namespace CORBA {
 namespace Nirvana {
