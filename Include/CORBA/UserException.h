@@ -47,11 +47,11 @@ return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), E::rep
 NIRVANA_OLF_SECTION extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>\
 _tc_##E = { ::Nirvana::OLF_IMPORT_INTERFACE, E::repository_id_, ::CORBA::TypeCode::repository_id_ };\
 DEFINE_USER_EXC (E)\
-::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
+GNU_OPTNONE ::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 
 #define DEFINE_CORBA_INTERFACE_EXCEPTION(ns, I, E)\
 const ::CORBA::Char I::E::repository_id_ [] = "IDL:omg.org/" #ns "/" #I "/" #E ":1.0";\
 DEFINE_USER_EXC (I::E)\
-::CORBA::TypeCode_ptr I::E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
+GNU_OPTNONE ::CORBA::TypeCode_ptr I::E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 
 #endif

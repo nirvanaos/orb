@@ -12,7 +12,7 @@ using namespace std;
 
 #define DEFINE_SYS_EXCEPTION(E)\
 const E* E::_downcast (const Exception* ep) NIRVANA_NOEXCEPT { return (ep && (EC_##E == ep->__code ())) ? static_cast <const E*> (ep) : 0; }\
-::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
+GNU_OPTNONE ::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 
 #define DEFINE_CORBA_EXCEPTION(E) const Char E::repository_id_ [] = "IDL:omg.org/CORBA/" #E ":1.0";\
 DEFINE_SYS_EXCEPTION(E)
