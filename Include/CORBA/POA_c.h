@@ -20,6 +20,26 @@ namespace Nirvana {
 
 template <> class I_ptr <PortableServer::ServantBase>;
 
+template <>
+struct Definitions <PortableServer::POA>
+{
+	static const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_ServantAlreadyActive;
+
+	class ServantAlreadyActive : public ::CORBA::UserException
+	{
+	public:
+		DECLARE_EXCEPTION (ServantAlreadyActive);
+	};
+
+	static const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_ObjectNotActive;
+
+	class ObjectNotActive : public ::CORBA::UserException
+	{
+	public:
+		DECLARE_EXCEPTION (ObjectNotActive);
+	};
+};
+
 BRIDGE_BEGIN (PortableServer::POA, PORTABLESERVER_REPOSITORY_ID ("POA"))
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV
@@ -29,7 +49,8 @@ BRIDGE_END ()
 
 template <class T>
 class Client <T, PortableServer::POA> :
-	public T
+	public T,
+	public Definitions <PortableServer::POA>
 {
 public:
 	String activate_object (I_in <PortableServer::ServantBase> servant);
@@ -46,21 +67,11 @@ typedef ::CORBA::Nirvana::I_ptr <ServantBase> Servant;
 class POA : public CORBA::Nirvana::ClientInterface <POA, CORBA::Object>
 {
 public:
-	static const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_ServantAlreadyActive;
+	using CORBA::Nirvana::Definitions <POA>::_tc_ServantAlreadyActive;
+	using CORBA::Nirvana::Definitions <POA>::ServantAlreadyActive;
 
-	class ServantAlreadyActive : public ::CORBA::UserException
-	{
-	public:
-		DECLARE_EXCEPTION (ServantAlreadyActive);
-	};
-
-	static const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_ObjectNotActive;
-
-	class ObjectNotActive : public ::CORBA::UserException
-	{
-	public:
-		DECLARE_EXCEPTION (ObjectNotActive);
-	};
+	using CORBA::Nirvana::Definitions <POA>::_tc_ObjectNotActive;
+	using CORBA::Nirvana::Definitions <POA>::ObjectNotActive;
 };
 
 }

@@ -12,6 +12,8 @@ namespace Nirvana {
 
 template <class T, class I> class Client;
 
+template <class I> struct Definitions;
+
 template <class I>
 class ClientBridge :
 	public Bridge <I>

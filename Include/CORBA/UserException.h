@@ -50,8 +50,8 @@ DEFINE_USER_EXC (E)\
 GNU_OPTNONE ::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 
 #define DEFINE_CORBA_INTERFACE_EXCEPTION(ns, I, E)\
-const ::CORBA::Char I::E::repository_id_ [] = "IDL:omg.org/" #ns "/" #I "/" #E ":1.0";\
-DEFINE_USER_EXC (I::E)\
-GNU_OPTNONE ::CORBA::TypeCode_ptr I::E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
+const ::CORBA::Char CORBA::Nirvana::Definitions <ns::I>::E::repository_id_ [] = "IDL:omg.org/" #ns "/" #I "/" #E ":1.0";\
+DEFINE_USER_EXC (CORBA::Nirvana::Definitions <ns::I>::E)\
+GNU_OPTNONE ::CORBA::TypeCode_ptr CORBA::Nirvana::Definitions <ns::I>::E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 
 #endif

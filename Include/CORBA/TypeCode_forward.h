@@ -47,6 +47,26 @@ typedef I_ptr <Marshal> Marshal_ptr;
 class Unmarshal;
 typedef I_ptr <Unmarshal> Unmarshal_ptr;
 
+template <>
+struct Definitions <TypeCode>
+{
+	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_BadKind;
+
+	class BadKind : public UserException
+	{
+	public:
+		DECLARE_EXCEPTION (BadKind);
+	};
+
+	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Bounds;
+
+	class Bounds : public UserException
+	{
+	public:
+		DECLARE_EXCEPTION (Bounds);
+	};
+};
+
 BRIDGE_BEGIN (TypeCode, CORBA_REPOSITORY_ID ("TypeCode"))
 Boolean (*equal) (Bridge <TypeCode>*, Interface*, Interface*);
 Boolean (*equivalent) (Bridge <TypeCode>*, Interface*, Interface*);
@@ -81,7 +101,8 @@ BRIDGE_END ()
 
 template <class T>
 class Client <T, TypeCode> :
-	public T
+	public T,
+	public Definitions <TypeCode>
 {
 public:
 	Boolean equal (TypeCode_ptr other);
@@ -149,24 +170,14 @@ public:
 
 }
 
-class TypeCode : public ::CORBA::Nirvana::ClientInterface <TypeCode>
+class TypeCode : public Nirvana::ClientInterface <TypeCode>
 {
 public:
-	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_BadKind;
+	using Nirvana::Definitions <TypeCode>::_tc_BadKind;
+	using Nirvana::Definitions <TypeCode>::BadKind;
 
-	class BadKind : public UserException
-	{
-	public:
-		DECLARE_EXCEPTION (BadKind);
-	};
-
-	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Bounds;
-
-	class Bounds : public UserException
-	{
-	public:
-		DECLARE_EXCEPTION (Bounds);
-	};
+	using Nirvana::Definitions <TypeCode>::_tc_Bounds;
+	using Nirvana::Definitions <TypeCode>::Bounds;
 };
 
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_TCKind;
