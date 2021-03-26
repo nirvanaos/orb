@@ -10,11 +10,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <class T, class I> class Client
-	: public T
-{
-	// Default implementation does not contain any methods.
-};
+template <class T, class I> class Client;
 
 template <class I>
 class ClientBridge :
