@@ -13,19 +13,19 @@ class UnknownUserException : public UserException
 public:
 	DECLARE_EXCEPTION (UnknownUserException);
 
-	typedef Any Data;
+	typedef Any _Data;
 
 	const Any& exception () const
 	{
-		return data_;
+		return _data;
 	}
 
 	UnknownUserException (Any&& exc) :
-		data_ (std::move (exc))
+		_data (std::move (exc))
 	{}
 
 private:
-	Data data_;
+	_Data _data;
 };
 
 }

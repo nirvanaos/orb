@@ -19,7 +19,7 @@ class NIRVANA_NOVTABLE Exception : public std::exception
 {
 public:
 	typedef int_fast16_t Code;
-	typedef void Data;
+	typedef void _Data;
 
 	virtual ~Exception ()
 	{}

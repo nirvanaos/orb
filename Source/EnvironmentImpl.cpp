@@ -136,8 +136,8 @@ void EnvironmentBase::set_system (const ExceptionEntry& ee, const void* data) NI
 {
 	if (set (ee) && data) {
 		SystemException& e = static_cast <SystemException&> (*exception ());
-		e.minor (((SystemException::Data*)data)->minor);
-		e.completed (((SystemException::Data*)data)->completed);
+		e.minor (((SystemException::_Data*)data)->minor);
+		e.completed (((SystemException::_Data*)data)->completed);
 	}
 }
 

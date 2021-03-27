@@ -95,7 +95,7 @@ void Any::type (TypeCode_ptr alias)
 	}
 }
 
-static_assert (Nirvana::ABI <Any>::SMALL_CAPACITY >= sizeof (SystemException::Data), "Any data must fit SystemException::Data.");
+static_assert (Nirvana::ABI <Any>::SMALL_CAPACITY >= sizeof (SystemException::_Data), "Any data must fit SystemException::_Data.");
 
 const void* Any::data () const
 {
@@ -192,12 +192,12 @@ Boolean operator >>= (const Any& any, SystemException& se)
 		||
 			!strncmp (nirvana_prefix, id, countof (nirvana_prefix) - 1)
 		) {
-			const Nirvana::ExceptionEntry* pee = SystemException::_get_exception_entry (id, Exception::EC_SYSTEM_EXCEPTION);
-			assert (pee);
-			(pee->construct) (&se);
-			const SystemException::Data& data = *(const SystemException::Data*)any.data ();
+			const Nirvana::ExceptionEntry* ee = SystemException::_get_exception_entry (id, Exception::EC_SYSTEM_EXCEPTION);
+			assert (ee);
+			(ee->construct) (&se);
+			const SystemException::_Data& data = *(const SystemException::_Data*)any.data ();
 			se.completed (data.completed);
-			if (Nirvana::RepositoryId::compatible (pee->rep_id, id))
+			if (Nirvana::RepositoryId::compatible (ee->rep_id, id))
 				se.minor (data.minor);
 			return true;
 		}

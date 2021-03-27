@@ -11,7 +11,7 @@ template <class E> class TypeCodeException;
 
 template <class E>
 class TypeCodeExceptionRoot :
-	public TypeCodeStatic <TypeCodeException <E>, TypeCodeWithId <tk_except, E>, TypeCodeOps <typename E::Data> >
+	public TypeCodeStatic <TypeCodeException <E>, TypeCodeWithId <tk_except, E>, TypeCodeOps <typename E::_Data> >
 {
 public:
 	static const char* _name (Bridge <TypeCode>* _b, Interface* _env)

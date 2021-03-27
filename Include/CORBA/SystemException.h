@@ -22,7 +22,7 @@ enum CompletionStatus : uint32_t
 class NIRVANA_NOVTABLE SystemException : public Exception
 {
 public:
-	struct Data
+	struct _Data
 	{
 		uint32_t minor;
 		CompletionStatus completed;
@@ -30,22 +30,22 @@ public:
 
 	ULong minor () const
 	{
-		return data_.minor;
+		return _data.minor;
 	}
 
 	void minor (ULong minor)
 	{
-		data_.minor = minor;
+		_data.minor = minor;
 	}
 
 	CompletionStatus completed () const
 	{
-		return data_.completed;
+		return _data.completed;
 	}
 
 	void completed (CompletionStatus status)
 	{
-		data_.completed = status;
+		_data.completed = status;
 	}
 
 	static const SystemException* _downcast (const Exception* ep)
@@ -95,28 +95,28 @@ public:
 protected:
 	SystemException ()
 	{
-		data_.minor = 0;
-		data_.completed = COMPLETED_NO;
+		_data.minor = 0;
+		_data.completed = COMPLETED_NO;
 	}
 
 	SystemException (const SystemException& src) :
-		data_ (src.data_)
+		_data (src._data)
 	{}
 
 	SystemException (ULong minor, CompletionStatus status = COMPLETED_NO)
 	{
-		data_.minor = minor;
-		data_.completed = status;
+		_data.minor = minor;
+		_data.completed = status;
 	}
 
 	SystemException& operator = (const SystemException& src)
 	{
-		data_ = src.data_;
+		_data = src._data;
 		return *this;
 	}
 
 private:
-	Data data_;
+	_Data _data;
 
 	struct ExceptionEntry
 	{
