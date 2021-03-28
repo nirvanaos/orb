@@ -28,7 +28,7 @@ public:
 		return core_object_->_get_interface ();
 	}
 
-	Boolean _is_a (const String& type_id) const
+	Boolean _is_a (String_in type_id) const
 	{
 		return core_object_->_is_a (type_id);
 	}

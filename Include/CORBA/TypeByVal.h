@@ -75,6 +75,11 @@ struct TypeByVal
 	{
 		return v;
 	}
+
+	// Member types
+
+	typedef T Member_type;
+	typedef T Member_ret;
 };
 
 }

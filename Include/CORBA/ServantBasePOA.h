@@ -35,7 +35,7 @@ public:
 		return ServantBaseLink::_get_interface ();
 	}
 
-	virtual Boolean _is_a (const String& type_id)
+	virtual Boolean _is_a (String_in type_id)
 	{
 		_check_construct ();
 		return ServantBaseLink::_is_a (type_id);

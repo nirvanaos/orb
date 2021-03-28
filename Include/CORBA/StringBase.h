@@ -56,9 +56,8 @@ public:
 			this->reset ();
 	}
 
-	StringBase (int i)
+	StringBase (nullptr_t)
 	{
-		assert (i == 0);
 		this->reset ();
 	}
 
@@ -76,13 +75,13 @@ private:
 };
 
 template <> inline
-size_t StringBase <Char>::_length (const Char* s)
+static size_t StringBase <Char>::_length (const Char* s)
 {
 	return strlen (s);
 }
 
 template <> inline
-size_t StringBase <WChar>::_length (const WChar* s)
+static size_t StringBase <WChar>::_length (const WChar* s)
 {
 	return wcslen (s);
 }

@@ -25,7 +25,7 @@ public:
 
 	virtual PortableServer::POA_var _default_POA ();
 	virtual InterfaceDef_var _get_interface ();
-	virtual Boolean _is_a (const String& type_id);
+	virtual Boolean _is_a (String_in type_id);
 	virtual Boolean _non_existent ();
 
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__non_existent;

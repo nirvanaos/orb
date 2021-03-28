@@ -128,6 +128,11 @@ struct Type <Boolean>
 	{
 		return b;
 	}
+
+	// Member types
+
+	typedef char Member_type;
+	typedef Boolean Member_ret;
 };
 
 typedef Type <Boolean>::C_in Boolean_in;

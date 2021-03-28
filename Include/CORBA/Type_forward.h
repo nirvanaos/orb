@@ -19,7 +19,7 @@ template <> struct Type <T>
 
   // Check internal invariants and throw BAD_PARAM or INV_OBJREF exception if data is invalid.
   static void check (const ABI_type&);
-       
+
   // true if check () method is not empty.
   static const bool has_check;
 
@@ -47,7 +47,11 @@ template <> struct Type <T>
   static ABI_ret ret (<Servant return type>);
   static ABI_VT_ret VT_ret (<Valuetype servant return type>);
 
-  // Servant types may be differ from client types.
+  // NOTE: Servant types may be differ from client types.
+
+  // Types for members
+  typedef T Member_type;
+  typedef const T& Member_ret;
 };
 ~~~
 */

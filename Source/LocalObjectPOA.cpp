@@ -14,7 +14,7 @@ InterfaceDef_var ServantPOA <LocalObject>::_get_interface ()
 	return LocalObjectLink::core_object_->_get_interface ();
 }
 
-Boolean ServantPOA <LocalObject>::_is_a (const String& type_id)
+Boolean ServantPOA <LocalObject>::_is_a (String_in type_id)
 {
 	_check_construct ();
 	return LocalObjectLink::core_object_->_is_a (type_id);

@@ -174,6 +174,11 @@ struct TypeByRef
 	{
 		return &reinterpret_cast <const ABI_type&> (v);
 	}
+
+	// Member types
+
+	typedef T Member_type;
+	typedef const T& Member_ret;
 };
 
 }
