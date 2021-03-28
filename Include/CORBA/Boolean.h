@@ -32,6 +32,10 @@ struct Type <Boolean>
 	typedef ABI_type ABI_ret;
 	typedef ABI_type ABI_VT_ret;
 
+	// Member types
+	typedef char Member_type;
+	typedef Boolean Member_ret;
+
 	class C_in
 	{
 	public:
@@ -42,6 +46,12 @@ struct Type <Boolean>
 		ABI_type operator & () const
 		{
 			return b_;
+		}
+
+		// For member assignments
+		operator Member_type () const
+		{
+			return (Member_type)b_;
 		}
 
 	private:
@@ -128,11 +138,6 @@ struct Type <Boolean>
 	{
 		return b;
 	}
-
-	// Member types
-
-	typedef char Member_type;
-	typedef Boolean Member_ret;
 };
 
 typedef Type <Boolean>::C_in Boolean_in;

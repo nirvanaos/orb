@@ -7,6 +7,12 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <typename C> inline
+StringBase <C>::operator const StringT <C>& () const
+{
+	return static_cast <const StringT <C>&> (*this);
+}
+
 template <typename C>
 struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 {

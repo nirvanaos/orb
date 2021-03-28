@@ -66,6 +66,9 @@ public:
 		return this;
 	}
 
+	// For member assignments
+	operator const StringT <C>& () const;
+
 protected:
 	StringBase ()
 	{}
@@ -75,13 +78,13 @@ private:
 };
 
 template <> inline
-static size_t StringBase <Char>::_length (const Char* s)
+size_t StringBase <Char>::_length (const Char* s)
 {
 	return strlen (s);
 }
 
 template <> inline
-static size_t StringBase <WChar>::_length (const WChar* s)
+size_t StringBase <WChar>::_length (const WChar* s)
 {
 	return wcslen (s);
 }

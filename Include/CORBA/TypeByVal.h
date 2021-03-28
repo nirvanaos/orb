@@ -38,6 +38,12 @@ struct TypeByVal
 			return val_;
 		}
 
+		// For member assignments
+		operator T () const
+		{
+			return val_;
+		}
+
 	private:
 		T val_;
 	};

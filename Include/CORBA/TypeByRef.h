@@ -37,6 +37,12 @@ struct TypeByRef
 			return &reinterpret_cast <const ABI_type&> (ref_);
 		}
 
+		// For member assignments
+		operator const T& () const
+		{
+			return ref_;
+		}
+
 	protected:
 		const T& ref_;
 	};
