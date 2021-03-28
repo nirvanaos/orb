@@ -10,13 +10,13 @@ namespace CORBA {
 namespace Nirvana {
 
 /// Fixed-length data types.
-/// Passed by value if sizeof (T) <= sizeof (Nirvana::Word).
+/// Passed by value if sizeof (T) <= 2 * sizeof (size_t).
 template <class T
 #ifdef NIRVANA_C11
 	, typename Enable = void
 #endif
 >
-using TypeFixLen = typename std::conditional <sizeof (T) <= 2 * sizeof (::Nirvana::Word), TypeByVal <T>, TypeByRef <T, T> >::type;
+using TypeFixLen = typename std::conditional <sizeof (T) <= 2 * sizeof (size_t), TypeByVal <T>, TypeByRef <T, T> >::type;
 
 template <class T> struct Type :
 	TypeFixLen <T

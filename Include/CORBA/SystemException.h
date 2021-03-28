@@ -28,6 +28,8 @@ public:
 		CompletionStatus completed;
 	};
 
+	virtual void* __data () NIRVANA_NOEXCEPT;
+
 	ULong minor () const
 	{
 		return _data.minor;

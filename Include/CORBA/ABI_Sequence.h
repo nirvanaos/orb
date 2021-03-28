@@ -17,7 +17,7 @@ template <class T>
 using Sequence = std::vector <T, std::allocator <T> >;
 
 template <class T>
-struct ABI <Sequence <T> >
+struct alignas (sizeof (void*)) ABI <Sequence <T> >
 {
 	void reset ()
 	{

@@ -7,7 +7,7 @@ namespace CORBA {
 namespace Nirvana {
 
 /** For each structure, union or enum data type T, IDL compiler generates `CORBA::Nirvana::MarshalTraits <T>` structure.
-    This structure is intended for proxies and defines how the parameters are marshalled inside one platform domain.
+    This structure is intended for proxies and defines how the parameters are marshalled inside the common platform domain.
     It is not intended for the user code.
 ~~~{.c++}
 template <> struct MarshalTraits <T>

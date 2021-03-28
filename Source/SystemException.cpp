@@ -81,4 +81,9 @@ void SystemException::_raise_by_code (Code ec)
 		throw UNKNOWN ();
 }
 
+void* SystemException::__data () NIRVANA_NOEXCEPT
+{
+	return &_data;
+}
+
 }

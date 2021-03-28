@@ -31,14 +31,14 @@ public:
 	virtual Code __code () const NIRVANA_NOEXCEPT = 0;
 	virtual TypeCode_ptr __type_code () const NIRVANA_NOEXCEPT = 0;
 
-	const void* __data () const NIRVANA_NOEXCEPT
+	virtual void* __data () NIRVANA_NOEXCEPT
 	{
-		return this + 1;
+		return nullptr;
 	}
 
-	void* __data () NIRVANA_NOEXCEPT
+	const void* __data () const NIRVANA_NOEXCEPT
 	{
-		return this + 1;
+		return const_cast <Exception&> (*this).__data ();
 	}
 
 	enum : Code {

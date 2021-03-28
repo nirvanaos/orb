@@ -17,15 +17,13 @@ class TypeCode;
 
 namespace Nirvana {
 
-#pragma pack (push, 1)
-
 template <>
-struct ABI <Any>
+struct alignas (sizeof (uintptr_t)) ABI <Any>
 {
-	/// Pointer to TypeCode and large data tag in the least significant bit.
+	/// Pointer to TypeCode and large data flag in the least significant bit.
 	uintptr_t type_code;
 
-	struct
+	struct alignas (sizeof (void*))
 	{
 		void* p;	//< Pointer to large data
 		size_t size;	//< Large data size
@@ -82,8 +80,6 @@ struct ABI <Any>
 		return data.size;
 	}
 };
-
-#pragma pack (pop)
 
 }
 }

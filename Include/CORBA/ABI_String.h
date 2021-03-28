@@ -26,7 +26,7 @@ typedef StringT <Char> String;
 typedef StringT <WChar> WString;
 
 template <typename C>
-struct ABI <StringT <C> >
+struct alignas (sizeof (void*)) ABI <StringT <C> >
 {
 	static size_t max_size ()
 	{
@@ -173,8 +173,6 @@ struct ABI <StringT <C> >
 	static const unsigned char SMALL_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 0x01 : 0x80;
 	static const size_t LARGE_MASK = ::Nirvana::endian::native == ::Nirvana::endian::big ? 1 : ~(size_t (~0) >> 1);
 
-#pragma pack (push, 1)
-
 	struct Large
 	{
 		C* data;
@@ -182,17 +180,23 @@ struct ABI <StringT <C> >
 		size_t allocated;
 	};
 
+	static_assert (sizeof (Large) == sizeof (void*) + 2 * sizeof (size_t), "sizeof (ABI <StringT <C>>::Large)");
+
 	struct Small
 	{
 		union
 		{
-			unsigned char padding [sizeof (Large) - sizeof (unsigned char)];
-			C data [sizeof (padding) / sizeof (C)];
+			C data [(sizeof (Large) - 1) / sizeof (C)];
+			struct
+			{
+				unsigned char padding [sizeof (Large) - 1];
+				unsigned char size;
+			};
 		};
-		unsigned char size;
 	};
 
-	static_assert (sizeof (Large) == sizeof (Small), "sizeof (Large) == sizeof (Small)");
+	static_assert (offsetof (Small, size) == sizeof (Large) - 1, "ABI <StringT <C>>::Small");
+	static_assert (sizeof (Large) == sizeof (Small), "ABI <StringT <C>>::Small");
 
 	static const size_t SMALL_CAPACITY = sizeof (Small::data) / sizeof (C) - 1;
 
@@ -202,14 +206,12 @@ struct ABI <StringT <C> >
 		Small small;
 	};
 
-	union Data
+	union alignas (sizeof (void*)) Data
 	{
 		Small small;
 		Large large;
 		size_t raw [sizeof (ULS) / sizeof (size_t)];
 	};
-
-#pragma pack (pop)
 
 	Data data;
 };

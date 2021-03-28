@@ -24,6 +24,8 @@ public:
 		_data (std::move (exc))
 	{}
 
+	virtual void* __data () NIRVANA_NOEXCEPT;
+
 private:
 	_Data _data;
 };
