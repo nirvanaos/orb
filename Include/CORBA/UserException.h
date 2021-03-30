@@ -41,7 +41,7 @@ protected:
 }
 
 #define DEFINE_USER_EXC(E)const E* E::_downcast (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT {\
-return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), E::repository_id_)) ? &static_cast <const E&> (*ep) : 0; }\
+return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), E::repository_id_)) ? &static_cast <const E&> (*ep) : nullptr; }\
 
 #define DEFINE_USER_EXCEPTION(E, rep_id) const ::CORBA::Char E::repository_id_ [] = rep_id;\
 NIRVANA_OLF_SECTION extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>\
