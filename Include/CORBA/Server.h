@@ -1,10 +1,11 @@
 /// \file
 /// CORBA server main header
-
 /*
 * Nirvana IDL support library.
 *
 * This is a part of the Nirvana project.
+*
+* Author: Igor Popov
 *
 * Copyright (c) 2021 Igor Popov.
 *
@@ -34,4 +35,40 @@
 #include "ImplementationLocalStatic.h"
 #include "PortableServer.h"
 
+namespace CORBA {
+
+/// Servant traits.
+/// 
+/// \tparam I Interface.
+template <class I>
+struct servant_traits
+{
+	/// \brief Servant base.
+	typedef Nirvana::ServantPOA <I> base_type;
+
+	/// \brief Servant reference.
+	typedef ::PortableServer::Servant_var <Nirvana::ServantPOA <I>> ref_type;
+
+	/// \brief Tied servant.
+	/// 
+	/// \tparam S Servant class that implement the interface.
+	template <class S>
+	using tie_type = Nirvana::ServantTied <S, I>;
+
+	// Nirvana extensions
+
+	/// \brief Servant implementation without the virtual methods (Nirvana extension).
+	/// 
+	/// \tparam S Servant class that implement the interface, derived from Servant <S>.
+	template <class S>
+	using Servant = Nirvana::Servant <S, I>;
+
+	/// \brief Static servant implementation (Nirvana extension).
+	/// 
+	/// \tparam S Servant class that implement the interface, derived from Servant <S>.
+	template <class S>
+	using ServantStatic = Nirvana::ServantStatic <S, I>;
+};
+
+}
 #endif

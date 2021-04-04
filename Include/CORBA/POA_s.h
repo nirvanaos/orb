@@ -1,10 +1,11 @@
 /// \file
 /// PortableServer::POA skeleton
-
 /*
 * Nirvana IDL support library.
 *
 * This is a part of the Nirvana project.
+*
+* Author: Igor Popov
 *
 * Copyright (c) 2021 Igor Popov.
 *

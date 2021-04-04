@@ -8,6 +8,8 @@
 *
 * This is a part of the Nirvana project.
 *
+* Author: Igor Popov
+*
 * Copyright (c) 2021 Igor Popov.
 *
 * This program is free software; you can redistribute it and/or modify
@@ -41,7 +43,7 @@ namespace Nirvana {
 //! \brief POA-style (virtual) implementation of the pseudo interface.
 //!
 //! \tparam Primary Primary interface.
-//! \tparam Bases All base interfaces derived directly or indirectly.
+//! \tparam Bases All base interfaces derived directly.
 
 template <class Primary, class ... Bases>
 class NIRVANA_NOVTABLE ImplementationPseudoPOA :

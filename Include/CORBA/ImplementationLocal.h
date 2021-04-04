@@ -1,7 +1,11 @@
+/// \file
+/// \author Igor Popov
 /*
 * Nirvana IDL support library.
 *
 * This is a part of the Nirvana project.
+*
+* Author: Igor Popov
 *
 * Copyright (c) 2021 Igor Popov.
 *
@@ -30,9 +34,9 @@
 namespace CORBA {
 namespace Nirvana {
 
-//! \class Implementation
+//! \class ImplementationLocal
 //!
-//! \brief An implementation of interface.
+//! \brief An implementation of a local interface.
 //!
 //! \tparam S Servant class implementing operations.
 //! \tparam Primary Primary interface.

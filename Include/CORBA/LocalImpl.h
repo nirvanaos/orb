@@ -1,10 +1,10 @@
 /// \file
-/// Locally implemented pseudo objects (Environment etc)
-
 /*
 * Nirvana IDL support library.
 *
 * This is a part of the Nirvana project.
+*
+* Author: Igor Popov
 *
 * Copyright (c) 2021 Igor Popov.
 *
@@ -33,7 +33,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-/// Locally implemented dynamic pseudo object
+/// Locally implemented dynamic pseudo object (Environment etc).
 template <class T>
 class LocalImpl
 {
