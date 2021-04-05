@@ -37,6 +37,7 @@
 #include "TypeCodeString.h"
 #include "TypeCodeSequence.h"
 #include "TypeCodeException.h"
+#include "TypeCodeEnum.h"
 #include <Nirvana/stateless.h>
 #include <Nirvana/OLF.h>
 

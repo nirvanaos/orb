@@ -1,6 +1,5 @@
 /// \file Boolean.h
 /// Provides ABI for the bool type.
-
 /*
 * Nirvana IDL support library.
 *
@@ -40,10 +39,10 @@ namespace Nirvana {
 
 /// We can not use `bool' built-in type across the binary boundaries because
 /// it is compiler-specific, but we have to achieve the binary compatibility.
-/// So we use int as ABI for boolean in assumption that bool implementation can't be wide.
+/// So we use size_t (the machine word) as ABI for boolean in assumption that bool implementation can't be wide.
 /// Note that Sequence <bool> is implemented as vector <bool> template specialization
 /// where element size is 1 byte.
-typedef int ABI_boolean;
+typedef size_t ABI_boolean;
 
 template <>
 struct Type <Boolean>
