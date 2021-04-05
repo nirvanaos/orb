@@ -161,9 +161,6 @@ struct Type <CompletionStatus> :
 	public TypeEnum <CompletionStatus, COMPLETED_MAYBE>
 {};
 
-template <>
-const Char RepIdOf <CompletionStatus>::repository_id_ [] = CORBA_REPOSITORY_ID ("CompletionStatus");
-
 }
 
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_CompletionStatus;
