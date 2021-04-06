@@ -1,5 +1,4 @@
-/// \file MarshalTraits_any.h
-/// \brief Declares the MarshalTraits <Any>.
+/// \file MarshalContext.h
 /*
 * Nirvana IDL support library.
 *
@@ -25,28 +24,26 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_MARSHALTRAITS_ANY_H_
-#define NIRVANA_ORB_MARSHALTRAITS_ANY_H_
+#ifndef NIRVANA_ORB_MARSHALCONTEXT_H_
+#define NIRVANA_ORB_MARSHALCONTEXT_H_
 
-#include "MarshalTraits_forward.h"
-#include "../Any.h"
-#include "Marshal.h"
-#include "Unmarshal.h"
+#include "TypeEnum.h"
+#include <Nirvana/throw_exception.h>
 
 namespace CORBA {
 namespace Nirvana {
 
-template <>
-struct MarshalTraits <Any>
+/// \brief Type of the inter-domain marshal context.
+enum class MarshalContext : ABI_enum
 {
-	static const bool has_marshal = true;
-
-	typedef ABI <Any> ABI;
-
-	static void marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst);
-	static void marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst);
-	static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst);
+	SHARED_MEMORY,            ///< Both domains share common memory heap.
+	SHARED_PROTECTION_DOMAIN, ///< Different heaps in the common protection domain.
+	OTHER_PROTECTION_DOMAIN   ///< Different protection domains.
 };
+
+template <> struct Type <MarshalContext> : 
+	TypeEnum <MarshalContext, MarshalContext::OTHER_PROTECTION_DOMAIN>
+{};
 
 }
 }

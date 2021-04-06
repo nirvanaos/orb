@@ -29,7 +29,7 @@
 #define NIRVANA_ORB_MARSHALTRAITS_STRING_H_
 
 #include "MarshalTraits_forward.h"
-#include "../String.h"
+#include "String.h"
 #include "Marshal.h"
 #include "Unmarshal.h"
 

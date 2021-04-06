@@ -1,4 +1,4 @@
-/// \file  MarshalTraits_forward.h
+/// \file
 /// \brief Declares the MarshalTraits template.
 /*
 * Nirvana IDL support library.
@@ -57,17 +57,6 @@ template <> struct MarshalTraits <T>
 
   /// \brief `true` if marshal operations are not trivial copy.
   static const bool has_marshal;
-
-  /// \brief Serialize
-  /// \param src         Source value ABI.
-  /// \param stream      Output stream.
-  static void serialize (const Type <T>::ABI_type <T>& src, Serialize_ptr stream);
-
-  /// \brief Deserialize
-  /// \param stream      Input stream.
-  /// \param marshaler   Marshaler interface. May be `nil` if MarshalTraits::has_marshal is `false`.
-  /// \param dst         Destination value ABI.
-  static void deserialize (Deserialize_ptr stream, Marshal_ptr marshaler, Type <T>::ABI_type <T>& dst);
 };
 ~~~
 */

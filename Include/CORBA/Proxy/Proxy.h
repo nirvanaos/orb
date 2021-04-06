@@ -30,7 +30,7 @@
 #include "../CORBA.h"
 #include "../FindInterface.h"
 #include "ProxyFactory_s.h"
-#include "MarshalTraits.h"
+#include "../MarshalTraits.h"
 #include "IOReference.h"
 #include "IORequest.h"
 #include "ProxyBase.h"

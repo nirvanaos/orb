@@ -41,5 +41,6 @@
 #include "LocalObject.h"
 #include "String_compat.h"
 #include "UnknownUserException.h"
+#include "MarshalTraits.h"
 
 #endif

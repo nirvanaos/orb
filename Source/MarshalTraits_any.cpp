@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/Proxy/MarshalTraits_any.h>
+#include <CORBA/MarshalTraits_any.h>
 
 namespace CORBA {
 namespace Nirvana {

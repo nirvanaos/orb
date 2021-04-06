@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_MARSHAL_S_H_
 #define NIRVANA_ORB_MARSHAL_S_H_
 
-#include "Marshal.h"
+#include "../Marshal.h"
 
 namespace CORBA {
 namespace Nirvana {

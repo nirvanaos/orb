@@ -55,7 +55,7 @@ pseudo interface IORequest
 #ifndef NIRVANA_ORB_IOREQUEST_H_
 #define NIRVANA_ORB_IOREQUEST_H_
 
-#include "Marshal.h"
+#include "../Marshal.h"
 
 namespace CORBA {
 namespace Nirvana {

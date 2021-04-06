@@ -49,8 +49,8 @@ pseudo interface Unmarshal
 #ifndef NIRVANA_ORB_UNMARSHAL_H_
 #define NIRVANA_ORB_UNMARSHAL_H_
 
-#include "../Object.h"
-#include "../TypeCode.h"
+#include "Object.h"
+#include "TypeCode.h"
 #include "MarshalContext.h"
 
 namespace CORBA {

@@ -29,7 +29,7 @@
 #define NIRVANA_ORB_MARSHALTRAITS_SEQUENCE_H_
 
 #include "MarshalTraits_forward.h"
-#include "../sequence.h"
+#include "sequence.h"
 #include "Marshal.h"
 #include "Unmarshal.h"
 

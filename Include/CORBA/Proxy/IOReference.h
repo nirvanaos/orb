@@ -80,8 +80,8 @@ pseudo interface IOReference : Object
 #define NIRVANA_ORB_IOREFERENCE_H_
 
 #include "../CORBA.h"
-#include "Marshal.h"
-#include "Unmarshal.h"
+#include "../Marshal.h"
+#include "../Unmarshal.h"
 
 namespace CORBA {
 namespace Nirvana {

@@ -29,7 +29,7 @@
 
 #include "../TypeCode_s.h"
 #include "../Exception.h"
-#include "MarshalTraits.h"
+#include "../MarshalTraits.h"
 #include <new>
 
 namespace CORBA {
