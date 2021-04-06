@@ -1,4 +1,4 @@
-/// \file Proxy.h
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -29,8 +29,8 @@
 
 #include "../CORBA.h"
 #include "../FindInterface.h"
-#include "ProxyFactory_s.h"
 #include "../MarshalTraits.h"
+#include "ProxyFactory_s.h"
 #include "IOReference.h"
 #include "IORequest.h"
 #include "ProxyBase.h"
@@ -39,7 +39,7 @@
 #include "TypeCodeException.h"
 #include "TypeCodeEnum.h"
 #include "TypeCodeStruct.h"
-#include "TypeCodeImport.h"
+#include "TypeCodeTypeDef.h"
 #include <Nirvana/stateless.h>
 #include <Nirvana/OLF.h>
 

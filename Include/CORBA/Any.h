@@ -123,8 +123,7 @@ public:
 	/*
 	struct from_string
 	{
-		from_string (char* s, ULong b,
-								 Boolean n = FALSE) :
+		from_string (char* s, ULong b, Boolean n = FALSE) :
 			val (s), bound (b), nocopy (n)
 		{}
 		from_string (const char* s, ULong b) :

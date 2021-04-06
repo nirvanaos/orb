@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_LOCALIMPL_H_
 #define NIRVANA_ORB_LOCALIMPL_H_
 
-#include "basic_types.h"
+#include "primitive_types.h"
 #include "Servant_var.h"
 
 namespace CORBA {

@@ -1,6 +1,5 @@
-/// \file basic_types.h
+/// \file
 /// \brief CORBA basic data types.
-
 /*
 * Nirvana IDL support library.
 *
@@ -29,57 +28,30 @@
 #ifndef NIRVANA_ORB_BASIC_TYPES_H_
 #define NIRVANA_ORB_BASIC_TYPES_H_
 
-#include <stdint.h>
 #include "Boolean.h"
 #include "TypeFixLen.h"
 
-#define DECLARE_BASIC_TYPE(T) namespace Nirvana { template <> struct Nirvana::Type <T> : Nirvana::TypeFixLen <T> {}; }\
+#define DECLARE_BASIC_TYPE(T, tc) namespace Nirvana { template <> struct Nirvana::Type <T> : Nirvana::TypeFixLen <T> {\
+static TypeCode_ptr type_code () { return tc; } }; }\
 typedef Nirvana::Type <T>::C_out T##_out; typedef Nirvana::Type <T>::C_inout T##_inout;
 
 namespace CORBA {
 
-// Primitive types
-
-typedef char Char;
-DECLARE_BASIC_TYPE (Char)
-
-typedef wchar_t WChar;
-DECLARE_BASIC_TYPE (WChar)
-
-typedef uint8_t Octet;
-DECLARE_BASIC_TYPE (Octet)
-
-typedef int16_t Short;
-DECLARE_BASIC_TYPE (Short)
-
-typedef uint16_t UShort;
-DECLARE_BASIC_TYPE (UShort)
-
-typedef int32_t Long;
-DECLARE_BASIC_TYPE (Long)
-
-typedef int64_t LongLong;
-DECLARE_BASIC_TYPE (LongLong)
-
-typedef uint32_t ULong;
-DECLARE_BASIC_TYPE (ULong)
-
-typedef uint64_t ULongLong;
-DECLARE_BASIC_TYPE (ULongLong)
-
-typedef float Float;
-DECLARE_BASIC_TYPE (Float)
-
-typedef double Double;
-DECLARE_BASIC_TYPE (Double)
-
-typedef long double LongDouble;
-DECLARE_BASIC_TYPE (LongDouble)
-
-typedef Long Flags;
-  
-} // namespace CORBA
+DECLARE_BASIC_TYPE (Char, _tc_char)
+DECLARE_BASIC_TYPE (WChar, _tc_wchar)
+DECLARE_BASIC_TYPE (Octet, _tc_octet)
+DECLARE_BASIC_TYPE (Short, _tc_short)
+DECLARE_BASIC_TYPE (UShort, _tc_ushort)
+DECLARE_BASIC_TYPE (Long, _tc_long)
+DECLARE_BASIC_TYPE (LongLong, _tc_longlong)
+DECLARE_BASIC_TYPE (ULong, _tc_ulong)
+DECLARE_BASIC_TYPE (ULongLong, _tc_ulonglong)
+DECLARE_BASIC_TYPE (Float, _tc_float)
+DECLARE_BASIC_TYPE (Double, _tc_double)
+DECLARE_BASIC_TYPE (LongDouble, _tc_longdouble)
 
 #undef DECLARE_BASIC_TYPE
+
+}
 
 #endif

@@ -309,14 +309,14 @@ class TypeCodeContentType
 public:
 	static Interface* _content_type (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		TypeCode_ptr tc (Content::_get_ptr ());
-		return (tc->_epv ().header.duplicate) (&tc, _env);
+		Interface* tc = &ptr ();
+		return (tc->_epv ().duplicate) (&tc, _env);
 	}
 
 protected:
 	static TypeCode_ptr ptr ()
 	{
-		return Content::_get_ptr ();
+		return Type <Content>::type_code ();
 	}
 };
 

@@ -29,12 +29,11 @@
 #define NIRVANA_ORB_BOOLEAN_H_
 
 #include <Nirvana/NirvanaBase.h>
+#include "primitive_types.h"
 #include "Type_forward.h"
+#include "tc_constants.h"
 
 namespace CORBA {
-
-typedef bool Boolean;
-
 namespace Nirvana {
 
 /// We can not use `bool' built-in type across the binary boundaries because
@@ -163,6 +162,11 @@ struct Type <Boolean>
 	static ABI_VT_ret VT_ret (Boolean b)
 	{
 		return b;
+	}
+
+	static TypeCode_ptr type_code ()
+	{
+		return _tc_boolean;
 	}
 };
 

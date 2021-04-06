@@ -28,6 +28,7 @@
 #define NIRVANA_ORB_OBJECT_H_
 
 #include "AbstractBase.h"
+#include "basic_types.h"
 
 /// CORBA::Object interface
 

@@ -1,4 +1,4 @@
-/// \file TypeCodeSequence.h
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -24,39 +24,23 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPECODESEQUENCE_H_
-#define NIRVANA_ORB_TYPECODESEQUENCE_H_
+#ifndef NIRVANA_ORB_TYPECODETYPEDEF_H_
+#define NIRVANA_ORB_TYPECODETYPEDEF_H_
 
 #include "TypeCodeImpl.h"
-#include "../sequence.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-template <typename T, ULong bound = 0>
-class TypeCodeSequence :
-	public TypeCodeStatic <TypeCodeSequence <T, bound>, TypeCodeTK <tk_sequence>, TypeCodeOps <Sequence <T> > >,
-	public TypeCodeLength <bound>,
-	public TypeCodeContentType <T>
+template <class TC, class Content>
+class TypeCodeTypeDef :
+	public TypeCodeStatic <TypeCodeTypeDef <TC, Content>, TypeCodeWithId <tk_alias, RepIdOf <TC> >, TypeCodeOps <Content> >,
+	public TypeCodeContentType <Content>,
+	public TypeCodeName <TC>
 {
-	typedef TypeCodeContentType <T> ContentType;
 public:
-	using TypeCodeLength <bound>::_length;
 	using TypeCodeContentType <Content>::_content_type;
-
-	static Boolean equal (TypeCode_ptr other)
-	{
-		return TypeCodeTK <tk_sequence>::equal (other)
-			&& other->length () == bound
-			&& other->content_type ()->equal (ContentType::ptr ());
-	}
-
-	static Boolean equivalent (TypeCode_ptr other)
-	{
-		return TypeCodeTK <tk_sequence>::equivalent (other)
-			&& other->length () == bound
-			&& other->content_type ()->equivalent (ContentType::ptr ());
-	}
+	using TypeCodeName <TC>::_name;
 };
 
 }

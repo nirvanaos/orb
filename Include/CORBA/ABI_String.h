@@ -31,7 +31,8 @@
 #define NIRVANA_ORB_ABI_STRING_H_
 
 #include <Nirvana/NirvanaBase.h>
-#include "basic_types.h"
+#include "primitive_types.h"
+#include "Type_forward.h"
 #include <assert.h>
 
 namespace std {

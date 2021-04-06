@@ -29,7 +29,7 @@
 #include "TypeEnum.h"
 #include "UserException.h"
 #include "EnvironmentEx.h"
-#include <Nirvana/ImportInterface.h>
+#include "basic_types.h"
 
 namespace CORBA {
 

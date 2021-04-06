@@ -27,7 +27,6 @@
 #define NIRVANA_ORB_FIXED_H_
 
 #include <Nirvana/basic_string.h>
-#include "basic_types.h"
 #include <iosfwd>
 
 namespace CORBA {

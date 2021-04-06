@@ -26,7 +26,6 @@
 #ifndef NIRVANA_ORB_TYPEENUM_H_
 #define NIRVANA_ORB_TYPEENUM_H_
 
-#include "basic_types.h"
 #include <Nirvana/throw_exception.h>
 
 namespace CORBA {
@@ -140,6 +139,8 @@ struct TypeEnum
 	{
 		return (ABI_ret)val;
 	}
+
+	static TypeCode_ptr type_code ();
 };
 
 }
