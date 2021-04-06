@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_UNMARSHAL_S_H_
 #define NIRVANA_ORB_UNMARSHAL_S_H_
 
-#include "../Unmarshal.h"
+#include "Unmarshal.h"
 
 namespace CORBA {
 namespace Nirvana {

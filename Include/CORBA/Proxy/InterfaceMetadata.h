@@ -30,7 +30,7 @@
 #define NIRVANA_ORB_INTERFACEMETADATA_H_
 
 #include "IORequest.h"
-#include "../Unmarshal.h"
+#include "Unmarshal.h"
 #include <Nirvana/ImportInterface.h>
 
 namespace CORBA {

@@ -30,8 +30,8 @@
 
 #include "MarshalTraits_forward.h"
 #include "Any.h"
-#include "Marshal.h"
-#include "Unmarshal.h"
+#include "Proxy/Marshal.h"
+#include "Proxy/Unmarshal.h"
 
 namespace CORBA {
 namespace Nirvana {

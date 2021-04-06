@@ -109,6 +109,19 @@ public:
 	}
 };
 
+template <class T>
+class TypeCodeName
+{
+public:
+	static const char* _name (Bridge <TypeCode>* _b, Interface* _env)
+	{
+		return name_;
+	}
+
+private:
+	static const Char name_ [];
+};
+
 template <typename T>
 class TypeCodeOps
 {

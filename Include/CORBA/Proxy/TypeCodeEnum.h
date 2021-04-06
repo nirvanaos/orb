@@ -35,15 +35,12 @@ namespace Nirvana {
 template <class E>
 class TypeCodeEnum :
 	public TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <tk_enum, RepIdOf <E> >, TypeCodeOps <E> >,
-	public TypeCodeMemberCount <Type <E>::count_>
+	public TypeCodeMemberCount <Type <E>::count_>,
+	public TypeCodeName <E>
 {
 public:
 	using TypeCodeMemberCount <Type <E>::count_>::_member_count;
-
-	static const char* _name (Bridge <TypeCode>* _b, Interface* _env)
-	{
-		return name_;
-	}
+	using TypeCodeName <E>::_name;
 
 	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
@@ -56,7 +53,6 @@ public:
 
 private:
 	static const Char* const members_ [Type <E>::count_];
-	static const Char name_ [];
 };
 
 }
