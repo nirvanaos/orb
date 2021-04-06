@@ -1,4 +1,4 @@
-/// \file TypeCodeException.h
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -24,29 +24,21 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPECODEEXCEPTION_H_
-#define NIRVANA_ORB_TYPECODEEXCEPTION_H_
+#ifndef NIRVANA_ORB_TYPECODEIMPORT_H_
+#define NIRVANA_ORB_TYPECODEIMPORT_H_
 
 #include "TypeCodeImpl.h"
-#include "TypeCodeMembers.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-template <class E, bool members = false>
-class TypeCodeException :
-	public TypeCodeStatic <TypeCodeException <E, members>, TypeCodeWithId <tk_except, E>, TypeCodeOps <typename E::_Data> >,
-	public TypeCodeMembersOptional <E, members>
+template <const ::Nirvana::ImportInterfaceT <TypeCode>* ptc>
+class TypeCodeImport
 {
-	typedef TypeCodeMembersOptional <E, members> Members;
 public:
-	using Members::_member_count;
-	using Members::_member_name;
-	using Members::_member_type;
-
-	static const char* _name (Bridge <TypeCode>* _b, Interface* _env)
+	static I_ptr <TypeCode> _get_ptr ()
 	{
-		return E::__name ();
+		return *ptc;
 	}
 };
 

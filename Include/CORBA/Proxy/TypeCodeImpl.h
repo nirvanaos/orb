@@ -303,14 +303,20 @@ public:
 };
 
 // for tk_sequence, tk_array, tk_value_box, tk_alias
-template <const ::Nirvana::ImportInterfaceT <TypeCode>* ptc>
+template <class Content>
 class TypeCodeContentType
 {
 public:
 	static Interface* _content_type (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		TypeCode_ptr tc (*ptc);
+		TypeCode_ptr tc (Content::_get_ptr ());
 		return (tc->_epv ().header.duplicate) (&tc, _env);
+	}
+
+protected:
+	static TypeCode_ptr ptr ()
+	{
+		return Content::_get_ptr ();
 	}
 };
 
