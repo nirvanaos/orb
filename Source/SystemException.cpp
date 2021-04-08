@@ -23,9 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/exceptions.h>
-#include <CORBA/RepositoryId.h>
-#include <CORBA/TypeCode.h>
+#include <CORBA/CORBA.h>
 #include <Nirvana/OLF.h>
 #include <algorithm>
 #include <string.h>

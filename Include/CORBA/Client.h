@@ -1,6 +1,5 @@
 /// \file Client.h
 /// Client implementation templates.
-
 /*
 * Nirvana IDL support library.
 *

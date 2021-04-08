@@ -30,6 +30,7 @@
 
 #include "Boolean.h"
 #include "TypeFixLen.h"
+#include "tc_constants.h"
 
 #define DECLARE_BASIC_TYPE(T, tc) namespace Nirvana { template <> struct Nirvana::Type <T> : Nirvana::TypeFixLen <T> {\
 static TypeCode_ptr type_code () { return tc; } }; }\
@@ -50,8 +51,18 @@ DECLARE_BASIC_TYPE (Float, _tc_float)
 DECLARE_BASIC_TYPE (Double, _tc_double)
 DECLARE_BASIC_TYPE (LongDouble, _tc_longdouble)
 
-#undef DECLARE_BASIC_TYPE
+namespace Nirvana {
+
+inline
+TypeCode_ptr Type <Boolean>::type_code ()
+{
+	return _tc_boolean;
+}
 
 }
+
+}
+
+#undef DECLARE_BASIC_TYPE
 
 #endif

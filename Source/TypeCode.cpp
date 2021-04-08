@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/TypeCode.h>
+#include <CORBA/CORBA.h>
 #include <Nirvana/OLF.h>
 
 DEFINE_CORBA_INTERFACE_EXCEPTION (CORBA, TypeCode, BadKind);

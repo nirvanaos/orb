@@ -28,6 +28,7 @@
 
 #include "ObjectFactory.h"
 #include <Nirvana/ImportInterface.h>
+#include <CORBA/TypeCode.h>
 
 namespace CORBA {
 namespace Nirvana {

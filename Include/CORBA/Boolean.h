@@ -31,17 +31,9 @@
 #include <Nirvana/NirvanaBase.h>
 #include "primitive_types.h"
 #include "Type_forward.h"
-#include "tc_constants.h"
 
 namespace CORBA {
 namespace Nirvana {
-
-/// We can not use `bool' built-in type across the binary boundaries because
-/// it is compiler-specific, but we have to achieve the binary compatibility.
-/// So we use size_t (the machine word) as ABI for boolean in assumption that bool implementation can't be wide.
-/// Note that Sequence <bool> is implemented as vector <bool> template specialization
-/// where element size is 1 byte.
-typedef size_t ABI_boolean;
 
 template <>
 struct Type <Boolean>
@@ -164,10 +156,7 @@ struct Type <Boolean>
 		return b;
 	}
 
-	static TypeCode_ptr type_code ()
-	{
-		return _tc_boolean;
-	}
+	static TypeCode_ptr type_code ();
 };
 
 typedef Type <Boolean>::C_in Boolean_in;

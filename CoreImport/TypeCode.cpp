@@ -1,4 +1,4 @@
-#include <CORBA/TypeCode.h>
+#include <CORBA/CORBA.h>
 #include <Nirvana/OLF.h>
 
 namespace CORBA {

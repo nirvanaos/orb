@@ -310,7 +310,7 @@ public:
 	static Interface* _content_type (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		Interface* tc = &ptr ();
-		return (tc->_epv ().duplicate) (&tc, _env);
+		return (tc->_epv ().duplicate) (tc, _env);
 	}
 
 protected:

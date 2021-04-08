@@ -56,12 +56,6 @@ private:
 	static const Char* const members_ [Type <E>::count_];
 };
 
-template <class T, T last> inline
-TypeCode_ptr TypeCodeEnum <T, last>::type_code ()
-{
-	return TypeCodeEnum <T>._get_ptr ();
-}
-
 }
 }
 

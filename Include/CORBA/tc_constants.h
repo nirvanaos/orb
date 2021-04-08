@@ -26,7 +26,6 @@
 #ifndef NIRVANA_ORB_TC_CONSTANTS_H_
 #define NIRVANA_ORB_TC_CONSTANTS_H_
 
-#include "TypeCode.h"
 #include <Nirvana/ImportInterface.h>
 
 namespace CORBA {

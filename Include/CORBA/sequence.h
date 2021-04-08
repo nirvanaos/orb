@@ -35,13 +35,21 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <class T>
-struct Type <Sequence <T> > :
-	public TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check>
+template <class T, ULong b = 0>
+class Sequence : public std::vector <T>
 {
-	typedef TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check> Base;
+public:
+	static const ULong bound = b;
+};
+
+template <class T, ULong bound>
+struct Type <Sequence <T, bound> > :
+	public TypeVarLen <std::vector <T>, CHECK_SEQUENCES || bound || Type <T>::has_check>
+{
+	typedef std::vector <T> Container;
+	typedef TypeVarLen <Container, CHECK_SEQUENCES || bound || Type <T>::has_check> Base;
 	typedef typename Type <T>::ABI_type T_ABI;
-	typedef ABI <Sequence <T_ABI> > ABI_type;
+	typedef ABI <std::vector <T_ABI> > ABI_type;
 
 	static void check (const ABI_type& v);
 
@@ -52,9 +60,12 @@ struct Type <Sequence <T> > :
 	class C_in : public Base::C_in
 	{
 	public:
-		C_in (const Sequence <T>& v) :
-			Base::C_in (v)
-		{}
+		C_in (const Container& s) :
+			Base::C_in (s)
+		{
+			if (bound && s.size () > bound)
+				::Nirvana::throw_BAD_PARAM ();
+		}
 
 		const ABI_type* operator & () const
 		{
@@ -65,9 +76,12 @@ struct Type <Sequence <T> > :
 	class C_inout : public Base::C_inout
 	{
 	public:
-		C_inout (Sequence <T>& s) :
+		C_inout (Container& s) :
 			Base::C_inout (s)
-		{}
+		{
+			if (bound && s.size () > bound)
+				::Nirvana::throw_BAD_PARAM ();
+		}
 
 		ABI_type* operator & () const
 		{
@@ -78,41 +92,46 @@ struct Type <Sequence <T> > :
 	class C_out : public C_inout
 	{
 	public:
-		C_out (Sequence <T>& s) :
+		C_out (Container& s) :
 			C_inout (s)
 		{
 			s.clear ();
 		}
 	};
 
-	static const Sequence <T>& in (ABI_in p)
+	static const Container& in (ABI_in p)
 	{
 		Base::in (p);	// Check
 		// Use static_cast to ensure that we are using own vector implementation.
 		return static_cast <const Sequence <T>&> (*p);
 	}
 
-	static Sequence <T>& inout (ABI_inout p)
+	static Container& inout (ABI_inout p)
 	{
 		Base::inout (p); // Check
 		// Use static_cast to ensure that we are using own vector implementation.
-		return static_cast <Sequence <T>&> (*p);
+		return static_cast <Container&> (*p);
 	}
 
-	static Sequence <T>& out (ABI_out p)
+	static Container& out (ABI_out p)
 	{
 		Base::out (p); // Check
 		// Use static_cast to ensure that we are using own vector implementation.
-		Sequence <T>& val = static_cast <Sequence <T>&> (*p);
+		Container& val = static_cast <Container&> (*p);
 		// Must be empty
 		if (!val.empty ())
 			::Nirvana::throw_BAD_PARAM ();
 		return val;
 	}
+
+	static TypeCode_ptr type_code ();
 };
 
 template <class T>
-void Type <Sequence <T> >::check (const ABI_type& v)
+struct Type < ::std::vector <T> > : public Type <Sequence <T, 0> > {};
+
+template <class T, ULong bound>
+void Type <Sequence <T, bound> >::check (const ABI_type& v)
 {
 	// Do some check
 	if (CHECK_SEQUENCES) {
@@ -120,30 +139,18 @@ void Type <Sequence <T> >::check (const ABI_type& v)
 		if (p)
 			CORBA::Nirvana::_check_pointer (p);
 		size_t cnt = v.size;
-		if (cnt > 0 && (cnt > v.allocated / sizeof (T) || !Sequence <T>::memory ()->is_readable (p, cnt * sizeof (T))))
+		if (cnt > 0 && (cnt > v.allocated / sizeof (T) || !Container::memory ()->is_readable (p, cnt * sizeof (T))))
 			::Nirvana::throw_BAD_PARAM ();
 	}
+
+	if (bound && v.size > bound)
+		::Nirvana::throw_BAD_PARAM ();
 
 	if (Type <T>::has_check) {
 		for (const T_ABI* p = v.ptr, *end = p + v.size; p != end; ++p)
 			Type <T>::check (*p);
 	}
 }
-
-template <typename T>
-using TypeSequence = Type <Sequence <T> >;
-
-template <typename T>
-using Sequence_in = typename TypeSequence <T>::C_in;
-
-template <typename T>
-using Sequence_out = typename TypeSequence <T>::C_out;
-
-template <typename T>
-using Sequence_inout = typename TypeSequence <T>::C_inout;
-
-template <typename T>
-using Sequence_var = typename TypeSequence <T>::C_var;
 
 }
 } // namespace CORBA

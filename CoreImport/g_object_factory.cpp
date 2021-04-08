@@ -1,3 +1,4 @@
+#include <CORBA/CORBA.h>
 #include <CORBA/ObjectFactory.h>
 #include <Nirvana/OLF.h>
 

@@ -44,6 +44,15 @@ enum CompletionStatus : uint32_t
 	COMPLETED_MAYBE
 };
 
+namespace Nirvana {
+
+template <>
+struct Type <CompletionStatus> :
+	public TypeEnum <CompletionStatus, CompletionStatus::COMPLETED_MAYBE>
+{};
+
+}
+
 class NIRVANA_NOVTABLE SystemException : public Exception
 {
 public:
@@ -153,15 +162,6 @@ private:
 
 	static const ExceptionEntry exception_entries_ [KNOWN_SYSTEM_EXCEPTIONS];
 };
-
-namespace Nirvana {
-
-template <>
-struct Type <CompletionStatus> :
-	public TypeEnum <CompletionStatus, COMPLETED_MAYBE>
-{};
-
-}
 
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_CompletionStatus;
 

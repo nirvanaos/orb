@@ -1,4 +1,4 @@
-#include <CORBA/tc_constants.h>
+#include <CORBA/CORBA.h>
 #include <Nirvana/OLF.h>
 
 namespace CORBA {

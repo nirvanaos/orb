@@ -179,8 +179,7 @@ struct TypeVarLen <T, true> : TypeVarLenBase <T>
 		C_ret (typename Base::ABI_ret&& val) :
 			Base::C_ret (std::move (val))
 		{
-			if (Type <T>::has_check)
-				check_or_clear (this->val_);
+			check_or_clear (this->val_);
 		}
 	};
 

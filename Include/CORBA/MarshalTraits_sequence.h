@@ -37,12 +37,12 @@ namespace CORBA {
 namespace Nirvana {
 
 template <typename T>
-struct MarshalTraits <Sequence <T> >
+struct MarshalTraits <std::vector <T> >
 {
 	static const bool has_marshal = true;
 
-	typedef Sequence <T> Seq;
-	typedef ABI <Sequence <T> > SeqABI;
+	typedef std::vector <T> Seq;
+	typedef ABI <Seq> SeqABI;
 	typedef typename Type <T>::ABI_type T_ABI;
 
 	static void marshal_in (const Seq& src, Marshal_ptr marshaler, SeqABI& dst);
@@ -51,7 +51,7 @@ struct MarshalTraits <Sequence <T> >
 };
 
 template <typename T>
-void MarshalTraits <Sequence <T> >::marshal_in (const Seq& src, Marshal_ptr marshaler, SeqABI& dst)
+void MarshalTraits <std::vector <T> >::marshal_in (const Seq& src, Marshal_ptr marshaler, SeqABI& dst)
 {
 	assert (&src != &dst);
 	if (src.empty ())
@@ -77,7 +77,7 @@ void MarshalTraits <Sequence <T> >::marshal_in (const Seq& src, Marshal_ptr mars
 }
 
 template <typename T>
-void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, Marshal_ptr marshaler, SeqABI& dst)
+void MarshalTraits <std::vector <T> >::marshal_out (Seq& src, Marshal_ptr marshaler, SeqABI& dst)
 {
 	assert (&src != &dst);
 	if (src.empty ())
@@ -121,7 +121,7 @@ void MarshalTraits <Sequence <T> >::marshal_out (Seq& src, Marshal_ptr marshaler
 }
 
 template <typename T>
-void MarshalTraits <Sequence <T> >::unmarshal (const SeqABI& src, Unmarshal_ptr unmarshaler, Seq& dst)
+void MarshalTraits <std::vector <T> >::unmarshal (const SeqABI& src, Unmarshal_ptr unmarshaler, Seq& dst)
 {
 	if (Type <Seq>::has_check)
 		Type <Seq>::check (src);

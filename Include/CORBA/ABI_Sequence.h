@@ -39,10 +39,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <class T>
-using Sequence = std::vector <T, std::allocator <T> >;
-
-template <class T>
-struct alignas (sizeof (void*)) ABI <Sequence <T> >
+struct alignas (sizeof (void*)) ABI <std::vector <T, std::allocator <T> > >
 {
 	void reset ()
 	{

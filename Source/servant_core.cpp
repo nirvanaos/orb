@@ -24,6 +24,7 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/servant_core.h>
+#include <CORBA/TypeCode.h>
 
 namespace CORBA {
 namespace Nirvana {

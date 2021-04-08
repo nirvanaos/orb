@@ -31,7 +31,7 @@
 #include "ABI_Any.h"
 #include "TypeCode_forward.h"
 #include <Nirvana/basic_string.h>
-
+#include "tc_constants.h"
 //#include "Fixed.h"
 
 namespace CORBA {
@@ -282,6 +282,11 @@ struct Type <Any> : public TypeVarLen <Any, true>
 		if (val.type ())
 			::Nirvana::throw_BAD_PARAM ();
 		return val;
+	}
+
+	static TypeCode_ptr type_code ()
+	{
+		return _tc_any;
 	}
 };
 

@@ -35,14 +35,14 @@ namespace Nirvana {
 
 template <typename T, ULong bound = 0>
 class TypeCodeSequence :
-	public TypeCodeStatic <TypeCodeSequence <T, bound>, TypeCodeTK <tk_sequence>, TypeCodeOps <Sequence <T> > >,
+	public TypeCodeStatic <TypeCodeSequence <T, bound>, TypeCodeTK <tk_sequence>, TypeCodeOps <std::vector <T> > >,
 	public TypeCodeLength <bound>,
 	public TypeCodeContentType <T>
 {
 	typedef TypeCodeContentType <T> ContentType;
 public:
 	using TypeCodeLength <bound>::_length;
-	using TypeCodeContentType <Content>::_content_type;
+	using TypeCodeContentType <T>::_content_type;
 
 	static Boolean equal (TypeCode_ptr other)
 	{
@@ -58,6 +58,12 @@ public:
 			&& other->content_type ()->equivalent (ContentType::ptr ());
 	}
 };
+
+template <typename T, ULong bound> inline
+TypeCode_ptr Type <Sequence <T, bound> >::type_code ()
+{
+	return TypeCodeSequence <T, bound>::_get_ptr ();
+}
 
 }
 }

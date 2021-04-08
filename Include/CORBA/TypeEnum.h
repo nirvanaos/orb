@@ -27,11 +27,10 @@
 #define NIRVANA_ORB_TYPEENUM_H_
 
 #include <Nirvana/throw_exception.h>
+#include "primitive_types.h"
 
 namespace CORBA {
 namespace Nirvana {
-
-typedef ULong ABI_enum;
 
 /// Base for enum data types
 template <class T, T last>
@@ -139,8 +138,6 @@ struct TypeEnum
 	{
 		return (ABI_ret)val;
 	}
-
-	static TypeCode_ptr type_code ();
 };
 
 }

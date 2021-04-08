@@ -29,7 +29,6 @@
 #include "TypeEnum.h"
 #include "UserException.h"
 #include "EnvironmentEx.h"
-#include "basic_types.h"
 
 namespace CORBA {
 
@@ -93,8 +92,8 @@ struct Definitions <TypeCode>
 };
 
 BRIDGE_BEGIN (TypeCode, CORBA_REPOSITORY_ID ("TypeCode"))
-Boolean (*equal) (Bridge <TypeCode>*, Interface*, Interface*);
-Boolean (*equivalent) (Bridge <TypeCode>*, Interface*, Interface*);
+ABI_boolean (*equal) (Bridge <TypeCode>*, Interface*, Interface*);
+ABI_boolean (*equivalent) (Bridge <TypeCode>*, Interface*, Interface*);
 Interface* (*get_compact_typecode) (Bridge <TypeCode>*, Interface*);
 ABI_enum (*kind) (Bridge <TypeCode>*, Interface*);
 const char* (*id) (Bridge <TypeCode>*, Interface*);

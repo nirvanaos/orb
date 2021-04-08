@@ -26,8 +26,19 @@
 #ifndef NIRVANA_ORB_TYPE_FORWARD_H_
 #define NIRVANA_ORB_TYPE_FORWARD_H_
 
+#include "primitive_types.h"
+
 namespace CORBA {
 namespace Nirvana {
+
+/// We can not use `bool' built-in type across the binary boundaries because
+/// it is compiler-specific, but we have to achieve the binary compatibility.
+/// So we use size_t (the machine word) as ABI for boolean in assumption that bool implementation can't be wide.
+/// Note that Sequence <bool> is implemented as vector <bool> template specialization
+/// where element size is 1 byte.
+typedef size_t ABI_boolean;
+
+typedef ULong ABI_enum;
 
 /// For each structure, union or enum data type T, IDL compiler generates `CORBA::Nirvana::ABI <T>` structure.
 /// ABI type must be POD (Plain Old Data, mustn't have any constructors and destructors).
@@ -76,6 +87,9 @@ template <> struct Type <T>
   // Types for members
   typedef T Member_type;
   typedef const T& Member_ret;
+
+  // Type code
+  static TypeCode_ptr type_code ();
 };
 ~~~
 */

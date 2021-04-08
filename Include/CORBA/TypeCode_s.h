@@ -41,7 +41,7 @@ public:
 	static const typename Bridge <TypeCode>::EPV epv_;
 
 protected:
-	static Boolean _equal (Bridge <TypeCode>* _b, Interface* other, Interface* _env)
+	static ABI_boolean _equal (Bridge <TypeCode>* _b, Interface* other, Interface* _env)
 	{
 		try {
 			return S::_implementation (_b).equal (TypeI <TypeCode>::in (other));
@@ -53,7 +53,7 @@ protected:
 		return 0;
 	}
 
-	static Boolean _equivalent (Bridge <TypeCode>* _b, Interface* other, Interface* _env)
+	static ABI_boolean _equivalent (Bridge <TypeCode>* _b, Interface* other, Interface* _env)
 	{
 		try {
 			return S::_implementation (_b).equivalent (TypeI <TypeCode>::in (other));
