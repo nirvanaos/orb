@@ -29,7 +29,7 @@
 #define NIRVANA_ORB_MARSHALTRAITS_SEQUENCE_H_
 
 #include "MarshalTraits_forward.h"
-#include "Type_sequence.h"
+#include "Sequence.h"
 #include "Proxy/Marshal.h"
 #include "Proxy/Unmarshal.h"
 
@@ -37,11 +37,11 @@ namespace CORBA {
 namespace Nirvana {
 
 template <typename T>
-struct MarshalTraits <std::vector <T> >
+struct MarshalTraits <Vector <T> >
 {
 	static const bool has_marshal = true;
 
-	typedef std::vector <T> Seq;
+	typedef Vector <T> Seq;
 	typedef ABI <Seq> SeqABI;
 	typedef typename Type <T>::ABI_type T_ABI;
 
@@ -51,7 +51,7 @@ struct MarshalTraits <std::vector <T> >
 };
 
 template <typename T>
-void MarshalTraits <std::vector <T> >::marshal_in (const Seq& src, Marshal_ptr marshaler, SeqABI& dst)
+void MarshalTraits <Vector <T> >::marshal_in (const Seq& src, Marshal_ptr marshaler, SeqABI& dst)
 {
 	assert (&src != &dst);
 	if (src.empty ())
@@ -77,7 +77,7 @@ void MarshalTraits <std::vector <T> >::marshal_in (const Seq& src, Marshal_ptr m
 }
 
 template <typename T>
-void MarshalTraits <std::vector <T> >::marshal_out (Seq& src, Marshal_ptr marshaler, SeqABI& dst)
+void MarshalTraits <Vector <T> >::marshal_out (Seq& src, Marshal_ptr marshaler, SeqABI& dst)
 {
 	assert (&src != &dst);
 	if (src.empty ())
@@ -121,7 +121,7 @@ void MarshalTraits <std::vector <T> >::marshal_out (Seq& src, Marshal_ptr marsha
 }
 
 template <typename T>
-void MarshalTraits <std::vector <T> >::unmarshal (const SeqABI& src, Unmarshal_ptr unmarshaler, Seq& dst)
+void MarshalTraits <Vector <T> >::unmarshal (const SeqABI& src, Unmarshal_ptr unmarshaler, Seq& dst)
 {
 	if (Type <Seq>::has_check)
 		Type <Seq>::check (src);

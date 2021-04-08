@@ -1,5 +1,4 @@
 /// \file
-/// CORBA sequence type.
 /*
 * Nirvana IDL support library.
 *
@@ -25,8 +24,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPE_SEQUENCE_H_
-#define NIRVANA_ORB_TYPE_SEQUENCE_H_
+#ifndef NIRVANA_ORB_SEQUENCE_H_
+#define NIRVANA_ORB_SEQUENCE_H_
 
 #include <Nirvana/vector.h>
 #include "TypeVarLen.h"
@@ -34,11 +33,23 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <class T>
-struct Type <std::vector <T> > :
-	public TypeVarLen <std::vector <T>, CHECK_SEQUENCES || Type <T>::has_check>
+/// CORBA sequence type.
+/// 
+/// \tparam T Element type.
+/// \tparam bound The bound.
+template <class T, ULong bound = 0>
+class Sequence : public Vector <T>
 {
-	typedef TypeVarLen <std::vector <T>, CHECK_SEQUENCES || Type <T>::has_check> Base;
+public:
+	/// The sequence bound. 0 if unbounded.
+	static const ULong bound_ = bound;
+};
+
+template <class T>
+struct Type <Vector <T> > :
+	public TypeVarLen <Vector <T>, CHECK_SEQUENCES || Type <T>::has_check>
+{
+	typedef TypeVarLen <Vector <T>, CHECK_SEQUENCES || Type <T>::has_check> Base;
 	typedef typename Type <T>::ABI_type T_ABI;
 	typedef typename Base::Var_type Var_type;
 	typedef typename Base::ABI_type ABI_type;
@@ -51,8 +62,8 @@ struct Type <std::vector <T> > :
 	class C_in : public Base::C_in
 	{
 	public:
-		C_in (const Var_type& s) :
-			Base::C_in (s)
+		C_in (const Var_type& v) :
+			Base::C_in (v)
 		{}
 
 		const ABI_type* operator & () const
@@ -65,8 +76,8 @@ struct Type <std::vector <T> > :
 	class C_inout : public Base::C_inout
 	{
 	public:
-		C_inout (Var_type& s) :
-			Base::C_inout (s)
+		C_inout (Var_type& v) :
+			Base::C_inout (v)
 		{}
 
 		ABI_type* operator & () const
@@ -79,10 +90,10 @@ struct Type <std::vector <T> > :
 	class C_out : public C_inout
 	{
 	public:
-		C_out (Var_type& s) :
-			C_inout (s)
+		C_out (Var_type& v) :
+			C_inout (v)
 		{
-			s.clear ();
+			v.clear ();
 		}
 	};
 
@@ -115,7 +126,7 @@ struct Type <std::vector <T> > :
 };
 
 template <class T>
-void Type <std::vector <T> >::check (const ABI_type& v)
+void Type <Vector <T> >::check (const ABI_type& v)
 {
 	// Do some check
 	if (CHECK_SEQUENCES) {
@@ -133,58 +144,37 @@ void Type <std::vector <T> >::check (const ABI_type& v)
 	}
 }
 
-template <class T, ULong b = 0>
-class Sequence : public std::vector <T>
-{
-public:
-	static const ULong bound = b;
-};
-
 template <class T, ULong bound>
 struct Type <Sequence <T, bound> > :
-	public Type <std::vector <T> >
+	public Type <Vector <T> >
 {
-	typedef Type <std::vector <T> > Base;
+	typedef Type <Vector <T> > Base;
+	typedef typename Base::ABI_type ABI_type;
+	typedef typename Base::Var_type Var_type;
+
 	static const bool has_check = Base::has_check || bound != 0;
 
-	typedef typename Base::Var_type Var_type;
-	typedef typename Base::ABI_type ABI_type;
+	static void check (const ABI_type& v)
+	{
+		Base::check (v);
+		if (bound && v.size > bound)
+			::Nirvana::throw_BAD_PARAM ();
+	}
 
-	static void check (const ABI_type& v);
-
+	// Check in C_in for member assignments
 	class C_in : public Base::C_in
 	{
 	public:
-		C_in (const Var_type& s) :
-			Base::C_in (s)
+		C_in (const Var_type& v) :
+			Base::C_in (v)
 		{
-			if (bound && s.size () > bound)
-				::Nirvana::throw_BAD_PARAM ();
-		}
-	};
-
-	class C_inout : public Base::C_inout
-	{
-	public:
-		C_inout (Var_type& s) :
-			Base::C_inout (s)
-		{
-			if (bound && s.size () > bound)
+			if (bound && v.size () > bound)
 				::Nirvana::throw_BAD_PARAM ();
 		}
 	};
 
 	static TypeCode_ptr type_code ();
 };
-
-template <class T, ULong bound>
-void Type <Sequence <T, bound> >::check (const ABI_type& v)
-{
-	Base::check (v);
-
-	if (bound && v.size > bound)
-		::Nirvana::throw_BAD_PARAM ();
-}
 
 }
 } // namespace CORBA

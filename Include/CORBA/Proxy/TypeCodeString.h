@@ -57,10 +57,31 @@ public:
 };
 
 template <ULong bound>
-class TypeCodeString <String, bound> : public TypeCodeStringBase <String, tk_string, bound> {};
+class TypeCodeString <StringT <Char>, bound> : public TypeCodeStringBase <String, tk_string, bound> {};
 
 template <ULong bound>
-class TypeCodeString <WString, bound> : public TypeCodeStringBase <WString, tk_wstring, bound> {};
+class TypeCodeString <StringT <WChar>, bound> : public TypeCodeStringBase <WString, tk_wstring, bound> {};
+
+inline
+TypeCode_ptr Type <StringT <Char> >::type_code ()
+{
+	return _tc_string;
+}
+
+inline
+TypeCode_ptr Type <StringT <WChar> >::type_code ()
+{
+	return _tc_wstring;
+}
+
+template <typename C, ULong bound> inline
+TypeCode_ptr Type <BoundedStringT <C, bound> >::type_code ()
+{
+	if (!bound)
+		return Type <StringT <C> >::type_code ();
+	else
+		return TypeCodeString <StringT <C>, bound>::_get_ptr ();
+}
 
 }
 }

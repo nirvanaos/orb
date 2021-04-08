@@ -42,7 +42,7 @@ public:
 		OTHER_INTERFACE
 	};
 
-	static bool compatible (String_in current, String_in requested)
+	static bool compatible (const StringBase <Char>& current, String_in requested)
 	{
 		return check (current, requested) == COMPATIBLE;
 	}

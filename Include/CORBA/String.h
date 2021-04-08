@@ -33,23 +33,17 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <typename C> inline
-StringBase <C>::operator const StringT <C>& () const
-{
-	return static_cast <const StringT <C>&> (*this);
-}
-
 template <typename C>
 struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 {
 	typedef TypeVarLen <StringT <C>, CHECK_STRINGS> Base;
-	typedef ABI <StringT <C> > ABI_type;
-
-	static void check (const ABI_type& s);
-
+	typedef typename Base::ABI_type ABI_type;
 	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_out ABI_out;
 	typedef typename Base::ABI_inout ABI_inout;
+	typedef typename Base::Member_type Member_type;
+
+	static void check (const ABI_type& s);
 
 	typedef const StringBase <C>& C_in;
 
@@ -100,6 +94,8 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 			::Nirvana::throw_BAD_PARAM ();
 		return val;
 	}
+
+	static TypeCode_ptr type_code ();
 };
 
 template <typename C>
@@ -124,12 +120,75 @@ void Type <StringT <C> >::check (const ABI_type& s)
 		::Nirvana::throw_BAD_PARAM (); // Not zero-terminated
 }
 
+template <typename C, ULong bound = 0>
+class BoundedStringT : public StringT <C>
+{
+public:
+	static const ULong bound_ = bound;
+};
+
+template <typename C, ULong bound>
+struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
+{
+	typedef Type <StringT <C> > Base;
+	typedef typename Base::ABI_type ABI_type;
+	typedef typename Base::Var_type Var_type;
+
+	static const bool has_check = Base::has_check || bound != 0;
+
+	static void check (const ABI_type& v)
+	{
+		Base::check (v);
+		if (bound && v.size > bound)
+			::Nirvana::throw_BAD_PARAM ();
+	}
+
+	// Check in C_in for member assignments
+	class C_in : public Base::C_in
+	{
+	public:
+		C_in (const Var_type& s) :
+			Base::C_in (s)
+		{
+			if (bound && s.size () > bound)
+				::Nirvana::throw_BAD_PARAM ();
+		}
+	};
+
+	static TypeCode_ptr type_code ();
+};
+
+/// Unbounded string. Equivalent to std::string.
+typedef StringT <Char> String;
+
+/// Unbounded wide string. Equivalent to std::wstring.
+typedef StringT <WChar> WString;
+
+/// Bounded string type
+/// 
+/// \tparam bound Maximal string length.
+template <ULong bound>
+using BoundedString = BoundedStringT <Char, bound>;
+
+/// Bounded wide string type
+/// 
+/// \tparam bound Maximal string length.
+template <ULong bound>
+using BoundedWString = BoundedStringT <WChar, bound>;
+
+// For member assignments
+template <typename C> inline
+StringBase <C>::operator const StringT <C>& () const
+{
+	return static_cast <const StringT <C>&> (*this);
 }
 
-typedef typename Nirvana::Type <Nirvana::String>::C_out String_out;
-typedef typename Nirvana::Type <Nirvana::WString>::C_out WString_out;
-typedef typename Nirvana::Type <Nirvana::String>::C_inout String_inout;
-typedef typename Nirvana::Type <Nirvana::WString>::C_inout WString_inout;
+}
+
+typedef typename Nirvana::Type <Nirvana::StringT <Char> >::C_out String_out;
+typedef typename Nirvana::Type <Nirvana::StringT <WChar> >::C_out WString_out;
+typedef typename Nirvana::Type <Nirvana::StringT <Char> >::C_inout String_inout;
+typedef typename Nirvana::Type <Nirvana::StringT <WChar> >::C_inout WString_inout;
 
 // For String_in and WString_in see StringBase.h
 // String_var and WString_var classes are defined in String_compat.h

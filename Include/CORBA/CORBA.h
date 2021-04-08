@@ -33,7 +33,7 @@
 #include "Object.h"
 #include "TypeCode.h"
 #include "String.h"
-#include "Type_sequence.h"
+#include "Sequence.h"
 #include "exceptions.h"
 #include "tc_constants.h"
 #include "Any.h"

@@ -1,7 +1,5 @@
-//! \file ABI_String.h.
-//!
-//! \brief Declares the string ABI
-
+/// \file ABI_String.h.
+/// \brief Declares the string ABI
 /*
 * Nirvana IDL support library.
 *
@@ -47,9 +45,6 @@ namespace Nirvana {
 
 template <typename C>
 using StringT = std::basic_string <C, std::char_traits <C>, std::allocator <C> >;
-
-typedef StringT <Char> String;
-typedef StringT <WChar> WString;
 
 template <typename C>
 struct alignas (sizeof (void*)) ABI <StringT <C> >

@@ -38,8 +38,11 @@ template <class T> class allocator;
 namespace CORBA {
 namespace Nirvana {
 
+template <typename T>
+using Vector = std::vector <T, std::allocator <T> >;
+
 template <class T>
-struct alignas (sizeof (void*)) ABI <std::vector <T, std::allocator <T> > >
+struct alignas (sizeof (void*)) ABI <Vector <T> >
 {
 	void reset ()
 	{
