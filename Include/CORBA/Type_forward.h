@@ -46,10 +46,11 @@ typedef ULong ABI_enum;
 template <class T> struct ABI;
 
 /** For each structure, union or enum data type T, IDL compiler generates `CORBA::Nirvana::Type <T>` structure.
-    This structure defines how the parameters are passed between client and server sides of the interface bridge.
+    This structure defines how the parameters are passed between client and server.
 ~~~
 template <> struct Type <T>
 {
+  typedef T Var_type;
   typedef ABI <T> ABI_type;
 
   // Check internal invariants and throw BAD_PARAM or INV_OBJREF exception if data is invalid.

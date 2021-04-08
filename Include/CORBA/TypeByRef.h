@@ -35,6 +35,7 @@ namespace Nirvana {
 template <class T, class ABI>
 struct TypeByRef
 {
+	typedef T Var_type;
 	typedef ABI ABI_type;
 
 	static const bool has_check = false;

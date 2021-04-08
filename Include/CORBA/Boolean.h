@@ -38,6 +38,7 @@ namespace Nirvana {
 template <>
 struct Type <Boolean>
 {
+	typedef bool Var_type;
 	typedef ABI_boolean ABI_type;
 
 	static const bool has_check = false;

@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_TYPECODESEQUENCE_H_
 
 #include "TypeCodeImpl.h"
-#include "../sequence.h"
+#include "../Type_sequence.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -58,6 +58,12 @@ public:
 			&& other->content_type ()->equivalent (ContentType::ptr ());
 	}
 };
+
+template <typename T> inline
+TypeCode_ptr Type <std::vector <T> >::type_code ()
+{
+	return TypeCodeSequence <T, 0>::_get_ptr ();
+}
 
 template <typename T, ULong bound> inline
 TypeCode_ptr Type <Sequence <T, bound> >::type_code ()
