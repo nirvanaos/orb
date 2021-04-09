@@ -52,8 +52,7 @@ extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_string;
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_wstring;
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_ValueBase;
 
-// TODO: Temporary solution
-// extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_InterfaceDef;
+// TODO: Temporary solution. Remove after definition of the InterfaceDef.
 #define _tc_InterfaceDef _tc_Object
 
 }

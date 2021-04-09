@@ -62,13 +62,13 @@ class TypeCodeString <StringT <Char>, bound> : public TypeCodeStringBase <String
 template <ULong bound>
 class TypeCodeString <StringT <WChar>, bound> : public TypeCodeStringBase <WString, tk_wstring, bound> {};
 
-inline
+template <> inline
 TypeCode_ptr Type <StringT <Char> >::type_code ()
 {
 	return _tc_string;
 }
 
-inline
+template <> inline
 TypeCode_ptr Type <StringT <WChar> >::type_code ()
 {
 	return _tc_wstring;

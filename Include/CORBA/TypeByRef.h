@@ -32,15 +32,15 @@ namespace CORBA {
 namespace Nirvana {
 
 /// Data type, passed by reference.
-template <class T, class ABI>
+/// 
+/// \tparam T The variable type.
+/// \tparam TABI The ABI type.
+/// \tparam TMember The struct member type.
+template <typename T, typename TABI = T, typename TMember = T>
 struct TypeByRef
 {
 	typedef T Var_type;
-	typedef ABI ABI_type;
-
-	static const bool has_check = false;
-	static void check (const ABI_type&)
-	{}
+	typedef TABI ABI_type;
 
 	// ABI data types
 	typedef const ABI_type* ABI_in;
@@ -49,17 +49,16 @@ struct TypeByRef
 	typedef ABI_type ABI_ret;
 	typedef const ABI_type* ABI_VT_ret;
 
-
 	// Member types
-	typedef T Member_type;
-	typedef const T& Member_ret;
+	typedef TMember Member_type;
+	typedef const TMember& Member_ret;
 
 	// Client-side types
 
 	class C_in
 	{
 	public:
-		C_in (const T& v) :
+		C_in (const Var_type& v) :
 			ref_ (v)
 		{}
 
@@ -69,19 +68,19 @@ struct TypeByRef
 		}
 
 		// For member assignments
-		operator const T& () const
+		operator const Member_type& () const
 		{
 			return ref_;
 		}
 
 	protected:
-		const T& ref_;
+		const Var_type& ref_;
 	};
 
 	class C_inout
 	{
 	public:
-		C_inout (T& v) :
+		C_inout (Var_type& v) :
 			ref_ (v)
 		{}
 
@@ -91,47 +90,47 @@ struct TypeByRef
 		}
 
 	protected:
-		T& ref_;
+		Var_type& ref_;
 	};
 
 	typedef C_inout C_out;
 
-	// Client I_var class for the legacy C++ IDL mapping support
+	// Client T_var class for the legacy C++ IDL mapping support
 	class C_var :
-		public T
+		public Var_type
 	{
 	public:
 		C_var ()
 		{}
 
-		C_var (const T& v) :
-			T (v)
+		C_var (const Var_type& v) :
+			Var_type (v)
 		{}
 
 		C_var (const C_var& src) :
-			T (src)
+			Var_type (src)
 		{}
 
-		C_var& operator = (const T& v)
+		C_var& operator = (const Var_type& v)
 		{
 			if (this != &v)
-				T::operator = (v);
+				Var_type::operator = (v);
 			return *this;
 		}
 
 		C_var& operator = (const C_var& v)
 		{
 			if (this != &v)
-				T::operator = (v);
+				Var_type::operator = (v);
 			return *this;
 		}
 
-		T& operator -> ()
+		Var_type& operator -> ()
 		{
 			return *this;
 		}
 
-		const T& operator -> () const
+		const Var_type& operator -> () const
 		{
 			return *this;
 		}
@@ -151,7 +150,7 @@ struct TypeByRef
 			return *this;
 		}
 
-		T _retn ()
+		Var_type _retn ()
 		{
 			return *this;
 		}
@@ -159,9 +158,9 @@ struct TypeByRef
 
 	struct C_ret : ABI_ret
 	{
-		operator const T& () const
+		operator const Var_type& () const
 		{
-			return reinterpret_cast <const T&> (*this);
+			return reinterpret_cast <const Var_type&> (*this);
 		}
 	};
 
@@ -169,7 +168,7 @@ struct TypeByRef
 	{
 	public:
 		C_VT_ret (ABI_VT_ret p) :
-			p_ (reinterpret_cast <const T*> (p))
+			p_ (reinterpret_cast <const Var_type*> (p))
 		{
 			_check_pointer (p);
 		}
@@ -180,34 +179,34 @@ struct TypeByRef
 		}
 
 	protected:
-		const T* p_;
+		const Var_type* p_;
 	};
 
 	// Servant-side methods
 
-	static const T& in (ABI_in p)
+	static const Var_type& in (ABI_in p)
 	{
 		_check_pointer (p);
-		return reinterpret_cast <const T&> (*p);
+		return reinterpret_cast <const Var_type&> (*p);
 	}
 
-	static T& out (ABI_out p)
+	static Var_type& out (ABI_out p)
 	{
 		return inout (p);
 	}
 
-	static T& inout (ABI_inout p)
+	static Var_type& inout (ABI_inout p)
 	{
 		_check_pointer (p);
-		return reinterpret_cast <T&> (*p);
+		return reinterpret_cast <Var_type&> (*p);
 	}
 
-	static ABI_ret ret (T& v)
+	static ABI_ret ret (Var_type& v)
 	{
 		return reinterpret_cast <ABI_ret&> (v);
 	}
 
-	static ABI_VT_ret VT_ret (const T& v)
+	static ABI_VT_ret VT_ret (const Var_type& v)
 	{
 		return &reinterpret_cast <const ABI_type&> (v);
 	}

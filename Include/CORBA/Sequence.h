@@ -37,7 +37,7 @@ namespace Nirvana {
 /// 
 /// \tparam T Element type.
 /// \tparam bound The bound.
-template <class T, ULong bound = 0>
+template <typename T, ULong bound = 0>
 class Sequence : public Vector <T>
 {
 public:
@@ -45,7 +45,7 @@ public:
 	static const ULong bound_ = bound;
 };
 
-template <class T>
+template <typename T>
 struct Type <Vector <T> > :
 	public TypeVarLen <Vector <T>, CHECK_SEQUENCES || Type <T>::has_check>
 {
@@ -123,9 +123,13 @@ struct Type <Vector <T> > :
 	}
 
 	static TypeCode_ptr type_code ();
+
+	static void marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst);
+	static void marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst);
+	static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst);
 };
 
-template <class T>
+template <typename T>
 void Type <Vector <T> >::check (const ABI_type& v)
 {
 	// Do some check
@@ -141,6 +145,110 @@ void Type <Vector <T> >::check (const ABI_type& v)
 	if (Type <T>::has_check) {
 		for (const T_ABI* p = v.ptr, *end = p + v.size; p != end; ++p)
 			Type <T>::check (*p);
+	}
+}
+
+template <typename T>
+void Type <Vector <T> >::marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
+{
+	assert (&src != &dst);
+	if (src.empty ())
+		dst.reset ();
+	else {
+		const ABI_type& asrc = static_cast <const ABI_type&> (src);
+		if (!Type <T>::has_marshal) {
+			size_t cb = asrc.size * sizeof (T);
+			dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, 0);
+			dst.allocated = cb;
+			dst.size = asrc.size;
+		} else {
+			size_t cb = asrc.size * sizeof (T);
+			void* buf;
+			dst.ptr = (T_ABI*)marshaler->get_buffer (cb, buf);
+			T_ABI* dp = (T_ABI*)buf;
+			const T* sp = src.data (), * end = sp + src.size ();
+			do {
+				Type <T>::marshal_in (*(sp++), marshaler, *(dp++));
+			} while (sp != end);
+		}
+	}
+}
+
+template <typename T>
+void Type <Vector <T> >::marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
+{
+	assert (&src != &dst);
+	if (src.empty ())
+		dst.reset ();
+	else {
+		ABI_type& asrc = static_cast <ABI_type&> (src);
+		dst.size = asrc.size;
+		if (!Type <T>::has_marshal) {
+			size_t cb = asrc.size * sizeof (T);
+			dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated);
+			dst.allocated = cb;
+			asrc.reset ();
+		} else {
+			T* sp = src.data (), * end = sp + src.size ();
+			T_ABI* dp;
+			size_t cb;
+			MarshalContext mctx = marshaler->context ();
+			if (MarshalContext::SHARED_MEMORY == mctx)
+				dp = (T_ABI*)sp;
+			else {
+				cb = asrc.size * sizeof (T);
+				void* buf;
+				dst.ptr = (T_ABI*)marshaler->get_buffer (cb, buf);
+				dp = (T_ABI*)buf;
+			}
+
+			do {
+				Type <T>::marshal_out (*(sp++), marshaler, *(dp++));
+			} while (sp != end);
+
+			if (MarshalContext::SHARED_MEMORY == mctx)
+				dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated);
+			else {
+				Var_type tmp;
+				src.swap (tmp);
+			}
+
+			dst.allocated = cb;
+		}
+	}
+}
+
+template <typename T>
+void Type <Vector <T> >::unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst)
+{
+	if (Base::has_check)
+		check (src);
+
+	if (!src.size)
+		dst.reset ();
+	else {
+		Var_type tmp;
+		ABI_type& adst = static_cast <ABI_type&> (tmp);
+		if (src.allocated) {
+			unmarshaler->adopt_memory (src.ptr, src.allocated);
+			adst.ptr = src.ptr;
+			adst.allocated = src.allocated;
+		} else
+			adst.ptr = (T*)::Nirvana::MemoryHelper::assign (0, adst.allocated, 0, src.size * sizeof (T), src.ptr);
+		if (Type <T>::has_marshal) {
+			T_ABI* sp = src.ptr, * end = sp + src.size;
+			T* dp = adst.ptr;
+			try {
+				do {
+					Type <T>::unmarshal (*(sp++), unmarshaler, *(dp++));
+				} while (sp != end);
+			} catch (...) {
+				adst.size = dp - adst.ptr;
+				throw;
+			}
+		}
+		adst.size = src.size;
+		tmp.swap (dst);
 	}
 }
 

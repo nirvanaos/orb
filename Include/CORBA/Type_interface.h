@@ -28,6 +28,8 @@
 
 #include "Type_forward.h"
 #include "I_var.h"
+#include "Proxy/Marshal.h"
+#include "Proxy/Unmarshal.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -262,17 +264,10 @@ typedef I_out <Interface> Interface_out;
 typedef I_inout <Interface> Interface_inout;
 
 template <class I>
-struct Type <I_var <I> >
+struct TypeItfBase
 {
 	typedef I_var <I> Var_type;
 	typedef Interface* ABI_type;
-
-	static const bool has_check = true;
-
-	static void check (Interface* p)
-	{
-		I::_check (p);
-	}
 
 	typedef Interface* ABI_in;
 	typedef Interface** ABI_out;
@@ -286,18 +281,6 @@ struct Type <I_var <I> >
 	typedef I_inout <I> C_inout;
 	typedef I_ret <I> C_ret;
 	typedef I_VT_ret <I> C_VT_ret;
-
-	static I_ptr <I> in (ABI_in p)
-	{
-		return I::_check (p);
-	}
-
-	static I_var <I>& inout (ABI_inout p)
-	{
-		_check_pointer (p);
-		I::_check (*p);
-		return reinterpret_cast <I_var <I>&> (*p);
-	}
 
 	static I_var <I>& out (ABI_out p)
 	{
@@ -330,11 +313,57 @@ struct Type <I_var <I> >
 	typedef I_ptr <I> Member_ret;
 };
 
-template <>
-struct Type <I_var <Interface> >
+template <class I>
+struct TypeItf : TypeItfBase <I>
 {
-	typedef Interface* ABI_type;
+	typedef TypeItfBase <I> Base;
+	typedef typename Base::ABI_in ABI_in;
+	typedef typename Base::ABI_inout ABI_inout;
 
+	static const bool has_check = true;
+
+	static void check (Interface* p)
+	{
+		I::_check (p);
+	}
+
+	static I_ptr <I> in (ABI_in p)
+	{
+		return I::_check (p);
+	}
+
+	static I_var <I>& inout (ABI_inout p)
+	{
+		_check_pointer (p);
+		I::_check (*p);
+		return reinterpret_cast <I_var <I>&> (*p);
+	}
+
+	static const bool has_marshal = true;
+
+	static void marshal_in (const I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst)
+	{
+		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
+	}
+
+	static void marshal_out (I_var <I>& src, Marshal_ptr marshaler, Interface*& dst)
+	{
+		marshal_in (src, marshaler, dst);
+	}
+
+	static void unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_var <I>& dst)
+	{
+		dst = static_cast <I*> (unmarshaler->unmarshal_interface (src, I::repository_id_));
+	}
+};
+
+template <class I>
+struct Type <I_var <I> > : TypeItf <I>
+{};
+
+template <>
+struct Type <I_var <Interface> > : TypeItfBase <Interface>
+{
 	static const bool has_check = false;
 
 	static void check (Interface* p)
@@ -363,36 +392,6 @@ struct Type <I_var <Interface> >
 		_check_pointer (p);
 		return reinterpret_cast <I_var <Interface>&> (*p);
 	}
-
-	static I_var <Interface>& out (ABI_out p)
-	{
-		_check_pointer (p);
-		if (*p)
-			::Nirvana::throw_BAD_PARAM ();
-		return reinterpret_cast <I_var <Interface>&> (*p);
-	}
-
-	static Interface* ret (const I_ptr <Interface>& ptr)
-	{
-		return &ptr;
-	}
-
-	static Interface* ret (I_var <Interface>&& var)
-	{
-		return &var._retn ();
-	}
-
-	static Interface* VT_ret (const I_ptr <Interface>& ptr)
-	{
-		return &ptr;
-	}
-
-	// Valuetupe implementation for state members must return I_ptr, not I_var.
-	// Otherwise compilation error will occur.
-	static void VT_ret (I_var <Interface>&);
-
-	typedef I_var <Interface> Member_type;
-	typedef I_ptr <Interface> Member_ret;
 };
 
 template <class I>

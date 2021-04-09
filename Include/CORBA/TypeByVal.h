@@ -32,15 +32,15 @@ namespace CORBA {
 namespace Nirvana {
 
 /// Data type, passed by value.
-template <class T>
+/// 
+/// \tparam T The variable type.
+/// \tparam TABI The ABI type.
+/// \tparam TMember The struct member type.
+template <typename T, typename TABI = T, typename TMember = T>
 struct TypeByVal
 {
 	typedef T Var_type;
-	typedef T ABI_type;
-
-	static const bool has_check = false;
-	static void check (const ABI_type&)
-	{}
+	typedef TABI ABI_type;
 
 	// ABI data types
 	typedef ABI_type ABI_in;
@@ -49,13 +49,17 @@ struct TypeByVal
 	typedef ABI_type ABI_ret;
 	typedef ABI_type ABI_VT_ret;
 
+	// Member types
+	typedef TMember Member_type;
+	typedef TMember Member_ret;
+
 	// Client-side types
 
-	/// in parameters passed by value
+	// in parameters passed by value
 	class C_in
 	{
 	public:
-		C_in (T val) :
+		C_in (Var_type val) :
 			val_ (val)
 		{}
 
@@ -65,53 +69,48 @@ struct TypeByVal
 		}
 
 		// For member assignments
-		operator T () const
+		operator Member_type () const
 		{
 			return val_;
 		}
 
 	private:
-		T val_;
+		Var_type val_;
 	};
 
-	typedef T& C_out;
-	typedef T& C_inout;
-	typedef T C_ret;
-	typedef T C_VT_ret;
+	typedef Var_type& C_out;
+	typedef Var_type& C_inout;
+	typedef Var_type C_ret;
+	typedef Var_type C_VT_ret;
 
 	// Servant-side methods
 
-	static T in (ABI_in v)
+	static Var_type in (ABI_in v)
 	{
 		return v;
 	}
 
-	static T& out (ABI_out p)
+	static Var_type& out (ABI_out p)
 	{
 		_check_pointer (p);
 		return *p;
 	}
 
-	static T& inout (ABI_out p)
+	static Var_type& inout (ABI_out p)
 	{
 		_check_pointer (p);
 		return *p;
 	}
 
-	static ABI_ret ret (T v)
+	static ABI_ret ret (Var_type v)
 	{
 		return v;
 	}
 
-	static ABI_VT_ret VT_ret (T v)
+	static ABI_VT_ret VT_ret (Var_type v)
 	{
 		return v;
 	}
-
-	// Member types
-
-	typedef T Member_type;
-	typedef T Member_ret;
 };
 
 }

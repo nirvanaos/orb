@@ -26,7 +26,7 @@
 #ifndef NIRVANA_ORB_POA_C_H_
 #define NIRVANA_ORB_POA_C_H_
 
-#include "Object.h"
+#include "LocalObject.h"
 #include "ReferenceCounter.h"
 #include "String.h"
 #include "UserException.h"
@@ -37,6 +37,8 @@ class POA;
 typedef ::CORBA::Nirvana::I_ptr <POA> POA_ptr;
 typedef ::CORBA::Nirvana::I_var <POA> POA_var;
 typedef ::CORBA::Nirvana::I_out <POA> POA_out;
+
+extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_POA;
 
 }
 
@@ -80,6 +82,15 @@ class Client <T, PortableServer::POA> :
 public:
 	String activate_object (I_in <PortableServer::ServantBase> servant);
 	void deactivate_object (String_in oid);
+};
+
+template <>
+struct Type <I_var < ::PortableServer::POA> > : TypeLocalObject < ::PortableServer::POA>
+{
+	static TypeCode_ptr type_code ()
+	{
+		return ::PortableServer::_tc_POA;
+	}
 };
 
 }

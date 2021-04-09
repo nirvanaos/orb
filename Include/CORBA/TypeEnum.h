@@ -27,52 +27,43 @@
 #define NIRVANA_ORB_TYPEENUM_H_
 
 #include <Nirvana/throw_exception.h>
-#include "primitive_types.h"
+#include "TypeFixLen.h"
+#include <type_traits>
 
 namespace CORBA {
 namespace Nirvana {
 
+typedef std::conditional_t <sizeof (size_t) >= 4, ULong, size_t> ABI_enum;
+
 /// Base for enum data types
 template <class T, T last>
-struct TypeEnum
+struct TypeEnum : TypeFixLen <T, ABI_enum, T>
 {
-	static_assert (sizeof (T) == sizeof (ABI_enum), "IDL enumerations must be declared as 32-bit.");
-	static const bool has_check = true;
+	static_assert (sizeof (T) == sizeof (ABI_enum), "IDL enumerations must be declared as : ABI_enum.");
+
 	static const ABI_enum count_ = (ABI_enum)last + 1;
 
-	typedef ABI_enum ABI_type;
+	typedef TypeFixLen <T, ABI_enum, T> Base;
 
-	typedef ABI_type ABI_in;
-	typedef ABI_type* ABI_out;
-	typedef ABI_type* ABI_inout;
-	typedef ABI_type ABI_ret;
+	typedef typename Base::Var_type Var_type;
+	typedef typename Base::ABI_type ABI_type;
+	typedef typename Base::ABI_in ABI_in;
+	typedef typename Base::ABI_out ABI_out;
+	typedef typename Base::ABI_inout ABI_inout;
+	typedef typename Base::ABI_ret ABI_ret;
 
-	static void check (ABI_enum val)
+	static const bool has_check = true;
+
+	static void check (ABI_type val)
 	{
 		if (val >= count_)
 			::Nirvana::throw_BAD_PARAM ();
 	}
 
-	class C_in
-	{
-	public:
-		C_in (T val) :
-			val_ (val)
-		{}
-
-		ABI_in operator & () const
-		{
-			return (ABI_type)val_;
-		}
-
-	private:
-		T val_;
-	};
-
 	class C_inout
 	{
 	public:
-		C_inout (T& val) :
+		C_inout (Var_type& val) :
 			ref_ (val),
 			val_ ((ABI_type)val)
 		{}
@@ -80,7 +71,7 @@ struct TypeEnum
 		~C_inout () noexcept (false)
 		{
 			if (!uncaught_exception ()) {
-				Type <T>::check (val_);
+				Type <Var_type>::check (val_);
 				ref_ = (T*)val_;
 			}
 		}
@@ -91,7 +82,7 @@ struct TypeEnum
 		}
 
 	private:
-		T& ref_;
+		Var_type& ref_;
 		ABI_type val_;
 	};
 
@@ -103,38 +94,38 @@ struct TypeEnum
 		C_ret (ABI_ret val) :
 			val_ (val)
 		{
-			Type <T>::check (val_);
+			check (val_);
 		}
 
-		operator T ()
+		operator Var_type ()
 		{
-			return (T)val_;
+			return (Var_type)val_;
 		}
 
 	private:
 		ABI_ret val_;
 	};
 
-	static T in (ABI_in v)
+	static Var_type in (ABI_in v)
 	{
-		Type <T>::check (v);
-		return (T)v;
+		check (v);
+		return (Var_type)v;
 	}
 
-	static T& inout (ABI_inout p)
+	static Var_type& inout (ABI_inout p)
 	{
 		_check_pointer (p);
-		Type <T>::check (*p);
-		return (T&)*p;
+		check (*p);
+		return (Var_type&)*p;
 	}
 
 	static T& out (ABI_out p)
 	{
 		_check_pointer (p);
-		return (T&)*p;
+		return (Var_type&)*p;
 	}
 
-	static ABI_ret ret (T val)
+	static ABI_ret ret (Var_type val)
 	{
 		return (ABI_ret)val;
 	}

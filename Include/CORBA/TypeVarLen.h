@@ -27,6 +27,8 @@
 #define NIRVANA_ORB_TYPEVARLEN_H_
 
 #include "TypeByRef.h"
+#include "Proxy/Marshal.h"
+#include "Proxy/Unmarshal.h"
 #include <utility>
 #include <new>
 
@@ -40,6 +42,9 @@ struct TypeVarLenBase : TypeByRef <T, ABI <T> >
 	typedef typename Base::C_in C_in;
 	typedef typename Base::C_inout C_inout;
 	typedef typename Base::ABI_ret ABI_ret;
+
+	/// Variable-length types marshalling is always not trivial.
+	static const bool has_marshal = true;
 
 	/// C_out class clears output variable
 	class C_out : public Base::C_out

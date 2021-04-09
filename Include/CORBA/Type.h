@@ -29,6 +29,45 @@
 #include "TypeVarLen.h"
 #include "TypeEnum.h"
 #include "Type_interface.h"
+#include "TypeCode.h"
+
+namespace CORBA {
+namespace Nirvana {
+
+// Marshaling helpers
+
+template <class T, class ABI> inline
+void _marshal_in (const T& src, Marshal_ptr marshaler, ABI& dst)
+{
+	Type <T>::marshal_in (src, marshaler, dst);
+}
+
+template <class I> inline
+void _marshal_in (const I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst)
+{
+	Type <I_var <I> >::marshal_in (src, marshaler, dst);
+}
+
+inline
+void _marshal_in (const TypeCode_ptr src, Marshal_ptr marshaler, Interface*& dst)
+{
+	Type <TypeCode_var>::marshal_in (src, marshaler, dst);
+}
+
+template <class T, class ABI> inline
+void _marshal_out (T& src, Marshal_ptr marshaler, ABI& dst)
+{
+	Type <T>::marshal_out (src, marshaler, dst);
+}
+
+template <class T, class ABI> inline
+void _unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, T& dst)
+{
+	Type <T>::unmarshal (src, unmarshaler, dst);
+}
+
+}
+}
 
 // Compatibility with modern C11 mapping
 namespace IDL {

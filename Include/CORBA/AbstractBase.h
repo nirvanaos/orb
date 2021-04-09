@@ -31,6 +31,8 @@
 #include "Client.h"
 #include "Type_interface.h"
 #include "String.h"
+#include "basic_types.h"
+#include "TypeCode.h"
 
 namespace CORBA {
 
@@ -106,6 +108,12 @@ public:
 	{
 		return Primary::_duplicate (obj->_query_interface <Primary> ());
 	}
+};
+
+template <class I>
+struct TypeAbstractInterface : TypeItf <I>
+{
+	static const TCKind tc_kind = tk_abstract_interface;
 };
 
 }

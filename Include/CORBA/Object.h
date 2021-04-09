@@ -28,10 +28,8 @@
 #define NIRVANA_ORB_OBJECT_H_
 
 #include "AbstractBase.h"
-#include "basic_types.h"
 
 /// CORBA::Object interface
-
 
 //! \namespace	IOP
 //!
@@ -95,7 +93,7 @@ struct Bridge <Object>::EPV
 	struct
 	{
 		Interface* (*get_servant) (Bridge <Object>*, Interface*);
-		const IOP::IOR* (*object_reference) (ABI_in <Boolean> local);
+//		const IOP::IOR* (*object_reference) (ABI_in <Boolean> local);
 	} internal;
 };
 
@@ -196,8 +194,35 @@ public:
 	}
 };
 
-}
+template <>
+struct Type <I_var <Object> > : TypeItf <Object>
+{
+	static TypeCode_ptr type_code ()
+	{
+		return _tc_Object;
+	}
+};
 
+template <class I>
+struct TypeObject : TypeItf <I>
+{
+	static const TCKind tc_kind = tk_objref;
+
+	static void marshal_in (const I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst)
+	{
+		if (marshaler->context () < MarshalContext::OTHER_PROTECTION_DOMAIN)
+			reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
+		else
+			reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (Object_ptr (src));
+	}
+
+	static void marshal_out (I_var <I>& src, Marshal_ptr marshaler, Interface*& dst)
+	{
+		marshal_in (src, marshaler, dst);
+	}
+};
+
+}
 }
 
 #endif

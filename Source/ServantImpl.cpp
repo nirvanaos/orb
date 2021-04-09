@@ -23,9 +23,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/ServantImpl.h>
+#include <CORBA/CORBA.h>
 #include <Nirvana/throw_exception.h>
-#include <CORBA/Type_forward.h>
 
 namespace CORBA {
 namespace Nirvana {

@@ -1,5 +1,3 @@
-/// \file MarshalTraits_any.h
-/// \brief Declares the MarshalTraits <Any>.
 /*
 * Nirvana IDL support library.
 *
@@ -25,28 +23,23 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_MARSHALTRAITS_ANY_H_
-#define NIRVANA_ORB_MARSHALTRAITS_ANY_H_
-
-#include "MarshalTraits_forward.h"
-#include "Any.h"
-#include "Proxy/Marshal.h"
-#include "Proxy/Unmarshal.h"
+#ifndef NIRVANA_ORB_ABI_H_
+#define NIRVANA_ORB_ABI_H_
 
 namespace CORBA {
 namespace Nirvana {
 
-template <>
-struct MarshalTraits <Any>
-{
-	static const bool has_marshal = true;
+/// We can not use `bool' built-in type across the binary boundaries because
+/// it is compiler-specific, but we have to achieve the binary compatibility.
+/// So we use size_t (the machine word) as ABI for boolean in assumption that bool implementation can't be wide.
+/// Note that Sequence <bool> is implemented as vector <bool> template specialization
+/// where element size is 1 byte.
+typedef size_t ABI_boolean;
 
-	typedef ABI <Any> ABI;
-
-	static void marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst);
-	static void marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst);
-	static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst);
-};
+/// For each structure, union or enum data type T, IDL compiler generates `CORBA::Nirvana::ABI <T>` structure.
+/// ABI type must be POD (Plain Old Data, mustn't have any constructors and destructors).
+/// Compiler replaces all non-POD struct members with corresponding ABI structures.
+template <class T> struct ABI;
 
 }
 }

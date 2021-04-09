@@ -32,7 +32,7 @@
 #define NIRVANA_ORB_ABI_ANY_H_
 
 #include <Nirvana/NirvanaBase.h>
-#include "Type_forward.h"
+#include "ABI.h"
 #include <assert.h>
 
 namespace CORBA {

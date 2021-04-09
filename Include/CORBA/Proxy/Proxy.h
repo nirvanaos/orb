@@ -29,7 +29,6 @@
 
 #include "../CORBA.h"
 #include "../FindInterface.h"
-#include "../MarshalTraits.h"
 #include "ProxyFactory_s.h"
 #include "IOReference.h"
 #include "IORequest.h"
@@ -46,11 +45,9 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <class I> class ProxyFactoryImpl;
-
 /// Proxy factory implements ProxyFactory and TypeCode interfaces.
 template <class I> class ProxyFactoryImpl :
-	public TypeCodeImpl <ServantStatic <ProxyFactoryImpl <I>, ProxyFactory>, TypeCodeWithId <tk_objref, I>, TypeCodeOps <I_var <I> > >
+	public TypeCodeImpl <ServantStatic <ProxyFactoryImpl <I>, ProxyFactory>, TypeCodeWithId <Type <I_var <I> >::tc_kind, I>, TypeCodeOps <I_var <I> > >
 {
 public:
 	// ProxyFactory

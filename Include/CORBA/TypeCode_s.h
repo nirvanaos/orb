@@ -29,7 +29,7 @@
 #include "TypeCode.h"
 #include "ImplementationPseudoStatic.h"
 #include "Type_interface.h"
-#include "Marshal.h"
+#include "Proxy/Marshal.h"
 
 namespace CORBA {
 namespace Nirvana {

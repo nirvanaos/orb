@@ -241,7 +241,6 @@ public:
 
 private:
 	friend struct Nirvana::Type <Any>;
-	friend struct Nirvana::MarshalTraits <Any>;
 
 	void copy_from (const Any& src);
 	void* prepare (TypeCode_ptr tc);
@@ -288,6 +287,10 @@ struct Type <Any> : public TypeVarLen <Any, true>
 	{
 		return _tc_any;
 	}
+
+	static void marshal_in (const Any& src, Marshal_ptr marshaler, ABI_type& dst);
+	static void marshal_out (Any& src, Marshal_ptr marshaler, ABI_type& dst);
+	static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Any& dst);
 };
 
 }

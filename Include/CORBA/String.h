@@ -37,6 +37,7 @@ template <typename C>
 struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 {
 	typedef TypeVarLen <StringT <C>, CHECK_STRINGS> Base;
+	typedef typename Base::Var_type Var_type;
 	typedef typename Base::ABI_type ABI_type;
 	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_out ABI_out;
@@ -50,7 +51,7 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 	class C_inout : public Base::C_inout
 	{
 	public:
-		C_inout (StringT <C>& s) :
+		C_inout (Var_type& s) :
 			Base::C_inout (s)
 		{}
 
@@ -63,32 +64,32 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 	class C_out : public C_inout
 	{
 	public:
-		C_out (StringT <C>& s) :
+		C_out (Var_type& s) :
 			C_inout (s)
 		{
 			s.clear ();
 		}
 	};
 
-	static const StringT <C>& in (ABI_in p)
+	static const Var_type& in (ABI_in p)
 	{
 		Base::in (p);	// Check
 		// Use static_cast to ensure that we are using own basic_string implementation.
 		return static_cast <const StringT <C>&> (*p);
 	}
 
-	static StringT <C>& inout (ABI_inout p)
+	static Var_type& inout (ABI_inout p)
 	{
 		Base::inout (p); // Check
 		// Use static_cast to ensure that we are using own basic_string implementation.
-		return static_cast <StringT <C>&> (*p);
+		return static_cast <Var_type&> (*p);
 	}
 
-	static StringT <C>& out (ABI_out p)
+	static Var_type& out (ABI_out p)
 	{
 		Base::out (p);	// Check
 		// Use static_cast to ensure that we are using own basic_string implementation.
-		StringT <C>& val = static_cast <StringT <C>&> (*p);
+		Var_type& val = static_cast <Var_type&> (*p);
 		// Must be empty
 		if (!val.empty ())
 			::Nirvana::throw_BAD_PARAM ();
@@ -96,6 +97,28 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 	}
 
 	static TypeCode_ptr type_code ();
+
+	static bool _small_copy (const ABI_type& src, ABI_type& dst);
+
+	static void marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst);
+
+	static void marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst);
+
+	static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst)
+	{
+		if (Base::has_check)
+			check (src);
+
+		if (src.is_large ()) {
+			size_t cb = src.allocated ();
+			if (cb) {
+				unmarshaler->adopt_memory (src.large_pointer (), cb);
+				static_cast <ABI_type&> (dst) = src;
+			} else
+				dst.assign_internal (src.large_size (), src.large_pointer ());
+		} else
+			static_cast <ABI_type&> (dst) = src;
+	}
 };
 
 template <typename C>
@@ -108,7 +131,7 @@ void Type <StringT <C> >::check (const ABI_type& s)
 		p = s.large_pointer ();
 		cc = s.large_size ();
 		CORBA::Nirvana::_check_pointer (p);
-		if (cc > s.large_capacity () || !StringT <C>::memory ()->is_readable (p, (cc + 1) * sizeof (C)))
+		if (cc > s.large_capacity () || !Var_type::memory ()->is_readable (p, (cc + 1) * sizeof (C)))
 			::Nirvana::throw_BAD_PARAM ();
 	} else {
 		p = s.small_pointer ();
@@ -118,6 +141,52 @@ void Type <StringT <C> >::check (const ABI_type& s)
 	}
 	if (p [cc])
 		::Nirvana::throw_BAD_PARAM (); // Not zero-terminated
+}
+
+template <typename C>
+void Type <StringT <C> >::marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
+{
+	assert (&src != &dst);
+	if (!_small_copy (src, dst)) {
+		size_t size = src.large_size ();
+		size_t cb = Var_type::byte_size (size);
+		dst.large_pointer ((C*)marshaler->marshal_memory (const_cast <C*> (src.large_pointer ()), cb, 0));
+		dst.large_size (size);
+		dst.allocated (cb);
+	}
+}
+
+template <typename C>
+void Type <StringT <C> >::marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
+{
+	assert (&src != &dst);
+	if (!_small_copy (src, dst)) {
+		size_t size = src.large_size ();
+		size_t cb = Var_type::byte_size (size);
+		dst.large_pointer ((C*)marshaler->marshal_memory (src.large_pointer (), cb, src.allocated ()));
+		dst.large_size (size);
+		dst.allocated (cb);
+		src.reset ();
+	}
+}
+
+template <typename C>
+bool Type <StringT <C> >::_small_copy (const ABI_type& src, ABI_type& dst)
+{
+	const C* p;
+	size_t len;
+	if (src.is_large ()) {
+		len = src.large_size ();
+		if (len > ABI_type::SMALL_CAPACITY)
+			return false;
+		p = src.large_pointer ();
+	} else {
+		p = src.small_pointer ();
+		len = src.small_size ();
+	}
+	::Nirvana::real_copy (p, p + len + 1, dst.small_pointer ());
+	dst.small_size (len);
+	return true;
 }
 
 template <typename C, ULong bound = 0>

@@ -26,24 +26,16 @@
 #ifndef NIRVANA_ORB_TYPE_FORWARD_H_
 #define NIRVANA_ORB_TYPE_FORWARD_H_
 
-#include "primitive_types.h"
+#include "ABI.h"
+#include "I_ptr.h"
 
 namespace CORBA {
 namespace Nirvana {
 
-/// We can not use `bool' built-in type across the binary boundaries because
-/// it is compiler-specific, but we have to achieve the binary compatibility.
-/// So we use size_t (the machine word) as ABI for boolean in assumption that bool implementation can't be wide.
-/// Note that Sequence <bool> is implemented as vector <bool> template specialization
-/// where element size is 1 byte.
-typedef size_t ABI_boolean;
-
-typedef ULong ABI_enum;
-
-/// For each structure, union or enum data type T, IDL compiler generates `CORBA::Nirvana::ABI <T>` structure.
-/// ABI type must be POD (Plain Old Data, mustn't have any constructors and destructors).
-/// Compiler replaces all non-POD struct members with corresponding ABI structures.
-template <class T> struct ABI;
+class Marshal;
+typedef I_ptr <Marshal> Marshal_ptr;
+class Unmarshal;
+typedef I_ptr <Unmarshal> Unmarshal_ptr;
 
 /** For each structure, union or enum data type T, IDL compiler generates `CORBA::Nirvana::Type <T>` structure.
     This structure defines how the parameters are passed between client and server.
@@ -91,6 +83,27 @@ template <> struct Type <T>
 
   // Type code
   static TypeCode_ptr type_code ();
+
+  /// \brief Copies input data to the marshaling buffer.
+  /// \param src         Source value.
+  /// \param marshaler   Marshaler interface. May be `nil` if has_marshal is `false`.
+  /// \param dst         Destination value ABI.
+  static void marshal_in (const T& src, Marshal_ptr marshaler, Type <T>::ABI_type <T>& dst);
+
+  /// \brief Moves output data to the marshaling buffer.
+  /// \param src         Source value. After marshalling, the value can be released.
+  /// \param marshaler   Marshaler interface. May be `nil` if has_marshal is `false`.
+  /// \param dst         Destination value ABI.
+  static void marshal_out (T& src, Marshal_ptr marshaler, Type <T>::ABI_type <T>& dst);
+
+  /// \brief Moves data from marshaling buffer to the local variable.
+  /// \param src         Source value ABI.
+  /// \param unmarshaler Unmarshaler interface. May be `nil` if has_marshal is `false`.
+  /// \param dst         Destination value.
+  static void unmarshal (const Type <T>::ABI_type <T>& src, Unmarshal_ptr unmarshaler, T& dst);
+
+  /// \brief `true` if marshal operations are not trivial copy.
+  static const bool has_marshal;
 };
 ~~~
 */

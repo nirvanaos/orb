@@ -107,6 +107,12 @@ Boolean Client <T, LocalObject>::_non_existent ()
 	return _ret;
 }
 
+template <class I>
+struct TypeLocalObject : TypeObject <I>
+{
+	static const TCKind tc_kind = tk_local_interface;
+};
+
 }
 
 class LocalObject : public Nirvana::ClientInterface <LocalObject, Object, Nirvana::ReferenceCounter>

@@ -29,7 +29,6 @@
 
 #include "../TypeCode_s.h"
 #include "../Exception.h"
-#include "../MarshalTraits.h"
 #include <new>
 
 namespace CORBA {
@@ -165,7 +164,7 @@ public:
 
 	static ABI_boolean __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return MarshalTraits <Valtype>::has_marshal;
+		return Type <Valtype>::has_marshal;
 	}
 
 	static void _marshal_in (::Nirvana::ConstPointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
@@ -174,7 +173,7 @@ public:
 		_check_pointer (src);
 		if (Type <Valtype>::has_check)
 			Type <Valtype>::check (*reinterpret_cast <const typename Type <Valtype>::ABI_type*> (src));
-		MarshalTraits <Valtype>::marshal_in (*reinterpret_cast <const Valtype*> (src), marshaler, *reinterpret_cast <typename Type <Valtype>::ABI_type*> (dst));
+		Type <Valtype>::marshal_in (*reinterpret_cast <const Valtype*> (src), marshaler, *reinterpret_cast <typename Type <Valtype>::ABI_type*> (dst));
 	}
 
 	static void _marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
@@ -183,7 +182,7 @@ public:
 		_check_pointer (src);
 		if (Type <Valtype>::has_check)
 			Type <Valtype>::check (*reinterpret_cast <const typename Type <Valtype>::ABI_type*> (src));
-		MarshalTraits <Valtype>::marshal_out (*reinterpret_cast <Valtype*> (src), marshaler, *reinterpret_cast <typename Type <Valtype>::ABI_type*> (dst));
+		Type <Valtype>::marshal_out (*reinterpret_cast <Valtype*> (src), marshaler, *reinterpret_cast <typename Type <Valtype>::ABI_type*> (dst));
 	}
 
 	static void _unmarshal (::Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
@@ -191,7 +190,7 @@ public:
 		_check_pointer (dst);
 		_check_pointer (src);
 		// Do not call check() here, unmarshal() will check.
-		MarshalTraits <Valtype>::unmarshal (*reinterpret_cast <const typename Type <Valtype>::ABI_type*> (src), unmarshaler, *reinterpret_cast <Valtype*> (dst));
+		Type <Valtype>::unmarshal (*reinterpret_cast <const typename Type <Valtype>::ABI_type*> (src), unmarshaler, *reinterpret_cast <Valtype*> (dst));
 	}
 };
 

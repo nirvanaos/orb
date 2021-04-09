@@ -27,6 +27,7 @@
 #define NIRVANA_ORB_STRINGBASE_H_
 
 #include "ABI_String.h"
+#include "primitive_types.h"
 #include <type_traits>
 #include <string.h>
 

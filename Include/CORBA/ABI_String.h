@@ -29,8 +29,7 @@
 #define NIRVANA_ORB_ABI_STRING_H_
 
 #include <Nirvana/NirvanaBase.h>
-#include "primitive_types.h"
-#include "Type_forward.h"
+#include "ABI.h"
 #include <assert.h>
 
 namespace std {

@@ -311,6 +311,15 @@ void Client <T, TypeCode>::_unmarshal (::Nirvana::ConstPointer src, Unmarshal_pt
 	_env.check ();
 }
 
+template <>
+struct Type <I_var <TypeCode> > : TypeItf <TypeCode>
+{
+	static TypeCode_ptr type_code ()
+	{
+		return _tc_TypeCode;
+	}
+};
+
 }
 }
 
