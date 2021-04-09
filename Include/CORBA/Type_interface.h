@@ -264,6 +264,7 @@ typedef I_inout <Interface> Interface_inout;
 template <class I>
 struct Type <I_var <I> >
 {
+	typedef I_var <I> Var_type;
 	typedef Interface* ABI_type;
 
 	static const bool has_check = true;
@@ -321,8 +322,12 @@ struct Type <I_var <I> >
 		return &ptr;
 	}
 
-	// Valuetupe implementation mustn't return I_var
+	// Valuetupe implementation for state members must return I_ptr, not I_var.
+	// Otherwise compilation error will occur.
 	static void VT_ret (I_var <I>&);
+
+	typedef I_var <I> Member_type;
+	typedef I_ptr <I> Member_ret;
 };
 
 template <>

@@ -68,7 +68,7 @@ struct TypeVarLenBase : TypeByRef <T, ABI <T> >
 		T val_;
 	};
 
-	// Client I_var class for the C++ IDL mapping standard conformance
+	// Client I_var class for the legacy C++ IDL mapping support
 	class C_var :
 		public T
 	{

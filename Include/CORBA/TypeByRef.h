@@ -49,6 +49,11 @@ struct TypeByRef
 	typedef ABI_type ABI_ret;
 	typedef const ABI_type* ABI_VT_ret;
 
+
+	// Member types
+	typedef T Member_type;
+	typedef const T& Member_ret;
+
 	// Client-side types
 
 	class C_in
@@ -91,7 +96,7 @@ struct TypeByRef
 
 	typedef C_inout C_out;
 
-	// Client C_var class for the C++ IDL mapping standard conformance
+	// Client I_var class for the legacy C++ IDL mapping support
 	class C_var :
 		public T
 	{
@@ -169,7 +174,7 @@ struct TypeByRef
 			_check_pointer (p);
 		}
 
-		operator const T& () const
+		operator Member_ret () const
 		{
 			return *p_;
 		}
@@ -206,11 +211,6 @@ struct TypeByRef
 	{
 		return &reinterpret_cast <const ABI_type&> (v);
 	}
-
-	// Member types
-
-	typedef T Member_type;
-	typedef const T& Member_ret;
 };
 
 }
