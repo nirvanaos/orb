@@ -387,8 +387,12 @@ struct Type <I_var <Interface> >
 		return &ptr;
 	}
 
-	// Valuetupe implementation mustn't return I_var
+	// Valuetupe implementation for state members must return I_ptr, not I_var.
+	// Otherwise compilation error will occur.
 	static void VT_ret (I_var <Interface>&);
+
+	typedef I_var <Interface> Member_type;
+	typedef I_ptr <Interface> Member_ret;
 };
 
 template <class I>

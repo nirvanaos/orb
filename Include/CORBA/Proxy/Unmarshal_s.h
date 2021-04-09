@@ -75,19 +75,6 @@ protected:
 		}
 		return nullptr;
 	}
-
-	static Interface* _unmarshal_type_code (Bridge <Unmarshal>* _b, ::Nirvana::ConstPointer data,
-		Interface* _env)
-	{
-		try {
-			return TypeI <TypeCode>::ret (S::_implementation (_b).unmarshal_type_code (data));
-		} catch (const Exception & e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
-		return nullptr;
-	}
 };
 
 template <class S>
@@ -100,8 +87,7 @@ const Bridge <Unmarshal>::EPV Skeleton <S, Unmarshal>::epv_ = {
 	{ // epv
 		S::_context,
 		S::_adopt_memory,
-		S::_unmarshal_interface,
-		S::_unmarshal_type_code
+		S::_unmarshal_interface
 	}
 };
 

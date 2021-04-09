@@ -78,22 +78,10 @@ protected:
 		return 0;
 	}
 
-	static ::Nirvana::UIntPtr _marshal_object (Bridge <Marshal>* _b, Interface* obj, Interface* _env)
+	static ::Nirvana::UIntPtr _marshal_interface (Bridge <Marshal>* _b, Interface* obj, Interface* _env)
 	{
 		try {
-			return S::_implementation (_b).marshal_object (TypeI <Object>::in (obj));
-		} catch (const Exception & e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
-		return 0;
-	}
-
-	static ::Nirvana::UIntPtr _marshal_type_code (Bridge <Marshal>* _b, Interface* tc, Interface* _env)
-	{
-		try {
-			return S::_implementation (_b).marshal_type_code (TypeI <TypeCode>::in (tc));
+			return S::_implementation (_b).marshal_interface (TypeI <Interface>::in (obj));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -114,8 +102,7 @@ const Bridge <Marshal>::EPV Skeleton <S, Marshal>::epv_ = {
 		S::_context,
 		S::_marshal_memory,
 		S::_get_buffer,
-		S::_marshal_object,
-		S::_marshal_type_code
+		S::_marshal_interface
 	}
 };
 

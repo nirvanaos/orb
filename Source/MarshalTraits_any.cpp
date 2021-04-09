@@ -34,7 +34,7 @@ void MarshalTraits <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI
 	if (!tc)
 		dst.reset ();
 	else {
-		dst.type ((::Nirvana::Pointer)marshaler->marshal_type_code (tc));
+		dst.type ((::Nirvana::Pointer)marshaler->marshal_interface (tc));
 		::Nirvana::ConstPointer psrc;
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
@@ -57,7 +57,7 @@ void MarshalTraits <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst
 	if (!tc)
 		dst.reset ();
 	else {
-		dst.type ((::Nirvana::Pointer)marshaler->marshal_type_code (tc));
+		dst.type ((::Nirvana::Pointer)marshaler->marshal_interface (tc));
 		::Nirvana::Pointer psrc;
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
@@ -88,7 +88,7 @@ void MarshalTraits <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, 
 	if (!ptc)
 		dst.reset ();
 	else {
-		TypeCode_var tc = unmarshaler->unmarshal_type_code (ptc);
+		TypeCode_var tc (static_cast <TypeCode*> (unmarshaler->unmarshal_interface (ptc, TypeCode::repository_id_)));
 		::Nirvana::ConstPointer psrc;
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {

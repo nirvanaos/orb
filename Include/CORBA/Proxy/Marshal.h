@@ -122,16 +122,14 @@ public:
 
 	::Nirvana::UIntPtr get_buffer (::Nirvana::Size& size, ::Nirvana::Pointer& buf_ptr);
 
-	::Nirvana::UIntPtr marshal_object (Object_ptr);
-	::Nirvana::UIntPtr marshal_type_code (TypeCode_ptr);
+	::Nirvana::UIntPtr marshal_interface (Interface_ptr);
 };
 
 BRIDGE_BEGIN (Marshal, CORBA_NIRVANA_REPOSITORY_ID ("Marshal"))
 ABI_enum (*_get_context) (Bridge <Marshal>*, Interface*);
 ::Nirvana::UIntPtr (*marshal_memory) (Bridge <Marshal>*, ::Nirvana::ConstPointer, ::Nirvana::Size*, ::Nirvana::Size, Interface*);
 ::Nirvana::UIntPtr (*get_buffer) (Bridge <Marshal>*, ::Nirvana::Size*, ::Nirvana::Pointer*, Interface*);
-::Nirvana::UIntPtr (*marshal_object) (Bridge <Marshal>*, Interface*, Interface*);
-::Nirvana::UIntPtr (*marshal_type_code) (Bridge <Marshal>*, Interface*, Interface*);
+::Nirvana::UIntPtr (*marshal_interface) (Bridge <Marshal>*, Interface*, Interface*);
 BRIDGE_END ()
 
 template <class T>
@@ -165,21 +163,11 @@ template <class T>
 }
 
 template <class T>
-::Nirvana::UIntPtr Client <T, Marshal>::marshal_object (Object_ptr obj)
+::Nirvana::UIntPtr Client <T, Marshal>::marshal_interface (Interface_ptr obj)
 {
 	Environment _env;
 	Bridge <Marshal>& _b (T::_get_bridge (_env));
-	::Nirvana::UIntPtr _ret = (_b._epv ().epv.marshal_object) (&_b, &obj, &_env);
-	_env.check ();
-	return _ret;
-}
-
-template <class T>
-::Nirvana::UIntPtr Client <T, Marshal>::marshal_type_code (TypeCode_ptr tc)
-{
-	Environment _env;
-	Bridge <Marshal>& _b (T::_get_bridge (_env));
-	::Nirvana::UIntPtr _ret = (_b._epv ().epv.marshal_type_code) (&_b, &tc, &_env);
+	::Nirvana::UIntPtr _ret = (_b._epv ().epv.marshal_interface) (&_b, &obj, &_env);
 	_env.check ();
 	return _ret;
 }

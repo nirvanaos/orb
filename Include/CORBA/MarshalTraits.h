@@ -98,17 +98,17 @@ struct MarshalTraits <TypeCode_var>
 
 	static void marshal_in (const TypeCode_ptr src, Marshal_ptr marshaler, Interface*& dst)
 	{
-		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_type_code (src);
+		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
 	}
 
 	static void marshal_out (TypeCode_var& src, Marshal_ptr marshaler, Interface*& dst)
 	{
-		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_type_code (src);
+		marshal_in (src, marshaler, dst);
 	}
 
 	static void unmarshal (Interface* src, Unmarshal_ptr unmarshaler, TypeCode_var& dst)
 	{
-		dst = unmarshaler->unmarshal_type_code (src);
+		dst = static_cast <TypeCode*> (static_cast <Bridge <TypeCode>*> (unmarshaler->unmarshal_interface (src, TypeCode::repository_id_)));
 	}
 };
 
@@ -119,12 +119,15 @@ struct MarshalTraits <I_var <I> >
 
 	static void marshal_in (const I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst)
 	{
-		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_object (src);
+		if (marshaler->context () < MarshalContext::OTHER_PROTECTION_DOMAIN)
+			reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
+		else
+			reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (Object_ptr (src));
 	}
 
 	static void marshal_out (I_var <I>& src, Marshal_ptr marshaler, Interface*& dst)
 	{
-		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_object (src);
+		marshal_in (src, marshaler, dst);
 	}
 
 	static void unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_var <I>& dst)
