@@ -27,8 +27,6 @@
 #define NIRVANA_ORB_TYPEVARLEN_H_
 
 #include "TypeByRef.h"
-#include "Proxy/Marshal.h"
-#include "Proxy/Unmarshal.h"
 #include <utility>
 #include <new>
 

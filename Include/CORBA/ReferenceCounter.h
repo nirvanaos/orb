@@ -37,6 +37,10 @@ typedef I_ptr <ReferenceCounter> ReferenceCounter_ptr;
 typedef I_var <ReferenceCounter> ReferenceCounter_var;
 typedef I_out <ReferenceCounter> ReferenceCounter_out;
 
+template <>
+struct Type <I_var <ReferenceCounter> > : TypeItf <ReferenceCounter>
+{};
+
 BRIDGE_BEGIN (ReferenceCounter, CORBA_NIRVANA_REPOSITORY_ID ("ReferenceCounter"))
 void (*add_ref) (Bridge <ReferenceCounter>*, Interface*);
 void (*remove_ref) (Bridge <ReferenceCounter>*, Interface*);

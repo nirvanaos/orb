@@ -80,11 +80,14 @@ struct CountedArray
 	ULong size;
 };
 
+/// Function to return TypeCode
+typedef TypeCode_ptr (*GetTypeCode) ();
+
 /// Parameter metadata.
 struct Parameter
 {
 	const Char* name;
-	const ::Nirvana::ImportInterfaceT <TypeCode>& type;
+	const GetTypeCode type;
 };
 
 /// Operation metadata.
@@ -93,7 +96,7 @@ struct Operation
 	const Char* name;
 	CountedArray <Parameter> input;
 	CountedArray <Parameter> output;
-	const ::Nirvana::ImportInterfaceT <TypeCode>& return_type;
+	GetTypeCode return_type;
 	RequestProc invoke;
 };
 

@@ -48,8 +48,7 @@ pseudo interface Unmarshal
 #ifndef NIRVANA_ORB_UNMARSHAL_H_
 #define NIRVANA_ORB_UNMARSHAL_H_
 
-#include "../Client.h"
-#include "../StringBase.h"
+#include <CORBA/CORBA.h>
 #include "MarshalContext.h"
 
 namespace CORBA {
@@ -58,12 +57,14 @@ class Object;
 
 namespace Nirvana {
 
-
-
 class Unmarshal;
 typedef I_ptr <Unmarshal> Unmarshal_ptr;
 typedef I_var <Unmarshal> Unmarshal_var;
 typedef I_out <Unmarshal> Unmarshal_out;
+
+template <>
+struct Type <I_var <Unmarshal> > : TypeItf <Unmarshal>
+{};
 
 /// \interface Unmarshal
 template <class T>

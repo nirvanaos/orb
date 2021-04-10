@@ -37,19 +37,26 @@
 
 namespace CORBA {
 
-enum CompletionStatus : uint32_t
+enum CompletionStatus : Nirvana::ABI_enum
 {
 	COMPLETED_YES,
 	COMPLETED_NO,
 	COMPLETED_MAYBE
 };
 
+extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_CompletionStatus;
+
 namespace Nirvana {
 
 template <>
 struct Type <CompletionStatus> :
 	public TypeEnum <CompletionStatus, CompletionStatus::COMPLETED_MAYBE>
-{};
+{
+	static TypeCode_ptr type_code ()
+	{
+		return _tc_CompletionStatus;
+	}
+};
 
 }
 
@@ -162,8 +169,6 @@ private:
 
 	static const ExceptionEntry exception_entries_ [KNOWN_SYSTEM_EXCEPTIONS];
 };
-
-extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_CompletionStatus;
 
 }
 

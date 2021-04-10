@@ -39,6 +39,10 @@ typedef Nirvana::I_inout <LocalObject> LocalObject_inout;
 
 namespace Nirvana {
 
+template <>
+struct Type <I_var <LocalObject> > : TypeItf <LocalObject>
+{};
+
 BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)

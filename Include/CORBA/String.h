@@ -99,26 +99,9 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 	static TypeCode_ptr type_code ();
 
 	static bool _small_copy (const ABI_type& src, ABI_type& dst);
-
 	static void marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst);
-
 	static void marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst);
-
-	static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst)
-	{
-		if (Base::has_check)
-			check (src);
-
-		if (src.is_large ()) {
-			size_t cb = src.allocated ();
-			if (cb) {
-				unmarshaler->adopt_memory (src.large_pointer (), cb);
-				static_cast <ABI_type&> (dst) = src;
-			} else
-				dst.assign_internal (src.large_size (), src.large_pointer ());
-		} else
-			static_cast <ABI_type&> (dst) = src;
-	}
+	static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst);
 };
 
 template <typename C>
@@ -141,33 +124,6 @@ void Type <StringT <C> >::check (const ABI_type& s)
 	}
 	if (p [cc])
 		::Nirvana::throw_BAD_PARAM (); // Not zero-terminated
-}
-
-template <typename C>
-void Type <StringT <C> >::marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
-{
-	assert (&src != &dst);
-	if (!_small_copy (src, dst)) {
-		size_t size = src.large_size ();
-		size_t cb = Var_type::byte_size (size);
-		dst.large_pointer ((C*)marshaler->marshal_memory (const_cast <C*> (src.large_pointer ()), cb, 0));
-		dst.large_size (size);
-		dst.allocated (cb);
-	}
-}
-
-template <typename C>
-void Type <StringT <C> >::marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
-{
-	assert (&src != &dst);
-	if (!_small_copy (src, dst)) {
-		size_t size = src.large_size ();
-		size_t cb = Var_type::byte_size (size);
-		dst.large_pointer ((C*)marshaler->marshal_memory (src.large_pointer (), cb, src.allocated ()));
-		dst.large_size (size);
-		dst.allocated (cb);
-		src.reset ();
-	}
 }
 
 template <typename C>

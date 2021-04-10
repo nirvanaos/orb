@@ -29,6 +29,7 @@
 #ifndef NIRVANA_ORB_CORBA_H_
 #define NIRVANA_ORB_CORBA_H_
 
+#include "Type_interface.h"
 #include "ORB.h"
 #include "Object.h"
 #include "TypeCode.h"

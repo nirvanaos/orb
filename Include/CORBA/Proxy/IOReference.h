@@ -99,6 +99,10 @@ typedef I_ptr <IOReference> IOReference_ptr;
 typedef I_var <IOReference> IOReference_var;
 typedef I_out <IOReference> IOReference_out;
 
+template <>
+struct Type <I_var <IOReference> > : TypeItf <IOReference>
+{};
+
 BRIDGE_BEGIN (IOReference, CORBA_NIRVANA_REPOSITORY_ID ("IOReference"))
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV

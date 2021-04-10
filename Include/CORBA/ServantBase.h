@@ -33,6 +33,10 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <>
+struct Type <I_var <PortableServer::ServantBase> > : TypeItf <PortableServer::ServantBase>
+{};
+
 BRIDGE_BEGIN (::PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("ServantBase"))
 BASE_STRUCT_ENTRY (AbstractBase, CORBA_AbstractBase)
 BASE_STRUCT_ENTRY (ReferenceCounter, CORBA_Nirvana_ReferenceCounter)

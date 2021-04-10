@@ -66,7 +66,32 @@ typedef Nirvana::I_inout <InterfaceDef> InterfaceDef_inout;
 namespace Nirvana {
 
 template <>
+struct Type <I_var <PortableServer::ServantBase> >;
+
+template <class I>
+struct TypeObject : TypeItf <I>
+{
+	static const CORBA::TCKind tc_kind = tk_objref;
+
+	static void marshal_in (const I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst);
+
+	static void marshal_out (I_var <I>& src, Marshal_ptr marshaler, Interface*& dst)
+	{
+		marshal_in (src, marshaler, dst);
+	}
+};
+
+template <>
 const Char Bridge <Object>::repository_id_ [] = CORBA_REPOSITORY_ID ("Object");
+
+template <>
+struct Type <I_var <Object> > : TypeItf <Object>
+{
+	static TypeCode_ptr type_code ()
+	{
+		return _tc_Object;
+	}
+};
 
 template <>
 struct Bridge <Object>::EPV
@@ -191,34 +216,6 @@ public:
 	static I_ptr <Primary> _narrow (Object_ptr obj)
 	{
 		return Primary::_duplicate (AbstractBase_ptr (obj)->_query_interface <Primary> ());
-	}
-};
-
-template <>
-struct Type <I_var <Object> > : TypeItf <Object>
-{
-	static TypeCode_ptr type_code ()
-	{
-		return _tc_Object;
-	}
-};
-
-template <class I>
-struct TypeObject : TypeItf <I>
-{
-	static const TCKind tc_kind = tk_objref;
-
-	static void marshal_in (const I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst)
-	{
-		if (marshaler->context () < MarshalContext::OTHER_PROTECTION_DOMAIN)
-			reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
-		else
-			reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (Object_ptr (src));
-	}
-
-	static void marshal_out (I_var <I>& src, Marshal_ptr marshaler, Interface*& dst)
-	{
-		marshal_in (src, marshaler, dst);
 	}
 };
 

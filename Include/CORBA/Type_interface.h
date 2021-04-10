@@ -28,8 +28,6 @@
 
 #include "Type_forward.h"
 #include "I_var.h"
-#include "Proxy/Marshal.h"
-#include "Proxy/Unmarshal.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -341,25 +339,10 @@ struct TypeItf : TypeItfBase <I>
 
 	static const bool has_marshal = true;
 
-	static void marshal_in (const I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst)
-	{
-		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
-	}
-
-	static void marshal_out (I_var <I>& src, Marshal_ptr marshaler, Interface*& dst)
-	{
-		marshal_in (src, marshaler, dst);
-	}
-
-	static void unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_var <I>& dst)
-	{
-		dst = static_cast <I*> (unmarshaler->unmarshal_interface (src, I::repository_id_));
-	}
+	static void marshal_in (const I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst);
+	static void marshal_out (I_var <I>& src, Marshal_ptr marshaler, Interface*& dst);
+	static void unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_var <I>& dst);
 };
-
-template <class I>
-struct Type <I_var <I> > : TypeItf <I>
-{};
 
 template <>
 struct Type <I_var <Interface> > : TypeItfBase <Interface>

@@ -32,7 +32,7 @@
 #include "Type_interface.h"
 #include "String.h"
 #include "basic_types.h"
-#include "TypeCode.h"
+#include "TCKind.h"
 
 namespace CORBA {
 
@@ -54,8 +54,12 @@ namespace Nirvana {
 
 // AbstractBase
 
+template <>
+struct Type <I_var <AbstractBase> > : TypeItf <AbstractBase>
+{};
+
 BRIDGE_BEGIN (AbstractBase, CORBA_REPOSITORY_ID ("AbstractBase"))
-	Interface* (*query_interface) (Bridge <AbstractBase>*, ABI_in <String>, Interface*);
+	Interface* (*query_interface) (Bridge <AbstractBase>*, Type <String>::ABI_in, Interface*);
 BRIDGE_END ()
 
 template <class T>

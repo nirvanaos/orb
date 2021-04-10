@@ -71,7 +71,8 @@ pseudo interface Marshal
 #ifndef NIRVANA_ORB_MARSHAL_H_
 #define NIRVANA_ORB_MARSHAL_H_
 
-#include "../Client.h"
+//#include "../Client.h"
+#include <CORBA/CORBA.h>
 #include "MarshalContext.h"
 
 namespace CORBA {
@@ -81,6 +82,10 @@ class Marshal;
 typedef I_ptr <Marshal> Marshal_ptr;
 typedef I_var <Marshal> Marshal_var;
 typedef I_out <Marshal> Marshal_out;
+
+template <>
+struct Type <I_var <Marshal> > : TypeItf <Marshal>
+{};
 
 /// \interface Marshal
 ///

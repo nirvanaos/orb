@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/LocalObjectPOA.h>
+#include <CORBA/Server.h>
 
 namespace CORBA {
 namespace Nirvana {

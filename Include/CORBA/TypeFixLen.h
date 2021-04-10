@@ -78,7 +78,7 @@ using TypeTrivial = TypeFixLen <T>;
 template <typename T>
 struct Type : TypeTrivial <T
 #ifdef NIRVANA_C11
-	, typename std::enable_if <std::is_trivially_copyable <T>::value>::type
+	, typename std::enable_if_t <std::is_trivially_copyable <T>::value>
 #endif
 >
 {};

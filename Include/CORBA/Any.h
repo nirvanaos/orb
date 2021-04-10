@@ -29,7 +29,6 @@
 
 #include "TypeVarLen.h"
 #include "ABI_Any.h"
-#include "TypeCode_forward.h"
 #include <Nirvana/basic_string.h>
 #include "tc_constants.h"
 //#include "Fixed.h"
@@ -283,10 +282,7 @@ struct Type <Any> : public TypeVarLen <Any, true>
 		return val;
 	}
 
-	static TypeCode_ptr type_code ()
-	{
-		return _tc_any;
-	}
+	static TypeCode_ptr type_code ();
 
 	static void marshal_in (const Any& src, Marshal_ptr marshaler, ABI_type& dst);
 	static void marshal_out (Any& src, Marshal_ptr marshaler, ABI_type& dst);
