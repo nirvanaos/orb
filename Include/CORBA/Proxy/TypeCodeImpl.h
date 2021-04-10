@@ -34,18 +34,33 @@
 namespace CORBA {
 namespace Nirvana {
 
+void set_BadKind (Interface* env);
+void set_Bounds (Interface* env);
+
+template <size_t cc> inline
+Type <String>::ABI_ret const_string_ret (Char const (&s) [cc])
+{
+	StringBase <Char> sb (s);
+	return Type <String>::ret (std::move (static_cast <String&> (sb)));
+}
+
+inline
+Type <String>::ABI_ret const_string_ret (const Char* s)
+{
+	StringBase <Char> sb (s);
+	return Type <String>::ret (std::move (static_cast <String&> (sb)));
+}
+
 class TypeCodeBase
 {
 public:
 	static Boolean equal (TCKind tk, TypeCode_ptr other);
 	static Boolean equivalent (TCKind tk, TypeCode_ptr other);
-	static Boolean equal (TCKind tk, const char* id, TypeCode_ptr other);
-	static Boolean equivalent (TCKind tk, const char* id, TypeCode_ptr other);
 
-	static const char* _id (Bridge <TypeCode>* _b, Interface* _env);
-	static const char* _name (Bridge <TypeCode>* _b, Interface* _env);
+	static Type <String>::ABI_ret _id (Bridge <TypeCode>* _b, Interface* _env);
+	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env);
 	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env);
-	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env);
+	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env);
 	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env);
 	static const Any* _member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env);
 	static Interface* _discriminator_type (Bridge <TypeCode>* _b, Interface* _env);
@@ -58,8 +73,9 @@ public:
 	static ValueModifier _type_modifier (Bridge <TypeCode>* _b, Interface* _env);
 	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, Interface* _env);
 
-	static void set_BadKind (Interface* env);
-	static void set_Bounds (Interface* env);
+protected:
+	static Boolean equal (TCKind tk, const String& id, TypeCode_ptr other);
+	static Boolean equivalent (TCKind tk, const String& id, TypeCode_ptr other);
 };
 
 template <TCKind tk>
@@ -102,9 +118,9 @@ public:
 		return TypeCodeBase::equivalent (tk, RepositoryType::repository_id_, other);
 	}
 
-	static const char* _id (Bridge <TypeCode>* _b, Interface* _env)
+	static ABI <String> _id (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return RepositoryType::repository_id_;
+		return const_string_ret (RepositoryType::repository_id_);
 	}
 };
 
@@ -112,9 +128,9 @@ template <class T>
 class TypeCodeName
 {
 public:
-	static const char* _name (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return name_;
+		return const_string_ret (name_);
 	}
 
 private:

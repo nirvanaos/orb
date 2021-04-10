@@ -64,9 +64,9 @@ public:
 	}
 
 	// TypeCode
-	static const char* _name (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return name_;
+		return const_string_ret (name_);
 	}
 
 	static const Char name_ [];

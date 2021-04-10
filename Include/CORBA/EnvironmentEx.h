@@ -49,7 +49,7 @@ private:
 
 template <class ... Exceptions>
 const ExceptionEntry EnvironmentEx <Exceptions...>::user_exceptions_[] = {
-	{ Exceptions::repository_id_, sizeof (Exceptions), ::CORBA::Nirvana::construct <Exceptions> }...,
+	{ RepIdOf <Exceptions>::repository_id_, sizeof (Exceptions), ::CORBA::Nirvana::construct <Exceptions> }...,
 	{0}
 };
 

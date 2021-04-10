@@ -33,20 +33,14 @@ namespace CORBA {
 using namespace Nirvana;
 using namespace std;
 
-#define DEFINE_SYS_EXCEPTION(E)\
+#define DEFINE_SYSTEM_EXCEPTION(E)\
 const E* E::_downcast (const Exception* ep) NIRVANA_NOEXCEPT { return (ep && (EC_##E == ep->__code ())) ? static_cast <const E*> (ep) : 0; }\
+const char* E::_rep_id () const NIRVANA_NOEXCEPT { return RepIdOf <E>::repository_id_; }\
 GNU_OPTNONE ::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 
-#define DEFINE_CORBA_EXCEPTION(E) const Char E::repository_id_ [] = "IDL:omg.org/CORBA/" #E ":1.0";\
-DEFINE_SYS_EXCEPTION(E)
+#define EXCEPTION_ENTRY(E) { { Nirvana::RepIdOf <E>::repository_id_, sizeof (E), ::CORBA::Nirvana::construct <E> }, countof (Nirvana::RepIdOf <E>::repository_id_) - 1 },
 
-#define DEFINE_NIRVANA_EXCEPTION(E) const Char E::repository_id_ [] = "IDL:CORBA/" #E ":1.0";\
-DEFINE_SYS_EXCEPTION(E)
-
-#define EXCEPTION_ENTRY(E) { { E::repository_id_, sizeof (E), ::CORBA::Nirvana::construct <E> }, countof (E::repository_id_) - 1 },
-
-CORBA_EXCEPTIONS (DEFINE_CORBA_EXCEPTION)
-NIRVANA_EXCEPTIONS (DEFINE_NIRVANA_EXCEPTION)
+SYSTEM_EXCEPTIONS (DEFINE_SYSTEM_EXCEPTION)
 
 const SystemException::ExceptionEntry SystemException::exception_entries_ [SystemException::KNOWN_SYSTEM_EXCEPTIONS] = {
 	SYSTEM_EXCEPTIONS (EXCEPTION_ENTRY)

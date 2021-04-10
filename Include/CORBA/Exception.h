@@ -72,6 +72,13 @@ public:
 
 namespace Nirvana {
 
+/// Bind repository id to a type.
+template <typename T>
+struct RepIdOf
+{
+	static const Char repository_id_ [];
+};
+
 struct ExceptionEntry
 {
 	const Char* rep_id;
@@ -101,8 +108,7 @@ extern void set_unknown_exception (Interface_ptr environment) NIRVANA_NOEXCEPT;
 #define DECLARE_EXCEPTION(E) public: E () {}\
 NIRVANA_DEFAULT_CONSTRUCTORS (E)\
 virtual void _raise () const { throw *this; }\
-virtual const char* _rep_id () const NIRVANA_NOEXCEPT { return repository_id_; }\
-static const char repository_id_ [];\
+virtual const char* _rep_id () const NIRVANA_NOEXCEPT;\
 virtual const char* _name () const NIRVANA_NOEXCEPT { return __name (); }\
 static constexpr const char* __name () NIRVANA_NOEXCEPT { return #E; }\
 virtual ::CORBA::TypeCode_ptr __type_code () const NIRVANA_NOEXCEPT;\

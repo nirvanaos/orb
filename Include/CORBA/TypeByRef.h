@@ -169,12 +169,11 @@ struct TypeByRef
 	public:
 		C_VT_ret (ABI_VT_ret p) :
 			p_ (reinterpret_cast <const Var_type*> (p))
-		{
-			_check_pointer (p);
-		}
+		{}
 
 		operator Member_ret () const
 		{
+			_check_pointer (p_);
 			return *p_;
 		}
 
@@ -206,9 +205,19 @@ struct TypeByRef
 		return reinterpret_cast <ABI_ret&> (v);
 	}
 
+	static ABI_ret ret ()
+	{
+		return Var_type ();
+	}
+
 	static ABI_VT_ret VT_ret (const Var_type& v)
 	{
 		return &reinterpret_cast <const ABI_type&> (v);
+	}
+
+	static ABI_VT_ret VT_ret ()
+	{
+		return nullptr;
 	}
 };
 

@@ -107,9 +107,19 @@ struct TypeByVal
 		return v;
 	}
 
+	static ABI_ret ret ()
+	{
+		return Var_type ();
+	}
+
 	static ABI_VT_ret VT_ret (Var_type v)
 	{
 		return v;
+	}
+
+	static ABI_VT_ret VT_ret ()
+	{
+		return Var_type ();
 	}
 };
 

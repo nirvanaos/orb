@@ -81,7 +81,7 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, const void* p
 		const ExceptionEntry* ee;
 		if (!static_cast <const String&> (rep_id).empty ()) {
 			if (Exception::EC_USER_EXCEPTION == code && user_exceptions) {
-				if (RepositoryId::compatible (UnknownUserException::repository_id_, rep_id) && param) {
+				if (RepositoryId::compatible (RepIdOf <UnknownUserException>::repository_id_, rep_id) && param) {
 					const Any* pa = (const Any*)param;
 					TypeCode_ptr tc = pa->type ();
 					if (tc) {

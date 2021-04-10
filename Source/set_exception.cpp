@@ -27,7 +27,7 @@
 #include <CORBA/exceptions.h>
 #include <CORBA/Environment_c.h>
 
-#define DEFINE_FUNCTION(e) void set_##e (Interface* env){ set_exception (env, SystemException::EC_##e, e::repository_id_, nullptr);}
+#define DEFINE_FUNCTION(e) void set_##e (Interface* env){ set_exception (env, SystemException::EC_##e, RepIdOf<e>::repository_id_, nullptr);}
 
 namespace CORBA {
 namespace Nirvana {

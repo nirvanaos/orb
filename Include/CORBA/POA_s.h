@@ -51,7 +51,7 @@ protected:
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return Type <String>::ABI_ret ();
+		return Type <String>::ret ();
 	}
 
 	static void _deactivate_object (Bridge <PortableServer::POA>* obj, Type <String>::ABI_in objid, Interface* env)

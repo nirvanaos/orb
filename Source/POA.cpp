@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/POA.h>
+#include <CORBA/Server.h>
 #include <Nirvana/OLF.h>
 
 DEFINE_CORBA_INTERFACE_EXCEPTION (PortableServer, POA, ServantAlreadyActive);

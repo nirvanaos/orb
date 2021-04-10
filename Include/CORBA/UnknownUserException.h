@@ -55,6 +55,12 @@ private:
 	_Data _data;
 };
 
+namespace Nirvana {
+
+template <>
+const Char RepIdOf <UnknownUserException>::repository_id_ [] = CORBA_REPOSITORY_ID ("UnknownUserException");
+}
+
 }
 
 #endif

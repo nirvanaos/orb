@@ -36,12 +36,21 @@ DECLARE_EXCEPTION(E)\
 E (ULong minor, CompletionStatus status = COMPLETED_NO) : SystemException (minor, status) {}\
 virtual Code __code () const NIRVANA_NOEXCEPT { return EC_##E; }};
 
+#define DECLARE_CORBA_EXCEPTION(E) DECLARE_SYSTEM_EXCEPTION(E)\
+namespace Nirvana { template <> const Char RepIdOf <E>::repository_id_ [] = "IDL:omg.org/CORBA/" #E ":1.0"; }
+
+#define DECLARE_NIRVANA_EXCEPTION(E) DECLARE_SYSTEM_EXCEPTION(E)\
+namespace Nirvana { template <> const Char RepIdOf <E>::repository_id_ [] = "IDL:CORBA/" #E ":1.0"; }
+
 namespace CORBA {
 
-SYSTEM_EXCEPTIONS (DECLARE_SYSTEM_EXCEPTION)
+CORBA_EXCEPTIONS (DECLARE_CORBA_EXCEPTION)
+NIRVANA_EXCEPTIONS (DECLARE_NIRVANA_EXCEPTION)
 
 }
 
 #undef DECLARE_SYSTEM_EXCEPTION
+#undef DECLARE_CORBA_EXCEPTION
+#undef DECLARE_NIRVANA_EXCEPTION
 
 #endif

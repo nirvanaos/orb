@@ -73,7 +73,9 @@ template <> struct Type <T>
   static <Servant out type> out (ABI_out p);
   static <Servant inout type> inout (ABI_inout p);
   static ABI_ret ret (<Servant return type>);
+  static ABI_ret ();
   static ABI_VT_ret VT_ret (<Valuetype servant return type>);
+  static ABI_VT_ret VT_ret ();
 
   // NOTE: Servant types may be differ from client types.
 

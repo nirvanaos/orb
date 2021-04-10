@@ -43,13 +43,13 @@ public:
 	using TypeCodeMemberCount <Type <E>::count_>::_member_count;
 	using TypeCodeName <E>::_name;
 
-	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
 		if (index >= Type <E>::count_) {
-			TypeCodeBase::set_Bounds (_env);
-			return nullptr;
+			set_Bounds (_env);
+			return Type <String>::ret ();
 		} else
-			return members_ [index];
+			return const_string_ret (members_ [index]);
 	}
 
 private:

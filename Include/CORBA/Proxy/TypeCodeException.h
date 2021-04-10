@@ -35,7 +35,7 @@ namespace Nirvana {
 
 template <class E, bool members = false>
 class TypeCodeException :
-	public TypeCodeStatic <TypeCodeException <E, members>, TypeCodeWithId <tk_except, E>, TypeCodeOps <typename E::_Data> >,
+	public TypeCodeStatic <TypeCodeException <E, members>, TypeCodeWithId <tk_except, RepIdOf <E>>, TypeCodeOps <typename E::_Data> >,
 	public TypeCodeMembersOptional <E, members>
 {
 	typedef TypeCodeMembersOptional <E, members> Members;
@@ -44,9 +44,9 @@ public:
 	using Members::_member_name;
 	using Members::_member_type;
 
-	static const char* _name (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return E::__name ();
+		return const_string_ret (E::__name ());
 	}
 };
 

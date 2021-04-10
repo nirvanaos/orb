@@ -89,28 +89,28 @@ protected:
 		return 0;
 	}
 
-	static const char* _id (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _id (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		try {
-			return S::_implementation (_b).id ();
+			return Type <String>::ret (S::_implementation (_b).id ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return 0;
+		return Type <String>::ret ();
 	}
 
-	static const char* _name (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		try {
-			return S::_implementation (_b).name ();
+			return Type <String>::ret (S::_implementation (_b).name ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return 0;
+		return Type <String>::ret ();
 	}
 
 	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env)
@@ -125,16 +125,16 @@ protected:
 		return 0;
 	}
 
-	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
 		try {
-			return S::_implementation (_b).member_name (index);
+			return Type <String>::ret (S::_implementation (_b).member_name (index));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return 0;
+		return Type <String>::ret ();
 	}
 
 	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env)

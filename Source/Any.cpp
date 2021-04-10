@@ -295,7 +295,7 @@ Boolean operator >>= (const Any& any, SystemException& se)
 {
 	TypeCode_ptr tc = any.type ();
 	if (tc && tc->kind () == tk_except) {
-		const Char* id = tc->id ();
+		const Char* id = tc->id ().c_str ();
 		const Char standard_prefix [] = "IDL:omg.org/CORBA/";
 		const Char nirvana_prefix [] = "IDL:CORBA/";
 		if (

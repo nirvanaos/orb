@@ -29,12 +29,12 @@
 #include "Any.h"
 #include "Boolean.h"
 
+// TODO: Remove redundant includes
+#include "String.h"
 #include "Client.h"
 #include "UserException.h"
 #include "EnvironmentEx.h"
 #include "TCKind.h"
-
-//#include "TypeCode_forward.h"
 
 namespace CORBA {
 
@@ -78,15 +78,21 @@ struct Definitions <TypeCode>
 	};
 };
 
+template <>
+const Char RepIdOf <Definitions <TypeCode>::BadKind>::repository_id_ [] = CORBA_REPOSITORY_ID ("TypeCode/BadKind");
+
+template <>
+const Char RepIdOf <Definitions <TypeCode>::Bounds>::repository_id_ [] = CORBA_REPOSITORY_ID ("TypeCode/Bounds");
+
 BRIDGE_BEGIN (TypeCode, CORBA_REPOSITORY_ID ("TypeCode"))
 ABI_boolean (*equal) (Bridge <TypeCode>*, Interface*, Interface*);
 ABI_boolean (*equivalent) (Bridge <TypeCode>*, Interface*, Interface*);
 Interface* (*get_compact_typecode) (Bridge <TypeCode>*, Interface*);
 ABI_enum (*kind) (Bridge <TypeCode>*, Interface*);
-const char* (*id) (Bridge <TypeCode>*, Interface*);
-const char* (*name) (Bridge <TypeCode>*, Interface*);
+Type <String>::ABI_ret (*id) (Bridge <TypeCode>*, Interface*);
+Type <String>::ABI_ret (*name) (Bridge <TypeCode>*, Interface*);
 ULong (*member_count) (Bridge <TypeCode>*, Interface*);
-const char* (*member_name) (Bridge <TypeCode>*, ULong index, Interface*);
+Type <String>::ABI_ret (*member_name) (Bridge <TypeCode>*, ULong index, Interface*);
 Interface* (*member_type) (Bridge <TypeCode>*, ULong index, Interface*);
 const Any* (*member_label) (Bridge <TypeCode>*, ULong index, Interface*);
 Interface* (*discriminator_type) (Bridge <TypeCode>*, Interface*);
@@ -124,13 +130,13 @@ public:
 	// for tk_objref, tk_struct, tk_union, tk_enum, tk_alias,
 	// tk_value, tk_value_box, tk_native, tk_abstract_interface
 	// tk_local_interface and tk_except
-	const char* id (); // raises (BadKind);
-	const char* name (); // raises (BadKind);
+	String id (); // raises (BadKind);
+	String name (); // raises (BadKind);
 
 	// for tk_struct, tk_union, tk_enum, tk_value,
 	// and tk_except
 	ULong member_count (); // raises (BadKind);
-	const char* member_name (ULong index); // raises (BadKind, Bounds);
+	String member_name (ULong index); // raises (BadKind, Bounds);
 	TypeCode_var member_type (ULong index); // raises (BadKind, Bounds);
 
 	// for tk_union
@@ -220,21 +226,21 @@ TCKind Client <T, TypeCode>::kind ()
 }
 
 template <class T>
-const char* Client <T, TypeCode>::id ()
+String Client <T, TypeCode>::id ()
 {
 	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	const char* _ret = (_b._epv ().epv.id) (&_b, &_env);
+	Type <String>::C_ret _ret = (_b._epv ().epv.id) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-const char* Client <T, TypeCode>::name ()
+String Client <T, TypeCode>::name ()
 {
 	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	const char* _ret = (_b._epv ().epv.name) (&_b, &_env);
+	Type <String>::C_ret _ret = (_b._epv ().epv.name) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -250,11 +256,11 @@ ULong Client <T, TypeCode>::member_count ()
 }
 
 template <class T>
-const char* Client <T, TypeCode>::member_name (ULong index)
+String Client <T, TypeCode>::member_name (ULong index)
 {
 	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	const char* _ret = (_b._epv ().epv.member_name) (&_b, index, &_env);
+	Type <String>::C_ret _ret = (_b._epv ().epv.member_name) (&_b, index, &_env);
 	_env.check ();
 	return _ret;
 }

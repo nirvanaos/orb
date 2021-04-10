@@ -43,19 +43,19 @@ public:
 		return countof (members_);
 	}
 
-	static const char* _member_name (Bridge <TypeCode>*_b, ULong index, Interface * _env)
+	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>*_b, ULong index, Interface * _env)
 	{
 		if (index >= countof (members_)) {
-			TypeCodeBase::set_Bounds (_env);
-			return nullptr;
+			set_Bounds (_env);
+			return Type <String>::ret ();
 		} else
-			return members_ [index].name;
+			return const_string_ret (members_ [index].name);
 	}
 
 	static Interface* _member_type (Bridge <TypeCode>*_b, ULong index, Interface * _env)
 	{
 		if (index >= countof (members_)) {
-			TypeCodeBase::set_Bounds (_env);
+			set_Bounds (_env);
 			return nullptr;
 		} else {
 			TypeCode_ptr tc ((members_ [index].type) ());
@@ -73,15 +73,15 @@ class TypeCodeMembersEmpty :
 public:
 	using TypeCodeMemberCount <0>::_member_count;
 
-	static const char* _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
-		TypeCodeBase::set_Bounds (_env);
-		return nullptr;
+		set_Bounds (_env);
+		return Type <String>::ret ();
 	}
 
 	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
-		TypeCodeBase::set_Bounds (_env);
+		set_Bounds (_env);
 		return nullptr;
 	}
 };

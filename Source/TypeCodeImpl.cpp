@@ -30,6 +30,16 @@
 namespace CORBA {
 namespace Nirvana {
 
+void set_BadKind (Interface* env)
+{
+	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::BadKind>::repository_id_, nullptr);
+}
+
+void set_Bounds (Interface* env)
+{
+	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::Bounds>::repository_id_, nullptr);
+}
+
 Boolean TypeCodeBase::equal (TCKind tk, TypeCode_ptr other)
 {
 	return tk == other->kind ();
@@ -48,40 +58,30 @@ Boolean TypeCodeBase::equivalent (TCKind tk, TypeCode_ptr other)
 	return tk == tko;
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, const char* id, TypeCode_ptr other)
+Boolean TypeCodeBase::equal (TCKind tk, const String& id, TypeCode_ptr other)
 {
 	if (!TypeCodeBase::equal (tk_except, other))
 		return false;
-	return !strcmp (id, other->id ());
+	return id ==  other->id ();
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, const char* id, TypeCode_ptr other)
+Boolean TypeCodeBase::equivalent (TCKind tk, const String& id, TypeCode_ptr other)
 {
 	if (!TypeCodeBase::equivalent (tk_except, other))
 		return false;
-	return !strcmp (id, other->id ());
+	return id == other->id ();
 }
 
-void TypeCodeBase::set_BadKind (Interface* env)
-{
-	set_exception (env, Exception::EC_USER_EXCEPTION, TypeCode::BadKind::repository_id_, nullptr);
-}
-
-void TypeCodeBase::set_Bounds (Interface* env)
-{
-	set_exception (env, Exception::EC_USER_EXCEPTION, TypeCode::Bounds::repository_id_, nullptr);
-}
-
-const char* TypeCodeBase::_id (Bridge <TypeCode>* _b, Interface* _env)
+Type <String>::ABI_ret TypeCodeBase::_id (Bridge <TypeCode>* _b, Interface* _env)
 {
 	set_BadKind (_env);
-	return nullptr;
+	return Type <String>::ret ();
 }
 
-const char* TypeCodeBase::_name (Bridge <TypeCode>* _b, Interface* _env)
+Type <String>::ABI_ret TypeCodeBase::_name (Bridge <TypeCode>* _b, Interface* _env)
 {
 	set_BadKind (_env);
-	return nullptr;
+	return Type <String>::ret ();
 }
 
 ULong TypeCodeBase::_member_count (Bridge <TypeCode>* _b, Interface* _env)
@@ -90,10 +90,10 @@ ULong TypeCodeBase::_member_count (Bridge <TypeCode>* _b, Interface* _env)
 	return 0;
 }
 
-const char* TypeCodeBase::_member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+Type <String>::ABI_ret TypeCodeBase::_member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 {
 	set_BadKind (_env);
-	return nullptr;
+	return Type <String>::ret ();
 }
 
 Interface* TypeCodeBase::_member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env)

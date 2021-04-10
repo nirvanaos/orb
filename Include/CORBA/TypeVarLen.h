@@ -37,6 +37,7 @@ template <class T>
 struct TypeVarLenBase : TypeByRef <T, ABI <T> >
 {
 	typedef TypeByRef <T, ABI <T> > Base;
+	typedef typename Base::Var_type Var_type;
 	typedef typename Base::C_in C_in;
 	typedef typename Base::C_inout C_inout;
 	typedef typename Base::ABI_ret ABI_ret;
@@ -48,10 +49,10 @@ struct TypeVarLenBase : TypeByRef <T, ABI <T> >
 	class C_out : public Base::C_out
 	{
 	public:
-		C_out (T& val) :
+		C_out (Var_type& val) :
 			Base::C_out (val)
 		{
-			val = T ();	// Clear
+			val = Var_type ();	// Clear
 		}
 	};
 
@@ -62,24 +63,24 @@ struct TypeVarLenBase : TypeByRef <T, ABI <T> >
 			val_ (reinterpret_cast <T&&> (val))
 		{}
 
-		operator T ()
+		operator Var_type ()
 		{
 			return std::move (val_);
 		}
 
 	protected:
-		T val_;
+		Var_type val_;
 	};
 
 	// Client I_var class for the legacy C++ IDL mapping support
 	class C_var :
-		public T
+		public Var_type
 	{
 	public:
 		C_var ()
 		{}
 
-		C_var (const T& v) :
+		C_var (const Var_type& v) :
 			T (v)
 		{}
 
@@ -87,26 +88,26 @@ struct TypeVarLenBase : TypeByRef <T, ABI <T> >
 			T (src)
 		{}
 
-		C_var& operator = (const T& v)
+		C_var& operator = (const Var_type& v)
 		{
 			if (this != &v)
-				T::operator = (v);
+				Var_type::operator = (v);
 			return *this;
 		}
 
 		C_var& operator = (const C_var& v)
 		{
 			if (this != &v)
-				T::operator = (v);
+				Var_type::operator = (v);
 			return *this;
 		}
 
-		T& operator -> ()
+		Var_type& operator -> ()
 		{
 			return *this;
 		}
 
-		const T& operator -> () const
+		const Var_type& operator -> () const
 		{
 			return *this;
 		}
@@ -126,16 +127,23 @@ struct TypeVarLenBase : TypeByRef <T, ABI <T> >
 			return *this;
 		}
 
-		T _retn ()
+		Var_type _retn ()
 		{
-			return std::move (static_cast <T&> (*this));
+			return std::move (static_cast <Var_type&> (*this));
 		}
 	};
 
-	static ABI_ret ret (T&& v)
+	static ABI_ret ret (Var_type&& v)
 	{
 		ABI_ret abi;
-		new (&abi) T (std::move (v));
+		new (&abi) Var_type (std::move (v));
+		return abi;
+	}
+
+	static ABI_ret ret ()
+	{
+		ABI_ret abi;
+		new (&abi) Var_type ();
 		return abi;
 	}
 };
@@ -151,15 +159,16 @@ template <class T>
 struct TypeVarLen <T, true> : TypeVarLenBase <T>
 {
 	typedef TypeVarLenBase <T> Base;
+	typedef typename Base::Var_type Var_type;
 
 	static const bool has_check = true;
 
-	static void check_or_clear (T& v);
+	static void check_or_clear (Var_type& v);
 
 	class C_inout : public Base::C_inout
 	{
 	public:
-		C_inout (T& val) :
+		C_inout (Var_type& val) :
 			Base::C_inout (val)
 		{}
 
@@ -169,10 +178,10 @@ struct TypeVarLen <T, true> : TypeVarLenBase <T>
 	class C_out : public C_inout
 	{
 	public:
-		C_out (T& val) :
+		C_out (Var_type& val) :
 			C_inout (val)
 		{
-			val = T ();	// Clear
+			val = Var_type ();	// Clear
 		}
 	};
 
@@ -192,27 +201,27 @@ struct TypeVarLen <T, true> : TypeVarLenBase <T>
 		C_VT_ret (typename Base::ABI_VT_ret p) :
 			Base::C_VT_ret (p)
 		{
-			Type <T>::check (*p);
+			Type <Var_type>::check (*p);
 		}
 	};
 
 	// Servant-side methods
 
-	static const T& in (typename Base::ABI_in p)
+	static const Var_type& in (typename Base::ABI_in p)
 	{
 		_check_pointer (p);
-		Type <T>::check (*p);
-		return reinterpret_cast <const T&> (*p);
+		Type <Var_type>::check (*p);
+		return reinterpret_cast <const Var_type&> (*p);
 	}
 
-	static T& inout (typename Base::ABI_inout p)
+	static Var_type& inout (typename Base::ABI_inout p)
 	{
 		_check_pointer (p);
-		Type <T>::check (*p);
-		return reinterpret_cast <T&> (*p);
+		Type <Var_type>::check (*p);
+		return reinterpret_cast <Var_type&> (*p);
 	}
 
-	static T& out (typename Base::ABI_out p)
+	static Var_type& out (typename Base::ABI_out p)
 	{
 		return inout (p);
 	}
@@ -220,13 +229,13 @@ struct TypeVarLen <T, true> : TypeVarLenBase <T>
 
 /// Outline for compact code
 template <class T>
-void TypeVarLen <T, true>::check_or_clear (T& v)
+void TypeVarLen <T, true>::check_or_clear (Var_type& v)
 {
 	try {
-		Type <T>::check (reinterpret_cast <typename Type <T>::ABI_type&> (v));
+		Type <Var_type>::check (reinterpret_cast <typename Type <Var_type>::ABI_type&> (v));
 	} catch (...) {
-		v.~T (); // Destructor mustn't throw exceptions
-		new (&v) T ();
+		v.~Var_type (); // Destructor mustn't throw exceptions
+		new (&v) Var_type ();
 		throw;
 	}
 }

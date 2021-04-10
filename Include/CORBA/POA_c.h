@@ -67,6 +67,12 @@ struct Definitions <PortableServer::POA>
 	};
 };
 
+template <>
+const Char RepIdOf <Definitions <PortableServer::POA>::ServantAlreadyActive>::repository_id_ [] = PORTABLESERVER_REPOSITORY_ID("POA/ServantAlreadyActive");
+
+template <>
+const Char RepIdOf <Definitions <PortableServer::POA>::ObjectNotActive>::repository_id_ [] = PORTABLESERVER_REPOSITORY_ID ("POA/ObjectNotActive");
+
 BRIDGE_BEGIN (PortableServer::POA, PORTABLESERVER_REPOSITORY_ID ("POA"))
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BRIDGE_EPV
