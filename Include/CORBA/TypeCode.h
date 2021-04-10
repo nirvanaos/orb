@@ -26,14 +26,7 @@
 #ifndef NIRVANA_ORB_TYPECODE_H_
 #define NIRVANA_ORB_TYPECODE_H_
 
-#include "Any.h"
-#include "Boolean.h"
-
-// TODO: Remove redundant includes
-#include "String.h"
-#include "Client.h"
-#include "UserException.h"
-#include "EnvironmentEx.h"
+#include <CORBA/CORBA.h>
 #include "TCKind.h"
 
 namespace CORBA {

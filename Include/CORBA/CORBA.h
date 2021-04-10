@@ -30,17 +30,19 @@
 #define NIRVANA_ORB_CORBA_H_
 
 #include "Type_interface.h"
-#include "ORB.h"
-#include "Object.h"
-#include "TypeCode.h"
+#include "Any.h"
+#include "Boolean.h"
+#include "UserException.h"
 #include "String.h"
+#include "EnvironmentEx.h"
+#include "TypeCode.h"
 #include "Sequence.h"
 #include "exceptions.h"
 #include "tc_constants.h"
-#include "Any.h"
-#include "Type.h"
 #include "LocalObject.h"
+#include "Type.h"
 #include "String_compat.h"
 #include "UnknownUserException.h"
+#include "ORB.h"
 
 #endif

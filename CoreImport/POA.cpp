@@ -1,4 +1,4 @@
-#include <CORBA/POA.h>
+#include <CORBA/Server.h>
 #include <Nirvana/OLF.h>
 
 NIRVANA_OLF_SECTION

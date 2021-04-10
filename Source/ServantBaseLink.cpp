@@ -23,9 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/ServantBaseLink.h>
-#include <CORBA/POA.h>
-#include <CORBA/core_objects.h>
+#include <CORBA/Server.h>
 
 namespace CORBA {
 namespace Nirvana {
