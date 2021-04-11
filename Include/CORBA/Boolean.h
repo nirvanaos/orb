@@ -38,6 +38,21 @@ template <>
 struct Type <Boolean> : TypeFixLen <Boolean, ABI_boolean, char>
 {
 	static TypeCode_ptr type_code ();
+
+	static void marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
+	{
+		dst = src;
+	}
+
+	static void marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
+	{
+		dst = src;
+	}
+
+	static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst) NIRVANA_NOEXCEPT
+	{
+		dst = src != 0;
+	}
 };
 
 typedef Type <Boolean>::C_in Boolean_in;
