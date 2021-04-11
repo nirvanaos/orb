@@ -39,6 +39,7 @@ class TypeCodeEnum :
 	public TypeCodeMemberCount <Type <E>::count_>,
 	public TypeCodeName <E>
 {
+	typedef public TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <tk_enum, RepIdOf <E> >, TypeCodeOps <E> > Base;
 public:
 	using TypeCodeMemberCount <Type <E>::count_>::_member_count;
 	using TypeCodeName <E>::_name;
@@ -49,7 +50,21 @@ public:
 			set_Bounds (_env);
 			return Type <String>::ret ();
 		} else
-			return const_string_ret (members_ [index]);
+			return const_string_ret_p (members_ [index]);
+	}
+
+	static Boolean equal (TypeCode_ptr other)
+	{
+		return Base::equal (other)
+			&& TypeCodeName <E>::equal (other)
+			&& TypeCodeBase::equal (members_, Type <E>::count_, other);
+	}
+
+	static Boolean equivalent (TypeCode_ptr other)
+	{
+		TypeCode_var tco = TypeCodeBase::dereference_alias (other);
+		return TypeCodeBase::equivalent (tk_enum, Base::RepositoryType::repository_id_, tco)
+			&& TypeCodeBase::equivalent (members_, Type <E>::count_, tco);
 	}
 
 private:

@@ -146,16 +146,16 @@ protected:
 		return 0;
 	}
 
-	static const Any* _member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+	static Type <Any>::ABI_ret _member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
 		try {
-			return Type <Any>::VT_ret (S::_implementation (_b).member_label (index));
+			return Type <Any>::ret (S::_implementation (_b).member_label (index));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return 0;
+		return Type <Any>::ret ();
 	}
 
 	static Interface* _discriminator_type (Bridge <TypeCode>* _b, Interface* _env)

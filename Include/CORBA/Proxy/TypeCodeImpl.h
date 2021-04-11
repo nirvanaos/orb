@@ -29,6 +29,7 @@
 
 #include "../Server.h"
 #include "../TypeCode_s.h"
+#include "InterfaceMetadata.h"
 #include <new>
 
 namespace CORBA {
@@ -45,7 +46,7 @@ Type <String>::ABI_ret const_string_ret (Char const (&s) [cc])
 }
 
 inline
-Type <String>::ABI_ret const_string_ret (const Char* s)
+Type <String>::ABI_ret const_string_ret_p (const Char* s)
 {
 	StringBase <Char> sb (s);
 	return Type <String>::ret (std::move (static_cast <String&> (sb)));
@@ -62,7 +63,7 @@ public:
 	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env);
 	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env);
 	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env);
-	static const Any* _member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env);
+	static Type <Any>::ABI_ret _member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env);
 	static Interface* _discriminator_type (Bridge <TypeCode>* _b, Interface* _env);
 	static Long _default_index (Bridge <TypeCode>* _b, Interface* _env);
 	static ULong _length (Bridge <TypeCode>* _b, Interface* _env);
@@ -77,6 +78,10 @@ protected:
 	static Boolean equal (TCKind tk, String_in& id, TypeCode_ptr other);
 	static Boolean equivalent (TCKind tk, String_in& id, TypeCode_ptr other);
 	static TypeCode_var dereference_alias (TypeCode_ptr tc);
+	static Boolean equal (const Char* const* members, ULong member_cnt, TypeCode_ptr other);
+	static Boolean equivalent (const Char* const* members, ULong member_cnt, TypeCode_ptr other);
+	static Boolean equal (const Parameter* members, ULong member_cnt, TypeCode_ptr other);
+	static Boolean equivalent (const Parameter* members, ULong member_cnt, TypeCode_ptr other);
 };
 
 template <TCKind tk>
@@ -132,6 +137,11 @@ public:
 	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return const_string_ret (name_);
+	}
+
+	static Boolean equal (TypeCode_ptr other)
+	{
+		return other->name ().compare (0, countof (name_) - 1, name_) == 0;
 	}
 
 private:

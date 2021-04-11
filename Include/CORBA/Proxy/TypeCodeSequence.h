@@ -35,7 +35,7 @@ namespace Nirvana {
 
 template <typename T, ULong bound = 0>
 class TypeCodeSequence :
-	public TypeCodeStatic <TypeCodeSequence <T, bound>, TypeCodeTK <tk_sequence>, TypeCodeOps <std::vector <T> > >,
+	public TypeCodeStatic <TypeCodeSequence <T, bound>, TypeCodeTK <tk_sequence>, TypeCodeOps <Vector <T> > >,
 	public TypeCodeLength <bound>,
 	public TypeCodeContentType <T>
 {

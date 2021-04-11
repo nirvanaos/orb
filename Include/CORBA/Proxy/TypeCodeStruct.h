@@ -39,11 +39,30 @@ class TypeCodeStruct :
 	public TypeCodeMembers <S>,
 	public TypeCodeName <S>
 {
+	typedef TypeCodeStatic <TypeCodeStruct <S>, TypeCodeWithId <tk_struct, RepIdOf <S> >, TypeCodeOps <S> > Base;
+	typedef TypeCodeMembers <S> Members;
 public:
 	using TypeCodeName <S>::_name;
 	using TypeCodeMembers <S>::_member_count;
 	using TypeCodeMembers <S>::_member_name;
 	using TypeCodeMembers <S>::_member_type;
+
+	static Boolean equal (TypeCode_ptr other)
+	{
+		if (!Base::equal (other))
+			return false;
+		if (!TypeCodeName <S>::equal (other))
+			return false;
+		return TypeCodeBase::equal (Members::members (), Members::member_count (), other);
+	}
+
+	static Boolean equivalent (TypeCode_ptr other)
+	{
+		TypeCode_var tco = TypeCodeBase::dereference_alias (other);
+		if (!TypeCodeBase::equivalent (tk_struct, Base::RepositoryType::repository_id_, tco))
+			return false;
+		return TypeCodeBase::equivalent (Members::members (), Members::member_count (), tco);
+	}
 };
 
 }

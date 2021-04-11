@@ -62,16 +62,59 @@ Boolean TypeCodeBase::equivalent (TCKind tk, TypeCode_ptr other)
 
 Boolean TypeCodeBase::equal (TCKind tk, String_in& id, TypeCode_ptr other)
 {
-	if (!TypeCodeBase::equal (tk, other))
-		return false;
-	return static_cast <const String&> (id) ==  other->id ();
+	return TypeCodeBase::equal (tk, other)
+		&& static_cast <const String&> (id) == other->id ();
 }
 
 Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, TypeCode_ptr other)
 {
-	if (!TypeCodeBase::equivalent (tk, other))
+	return TypeCodeBase::equivalent (tk, other)
+		&& static_cast <const String&> (id) == other->id ();
+}
+
+Boolean TypeCodeBase::equal (const Char* const* members, ULong member_cnt, TypeCode_ptr other)
+{
+	if (other->member_count () != member_cnt)
 		return false;
-	return static_cast <const String&> (id) == other->id ();
+
+	for (ULong i = 0; i < member_cnt; ++i) {
+		if (other->member_name (i) != members [i])
+			return false;
+	}
+	return true;
+}
+
+Boolean TypeCodeBase::equivalent (const Char* const* members, ULong member_cnt, TypeCode_ptr other)
+{
+	return other->member_count () == member_cnt;
+}
+
+Boolean TypeCodeBase::equal (const Parameter* members, ULong member_cnt, TypeCode_ptr other)
+{
+	if (other->member_count () != member_cnt)
+		return false;
+
+	for (ULong i = 0; i < member_cnt; ++i) {
+		if (other->member_name (i) != members [i].name)
+			return false;
+		if (!other->member_type (i)->equal ((members [i].type) ()))
+			return false;
+	}
+	return true;
+}
+
+Boolean TypeCodeBase::equivalent (const Parameter* members, ULong member_cnt, TypeCode_ptr other)
+{
+	assert (tk_alias != other->kind ());
+
+	if (other->member_count () != member_cnt)
+		return false;
+
+	for (ULong i = 0; i < member_cnt; ++i) {
+		if (!other->member_type (i)->equivalent ((members [i].type) ()))
+			return false;
+	}
+	return true;
 }
 
 Type <String>::ABI_ret TypeCodeBase::_id (Bridge <TypeCode>* _b, Interface* _env)
@@ -104,10 +147,10 @@ Interface* TypeCodeBase::_member_type (Bridge <TypeCode>* _b, ULong index, Inter
 	return nullptr;
 }
 
-const Any* TypeCodeBase::_member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+Type <Any>::ABI_ret TypeCodeBase::_member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 {
 	set_BadKind (_env);
-	return nullptr;
+	return Type <Any>::ret ();
 }
 
 Interface* TypeCodeBase::_discriminator_type (Bridge <TypeCode>* _b, Interface* _env)

@@ -38,6 +38,7 @@ class TypeCodeException :
 	public TypeCodeStatic <TypeCodeException <E, members>, TypeCodeWithId <tk_except, RepIdOf <E>>, TypeCodeOps <typename E::_Data> >,
 	public TypeCodeMembersOptional <E, members>
 {
+	typedef TypeCodeStatic <TypeCodeException <E, members>, TypeCodeWithId <tk_except, RepIdOf <E>>, TypeCodeOps <typename E::_Data> > Base;
 	typedef TypeCodeMembersOptional <E, members> Members;
 public:
 	using Members::_member_count;
@@ -46,7 +47,21 @@ public:
 
 	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return const_string_ret (E::__name ());
+		return const_string_ret_p (E::__name ());
+	}
+
+	static Boolean equal (TypeCode_ptr other)
+	{
+		return Base::equal (other)
+			&& (other->name () == E::__name ())
+			&& TypeCodeBase::equal (Members::members (), Members::member_count (), other);
+	}
+
+	static Boolean equivalent (TypeCode_ptr other)
+	{
+		TypeCode_var tco = TypeCodeBase::dereference_alias (other);
+		return TypeCodeBase::equivalent (tk_except, RepIdOf <E>::repository_id_, tco)
+			&& TypeCodeBase::equivalent (Members::members (), Members::member_count (), tco);
 	}
 };
 

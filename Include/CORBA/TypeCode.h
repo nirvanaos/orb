@@ -92,7 +92,7 @@ Type <String>::ABI_ret (*name) (Bridge <TypeCode>*, Interface*);
 ULong (*member_count) (Bridge <TypeCode>*, Interface*);
 Type <String>::ABI_ret (*member_name) (Bridge <TypeCode>*, ULong index, Interface*);
 Interface* (*member_type) (Bridge <TypeCode>*, ULong index, Interface*);
-const Any* (*member_label) (Bridge <TypeCode>*, ULong index, Interface*);
+Type <Any>::ABI_ret (*member_label) (Bridge <TypeCode>*, ULong index, Interface*);
 Interface* (*discriminator_type) (Bridge <TypeCode>*, Interface*);
 Long (*default_index) (Bridge <TypeCode>*, Interface*);
 ULong (*length) (Bridge <TypeCode>*, Interface*);
@@ -138,7 +138,7 @@ public:
 	TypeCode_var member_type (ULong index); // raises (BadKind, Bounds);
 
 	// for tk_union
-	const Any& member_label (ULong index); // raises (BadKind, Bounds);
+	Any member_label (ULong index); // raises (BadKind, Bounds);
 	TypeCode_var discriminator_type (); // raises (BadKind);
 	Long default_index (); // raises (BadKind);
 
@@ -274,11 +274,11 @@ TypeCode_var Client <T, TypeCode>::member_type (ULong index)
 }
 
 template <class T>
-const Any& Client <T, TypeCode>::member_label (ULong index)
+Any Client <T, TypeCode>::member_label (ULong index)
 {
 	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	typename Type <Any>::C_VT_ret _ret = (_b._epv ().epv.member_label) (&_b, index, &_env);
+	typename Type <Any>::C_ret _ret = (_b._epv ().epv.member_label) (&_b, index, &_env);
 	_env.check ();
 	return _ret;
 }

@@ -38,9 +38,16 @@ class TypeCodeTypeDef :
 	public TypeCodeContentType <Content>,
 	public TypeCodeName <TC>
 {
+	typedef TypeCodeStatic <TypeCodeTypeDef <TC, Content>, TypeCodeWithId <tk_alias, RepIdOf <TC> >, TypeCodeOps <void> > Base;
 public:
 	using TypeCodeContentType <Content>::_content_type;
 	using TypeCodeName <TC>::_name;
+
+	static Boolean equal (TypeCode_ptr other)
+	{
+		return Base::equal (other)
+			&& TypeCodeName <TC>::equal (other);
+	}
 
 	static Boolean equivalent (TypeCode_ptr other)
 	{

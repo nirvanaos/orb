@@ -38,9 +38,19 @@ template <class T>
 class TypeCodeMembers
 {
 public:
-	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env)
+	static const Parameter* members () NIRVANA_NOEXCEPT
+	{
+		return members_;
+	}
+
+	static ULong member_count () NIRVANA_NOEXCEPT
 	{
 		return countof (members_);
+	}
+
+	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env) NIRVANA_NOEXCEPT
+	{
+		return member_count ();
 	}
 
 	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>*_b, ULong index, Interface * _env)
@@ -49,7 +59,7 @@ public:
 			set_Bounds (_env);
 			return Type <String>::ret ();
 		} else
-			return const_string_ret (members_ [index].name);
+			return const_string_ret_p (members_ [index].name);
 	}
 
 	static Interface* _member_type (Bridge <TypeCode>*_b, ULong index, Interface * _env)
@@ -72,6 +82,16 @@ class TypeCodeMembersEmpty :
 {
 public:
 	using TypeCodeMemberCount <0>::_member_count;
+
+	static const Parameter* members () NIRVANA_NOEXCEPT
+	{
+		return nullptr;
+	}
+
+	static size_t member_count () NIRVANA_NOEXCEPT
+	{
+		return 0;
+	}
 
 	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
