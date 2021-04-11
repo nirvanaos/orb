@@ -44,31 +44,34 @@ Boolean TypeCodeBase::equal (TCKind tk, TypeCode_ptr other)
 	return tk == other->kind ();
 }
 
+TypeCode_var TypeCodeBase::dereference_alias (TypeCode_ptr tc)
+{
+	TypeCode_var ret = TypeCode::_duplicate (tc);
+	while (tk_alias == ret->kind ()) {
+		ret = ret->content_type ();
+	}
+	return ret;
+}
+
 Boolean TypeCodeBase::equivalent (TCKind tk, TypeCode_ptr other)
 {
 	TCKind tko = other->kind ();
-	if (tk_alias == tko) {
-		TypeCode_var type = TypeCode::_duplicate (other);
-		do {
-			type = type->content_type ();
-			tko = type->kind ();
-		} while (tk_alias == tko);
-	}
+	assert (tk_alias != tk && tk_alias != tko);
 	return tk == tko;
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, const String& id, TypeCode_ptr other)
+Boolean TypeCodeBase::equal (TCKind tk, String_in& id, TypeCode_ptr other)
 {
-	if (!TypeCodeBase::equal (tk_except, other))
+	if (!TypeCodeBase::equal (tk, other))
 		return false;
-	return id ==  other->id ();
+	return static_cast <const String&> (id) ==  other->id ();
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, const String& id, TypeCode_ptr other)
+Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, TypeCode_ptr other)
 {
-	if (!TypeCodeBase::equivalent (tk_except, other))
+	if (!TypeCodeBase::equivalent (tk, other))
 		return false;
-	return id == other->id ();
+	return static_cast <const String&> (id) == other->id ();
 }
 
 Type <String>::ABI_ret TypeCodeBase::_id (Bridge <TypeCode>* _b, Interface* _env)

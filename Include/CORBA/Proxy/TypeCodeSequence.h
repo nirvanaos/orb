@@ -53,9 +53,10 @@ public:
 
 	static Boolean equivalent (TypeCode_ptr other)
 	{
-		return TypeCodeTK <tk_sequence>::equivalent (other)
-			&& other->length () == bound
-			&& other->content_type ()->equivalent (ContentType::ptr ());
+		TypeCode_var otc = TypeCodeBase::dereference_alias (other);
+		return TypeCodeBase::equivalent (tk_sequence, otc)
+			&& otc->length () == bound
+			&& otc->content_type ()->equivalent (ContentType::ptr ());
 	}
 };
 

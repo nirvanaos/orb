@@ -42,6 +42,11 @@ public:
 	using TypeCodeContentType <Content>::_content_type;
 	using TypeCodeName <TC>::_name;
 
+	static Boolean equivalent (TypeCode_ptr other)
+	{
+		return TypeCodeBase::dereference_alias (TypeCodeTypeDef <TC, Content>::_get_ptr ())->equivalent (other);
+	}
+
 	static size_t __size (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return (content ()->_epv ().epv._size) (_b, _env);

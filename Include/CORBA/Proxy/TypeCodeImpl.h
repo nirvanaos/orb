@@ -74,8 +74,9 @@ public:
 	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, Interface* _env);
 
 protected:
-	static Boolean equal (TCKind tk, const String& id, TypeCode_ptr other);
-	static Boolean equivalent (TCKind tk, const String& id, TypeCode_ptr other);
+	static Boolean equal (TCKind tk, String_in& id, TypeCode_ptr other);
+	static Boolean equivalent (TCKind tk, String_in& id, TypeCode_ptr other);
+	static TypeCode_var dereference_alias (TypeCode_ptr tc);
 };
 
 template <TCKind tk>
@@ -92,7 +93,7 @@ public:
 
 	static Boolean equivalent (TypeCode_ptr other)
 	{
-		return TypeCodeBase::equivalent (tk_, other);
+		return TypeCodeBase::equivalent (tk_, TypeCodeBase::dereference_alias (other));
 	}
 
 	static Type <TCKind>::ABI_ret _kind (Bridge <TypeCode>* _b, Interface* _env)
@@ -115,7 +116,7 @@ public:
 
 	static Boolean equivalent (TypeCode_ptr other)
 	{
-		return TypeCodeBase::equivalent (tk, RepositoryType::repository_id_, other);
+		return TypeCodeBase::equivalent (tk, RepositoryType::repository_id_, TypeCodeBase::dereference_alias (other));
 	}
 
 	static ABI <String> _id (Bridge <TypeCode>* _b, Interface* _env)
