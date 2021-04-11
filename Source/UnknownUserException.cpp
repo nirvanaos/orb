@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/UnknownUserException.h>
+#include <CORBA/CORBA.h>
 #include <Nirvana/OLF.h>
 
 namespace CORBA {

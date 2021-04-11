@@ -27,8 +27,8 @@
 #ifndef NIRVANA_ORB_TYPECODEIMPL_H_
 #define NIRVANA_ORB_TYPECODEIMPL_H_
 
+#include "../Server.h"
 #include "../TypeCode_s.h"
-#include "../Exception.h"
 #include <new>
 
 namespace CORBA {

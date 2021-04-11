@@ -26,7 +26,6 @@
 #include <CORBA/CORBA.h>
 #include <Nirvana/OLF.h>
 #include <algorithm>
-#include <string.h>
 
 namespace CORBA {
 

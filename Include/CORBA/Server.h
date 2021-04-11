@@ -30,9 +30,12 @@
 
 #include "CORBA.h"
 #include "Implementation.h"
-#include "ImplementationLocal.h"
 #include "ImplementationStatic.h"
+#include "ImplementationLocal.h"
 #include "ImplementationLocalStatic.h"
+#include "ImplementationPseudo.h"
+#include "ImplementationPseudoStatic.h"
+#include "ImplementationPseudoPOA.h"
 #include "PortableServer.h"
 
 namespace CORBA {

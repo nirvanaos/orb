@@ -27,8 +27,8 @@
 #ifndef NIRVANA_ORB_PROXY_H_
 #define NIRVANA_ORB_PROXY_H_
 
-#include "../CORBA.h"
-#include "../FindInterface.h"
+#include "../Server.h"
+#include "InterfaceMetadata.h"
 #include "ProxyFactory_s.h"
 #include "IOReference.h"
 #include "IORequest.h"

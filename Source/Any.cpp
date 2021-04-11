@@ -23,10 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/Any.h>
-#include <CORBA/tc_constants.h>
-#include <Nirvana/Memory.h>
-#include <Nirvana/core_objects.h>
+#include <CORBA/CORBA.h>
 
 namespace CORBA {
 

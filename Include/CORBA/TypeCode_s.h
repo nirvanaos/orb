@@ -27,9 +27,6 @@
 #define NIRVANA_ORB_TYPECODE_S_H_
 
 #include "TypeCode.h"
-#include "ImplementationPseudoStatic.h"
-#include "Type_interface.h"
-#include "Proxy/Marshal.h"
 
 namespace CORBA {
 namespace Nirvana {

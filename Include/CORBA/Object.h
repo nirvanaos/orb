@@ -208,6 +208,7 @@ inline Object_var AbstractBase::_to_object ()
 
 namespace Nirvana {
 
+// TODO: Move to Client.h
 template <class Primary>
 class ClientInterfaceBase <Primary, Object> :
 	public Client <ClientBase <Primary, Object>, Object>

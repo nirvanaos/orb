@@ -68,21 +68,6 @@ struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t), TypeB
 	}
 };
 
-template <typename T
-#ifdef NIRVANA_C11
-	, typename Enable = void
-#endif
->
-using TypeTrivial = TypeFixLen <T>;
-
-template <typename T>
-struct Type : TypeTrivial <T
-#ifdef NIRVANA_C11
-	, typename std::enable_if_t <std::is_trivially_copyable <T>::value>
-#endif
->
-{};
-
 }
 }
 

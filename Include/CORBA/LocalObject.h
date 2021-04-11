@@ -43,6 +43,12 @@ template <>
 struct Type <I_var <LocalObject> > : TypeItf <LocalObject>
 {};
 
+template <class I>
+struct TypeLocalObject : TypeObject <I>
+{
+	static const TCKind tc_kind = tk_local_interface;
+};
+
 BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)
@@ -110,12 +116,6 @@ Boolean Client <T, LocalObject>::_non_existent ()
 	_env.check ();
 	return _ret;
 }
-
-template <class I>
-struct TypeLocalObject : TypeObject <I>
-{
-	static const TCKind tc_kind = tk_local_interface;
-};
 
 }
 

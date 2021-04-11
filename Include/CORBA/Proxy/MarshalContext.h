@@ -27,9 +27,6 @@
 #ifndef NIRVANA_ORB_MARSHALCONTEXT_H_
 #define NIRVANA_ORB_MARSHALCONTEXT_H_
 
-#include <CORBA/CORBA.h>
-#include <Nirvana/throw_exception.h>
-
 namespace CORBA {
 namespace Nirvana {
 

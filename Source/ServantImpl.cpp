@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/CORBA.h>
+#include <CORBA/Server.h>
 #include <Nirvana/throw_exception.h>
 
 namespace CORBA {

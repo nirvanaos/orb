@@ -23,20 +23,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/ServantBasePOA.h>
+#include <CORBA/CORBA.h>
+#include <Nirvana/OLF.h>
 
-namespace CORBA {
-namespace Nirvana {
-
-ServantPOA <PortableServer::ServantBase>::ServantPOA () :
-	ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_)
-{}
-
-Interface* ServantPOA <PortableServer::ServantBase>::_get_proxy ()
-{
-	_check_construct ();
-	return ServantBaseLink::_get_proxy ();
-}
-
-}
-}
+NIRVANA_OLF_SECTION extern const ::Nirvana::ImportInterfaceT <CORBA::TypeCode>
+_tc_SeqLong = { Nirvana::OLF_IMPORT_INTERFACE, CORBA::Nirvana::RepIdOf <CORBA::TCKind>::repository_id_, CORBA::TypeCode::repository_id_ };

@@ -26,9 +26,6 @@
 #ifndef NIRVANA_ORB_TCKIND_H_
 #define NIRVANA_ORB_TCKIND_H_
 
-#include "TypeEnum.h"
-#include <Nirvana/ImportInterface.h>
-
 namespace CORBA {
 
 class TypeCode;

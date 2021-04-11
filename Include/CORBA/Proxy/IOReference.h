@@ -79,12 +79,18 @@ pseudo interface IOReference : Object
 #ifndef NIRVANA_ORB_IOREFERENCE_H_
 #define NIRVANA_ORB_IOREFERENCE_H_
 
-#include "../CORBA.h"
-#include "Marshal.h"
-#include "Unmarshal.h"
-
 namespace CORBA {
 namespace Nirvana {
+
+class Marshal;
+typedef I_ptr <Marshal> Marshal_ptr;
+typedef I_var <Marshal> Marshal_var;
+typedef I_out <Marshal> Marshal_out;
+
+class Unmarshal;
+typedef I_ptr <Unmarshal> Unmarshal_ptr;
+typedef I_var <Unmarshal> Unmarshal_var;
+typedef I_out <Unmarshal> Unmarshal_out;
 
 struct OperationIndex
 {

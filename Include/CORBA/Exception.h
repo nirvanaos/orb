@@ -72,13 +72,6 @@ public:
 
 namespace Nirvana {
 
-/// Bind repository id to a type.
-template <typename T>
-struct RepIdOf
-{
-	static const Char repository_id_ [];
-};
-
 struct ExceptionEntry
 {
 	const Char* rep_id;

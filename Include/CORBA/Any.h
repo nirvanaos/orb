@@ -29,8 +29,7 @@
 
 #include "TypeVarLen.h"
 #include "ABI_Any.h"
-#include <Nirvana/basic_string.h>
-#include "tc_constants.h"
+#include "String.h"
 //#include "Fixed.h"
 
 namespace CORBA {

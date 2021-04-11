@@ -24,8 +24,6 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/CORBA.h>
-#include <Nirvana/Memory.h>
-#include <Nirvana/core_objects.h>
 
 namespace CORBA {
 namespace Nirvana {

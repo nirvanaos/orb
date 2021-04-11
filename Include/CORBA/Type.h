@@ -26,12 +26,21 @@
 #ifndef NIRVANA_ORB_TYPE_H_
 #define NIRVANA_ORB_TYPE_H_
 
-#include "TypeVarLen.h"
+#include "TypeFixLen.h"
 #include "TypeEnum.h"
 #include "Type_interface.h"
+#include "Client.h"
+#include <Nirvana/ImportInterface.h>
+#include "UserException.h"
+#include "Any.h"
+#include "Boolean.h"
+#include "EnvironmentEx.h"
 #include "TypeCode.h"
 #include "Proxy/Marshal.h"
 #include "Proxy/Unmarshal.h"
+#include "tc_constants.h"
+#include "Sequence.h"
+#include "Object.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -50,6 +59,12 @@ inline
 TypeCode_ptr Type <Any>::type_code ()
 {
 	return _tc_any;
+}
+
+inline
+TypeCode_ptr Type <I_var <TypeCode> >::type_code ()
+{
+	return _tc_TypeCode;
 }
 
 // Interface marshaling

@@ -71,7 +71,6 @@ pseudo interface Marshal
 #ifndef NIRVANA_ORB_MARSHAL_H_
 #define NIRVANA_ORB_MARSHAL_H_
 
-#include <CORBA/CORBA.h>
 #include "MarshalContext.h"
 
 namespace CORBA {

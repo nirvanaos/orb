@@ -26,12 +26,23 @@
 #ifndef NIRVANA_ORB_TYPECODE_H_
 #define NIRVANA_ORB_TYPECODE_H_
 
-#include <CORBA/CORBA.h>
 #include "TCKind.h"
 
 namespace CORBA {
 
-class Any;
+namespace Nirvana {
+
+class Marshal;
+typedef I_ptr <Marshal> Marshal_ptr;
+typedef I_var <Marshal> Marshal_var;
+typedef I_out <Marshal> Marshal_out;
+
+class Unmarshal;
+typedef I_ptr <Unmarshal> Unmarshal_ptr;
+typedef I_var <Unmarshal> Unmarshal_var;
+typedef I_out <Unmarshal> Unmarshal_out;
+
+}
 
 typedef Short Visibility;
 const Visibility PRIVATE_MEMBER = 0;
@@ -44,12 +55,6 @@ const ValueModifier VM_ABSTRACT = 2;
 const ValueModifier VM_TRUNCATABLE = 3;
 
 namespace Nirvana {
-
-class Marshal;
-typedef I_ptr <Marshal> Marshal_ptr;
-
-class Unmarshal;
-typedef I_ptr <Unmarshal> Unmarshal_ptr;
 
 template <>
 struct Definitions <TypeCode>
@@ -454,10 +459,7 @@ void Client <T, TypeCode>::_unmarshal (::Nirvana::ConstPointer src, Unmarshal_pt
 template <>
 struct Type <I_var <TypeCode> > : TypeItf <TypeCode>
 {
-	static TypeCode_ptr type_code ()
-	{
-		return _tc_TypeCode;
-	}
+	static TypeCode_ptr type_code ();
 };
 
 }

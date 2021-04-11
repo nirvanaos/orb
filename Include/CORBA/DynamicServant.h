@@ -31,9 +31,6 @@
 #ifndef NIRVANA_ORB_DYNAMICSERVANT_H_
 #define NIRVANA_ORB_DYNAMICSERVANT_H_
 
-#include "Client.h"
-#include "Type_interface.h"
-
 namespace CORBA {
 namespace Nirvana {
 

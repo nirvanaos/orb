@@ -50,7 +50,7 @@ struct StatelessCreationFrame
 
 template <>
 struct Type <StatelessCreationFrame> :
-	public TypeFixLen <StatelessCreationFrame>
+	public TypeByRef <StatelessCreationFrame>
 {};
 
 BRIDGE_BEGIN (ObjectFactory, CORBA_NIRVANA_REPOSITORY_ID ("ObjectFactory"))

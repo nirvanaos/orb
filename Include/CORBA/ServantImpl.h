@@ -36,6 +36,7 @@ class Object;
 
 namespace Nirvana {
 
+extern void _check_pointer (const void* p);
 extern void _check_pointer (const Interface* obj, const Interface::EPV& epv);
 
 template <class S, class I> class Skeleton;

@@ -103,6 +103,7 @@ public:
 
 namespace Nirvana {
 
+// TODO: Move to Client.h
 template <class Primary>
 class ClientInterfaceBase <Primary, AbstractBase> :
 	public Client <ClientBase <Primary, AbstractBase>, AbstractBase>

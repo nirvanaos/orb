@@ -74,7 +74,8 @@ _tc_##E = { ::Nirvana::OLF_IMPORT_INTERFACE, ::CORBA::Nirvana::RepIdOf <E>::repo
 DEFINE_USER_EXC (E)\
 GNU_OPTNONE ::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 
-#define DEFINE_CORBA_INTERFACE_EXCEPTION(ns, I, E)\
+#define DEFINE_CORBA_INTERFACE_EXCEPTION(ns, I, E) NIRVANA_OLF_SECTION const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>\
+CORBA::Nirvana::Definitions <ns::I>::_tc_##E = { ::Nirvana::OLF_IMPORT_INTERFACE, ::CORBA::Nirvana::RepIdOf <E>::repository_id_, ::CORBA::TypeCode::repository_id_ };\
 DEFINE_USER_EXC (CORBA::Nirvana::Definitions <ns::I>::E)\
 GNU_OPTNONE ::CORBA::TypeCode_ptr CORBA::Nirvana::Definitions <ns::I>::E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 

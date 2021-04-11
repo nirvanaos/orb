@@ -23,11 +23,9 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <Nirvana/NirvanaBase.h>
-#include <Nirvana/throw_exception.h>
 #include <CORBA/RepositoryId.h>
 #include <CORBA/String.h>
-#include <string.h>
+#include <Nirvana/throw_exception.h>
 #include <algorithm>
 
 namespace CORBA {

@@ -170,6 +170,14 @@ private:
 	static const ExceptionEntry exception_entries_ [KNOWN_SYSTEM_EXCEPTIONS];
 };
 
+namespace Nirvana {
+
+template <>
+struct Type <SystemException::_Data> : TypeFixLen <SystemException::_Data>
+{};
+
+}
+
 }
 
 #endif
