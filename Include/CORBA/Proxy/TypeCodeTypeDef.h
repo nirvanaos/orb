@@ -44,7 +44,7 @@ public:
 
 	static Boolean equivalent (TypeCode_ptr other)
 	{
-		return TypeCodeBase::dereference_alias (TypeCodeTypeDef <TC, Content>::_get_ptr ())->equivalent (other);
+		return content ()->equivalent (other);
 	}
 
 	static size_t __size (Bridge <TypeCode>* _b, Interface* _env)
