@@ -72,13 +72,12 @@ void (*exception) (Bridge <IORequest>*, Type <Any>::ABI_inout);
 void (*success) (Bridge <IORequest>*, Interface*);
 BRIDGE_END ()
 
-
 template <class T>
 class Client <T, IORequest> :
 	public T
 {
 public:
-	Marshal_ptr marshaler ();
+	Marshal_var marshaler ();
 	void exception (Exception&& e) NIRVANA_NOEXCEPT;
 	void success ();
 };
@@ -87,11 +86,11 @@ class IORequest : public ClientInterface <IORequest>
 {};
 
 template <class T>
-Marshal_ptr Client <T, IORequest>::marshaler ()
+Marshal_var Client <T, IORequest>::marshaler ()
 {
 	Environment _env;
 	Bridge <IORequest>& _b (T::_get_bridge (_env));
-	I_VT_ret <Marshal> _ret = (_b._epv ().epv.marshaler) (&_b, &_env);
+	TypeI <Marshal>::C_ret _ret = (_b._epv ().epv.marshaler) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }

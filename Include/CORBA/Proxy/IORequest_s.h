@@ -42,7 +42,7 @@ protected:
 	static Interface* _get_marshaler (Bridge <IORequest>* _b, Interface* _env)
 	{
 		try {
-			return TypeI <Marshal>::VT_ret (S::_implementation (_b).marshaler ());
+			return TypeI <Marshal>::ret (S::_implementation (_b).marshaler ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
