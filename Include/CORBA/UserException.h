@@ -65,18 +65,10 @@ protected:
 
 }
 
-#define DEFINE_USER_EXC(E)const E* E::_downcast (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT {\
-return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), ::CORBA::Nirvana::RepIdOf <E>::repository_id_)) ? &static_cast <const E&> (*ep) : nullptr; }\
-const char* E::_rep_id () const NIRVANA_NOEXCEPT { return ::CORBA::Nirvana::RepIdOf <E>::repository_id_; }
-
-#define DEFINE_USER_EXCEPTION(E) NIRVANA_OLF_SECTION extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>\
-_tc_##E = { ::Nirvana::OLF_IMPORT_INTERFACE, ::CORBA::Nirvana::RepIdOf <E>::repository_id_, ::CORBA::TypeCode::repository_id_ };\
-DEFINE_USER_EXC (E)\
-GNU_OPTNONE ::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
-
-#define DEFINE_CORBA_INTERFACE_EXCEPTION(ns, I, E) NIRVANA_OLF_SECTION const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>\
-CORBA::Nirvana::Definitions <ns::I>::_tc_##E = { ::Nirvana::OLF_IMPORT_INTERFACE, ::CORBA::Nirvana::RepIdOf <E>::repository_id_, ::CORBA::TypeCode::repository_id_ };\
-DEFINE_USER_EXC (CORBA::Nirvana::Definitions <ns::I>::E)\
-GNU_OPTNONE ::CORBA::TypeCode_ptr CORBA::Nirvana::Definitions <ns::I>::E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
+#define NIRVANA_EXCEPTION_DEF(Parent, E) const Parent E* Parent E::_downcast (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT {\
+return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), ::CORBA::Nirvana::RepIdOf <Parent E>::repository_id_))\
+? &static_cast <const Parent E&> (*ep) : nullptr; }\
+const char* Parent E::_rep_id () const NIRVANA_NOEXCEPT { return ::CORBA::Nirvana::RepIdOf <Parent E>::repository_id_; }\
+GNU_OPTNONE ::CORBA::TypeCode_ptr Parent E::__type_code () const NIRVANA_NOEXCEPT { return Parent _tc_##E; }
 
 #endif

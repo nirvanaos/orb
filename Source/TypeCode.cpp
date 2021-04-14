@@ -26,5 +26,13 @@
 #include <CORBA/CORBA.h>
 #include <Nirvana/OLF.h>
 
-DEFINE_CORBA_INTERFACE_EXCEPTION (CORBA, TypeCode, BadKind);
-DEFINE_CORBA_INTERFACE_EXCEPTION (CORBA, TypeCode, Bounds);
+NIRVANA_EXCEPTION_DEF (CORBA::Nirvana::Definitions <CORBA::TypeCode>::, BadKind);
+NIRVANA_EXCEPTION_DEF (CORBA::Nirvana::Definitions <CORBA::TypeCode>::, Bounds);
+
+NIRVANA_OLF_SECTION const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>
+CORBA::Nirvana::Definitions <CORBA::TypeCode>::_tc_BadKind = { ::Nirvana::OLF_IMPORT_INTERFACE,
+CORBA::Nirvana::RepIdOf <CORBA::Nirvana::Definitions <CORBA::TypeCode>::BadKind>::repository_id_, CORBA::TypeCode::repository_id_ };
+
+NIRVANA_OLF_SECTION const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>
+CORBA::Nirvana::Definitions <CORBA::TypeCode>::_tc_Bounds = { ::Nirvana::OLF_IMPORT_INTERFACE,
+CORBA::Nirvana::RepIdOf <CORBA::Nirvana::Definitions <CORBA::TypeCode>::Bounds>::repository_id_, CORBA::TypeCode::repository_id_ };

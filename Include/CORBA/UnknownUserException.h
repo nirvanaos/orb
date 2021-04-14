@@ -36,7 +36,7 @@ extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_UnknownUserExce
 class UnknownUserException : public UserException
 {
 public:
-	DECLARE_EXCEPTION (UnknownUserException);
+	NIRVANA_EXCEPTION_DCL (UnknownUserException);
 
 	typedef Any _Data;
 
@@ -49,7 +49,11 @@ public:
 		_data (std::move (exc))
 	{}
 
-	virtual void* __data () NIRVANA_NOEXCEPT;
+private:
+	virtual void* __data () NIRVANA_NOEXCEPT
+	{
+		return &_data;
+	}
 
 private:
 	_Data _data;

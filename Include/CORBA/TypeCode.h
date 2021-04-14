@@ -64,7 +64,7 @@ struct Definitions <TypeCode>
 	class BadKind : public UserException
 	{
 	public:
-		DECLARE_EXCEPTION (BadKind);
+		NIRVANA_EXCEPTION_DCL (BadKind);
 	};
 
 	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Bounds;
@@ -72,7 +72,7 @@ struct Definitions <TypeCode>
 	class Bounds : public UserException
 	{
 	public:
-		DECLARE_EXCEPTION (Bounds);
+		NIRVANA_EXCEPTION_DCL (Bounds);
 	};
 };
 

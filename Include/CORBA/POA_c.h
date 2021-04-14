@@ -55,7 +55,7 @@ struct Definitions <PortableServer::POA>
 	class ServantAlreadyActive : public ::CORBA::UserException
 	{
 	public:
-		DECLARE_EXCEPTION (ServantAlreadyActive);
+		NIRVANA_EXCEPTION_DCL (ServantAlreadyActive);
 	};
 
 	static const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_ObjectNotActive;
@@ -63,7 +63,7 @@ struct Definitions <PortableServer::POA>
 	class ObjectNotActive : public ::CORBA::UserException
 	{
 	public:
-		DECLARE_EXCEPTION (ObjectNotActive);
+		NIRVANA_EXCEPTION_DCL (ObjectNotActive);
 	};
 };
 
@@ -106,7 +106,7 @@ namespace PortableServer {
 
 typedef ::CORBA::Nirvana::I_ptr <ServantBase> Servant;
 
-class POA : public CORBA::Nirvana::ClientInterface <POA, CORBA::Object>
+class POA : public ::CORBA::Nirvana::ClientInterface <POA, CORBA::Object>
 {
 public:
 	using CORBA::Nirvana::Definitions <POA>::_tc_ServantAlreadyActive;

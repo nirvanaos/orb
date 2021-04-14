@@ -98,7 +98,7 @@ extern void set_unknown_exception (Interface_ptr environment) NIRVANA_NOEXCEPT;
 #define NIRVANA_DEFAULT_CONSTRUCTORS(T)
 #endif
 
-#define DECLARE_EXCEPTION(E) public: E () {}\
+#define NIRVANA_EXCEPTION_DCL(E) public: E () {}\
 NIRVANA_DEFAULT_CONSTRUCTORS (E)\
 virtual void _raise () const { throw *this; }\
 virtual const char* _rep_id () const NIRVANA_NOEXCEPT;\

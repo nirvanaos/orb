@@ -28,12 +28,6 @@
 
 namespace CORBA {
 
-GNU_OPTNONE TypeCode_ptr UnknownUserException::__type_code () const NIRVANA_NOEXCEPT { return _tc_UnknownUserException; }
-DEFINE_USER_EXC (UnknownUserException);
-
-void* UnknownUserException::__data () NIRVANA_NOEXCEPT
-{
-	return &_data;
-}
+NIRVANA_EXCEPTION_DEF (CORBA::, UnknownUserException);
 
 }

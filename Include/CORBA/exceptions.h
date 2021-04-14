@@ -32,7 +32,7 @@
 #define DECLARE_SYSTEM_EXCEPTION(E) \
 extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_##E;\
 class E : public SystemException {\
-DECLARE_EXCEPTION(E)\
+NIRVANA_EXCEPTION_DCL(E)\
 E (ULong minor, CompletionStatus status = COMPLETED_NO) : SystemException (minor, status) {}\
 virtual Code __code () const NIRVANA_NOEXCEPT { return EC_##E; }};
 

@@ -24,8 +24,17 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/CORBA.h>
-#include <Nirvana/OLF.h>
 #include <CORBA/POA.h>
+#include <Nirvana/ImportInterface.h>
 
-DEFINE_CORBA_INTERFACE_EXCEPTION (PortableServer, POA, ServantAlreadyActive);
-DEFINE_CORBA_INTERFACE_EXCEPTION (PortableServer, POA, ObjectNotActive);
+NIRVANA_OLF_SECTION const Nirvana::ImportInterfaceT <CORBA::TypeCode>
+CORBA::Nirvana::Definitions <PortableServer::POA>::_tc_ServantAlreadyActive = { ::Nirvana::OLF_IMPORT_INTERFACE,
+CORBA::Nirvana::RepIdOf <CORBA::Nirvana::Definitions <PortableServer::POA>::ServantAlreadyActive>::repository_id_, CORBA::TypeCode::repository_id_ };
+
+NIRVANA_OLF_SECTION const Nirvana::ImportInterfaceT <CORBA::TypeCode>
+CORBA::Nirvana::Definitions <PortableServer::POA>::_tc_ObjectNotActive = { ::Nirvana::OLF_IMPORT_INTERFACE,
+CORBA::Nirvana::RepIdOf <CORBA::Nirvana::Definitions <PortableServer::POA>::ObjectNotActive>::repository_id_, CORBA::TypeCode::repository_id_ };
+
+NIRVANA_EXCEPTION_DEF (CORBA::Nirvana::Definitions <PortableServer::POA>::, ServantAlreadyActive);
+NIRVANA_EXCEPTION_DEF (CORBA::Nirvana::Definitions <PortableServer::POA>::, ObjectNotActive);
+
