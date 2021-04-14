@@ -39,7 +39,7 @@ class TypeCodeEnum :
 	public TypeCodeMemberCount <Type <E>::count_>,
 	public TypeCodeName <E>
 {
-	typedef public TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <tk_enum, RepIdOf <E> >, TypeCodeOps <E> > Base;
+	typedef TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <tk_enum, RepIdOf <E> >, TypeCodeOps <E> > Base;
 public:
 	using TypeCodeMemberCount <Type <E>::count_>::_member_count;
 	using TypeCodeName <E>::_name;
