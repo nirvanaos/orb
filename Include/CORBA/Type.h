@@ -144,10 +144,10 @@ void Type <StringT <C> >::unmarshal (const ABI_type& src, Unmarshal_ptr unmarsha
 		static_cast <ABI_type&> (dst) = src;
 }
 
-// Vector marshaling
+// Sequence marshaling
 
 template <typename T>
-void Type <Vector <T> >::marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
+void Type <Sequence <T> >::marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
 {
 	assert (&src != &dst);
 	if (src.empty ())
@@ -173,7 +173,7 @@ void Type <Vector <T> >::marshal_in (const Var_type& src, Marshal_ptr marshaler,
 }
 
 template <typename T>
-void Type <Vector <T> >::marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
+void Type <Sequence <T> >::marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
 {
 	assert (&src != &dst);
 	if (src.empty ())
@@ -217,7 +217,7 @@ void Type <Vector <T> >::marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_
 }
 
 template <typename T>
-void Type <Vector <T> >::unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst)
+void Type <Sequence <T> >::unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst)
 {
 	if (Base::has_check)
 		check (src);

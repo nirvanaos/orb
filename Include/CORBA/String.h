@@ -145,11 +145,13 @@ bool Type <StringT <C> >::_small_copy (const ABI_type& src, ABI_type& dst)
 	return true;
 }
 
-template <typename C, ULong bound = 0>
+template <typename C, ULong bound>
 class BoundedStringT : public StringT <C>
 {
 public:
+	/// The String bound.
 	static const ULong bound_ = bound;
+	// TODO: Implement constructors, assigns and inserters.
 };
 
 template <typename C, ULong bound>

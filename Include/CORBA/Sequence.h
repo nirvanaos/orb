@@ -33,23 +33,11 @@
 namespace CORBA {
 namespace Nirvana {
 
-/// CORBA sequence type.
-/// 
-/// \tparam T Element type.
-/// \tparam bound The bound.
-template <typename T, ULong bound = 0>
-class Sequence : public Vector <T>
-{
-public:
-	/// The sequence bound. 0 if unbounded.
-	static const ULong bound_ = bound;
-};
-
 template <typename T>
-struct Type <Vector <T> > :
-	public TypeVarLen <Vector <T>, CHECK_SEQUENCES || Type <T>::has_check>
+struct Type <Sequence <T> > :
+	public TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check>
 {
-	typedef TypeVarLen <Vector <T>, CHECK_SEQUENCES || Type <T>::has_check> Base;
+	typedef TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check> Base;
 	typedef typename Type <T>::ABI_type T_ABI;
 	typedef typename Base::Var_type Var_type;
 	typedef typename Base::ABI_type ABI_type;
@@ -130,7 +118,7 @@ struct Type <Vector <T> > :
 };
 
 template <typename T>
-void Type <Vector <T> >::check (const ABI_type& v)
+void Type <Sequence <T> >::check (const ABI_type& v)
 {
 	// Do some check
 	if (CHECK_SEQUENCES) {
@@ -148,11 +136,24 @@ void Type <Vector <T> >::check (const ABI_type& v)
 	}
 }
 
-template <class T, ULong bound>
-struct Type <Sequence <T, bound> > :
-	public Type <Vector <T> >
+/// Bounded sequence type.
+/// 
+/// \tparam T Element type.
+/// \tparam bound The bound.
+template <typename T, ULong bound = 0>
+class BoundedSequence : public Sequence <T>
 {
-	typedef Type <Vector <T> > Base;
+public:
+	/// The sequence bound.
+	static const ULong bound_ = bound;
+	// TODO: Implement constructors, assigns and inserters.
+};
+
+template <class T, ULong bound>
+struct Type <BoundedSequence <T, bound> > :
+	public Type <Sequence <T> >
+{
+	typedef Type <Sequence <T> > Base;
 	typedef typename Base::ABI_type ABI_type;
 	typedef typename Base::Var_type Var_type;
 

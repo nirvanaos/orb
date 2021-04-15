@@ -32,8 +32,7 @@ namespace Nirvana {
 /// We can not use `bool' built-in type across the binary boundaries because
 /// it is compiler-specific, but we have to achieve the binary compatibility.
 /// So we use size_t (the machine word) as ABI for boolean in assumption that bool implementation can't be wide.
-/// Note that Sequence <bool> is implemented as vector <bool> template specialization
-/// where element size is 1 byte.
+/// Note that vector <bool> template specialization has element size is 1 byte.
 typedef size_t ABI_boolean;
 
 /// For each structure, union or enum data type T, IDL compiler generates `CORBA::Nirvana::ABI <T>` structure.
