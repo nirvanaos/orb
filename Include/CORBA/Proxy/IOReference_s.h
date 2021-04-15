@@ -42,7 +42,7 @@ protected:
 	static Interface* _create_marshaler (Bridge <IOReference>* _b, Interface* _env)
 	{
 		try {
-			return TypeI <Marshal>::ret (S::_implementation (_b).create_marshaler ());
+			return Type <Marshal>::ret (S::_implementation (_b).create_marshaler ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -56,8 +56,8 @@ protected:
 		::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size, Interface* _env)
 	{
 		try {
-			return TypeI <Unmarshal>::ret (S::_implementation (_b).call (Type <OperationIndex>::in (op),
-				in_params, in_params_size, TypeI <Marshal>::inout (marshaler), out_params, out_params_size));
+			return Type <Unmarshal>::ret (S::_implementation (_b).call (Type <OperationIndex>::in (op),
+				in_params, in_params_size, Type <Marshal>::inout (marshaler), out_params, out_params_size));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {

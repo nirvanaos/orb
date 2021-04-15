@@ -55,7 +55,7 @@ namespace Nirvana {
 // AbstractBase
 
 template <>
-struct Type <I_var <AbstractBase> > : TypeItf <AbstractBase>
+struct Type <AbstractBase> : TypeItf <AbstractBase>
 {};
 
 BRIDGE_BEGIN (AbstractBase, CORBA_REPOSITORY_ID ("AbstractBase"))

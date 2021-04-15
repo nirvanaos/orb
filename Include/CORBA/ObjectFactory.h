@@ -57,7 +57,7 @@ BRIDGE_BEGIN (ObjectFactory, CORBA_NIRVANA_REPOSITORY_ID ("ObjectFactory"))
 void* (*memory_allocate) (Bridge <ObjectFactory>*, size_t size, Interface*);
 void (*memory_release) (Bridge <ObjectFactory>*, void* p, size_t size, Interface*);
 void (*stateless_begin) (Bridge <ObjectFactory>*, Type <StatelessCreationFrame>::ABI_inout, Interface*);
-void* (*stateless_end) (Bridge <ObjectFactory>*, ABI_in <bool> success, Interface*);
+void* (*stateless_end) (Bridge <ObjectFactory>*, Type <Boolean>::ABI_in success, Interface*);
 Interface* (*create_reference_counter) (Bridge <ObjectFactory>*, Interface*, Interface*);
 Interface* (*create_servant) (Bridge <ObjectFactory>*, Interface*, Interface*);
 Interface* (*create_local_object) (Bridge <ObjectFactory>*, Interface*, Interface*, Interface*);
@@ -84,8 +84,8 @@ public:
 	/// \param size Amount of memory in bytes.
 	void memory_release (void* p, size_t size);
 
-	void stateless_begin (T_inout <StatelessCreationFrame> scb);
-	void* stateless_end (T_in <bool> success);
+	void stateless_begin (Type <StatelessCreationFrame>::C_inout scb);
+	void* stateless_end (Type <Boolean>::C_in success);
 
 	ReferenceCounter_var create_reference_counter (I_in <DynamicServant> dynamic);
 	PortableServer::ServantBase_var create_servant (I_in <PortableServer::ServantBase> impl);
@@ -112,7 +112,7 @@ void Client <T, ObjectFactory>::memory_release (void* p, size_t size)
 }
 
 template <class T>
-void Client <T, ObjectFactory>::stateless_begin (T_inout <StatelessCreationFrame> scs)
+void Client <T, ObjectFactory>::stateless_begin (Type <StatelessCreationFrame>::C_inout scs)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
@@ -121,7 +121,7 @@ void Client <T, ObjectFactory>::stateless_begin (T_inout <StatelessCreationFrame
 }
 
 template <class T>
-void* Client <T, ObjectFactory>::stateless_end (T_in <bool> success)
+void* Client <T, ObjectFactory>::stateless_end (Type <Boolean>::C_in success)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));

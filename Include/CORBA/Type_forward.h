@@ -111,36 +111,6 @@ template <> struct Type <T>
 */
 template <class T> struct Type;
 
-template <class T>
-using ABI_in = typename Type <T>::ABI_in;
-
-template <class T>
-using ABI_out = typename Type <T>::ABI_out;
-
-template <class T>
-using ABI_inout = typename Type <T>::ABI_inout;
-
-template <class T>
-using ABI_ret = typename Type <T>::ABI_ret;
-
-template <class T>
-using ABI_VT_ret = typename Type <T>::ABI_VT_ret;
-
-template <class T>
-using T_in = typename Type <T>::C_in;
-
-template <class T>
-using T_out = typename Type <T>::C_out;
-
-template <class T>
-using T_inout = typename Type <T>::C_inout;
-
-template <class T>
-using T_ret = typename Type <T>::C_ret;
-
-template <class T>
-using T_VT_ret = typename Type <T>::C_VT_ret;
-
 // Constraints check
 const bool CHECK_STRINGS = true;
 const bool CHECK_SEQUENCES = true;

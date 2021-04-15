@@ -34,7 +34,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <>
-struct Type <I_var <PortableServer::ServantBase> > : TypeItf <PortableServer::ServantBase>
+struct Type <PortableServer::ServantBase> : TypeItf <PortableServer::ServantBase>
 {};
 
 BRIDGE_BEGIN (::PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("ServantBase"))
@@ -43,8 +43,8 @@ BASE_STRUCT_ENTRY (ReferenceCounter, CORBA_Nirvana_ReferenceCounter)
 BRIDGE_EPV
 Interface* (*default_POA) (Bridge < ::PortableServer::ServantBase>*, Interface*);
 Interface* (*get_interface) (Bridge < ::PortableServer::ServantBase>*, Interface*);
-ABI_boolean (*is_a) (Bridge < ::PortableServer::ServantBase>*, ABI_in <String> type_id, Interface*);
-ABI_boolean (*non_existent) (Bridge < ::PortableServer::ServantBase>*, Interface*);
+Type <Boolean>::ABI_ret (*is_a) (Bridge < ::PortableServer::ServantBase>*, Type <String>::ABI_in type_id, Interface*);
+Type <Boolean>::ABI_ret (*non_existent) (Bridge < ::PortableServer::ServantBase>*, Interface*);
 Interface* (*core_servant) (Bridge < ::PortableServer::ServantBase>*, Interface*);
 BRIDGE_END ()
 
@@ -87,7 +87,7 @@ Boolean Client <T, ::PortableServer::ServantBase>::_is_a (String_in type_id)
 {
 	Environment _env;
 	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
-	T_ret <Boolean> _ret = (_b._epv ().epv.is_a) (&_b, &type_id, &_env);
+	Type <Boolean>::C_ret _ret = (_b._epv ().epv.is_a) (&_b, &type_id, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -97,7 +97,7 @@ Boolean Client <T, ::PortableServer::ServantBase>::_non_existent ()
 {
 	Environment _env;
 	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
-	T_ret <Boolean> _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
+	Type <Boolean>::C_ret _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }

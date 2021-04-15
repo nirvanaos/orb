@@ -44,7 +44,7 @@ protected:
 	static Interface* __default_POA (Bridge <::PortableServer::ServantBase>* obj, Interface* env)
 	{
 		try {
-			return TypeI <::PortableServer::POA>::ret (S::_implementation (obj)._default_POA ());
+			return Type <::PortableServer::POA>::ret (S::_implementation (obj)._default_POA ());
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -56,7 +56,7 @@ protected:
 	static Interface* __get_interface (Bridge <::PortableServer::ServantBase>* obj, Interface* env)
 	{
 		try {
-			return TypeI <InterfaceDef>::ret (S::_implementation (obj)._get_interface ());
+			return Type <InterfaceDef>::ret (S::_implementation (obj)._get_interface ());
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -65,7 +65,7 @@ protected:
 		return 0;
 	}
 
-	static ABI_boolean __is_a (Bridge <::PortableServer::ServantBase>* obj, ABI_in <String> type_id, Interface* env)
+	static Type <Boolean>::ABI_ret __is_a (Bridge <::PortableServer::ServantBase>* obj, Type <String>::ABI_in type_id, Interface* env)
 	{
 		try {
 			return S::_implementation (obj)._is_a (Type <String>::in (type_id));
@@ -77,7 +77,7 @@ protected:
 		return 0;
 	}
 
-	static ABI_boolean __non_existent (Bridge <::PortableServer::ServantBase>* obj, Interface* env)
+	static Type <Boolean>::ABI_ret __non_existent (Bridge <::PortableServer::ServantBase>* obj, Interface* env)
 	{
 		try {
 			return S::_implementation (obj)._non_existent ();
@@ -92,7 +92,7 @@ protected:
 	static Interface* ___core_servant (Bridge <::PortableServer::ServantBase>* obj, Interface* env)
 	{
 		try {
-			return TypeI <::PortableServer::ServantBase>::ret (S::_implementation (obj).__core_servant ());
+			return Type <::PortableServer::ServantBase>::ret (S::_implementation (obj).__core_servant ());
 		} catch (const Exception & e) {
 			set_exception (env, e);
 		} catch (...) {

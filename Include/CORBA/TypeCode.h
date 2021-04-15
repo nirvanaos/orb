@@ -83,8 +83,8 @@ template <>
 const Char RepIdOf <Definitions <TypeCode>::Bounds>::repository_id_ [] = CORBA_REPOSITORY_ID ("TypeCode/Bounds");
 
 BRIDGE_BEGIN (TypeCode, CORBA_REPOSITORY_ID ("TypeCode"))
-ABI_boolean (*equal) (Bridge <TypeCode>*, Interface*, Interface*);
-ABI_boolean (*equivalent) (Bridge <TypeCode>*, Interface*, Interface*);
+Type <Boolean>::ABI_ret (*equal) (Bridge <TypeCode>*, Interface*, Interface*);
+Type <Boolean>::ABI_ret (*equivalent) (Bridge <TypeCode>*, Interface*, Interface*);
 Interface* (*get_compact_typecode) (Bridge <TypeCode>*, Interface*);
 ABI_enum (*kind) (Bridge <TypeCode>*, Interface*);
 Type <String>::ABI_ret (*id) (Bridge <TypeCode>*, Interface*);
@@ -108,7 +108,7 @@ void (*_construct) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*);
 void (*_destruct) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*);
 void (*_copy) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::ConstPointer, Interface*);
 void (*_move) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::Pointer, Interface*);
-ABI_boolean (*_has_marshal) (Bridge <TypeCode>*, Interface*);
+Type <Boolean>::ABI_ret (*_has_marshal) (Bridge <TypeCode>*, Interface*);
 void (*_marshal_in) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, Interface*, ::Nirvana::Pointer, Interface*);
 void (*_marshal_out) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*, ::Nirvana::Pointer, Interface*);
 void (*_unmarshal) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, Interface*, ::Nirvana::Pointer, Interface*);
@@ -457,7 +457,7 @@ void Client <T, TypeCode>::_unmarshal (::Nirvana::ConstPointer src, Unmarshal_pt
 }
 
 template <>
-struct Type <I_var <TypeCode> > : TypeItf <TypeCode>
+struct Type <TypeCode> : TypeItf <TypeCode>
 {
 	static TypeCode_ptr type_code ();
 };

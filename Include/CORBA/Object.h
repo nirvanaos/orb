@@ -66,7 +66,7 @@ typedef Nirvana::I_inout <InterfaceDef> InterfaceDef_inout;
 namespace Nirvana {
 
 template <>
-struct Type <I_var <PortableServer::ServantBase> >;
+struct Type <PortableServer::ServantBase>;
 
 template <class I>
 struct TypeObject : TypeItf <I>
@@ -85,7 +85,7 @@ template <>
 const Char Bridge <Object>::repository_id_ [] = CORBA_REPOSITORY_ID ("Object");
 
 template <>
-struct Type <I_var <Object> > : TypeItf <Object>
+struct Type <Object> : TypeItf <Object>
 {
 	static TypeCode_ptr type_code ()
 	{
@@ -108,9 +108,9 @@ struct Bridge <Object>::EPV
 	struct
 	{
 		Interface* (*get_interface) (Bridge <Object>*, Interface*);
-		ABI_boolean (*is_a) (Bridge <Object>*, ABI_in <String> type_id, Interface*);
-		ABI_boolean (*non_existent) (Bridge <Object>*, Interface*);
-		ABI_boolean (*is_equivalent) (Bridge <Object>*, Interface*, Interface*);
+		Type <Boolean>::ABI_ret (*is_a) (Bridge <Object>*,  Type <String>::ABI_in type_id, Interface*);
+		Type <Boolean>::ABI_ret (*non_existent) (Bridge <Object>*, Interface*);
+		Type <Boolean>::ABI_ret (*is_equivalent) (Bridge <Object>*, Interface*, Interface*);
 		ULong (*hash) (Bridge <Object>*, ULong maximum, Interface*);
 		// TODO: Other Object operations shall be here...
 	} epv;
@@ -167,7 +167,7 @@ Boolean Client <T, Object>::_non_existent ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	T_ret <Boolean> _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
+	Type <Boolean>::C_ret _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -177,7 +177,7 @@ Boolean Client <T, Object>::_is_equivalent (I_in <Object> other_object)
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	T_ret <Boolean> _ret = (_b._epv ().epv.is_equivalent) (&_b, &other_object, &_env);
+	Type <Boolean>::C_ret _ret = (_b._epv ().epv.is_equivalent) (&_b, &other_object, &_env);
 	_env.check ();
 	return _ret;
 }

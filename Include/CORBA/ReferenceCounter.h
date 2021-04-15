@@ -38,7 +38,7 @@ typedef I_var <ReferenceCounter> ReferenceCounter_var;
 typedef I_out <ReferenceCounter> ReferenceCounter_out;
 
 template <>
-struct Type <I_var <ReferenceCounter> > : TypeItf <ReferenceCounter>
+struct Type <ReferenceCounter> : TypeItf <ReferenceCounter>
 {};
 
 BRIDGE_BEGIN (ReferenceCounter, CORBA_NIRVANA_REPOSITORY_ID ("ReferenceCounter"))

@@ -82,7 +82,7 @@ typedef I_var <Marshal> Marshal_var;
 typedef I_out <Marshal> Marshal_out;
 
 template <>
-struct Type <I_var <Marshal> > : TypeItf <Marshal>
+struct Type <Marshal> : TypeItf <Marshal>
 {};
 
 /// \interface Marshal

@@ -81,7 +81,7 @@ protected:
 	static ::Nirvana::UIntPtr _marshal_interface (Bridge <Marshal>* _b, Interface* obj, Interface* _env)
 	{
 		try {
-			return S::_implementation (_b).marshal_interface (TypeI <Interface>::in (obj));
+			return S::_implementation (_b).marshal_interface (Type <Interface>::in (obj));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {

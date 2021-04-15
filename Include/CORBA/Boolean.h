@@ -29,27 +29,71 @@
 #define NIRVANA_ORB_BOOLEAN_H_
 
 #include <Nirvana/NirvanaBase.h>
-#include "TypeFixLen.h"
+#include "TypeByVal.h"
 
 namespace CORBA {
 namespace Nirvana {
 
+/// We can not use `bool' built-in type across the binary boundaries because
+/// it is compiler-specific, but we have to achieve the binary compatibility.
+/// So we use size_t (the machine word) as ABI for boolean in assumption that bool implementation can't be wide.
+/// In and out parameters passed as reinterpret_cast <bool&> (size_t&).
+/// Note that vector <bool> template specialization has element size is 1 byte.
+typedef size_t ABI_boolean;
+
 template <>
-struct Type <Boolean> : TypeFixLen <Boolean, ABI_boolean, char>
+struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 {
+	typedef TypeByVal <Boolean, ABI_boolean, Char> Base;
+	typedef Boolean Var_type;
+	typedef ABI_boolean ABI_type;
+	typedef typename Base::ABI_inout ABI_inout;
+
+	static const bool has_check = false;
+	static void check (const ABI_type&) {}
+
+	class C_inout
+	{
+	public:
+		C_inout (Var_type& v) :
+			ref_ (v),
+			abi_ (v)
+		{}
+
+		~C_inout ()
+		{
+			ref_ = abi_;
+		}
+
+		ABI_inout operator & ()
+		{
+			return &abi_;
+		}
+
+	protected:
+		Var_type& ref_;
+		ABI_type abi_;
+	};
+
+	typedef C_inout C_out;
+
+	typedef Boolean Member_ret;
+
 	static TypeCode_ptr type_code ();
 
-	static void marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
+	static const bool has_marshal = false;
+
+	static void marshal_in (Var_type src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
 	{
 		dst = src;
 	}
 
-	static void marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
+	static void marshal_out (Var_type src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
 	{
 		dst = src;
 	}
 
-	static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst) NIRVANA_NOEXCEPT
+	static void unmarshal (ABI_type src, Unmarshal_ptr unmarshaler, Var_type& dst) NIRVANA_NOEXCEPT
 	{
 		dst = src != 0;
 	}

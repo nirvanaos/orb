@@ -76,7 +76,7 @@ protected:
 		}
 	}
 
-	static void* _stateless_end (Bridge <ObjectFactory>* _b, ABI_in <bool> success, Interface* _env)
+	static void* _stateless_end (Bridge <ObjectFactory>* _b, Type <Boolean>::ABI_in success, Interface* _env)
 	{
 		try {
 			return S::_implementation (_b).stateless_end (Type <bool>::in (success));
@@ -91,7 +91,7 @@ protected:
 	static Interface* _create_reference_counter (Bridge <ObjectFactory>* _b, Interface* dynamic, Interface* _env)
 	{
 		try {
-			return TypeI <ReferenceCounter>::ret (S::_implementation (_b).create_reference_counter (TypeI <DynamicServant>::in (dynamic)));
+			return Type <ReferenceCounter>::ret (S::_implementation (_b).create_reference_counter (Type <DynamicServant>::in (dynamic)));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -103,7 +103,7 @@ protected:
 	static Interface* _create_servant (Bridge <ObjectFactory>* _b, Interface* impl, Interface* _env)
 	{
 		try {
-			return TypeI <PortableServer::ServantBase>::ret (S::_implementation (_b).create_servant (TypeI <PortableServer::ServantBase>::in (impl)));
+			return Type <PortableServer::ServantBase>::ret (S::_implementation (_b).create_servant (Type <PortableServer::ServantBase>::in (impl)));
 		} catch (const Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -115,7 +115,7 @@ protected:
 	static Interface* _create_local_object (Bridge <ObjectFactory>* _b, Interface* impl, Interface* ab, Interface* _env)
 	{
 		try {
-			return TypeI <LocalObject>::ret (S::_implementation (_b).create_local_object (TypeI <LocalObject>::in (impl), TypeI <AbstractBase>::in (ab)));
+			return Type <LocalObject>::ret (S::_implementation (_b).create_local_object (Type <LocalObject>::in (impl), Type <AbstractBase>::in (ab)));
 		} catch (const Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {

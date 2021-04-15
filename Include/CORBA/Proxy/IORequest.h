@@ -90,7 +90,7 @@ Marshal_var Client <T, IORequest>::marshaler ()
 {
 	Environment _env;
 	Bridge <IORequest>& _b (T::_get_bridge (_env));
-	TypeI <Marshal>::C_ret _ret = (_b._epv ().epv.marshaler) (&_b, &_env);
+	Type <Marshal>::C_ret _ret = (_b._epv ().epv.marshaler) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }

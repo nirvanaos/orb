@@ -93,13 +93,13 @@ struct TypeByVal
 	static Var_type& out (ABI_out p)
 	{
 		_check_pointer (p);
-		return *p;
+		return reinterpret_cast <Var_type&> (*p);
 	}
 
-	static Var_type& inout (ABI_out p)
+	static Var_type& inout (ABI_inout p)
 	{
 		_check_pointer (p);
-		return *p;
+		return reinterpret_cast <Var_type&> (*p);
 	}
 
 	static ABI_ret ret (Var_type v)

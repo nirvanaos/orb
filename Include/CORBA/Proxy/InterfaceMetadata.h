@@ -63,7 +63,7 @@ void RqProcWrapper (Interface* servant, Interface* call,
 	try {
 		IORequest_ptr rq = IORequest::_check (call);
 		try {
-			proc (&static_cast <I&> (*servant), rq, in_params, TypeI <Unmarshal>::inout (unmarshaler), out_params);
+			proc (&static_cast <I&> (*servant), rq, in_params, Type <Unmarshal>::inout (unmarshaler), out_params);
 			rq->success ();
 		} catch (Exception & e) {
 			rq->exception (std::move (e));

@@ -47,7 +47,7 @@ namespace Nirvana {
 
 /// Proxy factory implements ProxyFactory and TypeCode interfaces.
 template <class I> class ProxyFactoryImpl :
-	public TypeCodeImpl <ServantStatic <ProxyFactoryImpl <I>, ProxyFactory>, TypeCodeWithId <Type <I_var <I> >::tc_kind, I>, TypeCodeOps <I_var <I> > >
+	public TypeCodeImpl <ServantStatic <ProxyFactoryImpl <I>, ProxyFactory>, TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> >
 {
 public:
 	// ProxyFactory

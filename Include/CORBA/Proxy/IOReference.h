@@ -106,7 +106,7 @@ typedef I_var <IOReference> IOReference_var;
 typedef I_out <IOReference> IOReference_out;
 
 template <>
-struct Type <I_var <IOReference> > : TypeItf <IOReference>
+struct Type <IOReference> : TypeItf <IOReference>
 {};
 
 BRIDGE_BEGIN (IOReference, CORBA_NIRVANA_REPOSITORY_ID ("IOReference"))
@@ -126,7 +126,7 @@ public:
 	Marshal_var create_marshaler ();
 
 	Unmarshal_var call (Type <OperationIndex>::C_in op,
-		::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size, TypeI <Marshal>::C_inout marshaler,
+		::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size, Type <Marshal>::C_inout marshaler,
 		::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size);
 };
 
@@ -145,7 +145,7 @@ Marshal_var Client <T, IOReference>::create_marshaler ()
 
 template <class T>
 Unmarshal_var Client <T, IOReference>::call (Type <OperationIndex>::C_in op,
-	::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size, TypeI <Marshal>::C_inout marshaler,
+	::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size, Type <Marshal>::C_inout marshaler,
 	::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size)
 {
 	EnvironmentEx <UnknownUserException> _env;

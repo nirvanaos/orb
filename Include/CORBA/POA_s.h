@@ -45,7 +45,7 @@ protected:
 	static Type <String>::ABI_ret _activate_object (Bridge <PortableServer::POA>* obj, Interface* servant, Interface* env)
 	{
 		try {
-			return Type <String>::ret (S::_implementation (obj).activate_object (TypeI <PortableServer::ServantBase>::in (servant)));
+			return Type <String>::ret (S::_implementation (obj).activate_object (Type <PortableServer::ServantBase>::in (servant)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {

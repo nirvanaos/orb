@@ -40,7 +40,7 @@ typedef Nirvana::I_inout <LocalObject> LocalObject_inout;
 namespace Nirvana {
 
 template <>
-struct Type <I_var <LocalObject> > : TypeItf <LocalObject>
+struct Type <LocalObject> : TypeItf <LocalObject>
 {};
 
 template <class I>
@@ -53,7 +53,7 @@ BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))
 BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
 BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)
 BRIDGE_EPV
-ABI_boolean (*non_existent) (Bridge <LocalObject>*, Interface*);
+Type <Boolean>::ABI_ret (*non_existent) (Bridge <LocalObject>*, Interface*);
 BRIDGE_END ()
 
 template <> /// We can obtain I_ptr <LocalObject> directly from servant pointer
@@ -112,7 +112,7 @@ Boolean Client <T, LocalObject>::_non_existent ()
 {
 	Environment _env;
 	Bridge <LocalObject>& _b (T::_get_bridge (_env));
-	T_ret <Boolean> _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
+	Type <Boolean>::C_ret _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }

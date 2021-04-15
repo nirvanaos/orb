@@ -38,10 +38,10 @@ public:
 	static const typename Bridge <TypeCode>::EPV epv_;
 
 protected:
-	static ABI_boolean _equal (Bridge <TypeCode>* _b, Interface* other, Interface* _env)
+	static Type <Boolean>::ABI_ret _equal (Bridge <TypeCode>* _b, Interface* other, Interface* _env)
 	{
 		try {
-			return S::_implementation (_b).equal (TypeI <TypeCode>::in (other));
+			return S::_implementation (_b).equal (Type <TypeCode>::in (other));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -50,10 +50,10 @@ protected:
 		return 0;
 	}
 
-	static ABI_boolean _equivalent (Bridge <TypeCode>* _b, Interface* other, Interface* _env)
+	static Type <Boolean>::ABI_ret _equivalent (Bridge <TypeCode>* _b, Interface* other, Interface* _env)
 	{
 		try {
-			return S::_implementation (_b).equivalent (TypeI <TypeCode>::in (other));
+			return S::_implementation (_b).equivalent (Type <TypeCode>::in (other));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -65,7 +65,7 @@ protected:
 	static Interface* _get_compact_typecode (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		try {
-			return TypeI <TypeCode>::ret (S::_implementation (_b).get_compact_typecode ());
+			return Type <TypeCode>::ret (S::_implementation (_b).get_compact_typecode ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -137,7 +137,7 @@ protected:
 	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
 		try {
-			return TypeI <TypeCode>::ret (S::_implementation (_b).member_type (index));
+			return Type <TypeCode>::ret (S::_implementation (_b).member_type (index));
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -161,7 +161,7 @@ protected:
 	static Interface* _discriminator_type (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		try {
-			return TypeI <TypeCode>::ret (S::_implementation (_b).discriminator_type ());
+			return Type <TypeCode>::ret (S::_implementation (_b).discriminator_type ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -197,7 +197,7 @@ protected:
 	static Interface* _content_type (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		try {
-			return TypeI <TypeCode>::ret (S::_implementation (_b).content_type ());
+			return Type <TypeCode>::ret (S::_implementation (_b).content_type ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -257,7 +257,7 @@ protected:
 	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		try {
-			return TypeI <TypeCode>::ret (S::_implementation (_b).concrete_base_type ());
+			return Type <TypeCode>::ret (S::_implementation (_b).concrete_base_type ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -322,7 +322,7 @@ protected:
 		}
 	}
 
-	static ABI_boolean __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		try {
 			return Type <Boolean>::ret (S::_implementation (_b)._has_marshal ());
@@ -337,7 +337,7 @@ protected:
 	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{
 		try {
-			S::_implementation (_b)._marshal_in (src, TypeI <Marshal>::in (marshaler), dst);
+			S::_implementation (_b)._marshal_in (src, Type <Marshal>::in (marshaler), dst);
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -348,7 +348,7 @@ protected:
 	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{
 		try {
-			S::_implementation (_b)._marshal_out (src, TypeI <Marshal>::in (marshaler), dst);
+			S::_implementation (_b)._marshal_out (src, Type <Marshal>::in (marshaler), dst);
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -359,7 +359,7 @@ protected:
 	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* unmarshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{
 		try {
-			S::_implementation (_b)._unmarshal (src, TypeI <Unmarshal>::in (unmarshaler), dst);
+			S::_implementation (_b)._unmarshal (src, Type <Unmarshal>::in (unmarshaler), dst);
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {

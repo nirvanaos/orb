@@ -62,7 +62,7 @@ typedef I_var <Unmarshal> Unmarshal_var;
 typedef I_out <Unmarshal> Unmarshal_out;
 
 template <>
-struct Type <I_var <Unmarshal> > : TypeItf <Unmarshal>
+struct Type <Unmarshal> : TypeItf <Unmarshal>
 {};
 
 /// \interface Unmarshal

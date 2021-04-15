@@ -152,64 +152,65 @@ template <typename T>
 class TypeCodeOps
 {
 public:
-	typedef T Valtype;
+	typedef typename Type <T>::Var_type Var_type;
+	typedef typename Type <T>::ABI_type ABI_type;
 
 	static size_t __size (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return sizeof (Valtype);
+		return sizeof (Var_type);
 	}
 
 	static void _construct (::Nirvana::Pointer p)
 	{
 		_check_pointer (p);
-		new (p) Valtype ();
+		new (p) Var_type ();
 	}
 
 	static void _destruct (::Nirvana::Pointer p)
 	{
 		if (p)
-			reinterpret_cast <Valtype*> (p)->~Valtype ();
+			reinterpret_cast <Var_type*> (p)->~Var_type ();
 	}
 
 	static void _copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
-		if (Type <Valtype>::has_check)
-			Type <Valtype>::check (*reinterpret_cast <const typename Type <Valtype>::ABI_type*> (src));
-		new (dst) Valtype (*reinterpret_cast <const Valtype*> (src));
+		if (Type <T>::has_check)
+			Type <T>::check (*reinterpret_cast <const ABI_type*> (src));
+		new (dst) Var_type (*reinterpret_cast <const Var_type*> (src));
 	}
 
 	static void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
-		if (Type <Valtype>::has_check)
-			Type <Valtype>::check (*reinterpret_cast <const typename Type <Valtype>::ABI_type*> (src));
-		new (dst) Valtype (std::move (*reinterpret_cast <Valtype*> (src)));
+		if (Type <T>::has_check)
+			Type <T>::check (*reinterpret_cast <const ABI_type*> (src));
+		new (dst) Var_type (std::move (*reinterpret_cast <Var_type*> (src)));
 	}
 
-	static ABI_boolean __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return Type <Valtype>::has_marshal;
+		return Type <T>::has_marshal;
 	}
 
 	static void _marshal_in (::Nirvana::ConstPointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
-		if (Type <Valtype>::has_check)
-			Type <Valtype>::check (*reinterpret_cast <const typename Type <Valtype>::ABI_type*> (src));
-		Type <Valtype>::marshal_in (*reinterpret_cast <const Valtype*> (src), marshaler, *reinterpret_cast <typename Type <Valtype>::ABI_type*> (dst));
+		if (Type <T>::has_check)
+			Type <T>::check (*reinterpret_cast <const ABI_type*> (src));
+		Type <T>::marshal_in (*reinterpret_cast <const Var_type*> (src), marshaler, *reinterpret_cast <ABI_type*> (dst));
 	}
 
 	static void _marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
-		if (Type <Valtype>::has_check)
-			Type <Valtype>::check (*reinterpret_cast <const typename Type <Valtype>::ABI_type*> (src));
-		Type <Valtype>::marshal_out (*reinterpret_cast <Valtype*> (src), marshaler, *reinterpret_cast <typename Type <Valtype>::ABI_type*> (dst));
+		if (Type <T>::has_check)
+			Type <T>::check (*reinterpret_cast <const ABI_type*> (src));
+		Type <T>::marshal_out (*reinterpret_cast <Var_type*> (src), marshaler, *reinterpret_cast <ABI_type*> (dst));
 	}
 
 	static void _unmarshal (::Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
@@ -217,7 +218,68 @@ public:
 		_check_pointer (dst);
 		_check_pointer (src);
 		// Do not call check() here, unmarshal() will check.
-		Type <Valtype>::unmarshal (*reinterpret_cast <const typename Type <Valtype>::ABI_type*> (src), unmarshaler, *reinterpret_cast <Valtype*> (dst));
+		Type <T>::unmarshal (*reinterpret_cast <const ABI_type*> (src), unmarshaler, *reinterpret_cast <Var_type*> (dst));
+	}
+};
+
+template <>
+class TypeCodeOps <Boolean>
+{
+public:
+	typedef typename Type <Boolean>::Member_type Var_type;
+
+	static size_t __size (Bridge <TypeCode>* _b, Interface* _env)
+	{
+		return sizeof (Var_type);
+	}
+
+	static void _construct (::Nirvana::Pointer p)
+	{
+		_check_pointer (p);
+	}
+
+	static void _destruct (::Nirvana::Pointer p)
+	{
+	}
+
+	static void _copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src)
+	{
+		_check_pointer (dst);
+		_check_pointer (src);
+		*reinterpret_cast <Var_type*> (dst) = *reinterpret_cast <const Var_type*> (src);
+	}
+
+	static void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src)
+	{
+		_check_pointer (dst);
+		_check_pointer (src);
+		*reinterpret_cast <Var_type*> (dst) = *reinterpret_cast <const Var_type*> (src);
+	}
+
+	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
+	{
+		return 0;
+	}
+
+	static void _marshal_in (::Nirvana::ConstPointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
+	{
+		_check_pointer (dst);
+		_check_pointer (src);
+		*reinterpret_cast <Var_type*> (dst) = *reinterpret_cast <const Var_type*> (src);
+	}
+
+	static void _marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
+	{
+		_check_pointer (dst);
+		_check_pointer (src);
+		*reinterpret_cast <Var_type*> (dst) = *reinterpret_cast <const Var_type*> (src);
+	}
+
+	static void _unmarshal (::Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
+	{
+		_check_pointer (dst);
+		_check_pointer (src);
+		*reinterpret_cast <Var_type*> (dst) = *reinterpret_cast <const Var_type*> (src);
 	}
 };
 
@@ -244,7 +306,7 @@ public:
 	static void __move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::Pointer src, Interface* _env)
 	{}
 
-	static ABI_boolean __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return 0;
 	}

@@ -91,7 +91,7 @@ public:
 };
 
 template <>
-struct Type <I_var < ::PortableServer::POA> > : TypeLocalObject < ::PortableServer::POA>
+struct Type < ::PortableServer::POA> : TypeLocalObject < ::PortableServer::POA>
 {
 	static TypeCode_ptr type_code ()
 	{
