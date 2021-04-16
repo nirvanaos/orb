@@ -204,6 +204,7 @@ struct Type <BoundedSequence <T, bound> > :
 	typedef typename Base::ABI_out ABI_out;
 	typedef typename Base::ABI_inout ABI_inout;
 	typedef BoundedSequence <T, bound> Var_type;
+	typedef const Var_type& Const_type;
 	typedef BoundedSequence <T, bound> Member_type;
 
 	static const bool has_check = true;

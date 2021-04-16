@@ -32,8 +32,6 @@
 namespace CORBA {
 namespace Nirvana {
 
-typedef Interface* ABI_interface;
-
 #ifdef NIRVANA_C11
 template <class I> using I_in = I_ptr <I>;
 #else
@@ -265,6 +263,7 @@ template <class I>
 struct TypeItfBase
 {
 	typedef I_var <I> Var_type;
+	typedef I_ptr <I> Const_type;
 	typedef Interface* ABI_type;
 
 	typedef Interface* ABI_in;
@@ -340,8 +339,13 @@ struct TypeItf : TypeItfBase <I>
 
 	static const bool has_marshal = true;
 
-	static void marshal_in (const I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst);
-	static void marshal_out (I_var <I>& src, Marshal_ptr marshaler, Interface*& dst);
+	static void marshal_in (I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst);
+	
+	static void marshal_out (I_var <I>& src, Marshal_ptr marshaler, Interface*& dst)
+	{
+		marshal_in (src, marshaler, dst);
+	}
+
 	static void unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_var <I>& dst);
 };
 
@@ -377,6 +381,10 @@ struct Type <Interface> : TypeItfBase <Interface>
 		return reinterpret_cast <I_var <Interface>&> (*p);
 	}
 };
+
+template <class I>
+struct Type <I_var <I> > : public TypeItf <I>
+{};
 
 }
 }

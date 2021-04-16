@@ -40,6 +40,7 @@ template <typename T, typename TABI = T, typename TMember = T>
 struct TypeByVal
 {
 	typedef T Var_type;
+	typedef T Const_type;
 	typedef TABI ABI_type;
 
 	// ABI data types

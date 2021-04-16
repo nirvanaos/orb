@@ -36,7 +36,6 @@ namespace PortableServer {
 class POA;
 typedef ::CORBA::Nirvana::I_ptr <POA> POA_ptr;
 typedef ::CORBA::Nirvana::I_var <POA> POA_var;
-typedef ::CORBA::Nirvana::I_out <POA> POA_out;
 
 extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_POA;
 

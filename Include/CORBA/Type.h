@@ -70,32 +70,25 @@ TypeCode_ptr Type <TypeCode>::type_code ()
 // Interface marshaling
 
 template <class I> inline
-void TypeItf <I>::marshal_in (const I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst)
-{
-	reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
-}
-
-template <class I> inline
-void TypeItf <I>::marshal_out (I_var <I>& src, Marshal_ptr marshaler, Interface*& dst)
-{
-	marshal_in (src, marshaler, dst);
-}
-
-template <class I> inline
 void TypeItf <I>::unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_var <I>& dst)
 {
 	dst = static_cast <I*> (unmarshaler->unmarshal_interface (src, I::repository_id_));
 }
 
-// Object marshaling
-
 template <class I>
-void TypeObject <I>::marshal_in (const I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst)
+void TypeItf <I>::marshal_in (I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst)
 {
 	if (marshaler->context () < MarshalContext::OTHER_PROTECTION_DOMAIN)
 		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
 	else
 		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (Object_ptr (src));
+}
+
+// TypeCode marshaling
+template <> inline
+void TypeItf <TypeCode>::marshal_in (I_ptr <TypeCode> src, Marshal_ptr marshaler, Interface*& dst)
+{
+	reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
 }
 
 // String marshaling

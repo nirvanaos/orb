@@ -43,6 +43,7 @@ typedef I_ptr <Unmarshal> Unmarshal_ptr;
 template <> struct Type <T>
 {
   typedef T Var_type;
+  typedef const T& Const_type;
   typedef ABI <T> ABI_type;
 
   // Check internal invariants and throw BAD_PARAM or INV_OBJREF exception if data is invalid.

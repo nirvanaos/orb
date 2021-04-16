@@ -45,7 +45,6 @@ namespace PortableServer {
 
 class ServantBase;
 typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
-typedef ::CORBA::Nirvana::I_out <ServantBase> ServantBase_out;
 
 }
 
@@ -72,13 +71,6 @@ template <class I>
 struct TypeObject : TypeItf <I>
 {
 	static const CORBA::TCKind tc_kind = tk_objref;
-
-	static void marshal_in (const I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst);
-
-	static void marshal_out (I_var <I>& src, Marshal_ptr marshaler, Interface*& dst)
-	{
-		marshal_in (src, marshaler, dst);
-	}
 };
 
 template <>
