@@ -34,7 +34,10 @@ namespace CORBA {
 namespace Nirvana {
 
 template <const ::Nirvana::ImportInterfaceT <TypeCode>* ref>
-struct TypeAlias
+struct Alias {};
+
+template <const ::Nirvana::ImportInterfaceT <TypeCode>* ref>
+struct Type <Alias <ref> >
 {
 	static TypeCode_ptr type_code ()
 	{

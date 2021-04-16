@@ -39,14 +39,14 @@ void set_BadKind (Interface* env);
 void set_Bounds (Interface* env);
 
 template <size_t cc> inline
-Type <String>::ABI_ret const_string_ret (Char const (&s) [cc])
+Type <String>::ABI_ret const_string_ret (Char const (&s) [cc]) NIRVANA_NOEXCEPT
 {
 	StringBase <Char> sb (s);
 	return Type <String>::ret (std::move (static_cast <String&> (sb)));
 }
 
 inline
-Type <String>::ABI_ret const_string_ret_p (const Char* s)
+Type <String>::ABI_ret const_string_ret_p (const Char* s) NIRVANA_NOEXCEPT
 {
 	StringBase <Char> sb (s);
 	return Type <String>::ret (std::move (static_cast <String&> (sb)));

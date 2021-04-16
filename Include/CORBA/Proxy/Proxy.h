@@ -39,6 +39,7 @@
 #include "TypeCodeEnum.h"
 #include "TypeCodeStruct.h"
 #include "TypeAlias.h"
+#include "TypeCodeTypeDef.h"
 #include <Nirvana/stateless.h>
 #include <Nirvana/OLF.h>
 
