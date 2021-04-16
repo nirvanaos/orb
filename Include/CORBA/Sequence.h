@@ -140,13 +140,57 @@ void Type <Sequence <T> >::check (const ABI_type& v)
 /// 
 /// \tparam T Element type.
 /// \tparam bound The bound.
-template <typename T, ULong bound = 0>
+template <typename T, ULong bound>
 class BoundedSequence : public Sequence <T>
 {
+	typedef Sequence <T> Base;
 public:
 	/// The sequence bound.
 	static const ULong bound_ = bound;
-	// TODO: Implement constructors, assigns and inserters.
+
+	// Implementations of the mapping are
+	// under no obligation to prevent assignment of a sequence to a bounded sequence type if the sequence exceeds the bound.
+	// Implementations must at run time detect attempts to pass a sequence that exceeds the bound as a parameter across an
+	// interface.
+
+	// Constructors
+
+	BoundedSequence ()
+	{}
+
+	explicit BoundedSequence (size_t count) :
+		Base (count)
+	{}
+
+#ifndef NIRVANA_C11
+	explicit
+#endif
+	BoundedSequence (size_t count, const T& v) :
+		Base (count, v)
+	{}
+
+	BoundedSequence (const Base& src) :
+		Base (src)
+	{}
+
+	BoundedSequence (Base&& src) NIRVANA_NOEXCEPT :
+		Base (std::move (src))
+	{}
+
+	template <class InputIterator
+#ifdef NIRVANA_C11
+		, typename = ::Nirvana::_RequireInputIter <InputIterator>
+#endif
+	>
+	BoundedSequence (InputIterator b, InputIterator e) :
+		Base (b, e)
+	{}
+
+#ifdef NIRVANA_C11
+	BoundedSequence (std::initializer_list <T> ilist) :
+		Base (ilist)
+	{}
+#endif
 };
 
 template <class T, ULong bound>
@@ -155,28 +199,39 @@ struct Type <BoundedSequence <T, bound> > :
 {
 	typedef Type <Sequence <T> > Base;
 	typedef typename Base::ABI_type ABI_type;
-	typedef typename Base::Var_type Var_type;
+	typedef typename Base::ABI_ret ABI_ret;
+	typedef typename Base::ABI_in ABI_in;
+	typedef typename Base::ABI_out ABI_out;
+	typedef typename Base::ABI_inout ABI_inout;
+	typedef BoundedSequence <T, bound> Var_type;
+	typedef BoundedSequence <T, bound> Member_type;
 
-	static const bool has_check = Base::has_check || bound != 0;
+	static const bool has_check = true;
 
 	static void check (const ABI_type& v)
 	{
-		Base::check (v);
-		if (bound && v.size > bound)
+		if (Base::has_check)
+			Base::check (v);
+		if (v.size > bound)
 			::Nirvana::throw_BAD_PARAM ();
 	}
 
-	// Check in C_in for member assignments
-	class C_in : public Base::C_in
+	typedef typename TypeVarLen <BoundedSequence <T, bound>, true, ABI_type>::C_ret C_ret;
+
+	static const Var_type& in (ABI_in p)
 	{
-	public:
-		C_in (const Var_type& v) :
-			Base::C_in (v)
-		{
-			if (bound && v.size () > bound)
-				::Nirvana::throw_BAD_PARAM ();
-		}
-	};
+		return static_cast <const Var_type&> (Base::in (p));
+	}
+
+	static Var_type& out (ABI_out p)
+	{
+		return static_cast <Var_type&> (Base::out (p));
+	}
+
+	static Var_type& inout (ABI_inout p)
+	{
+		return static_cast <Var_type&> (Base::inout (p));
+	}
 
 	static TypeCode_ptr type_code ();
 };

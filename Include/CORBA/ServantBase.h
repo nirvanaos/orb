@@ -37,16 +37,16 @@ template <>
 struct Type <PortableServer::ServantBase> : TypeItf <PortableServer::ServantBase>
 {};
 
-BRIDGE_BEGIN (::PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("ServantBase"))
-BASE_STRUCT_ENTRY (AbstractBase, CORBA_AbstractBase)
-BASE_STRUCT_ENTRY (ReferenceCounter, CORBA_Nirvana_ReferenceCounter)
-BRIDGE_EPV
+NIRVANA_BRIDGE_BEGIN (::PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("ServantBase"))
+NIRVANA_BASE_ENTRY (AbstractBase, CORBA_AbstractBase)
+NIRVANA_BASE_ENTRY (ReferenceCounter, CORBA_Nirvana_ReferenceCounter)
+NIRVANA_BRIDGE_EPV
 Interface* (*default_POA) (Bridge < ::PortableServer::ServantBase>*, Interface*);
 Interface* (*get_interface) (Bridge < ::PortableServer::ServantBase>*, Interface*);
 Type <Boolean>::ABI_ret (*is_a) (Bridge < ::PortableServer::ServantBase>*, Type <String>::ABI_in type_id, Interface*);
 Type <Boolean>::ABI_ret (*non_existent) (Bridge < ::PortableServer::ServantBase>*, Interface*);
 Interface* (*core_servant) (Bridge < ::PortableServer::ServantBase>*, Interface*);
-BRIDGE_END ()
+NIRVANA_BRIDGE_END ()
 
 template <class T>
 class Client <T, ::PortableServer::ServantBase> :

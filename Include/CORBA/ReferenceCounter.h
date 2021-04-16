@@ -41,11 +41,11 @@ template <>
 struct Type <ReferenceCounter> : TypeItf <ReferenceCounter>
 {};
 
-BRIDGE_BEGIN (ReferenceCounter, CORBA_NIRVANA_REPOSITORY_ID ("ReferenceCounter"))
+NIRVANA_BRIDGE_BEGIN (ReferenceCounter, CORBA_NIRVANA_REPOSITORY_ID ("ReferenceCounter"))
 void (*add_ref) (Bridge <ReferenceCounter>*, Interface*);
 void (*remove_ref) (Bridge <ReferenceCounter>*, Interface*);
 ULong (*refcount_value) (Bridge <ReferenceCounter>*, Interface*);
-BRIDGE_END ()
+NIRVANA_BRIDGE_END ()
 
 template <class T>
 class Client <T, ReferenceCounter> :

@@ -273,6 +273,7 @@ struct TypeItfBase
 	typedef Interface* ABI_ret;
 	typedef Interface* ABI_VT_ret;
 
+	typedef I_ptr <I> C_ptr;
 	typedef I_var <I> C_var;
 	typedef I_in <I> C_in;
 	typedef I_out <I> C_out;

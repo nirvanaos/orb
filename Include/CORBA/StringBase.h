@@ -92,9 +92,6 @@ public:
 		return this;
 	}
 
-	// For member assignments
-	operator const StringT <C>& () const;
-
 protected:
 	StringBase ()
 	{}

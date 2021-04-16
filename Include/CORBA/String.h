@@ -148,10 +148,80 @@ bool Type <StringT <C> >::_small_copy (const ABI_type& src, ABI_type& dst)
 template <typename C, ULong bound>
 class BoundedStringT : public StringT <C>
 {
+	typedef StringT <C> Base;
 public:
 	/// The String bound.
 	static const ULong bound_ = bound;
-	// TODO: Implement constructors, assigns and inserters.
+
+	typedef typename Base::const_iterator const_iterator;
+
+	// Implementations of the mapping are
+	// under no obligation to prevent assignment of a sequence to a bounded sequence type if the sequence exceeds the bound.
+	// Implementations must at run time detect attempts to pass a sequence that exceeds the bound as a parameter across an
+	// interface.
+
+	// Constructors
+
+	BoundedStringT ()
+	{}
+
+	BoundedStringT (const Base& s) :
+		Base (s)
+	{}
+
+	BoundedStringT (Base&& s) NIRVANA_NOEXCEPT :
+		Base (std::move (s))
+	{}
+
+	BoundedStringT (const Base& src, size_t off, size_t cnt = Base::npos) :
+		Base (src, off, cnt)
+	{}
+
+	BoundedStringT (const C* ptr, size_t cnt) :
+		Base (ptr, cnt)
+	{}
+
+	BoundedStringT (const C* ptr) :
+		Base (ptr)
+	{}
+
+	BoundedStringT (size_t cnt, C c) :
+		Base (cnt, c)
+	{}
+
+	template <class InputIterator
+#ifdef NIRVANA_C11
+		, typename = ::Nirvana::_RequireInputIter <InputIterator>
+#endif
+	>
+	BoundedStringT (InputIterator b, InputIterator e) :
+		Base (b, e)
+	{}
+
+	BoundedStringT (const C* b, const C* e) :
+		Base (b, e)
+	{}
+
+	BoundedStringT (const_iterator b, const_iterator e) :
+		Base (b, e)
+	{}
+
+#ifdef NIRVANA_C11
+
+	BoundedStringT (std::initializer_list <C> ilist) :
+		Base (ilist)
+	{}
+
+#endif
+
+#ifdef NIRVANA_C17
+
+	template <class V, class = _If_sv <V, void> >
+	BoundedStringT (const V& v) :
+		Base (v)
+	{}
+
+#endif
 };
 
 template <typename C, ULong bound>
@@ -161,12 +231,12 @@ struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
 	typedef typename Base::ABI_type ABI_type;
 	typedef typename Base::Var_type Var_type;
 
-	static const bool has_check = Base::has_check || bound != 0;
+	static const bool has_check = true;
 
 	static void check (const ABI_type& v)
 	{
 		Base::check (v);
-		if (bound && v.size > bound)
+		if (v.size > bound)
 			::Nirvana::throw_BAD_PARAM ();
 	}
 
@@ -174,10 +244,10 @@ struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
 	class C_in : public Base::C_in
 	{
 	public:
-		C_in (const Var_type& s) :
-			Base::C_in (s)
+		C_in (const Var_type& v) :
+			Base::C_in (v)
 		{
-			if (bound && s.size () > bound)
+			if (v.size () > bound)
 				::Nirvana::throw_BAD_PARAM ();
 		}
 	};
@@ -202,13 +272,6 @@ using BoundedString = BoundedStringT <Char, bound>;
 /// \tparam bound Maximal string length.
 template <ULong bound>
 using BoundedWString = BoundedStringT <WChar, bound>;
-
-// For member assignments
-template <typename C> inline
-StringBase <C>::operator const StringT <C>& () const
-{
-	return static_cast <const StringT <C>&> (*this);
-}
 
 }
 

@@ -96,7 +96,7 @@ public:
 
 template <class S> NIRVANA_OLF_SECTION
 volatile ::Nirvana::ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_{ ::Nirvana::OLF_EXPORT_OBJECT, ::Nirvana::StaticId <S>::static_id_
-, STATIC_BRIDGE (PortableServer::ServantBase, S) };
+, NIRVANA_STATIC_BRIDGE (PortableServer::ServantBase, S) };
 
 }
 }

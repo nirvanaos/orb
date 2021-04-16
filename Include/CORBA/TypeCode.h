@@ -82,7 +82,7 @@ const Char RepIdOf <Definitions <TypeCode>::BadKind>::repository_id_ [] = CORBA_
 template <>
 const Char RepIdOf <Definitions <TypeCode>::Bounds>::repository_id_ [] = CORBA_REPOSITORY_ID ("TypeCode/Bounds");
 
-BRIDGE_BEGIN (TypeCode, CORBA_REPOSITORY_ID ("TypeCode"))
+NIRVANA_BRIDGE_BEGIN (TypeCode, CORBA_REPOSITORY_ID ("TypeCode"))
 Type <Boolean>::ABI_ret (*equal) (Bridge <TypeCode>*, Interface*, Interface*);
 Type <Boolean>::ABI_ret (*equivalent) (Bridge <TypeCode>*, Interface*, Interface*);
 Interface* (*get_compact_typecode) (Bridge <TypeCode>*, Interface*);
@@ -112,7 +112,7 @@ Type <Boolean>::ABI_ret (*_has_marshal) (Bridge <TypeCode>*, Interface*);
 void (*_marshal_in) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, Interface*, ::Nirvana::Pointer, Interface*);
 void (*_marshal_out) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*, ::Nirvana::Pointer, Interface*);
 void (*_unmarshal) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, Interface*, ::Nirvana::Pointer, Interface*);
-BRIDGE_END ()
+NIRVANA_BRIDGE_END ()
 
 template <class T>
 class Client <T, TypeCode> :

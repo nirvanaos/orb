@@ -77,7 +77,7 @@ public:
 
 template <class S> NIRVANA_OLF_SECTION
 volatile ::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ ::Nirvana::OLF_EXPORT_LOCAL, ::Nirvana::StaticId <S>::static_id_
-, STATIC_BRIDGE (LocalObject, S), STATIC_BRIDGE (AbstractBase, S) };
+, NIRVANA_STATIC_BRIDGE (LocalObject, S), NIRVANA_STATIC_BRIDGE (AbstractBase, S) };
 
 }
 }

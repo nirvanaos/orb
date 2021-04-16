@@ -48,7 +48,19 @@ typedef float Float;
 typedef double Double;
 typedef long double LongDouble;
 typedef Long Flags;
+
+// Boolean constant
+#ifdef FALSE
+#undef FALSE
+#endif
   
+#ifdef TRUE
+#undef TRUE
+#endif
+
+const bool TRUE = true;
+const bool FALSE = false;
+
 }
 
 #endif

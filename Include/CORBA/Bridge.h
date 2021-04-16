@@ -75,13 +75,13 @@ protected:
 	}
 };
 
-#define BASE_STRUCT_ENTRY(type, name) MyBridge::Wide <type>::Func name;\
+#define NIRVANA_BASE_ENTRY(type, name) MyBridge::Wide <type>::Func name;\
 operator const MyBridge::Wide < type>::Func () const { return name; }
 
-#define BRIDGE_BEGIN(I, id) template <> const Char Bridge <I>::repository_id_ [] = id;\
+#define NIRVANA_BRIDGE_BEGIN(I, id) template <> const Char Bridge <I>::repository_id_ [] = id;\
 template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EPV header; struct {
-#define BRIDGE_EPV } base; struct {
-#define BRIDGE_END() } epv;};
+#define NIRVANA_BRIDGE_EPV } base; struct {
+#define NIRVANA_BRIDGE_END() } epv;};
 
 }
 }

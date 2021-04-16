@@ -43,9 +43,9 @@ template <>
 struct Type <DynamicServant> : TypeItf <DynamicServant>
 {};
 
-BRIDGE_BEGIN (DynamicServant, CORBA_NIRVANA_REPOSITORY_ID ("DynamicServant"))
+NIRVANA_BRIDGE_BEGIN (DynamicServant, CORBA_NIRVANA_REPOSITORY_ID ("DynamicServant"))
 void (*_delete) (Bridge <DynamicServant>*, Interface*);
-BRIDGE_END ()
+NIRVANA_BRIDGE_END ()
 
 template <class T>
 class Client <T, DynamicServant> :

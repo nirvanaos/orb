@@ -58,9 +58,9 @@ template <>
 struct Type <AbstractBase> : TypeItf <AbstractBase>
 {};
 
-BRIDGE_BEGIN (AbstractBase, CORBA_REPOSITORY_ID ("AbstractBase"))
+NIRVANA_BRIDGE_BEGIN (AbstractBase, CORBA_REPOSITORY_ID ("AbstractBase"))
 	Interface* (*query_interface) (Bridge <AbstractBase>*, Type <String>::ABI_in, Interface*);
-BRIDGE_END ()
+NIRVANA_BRIDGE_END ()
 
 template <class T>
 class Client <T, AbstractBase> :

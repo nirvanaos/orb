@@ -73,12 +73,12 @@ const Char RepIdOf <Definitions <PortableServer::POA>::ServantAlreadyActive>::re
 template <>
 const Char RepIdOf <Definitions <PortableServer::POA>::ObjectNotActive>::repository_id_ [] = PORTABLESERVER_REPOSITORY_ID ("POA/ObjectNotActive");
 
-BRIDGE_BEGIN (PortableServer::POA, PORTABLESERVER_REPOSITORY_ID ("POA"))
-BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
-BRIDGE_EPV
+NIRVANA_BRIDGE_BEGIN (PortableServer::POA, PORTABLESERVER_REPOSITORY_ID ("POA"))
+NIRVANA_BASE_ENTRY (CORBA::Object, CORBA_Object)
+NIRVANA_BRIDGE_EPV
 Type <String>::ABI_ret (*activate_object) (Bridge <PortableServer::POA>*, Interface*, Interface*);
 void (*deactivate_object) (Bridge <PortableServer::POA>*, Type <String>::ABI_in, Interface*);
-BRIDGE_END ()
+NIRVANA_BRIDGE_END ()
 
 template <class T>
 class Client <T, PortableServer::POA> :

@@ -127,12 +127,12 @@ public:
 	::Nirvana::UIntPtr marshal_interface (Interface_ptr);
 };
 
-BRIDGE_BEGIN (Marshal, CORBA_NIRVANA_REPOSITORY_ID ("Marshal"))
+NIRVANA_BRIDGE_BEGIN (Marshal, CORBA_NIRVANA_REPOSITORY_ID ("Marshal"))
 ABI_enum (*_get_context) (Bridge <Marshal>*, Interface*);
 ::Nirvana::UIntPtr (*marshal_memory) (Bridge <Marshal>*, ::Nirvana::ConstPointer, ::Nirvana::Size*, ::Nirvana::Size, Interface*);
 ::Nirvana::UIntPtr (*get_buffer) (Bridge <Marshal>*, ::Nirvana::Size*, ::Nirvana::Pointer*, Interface*);
 ::Nirvana::UIntPtr (*marshal_interface) (Bridge <Marshal>*, Interface*, Interface*);
-BRIDGE_END ()
+NIRVANA_BRIDGE_END ()
 
 template <class T>
 MarshalContext Client <T, Marshal>::context ()

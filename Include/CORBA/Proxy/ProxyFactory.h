@@ -57,12 +57,12 @@ pseudo interface ProxyFactory {
 ~~~
 */
 
-BRIDGE_BEGIN (ProxyFactory, CORBA_NIRVANA_REPOSITORY_ID ("ProxyFactory"))
+NIRVANA_BRIDGE_BEGIN (ProxyFactory, CORBA_NIRVANA_REPOSITORY_ID ("ProxyFactory"))
 const InterfaceMetadata* metadata;
 Interface* (*create_proxy) (Bridge <ProxyFactory>*, 
 	Interface*, UShort interface_idx,
 	Interface**, Interface*);
-BRIDGE_END ()
+NIRVANA_BRIDGE_END ()
 
 template <class T>
 class Client <T, ProxyFactory> :

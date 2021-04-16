@@ -49,12 +49,12 @@ struct TypeLocalObject : TypeObject <I>
 	static const TCKind tc_kind = tk_local_interface;
 };
 
-BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))
-BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
-BASE_STRUCT_ENTRY (ReferenceCounter, _ReferenceCounter)
-BRIDGE_EPV
+NIRVANA_BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))
+NIRVANA_BASE_ENTRY (CORBA::Object, CORBA_Object)
+NIRVANA_BASE_ENTRY (ReferenceCounter, _ReferenceCounter)
+NIRVANA_BRIDGE_EPV
 Type <Boolean>::ABI_ret (*non_existent) (Bridge <LocalObject>*, Interface*);
-BRIDGE_END ()
+NIRVANA_BRIDGE_END ()
 
 template <> /// We can obtain I_ptr <LocalObject> directly from servant pointer
 class I_ptr <LocalObject> : public I_ptr_base <LocalObject>

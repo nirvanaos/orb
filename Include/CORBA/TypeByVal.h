@@ -68,12 +68,6 @@ struct TypeByVal
 			return val_;
 		}
 
-		// For member assignments
-		operator Member_type () const
-		{
-			return val_;
-		}
-
 	private:
 		Var_type val_;
 	};

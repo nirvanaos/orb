@@ -78,11 +78,11 @@ public:
 	TypeCode_var unmarshal_type_code (::Nirvana::ConstPointer marshal_data);
 };
 
-BRIDGE_BEGIN (Unmarshal, CORBA_NIRVANA_REPOSITORY_ID ("Unmarshal"))
+NIRVANA_BRIDGE_BEGIN (Unmarshal, CORBA_NIRVANA_REPOSITORY_ID ("Unmarshal"))
 ABI_enum (*_get_context) (Bridge <Unmarshal>*, Interface*);
 void (*adopt_memory) (Bridge <Unmarshal>*, ::Nirvana::ConstPointer, ::Nirvana::Size, Interface*);
 Interface* (*unmarshal_interface) (Bridge <Unmarshal>*, ::Nirvana::ConstPointer, const ABI <StringT <Char> >*, Interface*);
-BRIDGE_END ()
+NIRVANA_BRIDGE_END ()
 
 template <class T>
 MarshalContext Client <T, Unmarshal>::context ()

@@ -33,10 +33,10 @@
 namespace CORBA {
 namespace Nirvana {
 
-template <class T>
-struct TypeVarLenBase : TypeByRef <T, ABI <T> >
+template <class T, class TABI>
+struct TypeVarLenBase : TypeByRef <T, TABI>
 {
-	typedef TypeByRef <T, ABI <T> > Base;
+	typedef TypeByRef <T, TABI> Base;
 	typedef typename Base::Var_type Var_type;
 	typedef typename Base::C_in C_in;
 	typedef typename Base::C_inout C_inout;
@@ -60,7 +60,7 @@ struct TypeVarLenBase : TypeByRef <T, ABI <T> >
 	{
 	public:
 		C_ret (ABI_ret&& val) :
-			val_ (reinterpret_cast <T&&> (val))
+			val_ (reinterpret_cast <Var_type&&> (val))
 		{}
 
 		operator Var_type ()
@@ -72,7 +72,7 @@ struct TypeVarLenBase : TypeByRef <T, ABI <T> >
 		Var_type val_;
 	};
 
-	// Client I_var class for the legacy C++ IDL mapping support
+	// Client T_var class for the legacy C++ IDL mapping support
 	class C_var :
 		public Var_type
 	{
@@ -148,17 +148,17 @@ struct TypeVarLenBase : TypeByRef <T, ABI <T> >
 	}
 };
 
-template <class T, bool with_check> struct TypeVarLen;
+template <class T, bool with_check, class TABI = ABI <T> > struct TypeVarLen;
 
-template <class T>
-struct TypeVarLen <T, false> : TypeVarLenBase <T>
+template <class T, class TABI>
+struct TypeVarLen <T, false, TABI> : TypeVarLenBase <T, TABI>
 {};
 
 /// Base for variable-length data types
-template <class T>
-struct TypeVarLen <T, true> : TypeVarLenBase <T>
+template <class T, class TABI>
+struct TypeVarLen <T, true, TABI> : TypeVarLenBase <T, TABI>
 {
-	typedef TypeVarLenBase <T> Base;
+	typedef TypeVarLenBase <T, TABI> Base;
 	typedef typename Base::Var_type Var_type;
 
 	static const bool has_check = true;
@@ -228,8 +228,8 @@ struct TypeVarLen <T, true> : TypeVarLenBase <T>
 };
 
 /// Outline for compact code
-template <class T>
-void TypeVarLen <T, true>::check_or_clear (Var_type& v)
+template <class T, class TABI>
+void TypeVarLen <T, true, TABI>::check_or_clear (Var_type& v)
 {
 	try {
 		Type <Var_type>::check (reinterpret_cast <typename Type <Var_type>::ABI_type&> (v));
@@ -241,8 +241,8 @@ void TypeVarLen <T, true>::check_or_clear (Var_type& v)
 }
 
 /// Outline for compact code
-template <class T>
-TypeVarLen <T, true>::C_inout::~C_inout () noexcept (false)
+template <class T, class TABI>
+TypeVarLen <T, true, TABI>::C_inout::~C_inout () noexcept (false)
 {
 	bool ex = uncaught_exception ();
 	try {

@@ -109,14 +109,14 @@ template <>
 struct Type <IOReference> : TypeItf <IOReference>
 {};
 
-BRIDGE_BEGIN (IOReference, CORBA_NIRVANA_REPOSITORY_ID ("IOReference"))
-BASE_STRUCT_ENTRY (CORBA::Object, CORBA_Object)
-BRIDGE_EPV
+NIRVANA_BRIDGE_BEGIN (IOReference, CORBA_NIRVANA_REPOSITORY_ID ("IOReference"))
+NIRVANA_BASE_ENTRY (CORBA::Object, CORBA_Object)
+NIRVANA_BRIDGE_EPV
 Interface* (*create_marshaler) (Bridge <IOReference>*, Interface*);
 Interface* (*call) (Bridge <IOReference>*, Type <OperationIndex>::ABI_in,
 	::Nirvana::ConstPointer, ::Nirvana::Size, Interface**,
 	::Nirvana::Pointer, ::Nirvana::Size, Interface*);
-BRIDGE_END ()
+NIRVANA_BRIDGE_END ()
 
 template <class T>
 class Client <T, IOReference> :

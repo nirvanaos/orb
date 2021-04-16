@@ -102,7 +102,7 @@ struct Bridge <Object>::EPV
 
 	struct
 	{
-		BASE_STRUCT_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
+		NIRVANA_BASE_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
 	} base;
 
 	struct
