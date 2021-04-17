@@ -47,7 +47,7 @@ template <> struct Type <T>
   typedef ABI <T> ABI;
 
   // Type for struct members
-  typedef T Member_type;
+  typedef T Member;
 
   // Check internal invariants and throw BAD_PARAM or INV_OBJREF exception if data is invalid.
   static void check (const ABI&);

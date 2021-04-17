@@ -40,7 +40,7 @@ template <typename T, typename TABI = T, typename TMember = T>
 struct TypeByVal
 {
 	typedef T Var;
-	typedef TMember Member_type;
+	typedef TMember Member;
 	typedef Var ConstRef; // By value
 
 	// ABI data types

@@ -41,7 +41,7 @@ struct TypeByRef
 {
 	typedef T Var;
 	typedef const Var& ConstRef;
-	typedef TMember Member_type;
+	typedef TMember Member;
 
 	// ABI data types
 	typedef TABI ABI;

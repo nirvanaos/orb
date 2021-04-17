@@ -226,7 +226,7 @@ template <>
 class TypeCodeOps <Boolean>
 {
 public:
-	typedef typename Type <Boolean>::Member_type Var;
+	typedef typename Type <Boolean>::Member Var;
 
 	static size_t __size (Bridge <TypeCode>* _b, Interface* _env)
 	{

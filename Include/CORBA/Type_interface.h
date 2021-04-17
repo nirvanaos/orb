@@ -315,7 +315,7 @@ struct TypeItfBase
 	// Otherwise compilation error will occur.
 	static void VT_ret (I_var <I>&);
 
-	typedef I_var <I> Member_type;
+	typedef I_var <I> Member;
 	typedef I_ptr <I> ConstRef;
 };
 
