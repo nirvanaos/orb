@@ -77,7 +77,7 @@ struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 
 	typedef C_inout C_out;
 
-	typedef Boolean Member_ret;
+	typedef Boolean MemberRef;
 
 	static TypeCode_ptr type_code ();
 

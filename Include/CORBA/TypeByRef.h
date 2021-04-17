@@ -40,7 +40,6 @@ template <typename T, typename TABI = T, typename TMember = T>
 struct TypeByRef
 {
 	typedef T Var_type;
-	typedef const T& Const_type;
 	typedef TABI ABI_type;
 
 	// ABI data types
@@ -52,7 +51,7 @@ struct TypeByRef
 
 	// Member types
 	typedef TMember Member_type;
-	typedef const TMember& Member_ret;
+	typedef const TMember& MemberRef;
 
 	// Client-side types
 
@@ -166,7 +165,7 @@ struct TypeByRef
 			p_ (reinterpret_cast <const Var_type*> (p))
 		{}
 
-		operator Member_ret () const
+		operator MemberRef () const
 		{
 			_check_pointer (p_);
 			return *p_;

@@ -263,7 +263,6 @@ template <class I>
 struct TypeItfBase
 {
 	typedef I_var <I> Var_type;
-	typedef I_ptr <I> Const_type;
 	typedef Interface* ABI_type;
 
 	typedef Interface* ABI_in;
@@ -298,9 +297,19 @@ struct TypeItfBase
 		return &var._retn ();
 	}
 
+	static Interface* ret ()
+	{
+		return nullptr;
+	}
+
 	static Interface* VT_ret (const I_ptr <I>& ptr)
 	{
 		return &ptr;
+	}
+
+	static Interface* VT_ret ()
+	{
+		return nullptr;
 	}
 
 	// Valuetupe implementation for state members must return I_ptr, not I_var.
@@ -308,7 +317,7 @@ struct TypeItfBase
 	static void VT_ret (I_var <I>&);
 
 	typedef I_var <I> Member_type;
-	typedef I_ptr <I> Member_ret;
+	typedef I_ptr <I> MemberRef;
 };
 
 template <class I>
