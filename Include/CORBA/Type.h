@@ -94,12 +94,12 @@ void TypeItf <TypeCode>::marshal_in (I_ptr <TypeCode> src, Marshal_ptr marshaler
 // String marshaling
 
 template <typename C>
-void Type <StringT <C> >::marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
+void Type <StringT <C> >::marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst)
 {
 	assert (&src != &dst);
 	if (!_small_copy (src, dst)) {
 		size_t size = src.large_size ();
-		size_t cb = Var_type::byte_size (size);
+		size_t cb = Var::byte_size (size);
 		dst.large_pointer ((C*)marshaler->marshal_memory (const_cast <C*> (src.large_pointer ()), cb, 0));
 		dst.large_size (size);
 		dst.allocated (cb);
@@ -107,12 +107,12 @@ void Type <StringT <C> >::marshal_in (const Var_type& src, Marshal_ptr marshaler
 }
 
 template <typename C>
-void Type <StringT <C> >::marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
+void Type <StringT <C> >::marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst)
 {
 	assert (&src != &dst);
 	if (!_small_copy (src, dst)) {
 		size_t size = src.large_size ();
-		size_t cb = Var_type::byte_size (size);
+		size_t cb = Var::byte_size (size);
 		dst.large_pointer ((C*)marshaler->marshal_memory (src.large_pointer (), cb, src.allocated ()));
 		dst.large_size (size);
 		dst.allocated (cb);
@@ -121,7 +121,7 @@ void Type <StringT <C> >::marshal_out (Var_type& src, Marshal_ptr marshaler, ABI
 }
 
 template <typename C>
-void Type <StringT <C> >::unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst)
+void Type <StringT <C> >::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst)
 {
 	if (Base::has_check)
 		check (src);
@@ -130,23 +130,23 @@ void Type <StringT <C> >::unmarshal (const ABI_type& src, Unmarshal_ptr unmarsha
 		size_t cb = src.allocated ();
 		if (cb) {
 			unmarshaler->adopt_memory (src.large_pointer (), cb);
-			static_cast <ABI_type&> (dst) = src;
+			static_cast <ABI&> (dst) = src;
 		} else
 			dst.assign_internal (src.large_size (), src.large_pointer ());
 	} else
-		static_cast <ABI_type&> (dst) = src;
+		static_cast <ABI&> (dst) = src;
 }
 
 // Sequence marshaling
 
 template <typename T>
-void Type <Sequence <T> >::marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
+void Type <Sequence <T> >::marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst)
 {
 	assert (&src != &dst);
 	if (src.empty ())
 		dst.reset ();
 	else {
-		const ABI_type& asrc = static_cast <const ABI_type&> (src);
+		const ABI& asrc = static_cast <const ABI&> (src);
 		if (!Type <T>::has_marshal) {
 			size_t cb = asrc.size * sizeof (T);
 			dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, 0);
@@ -166,13 +166,13 @@ void Type <Sequence <T> >::marshal_in (const Var_type& src, Marshal_ptr marshale
 }
 
 template <typename T>
-void Type <Sequence <T> >::marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst)
+void Type <Sequence <T> >::marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst)
 {
 	assert (&src != &dst);
 	if (src.empty ())
 		dst.reset ();
 	else {
-		ABI_type& asrc = static_cast <ABI_type&> (src);
+		ABI& asrc = static_cast <ABI&> (src);
 		dst.size = asrc.size;
 		if (!Type <T>::has_marshal) {
 			size_t cb = asrc.size * sizeof (T);
@@ -200,7 +200,7 @@ void Type <Sequence <T> >::marshal_out (Var_type& src, Marshal_ptr marshaler, AB
 			if (MarshalContext::SHARED_MEMORY == mctx)
 				dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated);
 			else {
-				Var_type tmp;
+				Var tmp;
 				src.swap (tmp);
 			}
 
@@ -210,7 +210,7 @@ void Type <Sequence <T> >::marshal_out (Var_type& src, Marshal_ptr marshaler, AB
 }
 
 template <typename T>
-void Type <Sequence <T> >::unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst)
+void Type <Sequence <T> >::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst)
 {
 	if (Base::has_check)
 		check (src);
@@ -218,8 +218,8 @@ void Type <Sequence <T> >::unmarshal (const ABI_type& src, Unmarshal_ptr unmarsh
 	if (!src.size)
 		dst.reset ();
 	else {
-		Var_type tmp;
-		ABI_type& adst = static_cast <ABI_type&> (tmp);
+		Var tmp;
+		ABI& adst = static_cast <ABI&> (tmp);
 		if (src.allocated) {
 			unmarshaler->adopt_memory (src.ptr, src.allocated);
 			adst.ptr = src.ptr;

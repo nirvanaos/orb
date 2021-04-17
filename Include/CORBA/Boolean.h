@@ -45,14 +45,14 @@ template <>
 struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 {
 	typedef TypeByVal <Boolean, ABI_boolean, Char> Base;
-	typedef Boolean Var_type;
+	typedef Boolean Var;
 	typedef Boolean ConstRef;
-	typedef ABI_boolean ABI_type;
+	typedef ABI_boolean ABI;
 
 	class C_inout
 	{
 	public:
-		C_inout (Var_type& v) :
+		C_inout (Var& v) :
 			ref_ (v),
 			abi_ (v)
 		{}
@@ -68,8 +68,8 @@ struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 		}
 
 	protected:
-		Var_type& ref_;
-		ABI_type abi_;
+		Var& ref_;
+		ABI abi_;
 	};
 
 	typedef C_inout C_out;

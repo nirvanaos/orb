@@ -29,14 +29,14 @@ namespace CORBA {
 
 namespace Nirvana {
 
-void Type <Any>::check (const ABI_type& any)
+void Type <Any>::check (const ABI& any)
 {
 	TypeCode::_check (any.type ());
 	if (any.is_large () && !any.large_pointer ())
 		::Nirvana::throw_BAD_PARAM ();
 }
 
-void Type <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI_type& dst)
+void Type <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst)
 {
 	TypeCode_ptr tc = src.type ();
 	if (!tc)
@@ -59,7 +59,7 @@ void Type <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI_type& ds
 	}
 }
 
-void Type <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI_type& dst)
+void Type <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst)
 {
 	TypeCode_ptr tc = src.type ();
 	if (!tc)
@@ -90,7 +90,7 @@ void Type <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI_type& dst)
 	}
 }
 
-void Type <Any>::unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Any& dst)
+void Type <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
 {
 	TypeCode* ptc = src.type ();
 	if (!ptc)

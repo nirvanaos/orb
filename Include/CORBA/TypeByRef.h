@@ -39,92 +39,92 @@ namespace Nirvana {
 template <typename T, typename TABI = T, typename TMember = T>
 struct TypeByRef
 {
-	typedef T Var_type;
-	typedef const Var_type& ConstRef;
+	typedef T Var;
+	typedef const Var& ConstRef;
 	typedef TMember Member_type;
 
 	// ABI data types
-	typedef TABI ABI_type;
-	typedef const ABI_type* ABI_in;
-	typedef ABI_type* ABI_out;
-	typedef ABI_type ABI_ret;
-	typedef const ABI_type* ABI_VT_ret;
+	typedef TABI ABI;
+	typedef const ABI* ABI_in;
+	typedef ABI* ABI_out;
+	typedef ABI ABI_ret;
+	typedef const ABI* ABI_VT_ret;
 
 	static const bool has_check = false;
-	static void check (const ABI_type&) {}
+	static void check (const ABI&) {}
 
 	// Client-side types
 
 	class C_in
 	{
 	public:
-		C_in (const Var_type& v) :
+		C_in (const Var& v) :
 			ref_ (v)
 		{}
 
 		ABI_in operator & () const
 		{
-			return &reinterpret_cast <const ABI_type&> (ref_);
+			return &reinterpret_cast <const ABI&> (ref_);
 		}
 
 	protected:
-		const Var_type& ref_;
+		const Var& ref_;
 	};
 
 	class C_inout
 	{
 	public:
-		C_inout (Var_type& v) :
+		C_inout (Var& v) :
 			ref_ (v)
 		{}
 
 		ABI_out operator & () const
 		{
-			return &reinterpret_cast <ABI_type&> (ref_);
+			return &reinterpret_cast <ABI&> (ref_);
 		}
 
 	protected:
-		Var_type& ref_;
+		Var& ref_;
 	};
 
 	typedef C_inout C_out;
 
 	// Client T_var class for the legacy C++ IDL mapping support
 	class C_var :
-		public Var_type
+		public Var
 	{
 	public:
 		C_var ()
 		{}
 
-		C_var (const Var_type& v) :
-			Var_type (v)
+		C_var (const Var& v) :
+			Var (v)
 		{}
 
 		C_var (const C_var& src) :
-			Var_type (src)
+			Var (src)
 		{}
 
-		C_var& operator = (const Var_type& v)
+		C_var& operator = (const Var& v)
 		{
 			if (this != &v)
-				Var_type::operator = (v);
+				Var::operator = (v);
 			return *this;
 		}
 
 		C_var& operator = (const C_var& v)
 		{
 			if (this != &v)
-				Var_type::operator = (v);
+				Var::operator = (v);
 			return *this;
 		}
 
-		Var_type& operator -> ()
+		Var& operator -> ()
 		{
 			return *this;
 		}
 
-		const Var_type& operator -> () const
+		const Var& operator -> () const
 		{
 			return *this;
 		}
@@ -144,7 +144,7 @@ struct TypeByRef
 			return *this;
 		}
 
-		Var_type _retn ()
+		Var _retn ()
 		{
 			return *this;
 		}
@@ -152,9 +152,9 @@ struct TypeByRef
 
 	struct C_ret : ABI_ret
 	{
-		operator const Var_type& () const
+		operator const Var& () const
 		{
-			return reinterpret_cast <const Var_type&> (*this);
+			return reinterpret_cast <const Var&> (*this);
 		}
 	};
 
@@ -162,7 +162,7 @@ struct TypeByRef
 	{
 	public:
 		C_VT_ret (ABI_VT_ret p) :
-			p_ (reinterpret_cast <const Var_type*> (p))
+			p_ (reinterpret_cast <const Var*> (p))
 		{}
 
 		operator ConstRef () const
@@ -172,7 +172,7 @@ struct TypeByRef
 		}
 
 	protected:
-		const Var_type* p_;
+		const Var* p_;
 	};
 
 	// Servant-side methods
@@ -180,33 +180,33 @@ struct TypeByRef
 	static ConstRef in (ABI_in p)
 	{
 		_check_pointer (p);
-		return reinterpret_cast <const Var_type&> (*p);
+		return reinterpret_cast <const Var&> (*p);
 	}
 
-	static Var_type& out (ABI_out p)
+	static Var& out (ABI_out p)
 	{
 		return inout (p);
 	}
 
-	static Var_type& inout (ABI_out p)
+	static Var& inout (ABI_out p)
 	{
 		_check_pointer (p);
-		return reinterpret_cast <Var_type&> (*p);
+		return reinterpret_cast <Var&> (*p);
 	}
 
-	static ABI_ret ret (Var_type& v)
+	static ABI_ret ret (Var& v)
 	{
 		return reinterpret_cast <ABI_ret&> (v);
 	}
 
 	static ABI_ret ret ()
 	{
-		return Var_type ();
+		return Var ();
 	}
 
-	static ABI_VT_ret VT_ret (const Var_type& v)
+	static ABI_VT_ret VT_ret (const Var& v)
 	{
-		return &reinterpret_cast <const ABI_type&> (v);
+		return &reinterpret_cast <const ABI&> (v);
 	}
 
 	static ABI_VT_ret VT_ret ()
@@ -216,19 +216,19 @@ struct TypeByRef
 
 	static const bool has_marshal = false;
 
-	static void marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
+	static void marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst) NIRVANA_NOEXCEPT
 	{
-		dst = reinterpret_cast <const ABI_type&> (src);
+		dst = reinterpret_cast <const ABI&> (src);
 	}
 
-	static void marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
+	static void marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst) NIRVANA_NOEXCEPT
 	{
-		dst = reinterpret_cast <const ABI_type&> (src);
+		dst = reinterpret_cast <const ABI&> (src);
 	}
 
-	static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst) NIRVANA_NOEXCEPT
+	static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst) NIRVANA_NOEXCEPT
 	{
-		dst = reinterpret_cast <const Var_type&> (src);
+		dst = reinterpret_cast <const Var&> (src);
 	}
 };
 

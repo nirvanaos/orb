@@ -262,8 +262,8 @@ typedef I_inout <Interface> Interface_inout;
 template <class I>
 struct TypeItfBase
 {
-	typedef I_var <I> Var_type;
-	typedef Interface* ABI_type;
+	typedef I_var <I> Var;
+	typedef Interface* ABI;
 
 	typedef Interface* ABI_in;
 	typedef Interface** ABI_out;

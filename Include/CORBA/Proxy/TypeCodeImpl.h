@@ -152,24 +152,24 @@ template <typename T>
 class TypeCodeOps
 {
 public:
-	typedef typename Type <T>::Var_type Var_type;
-	typedef typename Type <T>::ABI_type ABI_type;
+	typedef typename Type <T>::Var Var;
+	typedef typename Type <T>::ABI ABI;
 
 	static size_t __size (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return sizeof (Var_type);
+		return sizeof (Var);
 	}
 
 	static void _construct (::Nirvana::Pointer p)
 	{
 		_check_pointer (p);
-		new (p) Var_type ();
+		new (p) Var ();
 	}
 
 	static void _destruct (::Nirvana::Pointer p)
 	{
 		if (p)
-			reinterpret_cast <Var_type*> (p)->~Var_type ();
+			reinterpret_cast <Var*> (p)->~Var ();
 	}
 
 	static void _copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src)
@@ -177,8 +177,8 @@ public:
 		_check_pointer (dst);
 		_check_pointer (src);
 		if (Type <T>::has_check)
-			Type <T>::check (*reinterpret_cast <const ABI_type*> (src));
-		new (dst) Var_type (*reinterpret_cast <const Var_type*> (src));
+			Type <T>::check (*reinterpret_cast <const ABI*> (src));
+		new (dst) Var (*reinterpret_cast <const Var*> (src));
 	}
 
 	static void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src)
@@ -186,8 +186,8 @@ public:
 		_check_pointer (dst);
 		_check_pointer (src);
 		if (Type <T>::has_check)
-			Type <T>::check (*reinterpret_cast <const ABI_type*> (src));
-		new (dst) Var_type (std::move (*reinterpret_cast <Var_type*> (src)));
+			Type <T>::check (*reinterpret_cast <const ABI*> (src));
+		new (dst) Var (std::move (*reinterpret_cast <Var*> (src)));
 	}
 
 	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
@@ -200,8 +200,8 @@ public:
 		_check_pointer (dst);
 		_check_pointer (src);
 		if (Type <T>::has_check)
-			Type <T>::check (*reinterpret_cast <const ABI_type*> (src));
-		Type <T>::marshal_in (*reinterpret_cast <const Var_type*> (src), marshaler, *reinterpret_cast <ABI_type*> (dst));
+			Type <T>::check (*reinterpret_cast <const ABI*> (src));
+		Type <T>::marshal_in (*reinterpret_cast <const Var*> (src), marshaler, *reinterpret_cast <ABI*> (dst));
 	}
 
 	static void _marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
@@ -209,8 +209,8 @@ public:
 		_check_pointer (dst);
 		_check_pointer (src);
 		if (Type <T>::has_check)
-			Type <T>::check (*reinterpret_cast <const ABI_type*> (src));
-		Type <T>::marshal_out (*reinterpret_cast <Var_type*> (src), marshaler, *reinterpret_cast <ABI_type*> (dst));
+			Type <T>::check (*reinterpret_cast <const ABI*> (src));
+		Type <T>::marshal_out (*reinterpret_cast <Var*> (src), marshaler, *reinterpret_cast <ABI*> (dst));
 	}
 
 	static void _unmarshal (::Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
@@ -218,7 +218,7 @@ public:
 		_check_pointer (dst);
 		_check_pointer (src);
 		// Do not call check() here, unmarshal() will check.
-		Type <T>::unmarshal (*reinterpret_cast <const ABI_type*> (src), unmarshaler, *reinterpret_cast <Var_type*> (dst));
+		Type <T>::unmarshal (*reinterpret_cast <const ABI*> (src), unmarshaler, *reinterpret_cast <Var*> (dst));
 	}
 };
 
@@ -226,11 +226,11 @@ template <>
 class TypeCodeOps <Boolean>
 {
 public:
-	typedef typename Type <Boolean>::Member_type Var_type;
+	typedef typename Type <Boolean>::Member_type Var;
 
 	static size_t __size (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return sizeof (Var_type);
+		return sizeof (Var);
 	}
 
 	static void _construct (::Nirvana::Pointer p)
@@ -246,14 +246,14 @@ public:
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
-		*reinterpret_cast <Var_type*> (dst) = *reinterpret_cast <const Var_type*> (src);
+		*reinterpret_cast <Var*> (dst) = *reinterpret_cast <const Var*> (src);
 	}
 
 	static void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
-		*reinterpret_cast <Var_type*> (dst) = *reinterpret_cast <const Var_type*> (src);
+		*reinterpret_cast <Var*> (dst) = *reinterpret_cast <const Var*> (src);
 	}
 
 	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
@@ -265,21 +265,21 @@ public:
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
-		*reinterpret_cast <Var_type*> (dst) = *reinterpret_cast <const Var_type*> (src);
+		*reinterpret_cast <Var*> (dst) = *reinterpret_cast <const Var*> (src);
 	}
 
 	static void _marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
-		*reinterpret_cast <Var_type*> (dst) = *reinterpret_cast <const Var_type*> (src);
+		*reinterpret_cast <Var*> (dst) = *reinterpret_cast <const Var*> (src);
 	}
 
 	static void _unmarshal (::Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
-		*reinterpret_cast <Var_type*> (dst) = *reinterpret_cast <const Var_type*> (src);
+		*reinterpret_cast <Var*> (dst) = *reinterpret_cast <const Var*> (src);
 	}
 };
 

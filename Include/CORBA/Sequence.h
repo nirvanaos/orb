@@ -38,71 +38,71 @@ struct Type <Sequence <T> > :
 	public TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check>
 {
 	typedef TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check> Base;
-	typedef typename Type <T>::ABI_type T_ABI;
-	typedef typename Base::Var_type Var_type;
-	typedef typename Base::ABI_type ABI_type;
+	typedef typename Type <T>::ABI T_ABI;
+	typedef typename Base::Var Var;
+	typedef typename Base::ABI ABI;
 	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_out ABI_out;
 
-	static void check (const ABI_type& v);
+	static void check (const ABI& v);
 
 	class C_in : public Base::C_in
 	{
 	public:
-		C_in (const Var_type& v) :
+		C_in (const Var& v) :
 			Base::C_in (v)
 		{}
 
-		const ABI_type* operator & () const
+		const ABI* operator & () const
 		{
 			// Use static_cast to ensure that we are using own vector implementation.
-			return &static_cast <const ABI_type&> (this->ref_);
+			return &static_cast <const ABI&> (this->ref_);
 		}
 	};
 
 	class C_inout : public Base::C_inout
 	{
 	public:
-		C_inout (Var_type& v) :
+		C_inout (Var& v) :
 			Base::C_inout (v)
 		{}
 
-		ABI_type* operator & () const
+		ABI* operator & () const
 		{
 			// Use static_cast to ensure that we are using own vector implementation.
-			return &static_cast <ABI_type&> (this->ref_);
+			return &static_cast <ABI&> (this->ref_);
 		}
 	};
 
 	class C_out : public C_inout
 	{
 	public:
-		C_out (Var_type& v) :
+		C_out (Var& v) :
 			C_inout (v)
 		{
 			v.clear ();
 		}
 	};
 
-	static const Var_type& in (ABI_in p)
+	static const Var& in (ABI_in p)
 	{
 		Base::in (p);	// Check
 		// Use static_cast to ensure that we are using own vector implementation.
-		return static_cast <const Var_type&> (*p);
+		return static_cast <const Var&> (*p);
 	}
 
-	static Var_type& inout (ABI_out p)
+	static Var& inout (ABI_out p)
 	{
 		Base::inout (p); // Check
 		// Use static_cast to ensure that we are using own vector implementation.
-		return static_cast <Var_type&> (*p);
+		return static_cast <Var&> (*p);
 	}
 
-	static Var_type& out (ABI_out p)
+	static Var& out (ABI_out p)
 	{
 		Base::out (p); // Check
 		// Use static_cast to ensure that we are using own vector implementation.
-		Var_type& val = static_cast <Var_type&> (*p);
+		Var& val = static_cast <Var&> (*p);
 		// Must be empty
 		if (!val.empty ())
 			::Nirvana::throw_BAD_PARAM ();
@@ -111,13 +111,13 @@ struct Type <Sequence <T> > :
 
 	static TypeCode_ptr type_code ();
 
-	static void marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst);
-	static void marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst);
-	static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst);
+	static void marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst);
+	static void marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst);
+	static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst);
 };
 
 template <typename T>
-void Type <Sequence <T> >::check (const ABI_type& v)
+void Type <Sequence <T> >::check (const ABI& v)
 {
 	// Do some check
 	if (CHECK_SEQUENCES) {
@@ -125,7 +125,7 @@ void Type <Sequence <T> >::check (const ABI_type& v)
 		if (p)
 			CORBA::Nirvana::_check_pointer (p);
 		size_t cnt = v.size;
-		if (cnt > 0 && (cnt > v.allocated / sizeof (T) || !Var_type::memory ()->is_readable (p, cnt * sizeof (T))))
+		if (cnt > 0 && (cnt > v.allocated / sizeof (T) || !Var::memory ()->is_readable (p, cnt * sizeof (T))))
 			::Nirvana::throw_BAD_PARAM ();
 	}
 
@@ -197,16 +197,16 @@ struct Type <BoundedSequence <T, bound> > :
 	public Type <Sequence <T> >
 {
 	typedef Type <Sequence <T> > Base;
-	typedef typename Base::ABI_type ABI_type;
+	typedef typename Base::ABI ABI;
 	typedef typename Base::ABI_ret ABI_ret;
 	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_out ABI_out;
-	typedef BoundedSequence <T, bound> Var_type;
+	typedef BoundedSequence <T, bound> Var;
 	typedef BoundedSequence <T, bound> Member_type;
 
 	static const bool has_check = true;
 
-	static void check (const ABI_type& v)
+	static void check (const ABI& v)
 	{
 		if (Base::has_check)
 			Base::check (v);
@@ -214,21 +214,21 @@ struct Type <BoundedSequence <T, bound> > :
 			::Nirvana::throw_BAD_PARAM ();
 	}
 
-	typedef typename TypeVarLen <BoundedSequence <T, bound>, true, ABI_type>::C_ret C_ret;
+	typedef typename TypeVarLen <BoundedSequence <T, bound>, true, ABI>::C_ret C_ret;
 
-	static const Var_type& in (ABI_in p)
+	static const Var& in (ABI_in p)
 	{
-		return static_cast <const Var_type&> (Base::in (p));
+		return static_cast <const Var&> (Base::in (p));
 	}
 
-	static Var_type& out (ABI_out p)
+	static Var& out (ABI_out p)
 	{
-		return static_cast <Var_type&> (Base::out (p));
+		return static_cast <Var&> (Base::out (p));
 	}
 
-	static Var_type& inout (ABI_out p)
+	static Var& inout (ABI_out p)
 	{
-		return static_cast <Var_type&> (Base::inout (p));
+		return static_cast <Var&> (Base::inout (p));
 	}
 
 	static TypeCode_ptr type_code ();

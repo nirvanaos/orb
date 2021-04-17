@@ -42,24 +42,24 @@ typedef I_ptr <Unmarshal> Unmarshal_ptr;
 ~~~
 template <> struct Type <T>
 {
-  typedef T Var_type;
+  typedef T Var;
   typedef const T& ConstRef;
-  typedef ABI <T> ABI_type;
+  typedef ABI <T> ABI;
 
   // Type for struct members
   typedef T Member_type;
 
   // Check internal invariants and throw BAD_PARAM or INV_OBJREF exception if data is invalid.
-  static void check (const ABI_type&);
+  static void check (const ABI&);
 
   // true if check () method is not empty.
   static const bool has_check;
 
   // Types for passing parameters via interface ABI
-  typedef const ABI_type* ABI_in;
-  typedef ABI_type* ABI_out;
-  typedef ABI_type ABI_ret;
-  typedef const ABI_type* ABI_VT_ret; // Valuetype attributes returned by const reference
+  typedef const ABI* ABI_in;
+  typedef ABI* ABI_out;
+  typedef ABI ABI_ret;
+  typedef const ABI* ABI_VT_ret; // Valuetype attributes returned by const reference
 
   // Client-side types
   class C_var; // This is for T_var backward-compatible types. Not used in modern code.
@@ -73,9 +73,9 @@ template <> struct Type <T>
 
   // Servant-side methods
   static ConstRef in (ABI_in p);
-  static Var_type& out (ABI_out p);
-  static Var_type& inout (ABI_out p);
-  static ABI_ret ret (Var_type);
+  static Var& out (ABI_out p);
+  static Var& inout (ABI_out p);
+  static ABI_ret ret (Var);
   static ABI_ret (); // Return default value on error
   static ABI_VT_ret VT_ret (ConstRef);
   static ABI_VT_ret VT_ret (); // Return default value on error
@@ -87,19 +87,19 @@ template <> struct Type <T>
   /// \param src         Source value.
   /// \param marshaler   Marshaler interface. May be `nil` if has_marshal is `false`.
   /// \param dst         Destination value ABI.
-  static void marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst);
+  static void marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst);
 
   /// \brief Moves output data to the marshaling buffer.
   /// \param src         Source value. After marshalling, the value can be released.
   /// \param marshaler   Marshaler interface. May be `nil` if has_marshal is `false`.
   /// \param dst         Destination value ABI.
-  static void marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst);
+  static void marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst);
 
   /// \brief Moves data from marshaling buffer to the local variable.
   /// \param src         Source value ABI.
   /// \param unmarshaler Unmarshaler interface. May be `nil` if has_marshal is `false`.
   /// \param dst         Destination value.
-  static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst);
+  static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst);
 
   /// \brief `true` if marshal operations are not trivial copy.
   static const bool has_marshal;

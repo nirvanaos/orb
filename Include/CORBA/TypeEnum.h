@@ -45,15 +45,15 @@ struct TypeEnum : TypeByVal <T, ABI_enum, T>
 
 	typedef TypeByVal <T, ABI_enum, T> Base;
 
-	typedef typename Base::Var_type Var_type;
-	typedef typename Base::ABI_type ABI_type;
+	typedef typename Base::Var Var;
+	typedef typename Base::ABI ABI;
 	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_out ABI_out;
 	typedef typename Base::ABI_ret ABI_ret;
 
 	static const bool has_check = true;
 
-	static void check (ABI_type val)
+	static void check (ABI val)
 	{
 		if (val >= count_)
 			::Nirvana::throw_BAD_PARAM ();
@@ -62,27 +62,27 @@ struct TypeEnum : TypeByVal <T, ABI_enum, T>
 	class C_inout
 	{
 	public:
-		C_inout (Var_type& val) :
+		C_inout (Var& val) :
 			ref_ (val),
-			val_ ((ABI_type)val)
+			val_ ((ABI)val)
 		{}
 
 		~C_inout () noexcept (false)
 		{
 			if (!uncaught_exception ()) {
-				Type <Var_type>::check (val_);
+				Type <Var>::check (val_);
 				ref_ = (T*)val_;
 			}
 		}
 
-		ABI_type* operator & ()
+		ABI* operator & ()
 		{
 			return &val_;
 		}
 
 	private:
-		Var_type& ref_;
-		ABI_type val_;
+		Var& ref_;
+		ABI val_;
 	};
 
 	typedef C_inout C_out;
@@ -96,35 +96,35 @@ struct TypeEnum : TypeByVal <T, ABI_enum, T>
 			check (val_);
 		}
 
-		operator Var_type ()
+		operator Var ()
 		{
-			return (Var_type)val_;
+			return (Var)val_;
 		}
 
 	private:
 		ABI_ret val_;
 	};
 
-	static Var_type in (ABI_in v)
+	static Var in (ABI_in v)
 	{
 		check (v);
-		return (Var_type)v;
+		return (Var)v;
 	}
 
-	static Var_type& inout (ABI_out p)
+	static Var& inout (ABI_out p)
 	{
 		_check_pointer (p);
 		check (*p);
-		return (Var_type&)*p;
+		return (Var&)*p;
 	}
 
-	static Var_type& out (ABI_out p)
+	static Var& out (ABI_out p)
 	{
 		_check_pointer (p);
-		return (Var_type&)*p;
+		return (Var&)*p;
 	}
 
-	static ABI_ret ret (Var_type val)
+	static ABI_ret ret (Var val)
 	{
 		return (ABI_ret)val;
 	}

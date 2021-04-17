@@ -258,9 +258,9 @@ template <>
 struct Type <Any> : public TypeVarLen <Any, true>
 {
 	typedef TypeVarLen <Any, true> Base;
-	typedef ABI <Any> ABI_type;
+	typedef typename Base::ABI ABI;
 
-	static void check (const ABI_type& any);
+	static void check (const ABI& any);
 
 	class C_out : public Base::C_out
 	{
@@ -283,9 +283,9 @@ struct Type <Any> : public TypeVarLen <Any, true>
 
 	static TypeCode_ptr type_code ();
 
-	static void marshal_in (const Any& src, Marshal_ptr marshaler, ABI_type& dst);
-	static void marshal_out (Any& src, Marshal_ptr marshaler, ABI_type& dst);
-	static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Any& dst);
+	static void marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst);
+	static void marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst);
+	static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst);
 };
 
 }

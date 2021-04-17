@@ -39,19 +39,19 @@ namespace Nirvana {
 template <typename T, typename TABI = T, typename TMember = T>
 struct TypeByVal
 {
-	typedef T Var_type;
+	typedef T Var;
 	typedef TMember Member_type;
-	typedef Var_type ConstRef; // By value
+	typedef Var ConstRef; // By value
 
 	// ABI data types
-	typedef TABI ABI_type;
-	typedef ABI_type ABI_in;
-	typedef ABI_type* ABI_out;
-	typedef ABI_type ABI_ret;
-	typedef ABI_type ABI_VT_ret;
+	typedef TABI ABI;
+	typedef ABI ABI_in;
+	typedef ABI* ABI_out;
+	typedef ABI ABI_ret;
+	typedef ABI ABI_VT_ret;
 
 	static const bool has_check = false;
-	static void check (const ABI_type&) {}
+	static void check (const ABI&) {}
 
 	// Client-side types
 
@@ -59,7 +59,7 @@ struct TypeByVal
 	class C_in
 	{
 	public:
-		C_in (Var_type val) :
+		C_in (Var val) :
 			val_ (val)
 		{}
 
@@ -69,68 +69,68 @@ struct TypeByVal
 		}
 
 	private:
-		Var_type val_;
+		Var val_;
 	};
 
-	typedef Var_type& C_out;
-	typedef Var_type& C_inout;
-	typedef Var_type C_ret;
-	typedef Var_type C_VT_ret;
+	typedef Var& C_out;
+	typedef Var& C_inout;
+	typedef Var C_ret;
+	typedef Var C_VT_ret;
 
 	// Servant-side methods
 
-	static Var_type in (ABI_in v)
+	static Var in (ABI_in v)
 	{
 		return v;
 	}
 
-	static Var_type& out (ABI_out p)
+	static Var& out (ABI_out p)
 	{
 		_check_pointer (p);
-		return reinterpret_cast <Var_type&> (*p);
+		return reinterpret_cast <Var&> (*p);
 	}
 
-	static Var_type& inout (ABI_out p)
+	static Var& inout (ABI_out p)
 	{
 		_check_pointer (p);
-		return reinterpret_cast <Var_type&> (*p);
+		return reinterpret_cast <Var&> (*p);
 	}
 
-	static ABI_ret ret (Var_type v)
+	static ABI_ret ret (Var v)
 	{
 		return v;
 	}
 
 	static ABI_ret ret ()
 	{
-		return Var_type ();
+		return Var ();
 	}
 
-	static ABI_VT_ret VT_ret (Var_type v)
+	static ABI_VT_ret VT_ret (Var v)
 	{
 		return v;
 	}
 
 	static ABI_VT_ret VT_ret ()
 	{
-		return Var_type ();
+		return Var ();
 	}
 
 	static const bool has_marshal = false;
 
-	static void marshal_in (Var_type src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
+	static void marshal_in (Var src, Marshal_ptr marshaler, ABI& dst) NIRVANA_NOEXCEPT
 	{
-		dst = (ABI_type)src;
+		dst = (ABI)src;
 	}
 
-	static void marshal_out (Var_type src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
+	static void marshal_out (Var src, Marshal_ptr marshaler, ABI& dst) NIRVANA_NOEXCEPT
 	{
-		dst = (ABI_type)src;
+		dst = (ABI)src;
 	}
 
-	static void unmarshal (ABI_type src, Unmarshal_ptr unmarshaler, Var_type& dst) NIRVANA_NOEXCEPT
+	static void unmarshal (ABI src, Unmarshal_ptr unmarshaler, Var& dst) NIRVANA_NOEXCEPT
 	{
-		dst = (Var_type)src;
+		dst = (Var)src;
 	}
 };
 
