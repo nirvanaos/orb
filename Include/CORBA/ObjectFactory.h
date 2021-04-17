@@ -56,7 +56,7 @@ struct Type <StatelessCreationFrame> :
 NIRVANA_BRIDGE_BEGIN (ObjectFactory, CORBA_NIRVANA_REPOSITORY_ID ("ObjectFactory"))
 void* (*memory_allocate) (Bridge <ObjectFactory>*, size_t size, Interface*);
 void (*memory_release) (Bridge <ObjectFactory>*, void* p, size_t size, Interface*);
-void (*stateless_begin) (Bridge <ObjectFactory>*, Type <StatelessCreationFrame>::ABI_inout, Interface*);
+void (*stateless_begin) (Bridge <ObjectFactory>*, Type <StatelessCreationFrame>::ABI_out, Interface*);
 void* (*stateless_end) (Bridge <ObjectFactory>*, Type <Boolean>::ABI_in success, Interface*);
 Interface* (*create_reference_counter) (Bridge <ObjectFactory>*, Interface*, Interface*);
 Interface* (*create_servant) (Bridge <ObjectFactory>*, Interface*, Interface*);

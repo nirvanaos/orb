@@ -43,13 +43,12 @@ struct TypeEnum : TypeByVal <T, ABI_enum, T>
 
 	static const ABI_enum count_ = (ABI_enum)last + 1;
 
-	typedef TypeFixLen <T, ABI_enum, T> Base;
+	typedef TypeByVal <T, ABI_enum, T> Base;
 
 	typedef typename Base::Var_type Var_type;
 	typedef typename Base::ABI_type ABI_type;
 	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_out ABI_out;
-	typedef typename Base::ABI_inout ABI_inout;
 	typedef typename Base::ABI_ret ABI_ret;
 
 	static const bool has_check = true;
@@ -112,7 +111,7 @@ struct TypeEnum : TypeByVal <T, ABI_enum, T>
 		return (Var_type)v;
 	}
 
-	static Var_type& inout (ABI_inout p)
+	static Var_type& inout (ABI_out p)
 	{
 		_check_pointer (p);
 		check (*p);

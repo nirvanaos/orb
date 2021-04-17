@@ -29,6 +29,7 @@
 #include "Exception.h"
 #include "system_exceptions.h"
 #include "TypeEnum.h"
+#include "TypeFixLen.h"
 #include <Nirvana/ImportInterface.h>
 
 #define OMGVMCID 0x4f4d0000

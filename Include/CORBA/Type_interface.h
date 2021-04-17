@@ -267,7 +267,6 @@ struct TypeItfBase
 
 	typedef Interface* ABI_in;
 	typedef Interface** ABI_out;
-	typedef Interface** ABI_inout;
 	typedef Interface* ABI_ret;
 	typedef Interface* ABI_VT_ret;
 
@@ -317,7 +316,7 @@ struct TypeItfBase
 	static void VT_ret (I_var <I>&);
 
 	typedef I_var <I> Member_type;
-	typedef I_ptr <I> MemberRef;
+	typedef I_ptr <I> ConstRef;
 };
 
 template <class I>
@@ -325,7 +324,7 @@ struct TypeItf : TypeItfBase <I>
 {
 	typedef TypeItfBase <I> Base;
 	typedef typename Base::ABI_in ABI_in;
-	typedef typename Base::ABI_inout ABI_inout;
+	typedef typename Base::ABI_out ABI_out;
 
 	static const bool has_check = true;
 
@@ -339,7 +338,7 @@ struct TypeItf : TypeItfBase <I>
 		return I::_check (p);
 	}
 
-	static I_var <I>& inout (ABI_inout p)
+	static I_var <I>& inout (ABI_out p)
 	{
 		_check_pointer (p);
 		I::_check (*p);
@@ -368,7 +367,6 @@ struct Type <Interface> : TypeItfBase <Interface>
 
 	typedef Interface* ABI_in;
 	typedef Interface** ABI_out;
-	typedef Interface** ABI_inout;
 	typedef Interface* ABI_ret;
 	typedef Interface* ABI_VT_ret;
 
@@ -384,7 +382,7 @@ struct Type <Interface> : TypeItfBase <Interface>
 		return p;
 	}
 
-	static I_var <Interface>& inout (ABI_inout p)
+	static I_var <Interface>& inout (ABI_out p)
 	{
 		_check_pointer (p);
 		return reinterpret_cast <I_var <Interface>&> (*p);

@@ -40,18 +40,18 @@ template <typename T, typename TABI = T, typename TMember = T>
 struct TypeByRef
 {
 	typedef T Var_type;
-	typedef TABI ABI_type;
+	typedef const Var_type& ConstRef;
+	typedef TMember Member_type;
 
 	// ABI data types
+	typedef TABI ABI_type;
 	typedef const ABI_type* ABI_in;
 	typedef ABI_type* ABI_out;
-	typedef ABI_type* ABI_inout;
 	typedef ABI_type ABI_ret;
 	typedef const ABI_type* ABI_VT_ret;
 
-	// Member types
-	typedef TMember Member_type;
-	typedef const TMember& MemberRef;
+	static const bool has_check = false;
+	static void check (const ABI_type&) {}
 
 	// Client-side types
 
@@ -78,7 +78,7 @@ struct TypeByRef
 			ref_ (v)
 		{}
 
-		ABI_inout operator & () const
+		ABI_out operator & () const
 		{
 			return &reinterpret_cast <ABI_type&> (ref_);
 		}
@@ -165,7 +165,7 @@ struct TypeByRef
 			p_ (reinterpret_cast <const Var_type*> (p))
 		{}
 
-		operator MemberRef () const
+		operator ConstRef () const
 		{
 			_check_pointer (p_);
 			return *p_;
@@ -177,7 +177,7 @@ struct TypeByRef
 
 	// Servant-side methods
 
-	static const Var_type& in (ABI_in p)
+	static ConstRef in (ABI_in p)
 	{
 		_check_pointer (p);
 		return reinterpret_cast <const Var_type&> (*p);
@@ -188,7 +188,7 @@ struct TypeByRef
 		return inout (p);
 	}
 
-	static Var_type& inout (ABI_inout p)
+	static Var_type& inout (ABI_out p)
 	{
 		_check_pointer (p);
 		return reinterpret_cast <Var_type&> (*p);
@@ -212,6 +212,23 @@ struct TypeByRef
 	static ABI_VT_ret VT_ret ()
 	{
 		return nullptr;
+	}
+
+	static const bool has_marshal = false;
+
+	static void marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
+	{
+		dst = reinterpret_cast <const ABI_type&> (src);
+	}
+
+	static void marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
+	{
+		dst = reinterpret_cast <const ABI_type&> (src);
+	}
+
+	static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst) NIRVANA_NOEXCEPT
+	{
+		dst = reinterpret_cast <const Var_type&> (src);
 	}
 };
 

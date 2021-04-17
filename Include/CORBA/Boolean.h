@@ -49,9 +49,6 @@ struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 	typedef Boolean ConstRef;
 	typedef ABI_boolean ABI_type;
 
-	static const bool has_check = false;
-	static void check (const ABI_type&) {}
-
 	class C_inout
 	{
 	public:
@@ -79,22 +76,6 @@ struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 
 	static TypeCode_ptr type_code ();
 
-	static const bool has_marshal = false;
-
-	static void marshal_in (Var_type src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
-	{
-		dst = src;
-	}
-
-	static void marshal_out (Var_type src, Marshal_ptr marshaler, ABI_type& dst) NIRVANA_NOEXCEPT
-	{
-		dst = src;
-	}
-
-	static void unmarshal (ABI_type src, Unmarshal_ptr unmarshaler, Var_type& dst) NIRVANA_NOEXCEPT
-	{
-		dst = src != 0;
-	}
 };
 
 typedef Type <Boolean>::C_in Boolean_in;

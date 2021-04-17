@@ -41,9 +41,7 @@ struct TypeVarLenBase : TypeByRef <T, TABI>
 	typedef typename Base::C_in C_in;
 	typedef typename Base::C_inout C_inout;
 	typedef typename Base::ABI_ret ABI_ret;
-
-	/// Variable-length types marshalling is always not trivial.
-	static const bool has_marshal = true;
+	typedef typename Base::ABI_type ABI_type;
 
 	/// C_out class clears output variable
 	class C_out : public Base::C_out
@@ -146,6 +144,18 @@ struct TypeVarLenBase : TypeByRef <T, TABI>
 		new (&abi) Var_type ();
 		return abi;
 	}
+
+	/// Variable-length types marshalling is always not trivial and can throw exceptions.
+	static const bool has_marshal = true;
+
+	/// This method has no implementation and just hides TypeByRef method.
+	static void marshal_in (const Var_type& src, Marshal_ptr marshaler, ABI_type& dst);
+
+	/// This method has no implementation and just hides TypeByRef method.
+	static void marshal_out (Var_type& src, Marshal_ptr marshaler, ABI_type& dst);
+
+	/// This method has no implementation and just hides TypeByRef method.
+	static void unmarshal (const ABI_type& src, Unmarshal_ptr unmarshaler, Var_type& dst);
 };
 
 template <class T, bool with_check, class TABI = ABI <T> > struct TypeVarLen;
@@ -214,7 +224,7 @@ struct TypeVarLen <T, true, TABI> : TypeVarLenBase <T, TABI>
 		return reinterpret_cast <const Var_type&> (*p);
 	}
 
-	static Var_type& inout (typename Base::ABI_inout p)
+	static Var_type& inout (typename Base::ABI_out p)
 	{
 		_check_pointer (p);
 		Type <Var_type>::check (*p);

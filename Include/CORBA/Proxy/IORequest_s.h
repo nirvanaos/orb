@@ -51,7 +51,7 @@ protected:
 		return nullptr;
 	}
 
-	static void _exception (Bridge <IORequest>* _b, Type <Any>::ABI_inout exc)
+	static void _exception (Bridge <IORequest>* _b, Type <Any>::ABI_out exc)
 	{
 		try {
 			S::_implementation (_b).exception (Type <Any>::inout (exc));

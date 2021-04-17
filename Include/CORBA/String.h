@@ -41,7 +41,6 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 	typedef typename Base::ABI_type ABI_type;
 	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_out ABI_out;
-	typedef typename Base::ABI_inout ABI_inout;
 	typedef typename Base::Member_type Member_type;
 
 	static void check (const ABI_type& s);
@@ -78,7 +77,7 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 		return static_cast <const StringT <C>&> (*p);
 	}
 
-	static Var_type& inout (ABI_inout p)
+	static Var_type& inout (ABI_out p)
 	{
 		Base::inout (p); // Check
 		// Use static_cast to ensure that we are using own basic_string implementation.

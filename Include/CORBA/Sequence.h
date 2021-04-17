@@ -43,7 +43,6 @@ struct Type <Sequence <T> > :
 	typedef typename Base::ABI_type ABI_type;
 	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_out ABI_out;
-	typedef typename Base::ABI_inout ABI_inout;
 
 	static void check (const ABI_type& v);
 
@@ -92,7 +91,7 @@ struct Type <Sequence <T> > :
 		return static_cast <const Var_type&> (*p);
 	}
 
-	static Var_type& inout (ABI_inout p)
+	static Var_type& inout (ABI_out p)
 	{
 		Base::inout (p); // Check
 		// Use static_cast to ensure that we are using own vector implementation.
@@ -202,7 +201,6 @@ struct Type <BoundedSequence <T, bound> > :
 	typedef typename Base::ABI_ret ABI_ret;
 	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_out ABI_out;
-	typedef typename Base::ABI_inout ABI_inout;
 	typedef BoundedSequence <T, bound> Var_type;
 	typedef BoundedSequence <T, bound> Member_type;
 
@@ -228,7 +226,7 @@ struct Type <BoundedSequence <T, bound> > :
 		return static_cast <Var_type&> (Base::out (p));
 	}
 
-	static Var_type& inout (ABI_inout p)
+	static Var_type& inout (ABI_out p)
 	{
 		return static_cast <Var_type&> (Base::inout (p));
 	}

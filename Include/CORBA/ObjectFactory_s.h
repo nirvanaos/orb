@@ -65,7 +65,7 @@ protected:
 		}
 	}
 
-	static void _stateless_begin (Bridge <ObjectFactory>* _b, Type <StatelessCreationFrame>::ABI_inout scs, Interface* _env)
+	static void _stateless_begin (Bridge <ObjectFactory>* _b, Type <StatelessCreationFrame>::ABI_out scs, Interface* _env)
 	{
 		try {
 			S::_implementation (_b).stateless_begin (Type <StatelessCreationFrame>::inout (scs));

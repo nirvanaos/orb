@@ -68,7 +68,7 @@ typedef I_out <IORequest> IORequest_out;
 
 NIRVANA_BRIDGE_BEGIN (IORequest, CORBA_NIRVANA_REPOSITORY_ID ("IORequest"))
 Interface* (*marshaler) (Bridge <IORequest>*, Interface*);
-void (*exception) (Bridge <IORequest>*, Type <Any>::ABI_inout);
+void (*exception) (Bridge <IORequest>*, Type <Any>::ABI_out);
 void (*success) (Bridge <IORequest>*, Interface*);
 NIRVANA_BRIDGE_END ()
 
