@@ -46,8 +46,8 @@ struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 {
 	typedef TypeByVal <Boolean, ABI_boolean, Char> Base;
 	typedef Boolean Var_type;
+	typedef Boolean ConstRef;
 	typedef ABI_boolean ABI_type;
-	typedef typename Base::ABI_inout ABI_inout;
 
 	static const bool has_check = false;
 	static void check (const ABI_type&) {}
@@ -65,7 +65,7 @@ struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 			ref_ = abi_;
 		}
 
-		ABI_inout operator & ()
+		ABI_out operator & ()
 		{
 			return &abi_;
 		}
@@ -76,8 +76,6 @@ struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 	};
 
 	typedef C_inout C_out;
-
-	typedef Boolean MemberRef;
 
 	static TypeCode_ptr type_code ();
 

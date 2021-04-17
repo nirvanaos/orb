@@ -27,7 +27,7 @@
 #define NIRVANA_ORB_TYPEENUM_H_
 
 #include <Nirvana/throw_exception.h>
-#include "TypeFixLen.h"
+#include "TypeByVal.h"
 #include <type_traits>
 
 namespace CORBA {
@@ -37,7 +37,7 @@ typedef std::conditional_t <sizeof (size_t) >= 4, ULong, size_t> ABI_enum;
 
 /// Base for enum data types
 template <class T, T last>
-struct TypeEnum : TypeFixLen <T, ABI_enum, T>
+struct TypeEnum : TypeByVal <T, ABI_enum, T>
 {
 	static_assert (sizeof (T) == sizeof (ABI_enum), "IDL enumerations must be declared as : ABI_enum.");
 
@@ -119,7 +119,7 @@ struct TypeEnum : TypeFixLen <T, ABI_enum, T>
 		return (Var_type&)*p;
 	}
 
-	static T& out (ABI_out p)
+	static Var_type& out (ABI_out p)
 	{
 		_check_pointer (p);
 		return (Var_type&)*p;
