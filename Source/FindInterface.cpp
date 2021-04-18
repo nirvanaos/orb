@@ -29,7 +29,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-Interface* InterfaceEntry::find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, const String& id)
+Interface* InterfaceEntry::find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, String_in id)
 {
 	const InterfaceEntry* ie = 0;
 	if (id.empty ()) // On NULL id return primary interface

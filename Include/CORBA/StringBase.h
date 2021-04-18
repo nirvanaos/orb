@@ -92,6 +92,11 @@ public:
 		return this;
 	}
 
+	bool empty () const
+	{
+		return ABI <StringT <C> >::empty ();
+	}
+
 protected:
 	StringBase ()
 	{}

@@ -65,7 +65,7 @@ struct TypeByVal
 
 		ABI_in operator & () const
 		{
-			return val_;
+			return (ABI_in)val_;
 		}
 
 	private:
