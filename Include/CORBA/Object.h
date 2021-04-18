@@ -50,7 +50,7 @@ typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
 
 namespace CORBA {
 
-typedef Nirvana::Interface ImplementationDef; // Not defined, unused
+class ImplementationDef; // Not defined, unused
 typedef Nirvana::I_ptr <ImplementationDef> ImplementationDef_ptr;
 typedef Nirvana::I_var <ImplementationDef> ImplementationDef_var;
 typedef Nirvana::I_out <ImplementationDef> ImplementationDef_out;
@@ -131,7 +131,7 @@ public:
 template <class T>
 ImplementationDef_var Client <T, Object>::_get_implementation ()
 {
-	return ImplementationDef::_nil ();
+	return I_var <ImplementationDef> ();
 }
 
 template <class T>
