@@ -291,9 +291,6 @@ struct Type <Any> : public TypeVarLen <Any, true>
 }
 
 typedef Nirvana::Type <Any>::C_var Any_var;
-typedef Nirvana::Type <Any>::C_in Any_in;
-typedef Nirvana::Type <Any>::C_out Any_out;
-typedef Nirvana::Type <Any>::C_inout Any_inout;
 
 void operator <<= (Any&, Short);
 void operator <<= (Any&, UShort);

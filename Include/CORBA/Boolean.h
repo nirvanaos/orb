@@ -78,10 +78,6 @@ struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 
 };
 
-typedef Type <Boolean>::C_in Boolean_in;
-typedef Type <Boolean>::C_out Boolean_out;
-typedef Type <Boolean>::C_inout Boolean_inout;
-
 }
 }
 

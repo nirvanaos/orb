@@ -274,14 +274,6 @@ using BoundedWString = BoundedStringT <WChar, bound>;
 
 }
 
-typedef typename Nirvana::Type <Nirvana::StringT <Char> >::C_out String_out;
-typedef typename Nirvana::Type <Nirvana::StringT <WChar> >::C_out WString_out;
-typedef typename Nirvana::Type <Nirvana::StringT <Char> >::C_inout String_inout;
-typedef typename Nirvana::Type <Nirvana::StringT <WChar> >::C_inout WString_inout;
-
-// For String_in and WString_in see StringBase.h
-// String_var and WString_var classes are defined in String_compat.h
-
 }
 
 #endif

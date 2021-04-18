@@ -64,10 +64,16 @@ public:
 	}
 };
 
+namespace Nirvana {
+
+template <>
+struct Type < ::CORBA::Environment> : TypeLocal < ::CORBA::Environment>
+{};
+
+}
+
 typedef Environment* Environment_ptr;
-typedef Nirvana::LocalImpl <Environment>::_var_type Environment_var;
-typedef Nirvana::LocalImpl <Environment>::_inout_type Environment_inout;
-typedef Nirvana::LocalImpl <Environment>::_out_type Environment_out;
+typedef Environment::_var_type Environment_var;
 
 }
 

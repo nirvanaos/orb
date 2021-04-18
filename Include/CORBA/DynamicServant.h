@@ -37,7 +37,6 @@ namespace Nirvana {
 class DynamicServant;
 typedef I_ptr <DynamicServant> DynamicServant_ptr;
 typedef I_var <DynamicServant> DynamicServant_var;
-typedef I_out <DynamicServant> DynamicServant_out;
 
 template <>
 struct Type <DynamicServant> : TypeItf <DynamicServant>

@@ -39,14 +39,10 @@ namespace CORBA {
 class AbstractBase;
 typedef Nirvana::I_ptr <AbstractBase> AbstractBase_ptr;
 typedef Nirvana::I_var <AbstractBase> AbstractBase_var;
-typedef Nirvana::I_out <AbstractBase> AbstractBase_out;
-typedef Nirvana::I_inout <AbstractBase> AbstractBase_inout;
 
 class Object;
 typedef Nirvana::I_ptr <Object> Object_ptr;
 typedef Nirvana::I_var <Object> Object_var;
-typedef Nirvana::I_out <Object> Object_out;
-typedef Nirvana::I_inout <Object> Object_inout;
 
 class ValueBase;
 

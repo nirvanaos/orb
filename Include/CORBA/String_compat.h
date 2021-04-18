@@ -116,12 +116,12 @@ public:
 
 	C_inout inout ()
 	{
-		return String_inout <C> (*this);
+		return C_inout (*this);
 	}
 
 	C_out out ()
 	{
-		return String_out <C> (*this);
+		return C_out (*this);
 	}
 
 	StringT <C> _retn ()

@@ -35,7 +35,6 @@ namespace Nirvana {
 class ReferenceCounter;
 typedef I_ptr <ReferenceCounter> ReferenceCounter_ptr;
 typedef I_var <ReferenceCounter> ReferenceCounter_var;
-typedef I_out <ReferenceCounter> ReferenceCounter_out;
 
 template <>
 struct Type <ReferenceCounter> : TypeItf <ReferenceCounter>

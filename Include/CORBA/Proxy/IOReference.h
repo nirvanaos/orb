@@ -85,12 +85,10 @@ namespace Nirvana {
 class Marshal;
 typedef I_ptr <Marshal> Marshal_ptr;
 typedef I_var <Marshal> Marshal_var;
-typedef I_out <Marshal> Marshal_out;
 
 class Unmarshal;
 typedef I_ptr <Unmarshal> Unmarshal_ptr;
 typedef I_var <Unmarshal> Unmarshal_var;
-typedef I_out <Unmarshal> Unmarshal_out;
 
 struct OperationIndex
 {
@@ -103,7 +101,6 @@ template <> struct Type <OperationIndex> : TypeFixLen <OperationIndex> {};
 class IOReference;
 typedef I_ptr <IOReference> IOReference_ptr;
 typedef I_var <IOReference> IOReference_var;
-typedef I_out <IOReference> IOReference_out;
 
 template <>
 struct Type <IOReference> : TypeItf <IOReference>

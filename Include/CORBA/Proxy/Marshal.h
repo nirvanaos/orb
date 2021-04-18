@@ -79,7 +79,6 @@ namespace Nirvana {
 class Marshal;
 typedef I_ptr <Marshal> Marshal_ptr;
 typedef I_var <Marshal> Marshal_var;
-typedef I_out <Marshal> Marshal_out;
 
 template <>
 struct Type <Marshal> : TypeItf <Marshal>

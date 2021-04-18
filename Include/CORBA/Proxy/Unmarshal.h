@@ -59,7 +59,6 @@ namespace Nirvana {
 class Unmarshal;
 typedef I_ptr <Unmarshal> Unmarshal_ptr;
 typedef I_var <Unmarshal> Unmarshal_var;
-typedef I_out <Unmarshal> Unmarshal_out;
 
 template <>
 struct Type <Unmarshal> : TypeItf <Unmarshal>

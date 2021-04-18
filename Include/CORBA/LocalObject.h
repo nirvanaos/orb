@@ -34,8 +34,6 @@ namespace CORBA {
 class LocalObject;
 typedef Nirvana::I_ptr <LocalObject> LocalObject_ptr;
 typedef Nirvana::I_var <LocalObject> LocalObject_var;
-typedef Nirvana::I_out <LocalObject> LocalObject_out;
-typedef Nirvana::I_inout <LocalObject> LocalObject_inout;
 
 namespace Nirvana {
 

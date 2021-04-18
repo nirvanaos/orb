@@ -36,17 +36,10 @@ namespace Nirvana {
 class IOReference;
 typedef I_ptr <IOReference> IOReference_ptr;
 typedef I_var <IOReference> IOReference_var;
-typedef I_out <IOReference> IOReference_out;
-
-class DynamicServant;
-typedef I_ptr <DynamicServant> DynamicServant_ptr;
-typedef I_var <DynamicServant> DynamicServant_var;
-typedef I_out <DynamicServant> DynamicServant_out;
 
 class ProxyFactory;
 typedef I_ptr <ProxyFactory> ProxyFactory_ptr;
 typedef I_var <ProxyFactory> ProxyFactory_var;
-typedef I_out <ProxyFactory> ProxyFactory_out;
 
 /*
 ~~~{.idl}

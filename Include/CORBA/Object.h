@@ -53,14 +53,10 @@ namespace CORBA {
 class ImplementationDef; // Not defined, unused
 typedef Nirvana::I_ptr <ImplementationDef> ImplementationDef_ptr;
 typedef Nirvana::I_var <ImplementationDef> ImplementationDef_var;
-typedef Nirvana::I_out <ImplementationDef> ImplementationDef_out;
-typedef Nirvana::I_inout <ImplementationDef> ImplementationDef_inout;
 
 typedef Object InterfaceDef; // TODO: Not defined yet
 typedef Nirvana::I_ptr <InterfaceDef> InterfaceDef_ptr;
 typedef Nirvana::I_var <InterfaceDef> InterfaceDef_var;
-typedef Nirvana::I_out <InterfaceDef> InterfaceDef_out;
-typedef Nirvana::I_inout <InterfaceDef> InterfaceDef_inout;
 
 namespace Nirvana {
 

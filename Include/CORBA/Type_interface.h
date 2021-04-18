@@ -256,8 +256,6 @@ public:
 };
 
 typedef I_var <Interface> Interface_var;
-typedef I_out <Interface> Interface_out;
-typedef I_inout <Interface> Interface_inout;
 
 template <class I>
 struct TypeItfBase

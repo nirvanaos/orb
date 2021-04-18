@@ -39,7 +39,6 @@ namespace Nirvana {
 class ObjectFactory;
 typedef I_ptr <ObjectFactory> ObjectFactory_ptr;
 typedef I_var <ObjectFactory> ObjectFactory_var;
-typedef I_out <ObjectFactory> ObjectFactory_out;
 
 struct StatelessCreationFrame
 {

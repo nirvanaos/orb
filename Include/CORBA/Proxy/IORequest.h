@@ -63,7 +63,6 @@ namespace Nirvana {
 class IORequest;
 typedef I_ptr <IORequest> IORequest_ptr;
 typedef I_var <IORequest> IORequest_var;
-typedef I_out <IORequest> IORequest_out;
 
 
 NIRVANA_BRIDGE_BEGIN (IORequest, CORBA_NIRVANA_REPOSITORY_ID ("IORequest"))
@@ -102,7 +101,7 @@ void Client <T, IORequest>::exception (Exception&& e) NIRVANA_NOEXCEPT
 	any <<= (std::move (e));
 	Environment* _env = nullptr;
 	Bridge <IORequest>& _b (T::_get_bridge (*_env));
-	(_b._epv ().epv.exception) (&_b, &Any_inout (any));
+	(_b._epv ().epv.exception) (&_b, &Type <Any>::C_inout (any));
 }
 
 template <class T>

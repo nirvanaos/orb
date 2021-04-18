@@ -29,6 +29,7 @@
 
 #include "primitive_types.h"
 #include "Servant_var.h"
+#include "Type_forward.h"
 
 namespace CORBA {
 namespace Nirvana {
@@ -87,6 +88,14 @@ public:
 
 private:
 	ULong ref_cnt_;
+};
+
+template <class T>
+struct TypeLocal
+{
+	typedef typename LocalImpl <T>::_var_type Var;
+	typedef typename LocalImpl <T>::_out_type C_out;
+	typedef typename LocalImpl <T>::_inout_type C_inout;
 };
 
 }
