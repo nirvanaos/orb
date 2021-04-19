@@ -29,8 +29,7 @@
 #define NIRVANA_ORB_POA_S_H_
 
 #include "POA.h"
-#include "Object_s.h"
-#include "ImplementationLocal.h"
+#include "ServantBase_s.h"
 
 namespace CORBA {
 namespace Nirvana {
