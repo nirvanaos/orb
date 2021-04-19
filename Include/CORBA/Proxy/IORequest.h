@@ -55,10 +55,12 @@ pseudo interface IORequest
 #ifndef NIRVANA_ORB_IOREQUEST_H_
 #define NIRVANA_ORB_IOREQUEST_H_
 
-#include "Marshal.h"
-
 namespace CORBA {
 namespace Nirvana {
+
+class Marshal;
+typedef I_ptr <Marshal> Marshal_ptr;
+typedef I_var <Marshal> Marshal_var;
 
 class IORequest;
 typedef I_ptr <IORequest> IORequest_ptr;

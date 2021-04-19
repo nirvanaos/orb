@@ -78,6 +78,6 @@ template <class I> struct ProxyTraits;
 }
 }
 
-#define IMPLEMENT_PROXY_FACTORY(ns, I) template <> const Char ProxyFactoryImpl <ns::I>::name_ [] = #I
+#define IMPLEMENT_PROXY_FACTORY(ns, I) template <> const Char ProxyFactoryImpl <ns##I>::name_ [] = #I
 
 #endif
