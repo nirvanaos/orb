@@ -29,12 +29,15 @@
 #ifndef NIRVANA_ORB_OBJECTFACTORY_H_
 #define NIRVANA_ORB_OBJECTFACTORY_H_
 
-#include "ServantBase.h"
-#include "DynamicServant.h"
 #include "LocalObject.h"
+#include "ServantBase.h"
 
 namespace CORBA {
 namespace Nirvana {
+
+class DynamicServant;
+typedef I_ptr <DynamicServant> DynamicServant_ptr;
+typedef I_var <DynamicServant> DynamicServant_var;
 
 class ObjectFactory;
 typedef I_ptr <ObjectFactory> ObjectFactory_ptr;

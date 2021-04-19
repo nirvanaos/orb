@@ -103,8 +103,6 @@ struct Type < ::PortableServer::POA> : TypeLocalObject < ::PortableServer::POA>
 
 namespace PortableServer {
 
-typedef ::CORBA::Nirvana::I_ptr <ServantBase> Servant;
-
 class POA : public ::CORBA::Nirvana::ClientInterface <POA, CORBA::Object>
 {
 public:

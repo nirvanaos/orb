@@ -27,6 +27,8 @@
 #define NIRVANA_ORB_SERVANTMEMORY_H_
 
 #include "core_objects.h"
+#include "Client.h"
+#include "ObjectFactory.h"
 
 namespace CORBA {
 namespace Nirvana {

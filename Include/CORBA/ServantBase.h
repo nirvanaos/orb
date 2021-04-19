@@ -28,9 +28,40 @@
 #ifndef NIRVANA_ORB_SERVANTBASE_H_
 #define NIRVANA_ORB_SERVANTBASE_H_
 
-#include "POA_c.h"
+#include "AbstractBase.h"
+#include "ReferenceCounter.h"
+
+namespace PortableServer {
+
+class POA;
+typedef ::CORBA::Nirvana::I_ptr <POA> POA_ptr;
+typedef ::CORBA::Nirvana::I_var <POA> POA_var;
+
+class ServantBase;
+
+}
 
 namespace CORBA {
+namespace Nirvana {
+
+template <> class ::CORBA::Nirvana::I_ptr < ::PortableServer::ServantBase>;
+
+}
+}
+
+namespace PortableServer {
+
+typedef ::CORBA::Nirvana::I_ptr <ServantBase> Servant;
+typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
+
+}
+
+namespace CORBA {
+
+typedef Object InterfaceDef; // TODO: Not defined yet
+typedef Nirvana::I_ptr <InterfaceDef> InterfaceDef_ptr;
+typedef Nirvana::I_var <InterfaceDef> InterfaceDef_var;
+
 namespace Nirvana {
 
 template <>

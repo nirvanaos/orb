@@ -28,8 +28,7 @@
 #ifndef NIRVANA_ORB_POA_H_
 #define NIRVANA_ORB_POA_H_
 
-#include "ServantBase.h"
-#include "TypeCode.h"
+#include "POA_c.h"
 
 namespace CORBA {
 namespace Nirvana {

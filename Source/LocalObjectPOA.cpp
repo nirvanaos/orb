@@ -24,6 +24,7 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/LocalObjectPOA.h>
+#include <CORBA/POA_c.h>
 
 namespace CORBA {
 namespace Nirvana {

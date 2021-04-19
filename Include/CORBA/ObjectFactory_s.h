@@ -27,8 +27,6 @@
 #define NIRVANA_ORB_OBJECTFACTORY_S_H_
 
 #include "ObjectFactory.h"
-#include "ImplementationPseudo.h"
-#include "ImplementationPseudoStatic.h"
 
 // ObjectFactory skeleton
 

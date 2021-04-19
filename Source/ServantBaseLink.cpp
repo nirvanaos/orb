@@ -25,6 +25,8 @@
 */
 #include <CORBA/ServantBaseLink.h>
 #include <CORBA/core_objects.h>
+#include <CORBA/POA_c.h>
+#include <CORBA/ObjectFactory.h>
 
 namespace CORBA {
 namespace Nirvana {

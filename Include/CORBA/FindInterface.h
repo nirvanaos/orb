@@ -74,7 +74,7 @@ class FindInterface
 {
 public:
 	template <class S>
-	static Interface* find (S& servant, const String_in id)
+	static Interface* find (S& servant, String_in id)
 	{
 		return InterfaceFinder <S, Primary, I...>::find (servant, id);
 	}
