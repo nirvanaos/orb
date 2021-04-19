@@ -72,13 +72,13 @@ TypeCode_ptr Type <TypeCode>::type_code ()
 template <class I> inline
 void TypeItf <I>::unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_var <I>& dst)
 {
-	dst = static_cast <I*> (unmarshaler->unmarshal_interface (src, I::repository_id_));
+	dst = static_cast <I*> (&unmarshaler->unmarshal_interface (src, I::repository_id_)._retn ());
 }
 
 template <class I>
 void TypeItf <I>::marshal_in (I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst)
 {
-	if (marshaler->context () < MarshalContext::OTHER_PROTECTION_DOMAIN)
+	if (marshaler->marshal_context () < MarshalContext::OTHER_PROTECTION_DOMAIN)
 		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
 	else
 		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (Object_ptr (src));
@@ -183,7 +183,7 @@ void Type <Sequence <T> >::marshal_out (Var& src, Marshal_ptr marshaler, ABI& ds
 			T* sp = src.data (), * end = sp + src.size ();
 			T_ABI* dp;
 			size_t cb;
-			MarshalContext mctx = marshaler->context ();
+			MarshalContext mctx = marshaler->marshal_context ();
 			if (MarshalContext::SHARED_MEMORY == mctx)
 				dp = (T_ABI*)sp;
 			else {

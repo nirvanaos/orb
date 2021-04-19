@@ -1,45 +1,24 @@
-/// \file MarshalContext.h
-/*
-* Nirvana IDL support library.
-*
-* This is a part of the Nirvana project.
-*
-* Author: Igor Popov
-*
-* Copyright (c) 2021 Igor Popov.
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as published by
-* the Free Software Foundation; either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public
-* License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-*
-* Send comments and/or bug reports to:
-*  popov.nirvana@gmail.com
-*/
-#ifndef NIRVANA_ORB_MARSHALCONTEXT_H_
-#define NIRVANA_ORB_MARSHALCONTEXT_H_
+// This file was generated from "MarshalContext.idl"
+// Nirvana IDL compiler version 1.0
+#ifndef IDL_MARSHALCONTEXT_H_
+#define IDL_MARSHALCONTEXT_H_
 
 namespace CORBA {
 namespace Nirvana {
 
-/// \brief Type of the inter-domain marshal context.
-enum class MarshalContext : ABI_enum
+enum class MarshalContext : ::CORBA::Nirvana::ABI_enum
 {
-	SHARED_MEMORY,            ///< Both domains share common memory heap.
-	SHARED_PROTECTION_DOMAIN, ///< Different heaps in the common protection domain.
-	OTHER_PROTECTION_DOMAIN   ///< Different protection domains.
+	SHARED_MEMORY,
+	SHARED_PROTECTION_DOMAIN,
+	OTHER_PROTECTION_DOMAIN
 };
+extern const ::Nirvana::ImportInterfaceT < ::CORBA::TypeCode> _tc_MarshalContext;
 
-template <> struct Type <MarshalContext> : 
-	TypeEnum <MarshalContext, MarshalContext::OTHER_PROTECTION_DOMAIN>
+template <>
+const Char RepIdOf <MarshalContext>::repository_id_ [] = "IDL:CORBA/Nirvana/MarshalContext:1.0";
+
+template <>
+struct Type <MarshalContext> : public TypeEnum <MarshalContext, MarshalContext::OTHER_PROTECTION_DOMAIN>
 {};
 
 }

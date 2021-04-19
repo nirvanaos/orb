@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,15 +24,28 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/Server.h>
 
-namespace CORBA {
-namespace Nirvana {
+module Nirvana{
 
-void LocalObjectLink::_construct (Bridge <AbstractBase>& ab)
+native Pointer;
+native ConstPointer;
+native Size;
+native UIntPtr;
+
+};
+
+module CORBA {
+module Nirvana {
+
+/// \brief Type of the inter-domain marshal context.
+enum MarshalContext
 {
-	core_object_ = g_object_factory->create_local_object (this, AbstractBase_ptr (&static_cast <AbstractBase&> (ab)));
-}
+	SHARED_MEMORY,            ///< Both domains share common memory heap.
+	SHARED_PROTECTION_DOMAIN, ///< Different heaps in the common protection domain.
+	OTHER_PROTECTION_DOMAIN   ///< Different protection domains.
+};
 
-}
-}
+native Interface;
+
+};
+};

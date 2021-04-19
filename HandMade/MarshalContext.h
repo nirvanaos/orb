@@ -1,3 +1,4 @@
+/// \file MarshalContext.h
 /*
 * Nirvana IDL support library.
 *
@@ -23,15 +24,25 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/Server.h>
+#ifndef NIRVANA_ORB_MARSHALCONTEXT_H_
+#define NIRVANA_ORB_MARSHALCONTEXT_H_
 
 namespace CORBA {
 namespace Nirvana {
 
-void LocalObjectLink::_construct (Bridge <AbstractBase>& ab)
+/// \brief Type of the inter-domain marshal context.
+enum class MarshalContext : ABI_enum
 {
-	core_object_ = g_object_factory->create_local_object (this, AbstractBase_ptr (&static_cast <AbstractBase&> (ab)));
-}
+	SHARED_MEMORY,            ///< Both domains share common memory heap.
+	SHARED_PROTECTION_DOMAIN, ///< Different heaps in the common protection domain.
+	OTHER_PROTECTION_DOMAIN   ///< Different protection domains.
+};
+
+template <> struct Type <MarshalContext> : 
+	TypeEnum <MarshalContext, MarshalContext::OTHER_PROTECTION_DOMAIN>
+{};
 
 }
 }
+
+#endif

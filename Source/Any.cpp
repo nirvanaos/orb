@@ -70,7 +70,7 @@ void Type <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst)
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
 			psrc = src.large_pointer ();
-			if (MarshalContext::SHARED_MEMORY == marshaler->context ()) {
+			if (MarshalContext::SHARED_MEMORY == marshaler->marshal_context ()) {
 				dst = src;
 				src.reset ();
 				pdst = dst.large_pointer ();
@@ -96,7 +96,7 @@ void Type <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
 	if (!ptc)
 		dst.reset ();
 	else {
-		TypeCode_var tc (static_cast <TypeCode*> (unmarshaler->unmarshal_interface (ptc, TypeCode::repository_id_)));
+		TypeCode_var tc (static_cast <TypeCode*> (&unmarshaler->unmarshal_interface (ptc, TypeCode::repository_id_)._retn ()));
 		::Nirvana::ConstPointer psrc;
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {

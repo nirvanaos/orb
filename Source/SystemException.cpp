@@ -24,7 +24,6 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/CORBA.h>
-#include <Nirvana/OLF.h>
 #include <algorithm>
 
 namespace CORBA {

@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,15 +24,21 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/Server.h>
+#include "MarshalContext.idl"
 
-namespace CORBA {
-namespace Nirvana {
+module CORBA {
+module Nirvana {
 
-void LocalObjectLink::_construct (Bridge <AbstractBase>& ab)
+/// Unmarshals data between objects in the same platform domain.
+pseudo interface Unmarshal
 {
-	core_object_ = g_object_factory->create_local_object (this, AbstractBase_ptr (&static_cast <AbstractBase&> (ab)));
-}
+	/// Returns marshal context.
+	/// Used for proxy code optimization.
+	readonly attribute MarshalContext marshal_context;
 
-}
-}
+	void adopt_memory (in ::Nirvana::ConstPointer p, in ::Nirvana::Size size);
+	Interface unmarshal_interface (in ::Nirvana::ConstPointer marshal_data, in string iid);
+};
+
+};
+};

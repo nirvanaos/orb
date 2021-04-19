@@ -24,7 +24,6 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/Proxy/TypeCodeImpl.h>
-//#include <string.h>
 
 namespace CORBA {
 namespace Nirvana {
