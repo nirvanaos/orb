@@ -46,7 +46,7 @@ protected:
 	{
 		Interface* ret = 0;
 		try {
-			ret = Type <Interface>::VT_ret (S::_implementation (base)._query_interface (Type <String>::in (id)));
+			ret = TypeItf <Interface>::VT_ret (S::_implementation (base)._query_interface (Type <String>::in (id)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {

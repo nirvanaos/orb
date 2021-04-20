@@ -72,7 +72,7 @@ TypeCode_ptr Type <TypeCode>::type_code ()
 template <class I> inline
 void TypeItf <I>::unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_var <I>& dst)
 {
-	dst = static_cast <I*> (&unmarshaler->unmarshal_interface (src, I::repository_id_)._retn ());
+	dst = unmarshaler->unmarshal_interface <I> (src);
 }
 
 template <class I>

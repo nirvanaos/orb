@@ -98,22 +98,22 @@ struct TypeByVal
 
 	static ABI_ret ret (Var v)
 	{
-		return v;
+		return (ABI_ret)v;
 	}
 
 	static ABI_ret ret ()
 	{
-		return Var ();
+		return ABI_ret ();
 	}
 
 	static ABI_VT_ret VT_ret (Var v)
 	{
-		return v;
+		return (ABI_ret)v;
 	}
 
 	static ABI_VT_ret VT_ret ()
 	{
-		return Var ();
+		return ABI_ret ();
 	}
 
 	static const bool has_marshal = false;

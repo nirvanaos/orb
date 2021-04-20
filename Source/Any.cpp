@@ -96,7 +96,7 @@ void Type <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
 	if (!ptc)
 		dst.reset ();
 	else {
-		TypeCode_var tc (static_cast <TypeCode*> (&unmarshaler->unmarshal_interface (ptc, TypeCode::repository_id_)._retn ()));
+		TypeCode_var tc (unmarshaler->unmarshal_interface <TypeCode> (ptc));
 		::Nirvana::ConstPointer psrc;
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {

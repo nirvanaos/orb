@@ -47,9 +47,9 @@ protected:
 		Interface** deleter, Interface* env)
 	{
 		try {
-			return Type <Interface>::VT_ret (S::_implementation (obj).create_proxy (
-				Type <IOReference>::in (target), interface_idx,
-				Type <DynamicServant>::out (deleter)));
+			return TypeItf <Interface>::VT_ret (S::_implementation (obj).create_proxy (
+				TypeItf <IOReference>::in (target), interface_idx,
+				TypeItf <DynamicServant>::out (deleter)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {

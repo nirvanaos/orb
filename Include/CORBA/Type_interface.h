@@ -356,7 +356,7 @@ struct TypeItf : TypeItfBase <I>
 };
 
 template <>
-struct Type <Interface> : TypeItfBase <Interface>
+struct TypeItf <Interface> : TypeItfBase <Interface>
 {
 	static const bool has_check = false;
 
@@ -386,6 +386,10 @@ struct Type <Interface> : TypeItfBase <Interface>
 		return reinterpret_cast <I_var <Interface>&> (*p);
 	}
 };
+
+template <>
+struct Type <Interface> : TypeItf <Interface>
+{};
 
 template <class I>
 struct Type <I_var <I> > : public TypeItf <I>

@@ -123,11 +123,6 @@ struct TypeEnum : TypeByVal <T, ABI_enum, T>
 		_check_pointer (p);
 		return (Var&)*p;
 	}
-
-	static ABI_ret ret (Var val)
-	{
-		return (ABI_ret)val;
-	}
 };
 
 }

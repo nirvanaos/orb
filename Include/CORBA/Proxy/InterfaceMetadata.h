@@ -66,7 +66,9 @@ void RqProcWrapper (Interface* servant, Interface* call,
 			proc (&static_cast <I&> (*servant), rq, in_params, Type <Unmarshal>::inout (unmarshaler), out_params);
 			rq->success ();
 		} catch (Exception & e) {
-			rq->exception (std::move (e));
+			Any any;
+			any <<= std::move (e);
+			rq->set_exception (any);
 		}
 	} catch (...) {
 	}

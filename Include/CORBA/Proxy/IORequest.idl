@@ -1,6 +1,5 @@
-/// \file
 /*
-* Nirvana IDL support library.
+* Nirvana runtime library.
 *
 * This is a part of the Nirvana project.
 *
@@ -24,20 +23,27 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "MarshalContext.idl"
-
-module CORBA {
+module CORBA{
 module Nirvana {
 
-/// Unmarshals data between objects in the same platform domain.
-pseudo interface Unmarshal
-{
-	/// Returns marshal context.
-	/// Used for proxy code optimization.
-	readonly attribute MarshalContext marshal_context;
+interface Marshal;
 
-	void adopt_memory (in ::Nirvana::ConstPointer p, in ::Nirvana::Size size);
-	Interface unmarshal_interface (in ::Nirvana::ConstPointer marshal_data, in string interface_id);
+/// \brief Interoperable Object Request.
+///        Interface to the implementation of the some Inter-ORB protocol.
+pseudo interface IORequest
+{
+	/// Returns a marshaler associated with this call.
+	/// If the marshaler does not exist, it will be created.
+	/// Caller mustn't duplicate this interface.
+	readonly attribute Marshal marshaler;
+
+	/// Return exception to caller.
+	void set_exception (inout any e);
+
+	/// Marks request as successful.
+	/// If request procedure return without the explicit call of success (), request will
+	/// return UNKNOWN exception to caller.
+	void success ();
 };
 
 };
