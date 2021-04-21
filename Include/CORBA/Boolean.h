@@ -44,11 +44,6 @@ typedef size_t ABI_boolean;
 template <>
 struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 {
-	typedef TypeByVal <Boolean, ABI_boolean, Char> Base;
-	typedef Boolean Var;
-	typedef Boolean ConstRef;
-	typedef ABI_boolean ABI;
-
 	class C_inout
 	{
 	public:

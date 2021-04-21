@@ -42,6 +42,7 @@ struct TypeByVal
 	typedef T Var;
 	typedef TMember Member;
 	typedef Var ConstRef; // By value
+	typedef Var S_in; // By value
 
 	// ABI data types
 	typedef TABI ABI;
@@ -81,7 +82,7 @@ struct TypeByVal
 
 	static Var in (ABI_in v)
 	{
-		return v;
+		return (Var)v;
 	}
 
 	static Var& out (ABI_out p)
