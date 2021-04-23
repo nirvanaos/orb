@@ -54,6 +54,11 @@ public:
 	// ProxyFactory
 	static const InterfaceMetadata metadata_;
 
+	static InterfaceMetadataPtr __get_metadata (Bridge <ProxyFactory>* obj, Interface* env)
+	{
+		return &metadata_;
+	}
+
 	Interface_ptr create_proxy (
 		IOReference_ptr proxy_manager, UShort interface_idx,
 		DynamicServant_var& deleter)

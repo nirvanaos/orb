@@ -39,6 +39,10 @@ class Environment :
 	public Nirvana::LocalImpl <Environment>
 {
 public:
+	using Nirvana::LocalImpl <Environment>::_ptr_type;
+	using Nirvana::LocalImpl <Environment>::_var_type;
+	using Nirvana::LocalImpl <Environment>::_out_type;
+
 	Environment () {}
 
 	Environment (Environment&& src) NIRVANA_NOEXCEPT
@@ -71,9 +75,10 @@ struct Type < ::CORBA::Environment> : TypeLocal < ::CORBA::Environment>
 {};
 
 }
-
+#ifndef STRICT_CORBA_CPP11
 typedef Environment* Environment_ptr;
 typedef Environment::_var_type Environment_var;
+#endif
 
 }
 

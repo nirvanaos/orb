@@ -123,7 +123,7 @@ public:
 		if (src.p_)
 			*this = static_cast <I_ptr> (*src.p_);
 		else
-			this->p_ = 0;
+			this->p_ = nullptr;
 	}
 
 	template <class I1>
@@ -203,7 +203,7 @@ public:
 
 typedef I_ptr <Interface> Interface_ptr;
 
-inline I_ptr <Interface> Interface::_nil ()
+inline I_ptr <Interface> Interface::_nil () NIRVANA_NOEXCEPT
 {
 	return I_ptr <Interface> ((Interface*)nullptr);
 }

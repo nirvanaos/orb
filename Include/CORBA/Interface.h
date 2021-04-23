@@ -37,6 +37,7 @@ namespace Nirvana {
 template <class I> class I_ptr;
 class Interface;
 template <> class I_ptr <Interface>;
+template <class I> class I_var;
 
 /// Base for all interface ABIs.
 /// Provides life-cycle management and interface identification.
@@ -53,23 +54,27 @@ public:
 		void (*release) (Interface*);
 	};
 
-	Interface (const EPV& epv) :
+	Interface (const EPV& epv) NIRVANA_NOEXCEPT :
 		_epv_ref (epv)
 	{}
 
-	const EPV& _epv () const
+	const EPV& _epv () const NIRVANA_NOEXCEPT
 	{
 		return _epv_ref;
 	}
 
-	Interface& operator = (const Interface&)
+	Interface& operator = (const Interface&) NIRVANA_NOEXCEPT
 	{
 		return *this;	// Do nothing
 	}
 
 	static Interface* _check (Interface* obj, String_in interface_id);
 
-	static I_ptr <Interface> _nil ();
+	typedef I_ptr <Interface> _ptr_type;
+	typedef I_var <Interface> _var_type;
+	typedef _var_type& _out_type;
+
+	static I_ptr <Interface> _nil () NIRVANA_NOEXCEPT;
 
 private:
 	const EPV& _epv_ref;

@@ -41,7 +41,7 @@ class LocalImpl
 public:
 	typedef T* _ptr_type;
 	typedef PortableServer::Servant_var <T> _var_type;
-	typedef PortableServer::Servant_out <T> _out_type;
+	typedef _var_type& _out_type;
 
 	LocalImpl () :
 		ref_cnt_ (1)
@@ -93,7 +93,9 @@ template <class T>
 struct TypeLocal
 {
 	typedef typename LocalImpl <T>::_var_type Var;
-	typedef typename LocalImpl <T>::_out_type C_out;
+	typedef const Var& ConstRef;
+	typedef ConstRef C_in;
+	typedef typename PortableServer::Servant_out <T> C_out;
 	typedef Var& C_inout;
 };
 

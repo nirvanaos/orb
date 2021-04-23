@@ -112,6 +112,13 @@ struct InterfaceMetadata
 	CountedArray <Operation> operations;
 };
 
+// native InterfaceMetadataPtr;
+typedef const InterfaceMetadata* InterfaceMetadataPtr;
+
+template <>
+struct Type <InterfaceMetadataPtr> : TypeByVal <InterfaceMetadataPtr>
+{};
+
 }
 }
 
