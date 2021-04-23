@@ -1,7 +1,32 @@
-// This file was generated from "IORequest.idl"
-// Nirvana IDL compiler version 1.0
-#ifndef IDL_IOREQUEST_S_H_
-#define IDL_IOREQUEST_S_H_
+/// \file IORequest_s.h
+/*
+* Nirvana IDL support library.
+*
+* This is a part of the Nirvana project.
+*
+* Author: Igor Popov
+*
+* Copyright (c) 2021 Igor Popov.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+*
+* Send comments and/or bug reports to:
+*  popov.nirvana@gmail.com
+*/
+#ifndef NIRVANA_ORB_IOREQUEST_S_H_
+#define NIRVANA_ORB_IOREQUEST_S_H_
+
 #include "IORequest.h"
 
 namespace CORBA {
@@ -14,22 +39,22 @@ public:
 	static const typename Bridge <IORequest>::EPV epv_;
 
 protected:
-	static Interface* __get_marshaler (Bridge <IORequest>* _b, Interface* _env)
+	static Interface* _get_marshaler (Bridge <IORequest>* _b, Interface* _env)
 	{
 		try {
-			return TypeItf <Marshal>::ret (S::_implementation (_b).marshaler ());
-		} catch (const Exception& e) {
+			return Type <Marshal>::VT_ret (S::_implementation (_b).marshaler ());
+		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return TypeItf <Marshal>::ret ();
+		return nullptr;
 	}
 
-	static void _set_exception (Bridge <IORequest>* _b, Type <Any>::ABI_out e, Interface* _env)
+	static void _set_exception (Bridge <IORequest>* _b, Type <Any>::ABI_out exc, Interface* _env)
 	{
 		try {
-			S::_implementation (_b).set_exception (Type <Any>::inout (e));
+			S::_implementation (_b).set_exception (Type <Any>::inout (exc));
 		} catch (const Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -41,13 +66,12 @@ protected:
 	{
 		try {
 			S::_implementation (_b).success ();
-		} catch (const Exception& e) {
+		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
 	}
-
 };
 
 template <class S>
@@ -57,37 +81,12 @@ const Bridge <IORequest>::EPV Skeleton <S, IORequest>::epv_ = {
 		S::template __duplicate <IORequest>,
 		S::template __release <IORequest>
 	},
-	{ // EPV
-		S::__get_marshaler,
+	{ // epv
+		S::_get_marshaler,
 		S::_set_exception,
 		S::_success
 	}
 };
-
-template <class S>
-class Servant <S, IORequest> : public ImplementationPseudo <S, IORequest>
-{};
-
-template <>
-class ServantPOA <IORequest> : public ImplementationPseudoPOA <IORequest>
-{
-public:
-	virtual TypeItf <Marshal>::Var marshaler () = 0;
-	virtual void set_exception (Type <Any>::Var& e) = 0;
-	virtual void success () = 0;
-};
-
-template <class S>
-class ServantStatic <S, IORequest> : public ImplementationPseudoStatic <S, IORequest>
-{};
-
-}
-}
-namespace POA_CORBA {
-namespace Nirvana {
-
-typedef ::CORBA::Nirvana::ServantPOA <CORBA::Nirvana::IORequest> IORequest;
-template <class T> using IORequest_tie = ::CORBA::Nirvana::ServantTied <T, CORBA::Nirvana::IORequest>;
 
 }
 }

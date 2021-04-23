@@ -45,7 +45,7 @@ interface Unmarshal;
 
 /// \brief Interoperable Object Reference.
 ///        Interface to the implementation of the some Inter-ORB protocol.
-interface IOReference
+abstract valuetype IOReference
 {
 	/// Creates Marshal object.
 	Marshal create_marshaler ();

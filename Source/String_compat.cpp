@@ -25,8 +25,6 @@
 */
 #include <CORBA/String_compat.h>
 
-#ifdef LEGACY_STRING_MAPPING_SUPPORT
-
 namespace CORBA {
 namespace Nirvana {
 
@@ -56,7 +54,7 @@ public:
 
 }
 
-Char* string_alloc (uint32_t len)
+Char* string_alloc (ULong len)
 {
 	return Nirvana::StringAllocator <Char>::allocate (len);
 }
@@ -71,12 +69,12 @@ void string_free (Char* s)
 	Nirvana::StringAllocator <char>::free (s);
 }
 
-WChar* wstring_alloc (uint32_t len)
+WChar* wstring_alloc (ULong len)
 {
 	return Nirvana::StringAllocator <WChar>::allocate (len);
 }
 
-WChar* wstring_dup (const wchar_t* s)
+WChar* wstring_dup (const WChar* s)
 {
 	return Nirvana::StringAllocator <WChar>::dup (s);
 }
@@ -87,6 +85,4 @@ void wstring_free (WChar* s)
 }
 
 }
-
-#endif
 

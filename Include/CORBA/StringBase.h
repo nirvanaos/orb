@@ -117,11 +117,10 @@ size_t StringBase <WChar>::_length (const WChar* s)
 	return wcslen (s);
 }
 
-}
-
 typedef const Nirvana::StringBase <Char>& String_in;
 typedef const Nirvana::StringBase <WChar>& WString_in;
 
+}
 }
 
 #endif

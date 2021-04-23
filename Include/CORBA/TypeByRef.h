@@ -89,67 +89,6 @@ struct TypeByRef
 
 	typedef C_inout C_out;
 
-	// Client T_var class for the legacy C++ IDL mapping support
-	class C_var :
-		public Var
-	{
-	public:
-		C_var ()
-		{}
-
-		C_var (const Var& v) :
-			Var (v)
-		{}
-
-		C_var (const C_var& src) :
-			Var (src)
-		{}
-
-		C_var& operator = (const Var& v)
-		{
-			if (this != &v)
-				Var::operator = (v);
-			return *this;
-		}
-
-		C_var& operator = (const C_var& v)
-		{
-			if (this != &v)
-				Var::operator = (v);
-			return *this;
-		}
-
-		Var& operator -> ()
-		{
-			return *this;
-		}
-
-		const Var& operator -> () const
-		{
-			return *this;
-		}
-
-		C_in in () const
-		{
-			return *this;
-		}
-
-		C_out out ()
-		{
-			return *this;
-		}
-
-		C_inout inout ()
-		{
-			return *this;
-		}
-
-		Var _retn ()
-		{
-			return *this;
-		}
-	};
-
 	struct C_ret : ABI_ret
 	{
 		operator const Var& () const
@@ -230,6 +169,78 @@ struct TypeByRef
 	{
 		dst = reinterpret_cast <const Var&> (src);
 	}
+
+#ifndef STRICT_CORBA_CPP11
+
+	// Client T_var class for the legacy C++ IDL mapping support
+	class C_var :
+		public Var
+	{
+	public:
+		C_var ()
+		{}
+
+		C_var (const Var& v) :
+			Var (v)
+		{}
+
+		NIRVANA_DEPRECATED
+		C_var (Var* p) : // MyStruct_var v = new MyStruct();
+			Var (*p)
+		{
+			delete p;
+		}
+
+		C_var (const C_var& src) :
+			Var (src)
+		{}
+
+		C_var& operator = (const Var& v)
+		{
+			if (this != &v)
+				Var::operator = (v);
+			return *this;
+		}
+
+		C_var& operator = (const C_var& v)
+		{
+			if (this != &v)
+				Var::operator = (v);
+			return *this;
+		}
+
+		Var& operator -> ()
+		{
+			return *this;
+		}
+
+		const Var& operator -> () const
+		{
+			return *this;
+		}
+
+		C_in in () const
+		{
+			return *this;
+		}
+
+		C_out out ()
+		{
+			return *this;
+		}
+
+		C_inout inout ()
+		{
+			return *this;
+		}
+
+		Var _retn ()
+		{
+			return std::move (static_cast <Var&> (*this));
+		}
+	};
+
+#endif
 };
 
 }

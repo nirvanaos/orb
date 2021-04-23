@@ -70,67 +70,6 @@ struct TypeVarLenBase : TypeByRef <T, TABI>
 		Var val_;
 	};
 
-	// Client T_var class for the legacy C++ IDL mapping support
-	class C_var :
-		public Var
-	{
-	public:
-		C_var ()
-		{}
-
-		C_var (const Var& v) :
-			T (v)
-		{}
-
-		C_var (const C_var& src) :
-			T (src)
-		{}
-
-		C_var& operator = (const Var& v)
-		{
-			if (this != &v)
-				Var::operator = (v);
-			return *this;
-		}
-
-		C_var& operator = (const C_var& v)
-		{
-			if (this != &v)
-				Var::operator = (v);
-			return *this;
-		}
-
-		Var& operator -> ()
-		{
-			return *this;
-		}
-
-		const Var& operator -> () const
-		{
-			return *this;
-		}
-
-		C_in in () const
-		{
-			return *this;
-		}
-
-		C_out out ()
-		{
-			return *this;
-		}
-
-		C_inout inout ()
-		{
-			return *this;
-		}
-
-		Var _retn ()
-		{
-			return std::move (static_cast <Var&> (*this));
-		}
-	};
-
 	static ABI_ret ret (Var&& v)
 	{
 		ABI_ret abi;

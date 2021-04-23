@@ -42,7 +42,6 @@ public:
 	typedef T* _ptr_type;
 	typedef PortableServer::Servant_var <T> _var_type;
 	typedef PortableServer::Servant_out <T> _out_type;
-	typedef PortableServer::Servant_var <T>& _inout_type;
 
 	LocalImpl () :
 		ref_cnt_ (1)
@@ -95,7 +94,7 @@ struct TypeLocal
 {
 	typedef typename LocalImpl <T>::_var_type Var;
 	typedef typename LocalImpl <T>::_out_type C_out;
-	typedef typename LocalImpl <T>::_inout_type C_inout;
+	typedef Var& C_inout;
 };
 
 }

@@ -30,7 +30,7 @@ interface Marshal;
 
 /// \brief Interoperable Object Request.
 ///        Interface to the implementation of the some Inter-ORB protocol.
-pseudo interface IORequest
+abstract valuetype IORequest
 {
 	/// Returns a marshaler associated with this call.
 	/// If the marshaler does not exist, it will be created.

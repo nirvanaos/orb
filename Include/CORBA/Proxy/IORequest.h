@@ -1,52 +1,97 @@
-// This file was generated from "IORequest.idl"
-// Nirvana IDL compiler version 1.0
-#ifndef IDL_IOREQUEST_H_
-#define IDL_IOREQUEST_H_
+/// \file IORequest.h
+/*
+* Nirvana IDL support library.
+*
+* This is a part of the Nirvana project.
+*
+* Author: Igor Popov
+*
+* Copyright (c) 2021 Igor Popov.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+*
+* Send comments and/or bug reports to:
+*  popov.nirvana@gmail.com
+*/
+
+/*
+~~~{.idl}
+module CORBA {
+module Nirvana {
+
+/// \brief Interoperable Object Request.
+///        Interface to the implementation of the some Inter-ORB protocol.
+abstract valuetype IORequest
+{
+	/// Returns a marshaler associated with this call.
+	/// If the marshaler does not exist, it will be created.
+	/// Caller mustn't duplicate this interface.
+	readonly attribute Marshal marshaler;
+
+	/// Return exception to caller.
+	void set_exception (inout any e);
+
+	/// Marks request as successful.
+	/// If request procedure return without the explicit call of success (), request will
+	/// return UNKNOWN exception to caller.
+	void success ();
+};
+
+}
+}
+~~~
+*/
+#ifndef NIRVANA_ORB_IOREQUEST_H_
+#define NIRVANA_ORB_IOREQUEST_H_
 
 namespace CORBA {
 namespace Nirvana {
 
 class Marshal;
-extern const ::Nirvana::ImportInterfaceT < ::CORBA::TypeCode> _tc_Marshal;
-typedef ::CORBA::Nirvana::TypeItf <Marshal>::C_ptr Marshal_ptr;
-typedef ::CORBA::Nirvana::TypeItf <Marshal>::C_var Marshal_var;
+typedef I_ptr <Marshal> Marshal_ptr;
+typedef I_var <Marshal> Marshal_var;
 
 class IORequest;
-typedef ::CORBA::Nirvana::TypeItf <IORequest>::C_ptr IORequest_ptr;
-typedef ::CORBA::Nirvana::TypeItf <IORequest>::C_var IORequest_var;
+typedef I_ptr <IORequest> IORequest_ptr;
+typedef I_var <IORequest> IORequest_var;
 
-template <>
-struct Type <IORequest> : TypeItf < IORequest>
-{};
 
-template <>
-struct Definitions < IORequest>
-{
-};
-
-NIRVANA_BRIDGE_BEGIN (IORequest, "IDL:CORBA/Nirvana/IORequest:1.0")
-Interface* (*_get_marshaler) (Bridge < IORequest>*, Interface*);
-void (*set_exception) (Bridge < IORequest>* _b, Type <Any>::ABI_out, Interface* _env);
-void (*success) (Bridge < IORequest>* _b, Interface* _env);
+NIRVANA_BRIDGE_BEGIN (IORequest, CORBA_NIRVANA_REPOSITORY_ID ("IORequest"))
+Interface* (*marshaler) (Bridge <IORequest>*, Interface*);
+void (*set_exception) (Bridge <IORequest>*, Type <Any>::ABI_out, Interface*);
+void (*success) (Bridge <IORequest>*, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
 class Client <T, IORequest> :
-	public T,
-	public Definitions <IORequest>
+	public T
 {
 public:
-	TypeItf <Marshal>::Var marshaler ();
+	TypeItf <Marshal>::ConstRef marshaler ();
 	void set_exception (Type <Any>::C_inout e);
 	void success ();
 };
 
+class IORequest : public ClientInterface <IORequest>
+{};
+
 template <class T>
-TypeItf <Marshal>::Var Client <T, IORequest>::marshaler ()
+TypeItf <Marshal>::ConstRef Client <T, IORequest>::marshaler ()
 {
 	Environment _env;
-	Bridge < IORequest>& _b (T::_get_bridge (_env));
-	TypeItf <Marshal>::C_ret _ret = (_b._epv ().epv._get_marshaler) (&_b, &_env);
+	Bridge <IORequest>& _b (T::_get_bridge (_env));
+	Type <Marshal>::C_VT_ret _ret = (_b._epv ().epv.marshaler) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -55,24 +100,18 @@ template <class T>
 void Client <T, IORequest>::set_exception (Type <Any>::C_inout e)
 {
 	Environment _env;
-	Bridge < IORequest>& _b (T::_get_bridge (_env));
-	(_b._epv ().epv.set_exception) (&_b, &e, &_env);
-	_env.check ();
+	Bridge <IORequest>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.set_exception) (&_b, &Type <Any>::C_inout (e), &_env);
 }
 
 template <class T>
 void Client <T, IORequest>::success ()
 {
 	Environment _env;
-	Bridge < IORequest>& _b (T::_get_bridge (_env));
+	Bridge <IORequest>& _b (T::_get_bridge (_env));
 	(_b._epv ().epv.success) (&_b, &_env);
 	_env.check ();
 }
-
-class IORequest : public CORBA::Nirvana::ClientInterface <IORequest>
-{
-public:
-};
 
 }
 }

@@ -33,6 +33,7 @@
 namespace CORBA {
 namespace Nirvana {
 
+/// This class provides the backward compatibility with legacy code.
 template <typename C>
 class String_var : public std::basic_string <C>
 {
@@ -40,15 +41,10 @@ public:
 	String_var ()
 	{}
 
-#ifdef LEGACY_STRING_MAPPING_SUPPORT
-
-	// TODO: Mark as deprecated
 	String_var (C* s)
 	{
 		adopt (s);
 	}
-
-#endif
 
 	String_var (const C* s)
 	{
@@ -83,17 +79,12 @@ public:
 		return *this;
 	}
 
-#ifdef LEGACY_STRING_MAPPING_SUPPORT
-
-	// TODO: Mark as deprecated
 	String_var& operator = (C* s)
 	{
 		this->release_memory ();
 		adopt (s);
 		return *this;
 	}
-
-#endif
 
 	operator C* ()
 	{
@@ -131,12 +122,8 @@ public:
 
 private:
 
-#ifdef LEGACY_STRING_MAPPING_SUPPORT
 	void adopt (C* s);
-#endif
 };
-
-#ifdef LEGACY_STRING_MAPPING_SUPPORT
 
 template <typename C>
 void String_var <C>::adopt (C* s)
@@ -151,20 +138,20 @@ void String_var <C>::adopt (C* s)
 		this->reset ();
 }
 
-#endif
-
 }
+
+#ifndef STRICT_CORBA_CPP11
 
 typedef Nirvana::String_var <Char> String_var;
 typedef Nirvana::String_var <WChar> WString_var;
-
-#ifdef LEGACY_STRING_MAPPING_SUPPORT
+typedef String_var& String_out;
+typedef WString_var& WString_out;
 
 // For compatibility with old C++ mapping specification
-Char* string_alloc (uint32_t len);
+Char* string_alloc (ULong len);
 Char* string_dup (const Char* s);
 void string_free (Char* s);
-WChar* wstring_alloc (uint32_t len);
+WChar* wstring_alloc (ULong len);
 WChar* wstring_dup (const WChar* s);
 void wstring_free (WChar* s);
 

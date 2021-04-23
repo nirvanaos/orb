@@ -290,7 +290,9 @@ struct Type <Any> : public TypeVarLen <Any, true>
 
 }
 
+#ifndef STRICT_CORBA_CPP11
 typedef Nirvana::Type <Any>::C_var Any_var;
+#endif
 
 void operator <<= (Any&, Short);
 void operator <<= (Any&, UShort);

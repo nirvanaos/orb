@@ -29,6 +29,9 @@
 #ifndef NIRVANA_ORB_CORBA_H_
 #define NIRVANA_ORB_CORBA_H_
 
+/// Define macro STRICT_CORBA_CPP11 to disable support of the legacy C++ mapping specification 1.3.
+//#define STRICT_CORBA_CPP11
+
 #include <Nirvana/NirvanaBase.h>
 #include "exceptions.h"
 #include "LocalObject.h"
