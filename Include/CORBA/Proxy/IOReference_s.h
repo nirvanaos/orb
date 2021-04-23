@@ -39,10 +39,22 @@ public:
 	static const typename Bridge <IOReference>::EPV epv_;
 
 protected:
+	static Interface* __get_object (Bridge <IOReference>* _b, Interface* _env)
+	{
+		try {
+			return TypeItf <Object>::VT_ret (S::_implementation (_b).object ());
+		} catch (const Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return nullptr;
+	}
+
 	static Interface* _create_marshaler (Bridge <IOReference>* _b, Interface* _env)
 	{
 		try {
-			return Type <Marshal>::ret (S::_implementation (_b).create_marshaler ());
+			return TypeItf <Marshal>::ret (S::_implementation (_b).create_marshaler ());
 		} catch (const Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -74,10 +86,8 @@ const Bridge <IOReference>::EPV Skeleton <S, IOReference>::epv_ = {
 		S::template __duplicate <IOReference>,
 		S::template __release <IOReference>
 	},
-	{ // base
-		S::template _wide_object
-	},
 	{ // epv
+		S::__get_object,
 		S::_create_marshaler,
 		S::_call
 	}

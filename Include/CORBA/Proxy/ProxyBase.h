@@ -44,11 +44,7 @@ class ProxyRoot : public ServantMemory
 public:
 	Bridge <Object>* _get_object (String_in iid) const
 	{
-		Environment env;
-		typename Bridge <IOReference>:: template Wide <Object>::Func func = proxy_manager_->_epv ().base;
-		Bridge <Object>* ret = (func)(&proxy_manager_, iid, &env);
-		env.check ();
-		return ret;
+		return &proxy_manager_->object ();
 	}
 
 	void _add_ref ()

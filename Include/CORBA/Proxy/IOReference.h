@@ -38,8 +38,11 @@ struct OperationIndex
 
 /// \brief Interoperable Object Reference.
 ///        Interface to the implementation of the some Inter-ORB protocol.
-pseudo interface IOReference : Object
+abstract valuetype IOReference
 {
+	/// Returns pointer to the Object implementation.
+	readonly attribute Object _object;
+
 	/// Creates Marshal object.
 	Marshal create_marshaler ();
 
@@ -107,8 +110,7 @@ struct Type <IOReference> : TypeItf <IOReference>
 {};
 
 NIRVANA_BRIDGE_BEGIN (IOReference, CORBA_NIRVANA_REPOSITORY_ID ("IOReference"))
-NIRVANA_BASE_ENTRY (CORBA::Object, CORBA_Object)
-NIRVANA_BRIDGE_EPV
+Interface* (*_get_object) (Bridge <IOReference>*, Interface*);
 Interface* (*create_marshaler) (Bridge <IOReference>*, Interface*);
 Interface* (*call) (Bridge <IOReference>*, Type <OperationIndex>::ABI_in,
 	::Nirvana::ConstPointer, ::Nirvana::Size, Interface**,
@@ -120,34 +122,46 @@ class Client <T, IOReference> :
 	public T
 {
 public:
-	Marshal_var create_marshaler ();
+	TypeItf <Object>::ConstRef object ();
+	
+	TypeItf <Marshal>::Var create_marshaler ();
 
-	Unmarshal_var call (Type <OperationIndex>::C_in op,
+	TypeItf <Unmarshal>::Var call (Type <OperationIndex>::C_in op,
 		::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size, Type <Marshal>::C_inout marshaler,
 		::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size);
 };
 
-class IOReference : public ClientInterface <IOReference, Object>
+class IOReference : public ClientInterface <IOReference>
 {};
 
 template <class T>
-Marshal_var Client <T, IOReference>::create_marshaler ()
+TypeItf <Object>::ConstRef Client <T, IOReference>::object ()
 {
 	Environment _env;
 	Bridge <IOReference>& _b (T::_get_bridge (_env));
-	I_ret <Marshal> _ret ((_b._epv ().epv.create_marshaler) (&_b, &_env));
+	TypeItf <Object>::C_VT_ret _ret ((_b._epv ().epv._get_object) (&_b, &_env));
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-Unmarshal_var Client <T, IOReference>::call (Type <OperationIndex>::C_in op,
+TypeItf <Marshal>::Var Client <T, IOReference>::create_marshaler ()
+{
+	Environment _env;
+	Bridge <IOReference>& _b (T::_get_bridge (_env));
+	TypeItf <Marshal>::C_ret _ret ((_b._epv ().epv.create_marshaler) (&_b, &_env));
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
+TypeItf <Unmarshal>::Var Client <T, IOReference>::call (Type <OperationIndex>::C_in op,
 	::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size, Type <Marshal>::C_inout marshaler,
 	::Nirvana::Pointer out_params, ::Nirvana::Size out_params_size)
 {
 	EnvironmentEx <UnknownUserException> _env;
 	Bridge <IOReference>& _b (T::_get_bridge (_env));
-	I_ret <Unmarshal> _ret ((_b._epv ().epv.call) (&_b, &op, in_params, in_params_size, &marshaler,
+	TypeItf <Unmarshal>::C_ret _ret ((_b._epv ().epv.call) (&_b, &op, in_params, in_params_size, &marshaler,
 		out_params, out_params_size, &_env));
 	_env.check ();
 	return _ret;
