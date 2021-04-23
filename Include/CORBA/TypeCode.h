@@ -52,6 +52,13 @@ const ValueModifier VM_CUSTOM = 1;
 const ValueModifier VM_ABSTRACT = 2;
 const ValueModifier VM_TRUNCATABLE = 3;
 
+class TypeCode;
+#ifdef LEGACY_CORBA_CPP
+typedef Nirvana::TypeItf <TypeCode>::C_ptr TypeCode_ptr;
+typedef Nirvana::TypeItf <TypeCode>::C_var TypeCode_var;
+typedef Nirvana::TypeItf <TypeCode>::C_var& TypeCode_out;
+#endif
+
 namespace Nirvana {
 
 template <>
@@ -118,9 +125,9 @@ class Client <T, TypeCode> :
 	public Definitions <TypeCode>
 {
 public:
-	Boolean equal (TypeCode_ptr other);
-	Boolean equivalent (TypeCode_ptr other);
-	TypeCode_var get_compact_typecode ();
+	Boolean equal (I_ptr <TypeCode> other);
+	Boolean equivalent (I_ptr <TypeCode> other);
+	I_var <TypeCode> get_compact_typecode ();
 	TCKind kind ();
 
 	// for tk_objref, tk_struct, tk_union, tk_enum, tk_alias,
@@ -133,18 +140,18 @@ public:
 	// and tk_except
 	ULong member_count (); // raises (BadKind);
 	String member_name (ULong index); // raises (BadKind, Bounds);
-	TypeCode_var member_type (ULong index); // raises (BadKind, Bounds);
+	I_var <TypeCode> member_type (ULong index); // raises (BadKind, Bounds);
 
 	// for tk_union
 	Any member_label (ULong index); // raises (BadKind, Bounds);
-	TypeCode_var discriminator_type (); // raises (BadKind);
+	I_var <TypeCode> discriminator_type (); // raises (BadKind);
 	Long default_index (); // raises (BadKind);
 
 	// for tk_string, tk_sequence, and tk_array
 	ULong length (); // raises (BadKind);
 
 	// for tk_sequence, tk_array, tk_value_box and tk_alias
-	TypeCode_var content_type (); // raises (BadKind);
+	I_var <TypeCode> content_type (); // raises (BadKind);
 
 	// for tk_fixed
 	UShort fixed_digits (); // raises (BadKind);
@@ -153,7 +160,7 @@ public:
 	// for tk_value
 	Visibility member_visibility (ULong index); // raises (BadKind, Bounds);
 	ValueModifier type_modifier (); // raises (BadKind);
-	TypeCode_var concrete_base_type (); // raises (BadKind);
+	I_var <TypeCode> concrete_base_type (); // raises (BadKind);
 
 	// Nirvana extensions
 	// NOTE: For exceptions, all methods below are related to the exception data, not the exception itself.
@@ -182,7 +189,7 @@ public:
 };
 
 template <class T>
-Boolean Client <T, TypeCode>::equal (TypeCode_ptr other)
+Boolean Client <T, TypeCode>::equal (I_ptr <TypeCode> other)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -192,7 +199,7 @@ Boolean Client <T, TypeCode>::equal (TypeCode_ptr other)
 }
 
 template <class T>
-Boolean Client <T, TypeCode>::equivalent (TypeCode_ptr other)
+Boolean Client <T, TypeCode>::equivalent (I_ptr <TypeCode> other)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -202,7 +209,7 @@ Boolean Client <T, TypeCode>::equivalent (TypeCode_ptr other)
 }
 
 template <class T>
-TypeCode_var Client <T, TypeCode>::get_compact_typecode ()
+I_var <TypeCode> Client <T, TypeCode>::get_compact_typecode ()
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -262,7 +269,7 @@ String Client <T, TypeCode>::member_name (ULong index)
 }
 
 template <class T>
-TypeCode_var Client <T, TypeCode>::member_type (ULong index)
+I_var <TypeCode> Client <T, TypeCode>::member_type (ULong index)
 {
 	EnvironmentEx <TypeCode::BadKind, TypeCode::Bounds> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -282,7 +289,7 @@ Any Client <T, TypeCode>::member_label (ULong index)
 }
 
 template <class T>
-TypeCode_var Client <T, TypeCode>::discriminator_type ()
+I_var <TypeCode> Client <T, TypeCode>::discriminator_type ()
 {
 	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -312,7 +319,7 @@ ULong Client <T, TypeCode>::length ()
 }
 
 template <class T>
-TypeCode_var Client <T, TypeCode>::content_type ()
+I_var <TypeCode> Client <T, TypeCode>::content_type ()
 {
 	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -362,7 +369,7 @@ ValueModifier Client <T, TypeCode>::type_modifier ()
 }
 
 template <class T>
-TypeCode_var Client <T, TypeCode>::concrete_base_type ()
+I_var <TypeCode> Client <T, TypeCode>::concrete_base_type ()
 {
 	EnvironmentEx <TypeCode::BadKind> _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -457,7 +464,7 @@ void Client <T, TypeCode>::_unmarshal (::Nirvana::ConstPointer src, Unmarshal_pt
 template <>
 struct Type <TypeCode> : TypeItf <TypeCode>
 {
-	static TypeCode_ptr type_code ();
+	static I_ptr <TypeCode> type_code ();
 };
 
 }

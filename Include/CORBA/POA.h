@@ -46,7 +46,7 @@ namespace Nirvana {
 template <>
 struct Type < ::PortableServer::POA> : TypeLocalObject < ::PortableServer::POA>
 {
-	static TypeCode_ptr type_code ()
+	static I_ptr <TypeCode> type_code ()
 	{
 		return ::PortableServer::_tc_POA;
 	}

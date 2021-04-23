@@ -38,40 +38,40 @@ void set_Bounds (Interface* env)
 	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::Bounds>::repository_id_, nullptr);
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, TypeCode_ptr other)
+Boolean TypeCodeBase::equal (TCKind tk, I_ptr <TypeCode> other)
 {
 	return tk == other->kind ();
 }
 
-TypeCode_var TypeCodeBase::dereference_alias (TypeCode_ptr tc)
+I_var <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc)
 {
-	TypeCode_var ret = TypeCode::_duplicate (tc);
+	I_var <TypeCode> ret = TypeCode::_duplicate (tc);
 	while (tk_alias == ret->kind ()) {
 		ret = ret->content_type ();
 	}
 	return ret;
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, TypeCode_ptr other)
+Boolean TypeCodeBase::equivalent (TCKind tk, I_ptr <TypeCode> other)
 {
 	TCKind tko = other->kind ();
 	assert (tk_alias != tk && tk_alias != tko);
 	return tk == tko;
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, String_in& id, TypeCode_ptr other)
+Boolean TypeCodeBase::equal (TCKind tk, String_in& id, I_ptr <TypeCode> other)
 {
 	return TypeCodeBase::equal (tk, other)
 		&& static_cast <const String&> (id) == other->id ();
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, TypeCode_ptr other)
+Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other)
 {
 	return TypeCodeBase::equivalent (tk, other)
 		&& static_cast <const String&> (id) == other->id ();
 }
 
-Boolean TypeCodeBase::equal (const Char* const* members, ULong member_cnt, TypeCode_ptr other)
+Boolean TypeCodeBase::equal (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
 	if (other->member_count () != member_cnt)
 		return false;
@@ -83,12 +83,12 @@ Boolean TypeCodeBase::equal (const Char* const* members, ULong member_cnt, TypeC
 	return true;
 }
 
-Boolean TypeCodeBase::equivalent (const Char* const* members, ULong member_cnt, TypeCode_ptr other)
+Boolean TypeCodeBase::equivalent (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
 	return other->member_count () == member_cnt;
 }
 
-Boolean TypeCodeBase::equal (const Parameter* members, ULong member_cnt, TypeCode_ptr other)
+Boolean TypeCodeBase::equal (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
 	if (other->member_count () != member_cnt)
 		return false;
@@ -102,7 +102,7 @@ Boolean TypeCodeBase::equal (const Parameter* members, ULong member_cnt, TypeCod
 	return true;
 }
 
-Boolean TypeCodeBase::equivalent (const Parameter* members, ULong member_cnt, TypeCode_ptr other)
+Boolean TypeCodeBase::equivalent (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
 	assert (tk_alias != other->kind ());
 

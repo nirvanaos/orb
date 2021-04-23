@@ -26,16 +26,19 @@
 #ifndef NIRVANA_ORB_EXCEPTION_H_
 #define NIRVANA_ORB_EXCEPTION_H_
 
-#include "I_var.h"
-#include <CORBA/ABI_String.h>
+#include <Nirvana/NirvanaBase.h>
+#include "primitive_types.h"
 #include <exception>
 #include <new>
 
 namespace CORBA {
 
+namespace Nirvana {
+template <class I> class I_ptr;
+class Interface;
+}
+
 class TypeCode;
-typedef Nirvana::I_ptr <TypeCode> TypeCode_ptr;
-typedef Nirvana::I_var <TypeCode> TypeCode_var;
 
 class NIRVANA_NOVTABLE Exception : public std::exception
 {
@@ -51,7 +54,7 @@ public:
 
 	// Nirvana specific
 	virtual Code __code () const NIRVANA_NOEXCEPT = 0;
-	virtual TypeCode_ptr __type_code () const NIRVANA_NOEXCEPT = 0;
+	virtual Nirvana::I_ptr <TypeCode> __type_code () const NIRVANA_NOEXCEPT = 0;
 
 	virtual void* __data () NIRVANA_NOEXCEPT
 	{
@@ -85,9 +88,9 @@ void construct (void* p)
 	new (p) E ();
 }
 
-extern void set_exception (Interface_ptr environment, Exception::Code code, const Char* rep_id, const void* param) NIRVANA_NOEXCEPT;
-extern void set_exception (Interface_ptr environment, const Exception& e) NIRVANA_NOEXCEPT;
-extern void set_unknown_exception (Interface_ptr environment) NIRVANA_NOEXCEPT;
+extern void set_exception (Interface* environment, Exception::Code code, const Char* rep_id, const void* param) NIRVANA_NOEXCEPT;
+extern void set_exception (Interface* environment, const Exception& e) NIRVANA_NOEXCEPT;
+extern void set_unknown_exception (Interface* environment) NIRVANA_NOEXCEPT;
 
 }
 } // namespace CORBA
@@ -104,7 +107,7 @@ virtual void _raise () const { throw *this; }\
 virtual const char* _rep_id () const NIRVANA_NOEXCEPT;\
 virtual const char* _name () const NIRVANA_NOEXCEPT { return __name (); }\
 static constexpr const char* __name () NIRVANA_NOEXCEPT { return #E; }\
-virtual ::CORBA::TypeCode_ptr __type_code () const NIRVANA_NOEXCEPT;\
+virtual ::CORBA::Nirvana::I_ptr <::CORBA::TypeCode> __type_code () const NIRVANA_NOEXCEPT;\
 static const E* _downcast (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT;\
 static E* _downcast (::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return const_cast <E*> (_downcast ((const ::CORBA::Exception*)ep)); }\
 static const E* _narrow (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return _downcast (ep); }\

@@ -28,7 +28,8 @@
 
 #include "Exception.h"
 #include "RepositoryId.h"
-#include "I_ptr.h"
+#include "Bridge.h"
+#include <Nirvana/throw_exception.h>
 
 namespace CORBA {
 

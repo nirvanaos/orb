@@ -170,7 +170,7 @@ struct TypeByRef
 		dst = reinterpret_cast <const Var&> (src);
 	}
 
-#ifndef STRICT_CORBA_CPP11
+#ifdef LEGACY_CORBA_CPP
 
 	// Client T_var class for the legacy C++ IDL mapping support
 	class C_var :

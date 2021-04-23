@@ -56,7 +56,7 @@ class ClientInterfacePrimary :
 {
 public:
 	typedef I_ptr <I> _ptr_type;
-#ifndef STRICT_CORBA_CPP11
+#ifdef LEGACY_CORBA_CPP
 	typedef I_var <I> _var_type;
 	typedef _var_type& _out_type;
 #endif
@@ -121,8 +121,7 @@ ClientBase <Primary, Base>::operator I_ptr <Base> ()
 template <class Primary, class I>
 class ClientInterfaceBase :
 	public Client <ClientBase <Primary, I>, I>
-{
-};
+{};
 
 //! Base for client interface.
 template <class Primary, class ... Bases>

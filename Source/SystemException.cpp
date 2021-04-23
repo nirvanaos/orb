@@ -34,7 +34,7 @@ using namespace std;
 #define DEFINE_SYSTEM_EXCEPTION(E)\
 const E* E::_downcast (const Exception* ep) NIRVANA_NOEXCEPT { return (ep && (EC_##E == ep->__code ())) ? static_cast <const E*> (ep) : 0; }\
 const char* E::_rep_id () const NIRVANA_NOEXCEPT { return RepIdOf <E>::repository_id_; }\
-GNU_OPTNONE ::CORBA::TypeCode_ptr E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
+GNU_OPTNONE ::CORBA::I_ptr <TypeCode> E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 
 #define EXCEPTION_ENTRY(E) { { Nirvana::RepIdOf <E>::repository_id_, sizeof (E), ::CORBA::Nirvana::construct <E> }, countof (Nirvana::RepIdOf <E>::repository_id_) - 1 },
 
@@ -78,7 +78,7 @@ const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (String_in 
 		return nullptr;
 }
 
-const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (TypeCode_ptr tc)
+const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (I_ptr <TypeCode> tc)
 {
 	if (tc && tc->kind () == tk_except)
 		return _get_exception_entry (tc->id ());

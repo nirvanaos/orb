@@ -55,8 +55,8 @@ Type <String>::ABI_ret const_string_ret_p (const Char* s) NIRVANA_NOEXCEPT
 class TypeCodeBase
 {
 public:
-	static Boolean equal (TCKind tk, TypeCode_ptr other);
-	static Boolean equivalent (TCKind tk, TypeCode_ptr other);
+	static Boolean equal (TCKind tk, I_ptr <TypeCode> other);
+	static Boolean equivalent (TCKind tk, I_ptr <TypeCode> other);
 
 	static Type <String>::ABI_ret _id (Bridge <TypeCode>* _b, Interface* _env);
 	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env);
@@ -75,13 +75,13 @@ public:
 	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, Interface* _env);
 
 protected:
-	static Boolean equal (TCKind tk, String_in& id, TypeCode_ptr other);
-	static Boolean equivalent (TCKind tk, String_in& id, TypeCode_ptr other);
-	static TypeCode_var dereference_alias (TypeCode_ptr tc);
-	static Boolean equal (const Char* const* members, ULong member_cnt, TypeCode_ptr other);
-	static Boolean equivalent (const Char* const* members, ULong member_cnt, TypeCode_ptr other);
-	static Boolean equal (const Parameter* members, ULong member_cnt, TypeCode_ptr other);
-	static Boolean equivalent (const Parameter* members, ULong member_cnt, TypeCode_ptr other);
+	static Boolean equal (TCKind tk, String_in& id, I_ptr <TypeCode> other);
+	static Boolean equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other);
+	static I_var <TypeCode> dereference_alias (I_ptr <TypeCode> tc);
+	static Boolean equal (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other);
+	static Boolean equivalent (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other);
+	static Boolean equal (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
+	static Boolean equivalent (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
 };
 
 template <TCKind tk>
@@ -91,12 +91,12 @@ class TypeCodeTK :
 public:
 	static const TCKind tk_ = tk;
 
-	static Boolean equal (TypeCode_ptr other)
+	static Boolean equal (I_ptr <TypeCode> other)
 	{
 		return TypeCodeBase::equal (tk_, other);
 	}
 
-	static Boolean equivalent (TypeCode_ptr other)
+	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
 		return TypeCodeBase::equivalent (tk_, TypeCodeBase::dereference_alias (other));
 	}
@@ -114,12 +114,12 @@ class TypeCodeWithId :
 public:
 	typedef T RepositoryType;
 
-	static Boolean equal (TypeCode_ptr other)
+	static Boolean equal (I_ptr <TypeCode> other)
 	{
 		return TypeCodeBase::equal (tk, RepositoryType::repository_id_, other);
 	}
 
-	static Boolean equivalent (TypeCode_ptr other)
+	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
 		return TypeCodeBase::equivalent (tk, RepositoryType::repository_id_, TypeCodeBase::dereference_alias (other));
 	}
@@ -139,7 +139,7 @@ public:
 		return const_string_ret (name_);
 	}
 
-	static Boolean equal (TypeCode_ptr other)
+	static Boolean equal (I_ptr <TypeCode> other)
 	{
 		return other->name ().compare (0, countof (name_) - 1, name_) == 0;
 	}
@@ -348,7 +348,7 @@ public:
 
 	// The get_compact_typecode operation strips out all optional name and member
 	// name fields, but it leaves all alias typecodes intact.
-	TypeCode_var get_compact_typecode ()
+	I_var <TypeCode> get_compact_typecode ()
 	{
 		// Currently, we don't strip names, just return this type code.
 		return TypeCode::_duplicate (&static_cast <TypeCode&> (static_cast <Bridge <TypeCode>&> (static_cast <S&> (*this))));
@@ -402,7 +402,7 @@ public:
 	}
 
 protected:
-	static TypeCode_ptr ptr ()
+	static I_ptr <TypeCode> ptr ()
 	{
 		return Type <Content>::type_code ();
 	}

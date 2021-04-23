@@ -39,7 +39,7 @@ struct Alias {};
 template <const ::Nirvana::ImportInterfaceT <TypeCode>* ref>
 struct Type <Alias <ref> >
 {
-	static TypeCode_ptr type_code ()
+	static I_ptr <TypeCode> type_code ()
 	{
 		return *ref;
 	}

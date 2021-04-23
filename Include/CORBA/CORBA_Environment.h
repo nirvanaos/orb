@@ -75,7 +75,7 @@ struct Type < ::CORBA::Environment> : TypeLocal < ::CORBA::Environment>
 {};
 
 }
-#ifndef STRICT_CORBA_CPP11
+#ifdef LEGACY_CORBA_CPP
 typedef Environment* Environment_ptr;
 typedef Environment::_var_type Environment_var;
 #endif

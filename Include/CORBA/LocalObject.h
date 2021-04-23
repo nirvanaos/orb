@@ -32,9 +32,12 @@
 namespace CORBA {
 
 class LocalObject;
+#ifdef LEGACY_CORBA_CPP
 template <> class Nirvana::I_ptr <LocalObject>;
 typedef Nirvana::I_ptr <LocalObject> LocalObject_ptr;
 typedef Nirvana::I_var <LocalObject> LocalObject_var;
+typedef LocalObject_var& LocalObject_out;
+#endif
 
 namespace Nirvana {
 

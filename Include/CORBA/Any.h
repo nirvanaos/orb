@@ -77,12 +77,12 @@ public:
 		return *this;
 	}
 
-	TypeCode_ptr type () const
+	Nirvana::I_ptr <TypeCode> type () const
 	{
 		return ABI::type ();
 	}
 
-	void type (TypeCode_ptr alias);
+	void type (Nirvana::I_ptr <TypeCode> alias);
 
 	const void* data () const;
 
@@ -234,16 +234,16 @@ public:
 	//Boolean operator >>= (to_wstring) const;
 	//Boolean operator >>= (to_fixed) const;
 
-	void copy_from (TypeCode_ptr tc, const void* val);
-	void move_from (TypeCode_ptr tc, void* val);
+	void copy_from (Nirvana::I_ptr <TypeCode> tc, const void* val);
+	void move_from (Nirvana::I_ptr <TypeCode> tc, void* val);
 
 private:
 	friend struct Nirvana::Type <Any>;
 
 	void copy_from (const Any& src);
-	void* prepare (TypeCode_ptr tc);
-	void set_type (TypeCode_ptr tc);
-	void set_type (TypeCode_var&& tc);
+	void* prepare (Nirvana::I_ptr <TypeCode> tc);
+	void set_type (Nirvana::I_ptr <TypeCode> tc);
+	void set_type (Nirvana::I_var <TypeCode>&& tc);
 
 	// these functions are private and not implemented
 	// hiding these causes compile-time errors for
@@ -281,7 +281,7 @@ struct Type <Any> : public TypeVarLen <Any, true>
 		return val;
 	}
 
-	static TypeCode_ptr type_code ();
+	static I_ptr <TypeCode> type_code ();
 
 	static void marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst);
 	static void marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst);
@@ -290,7 +290,7 @@ struct Type <Any> : public TypeVarLen <Any, true>
 
 }
 
-#ifndef STRICT_CORBA_CPP11
+#ifdef LEGACY_CORBA_CPP
 typedef Nirvana::Type <Any>::C_var Any_var;
 #endif
 

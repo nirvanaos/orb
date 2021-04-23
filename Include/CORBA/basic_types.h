@@ -33,7 +33,7 @@
 #include "tc_constants.h"
 
 #define DECLARE_BASIC_TYPE(T, tc) namespace Nirvana { template <> struct Nirvana::Type <T> : Nirvana::TypeFixLen <T> {\
-static TypeCode_ptr type_code () { return tc; } }; }
+static I_ptr <TypeCode> type_code () { return tc; } }; }
 
 namespace CORBA {
 
@@ -53,7 +53,7 @@ DECLARE_BASIC_TYPE (LongDouble, _tc_longdouble)
 namespace Nirvana {
 
 inline
-TypeCode_ptr Type <Boolean>::type_code ()
+I_ptr <TypeCode> Type <Boolean>::type_code ()
 {
 	return _tc_boolean;
 }

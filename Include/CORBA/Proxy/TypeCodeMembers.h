@@ -68,7 +68,7 @@ public:
 			set_Bounds (_env);
 			return nullptr;
 		} else {
-			TypeCode_ptr tc ((members_ [index].type) ());
+			I_ptr <TypeCode> tc ((members_ [index].type) ());
 			return (tc->_epv ().header.duplicate) (&tc, _env);
 		}
 	}

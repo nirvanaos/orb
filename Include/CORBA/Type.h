@@ -49,20 +49,20 @@ namespace Nirvana {
 template <>
 struct Type <void>
 {
-	static TypeCode_ptr type_code ()
+	static I_ptr <TypeCode> type_code ()
 	{
 		return _tc_void;
 	}
 };
 
 inline
-TypeCode_ptr Type <Any>::type_code ()
+I_ptr <TypeCode> Type <Any>::type_code ()
 {
 	return _tc_any;
 }
 
 inline
-TypeCode_ptr Type <TypeCode>::type_code ()
+I_ptr <TypeCode> Type <TypeCode>::type_code ()
 {
 	return _tc_TypeCode;
 }

@@ -43,13 +43,13 @@ class TypeCodeStringBase :
 public:
 	using TypeCodeLength <bound>::_length;
 
-	static Boolean equal (TypeCode_ptr other)
+	static Boolean equal (I_ptr <TypeCode> other)
 	{
 		return TypeCodeTK <tk>::equal (other)
 			&& other->length () == bound;
 	}
 
-	static Boolean equivalent (TypeCode_ptr other)
+	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
 		return TypeCodeTK <tk>::equivalent (other)
 			&& other->length () == bound;
@@ -63,19 +63,19 @@ template <ULong bound>
 class TypeCodeString <StringT <WChar>, bound> : public TypeCodeStringBase <WString, tk_wstring, bound> {};
 
 template <> inline
-TypeCode_ptr Type <StringT <Char> >::type_code ()
+I_ptr <TypeCode> Type <StringT <Char> >::type_code ()
 {
 	return _tc_string;
 }
 
 template <> inline
-TypeCode_ptr Type <StringT <WChar> >::type_code ()
+I_ptr <TypeCode> Type <StringT <WChar> >::type_code ()
 {
 	return _tc_wstring;
 }
 
 template <typename C, ULong bound> inline
-TypeCode_ptr Type <BoundedStringT <C, bound> >::type_code ()
+I_ptr <TypeCode> Type <BoundedStringT <C, bound> >::type_code ()
 {
 	if (!bound)
 		return Type <StringT <C> >::type_code ();

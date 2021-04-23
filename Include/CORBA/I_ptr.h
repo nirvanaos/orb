@@ -58,13 +58,13 @@ public:
 		p_ (p)
 	{}
 
-	I_ptr_base (const I_ptr_base <I>& src) NIRVANA_NOEXCEPT :
+	I_ptr_base (const I_ptr_base& src) NIRVANA_NOEXCEPT :
 		p_ (src.p_)
 	{}
 
 	I_ptr_base (const I_var <I>& var) NIRVANA_NOEXCEPT;
 
-	I_ptr_base& operator = (const I_ptr_base <I>& src) NIRVANA_NOEXCEPT
+	I_ptr_base& operator = (const I_ptr_base& src) NIRVANA_NOEXCEPT
 	{
 		p_ = src.p_;
 		return *this;
@@ -113,26 +113,22 @@ public:
 		I_ptr_base <I> (p)
 	{}
 
-	I_ptr (const I_ptr <I>& src) NIRVANA_NOEXCEPT :
+	I_ptr (const I_ptr& src) NIRVANA_NOEXCEPT :
 		I_ptr_base <I> (src)
 	{}
 
 	template <class I1>
-	I_ptr (const I_ptr <I1>& src)
-	{
-		if (src.p_)
-			*this = static_cast <I_ptr> (*src.p_);
-		else
-			this->p_ = nullptr;
-	}
-
-	template <class I1>
-	I_ptr (const I_var <I1>& src) :
-		I_ptr (I_ptr <I1> (src))
+	I_ptr (const I_ptr <I1>& src) :
+		I_ptr_base <I> (src ? static_cast <I_ptr> (*src.p_) : nullptr)
 	{}
 
 	I_ptr (const I_var <I>& var) NIRVANA_NOEXCEPT :
 		I_ptr_base <I> (var)
+	{}
+
+	template <class I1>
+	I_ptr (const I_var <I1>& src) :
+		I_ptr (I_ptr <I1> (src))
 	{}
 
 	/// Move constructor in case returned I_var assigned to I_ptr:
@@ -143,7 +139,7 @@ public:
 		this->move_from (var);
 	}
 
-	I_ptr& operator = (const I_ptr <I>& src) NIRVANA_NOEXCEPT
+	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
 	{
 		I_ptr_base <I>::operator = (src);
 		return *this;
@@ -188,7 +184,7 @@ public:
 		this->move_from (var);
 	}
 
-	I_ptr& operator = (const I_ptr <Interface>& src) NIRVANA_NOEXCEPT
+	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
 	{
 		I_ptr_base <Interface>::operator = (src);
 		return *this;

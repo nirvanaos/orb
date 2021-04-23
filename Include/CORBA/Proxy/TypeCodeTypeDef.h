@@ -47,13 +47,13 @@ public:
 	typedef TypeCodeName <TypeCodeTypeDef <ref> > Name;
 	using Name::_name;
 
-	static Boolean equal (TypeCode_ptr other)
+	static Boolean equal (I_ptr <TypeCode> other)
 	{
 		return Base::equal (other)
 			&& Name::equal (other);
 	}
 
-	static Boolean equivalent (TypeCode_ptr other)
+	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
 		return content ()->equivalent (other);
 	}
@@ -109,7 +109,7 @@ public:
 	}
 
 private:
-	static TypeCode_ptr content ()
+	static I_ptr <TypeCode> content ()
 	{
 		return TypeCodeContentType <Content>::ptr ();
 	}

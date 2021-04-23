@@ -37,15 +37,17 @@
 namespace CORBA {
 
 class AbstractBase;
-#ifndef STRICT_CORBA_CPP11
+#ifdef LEGACY_CORBA_CPP
 typedef Nirvana::I_ptr <AbstractBase> AbstractBase_ptr;
 typedef Nirvana::I_var <AbstractBase> AbstractBase_var;
+typedef AbstractBase_var& AbstractBase_out;
 #endif
 
 class Object;
-#ifndef STRICT_CORBA_CPP11
+#ifdef LEGACY_CORBA_CPP
 typedef Nirvana::I_ptr <Object> Object_ptr;
 typedef Nirvana::I_var <Object> Object_var;
+typedef Object_var& Object_out;
 #endif
 
 class ValueBase;

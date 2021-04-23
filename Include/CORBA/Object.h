@@ -44,7 +44,10 @@ struct IOR;
 namespace PortableServer {
 
 class ServantBase;
+
+#ifdef LEGACY_CORBA_CPP
 typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
+#endif
 
 }
 
@@ -75,7 +78,7 @@ const Char Bridge <Object>::repository_id_ [] = CORBA_REPOSITORY_ID ("Object");
 template <>
 struct Type <Object> : TypeItf <Object>
 {
-	static TypeCode_ptr type_code ()
+	static I_ptr <TypeCode> type_code ()
 	{
 		return _tc_Object;
 	}

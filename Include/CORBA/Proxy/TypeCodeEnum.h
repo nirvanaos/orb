@@ -53,16 +53,16 @@ public:
 			return const_string_ret_p (members_ [index]);
 	}
 
-	static Boolean equal (TypeCode_ptr other)
+	static Boolean equal (I_ptr <TypeCode> other)
 	{
 		return Base::equal (other)
 			&& TypeCodeName <E>::equal (other)
 			&& TypeCodeBase::equal (members_, Type <E>::count_, other);
 	}
 
-	static Boolean equivalent (TypeCode_ptr other)
+	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		TypeCode_var tco = TypeCodeBase::dereference_alias (other);
+		I_var <TypeCode> tco = TypeCodeBase::dereference_alias (other);
 		return TypeCodeBase::equivalent (tk_enum, Base::RepositoryType::repository_id_, tco)
 			&& TypeCodeBase::equivalent (members_, Type <E>::count_, tco);
 	}

@@ -6,13 +6,13 @@
 namespace CORBA {
 namespace Nirvana {
 
-enum class MarshalContext : ::CORBA::Nirvana::ABI_enum
+enum class MarshalContext : ABI_enum
 {
 	SHARED_MEMORY,
 	SHARED_PROTECTION_DOMAIN,
 	OTHER_PROTECTION_DOMAIN
 };
-extern const ::Nirvana::ImportInterfaceT < ::CORBA::TypeCode> _tc_MarshalContext;
+extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_MarshalContext;
 
 template <>
 const Char RepIdOf <MarshalContext>::repository_id_ [] = "IDL:CORBA/Nirvana/MarshalContext:1.0";

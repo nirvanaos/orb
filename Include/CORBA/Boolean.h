@@ -69,7 +69,7 @@ struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 
 	typedef C_inout C_out;
 
-	static TypeCode_ptr type_code ();
+	static I_ptr <TypeCode> type_code ();
 
 };
 

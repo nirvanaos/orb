@@ -81,7 +81,7 @@ template <> struct Type <T>
   static ABI_VT_ret VT_ret (); // Return default value on error
 
   // Type code
-  static TypeCode_ptr type_code ();
+  static I_ptr <TypeCode> type_code ();
 
   /// \brief Copies input data to the marshaling buffer.
   /// \param src         Source value.

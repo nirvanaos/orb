@@ -53,7 +53,7 @@ template <>
 struct Type <CompletionStatus> :
 	public TypeEnum <CompletionStatus, CompletionStatus::COMPLETED_MAYBE>
 {
-	static TypeCode_ptr type_code ()
+	static I_ptr <TypeCode> type_code ()
 	{
 		return _tc_CompletionStatus;
 	}
@@ -113,7 +113,7 @@ public:
 	}
 
 	static const Nirvana::ExceptionEntry* _get_exception_entry (Nirvana::String_in rep_id, Code hint = Exception::EC_USER_EXCEPTION);
-	static const Nirvana::ExceptionEntry* _get_exception_entry (TypeCode_ptr tc);
+	static const Nirvana::ExceptionEntry* _get_exception_entry (Nirvana::I_ptr <TypeCode> tc);
 	
 	static const Nirvana::ExceptionEntry* _get_exception_entry (Code code)
 	{

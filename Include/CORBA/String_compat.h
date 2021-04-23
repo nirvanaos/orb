@@ -140,7 +140,7 @@ void String_var <C>::adopt (C* s)
 
 }
 
-#ifndef STRICT_CORBA_CPP11
+#ifdef LEGACY_CORBA_CPP
 
 typedef Nirvana::String_var <Char> String_var;
 typedef Nirvana::String_var <WChar> WString_var;

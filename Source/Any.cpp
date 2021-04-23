@@ -38,7 +38,7 @@ void Type <Any>::check (const ABI& any)
 
 void Type <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst)
 {
-	TypeCode_ptr tc = src.type ();
+	I_ptr <TypeCode> tc = src.type ();
 	if (!tc)
 		dst.reset ();
 	else {
@@ -61,7 +61,7 @@ void Type <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst)
 
 void Type <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst)
 {
-	TypeCode_ptr tc = src.type ();
+	I_ptr <TypeCode> tc = src.type ();
 	if (!tc)
 		dst.reset ();
 	else {
@@ -96,7 +96,7 @@ void Type <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
 	if (!ptc)
 		dst.reset ();
 	else {
-		TypeCode_var tc (unmarshaler->unmarshal_interface <TypeCode> (ptc));
+		I_var <TypeCode> tc (unmarshaler->unmarshal_interface <TypeCode> (ptc));
 		::Nirvana::ConstPointer psrc;
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
@@ -124,9 +124,11 @@ void Type <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
 
 }
 
+using namespace Nirvana;
+
 void Any::clear ()
 {
-	TypeCode_ptr tc = type ();
+	I_ptr <TypeCode> tc = type ();
 	bool large = is_large ();
 	if (tc) {
 		void* p;
@@ -142,7 +144,7 @@ void Any::clear ()
 	reset ();
 }
 
-void* Any::prepare (TypeCode_ptr tc)
+void* Any::prepare (I_ptr <TypeCode> tc)
 {
 	clear ();
 	void* dst = nullptr;
@@ -158,17 +160,17 @@ void* Any::prepare (TypeCode_ptr tc)
 	return dst;
 }
 
-void Any::set_type (TypeCode_ptr tc)
+void Any::set_type (I_ptr <TypeCode> tc)
 {
 	ABI::type (static_cast <Nirvana::Bridge <TypeCode>*> (&TypeCode::_duplicate (tc)));
 }
 
-void Any::set_type (TypeCode_var&& tc)
+void Any::set_type (I_var <TypeCode>&& tc)
 {
 	ABI::type (&tc._retn ());
 }
 
-void Any::copy_from (TypeCode_ptr tc, const void* val)
+void Any::copy_from (I_ptr <TypeCode> tc, const void* val)
 {
 	void* dst = prepare (tc);
 	if (dst) {
@@ -179,7 +181,7 @@ void Any::copy_from (TypeCode_ptr tc, const void* val)
 
 void Any::copy_from (const Any& src)
 {
-	TypeCode_ptr tc = src.type ();
+	I_ptr <TypeCode> tc = src.type ();
 	void* dst = prepare (tc);
 	if (dst) {
 		tc->_copy (dst, src.data ());
@@ -187,16 +189,16 @@ void Any::copy_from (const Any& src)
 	}
 }
 
-void Any::move_from (TypeCode_ptr tc, void* val)
+void Any::move_from (I_ptr <TypeCode> tc, void* val)
 {
 	void* dst = prepare (tc);
 	tc->_move (dst, val);
 	set_type (tc);
 }
 
-void Any::type (TypeCode_ptr alias)
+void Any::type (I_ptr <TypeCode> alias)
 {
-	TypeCode_ptr tc = type ();
+	I_ptr <TypeCode> tc = type ();
 	if (tc && tc->equivalent (alias)) {
 		release (tc);
 		set_type (tc);
@@ -290,7 +292,7 @@ void operator <<= (Any& any, Exception&& e)
 
 Boolean operator >>= (const Any& any, SystemException& se)
 {
-	TypeCode_ptr tc = any.type ();
+	I_ptr <TypeCode> tc = any.type ();
 	if (tc && tc->kind () == tk_except) {
 		const Char* id = tc->id ().c_str ();
 		const Char standard_prefix [] = "IDL:omg.org/CORBA/";

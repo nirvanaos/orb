@@ -69,6 +69,6 @@ protected:
 return (ep && ::CORBA::Nirvana::RepositoryId::compatible (ep->_rep_id (), ::CORBA::Nirvana::RepIdOf <Parent E>::repository_id_))\
 ? &static_cast <const Parent E&> (*ep) : nullptr; }\
 const char* Parent E::_rep_id () const NIRVANA_NOEXCEPT { return ::CORBA::Nirvana::RepIdOf <Parent E>::repository_id_; }\
-GNU_OPTNONE ::CORBA::TypeCode_ptr Parent E::__type_code () const NIRVANA_NOEXCEPT { return Parent _tc_##E; }
+GNU_OPTNONE ::CORBA::Nirvana::I_ptr <::CORBA::TypeCode> Parent E::__type_code () const NIRVANA_NOEXCEPT { return Parent _tc_##E; }
 
 #endif

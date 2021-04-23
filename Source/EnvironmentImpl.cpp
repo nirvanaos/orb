@@ -81,7 +81,7 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, const void* p
 			if (Exception::EC_USER_EXCEPTION == code && user_exceptions) {
 				if (RepositoryId::compatible (RepIdOf <UnknownUserException>::repository_id_, rep_id) && param) {
 					const Any* pa = (const Any*)param;
-					TypeCode_ptr tc = pa->type ();
+					I_ptr <TypeCode> tc = pa->type ();
 					if (tc) {
 						try {
 							assert (tc->kind () == tk_except);
@@ -143,7 +143,7 @@ void EnvironmentBase::set_user (const ExceptionEntry& ee, const void* data) NIRV
 	if (set (ee) && data && ee.size > sizeof (UserException)) {
 		try {
 			Exception& e = *exception ();
-			TypeCode_ptr tc = e.__type_code ();
+			I_ptr <TypeCode> tc = e.__type_code ();
 			tc->_copy (e.__data (), data);
 		} catch (...) {
 			new (&data_) NO_MEMORY ();
