@@ -56,16 +56,18 @@ class ClientInterfacePrimary :
 {
 public:
 	typedef I_ptr <I> _ptr_type;
+	typedef I_ref <I> _ref_type;
+
 #ifdef LEGACY_CORBA_CPP
 	typedef I_var <I> _var_type;
 	typedef _var_type& _out_type;
-#endif
 
 	// TODO: Change return type to I_var?
 	static NIRVANA_NODISCARD I_ptr <I> _duplicate (I_ptr <I> obj)
 	{
 		return static_cast <I*> (interface_duplicate (&obj));
 	}
+#endif
 
 	static I_ptr <I> _nil ()
 	{

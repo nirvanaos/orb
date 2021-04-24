@@ -26,124 +26,79 @@
 #ifndef NIRVANA_ORB_I_VAR_H_
 #define NIRVANA_ORB_I_VAR_H_
 
-#include "I_ptr.h"
+#ifdef LEGACY_CORBA_CPP
+
+#include "I_ref.h"
 
 namespace CORBA {
 namespace Nirvana {
 
 template <class I> class I_out;
 
-//! I_var helper class for interface
+/// Helper class to support legacy interface smart pointer.
 template <class I>
-class I_var
+class I_var : public I_ref <I>
 {
+	typedef I_ref <I> Base;
 public:
-	I_var () NIRVANA_NOEXCEPT :
-		p_ (nullptr)
+	I_var () NIRVANA_NOEXCEPT
 	{}
 
+	// No add reference
 	I_var (const I_ptr <I>& p) NIRVANA_NOEXCEPT :
-		p_ (p.p_)
+		Base (p, false)
 	{}
 
 	I_var (const I_var <I>& src) :
-		p_ (static_cast <I*> (interface_duplicate (src.p_)))
+		Base (src)
 	{}
 
 	I_var (I_var <I>&& src) NIRVANA_NOEXCEPT :
-		p_ (src.p_)
-	{
-		src.p_ = nullptr;
-	}
+		Base (std::move (src))
+	{}
 
-	~I_var () NIRVANA_NOEXCEPT
-	{
-		interface_release (p_);
-	}
-
+	// No add reference
 	I_var& operator = (const I_ptr <I>& p) NIRVANA_NOEXCEPT
 	{
-		reset (p.p_);
+		if (p.p_ != Base::p_) {
+			I* tmp = Base::p_;
+			Base::p_ = p.p_;
+			interface_release (tmp);
+		}
 		return *this;
 	}
 
 	I_var& operator = (const I_var& src)
 	{
-		if (src.p_ != this->p_)
-			operator = (I_ptr <I> (static_cast <I*> (interface_duplicate (src.p_))));
+		Base::operator = (src);
 		return *this;
 	}
 
 	I_var& operator = (I_var&& src) NIRVANA_NOEXCEPT
 	{
-		if (&src != this) {
-			reset (src.p_);
-			src.p_ = nullptr;
-		}
+		Base::operator = (std::move (src));
 		return *this;
 	}
 
 	inline I_inout <I> inout ();
 	inline I_out <I> out ();
 
-	I* operator -> () const
-	{
-		if (!p_)
-			::Nirvana::throw_INV_OBJREF ();
-		return p_;
-	}
-
-	explicit operator bool () const NIRVANA_NOEXCEPT
-	{
-		return p_ != nullptr;
-	}
-
-	explicit operator bool () NIRVANA_NOEXCEPT
-	{
-		return p_ != nullptr;
-	}
-
 	I_ptr <I> in () const
 	{
-		return p_;
+		return Base::p_;
 	}
 
 	I_ptr <I> _retn () NIRVANA_NOEXCEPT
 	{
-		I_ptr <I> p (p_);
-		p_ = nullptr;
+		I_ptr <I> p (Base::p_);
+		Base::p_ = nullptr;
 		return p;
 	}
-
-protected:
-	void reset (I* p) NIRVANA_NOEXCEPT
-	{
-		I* tmp = p_;
-		p_ = p;
-		interface_release (tmp);
-	}
-
-protected:
-	friend class I_ptr_base <I>;
-	friend class I_inout <I>;
-
-	I* p_;
 };
 
-template <class I> inline
-I_ptr_base <I>::I_ptr_base (const I_var <I>& var) NIRVANA_NOEXCEPT
-{
-	p_ = var.p_;
+}
 }
 
-template <class I> inline
-void I_ptr_base <I>::move_from (I_var <I>& var) NIRVANA_NOEXCEPT
-{
-	p_ = var.p_;
-	var.p_ = 0;
-}
-
-}
-}
+#endif
 
 #endif

@@ -34,6 +34,7 @@ namespace CORBA {
 namespace Nirvana {
 
 template <class I> class I_ptr;
+template <class I> class I_ref;
 template <class I> class I_var;
 template <class I> class I_inout;
 template <class I> class I_ret;
@@ -62,7 +63,10 @@ public:
 		p_ (src.p_)
 	{}
 
-	I_ptr_base (const I_var <I>& var) NIRVANA_NOEXCEPT;
+	I_ptr_base (const I_ref <I>& src) NIRVANA_NOEXCEPT;
+
+	template <class I1>
+	I_ptr_base (const I_ref <I1>& src);
 
 	I_ptr_base& operator = (const I_ptr_base& src) NIRVANA_NOEXCEPT
 	{
@@ -91,9 +95,16 @@ public:
 	}
 
 protected:
-	void move_from (I_var <I>& var) NIRVANA_NOEXCEPT;
+	void move_from (I_ref <I>& src) NIRVANA_NOEXCEPT;
+
+	template <class I1>
+	static I* wide (I1* p)
+	{
+		return p ? static_cast <I*> (&static_cast <I_ptr <I>> (*p)) : nullptr;
+	}
 
 protected:
+	friend class I_ref <I>;
 	friend class I_var <I>;
 	friend class I_inout <I>;
 	template <class I1> friend class I_ptr;
@@ -105,43 +116,44 @@ protected:
 template <class I>
 class I_ptr : public I_ptr_base <I>
 {
+	typedef I_ptr_base <I> Base;
 public:
 	I_ptr () NIRVANA_NOEXCEPT
 	{}
 
 	I_ptr (I* p) NIRVANA_NOEXCEPT :
-		I_ptr_base <I> (p)
+		Base (p)
 	{}
 
 	I_ptr (const I_ptr& src) NIRVANA_NOEXCEPT :
-		I_ptr_base <I> (src)
+		Base (src)
 	{}
 
 	template <class I1>
 	I_ptr (const I_ptr <I1>& src) :
-		I_ptr_base <I> (src ? static_cast <I_ptr> (*src.p_) : nullptr)
+		Base (Base::wide (src.p_))
 	{}
 
-	I_ptr (const I_var <I>& var) NIRVANA_NOEXCEPT :
-		I_ptr_base <I> (var)
+	I_ptr (const I_ref <I>& src) NIRVANA_NOEXCEPT :
+		Base (src)
 	{}
 
 	template <class I1>
-	I_ptr (const I_var <I1>& src) :
-		I_ptr (I_ptr <I1> (src))
+	I_ptr (const I_ref <I1>& src) :
+		Base (src)
 	{}
 
-	/// Move constructor in case returned I_var assigned to I_ptr:
-	///    Object_var func ();
+	/// Move constructor in case returned I_ref assigned to I_ptr:
+	///    Object::_ref_type func ();
 	///    Object_ptr obj = func ();
-	I_ptr (I_var <I>&& var) NIRVANA_NOEXCEPT
+	I_ptr (I_ref <I>&& src) NIRVANA_NOEXCEPT
 	{
-		this->move_from (var);
+		this->move_from (src);
 	}
 
 	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
 	{
-		I_ptr_base <I>::operator = (src);
+		Base::operator = (src);
 		return *this;
 	}
 
@@ -155,38 +167,31 @@ public:
 template <>
 class I_ptr <Interface> : public I_ptr_base <Interface>
 {
+	typedef I_ptr_base <Interface> Base;
 public:
 	I_ptr () NIRVANA_NOEXCEPT
 	{}
 
 	I_ptr (Interface* p) NIRVANA_NOEXCEPT :
-		I_ptr_base <Interface> (p)
+		Base (p)
 	{}
 
 	I_ptr (const I_ptr& src) NIRVANA_NOEXCEPT :
-		I_ptr_base <Interface> (src)
+		Base (src)
 	{}
 
 	template <class I>
 	I_ptr (const I_ptr <I>& src) :
-		I_ptr_base <Interface> (src.p_)
+		Base (src.p_)
 	{}
 
-	I_ptr (const I_var <Interface>& var) NIRVANA_NOEXCEPT :
-		I_ptr_base <Interface> (var)
+	I_ptr (const I_ref <Interface>& src) NIRVANA_NOEXCEPT :
+		Base (src)
 	{}
-
-	/// Move constructor in case returned I_var assigned to I_ptr:
-	///    Interface_var func ();
-	///    Interface_ptr obj = func ();
-	I_ptr (I_var <Interface>&& var) NIRVANA_NOEXCEPT
-	{
-		this->move_from (var);
-	}
 
 	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
 	{
-		I_ptr_base <Interface>::operator = (src);
+		Base::operator = (src);
 		return *this;
 	}
 
@@ -230,12 +235,16 @@ struct StaticI_ptr
 
 }
 
+#ifdef LEGACY_CORBA_CPP
+
 /// CORBA::release
 template <class I> inline
 void release (const Nirvana::I_ptr <I>& ptr)
 {
 	Nirvana::interface_release (&ptr);
 }
+
+#endif
 
 /// CORBA::is_nil()
 template <class I> inline
