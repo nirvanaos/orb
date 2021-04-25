@@ -48,13 +48,13 @@ public:
 
 	// ServantBase operations
 
-	virtual PortableServer::POA_var _default_POA ()
+	virtual I_ref <PortableServer::POA> _default_POA ()
 	{
 		_check_construct ();
 		return ServantBaseLink::_default_POA ();
 	}
 
-	virtual InterfaceDef_var _get_interface ()
+	virtual I_ref <InterfaceDef> _get_interface ()
 	{
 		_check_construct ();
 		return ServantBaseLink::_get_interface ();

@@ -134,9 +134,9 @@ public:
 	void stateless_begin (Type <StatelessCreationFrame>::C_inout scb);
 	void* stateless_end (Type <Boolean>::C_in success);
 
-	ReferenceCounter_var create_reference_counter (I_in <DynamicServant> dynamic);
-	PortableServer::ServantBase_var create_servant (I_in <PortableServer::ServantBase> impl);
-	LocalObject_var create_local_object (I_in <LocalObject> impl, I_in <AbstractBase> abstract_base);
+	ReferenceCounter::_ref_type create_reference_counter (I_in <DynamicServant> dynamic);
+	PortableServer::ServantBase::_ref_type create_servant (I_in <PortableServer::ServantBase> impl);
+	LocalObject::_ref_type create_local_object (I_in <LocalObject> impl, I_in <AbstractBase> abstract_base);
 };
 
 template <class T>
@@ -178,7 +178,7 @@ void* Client <T, ObjectFactory>::stateless_end (Type <Boolean>::C_in success)
 }
 
 template <class T>
-ReferenceCounter_var Client <T, ObjectFactory>::create_reference_counter (I_in <DynamicServant> dynamic)
+ReferenceCounter::_ref_type Client <T, ObjectFactory>::create_reference_counter (I_in <DynamicServant> dynamic)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
@@ -188,7 +188,7 @@ ReferenceCounter_var Client <T, ObjectFactory>::create_reference_counter (I_in <
 }
 
 template <class T>
-PortableServer::ServantBase_var Client <T, ObjectFactory>::create_servant (I_in <PortableServer::ServantBase> impl)
+PortableServer::ServantBase::_ref_type Client <T, ObjectFactory>::create_servant (I_in <PortableServer::ServantBase> impl)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
@@ -198,7 +198,7 @@ PortableServer::ServantBase_var Client <T, ObjectFactory>::create_servant (I_in 
 }
 
 template <class T>
-LocalObject_var Client <T, ObjectFactory>::create_local_object (I_in <LocalObject> impl, I_in <AbstractBase> abstract_base)
+LocalObject::_ref_type Client <T, ObjectFactory>::create_local_object (I_in <LocalObject> impl, I_in <AbstractBase> abstract_base)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));

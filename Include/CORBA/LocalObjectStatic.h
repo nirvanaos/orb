@@ -65,7 +65,7 @@ protected:
 	}
 
 private:
-	static LocalObject_ptr core_object ()
+	static LocalObject::_ptr_type core_object ()
 	{
 		return static_cast <LocalObject*> (export_struct_.core_object);
 	}

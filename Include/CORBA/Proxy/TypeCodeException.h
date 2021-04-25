@@ -59,7 +59,7 @@ public:
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		I_var <TypeCode> tco = TypeCodeBase::dereference_alias (other);
+		I_ref <TypeCode> tco = TypeCodeBase::dereference_alias (other);
 		return TypeCodeBase::equivalent (tk_except, RepIdOf <E>::repository_id_, tco)
 			&& TypeCodeBase::equivalent (Members::members (), Members::member_count (), tco);
 	}

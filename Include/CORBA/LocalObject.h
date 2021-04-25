@@ -74,6 +74,12 @@ public:
 		I_ptr_base (src)
 	{}
 
+	I_ptr (const I_ref <LocalObject>& var) NIRVANA_NOEXCEPT :
+		I_ptr_base (var)
+	{}
+
+#ifdef LEGACY_CORBA_CPP
+
 	I_ptr (const I_var <LocalObject>& var) NIRVANA_NOEXCEPT :
 		I_ptr_base (var)
 	{}
@@ -85,6 +91,8 @@ public:
 	{
 		this->move_from (var);
 	}
+
+#endif
 
 	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
 	{

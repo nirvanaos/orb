@@ -32,9 +32,9 @@
 namespace CORBA {
 namespace Nirvana {
 
-Bridge <Object>* get_object_from_core (LocalObject_ptr core_object, String_in iid);
+Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object, String_in iid);
 
-Interface::_ref_type get_proxy (LocalObject_ptr core_object);
+Interface::_ref_type get_proxy (LocalObject::_ptr_type core_object);
 
 }
 }

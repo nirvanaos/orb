@@ -122,8 +122,8 @@ class Client <T, Object> :
 	public T
 {
 public:
-	ImplementationDef_var _get_implementation ();
-	InterfaceDef_var _get_interface ();
+	Nirvana::I_ref <ImplementationDef> _get_implementation ();
+	Nirvana::I_ref <InterfaceDef> _get_interface ();
 	Boolean _is_a (String_in type_id);
 	Boolean _non_existent ();
 	Boolean _is_equivalent (I_in <Object> other_object);
@@ -132,13 +132,13 @@ public:
 };
 
 template <class T>
-ImplementationDef_var Client <T, Object>::_get_implementation ()
+Nirvana::I_ref <ImplementationDef> Client <T, Object>::_get_implementation ()
 {
-	return I_var <ImplementationDef> ();
+	return I_ref <ImplementationDef> ();
 }
 
 template <class T>
-InterfaceDef_var Client <T, Object>::_get_interface ()
+Nirvana::I_ref <InterfaceDef> Client <T, Object>::_get_interface ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
@@ -196,9 +196,9 @@ class Object :
 	public Nirvana::ClientBase <Object, AbstractBase> // AbstractBase operations are not available directly on Object_ptr.
 {};
 
-inline Object_var AbstractBase::_to_object ()
+inline Object::_ref_type AbstractBase::_to_object ()
 {
-	return Object::_duplicate (_query_interface <Object> ());
+	return _query_interface <Object> ();
 }
 
 namespace Nirvana {
@@ -209,9 +209,9 @@ class ClientInterfaceBase <Primary, Object> :
 	public Client <ClientBase <Primary, Object>, Object>
 {
 public:
-	static I_ptr <Primary> _narrow (Object_ptr obj)
+	static I_ref <Primary> _narrow (Object::_ptr_type obj)
 	{
-		return Primary::_duplicate (AbstractBase_ptr (obj)->_query_interface <Primary> ());
+		return AbstractBase::_ptr_type (obj)->_query_interface <Primary> ();
 	}
 };
 

@@ -43,9 +43,9 @@ Boolean TypeCodeBase::equal (TCKind tk, I_ptr <TypeCode> other)
 	return tk == other->kind ();
 }
 
-I_var <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc)
+I_ref <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc)
 {
-	I_var <TypeCode> ret = TypeCode::_duplicate (tc);
+	I_ref <TypeCode> ret = tc;
 	while (tk_alias == ret->kind ()) {
 		ret = ret->content_type ();
 	}

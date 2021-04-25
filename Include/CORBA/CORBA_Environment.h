@@ -40,8 +40,11 @@ class Environment :
 {
 public:
 	using Nirvana::LocalImpl <Environment>::_ptr_type;
-	using Nirvana::LocalImpl <Environment>::_var_type;
+	using Nirvana::LocalImpl <Environment>::_ref_type;
 	using Nirvana::LocalImpl <Environment>::_out_type;
+#ifdef LEGACYY_CORBA_CPP
+	using Nirvana::LocalImpl <Environment>::_var_type;
+#endif
 
 	Environment () {}
 
@@ -75,8 +78,10 @@ struct Type < ::CORBA::Environment> : TypeLocal < ::CORBA::Environment>
 {};
 
 }
-#ifdef LEGACY_CORBA_CPP
+
 typedef Environment* Environment_ptr;
+
+#ifdef LEGACY_CORBA_CPP
 typedef Environment::_var_type Environment_var;
 typedef Environment_var& Environment_out;
 #endif

@@ -28,12 +28,12 @@
 namespace CORBA {
 namespace Nirvana {
 
-PortableServer::POA_var ServantPOA <LocalObject>::_default_POA ()
+PortableServer::POA::_ref_type ServantPOA <LocalObject>::_default_POA ()
 {
 	return PortableServer::POA::_nil ();
 }
 
-InterfaceDef_var ServantPOA <LocalObject>::_get_interface ()
+InterfaceDef::_ref_type ServantPOA <LocalObject>::_get_interface ()
 {
 	_check_construct ();
 	return LocalObjectLink::core_object_->_get_interface ();

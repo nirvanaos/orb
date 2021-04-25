@@ -45,7 +45,7 @@ public:
 #ifdef LEGACY_CORBA_CPP
 	typedef PortableServer::Servant_var <T> _var_type;
 #endif
-	typedef _var_type& _out_type;
+	typedef _ref_type& _out_type;
 
 	LocalImpl () :
 		ref_cnt_ (1)
@@ -96,10 +96,15 @@ private:
 template <class T>
 struct TypeLocal
 {
-	typedef typename LocalImpl <T>::_var_type Var;
+	typedef typename LocalImpl <T>::_ref_type Var;
 	typedef const Var& ConstRef;
 	typedef ConstRef C_in;
-	typedef typename PortableServer::Servant_out <T> C_out;
+#ifdef LEGACY_CORBA_CPP
+	typedef typename LocalImpl <T>::_var_type C_var;
+	typedef PortableServer::Servant_out <T> C_out;
+#else
+	typedef servant_out <T> C_out;
+#endif
 	typedef Var& C_inout;
 };
 

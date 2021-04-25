@@ -50,7 +50,7 @@ struct servant_traits
 	typedef Nirvana::ServantPOA <I> base_type;
 
 	/// \brief Servant reference.
-	typedef ::PortableServer::Servant_var <Nirvana::ServantPOA <I>> ref_type;
+	typedef servant_reference <Nirvana::ServantPOA <I>> ref_type;
 
 	/// \brief Tied servant.
 	/// 

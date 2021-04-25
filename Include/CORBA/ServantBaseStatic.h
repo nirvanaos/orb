@@ -52,12 +52,12 @@ public:
 
 	// ServantBase operations
 
-	static PortableServer::POA_var _default_POA ()
+	static I_ref <PortableServer::POA> _default_POA ()
 	{
 		return servant_base ()->_default_POA ();
 	}
 
-	static InterfaceDef_var _get_interface ()
+	static I_ref <InterfaceDef> _get_interface ()
 	{
 		return servant_base ()->_get_interface ();
 	}

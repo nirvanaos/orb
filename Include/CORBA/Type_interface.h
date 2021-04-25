@@ -103,14 +103,7 @@ protected:
 
 protected:
 	Interface*& ref_;
-};
-
-
-template <class I> inline
-I_inout <I> I_var <I>::inout ()
-{
-	return I_inout <I> (*this);
-}
+ };
 
 //! I_out helper class for interface
 template <class I>
@@ -146,11 +139,21 @@ public:
 	}
 };
 
+#ifdef LEGACY_CORBA_CPP
+
+template <class I> inline
+I_inout <I> I_var <I>::inout ()
+{
+	return I_inout <I> (*this);
+}
+
 template <class I> inline
 I_out <I> I_var <I>::out ()
 {
 	return I_out <I> (*this);
 }
+
+#endif
 
 //! I_ret helper class for interface
 template <class I>
@@ -255,8 +258,6 @@ public:
 	{}
 };
 
-typedef I_var <Interface> Interface_var;
-
 template <class I>
 struct TypeItfBase
 {
@@ -317,7 +318,7 @@ struct TypeItfBase
 
 	// Valuetupe implementation for state members must return I_ptr, not I_ref.
 	// Otherwise compilation error will occur.
-	static void VT_ret (I_var <I>&);
+	static void VT_ret (I_ref <I>&);
 
 	typedef I_ref <I> Member;
 	typedef I_ptr <I> ConstRef;
@@ -374,7 +375,10 @@ struct TypeItf <Interface> : TypeItfBase <Interface>
 	typedef Interface* ABI_ret;
 	typedef Interface* ABI_VT_ret;
 
+#ifdef LEGACY_CORBA_CPP
 	typedef I_var <Interface> C_var;
+#endif
+
 	typedef I_in <Interface> C_in;
 	typedef I_out <Interface> C_out;
 	typedef I_inout <Interface> C_inout;

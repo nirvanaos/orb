@@ -43,12 +43,12 @@ public:
 
 	// ServantBase operations
 
-	PortableServer::POA_var _default_POA () const
+	I_ref <PortableServer::POA> _default_POA () const
 	{
 		return core_object_->_default_POA ();
 	}
 
-	InterfaceDef_var _get_interface () const
+	I_ref <InterfaceDef> _get_interface () const
 	{
 		return core_object_->_get_interface ();
 	}
@@ -93,7 +93,7 @@ protected:
 	}
 
 protected:
-	PortableServer::ServantBase_var core_object_;
+	PortableServer::ServantBase::_ref_type core_object_;
 };
 
 }

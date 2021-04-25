@@ -85,7 +85,7 @@ void Type <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst)
 			psrc = src.small_pointer ();
 		}
 		tc->_marshal_out (psrc, marshaler, pdst);
-		release (tc);
+		Nirvana::interface_release (&tc);
 		src.reset ();
 	}
 }
@@ -96,7 +96,7 @@ void Type <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
 	if (!ptc)
 		dst.reset ();
 	else {
-		I_var <TypeCode> tc (unmarshaler->unmarshal_interface <TypeCode> (ptc));
+		I_ref <TypeCode> tc (unmarshaler->unmarshal_interface <TypeCode> (ptc));
 		::Nirvana::ConstPointer psrc;
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
@@ -137,7 +137,7 @@ void Any::clear ()
 		else
 			p = small_pointer ();
 		tc->_destruct (p);
-		release (tc);
+		interface_release (&tc);
 	}
 	if (large)
 		::Nirvana::g_memory->release (large_pointer (), large_size ());
@@ -162,12 +162,14 @@ void* Any::prepare (I_ptr <TypeCode> tc)
 
 void Any::set_type (I_ptr <TypeCode> tc)
 {
-	ABI::type (static_cast <Nirvana::Bridge <TypeCode>*> (&TypeCode::_duplicate (tc)));
+	ABI::type (interface_duplicate (&tc));
 }
 
-void Any::set_type (I_var <TypeCode>&& tc)
+void Any::set_type (I_ref <TypeCode>&& tc)
 {
-	ABI::type (&tc._retn ());
+	I_ptr <TypeCode> tcp;
+	reinterpret_cast <I_ref <TypeCode>&> (tcp) = std::move (tc);
+	ABI::type (&tcp);
 }
 
 void Any::copy_from (I_ptr <TypeCode> tc, const void* val)
@@ -200,8 +202,8 @@ void Any::type (I_ptr <TypeCode> alias)
 {
 	I_ptr <TypeCode> tc = type ();
 	if (tc && tc->equivalent (alias)) {
-		release (tc);
-		set_type (tc);
+		interface_release (&tc);
+		set_type (alias);
 	}
 }
 

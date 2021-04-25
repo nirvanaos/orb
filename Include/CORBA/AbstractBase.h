@@ -94,13 +94,20 @@ class AbstractBase :
 	public Nirvana::ClientInterfacePrimary <AbstractBase>
 {
 public:
+#ifdef LEGACY_CORBA_CPP
 	static AbstractBase_ptr _narrow (AbstractBase_ptr obj)
 	{
 		return _duplicate (obj);
 	}
+#else
+	static AbstractBase::_ref_type _narrow (AbstractBase::_ptr_type obj)
+	{
+		return obj;
+	}
+#endif
 
-	inline Object_var _to_object ();
-	inline ValueBase* _to_value ();
+	inline Nirvana::I_ref <Object> _to_object ();
+	inline Nirvana::I_ref <ValueBase> _to_value ();
 };
 
 namespace Nirvana {
@@ -111,9 +118,9 @@ class ClientInterfaceBase <Primary, AbstractBase> :
 	public Client <ClientBase <Primary, AbstractBase>, AbstractBase>
 {
 public:
-	static I_ptr <Primary> _narrow (AbstractBase_ptr obj)
+	static I_ref <Primary> _narrow (AbstractBase::_ptr_type obj)
 	{
-		return Primary::_duplicate (obj->_query_interface <Primary> ());
+		return obj->_query_interface <Primary> ();
 	}
 };
 

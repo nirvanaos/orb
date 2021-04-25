@@ -39,14 +39,14 @@ public:
 	template <class I>
 	static Interface* __duplicate (Interface* itf, Interface*)
 	{
-		::Nirvana::Module::_duplicate (::Nirvana::g_module);
+		interface_duplicate (::Nirvana::g_module.imp.itf);
 		return itf;
 	}
 
 	template <class I>
 	static void __release (Interface*)
 	{
-		release ((::Nirvana::Module_ptr)::Nirvana::g_module);
+		interface_release (::Nirvana::g_module.imp.itf);
 	}
 };
 

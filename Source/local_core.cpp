@@ -28,7 +28,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-Bridge <Object>* get_object_from_core (LocalObject_ptr core_object, String_in iid)
+Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object, String_in iid)
 {
 	Bridge <LocalObject>* bridge = &core_object;
 	Environment env;
@@ -37,9 +37,9 @@ Bridge <Object>* get_object_from_core (LocalObject_ptr core_object, String_in ii
 	return obj;
 }
 
-Interface::_ref_type get_proxy (LocalObject_ptr core_object)
+Interface::_ref_type get_proxy (LocalObject::_ptr_type core_object)
 {
-	Interface::_ptr_type proxy = AbstractBase_ptr (Object_ptr (core_object))->_query_interface (0);
+	Interface::_ptr_type proxy = AbstractBase::_ptr_type (Object::_ptr_type (core_object))->_query_interface (0);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
 	return proxy; // Duplicate

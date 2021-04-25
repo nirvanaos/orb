@@ -35,7 +35,9 @@ namespace PortableServer {
 
 class POA;
 typedef ::CORBA::Nirvana::I_ptr <POA> POA_ptr;
+#ifdef LEGACY_CORBA_CPP
 typedef ::CORBA::Nirvana::I_var <POA> POA_var;
+#endif
 
 class ServantBase;
 
@@ -52,15 +54,20 @@ template <> class ::CORBA::Nirvana::I_ptr < ::PortableServer::ServantBase>;
 namespace PortableServer {
 
 typedef ::CORBA::Nirvana::I_ptr <ServantBase> Servant;
+
+#ifdef LEGACY_CORBA_CPP
 typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
+#endif
 
 }
 
 namespace CORBA {
 
 typedef Object InterfaceDef; // TODO: Not defined yet
+#ifdef LEGACY_CORBA_CPP
 typedef Nirvana::I_ptr <InterfaceDef> InterfaceDef_ptr;
 typedef Nirvana::I_var <InterfaceDef> InterfaceDef_var;
+#endif
 
 namespace Nirvana {
 
@@ -84,8 +91,8 @@ class Client <T, ::PortableServer::ServantBase> :
 	public T
 {
 public:
-	::PortableServer::POA_var _default_POA ();
-	InterfaceDef_var _get_interface ();
+	I_ref < ::PortableServer::POA> _default_POA ();
+	I_ref <InterfaceDef> _get_interface ();
 	Boolean _is_a (String_in type_id);
 	Boolean _non_existent ();
 
@@ -94,7 +101,7 @@ public:
 };
 
 template <class T>
-::PortableServer::POA_var Client <T, ::PortableServer::ServantBase>::_default_POA ()
+I_ref < ::PortableServer::POA> Client <T, ::PortableServer::ServantBase>::_default_POA ()
 {
 	Environment _env;
 	Bridge <::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
@@ -104,7 +111,7 @@ template <class T>
 }
 
 template <class T>
-InterfaceDef_var Client <T, ::PortableServer::ServantBase>::_get_interface ()
+I_ref <InterfaceDef> Client <T, ::PortableServer::ServantBase>::_get_interface ()
 {
 	Environment _env;
 	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
@@ -159,14 +166,14 @@ public:
 		I_ptr_base (src)
 	{}
 
-	I_ptr (const I_var <::PortableServer::ServantBase>& var) NIRVANA_NOEXCEPT :
+	I_ptr (const I_ref <::PortableServer::ServantBase>& var) NIRVANA_NOEXCEPT :
 		I_ptr_base (var)
 	{}
 
 	/// Move constructor in case returned I_var assigned to I_ptr:
 	///    Object_var func ();
 	///    Object_ptr obj = func ();
-	I_ptr (I_var <::PortableServer::ServantBase>&& var) NIRVANA_NOEXCEPT
+	I_ptr (I_ref <::PortableServer::ServantBase>&& var) NIRVANA_NOEXCEPT
 	{
 		this->move_from (var);
 	}
@@ -197,10 +204,14 @@ class ServantBase :
 	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::AbstractBase>
 {};
 
+#ifdef LEGACY_CORBA_CPP
+
 inline void release (Servant& ptr)
 {
 	::CORBA::release (ptr);
 }
+
+#endif
 
 }
 

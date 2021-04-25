@@ -98,10 +98,13 @@ protected:
 protected:
 	friend class I_ref_base <I>;
 	template <class I1> friend class I_ref;
-	friend class I_var <I>;
 	friend class I_inout <I>;
 	friend class I_ret <I>;
 	template <class I1> friend class I_ptr;
+
+#ifdef LEGACY_CORBA_CPP
+	friend class I_var <I>;
+#endif
 
 	I* p_;
 };

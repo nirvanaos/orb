@@ -102,7 +102,7 @@ template <class I>
 class ProxyBaseInterface
 {
 public:
-	void init (AbstractBase_ptr ab)
+	void init (AbstractBase::_ptr_type ab)
 	{
 		proxy_ = static_cast <Bridge <I>*> (&ab->_query_interface (I::repository_id_));
 		if (!proxy_)

@@ -53,7 +53,7 @@ public:
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		I_var <TypeCode> otc = TypeCodeBase::dereference_alias (other);
+		I_ref <TypeCode> otc = TypeCodeBase::dereference_alias (other);
 		return TypeCodeBase::equivalent (tk_sequence, otc)
 			&& otc->length () == bound
 			&& otc->content_type ()->equivalent (ContentType::ptr ());

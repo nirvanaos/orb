@@ -26,9 +26,9 @@
 #ifndef NIRVANA_ORB_I_VAR_H_
 #define NIRVANA_ORB_I_VAR_H_
 
-#ifdef LEGACY_CORBA_CPP
-
 #include "I_ref.h"
+
+#ifdef LEGACY_CORBA_CPP
 
 namespace CORBA {
 namespace Nirvana {

@@ -77,7 +77,7 @@ public:
 protected:
 	static Boolean equal (TCKind tk, String_in& id, I_ptr <TypeCode> other);
 	static Boolean equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other);
-	static I_var <TypeCode> dereference_alias (I_ptr <TypeCode> tc);
+	static I_ref <TypeCode> dereference_alias (I_ptr <TypeCode> tc);
 	static Boolean equal (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other);
 	static Boolean equivalent (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other);
 	static Boolean equal (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
@@ -348,7 +348,7 @@ public:
 
 	// The get_compact_typecode operation strips out all optional name and member
 	// name fields, but it leaves all alias typecodes intact.
-	I_var <TypeCode> get_compact_typecode ()
+	I_ref <TypeCode> get_compact_typecode ()
 	{
 		// Currently, we don't strip names, just return this type code.
 		return TypeCode::_duplicate (&static_cast <TypeCode&> (static_cast <Bridge <TypeCode>&> (static_cast <S&> (*this))));

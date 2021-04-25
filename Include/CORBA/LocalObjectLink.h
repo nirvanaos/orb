@@ -67,7 +67,7 @@ protected:
 	}
 
 protected:
-	LocalObject_var core_object_;
+	LocalObject::_ref_type core_object_;
 };
 
 }

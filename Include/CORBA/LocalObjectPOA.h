@@ -48,8 +48,8 @@ public:
 
 	// Object operations
 
-	virtual PortableServer::POA_var _default_POA ();
-	virtual InterfaceDef_var _get_interface ();
+	virtual I_ref <PortableServer::POA> _default_POA ();
+	virtual I_ref <InterfaceDef> _get_interface ();
 	virtual Boolean _is_a (String_in type_id);
 	virtual Boolean _non_existent ();
 

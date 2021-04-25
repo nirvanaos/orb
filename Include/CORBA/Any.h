@@ -243,7 +243,7 @@ private:
 	void copy_from (const Any& src);
 	void* prepare (Nirvana::I_ptr <TypeCode> tc);
 	void set_type (Nirvana::I_ptr <TypeCode> tc);
-	void set_type (Nirvana::I_var <TypeCode>&& tc);
+	void set_type (Nirvana::I_ref <TypeCode>&& tc);
 
 	// these functions are private and not implemented
 	// hiding these causes compile-time errors for
