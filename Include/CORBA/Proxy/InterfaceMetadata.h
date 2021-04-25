@@ -119,6 +119,13 @@ template <>
 struct Type <InterfaceMetadataPtr> : TypeByVal <InterfaceMetadataPtr>
 {};
 
+// native InterfacePtr;
+typedef Interface* InterfacePtr;
+
+template <>
+struct Type <InterfacePtr> : TypeByVal <InterfacePtr>
+{};
+
 }
 }
 

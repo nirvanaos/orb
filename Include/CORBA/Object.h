@@ -54,12 +54,16 @@ typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
 namespace CORBA {
 
 class ImplementationDef; // Not defined, unused
+#ifdef LEGACY_CORBA_CPP
 typedef Nirvana::I_ptr <ImplementationDef> ImplementationDef_ptr;
 typedef Nirvana::I_var <ImplementationDef> ImplementationDef_var;
+#endif
 
 typedef Object InterfaceDef; // TODO: Not defined yet
+#ifdef LEGACY_CORBA_CPP
 typedef Nirvana::I_ptr <InterfaceDef> InterfaceDef_ptr;
 typedef Nirvana::I_var <InterfaceDef> InterfaceDef_var;
+#endif
 
 namespace Nirvana {
 

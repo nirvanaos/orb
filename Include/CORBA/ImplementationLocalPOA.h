@@ -46,7 +46,7 @@ class NIRVANA_NOVTABLE ImplementationLocalPOA :
 	public InterfaceImpl <ServantPOA <Primary>, Primary>
 {
 public:
-	virtual Interface_ptr _query_interface (const String& id)
+	virtual Interface* _query_interface (const String& id)
 	{
 #ifdef _DEBUG
 		Bridge <AbstractBase>* ab = this;

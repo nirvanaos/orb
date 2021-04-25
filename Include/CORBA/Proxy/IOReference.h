@@ -30,11 +30,9 @@
 module CORBA {
 module Nirvana {
 
-struct OperationIndex
-{
-	unsigned short interface_idx;
-	unsigned short operation_idx;
-};
+/// High 16 bits contain the interface index.
+/// Low 16 bits contain the operation index within the interface.
+typedef unsigned long OperationIndex;
 
 /// \brief Interoperable Object Reference.
 ///        Interface to the implementation of the some Inter-ORB protocol.
@@ -86,24 +84,24 @@ namespace CORBA {
 namespace Nirvana {
 
 class Marshal;
+#ifdef LEGACY_CORBA_CPP
 typedef I_ptr <Marshal> Marshal_ptr;
 typedef I_var <Marshal> Marshal_var;
+#endif
 
 class Unmarshal;
+#ifdef LEGACY_CORBA_CPP
 typedef I_ptr <Unmarshal> Unmarshal_ptr;
 typedef I_var <Unmarshal> Unmarshal_var;
+#endif
 
-struct OperationIndex
-{
-	UShort interface_idx;
-	UShort operation_idx;
-};
-
-template <> struct Type <OperationIndex> : TypeFixLen <OperationIndex> {};
+typedef ULong OperationIndex;
 
 class IOReference;
+#ifdef LEGACY_CORBA_CPP
 typedef I_ptr <IOReference> IOReference_ptr;
 typedef I_var <IOReference> IOReference_var;
+#endif
 
 template <>
 struct Type <IOReference> : TypeItf <IOReference>

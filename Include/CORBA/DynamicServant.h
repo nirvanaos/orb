@@ -35,8 +35,10 @@ namespace CORBA {
 namespace Nirvana {
 
 class DynamicServant;
+#ifdef LEGACY_CORBA_CPP
 typedef I_ptr <DynamicServant> DynamicServant_ptr;
 typedef I_var <DynamicServant> DynamicServant_var;
+#endif
 
 template <>
 struct Type <DynamicServant> : TypeItf <DynamicServant>

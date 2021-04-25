@@ -40,7 +40,6 @@
 #include "TypeCodeStruct.h"
 #include "TypeAlias.h"
 #include "TypeCodeTypeDef.h"
-#include <Nirvana/stateless.h>
 #include <Nirvana/OLF.h>
 
 namespace CORBA {
@@ -59,12 +58,22 @@ public:
 		return &metadata_;
 	}
 
-	Interface_ptr create_proxy (
-		IOReference_ptr proxy_manager, UShort interface_idx,
+	Interface* create_proxy (
+		I_ptr <IOReference> proxy_manager, UShort interface_idx,
 		DynamicServant_var& deleter)
 	{
-		Proxy <I>* proxy =
-			::Nirvana::stateless_create <Proxy <I> > (proxy_manager, interface_idx);
+		typedef Proxy <I> ProxyClass;
+		typename std::aligned_storage <sizeof (ProxyClass), alignof (ProxyClass)>::type tmp;
+		CORBA::Nirvana::StatelessCreationFrame scb { &tmp, sizeof (ProxyClass) };
+		CORBA::Nirvana::g_object_factory->stateless_begin (scb);
+		ProxyClass* proxy;
+		try {
+			new (&tmp) ProxyClass (proxy_manager, interface_idx);
+			proxy = (ProxyClass*)CORBA::Nirvana::g_object_factory->stateless_end (true);
+		} catch (...) {
+			CORBA::Nirvana::g_object_factory->stateless_end (false);
+			throw;
+		}
 		deleter = proxy->_dynamic_servant ();
 		return proxy->_proxy ();
 	}

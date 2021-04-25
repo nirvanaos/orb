@@ -37,6 +37,21 @@
 namespace CORBA {
 namespace Nirvana {
 
+inline OperationIndex make_op_idx (UShort itf_idx, UShort op_idx)
+{
+	return (ULong)itf_idx << 16 | op_idx;
+}
+
+inline UShort interface_idx (OperationIndex oi)
+{
+	return oi >> 16;
+}
+
+inline UShort operation_idx (OperationIndex oi)
+{
+	return (UShort)oi;
+}
+
 template <class I> class Proxy;
 
 class ProxyRoot : public ServantMemory
@@ -65,6 +80,11 @@ public:
 	UShort _interface_idx () const
 	{
 		return interface_idx_;
+	}
+
+	ULong _make_op_idx (UShort op_idx) const
+	{
+		return make_op_idx (interface_idx_, op_idx);
 	}
 
 protected:

@@ -104,7 +104,7 @@ public:
 	}
 
 	template <class I1>
-	I_ref& operator = (I_ref <I1>&& src) NIRVANA_NOEXCEPT
+	I_ref& operator = (I_ref <I1>&& src)
 	{
 		if (&src != this) {
 			reset (wide (src.p_));
@@ -155,7 +155,7 @@ protected:
 	{}
 
 private:
-	void reset (I* p) NIRVANA_NOEXCEPT
+	void reset (I* p)
 	{
 		if (p_ != p) {
 			I* tmp = p_;

@@ -36,12 +36,16 @@ namespace CORBA {
 namespace Nirvana {
 
 class DynamicServant;
+#ifdef LEGACY_CORBA_CPP
 typedef I_ptr <DynamicServant> DynamicServant_ptr;
 typedef I_var <DynamicServant> DynamicServant_var;
+#endif
 
 class ObjectFactory;
+#ifdef LEGACY_CORBA_CPP
 typedef I_ptr <ObjectFactory> ObjectFactory_ptr;
 typedef I_var <ObjectFactory> ObjectFactory_var;
+#endif
 
 struct StatelessCreationFrame
 {

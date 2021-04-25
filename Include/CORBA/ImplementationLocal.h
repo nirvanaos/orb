@@ -50,7 +50,7 @@ class ImplementationLocal :
 	public InterfaceImpl <S, LocalObject> // LocalObject implementation must be constructed after all interfaces.
 {
 public:
-	Interface_ptr _query_interface (const String& id)
+	Interface* _query_interface (const String& id)
 	{
 		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);
 	}

@@ -34,11 +34,9 @@ native Size;
 module CORBA {
 module Nirvana {
 
-struct OperationIndex
-{
-	unsigned short interface_idx;
-	unsigned short operation_idx;
-};
+/// Low 16 bits contain the interface index.
+/// High 16 bits contain the operation index within the interface.
+typedef unsigned long OperationIndex;
 
 interface Marshal;
 interface Unmarshal;

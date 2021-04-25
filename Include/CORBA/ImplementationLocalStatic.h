@@ -46,7 +46,7 @@ class ImplementationLocalStatic :
 	public InterfaceStatic <S, Primary>
 {
 public:
-	Interface_ptr _query_interface (const String& id)
+	Interface* _query_interface (const String& id)
 	{
 		return FindInterface <Primary, Bases...>::find (*(S*)0, id);
 	}

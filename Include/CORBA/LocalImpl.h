@@ -28,6 +28,7 @@
 #define NIRVANA_ORB_LOCALIMPL_H_
 
 #include "primitive_types.h"
+#include "servant_reference.h"
 #include "Servant_var.h"
 #include "Type_forward.h"
 
@@ -40,7 +41,10 @@ class LocalImpl
 {
 public:
 	typedef T* _ptr_type;
+	typedef servant_reference <T> _ref_type;
+#ifdef LEGACY_CORBA_CPP
 	typedef PortableServer::Servant_var <T> _var_type;
+#endif
 	typedef _var_type& _out_type;
 
 	LocalImpl () :
@@ -101,6 +105,8 @@ struct TypeLocal
 
 }
 
+#ifdef LEGACY_CORBA_CPP
+
 /// CORBA::release
 template <class T> inline
 void release (Nirvana::LocalImpl <T>* ptr)
@@ -108,6 +114,8 @@ void release (Nirvana::LocalImpl <T>* ptr)
 	if (ptr)
 		ptr->_remove_ref ();
 }
+
+#endif
 
 }
 

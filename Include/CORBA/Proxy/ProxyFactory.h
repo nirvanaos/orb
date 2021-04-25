@@ -42,11 +42,13 @@ module CORBA {
 module Nirvana {
 
 native InterfaceMetadataPtr;
+native InterfacePtr;
 
 pseudo interface ProxyFactory {
 	readonly attribute InterfaceMetadataPtr metadata;
-	Interface create_proxy (IOReference target, short interface_idx, out DynamicServant deleter);
+	InterfacePtr create_proxy (IOReference target, short interface_idx, out DynamicServant deleter);
 };
+
 };
 };
 ~~~
@@ -54,7 +56,7 @@ pseudo interface ProxyFactory {
 
 NIRVANA_BRIDGE_BEGIN (ProxyFactory, CORBA_NIRVANA_REPOSITORY_ID ("ProxyFactory"))
 Type <InterfaceMetadataPtr>::ABI_ret (*_get_metadata) (Bridge <ProxyFactory>*, Interface*);
-Interface* (*create_proxy) (Bridge <ProxyFactory>*, Interface*, UShort interface_idx, Interface**, Interface*);
+Type <InterfacePtr>::ABI_ret (*create_proxy) (Bridge <ProxyFactory>*, Interface*, UShort interface_idx, Interface**, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
@@ -64,7 +66,7 @@ class Client <T, ProxyFactory> :
 public:
 	Type <InterfaceMetadataPtr>::Var metadata ();
 
-	TypeItf <Interface>::Var create_proxy (TypeItf <IOReference>::C_in target, UShort interface_idx, TypeItf <DynamicServant>::C_out deleter);
+	Type <InterfacePtr>::Var create_proxy (TypeItf <IOReference>::C_in target, UShort interface_idx, TypeItf <DynamicServant>::C_out deleter);
 };
 
 template <class T>
@@ -78,11 +80,11 @@ Type <InterfaceMetadataPtr>::Var Client <T, ProxyFactory>::metadata ()
 }
 
 template <class T>
-TypeItf <Interface>::Var Client <T, ProxyFactory>::create_proxy (TypeItf <IOReference>::C_in target, UShort interface_idx, TypeItf <DynamicServant>::C_out deleter)
+Type <InterfacePtr>::Var Client <T, ProxyFactory>::create_proxy (TypeItf <IOReference>::C_in target, UShort interface_idx, TypeItf <DynamicServant>::C_out deleter)
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));
-	TypeItf <Interface>::C_ret _ret = (_b._epv ().epv.create_proxy) (&_b, &target, interface_idx, &deleter, &_env);
+	Type <InterfacePtr>::C_ret _ret = (_b._epv ().epv.create_proxy) (&_b, &target, interface_idx, &deleter, &_env);
 	_env.check ();
 	return _ret;
 }

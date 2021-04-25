@@ -143,6 +143,8 @@ public:
 		Base (src)
 	{}
 
+#ifdef LEGACY_CORBA_CPP
+
 	/// Move constructor in case returned I_ref assigned to I_ptr:
 	///    Object::_ref_type func ();
 	///    Object_ptr obj = func ();
@@ -150,6 +152,8 @@ public:
 	{
 		this->move_from (src);
 	}
+
+#endif
 
 	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
 	{
@@ -189,6 +193,13 @@ public:
 		Base (src)
 	{}
 
+	/// Move constructor in case returned I_ref assigned to I_ptr.
+	/// It is used internally.
+	I_ptr (I_ref <Interface>&& src) NIRVANA_NOEXCEPT
+	{
+		this->move_from (src);
+	}
+
 	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
 	{
 		Base::operator = (src);
@@ -201,8 +212,6 @@ public:
 		return this->p_;
 	}
 };
-
-typedef I_ptr <Interface> Interface_ptr;
 
 inline I_ptr <Interface> Interface::_nil () NIRVANA_NOEXCEPT
 {

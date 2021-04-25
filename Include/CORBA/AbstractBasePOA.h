@@ -41,7 +41,7 @@ class NIRVANA_NOVTABLE ServantPOA <AbstractBase> :
 	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>
 {
 public:
-	virtual Interface_ptr _query_interface (const String& id) = 0;
+	virtual Interface* _query_interface (const String& id) = 0;
 
 protected:
 	ServantPOA ()
