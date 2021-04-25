@@ -37,10 +37,10 @@ namespace Nirvana {
 // or to assert (false) and return nullptr.
 inline Bridge <Object>* get_object_from_core (PortableServer::Servant core_object, String_in iid)
 {
-	return static_cast <Bridge <Object>*> (AbstractBase_ptr (core_object)->_query_interface (iid));
+	return static_cast <Bridge <Object>*> (&AbstractBase_ptr (core_object)->_query_interface (iid));
 }
 
-Interface* get_proxy (PortableServer::Servant core_object);
+Interface::_ref_type get_proxy (PortableServer::Servant core_object);
 
 }
 }

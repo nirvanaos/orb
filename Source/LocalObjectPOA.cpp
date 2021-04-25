@@ -50,7 +50,7 @@ Boolean ServantPOA <LocalObject>::_non_existent ()
 	return LocalObjectLink::_non_existent ();
 }
 
-Interface* ServantPOA <LocalObject>::_get_proxy ()
+Interface::_ref_type ServantPOA <LocalObject>::_get_proxy ()
 {
 	_check_construct ();
 	return LocalObjectLink::_get_proxy ();

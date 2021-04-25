@@ -104,7 +104,7 @@ class ProxyBaseInterface
 public:
 	void init (AbstractBase_ptr ab)
 	{
-		proxy_ = static_cast <Bridge <I>*> (ab->_query_interface (I::repository_id_));
+		proxy_ = static_cast <Bridge <I>*> (&ab->_query_interface (I::repository_id_));
 		if (!proxy_)
 			throw OBJ_ADAPTER ();
 	}

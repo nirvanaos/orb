@@ -56,9 +56,9 @@ public:
 		return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
 	}
 
-	I_ptr <Primary> _this ()
+	I_ref <Primary> _this ()
 	{
-		return static_cast <Primary*> (this->_get_proxy ());
+		return this->_get_proxy ().downcast <Primary> ();
 	}
 
 protected:

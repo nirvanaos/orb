@@ -34,7 +34,7 @@ namespace Nirvana {
 
 Bridge <Object>* get_object_from_core (LocalObject_ptr core_object, String_in iid);
 
-Interface* get_proxy (LocalObject_ptr core_object);
+Interface::_ref_type get_proxy (LocalObject_ptr core_object);
 
 }
 }

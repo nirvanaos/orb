@@ -55,17 +55,14 @@ class ImplementationPseudo :
 	public InterfaceImplBase <S, Primary>
 {
 public:
-
-	//! \fn I_ptr <Primary> _get_ptr ()
-	//!
-	//! \brief Gets the pointer.
-	//!   Works like _this() method but doesn't increment the reference counter.
-	//!
-	//! \return The primary interface pointer.
-
 	I_ptr <Primary> _get_ptr ()
 	{
 		return I_ptr <Primary> (&static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this)));
+	}
+
+	I_ref <Primary> _this ()
+	{
+		return _get_ptr ();
 	}
 
 protected:

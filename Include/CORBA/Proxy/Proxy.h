@@ -60,11 +60,11 @@ public:
 
 	Interface* create_proxy (
 		I_ptr <IOReference> proxy_manager, UShort interface_idx,
-		DynamicServant*& deleter)
+		Interface*& deleter)
 	{
 		typedef Proxy <I> ProxyClass;
 		typename std::aligned_storage <sizeof (ProxyClass), alignof (ProxyClass)>::type tmp;
-		CORBA::Nirvana::StatelessCreationFrame scb { &tmp, sizeof (ProxyClass) };
+		CORBA::Nirvana::StatelessCreationFrame scb (&tmp, sizeof (ProxyClass), 0);
 		CORBA::Nirvana::g_object_factory->stateless_begin (scb);
 		ProxyClass* proxy;
 		try {

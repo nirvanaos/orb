@@ -53,12 +53,12 @@ protected:
 		return Type <InterfaceMetadataPtr>::ret ();
 	}
 
-	static Type <InterfacePtr>::ABI_ret _create_proxy (Bridge <ProxyFactory>* obj, Interface* target, UShort interface_idx, Type <DynamicServantPtr>::ABI_out deleter, Interface* env)
+	static Type <InterfacePtr>::ABI_ret _create_proxy (Bridge <ProxyFactory>* obj, Interface* target, UShort interface_idx, Type <InterfacePtr>::ABI_out deleter, Interface* env)
 	{
 		try {
 			return Type <InterfacePtr>::ret (S::_implementation (obj).create_proxy (
 				TypeItf <IOReference>::in (target), interface_idx,
-				Type <DynamicServantPtr>::out (deleter)));
+				Type <InterfacePtr>::out (deleter)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {

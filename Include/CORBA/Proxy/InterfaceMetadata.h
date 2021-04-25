@@ -126,13 +126,6 @@ template <>
 struct Type <InterfacePtr> : TypeByVal <InterfacePtr>
 {};
 
-// native DynamicServantPtr;
-typedef DynamicServant* DynamicServantPtr;
-
-template <>
-struct Type <DynamicServantPtr> : TypeByVal <DynamicServantPtr>
-{};
-
 }
 }
 

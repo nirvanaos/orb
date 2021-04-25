@@ -47,11 +47,52 @@ typedef I_ptr <ObjectFactory> ObjectFactory_ptr;
 typedef I_var <ObjectFactory> ObjectFactory_var;
 #endif
 
-struct StatelessCreationFrame
+class StatelessCreationFrame
 {
-	Type < ::Nirvana::ConstPointer>::Member tmp; ///< Pointer to the servant temporary location in stack
-	Type < ::Nirvana::Size>::Member size; ///< Servant size
-	Type < ::Nirvana::PtrDiff>::Member offset; ///< Offset to the stateless memory block
+public:
+	StatelessCreationFrame () :
+		_tmp (),
+		_size (),
+		_offset ()
+	{}
+
+	explicit StatelessCreationFrame (::Nirvana::ConstPointer tmp, ::Nirvana::Size size, ::Nirvana::PtrDiff offset) :
+		_tmp (tmp),
+		_size (size),
+		_offset (offset)
+	{}
+
+	::Nirvana::ConstPointer tmp () const
+	{
+		return _tmp;
+	}
+	void tmp (::Nirvana::ConstPointer val)
+	{
+		_tmp = val;
+	}
+
+	::Nirvana::Size size () const
+	{
+		return _size;
+	}
+	void size (::Nirvana::Size val)
+	{
+		_size = val;
+	}
+
+	::Nirvana::PtrDiff offset () const
+	{
+		return _offset;
+	}
+	void offset (::Nirvana::PtrDiff val)
+	{
+		_offset = val;
+	}
+
+private:
+	Type < ::Nirvana::ConstPointer>::Member _tmp; ///< Pointer to the servant temporary location in stack
+	Type < ::Nirvana::Size>::Member _size; ///< Servant size
+	Type < ::Nirvana::PtrDiff>::Member _offset; ///< Offset to the stateless memory block
 };
 
 template <>

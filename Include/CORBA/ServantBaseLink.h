@@ -87,7 +87,7 @@ protected:
 
 	void _construct ();
 
-	Interface* _get_proxy ()
+	Interface::_ref_type _get_proxy ()
 	{
 		return get_proxy (core_object_);
 	}

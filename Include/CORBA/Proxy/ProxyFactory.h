@@ -56,7 +56,7 @@ pseudo interface ProxyFactory {
 
 NIRVANA_BRIDGE_BEGIN (ProxyFactory, CORBA_NIRVANA_REPOSITORY_ID ("ProxyFactory"))
 Type <InterfaceMetadataPtr>::ABI_ret (*_get_metadata) (Bridge <ProxyFactory>*, Interface*);
-Type <InterfacePtr>::ABI_ret (*create_proxy) (Bridge <ProxyFactory>*, Interface*, UShort interface_idx, Type <DynamicServantPtr>::ABI_out, Interface*);
+Type <InterfacePtr>::ABI_ret (*create_proxy) (Bridge <ProxyFactory>*, Interface*, UShort interface_idx, Type <InterfacePtr>::ABI_out, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
@@ -66,7 +66,7 @@ class Client <T, ProxyFactory> :
 public:
 	Type <InterfaceMetadataPtr>::Var metadata ();
 
-	Type <InterfacePtr>::Var create_proxy (TypeItf <IOReference>::C_in target, UShort interface_idx, Type <DynamicServantPtr>::C_out deleter);
+	Type <InterfacePtr>::Var create_proxy (TypeItf <IOReference>::C_in target, UShort interface_idx, Type <InterfacePtr>::C_out deleter);
 };
 
 template <class T>
@@ -80,7 +80,7 @@ Type <InterfaceMetadataPtr>::Var Client <T, ProxyFactory>::metadata ()
 }
 
 template <class T>
-Type <InterfacePtr>::Var Client <T, ProxyFactory>::create_proxy (TypeItf <IOReference>::C_in target, UShort interface_idx, Type <DynamicServantPtr>::C_out deleter)
+Type <InterfacePtr>::Var Client <T, ProxyFactory>::create_proxy (TypeItf <IOReference>::C_in target, UShort interface_idx, Type <InterfacePtr>::C_out deleter)
 {
 	Environment _env;
 	Bridge <ProxyFactory>& _b (T::_get_bridge (_env));

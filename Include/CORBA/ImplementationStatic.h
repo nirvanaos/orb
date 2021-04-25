@@ -54,9 +54,9 @@ public:
 		return FindInterface <Primary, Bases...>::find (*(S*)0, id);
 	}
 
-	static I_ptr <Primary> _this ()
+	static I_ref <Primary> _this ()
 	{
-		return static_cast <Primary*> (InterfaceStatic <S, PortableServer::ServantBase>::_get_proxy ());
+		return InterfaceStatic <S, PortableServer::ServantBase>::_get_proxy ().downcast <Primary> ();
 	}
 };
 

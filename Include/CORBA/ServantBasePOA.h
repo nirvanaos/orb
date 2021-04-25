@@ -74,7 +74,7 @@ public:
 protected:
 	ServantPOA ();
 
-	virtual Interface* _get_proxy ();
+	virtual Interface::_ref_type _get_proxy ();
 
 private:
 	friend class ServantTraitsPOA;

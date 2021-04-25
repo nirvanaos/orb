@@ -69,21 +69,21 @@ class Client <T, AbstractBase> :
 	public T
 {
 public:
-	Interface* _query_interface (String_in type_id);
+	I_ptr <Interface> _query_interface (String_in type_id);
 
 	template <class I>
 	I_ptr <I> _query_interface ()
 	{
-		return static_cast <I*> (_query_interface (Bridge <I>::repository_id_));
+		return static_cast <I*> (&_query_interface (Bridge <I>::repository_id_));
 	}
 };
 
 template <class T>
-Interface* Client <T, AbstractBase>::_query_interface (String_in type_id)
+I_ptr <Interface> Client <T, AbstractBase>::_query_interface (String_in type_id)
 {
 	Environment _env;
 	Bridge <AbstractBase>& _b (T::_get_bridge (_env));
-	Interface* _ret = (_b._epv ().epv.query_interface) (&_b, &type_id, &_env);
+	I_VT_ret <Interface> _ret = (_b._epv ().epv.query_interface) (&_b, &type_id, &_env);
 	_env.check ();
 	return _ret;
 }
