@@ -70,7 +70,7 @@ I_ptr <TypeCode> Type <TypeCode>::type_code ()
 // Interface marshaling
 
 template <class I> inline
-void TypeItf <I>::unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_var <I>& dst)
+void TypeItf <I>::unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_ref <I>& dst)
 {
 	dst = unmarshaler->unmarshal_interface <I> (src);
 }

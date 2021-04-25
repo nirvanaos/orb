@@ -73,8 +73,12 @@ public:
 	MarshalContext context ();
 
 	void adopt_memory (::Nirvana::ConstPointer p, ::Nirvana::Size size);
-	NIRVANA_NODISCARD Interface* unmarshal_interface (::Nirvana::ConstPointer marshal_data, String_in iid);
-	TypeCode_var unmarshal_type_code (::Nirvana::ConstPointer marshal_data);
+	TypeItf <Interface>::Var unmarshal_interface (Type < ::Nirvana::ConstPointer>::C_in marshal_data, Type <String>::C_in interface_id);
+	template <class I>
+	typename TypeItf <I>::Var unmarshal_interface (Type < ::Nirvana::ConstPointer>::C_in marshal_data)
+	{
+		return unmarshal_interface (marshal_data, I::repository_id_).downcast <I> ();
+	}
 };
 
 NIRVANA_BRIDGE_BEGIN (Unmarshal, CORBA_NIRVANA_REPOSITORY_ID ("Unmarshal"))
@@ -103,11 +107,11 @@ void Client <T, Unmarshal>::adopt_memory (::Nirvana::ConstPointer p, ::Nirvana::
 }
 
 template <class T>
-NIRVANA_NODISCARD Interface* Client <T, Unmarshal>::unmarshal_interface (::Nirvana::ConstPointer marshal_data, String_in iid)
+TypeItf <Interface>::Var Client <T, Unmarshal>::unmarshal_interface (Type < ::Nirvana::ConstPointer>::C_in marshal_data, Type <String>::C_in interface_id)
 {
 	Environment _env;
-	Bridge <Unmarshal>& _b (T::_get_bridge (_env));
-	Interface* _ret = (_b._epv ().epv.unmarshal_interface) (&_b, marshal_data, &iid, &_env);
+	Bridge < Unmarshal>& _b (T::_get_bridge (_env));
+	TypeItf <Interface>::C_ret _ret = (_b._epv ().epv.unmarshal_interface) (&_b, &marshal_data, &interface_id, &_env);
 	_env.check ();
 	return _ret;
 }

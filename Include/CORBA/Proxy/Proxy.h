@@ -60,7 +60,7 @@ public:
 
 	Interface* create_proxy (
 		I_ptr <IOReference> proxy_manager, UShort interface_idx,
-		DynamicServant_var& deleter)
+		DynamicServant*& deleter)
 	{
 		typedef Proxy <I> ProxyClass;
 		typename std::aligned_storage <sizeof (ProxyClass), alignof (ProxyClass)>::type tmp;

@@ -31,69 +31,47 @@
 namespace CORBA {
 namespace Nirvana {
 
-/// An interface reference smart pointer.
 template <class I>
-class I_ref
+struct TypeItfBase;
+
+template <class I>
+class I_ref_base
 {
 public:
-	I_ref () NIRVANA_NOEXCEPT :
+	I_ref_base () NIRVANA_NOEXCEPT :
 		p_ (nullptr)
 	{}
 
-	I_ref (nullptr_t) NIRVANA_NOEXCEPT :
+	I_ref_base (nullptr_t) NIRVANA_NOEXCEPT :
 		p_ (nullptr)
 	{}
 
-	I_ref (const I_ref& src) :
+	I_ref_base (const I_ref_base& src) :
 		p_ (duplicate (src.p_))
 	{}
 
-	template <class I1>
-	I_ref (const I_ref <I1>& src) :
-		p_ (duplicate (wide (src.p_)))
-	{}
-
-	I_ref (I_ref <I>&& src) NIRVANA_NOEXCEPT :
+	I_ref_base (I_ref_base&& src) NIRVANA_NOEXCEPT :
 		p_ (src.p_)
 	{
 		src.p_ = nullptr;
 	}
 
-	template <class I1>
-	I_ref (I_ref <I1>&& src) NIRVANA_NOEXCEPT :
-		p_ (duplicate (wide (src.p_)))
-	{
-		src = nullptr;
-	}
-
-	I_ref (const I_ptr <I>& p) :
+	I_ref_base (const I_ptr_base <I>& p) :
 		p_ (duplicate (p.p_))
 	{}
 
-	template <class I1>
-	I_ref (const I_ptr <I1>& p) :
-		p_ (duplicate (wide (p.p_)))
-	{}
-
-	~I_ref () NIRVANA_NOEXCEPT
+	~I_ref_base () NIRVANA_NOEXCEPT
 	{
 		interface_release (p_);
 	}
 
-	I_ref& operator = (const I_ref& src)
+	I_ref_base& operator = (const I_ref_base& src)
 	{
 		reset (src.p_);
 		return *this;
 	}
 
-	template <class I1>
-	I_ref& operator = (const I_ref <I1>& src)
-	{
-		reset (wide (src.p_));
-		return *this;
-	}
-
-	I_ref& operator = (I_ref&& src) NIRVANA_NOEXCEPT
+	I_ref_base& operator = (I_ref_base&& src) NIRVANA_NOEXCEPT
 	{
 		if (&src != this) {
 			interface_release (p_);
@@ -103,33 +81,11 @@ public:
 		return *this;
 	}
 
-	template <class I1>
-	I_ref& operator = (I_ref <I1>&& src)
-	{
-		if (&src != this) {
-			reset (wide (src.p_));
-			src = nullptr;
-		}
-		return *this;
-	}
-
-	I_ref& operator = (const I_ptr <I>& p)
-	{
-		reset (p.p_);
-		return *this;
-	}
-
-	template <class I1>
-	I_ref& operator = (const I_ptr <I1>& p)
-	{
-		reset (wide (p.p_));
-		return *this;
-	}
-
-	I_ref& operator = (nullptr_t) NIRVANA_NOEXCEPT
+	I_ref_base& operator = (nullptr_t) NIRVANA_NOEXCEPT
 	{
 		interface_release (p_);
 		p_ = nullptr;
+		return *this;
 	}
 
 	I* operator -> () const
@@ -150,11 +106,10 @@ public:
 	}
 
 protected:
-	I_ref (const I_ptr <I>& p, bool) :
-		p_ (p.p_)
+	I_ref_base (I* p) :
+		p_ (p)
 	{}
 
-private:
 	void reset (I* p)
 	{
 		if (p_ != p) {
@@ -169,23 +124,184 @@ private:
 		return static_cast <I*> (interface_duplicate (p));
 	}
 
+protected:
+	template <class I1> friend class I_ptr_base;
+	template <class I1> friend class I_ptr;
+	friend class I_inout <I>;
+	friend struct TypeItfBase <I>;
+
+	I* p_;
+};
+
+template <class I> class I_ref;
+template <> class I_ref <Interface>;
+
+/// An interface reference smart pointer.
+template <class I>
+class I_ref : public I_ref_base <I>
+{
+	typedef I_ref_base <I> Base;
+public:
+	I_ref () NIRVANA_NOEXCEPT
+	{}
+
+	I_ref (nullptr_t) NIRVANA_NOEXCEPT :
+		Base (nullptr)
+	{}
+
+	I_ref (const I_ref& src) :
+		Base (src)
+	{}
+
+	template <class I1>
+	I_ref (const I_ref <I1>& src) :
+		Base (duplicate (wide (src.p_)))
+	{}
+
+	I_ref (I_ref&& src) NIRVANA_NOEXCEPT :
+		Base (std::move (src))
+	{}
+
+	template <class I1>
+	I_ref (I_ref <I1>&& src) NIRVANA_NOEXCEPT :
+		Base (duplicate (wide (src.p_)))
+	{
+		src = nullptr;
+	}
+
+	I_ref (const I_ptr <I>& p) :
+		Base (p)
+	{}
+
+	template <class I1>
+	I_ref (const I_ptr <I1>& p) :
+		Base (duplicate (wide (p.p_)))
+	{}
+
+	I_ref& operator = (const I_ref& src)
+	{
+		Base::operator = (src);
+		return *this;
+	}
+
+	template <class I1>
+	I_ref& operator = (const I_ref <I1>& src)
+	{
+		reset (wide (src.p_));
+		return *this;
+	}
+
+	I_ref& operator = (I_ref&& src) NIRVANA_NOEXCEPT
+	{
+		Base::operator = (std::move (src));
+		return *this;
+	}
+
+	template <class I1>
+	I_ref& operator = (I_ref <I1>&& src)
+	{
+		if (&src != this) {
+			reset (wide (src.p_));
+			src = nullptr;
+		}
+		return *this;
+	}
+
+	I_ref& operator = (const I_ptr <I>& p)
+	{
+		Base::operator = (p);
+		return *this;
+	}
+
+	template <class I1>
+	I_ref& operator = (const I_ptr <I1>& p)
+	{
+		reset (wide (p.p_));
+		return *this;
+	}
+
+	I_ref& operator = (nullptr_t) NIRVANA_NOEXCEPT
+	{
+		Base::operator = (nullptr);
+		return *this;
+	}
+
+protected:
+	friend class I_ref <Interface>;
+	friend class I_ret <I>;
+
+	I_ref (I* p) :
+		Base (p)
+	{}
+
+private:
 	template <class I1>
 	static I* wide (I1* p)
 	{
 		return p ? static_cast <I*> (&static_cast <I_ptr <I> > (*p)) : nullptr;
 	}
+};
 
-protected:
-	template <class I1>
-	friend class I_ptr_base;
-	friend class I_inout <I>;
+template <>
+class I_ref <Interface> : public I_ref_base <Interface>
+{
+	typedef I_ref_base <Interface> Base;
+public:
+	I_ref () NIRVANA_NOEXCEPT
+	{}
 
-	I* p_;
+	I_ref (nullptr_t) NIRVANA_NOEXCEPT :
+		Base (nullptr)
+	{}
+
+	I_ref (const I_ref& src) :
+		Base (src)
+	{}
+
+	I_ref (I_ref&& src) NIRVANA_NOEXCEPT :
+		Base (std::move (src))
+	{}
+
+	I_ref (const I_ptr <Interface>& p) :
+		Base (p)
+	{}
+
+	I_ref& operator = (const I_ref& src)
+	{
+		Base::operator = (src);
+		return *this;
+	}
+
+	I_ref& operator = (I_ref&& src) NIRVANA_NOEXCEPT
+	{
+		Base::operator = (std::move (src));
+		return *this;
+	}
+
+	I_ref& operator = (nullptr_t) NIRVANA_NOEXCEPT
+	{
+		Base::operator = (nullptr);
+		return *this;
+	}
+
+	template <class I>
+	I_ref <I> downcast ()
+	{
+		I_ref <I> ret (static_cast <I*> (p_));
+		p_ = nullptr;
+		return ret;
+	}
+
+private:
+	friend class I_ret <Interface>;
+	I_ref (Interface* p) :
+		Base (p)
+	{}
 };
 
 template <class I> inline
 I_ptr_base <I>::I_ptr_base (const I_ref <I>& src) NIRVANA_NOEXCEPT :
-	p_ (src.p_)
+p_ (src.p_)
 {}
 
 template <class I> inline
@@ -197,8 +313,8 @@ void I_ptr_base <I>::move_from (I_ref <I>& src) NIRVANA_NOEXCEPT
 
 template <class I>
 template <class I1> inline
-I_ptr_base <I>::I_ptr_base (const I_ref <I1>& src) :
-	p_ (wide (src.p_))
+I_ptr <I>::I_ptr (const I_ref <I1>& src) :
+	Base (wide (src.p_))
 {}
 
 }

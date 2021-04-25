@@ -49,9 +49,9 @@ typedef I_var <ObjectFactory> ObjectFactory_var;
 
 struct StatelessCreationFrame
 {
-	const void* tmp; ///< Pointer to the servant temporary location in stack
-	size_t size; ///< Servant size
-	ptrdiff_t offset; ///< Offset to the stateless memory block
+	Type < ::Nirvana::ConstPointer>::Member tmp; ///< Pointer to the servant temporary location in stack
+	Type < ::Nirvana::Size>::Member size; ///< Servant size
+	Type < ::Nirvana::PtrDiff>::Member offset; ///< Offset to the stateless memory block
 };
 
 template <>

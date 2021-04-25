@@ -43,7 +43,7 @@ template <class I>
 class I_inout
 {
 public:
-	I_inout (I_var <I>& var) :
+	I_inout (I_ref <I>& var) :
 		ref_ (reinterpret_cast <Interface*&> (var.p_))
 	{}
 
@@ -83,7 +83,7 @@ template <>
 class I_inout <Interface>
 {
 public:
-	I_inout (I_var <Interface>& var) :
+	I_inout (I_ref <Interface>& var) :
 		ref_ (var.p_)
 	{}
 
@@ -117,13 +117,15 @@ template <class I>
 class I_out : public I_inout <I>
 {
 public:
+#ifdef LEGACY_CORBA_CPP
 	I_out (I_ptr <I>& p) :
 		I_inout <I> (p)
 	{
 		this->ref_ = 0;
 	}
+#endif
 
-	I_out (I_var <I>& var) :
+	I_out (I_ref <I>& var) :
 		I_inout <I> (var)
 	{
 		interface_release (this->ref_);
@@ -136,13 +138,7 @@ template <>
 class I_out <Interface> : public I_inout <Interface>
 {
 public:
-	I_out (I_ptr <Interface>& p) :
-		I_inout <Interface> (p)
-	{
-		this->ref_ = 0;
-	}
-
-	I_out (I_var <Interface>& var) :
+	I_out (I_ref <Interface>& var) :
 		I_inout <Interface> (var)
 	{
 		interface_release (this->ref_);
@@ -174,8 +170,17 @@ public:
 
 	~I_ret ()
 	{
-		release (ptr_);
+		interface_release (&ptr_);
 	}
+
+	operator I_ref <I> ()
+	{
+		I_ref <I> ret (ptr_.p_);
+		ptr_ = I::_nil ();
+		return ret;
+	}
+
+#ifdef LEGACY_CORBA_CPP
 
 	operator I_ptr <I> ()
 	{
@@ -190,6 +195,8 @@ public:
 		ptr_ = I::_nil ();
 		return ret;
 	}
+
+#endif
 
 private:
 	I_ptr <I> ptr_;
@@ -224,25 +231,18 @@ public:
 
 	~I_ret ()
 	{
-		interface_release (&ptr_);
+		interface_release (ptr_);
 	}
 
-	operator I_ptr <Interface> ()
+	operator I_ref <Interface> ()
 	{
-		I_ptr <Interface> ret = ptr_;
-		ptr_ = Interface::_nil ();
-		return ret;
-	}
-
-	operator I_var <Interface> ()
-	{
-		I_ptr <Interface> ret = ptr_;
-		ptr_ = Interface::_nil ();
+		I_ref <Interface> ret (ptr_);
+		ptr_ = nullptr;
 		return ret;
 	}
 
 private:
-	I_ptr <Interface> ptr_;
+	Interface* ptr_;
 };
 
 template <>
@@ -260,7 +260,7 @@ typedef I_var <Interface> Interface_var;
 template <class I>
 struct TypeItfBase
 {
-	typedef I_var <I> Var;
+	typedef I_ref <I> Var;
 	typedef Interface* ABI;
 
 	typedef Interface* ABI_in;
@@ -269,29 +269,35 @@ struct TypeItfBase
 	typedef Interface* ABI_VT_ret;
 
 	typedef I_ptr <I> C_ptr;
+#ifdef LEGACY_CORBA_CPP
 	typedef I_var <I> C_var;
+#endif
 	typedef I_in <I> C_in;
 	typedef I_out <I> C_out;
 	typedef I_inout <I> C_inout;
 	typedef I_ret <I> C_ret;
 	typedef I_VT_ret <I> C_VT_ret;
 
-	static I_var <I>& out (ABI_out p)
+	static I_ref <I>& out (ABI_out p)
 	{
 		_check_pointer (p);
 		if (*p)
 			::Nirvana::throw_BAD_PARAM ();
-		return reinterpret_cast <I_var <I>&> (*p);
+		return reinterpret_cast <I_ref <I>&> (*p);
 	}
 
+#ifdef LEGACY_CORBA_CPP
 	static Interface* ret (const I_ptr <I>& ptr)
 	{
 		return &ptr;
 	}
+#endif
 
-	static Interface* ret (I_var <I>&& var)
+	static Interface* ret (I_ref <I>&& var)
 	{
-		return &var._retn ();
+		Interface* p = var.p_;
+		var.p_ = nullptr;
+		return p;
 	}
 
 	static Interface* ret ()
@@ -309,11 +315,11 @@ struct TypeItfBase
 		return nullptr;
 	}
 
-	// Valuetupe implementation for state members must return I_ptr, not I_var.
+	// Valuetupe implementation for state members must return I_ptr, not I_ref.
 	// Otherwise compilation error will occur.
 	static void VT_ret (I_var <I>&);
 
-	typedef I_var <I> Member;
+	typedef I_ref <I> Member;
 	typedef I_ptr <I> ConstRef;
 };
 
@@ -336,23 +342,23 @@ struct TypeItf : TypeItfBase <I>
 		return I::_check (p);
 	}
 
-	static I_var <I>& inout (ABI_out p)
+	static I_ref <I>& inout (ABI_out p)
 	{
 		_check_pointer (p);
 		I::_check (*p);
-		return reinterpret_cast <I_var <I>&> (*p);
+		return reinterpret_cast <I_ref <I>&> (*p);
 	}
 
 	static const bool has_marshal = true;
 
 	static void marshal_in (I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst);
 	
-	static void marshal_out (I_var <I>& src, Marshal_ptr marshaler, Interface*& dst)
+	static void marshal_out (I_ref <I>& src, Marshal_ptr marshaler, Interface*& dst)
 	{
 		marshal_in (src, marshaler, dst);
 	}
 
-	static void unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_var <I>& dst);
+	static void unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_ref <I>& dst);
 };
 
 template <>
@@ -380,10 +386,10 @@ struct TypeItf <Interface> : TypeItfBase <Interface>
 		return p;
 	}
 
-	static I_var <Interface>& inout (ABI_out p)
+	static I_ref <Interface>& inout (ABI_out p)
 	{
 		_check_pointer (p);
-		return reinterpret_cast <I_var <Interface>&> (*p);
+		return reinterpret_cast <I_ref <Interface>&> (*p);
 	}
 };
 
@@ -392,7 +398,7 @@ struct Type <Interface> : TypeItf <Interface>
 {};
 
 template <class I>
-struct Type <I_var <I> > : public TypeItf <I>
+struct Type <I_ref <I> > : public TypeItf <I>
 {};
 
 }

@@ -53,6 +53,10 @@ class ImplementationPseudoStatic :
 	public InterfaceStaticBase <S, Primary>
 {
 public:
+	//! \brief Gets the pointer.
+	//!   Works like _this() method but doesn't increment the reference counter.
+	//!
+	//! \return The primary interface pointer.
 	static Primary* _get_ptr ()
 	{
 		return static_cast <Primary*> (InterfaceStaticBase <S, Primary>::_bridge ());

@@ -54,14 +54,14 @@ typedef void (*RequestProc) (Interface* servant, Interface* call,
 	Interface** unmarshaler,
 	::Nirvana::Pointer out_params);
 
-template <class I, void (*proc) (I_ptr <I>, IORequest_ptr, ::Nirvana::ConstPointer, Unmarshal_var&, ::Nirvana::Pointer)>
+template <class I, void (*proc) (I_ptr <I>, IORequest::_ptr_type, ::Nirvana::ConstPointer, Unmarshal::_ref_type&, ::Nirvana::Pointer)>
 void RqProcWrapper (Interface* servant, Interface* call,
 	::Nirvana::ConstPointer in_params,
 	Interface** unmarshaler,
 	::Nirvana::Pointer out_params)
 {
 	try {
-		IORequest_ptr rq = IORequest::_check (call);
+		IORequest::_ptr_type rq = IORequest::_check (call);
 		try {
 			proc (&static_cast <I&> (*servant), rq, in_params, Type <Unmarshal>::inout (unmarshaler), out_params);
 			rq->success ();
@@ -124,6 +124,13 @@ typedef Interface* InterfacePtr;
 
 template <>
 struct Type <InterfacePtr> : TypeByVal <InterfacePtr>
+{};
+
+// native DynamicServantPtr;
+typedef DynamicServant* DynamicServantPtr;
+
+template <>
+struct Type <DynamicServantPtr> : TypeByVal <DynamicServantPtr>
 {};
 
 }

@@ -125,7 +125,7 @@ class ProxyLifeCycle :
 	public InterfaceImplBase <S, DynamicServant>
 {
 public:
-	DynamicServant_ptr _dynamic_servant ()
+	DynamicServant* _dynamic_servant ()
 	{
 		return &static_cast <DynamicServant&> (static_cast <Bridge <DynamicServant>&> (*this));
 	}

@@ -46,11 +46,19 @@ public:
 
 	// No add reference
 	I_var (const I_ptr <I>& p) NIRVANA_NOEXCEPT :
-		Base (p, false)
+		Base (p.p_)
+	{}
+
+	I_var (const I_ref <I>& src) :
+		Base (src)
 	{}
 
 	I_var (const I_var <I>& src) :
 		Base (src)
+	{}
+
+	I_var (I_ref <I>&& src) NIRVANA_NOEXCEPT :
+		Base (std::move (src))
 	{}
 
 	I_var (I_var <I>&& src) NIRVANA_NOEXCEPT :

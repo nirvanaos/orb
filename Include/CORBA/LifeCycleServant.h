@@ -69,13 +69,13 @@ protected:
 	}
 
 protected:
-	ReferenceCounter_ptr _reference_counter () const
+	ReferenceCounter::_ptr_type _reference_counter () const
 	{
 		return reference_counter_;
 	}
 
 private:
-	ReferenceCounter_var reference_counter_;
+	ReferenceCounter::_ref_type reference_counter_;
 };
 
 /// \brief Dynamic servant life cycle implementation

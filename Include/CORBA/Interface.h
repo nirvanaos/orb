@@ -35,9 +35,10 @@ namespace CORBA {
 namespace Nirvana {
 
 template <class I> class I_ptr;
+template <class I> class I_ref;
 class Interface;
 template <> class I_ptr <Interface>;
-template <class I> class I_var;
+template <> class I_ref <Interface>;
 
 /// Base for all interface ABIs.
 /// Provides life-cycle management and interface identification.
@@ -71,8 +72,7 @@ public:
 	static Interface* _check (Interface* obj, String_in interface_id);
 
 	typedef I_ptr <Interface> _ptr_type;
-	typedef I_var <Interface> _var_type;
-	typedef _var_type& _out_type;
+	typedef I_ref <Interface> _ref_type;
 
 	static I_ptr <Interface> _nil () NIRVANA_NOEXCEPT;
 
