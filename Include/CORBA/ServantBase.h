@@ -145,7 +145,7 @@ template <class T>
 {
 	Environment _env;
 	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
-	I_ret <::PortableServer::ServantBase> _ret = (_b._epv ().epv.core_servant) (&_b, &_env);
+	I_VT_ret <::PortableServer::ServantBase> _ret = (_b._epv ().epv.core_servant) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }

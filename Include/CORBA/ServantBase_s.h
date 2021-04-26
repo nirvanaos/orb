@@ -92,7 +92,7 @@ protected:
 	static Interface* ___core_servant (Bridge <::PortableServer::ServantBase>* obj, Interface* env)
 	{
 		try {
-			return Type <::PortableServer::ServantBase>::ret (S::_implementation (obj).__core_servant ());
+			return Type <::PortableServer::ServantBase>::VT_ret (S::_implementation (obj).__core_servant ());
 		} catch (const Exception & e) {
 			set_exception (env, e);
 		} catch (...) {

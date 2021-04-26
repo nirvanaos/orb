@@ -127,6 +127,7 @@ protected:
 protected:
 	template <class I1> friend class I_ptr_base;
 	template <class I1> friend class I_ptr;
+	template <class I1> friend class I_ref;
 	friend class I_inout <I>;
 	friend struct TypeItfBase <I>;
 
@@ -155,7 +156,7 @@ public:
 
 	template <class I1>
 	I_ref (const I_ref <I1>& src) :
-		Base (duplicate (wide (src.p_)))
+		Base (Base::duplicate (wide (src.p_)))
 	{}
 
 	I_ref (I_ref&& src) NIRVANA_NOEXCEPT :
@@ -164,7 +165,7 @@ public:
 
 	template <class I1>
 	I_ref (I_ref <I1>&& src) NIRVANA_NOEXCEPT :
-		Base (duplicate (wide (src.p_)))
+		Base (Base::duplicate (wide (src.p_)))
 	{
 		src = nullptr;
 	}
@@ -175,7 +176,7 @@ public:
 
 	template <class I1>
 	I_ref (const I_ptr <I1>& p) :
-		Base (duplicate (wide (p.p_)))
+		Base (Base::duplicate (wide (p.p_)))
 	{}
 
 	I_ref& operator = (const I_ref& src)
@@ -187,7 +188,7 @@ public:
 	template <class I1>
 	I_ref& operator = (const I_ref <I1>& src)
 	{
-		reset (wide (src.p_));
+		Base::reset (wide (src.p_));
 		return *this;
 	}
 
@@ -201,7 +202,7 @@ public:
 	I_ref& operator = (I_ref <I1>&& src)
 	{
 		if (&src != this) {
-			reset (wide (src.p_));
+			Base::reset (wide (src.p_));
 			src = nullptr;
 		}
 		return *this;
@@ -216,7 +217,7 @@ public:
 	template <class I1>
 	I_ref& operator = (const I_ptr <I1>& p)
 	{
-		reset (wide (p.p_));
+		Base::reset (wide (p.p_));
 		return *this;
 	}
 
