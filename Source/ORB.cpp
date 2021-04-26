@@ -29,7 +29,7 @@ namespace CORBA {
 
 void ORB::create_environment (Nirvana::Type <Environment>::C_out env)
 {
-	env = new Environment ();
+	env = make_reference <Environment> ();
 }
 
 }

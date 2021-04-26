@@ -36,12 +36,8 @@ class servant_reference;
 template <class T, class ... Args>
 servant_reference <T> make_reference (Args ...);
 
-}
-
-namespace Nirvana {
-
 template <class T, class ... Args>
-CORBA::servant_reference <T> make_stateless (Args ...);
+servant_reference <T> make_stateless (Args ...);
 
 }
 
@@ -124,6 +120,11 @@ public:
 		return p_;
 	}
 
+protected:
+	servant_reference (T* p, bool) :
+		p_ (p)
+	{}
+
 private:
 	void reset (T* p)
 	{
@@ -154,14 +155,10 @@ private:
 	template <class T1, class ... Args> friend
 	servant_reference <T1> make_reference (Args ... args);
 
-//	template <class T1, class ... Args> friend
-//	servant_reference <T1> ::Nirvana::make_stateless (Args ... args);
+	template <class T1, class ... Args> friend
+	servant_reference <T1> make_stateless (Args ... args);
 
-	servant_reference (T* p, bool) :
-		p_ (p)
-	{}
-
-private:
+protected:
 	T* p_;
 };
 
@@ -174,6 +171,14 @@ public:
 	{
 		var = nullptr;
 	}
+
+#ifdef LEGACY_CORBA_CPP
+	servant_out (T*& p) :
+		ref_ (reinterpret_cast <servant_reference <T>&> (p))
+	{
+		p = nullptr;
+	}
+#endif
 
 	servant_out (const servant_out& src) :
 		ref_ (src.ref_)

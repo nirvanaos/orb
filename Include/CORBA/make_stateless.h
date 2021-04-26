@@ -1,8 +1,5 @@
-/// \file CORBA.h
-/// The main header.
-
 /*
-* Nirvana IDL support library.
+* Nirvana runtime library.
 *
 * This is a part of the Nirvana project.
 *
@@ -26,19 +23,31 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_CORBA_H_
-#define NIRVANA_ORB_CORBA_H_
+#ifndef NIRVANA_ORB_MAKE_STATELESS_H_
+#define NIRVANA_ORB_MAKE_STATELESS_H_
 
-/// Define macro LEGACY_CORBA_CPP to support of the legacy C++ mapping specification 1.3.
-//#define LEGACY_CORBA_CPP
+#include "core_objects.h"
+#include "ObjectFactory.h"
+#include "servant_reference.h"
+#include <utility>
 
-#include <Nirvana/NirvanaBase.h>
-#include "exceptions.h"
-#include "LocalObject.h"
-#include "Type.h"
-#include "String_compat.h"
-#include "UnknownUserException.h"
-#include "ORB.h"
-#include "make_stateless.h"
+namespace CORBA {
+
+template <class T, class ... Args>
+servant_reference <T> make_stateless (Args ... args)
+{
+	typename std::aligned_storage <sizeof (T), alignof (T)>::type tmp;
+	Nirvana::StatelessCreationFrame scb (&tmp, sizeof (T), 0);
+	Nirvana::g_object_factory->stateless_begin (scb);
+	try {
+		new (&tmp) T (std::forward <Args> (args)...);
+		return ervant_reference ((T*)CORBA::Nirvana::g_object_factory->stateless_end (true), false);
+	} catch (...) {
+		Nirvana::g_object_factory->stateless_end (false);
+		throw;
+	}
+}
+
+}
 
 #endif

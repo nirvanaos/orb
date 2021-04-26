@@ -167,7 +167,7 @@ void Any::set_type (I_ptr <TypeCode> tc)
 
 void Any::set_type (I_ref <TypeCode>&& tc)
 {
-	I_ptr <TypeCode> tcp;
+	I_ptr <TypeCode> tcp (nullptr);
 	reinterpret_cast <I_ref <TypeCode>&> (tcp) = std::move (tc);
 	ABI::type (&tcp);
 }

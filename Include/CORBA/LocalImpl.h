@@ -101,10 +101,8 @@ struct TypeLocal
 	typedef ConstRef C_in;
 #ifdef LEGACY_CORBA_CPP
 	typedef typename LocalImpl <T>::_var_type C_var;
-	typedef PortableServer::Servant_out <T> C_out;
-#else
-	typedef servant_out <T> C_out;
 #endif
+	typedef servant_out <T> C_out;
 	typedef Var& C_inout;
 };
 

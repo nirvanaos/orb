@@ -402,7 +402,7 @@ struct Type <Interface> : TypeItf <Interface>
 {};
 
 template <class I>
-struct Type <I_ref <I> > : public TypeItf <I>
+struct Type <I_ref <I> > : public Type <I>
 {};
 
 }

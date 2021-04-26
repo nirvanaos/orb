@@ -246,17 +246,10 @@ void Type <Sequence <T> >::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler,
 }
 }
 
-// Compatibility with modern C11 mapping
+// IDL::traits
 namespace IDL {
 
-template <class T>
-struct traits
-{
-	typedef typename CORBA::Nirvana::Type <T>::C_var value_type;
-	typedef typename CORBA::Nirvana::Type <T>::C_in in_type;
-	typedef typename CORBA::Nirvana::Type <T>::C_out out_type;
-	typedef typename CORBA::Nirvana::Type <T>::C_inout inout_type;
-};
+template <class T> struct traits;
 
 }
 

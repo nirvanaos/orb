@@ -36,6 +36,10 @@ class DynamicServant;
 
 class ProxyFactory;
 
+template <>
+struct Type <ProxyFactory> : TypeItf <ProxyFactory>
+{};
+
 /*
 ~~~{.idl}
 module CORBA {

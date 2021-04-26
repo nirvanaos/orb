@@ -26,91 +26,58 @@
 #ifndef NIRVANA_ORB_SERVANTVAR_H_
 #define NIRVANA_ORB_SERVANTVAR_H_
 
+#include "servant_reference.h"
+
 #ifdef LEGACY_CORBA_CPP
 
 namespace PortableServer {
 
-template <typename T> class Servant_out;
+template <typename T>
+using Servant_out = CORBA::servant_out <T>;
 
 template <typename T>
-class Servant_var
+class Servant_var : public CORBA::servant_reference <T>
 {
+	typedef CORBA::servant_reference <T> Base;
 public:
-	Servant_var () :
-		p_ (nullptr)
+	Servant_var ()
 	{}
 
 	Servant_var (T* p) :
-		p_ (p)
+		Base (p, false)
 	{}
 
 	Servant_var (const Servant_var& src) :
-		p_ (src.p_)
-	{
-		if (p_)
-			p_->_add_ref ();
-	}
+		Base (src)
+	{}
 
 	Servant_var (Servant_var&& src) :
-		p_ (src.p_)
-	{
-		src.p_ = nullptr;
-	}
-
-	~Servant_var ()
-	{
-		if (p_) {
-			try {
-				p_->_remove_ref ();
-			} catch (...) {
-				// swallow exceptions
-			}
-		}
-	}
+		Base (std::move (src))
+	{}
 
 	Servant_var& operator = (T* p)
 	{
-		if (p_ != p)
+		if (Base::p_ != p)
 			reset (p);
 		return *this;
 	}
 
 	Servant_var& operator = (const Servant_var& src)
 	{
-		if (p_ != src.p_) {
-			T* p = src.p_;
-			if (p)
-				p->_add_ref ();
-			reset (p);
-		}
+		Base::operator = (src);
 		return *this;
 	}
 
 	template <class T1>
 	Servant_var& operator = (Servant_var <T1>&& src)
 	{
-		if (p_ != src.p_) {
-			reset (src.p_);
-			src.p_ = nullptr;
-		}
+		Base::operator = (std::move (src));
 		return *this;
-	}
-
-	T* operator -> () const
-	{
-		if (!p_)
-			::Nirvana::throw_INV_OBJREF ();
-		return p_;
-	}
-
-	operator T* () const
-	{
-		return p_;
 	}
 
 	T* in () const
 	{
-		return p_;
+		return Base::p_;
 	}
 
 	Servant_var <T>& inout ()
@@ -118,96 +85,27 @@ public:
 		return *this;
 	}
 
-	Servant_out <T> out ();
+	Servant_out <T> out ()
+	{
+		return Servant_out <T> (*this);
+	}
 
 	T* _retn ()
 	{
-		T* retval = p_;
-		p_ = nullptr;
+		T* retval = Base::p_;
+		Base::p_ = nullptr;
 		return retval;
 	}
 
 private:
 	void reset (T* p) NIRVANA_NOEXCEPT
 	{
-		T* tmp = p_;
-		p_ = p;
+		T* tmp = Base::p_;
+		Base::p_ = p;
 		if (tmp)
 			tmp->_remove_ref ();
 	}
-
-	friend class Servant_out <T>;
-
-private:
-	T* p_;
 };
-
-template <typename T>
-class Servant_out
-{
-public:
-	Servant_out (T*& p) :
-		ref_ (p)
-	{
-		p = nullptr;
-	}
-
-	Servant_out (Servant_var <T>& var) :
-		ref_ (var.p_)
-	{
-		var = nullptr;
-	}
-
-	Servant_out (const Servant_out& src) :
-		ref_ (src.ref_)
-	{}
-
-	Servant_out& operator = (const Servant_out& src)
-	{
-		if (&ref_ != &src.ref_) {
-			T* p = src.ref_;
-			if (p)
-				p->_add_ref ();
-			reset (p);
-		}
-		return *this;
-	}
-
-	Servant_out& operator = (T* p)
-	{
-		reset (p);
-		return *this;
-	}
-
-	Servant_out& operator = (const Servant_var <T>& src)
-	{
-		if (&ref_ != &src.p_) {
-			T* p = src.p_;
-			if (p)
-				p->_add_ref ();
-			reset (p);
-		}
-		return *this;
-	}
-
-private:
-	void reset (T* p) NIRVANA_NOEXCEPT
-	{
-		T* tmp = ref_;
-		ref_ = p;
-		if (tmp)
-			tmp->_remove_ref ();
-	}
-
-private:
-	T*& ref_;
-};
-
-template <class T> inline
-Servant_out <T> Servant_var <T>::out ()
-{
-	return Servant_out <T> (*this);
-}
 
 }
 
