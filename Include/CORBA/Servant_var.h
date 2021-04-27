@@ -55,6 +55,10 @@ public:
 		Base (std::move (src))
 	{}
 
+	Servant_var (Base&& src) :
+		Base (std::move (src))
+	{}
+
 	Servant_var& operator = (T* p)
 	{
 		if (Base::p_ != p)

@@ -29,21 +29,21 @@
 #define NIRVANA_ORB_CORBA_ENVIRONMENT_H_
 
 #include "EnvironmentImpl.h"
-#include "LocalImpl.h"
+#include "Serverless.h"
 
 namespace CORBA {
 
 //! CORBA::Environment
 class Environment :
 	public Nirvana::EnvironmentImpl <Environment>,
-	public Nirvana::LocalImpl <Environment>
+	public Nirvana::Serverless <Environment>
 {
 public:
-	using Nirvana::LocalImpl <Environment>::_ptr_type;
-	using Nirvana::LocalImpl <Environment>::_ref_type;
-	using Nirvana::LocalImpl <Environment>::_out_type;
+	using Nirvana::Serverless <Environment>::_ptr_type;
+	using Nirvana::Serverless <Environment>::_ref_type;
+	using Nirvana::Serverless <Environment>::_out_type;
 #ifdef LEGACYY_CORBA_CPP
-	using Nirvana::LocalImpl <Environment>::_var_type;
+	using Nirvana::Serverless <Environment>::_var_type;
 #endif
 
 	Environment () {}
@@ -74,7 +74,7 @@ public:
 namespace Nirvana {
 
 template <>
-struct Type < ::CORBA::Environment> : TypeLocal < ::CORBA::Environment>
+struct Type < ::CORBA::Environment> : TypeServerless < ::CORBA::Environment>
 {};
 
 }

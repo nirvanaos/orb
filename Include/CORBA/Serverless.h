@@ -24,8 +24,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_LOCALIMPL_H_
-#define NIRVANA_ORB_LOCALIMPL_H_
+#ifndef NIRVANA_ORB_SERVERLESS_H_
+#define NIRVANA_ORB_SERVERLESS_H_
 
 #include "primitive_types.h"
 #include "servant_reference.h"
@@ -35,9 +35,9 @@
 namespace CORBA {
 namespace Nirvana {
 
-/// Locally implemented dynamic pseudo object (Environment etc).
+/// Serverless dynamic pseudo object (Environment etc).
 template <class T>
-class LocalImpl
+class Serverless
 {
 public:
 	typedef T* _ptr_type;
@@ -47,15 +47,15 @@ public:
 #endif
 	typedef _ref_type& _out_type;
 
-	LocalImpl () :
+	Serverless () :
 		ref_cnt_ (1)
 	{}
 
-	LocalImpl (const LocalImpl&) :
+	Serverless (const Serverless&) :
 		ref_cnt_ (1)
 	{}
 
-	LocalImpl& operator = (const LocalImpl&)
+	Serverless& operator = (const Serverless&)
 	{
 		return *this; // Do nothing
 	}
@@ -94,13 +94,13 @@ private:
 };
 
 template <class T>
-struct TypeLocal
+struct TypeServerless
 {
-	typedef typename LocalImpl <T>::_ref_type Var;
+	typedef typename Serverless <T>::_ref_type Var;
 	typedef const Var& ConstRef;
 	typedef ConstRef C_in;
 #ifdef LEGACY_CORBA_CPP
-	typedef typename LocalImpl <T>::_var_type C_var;
+	typedef typename Serverless <T>::_var_type C_var;
 #endif
 	typedef servant_out <T> C_out;
 	typedef Var& C_inout;
@@ -112,7 +112,7 @@ struct TypeLocal
 
 /// CORBA::release
 template <class T> inline
-void release (Nirvana::LocalImpl <T>* ptr)
+void release (Nirvana::Serverless <T>* ptr)
 {
 	if (ptr)
 		ptr->_remove_ref ();
