@@ -69,10 +69,10 @@ public:
 
 	void _remove_ref ()
 	{
-		release (proxy_manager_);
+		interface_release (&proxy_manager_);
 	}
 
-	IOReference_ptr _target () const
+	IOReference::_ptr_type _target () const
 	{
 		return proxy_manager_;
 	}
@@ -88,13 +88,13 @@ public:
 	}
 
 protected:
-	ProxyRoot (IOReference_ptr proxy_manager, UShort interface_idx) :
+	ProxyRoot (IOReference::_ptr_type proxy_manager, UShort interface_idx) :
 		proxy_manager_ (proxy_manager),
 		interface_idx_ (interface_idx)
 	{}
 
 private:
-	IOReference_ptr proxy_manager_;
+	IOReference::_ptr_type proxy_manager_;
 	UShort interface_idx_;
 };
 
@@ -159,7 +159,7 @@ public:
 	}
 
 protected:
-	ProxyBase (IOReference_ptr proxy_manager, UShort interface_idx) :
+	ProxyBase (IOReference::_ptr_type proxy_manager, UShort interface_idx) :
 		ProxyRoot (proxy_manager, interface_idx)
 	{}
 };

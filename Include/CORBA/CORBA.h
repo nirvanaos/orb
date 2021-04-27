@@ -40,5 +40,6 @@
 #include "UnknownUserException.h"
 #include "ORB.h"
 #include "make_stateless.h"
+#include "make_pseudo.h"
 
 #endif

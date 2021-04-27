@@ -49,6 +49,8 @@ template <class I>
 class I_ptr_base
 {
 public:
+	typedef I ItfType;
+
 	/// Zero init skipped for performance
 	I_ptr_base () NIRVANA_NOEXCEPT
 #ifdef _DEBUG
@@ -212,30 +214,6 @@ inline I_ptr <Interface> Interface::_nil () NIRVANA_NOEXCEPT
 {
 	return I_ptr <Interface> ((Interface*)nullptr);
 }
-
-template <class I>
-struct StaticI_ptr
-{
-	Bridge <I>* itf;
-
-	operator I_ptr <I> () const
-	{
-		return static_cast <I*> (itf);
-	}
-
-	I* operator -> () const
-	{
-		if (!itf)
-			::Nirvana::throw_INV_OBJREF ();
-		return static_cast <I*> (itf);
-	}
-
-	StaticI_ptr& operator = (I_ptr <I> ptr)
-	{
-		itf = &ptr;
-		return *this;
-	}
-};
 
 }
 

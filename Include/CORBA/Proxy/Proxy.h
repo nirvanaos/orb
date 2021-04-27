@@ -64,14 +64,14 @@ public:
 	{
 		typedef Proxy <I> ProxyClass;
 		typename std::aligned_storage <sizeof (ProxyClass), alignof (ProxyClass)>::type tmp;
-		CORBA::Nirvana::StatelessCreationFrame scb (&tmp, sizeof (ProxyClass), 0);
-		CORBA::Nirvana::g_object_factory->stateless_begin (scb);
+		ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (ProxyClass), 0);
+		g_object_factory->stateless_begin (scb);
 		ProxyClass* proxy;
 		try {
 			new (&tmp) ProxyClass (proxy_manager, interface_idx);
-			proxy = (ProxyClass*)CORBA::Nirvana::g_object_factory->stateless_end (true);
+			proxy = (ProxyClass*)g_object_factory->stateless_end (true);
 		} catch (...) {
-			CORBA::Nirvana::g_object_factory->stateless_end (false);
+			g_object_factory->stateless_end (false);
 			throw;
 		}
 		deleter = proxy->_dynamic_servant ();

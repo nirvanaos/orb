@@ -81,7 +81,7 @@ void TypeItf <I>::marshal_in (I_ptr <I> src, Marshal_ptr marshaler, Interface*& 
 	if (marshaler->marshal_context () < MarshalContext::OTHER_PROTECTION_DOMAIN)
 		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
 	else
-		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (Object_ptr (src));
+		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (Object::_ptr_type (src));
 }
 
 // TypeCode marshaling

@@ -31,6 +31,9 @@
 namespace CORBA {
 namespace Nirvana {
 
+template <class I> class I_ref;
+template <> class I_ref <Interface>;
+
 template <class I>
 struct TypeItfBase;
 
@@ -38,8 +41,10 @@ template <class I>
 class I_ref_base
 {
 public:
+	typedef I ItfType;
+
 	I_ref_base () NIRVANA_NOEXCEPT :
-		p_ (nullptr)
+	p_ (nullptr)
 	{}
 
 	I_ref_base (nullptr_t) NIRVANA_NOEXCEPT :
@@ -134,8 +139,12 @@ protected:
 	I* p_;
 };
 
-template <class I> class I_ref;
-template <> class I_ref <Interface>;
+}
+
+template <class S, class ... Args>
+Nirvana::I_ref <typename S::PrimaryInterface> make_pseudo (Args ... args);
+
+namespace Nirvana {
 
 /// An interface reference smart pointer.
 template <class I>
@@ -230,6 +239,9 @@ public:
 protected:
 	friend class I_ref <Interface>;
 	friend class I_ret <I>;
+
+	template <class S, class ... Args> friend
+	I_ref <typename S::PrimaryInterface> CORBA::make_pseudo (Args ... args);
 
 	I_ref (I* p) :
 		Base (p)

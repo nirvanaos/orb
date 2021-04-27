@@ -55,14 +55,11 @@ class ImplementationPseudo :
 	public InterfaceImplBase <S, Primary>
 {
 public:
+	typedef Primary PrimaryInterface;
+
 	I_ptr <Primary> _get_ptr ()
 	{
 		return I_ptr <Primary> (&static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this)));
-	}
-
-	I_ref <Primary> _this ()
-	{
-		return _get_ptr ();
 	}
 
 protected:

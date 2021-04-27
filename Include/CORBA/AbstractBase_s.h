@@ -44,15 +44,14 @@ public:
 protected:
 	static Interface* __query_interface (Bridge <AbstractBase>* base, Type <String>::ABI_in id, Interface* env)
 	{
-		Interface* ret = 0;
 		try {
-			ret = TypeItf <Interface>::VT_ret (S::_implementation (base)._query_interface (Type <String>::in (id)));
+			return Type <Interface>::VT_ret (S::_implementation (base)._query_interface (Type <String>::in (id)));
 		} catch (const Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return ret;
+		return Type <Interface>::VT_ret ();
 	}
 };
 

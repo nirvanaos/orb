@@ -50,6 +50,8 @@ class Implementation :
 	public InterfaceImpl <S, PortableServer::ServantBase> // ServantBase implementation must be constructed after all interfaces.
 {
 public:
+	typedef Primary PrimaryInterface;
+
 	Interface* _query_interface (const String& id)
 	{
 		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);

@@ -351,7 +351,7 @@ public:
 	I_ref <TypeCode> get_compact_typecode ()
 	{
 		// Currently, we don't strip names, just return this type code.
-		return TypeCode::_duplicate (&static_cast <TypeCode&> (static_cast <Bridge <TypeCode>&> (static_cast <S&> (*this))));
+		return I_ptr <TypeCode> (&static_cast <TypeCode&> (static_cast <Bridge <TypeCode>&> (static_cast <S&> (*this))));
 	}
 };
 

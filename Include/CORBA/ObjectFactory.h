@@ -47,63 +47,67 @@ typedef I_ptr <ObjectFactory> ObjectFactory_ptr;
 typedef I_var <ObjectFactory> ObjectFactory_var;
 #endif
 
-class StatelessCreationFrame
+template <>
+struct Definitions <ObjectFactory>
 {
-public:
-	StatelessCreationFrame () :
-		_tmp (),
-		_size (),
-		_offset ()
-	{}
+	class StatelessCreationFrame
+	{
+	public:
+		StatelessCreationFrame () :
+			_tmp (),
+			_size (),
+			_offset ()
+		{}
 
-	explicit StatelessCreationFrame (::Nirvana::ConstPointer tmp, ::Nirvana::Size size, ::Nirvana::PtrDiff offset) :
-		_tmp (tmp),
-		_size (size),
-		_offset (offset)
-	{}
+		explicit StatelessCreationFrame (::Nirvana::ConstPointer tmp, ::Nirvana::Size size, ::Nirvana::PtrDiff offset) :
+			_tmp (tmp),
+			_size (size),
+			_offset (offset)
+		{}
 
-	::Nirvana::ConstPointer tmp () const
-	{
-		return _tmp;
-	}
-	void tmp (::Nirvana::ConstPointer val)
-	{
-		_tmp = val;
-	}
+		::Nirvana::ConstPointer tmp () const
+		{
+			return _tmp;
+		}
+		void tmp (::Nirvana::ConstPointer val)
+		{
+			_tmp = val;
+		}
 
-	::Nirvana::Size size () const
-	{
-		return _size;
-	}
-	void size (::Nirvana::Size val)
-	{
-		_size = val;
-	}
+		::Nirvana::Size size () const
+		{
+			return _size;
+		}
+		void size (::Nirvana::Size val)
+		{
+			_size = val;
+		}
 
-	::Nirvana::PtrDiff offset () const
-	{
-		return _offset;
-	}
-	void offset (::Nirvana::PtrDiff val)
-	{
-		_offset = val;
-	}
+		::Nirvana::PtrDiff offset () const
+		{
+			return _offset;
+		}
+		void offset (::Nirvana::PtrDiff val)
+		{
+			_offset = val;
+		}
 
-private:
-	Type < ::Nirvana::ConstPointer>::Member _tmp; ///< Pointer to the servant temporary location in stack
-	Type < ::Nirvana::Size>::Member _size; ///< Servant size
-	Type < ::Nirvana::PtrDiff>::Member _offset; ///< Offset to the stateless memory block
+	private:
+		Type < ::Nirvana::ConstPointer>::Member _tmp; ///< Pointer to the servant temporary location in stack
+		Type < ::Nirvana::Size>::Member _size; ///< Servant size
+		Type < ::Nirvana::PtrDiff>::Member _offset; ///< Offset to the stateless memory block
+	};
 };
 
 template <>
-struct Type <StatelessCreationFrame> :
-	public TypeByRef <StatelessCreationFrame>
+struct Type <Definitions <ObjectFactory>::StatelessCreationFrame> :
+	public TypeByRef <Definitions <ObjectFactory>::StatelessCreationFrame>
 {};
 
 NIRVANA_BRIDGE_BEGIN (ObjectFactory, CORBA_NIRVANA_REPOSITORY_ID ("ObjectFactory"))
 void* (*memory_allocate) (Bridge <ObjectFactory>*, size_t size, Interface*);
 void (*memory_release) (Bridge <ObjectFactory>*, void* p, size_t size, Interface*);
-void (*stateless_begin) (Bridge <ObjectFactory>*, Type <StatelessCreationFrame>::ABI_out, Interface*);
+void (*stateless_begin) (Bridge <ObjectFactory>*, Type <Definitions <ObjectFactory>::StatelessCreationFrame>::ABI_out, Interface*);
 void* (*stateless_end) (Bridge <ObjectFactory>*, Type <Boolean>::ABI_in success, Interface*);
 Interface* (*create_reference_counter) (Bridge <ObjectFactory>*, Interface*, Interface*);
 Interface* (*create_servant) (Bridge <ObjectFactory>*, Interface*, Interface*);
@@ -112,7 +116,8 @@ NIRVANA_BRIDGE_END ()
 
 template <class T>
 class Client <T, ObjectFactory> :
-	public T
+	public T,
+	public Definitions <ObjectFactory>
 {
 public:
 	/// \brief Allocates memory for servant.
@@ -131,7 +136,7 @@ public:
 	/// \param size Amount of memory in bytes.
 	void memory_release (void* p, size_t size);
 
-	void stateless_begin (Type <StatelessCreationFrame>::C_inout scb);
+	void stateless_begin (Type <Definitions <ObjectFactory>::StatelessCreationFrame>::C_inout scb);
 	void* stateless_end (Type <Boolean>::C_in success);
 
 	ReferenceCounter::_ref_type create_reference_counter (I_in <DynamicServant> dynamic);
@@ -159,7 +164,7 @@ void Client <T, ObjectFactory>::memory_release (void* p, size_t size)
 }
 
 template <class T>
-void Client <T, ObjectFactory>::stateless_begin (Type <StatelessCreationFrame>::C_inout scs)
+void Client <T, ObjectFactory>::stateless_begin (Type <Definitions <ObjectFactory>::StatelessCreationFrame>::C_inout scs)
 {
 	Environment _env;
 	Bridge <ObjectFactory>& _b (T::_get_bridge (_env));
@@ -208,7 +213,10 @@ LocalObject::_ref_type Client <T, ObjectFactory>::create_local_object (I_in <Loc
 }
 
 class ObjectFactory : public ClientInterface <ObjectFactory>
-{};
+{
+public:
+	using Definitions <ObjectFactory>::StatelessCreationFrame;
+};
 
 }
 }

@@ -53,6 +53,8 @@ class ImplementationPseudoStatic :
 	public InterfaceStaticBase <S, Primary>
 {
 public:
+	typedef Primary PrimaryInterface;
+
 	//! \brief Gets the pointer.
 	//!   Works like _this() method but doesn't increment the reference counter.
 	//!

@@ -1,5 +1,5 @@
 /*
-* Nirvana IDL support library.
+* Nirvana runtime library.
 *
 * This is a part of the Nirvana project.
 *
@@ -23,27 +23,20 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/local_core.h>
+#ifndef NIRVANA_ORB_MAKE_PSEUDO_H_
+#define NIRVANA_ORB_MAKE_PSEUDO_H_
+
+#include "I_ref.h"
 
 namespace CORBA {
-namespace Nirvana {
 
-Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object, String_in iid)
+template <class S, class ... Args>
+Nirvana::I_ref <typename S::PrimaryInterface> make_pseudo (Args ... args)
 {
-	Bridge <LocalObject>* bridge = &core_object;
-	Environment env;
-	Bridge <Object>* obj = bridge->_epv ().base.CORBA_Object (bridge, iid, &env);
-	env.check ();
-	return obj;
-}
-
-Interface::_ref_type get_proxy (LocalObject::_ptr_type core_object)
-{
-	Interface::_ptr_type proxy = AbstractBase::_ptr_type (Object::_ptr_type (core_object))->_query_interface (nullptr);
-	if (!proxy)
-		::Nirvana::throw_MARSHAL ();
-	return proxy; // Duplicate
+	typedef typename S::PrimaryInterface I;
+	return Nirvana::I_ref <I> (static_cast <I*> (&(new S (std::forward <Args> (args)...))->_get_ptr ()));
 }
 
 }
-}
+
+#endif
