@@ -42,7 +42,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).equal (Type <TypeCode>::in (other));
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -54,7 +54,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).equivalent (Type <TypeCode>::in (other));
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -66,7 +66,7 @@ protected:
 	{
 		try {
 			return Type <TypeCode>::ret (S::_implementation (_b).get_compact_typecode ());
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -78,7 +78,7 @@ protected:
 	{
 		try {
 			return Type <TCKind>::ret (S::_implementation (_b).kind ());
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -90,7 +90,7 @@ protected:
 	{
 		try {
 			return Type <String>::ret (S::_implementation (_b).id ());
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -102,7 +102,7 @@ protected:
 	{
 		try {
 			return Type <String>::ret (S::_implementation (_b).name ());
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -114,7 +114,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).member_count ();
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -126,7 +126,7 @@ protected:
 	{
 		try {
 			return Type <String>::ret (S::_implementation (_b).member_name (index));
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -138,7 +138,7 @@ protected:
 	{
 		try {
 			return Type <TypeCode>::ret (S::_implementation (_b).member_type (index));
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -150,7 +150,7 @@ protected:
 	{
 		try {
 			return Type <Any>::ret (S::_implementation (_b).member_label (index));
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -162,7 +162,7 @@ protected:
 	{
 		try {
 			return Type <TypeCode>::ret (S::_implementation (_b).discriminator_type ());
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -174,7 +174,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).default_index ();
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -186,7 +186,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).length ();
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -198,7 +198,7 @@ protected:
 	{
 		try {
 			return Type <TypeCode>::ret (S::_implementation (_b).content_type ());
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -210,7 +210,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).fixed_digits ();
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -222,7 +222,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).fixed_scale ();
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -234,7 +234,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).member_visibility (index);
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -246,7 +246,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).type_modifier ();
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -258,7 +258,7 @@ protected:
 	{
 		try {
 			return Type <TypeCode>::ret (S::_implementation (_b).concrete_base_type ());
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -270,7 +270,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b)._size ();
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -282,7 +282,7 @@ protected:
 	{
 		try {
 			S::_implementation (_b)._construct (p);
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -293,7 +293,7 @@ protected:
 	{
 		try {
 			S::_implementation (_b)._destruct (p);
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -304,7 +304,7 @@ protected:
 	{
 		try {
 			S::_implementation (_b)._copy (dst, src);
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -315,7 +315,7 @@ protected:
 	{
 		try {
 			S::_implementation (_b)._move (dst, src);
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -326,7 +326,7 @@ protected:
 	{
 		try {
 			return Type <Boolean>::ret (S::_implementation (_b)._has_marshal ());
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -338,7 +338,7 @@ protected:
 	{
 		try {
 			S::_implementation (_b)._marshal_in (src, Type <Marshal>::in (marshaler), dst);
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -349,7 +349,7 @@ protected:
 	{
 		try {
 			S::_implementation (_b)._marshal_out (src, Type <Marshal>::in (marshaler), dst);
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -360,7 +360,7 @@ protected:
 	{
 		try {
 			S::_implementation (_b)._unmarshal (src, Type <Unmarshal>::in (unmarshaler), dst);
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);

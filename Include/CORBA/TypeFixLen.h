@@ -39,8 +39,8 @@ namespace Nirvana {
 /// 
 /// \tparam T The variable type.
 /// \tparam ABI The ABI type
-template <typename T, typename TABI = T, typename TMember = T>
-struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t), TypeByVal <T, TABI, TMember>, TypeByRef <T, TABI, TMember> >
+template <typename T, typename TABI = T>
+struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t), TypeByVal <T, TABI>, TypeByRef <T, TABI> >
 {};
 
 }

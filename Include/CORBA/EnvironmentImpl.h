@@ -38,7 +38,7 @@ class EnvironmentBase :
 	public Bridge < ::CORBA::Environment>
 {
 public:
-	void exception_set (Short code, String_in rep_id, const void* param,
+	void exception_set (Short code, String_in rep_id, void* param,
 		const ExceptionEntry* user_exceptions = 0) NIRVANA_NOEXCEPT;
 
 	const Char* exception_id () const NIRVANA_NOEXCEPT;
@@ -82,8 +82,8 @@ protected:
 private:
 	bool set (const ExceptionEntry& ee) NIRVANA_NOEXCEPT;
 	void set_system (const ExceptionEntry& ee, const void* data) NIRVANA_NOEXCEPT;
-	void set_user (const ExceptionEntry& ee, const void* data) NIRVANA_NOEXCEPT;
-	bool set_user (String_in rep_id, const void* param, const ExceptionEntry* user_exceptions) NIRVANA_NOEXCEPT;
+	void set_user (const ExceptionEntry& ee, void* data) NIRVANA_NOEXCEPT;
+	bool set_user (String_in rep_id, void* param, const ExceptionEntry* user_exceptions) NIRVANA_NOEXCEPT;
 
 private:
 	union Data

@@ -320,7 +320,6 @@ struct TypeItfBase
 	// Otherwise compilation error will occur.
 	static void VT_ret (I_ref <I>&);
 
-	typedef I_ref <I> Member;
 	typedef I_ptr <I> ConstRef;
 };
 

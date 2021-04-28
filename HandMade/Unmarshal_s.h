@@ -43,7 +43,7 @@ protected:
 	{
 		try {
 			return Type <MarshalContext>::ret (S::_implementation (_b).context ());
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -56,7 +56,7 @@ protected:
 	{
 		try {
 			S::_implementation (_b).adopt_memory (p, size);
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -68,7 +68,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).unmarshal_interface (data, Type <String>::in (iid));
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);

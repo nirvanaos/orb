@@ -42,7 +42,7 @@ protected:
 	{
 		try {
 			return S::_implementation (obj)._non_existent ();
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);

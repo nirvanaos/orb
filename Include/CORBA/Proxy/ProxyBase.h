@@ -137,7 +137,7 @@ public:
 			if (!RepositoryId::compatible (Bridge <Base>::repository_id_, id))
 				::Nirvana::throw_INV_OBJREF ();
 			return static_cast <ProxyBaseInterface <Base>&> (S::_implementation (derived)).get ();
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);

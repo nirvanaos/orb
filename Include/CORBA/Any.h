@@ -84,7 +84,12 @@ public:
 
 	void type (Nirvana::I_ptr <TypeCode> alias);
 
-	const void* data () const;
+	void* data ();
+
+	const void* data () const
+	{
+		return const_cast <Any&> (*this).data ();
+	}
 
 	void clear ();
 

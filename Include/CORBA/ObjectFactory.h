@@ -93,9 +93,9 @@ struct Definitions <ObjectFactory>
 		}
 
 	private:
-		Type < ::Nirvana::ConstPointer>::Member _tmp; ///< Pointer to the servant temporary location in stack
-		Type < ::Nirvana::Size>::Member _size; ///< Servant size
-		Type < ::Nirvana::PtrDiff>::Member _offset; ///< Offset to the stateless memory block
+		Type < ::Nirvana::ConstPointer>::Var _tmp; ///< Pointer to the servant temporary location in stack
+		Type < ::Nirvana::Size>::Var _size; ///< Servant size
+		Type < ::Nirvana::PtrDiff>::Var _offset; ///< Offset to the stateless memory block
 	};
 };
 

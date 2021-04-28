@@ -88,21 +88,14 @@ void construct (void* p)
 	new (p) E ();
 }
 
-extern void set_exception (Interface* environment, Exception::Code code, const Char* rep_id, const void* param) NIRVANA_NOEXCEPT;
-extern void set_exception (Interface* environment, const Exception& e) NIRVANA_NOEXCEPT;
+extern void set_exception (Interface* environment, Exception::Code code, const Char* rep_id, void* param) NIRVANA_NOEXCEPT;
+extern void set_exception (Interface* environment, Exception& e) NIRVANA_NOEXCEPT;
 extern void set_unknown_exception (Interface* environment) NIRVANA_NOEXCEPT;
 
 }
 } // namespace CORBA
 
-#ifdef NIRVANA_C11
-#define NIRVANA_DEFAULT_CONSTRUCTORS(T) T (const T&) = default; T (T&&) = default;
-#else
-#define NIRVANA_DEFAULT_CONSTRUCTORS(T)
-#endif
-
-#define NIRVANA_EXCEPTION_DCL(E) public: E () {}\
-NIRVANA_DEFAULT_CONSTRUCTORS (E)\
+#define NIRVANA_EXCEPTION_DCL(E) public:\
 virtual void _raise () const { throw *this; }\
 virtual const char* _rep_id () const NIRVANA_NOEXCEPT;\
 virtual const char* _name () const NIRVANA_NOEXCEPT { return __name (); }\

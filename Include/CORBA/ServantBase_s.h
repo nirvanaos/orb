@@ -45,7 +45,7 @@ protected:
 	{
 		try {
 			return Type <::PortableServer::POA>::ret (S::_implementation (obj)._default_POA ());
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
@@ -57,7 +57,7 @@ protected:
 	{
 		try {
 			return Type <InterfaceDef>::ret (S::_implementation (obj)._get_interface ());
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
@@ -69,7 +69,7 @@ protected:
 	{
 		try {
 			return S::_implementation (obj)._is_a (Type <String>::in (type_id));
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
@@ -81,7 +81,7 @@ protected:
 	{
 		try {
 			return S::_implementation (obj)._non_existent ();
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
@@ -93,7 +93,7 @@ protected:
 	{
 		try {
 			return Type <::PortableServer::ServantBase>::VT_ret (S::_implementation (obj).__core_servant ());
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);

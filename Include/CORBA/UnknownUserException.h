@@ -40,23 +40,26 @@ public:
 
 	typedef Any _Data;
 
-	const Any& exception () const
+	Any& exception ()
 	{
-		return _data;
+		return _exception;
 	}
 
+	UnknownUserException ()
+	{}
+
 	UnknownUserException (Any&& exc) :
-		_data (std::move (exc))
+		_exception (std::move (exc))
 	{}
 
 private:
 	virtual void* __data () NIRVANA_NOEXCEPT
 	{
-		return &_data;
+		return &_exception;
 	}
 
 private:
-	_Data _data;
+	Any _exception;
 };
 
 namespace Nirvana {

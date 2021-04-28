@@ -30,7 +30,7 @@
 namespace CORBA {
 namespace Nirvana {
 
-void set_exception (Interface* environment, Exception::Code code, const Char* rep_id, const void* param) NIRVANA_NOEXCEPT
+void set_exception (Interface* environment, Exception::Code code, const Char* rep_id, void* param) NIRVANA_NOEXCEPT
 {
 	if (environment && RepositoryId::compatible (environment->_epv ().interface_id, Bridge < ::CORBA::Environment>::repository_id_)) {
 		Bridge < ::CORBA::Environment>* b = &static_cast <Bridge < ::CORBA::Environment>&> (*environment);
@@ -38,7 +38,7 @@ void set_exception (Interface* environment, Exception::Code code, const Char* re
 	}
 }
 
-void set_exception (Interface* environment, const Exception& e) NIRVANA_NOEXCEPT
+void set_exception (Interface* environment, Exception& e) NIRVANA_NOEXCEPT
 {
 	set_exception (environment, e.__code (), e._rep_id (), e.__data ());
 }

@@ -43,7 +43,7 @@ protected:
 	{
 		try {
 			return TypeItf <Object>::VT_ret (S::_implementation (_b).object ());
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -55,7 +55,7 @@ protected:
 	{
 		try {
 			return TypeItf <Marshal>::ret (S::_implementation (_b).create_marshaler ());
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -70,7 +70,7 @@ protected:
 		try {
 			return Type <Unmarshal>::ret (S::_implementation (_b).call (Type <OperationIndex>::in (op),
 				in_params, in_params_size, Type <Marshal>::inout (marshaler), out_params, out_params_size));
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);

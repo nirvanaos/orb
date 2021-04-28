@@ -46,7 +46,7 @@ protected:
 	{
 		try {
 			return Type <Interface>::VT_ret (S::_implementation (base)._query_interface (Type <String>::in (id)));
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);

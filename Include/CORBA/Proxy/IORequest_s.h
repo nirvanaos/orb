@@ -43,7 +43,7 @@ protected:
 	{
 		try {
 			return Type <Marshal>::VT_ret (S::_implementation (_b).marshaler ());
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -55,7 +55,7 @@ protected:
 	{
 		try {
 			S::_implementation (_b).set_exception (Type <Any>::inout (exc));
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -66,7 +66,7 @@ protected:
 	{
 		try {
 			S::_implementation (_b).success ();
-		} catch (const Exception & e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);

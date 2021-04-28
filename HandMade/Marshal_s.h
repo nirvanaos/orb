@@ -43,7 +43,7 @@ protected:
 	{
 		try {
 			return Type <MarshalContext>::ret (S::_implementation (_b).context ());
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -56,7 +56,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).marshal_memory (p, Type <::Nirvana::Size>::inout (size), release_size);
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -70,7 +70,7 @@ protected:
 		try {
 			return S::_implementation (_b).get_buffer (Type <::Nirvana::Size>::inout (size),
 				Type <::Nirvana::Pointer>::out (buf_ptr));
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -82,7 +82,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).marshal_interface (Type <Interface>::in (obj));
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);

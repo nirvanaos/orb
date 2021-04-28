@@ -45,7 +45,7 @@ protected:
 	{
 		try {
 			return Type <InterfaceMetadataPtr>::ret (S::_implementation (obj).metadata ());
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
@@ -59,7 +59,7 @@ protected:
 			return Type <InterfacePtr>::ret (S::_implementation (obj).create_proxy (
 				TypeItf <IOReference>::in (target), interface_idx,
 				Type <DynamicServantPtr>::out (deleter)));
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);

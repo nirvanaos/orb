@@ -36,11 +36,10 @@ namespace Nirvana {
 /// \tparam T The variable type.
 /// \tparam TABI The ABI type.
 /// \tparam TMember The struct member type.
-template <typename T, typename TABI = T, typename TMember = T>
+template <typename T, typename TABI = T>
 struct TypeByVal
 {
 	typedef T Var;
-	typedef TMember Member;
 	typedef Var ConstRef; // By value
 	typedef Var S_in; // By value
 

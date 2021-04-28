@@ -44,7 +44,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).memory_allocate (size);
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -56,7 +56,7 @@ protected:
 	{
 		try {
 			S::_implementation (_b).memory_release (p, size);
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -67,7 +67,7 @@ protected:
 	{
 		try {
 			S::_implementation (_b).stateless_begin (Type <ObjectFactory::StatelessCreationFrame>::inout (scs));
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -78,7 +78,7 @@ protected:
 	{
 		try {
 			return S::_implementation (_b).stateless_end (Type <bool>::in (success));
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -90,7 +90,7 @@ protected:
 	{
 		try {
 			return Type <ReferenceCounter>::ret (S::_implementation (_b).create_reference_counter (Type <DynamicServant>::in (dynamic)));
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -102,7 +102,7 @@ protected:
 	{
 		try {
 			return Type <PortableServer::ServantBase>::ret (S::_implementation (_b).create_servant (Type <PortableServer::ServantBase>::in (impl)));
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
@@ -114,7 +114,7 @@ protected:
 	{
 		try {
 			return Type <LocalObject>::ret (S::_implementation (_b).create_local_object (Type <LocalObject>::in (impl), Type <AbstractBase>::in (ab)));
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);

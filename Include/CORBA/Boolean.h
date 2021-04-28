@@ -36,13 +36,9 @@ namespace Nirvana {
 
 /// We can not use `bool' built-in type across the binary boundaries because
 /// it is compiler-specific, but we have to achieve the binary compatibility.
-/// So we use size_t (the machine word) as ABI for boolean in assumption that bool implementation can't be wide.
-/// In and out parameters passed as reinterpret_cast <bool&> (size_t&).
-/// Note that vector <bool> template specialization has element size is 1 byte.
-typedef size_t ABI_boolean;
 
 template <>
-struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
+struct Type <Boolean> : TypeByVal <Boolean, Char>
 {
 	class C_inout
 	{
@@ -59,18 +55,33 @@ struct Type <Boolean> : TypeByVal <Boolean, ABI_boolean, Char>
 
 		ABI_out operator & ()
 		{
-			return &abi_;
+			return (Char*)&abi_;
 		}
 
 	protected:
 		Var& ref_;
-		ABI abi_;
+		// The ABI for boolean is Char.
+		// But sizeof(bool) is implementation-dependent and might be > sizeof(char).
+		// So we reserve size_t (the machine word) as ABI for boolean in assumption that bool implementation can't be wide.
+		size_t abi_;
 	};
 
 	typedef C_inout C_out;
 
 	static I_ptr <TypeCode> type_code ();
 
+	// For the ABI compatibility, compiler uses char as structured type member of boolean type.
+	// So we have 2 kinds unmarshal methods.
+
+	static void unmarshal (ABI src, Unmarshal_ptr unmarshaler, Var& dst) NIRVANA_NOEXCEPT
+	{
+		dst = (Var)src;
+	}
+
+	static void unmarshal (ABI src, Unmarshal_ptr unmarshaler, Char& dst) NIRVANA_NOEXCEPT
+	{
+		dst = (Var)src;
+	}
 };
 
 }

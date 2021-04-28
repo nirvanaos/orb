@@ -37,13 +37,13 @@ typedef std::conditional_t <sizeof (size_t) >= 4, ULong, size_t> ABI_enum;
 
 /// Base for enum data types
 template <class T, T last>
-struct TypeEnum : TypeByVal <T, ABI_enum, T>
+struct TypeEnum : TypeByVal <T, ABI_enum>
 {
 	static_assert (sizeof (T) == sizeof (ABI_enum), "IDL enumerations must be declared as : ABI_enum.");
 
 	static const ABI_enum count_ = (ABI_enum)last + 1;
 
-	typedef TypeByVal <T, ABI_enum, T> Base;
+	typedef TypeByVal <T, ABI_enum> Base;
 
 	typedef typename Base::Var Var;
 	typedef typename Base::ABI ABI;

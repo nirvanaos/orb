@@ -209,7 +209,7 @@ void Any::type (I_ptr <TypeCode> alias)
 
 static_assert (Nirvana::ABI <Any>::SMALL_CAPACITY >= sizeof (SystemException::_Data), "Any data must fit SystemException::_Data.");
 
-const void* Any::data () const
+void* Any::data ()
 {
 	assert (type ());
 	if (is_large ())

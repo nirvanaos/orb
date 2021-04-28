@@ -41,7 +41,6 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 	typedef typename Base::ABI ABI;
 	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_out ABI_out;
-	typedef typename Base::Member Member;
 
 	static void check (const ABI& s);
 

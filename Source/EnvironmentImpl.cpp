@@ -71,7 +71,7 @@ void EnvironmentBase::exception (Exception* ex) NIRVANA_NOEXCEPT
 	data_.ptr = ex;
 }
 
-void EnvironmentBase::exception_set (Short code, String_in rep_id, const void* param,
+void EnvironmentBase::exception_set (Short code, String_in rep_id, void* param,
 	const ExceptionEntry* user_exceptions) NIRVANA_NOEXCEPT
 {
 	exception_free ();
@@ -80,7 +80,7 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, const void* p
 		if (!static_cast <const String&> (rep_id).empty ()) {
 			if (Exception::EC_USER_EXCEPTION == code && user_exceptions) {
 				if (RepositoryId::compatible (RepIdOf <UnknownUserException>::repository_id_, rep_id) && param) {
-					const Any* pa = (const Any*)param;
+					Any* pa = (Any*)param;
 					I_ptr <TypeCode> tc = pa->type ();
 					if (tc) {
 						try {
@@ -102,7 +102,7 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, const void* p
 	}
 }
 
-bool EnvironmentBase::set_user (String_in rep_id, const void* param,
+bool EnvironmentBase::set_user (String_in rep_id, void* param,
 	const ExceptionEntry* user_exceptions) NIRVANA_NOEXCEPT
 {
 	for (const ExceptionEntry* p = user_exceptions; p->rep_id; ++p) {
@@ -138,13 +138,13 @@ bool EnvironmentBase::set (const ExceptionEntry& ee) NIRVANA_NOEXCEPT
 	}
 }
 
-void EnvironmentBase::set_user (const ExceptionEntry& ee, const void* data) NIRVANA_NOEXCEPT
+void EnvironmentBase::set_user (const ExceptionEntry& ee, void* data) NIRVANA_NOEXCEPT
 {
 	if (set (ee) && data && ee.size > sizeof (UserException)) {
 		try {
 			Exception& e = *exception ();
 			I_ptr <TypeCode> tc = e.__type_code ();
-			tc->_copy (e.__data (), data);
+			tc->_move (e.__data (), data);
 		} catch (...) {
 			new (&data_) NO_MEMORY ();
 		}

@@ -40,7 +40,7 @@ public:
 	static const typename Bridge < ::CORBA::Environment>::EPV epv_;
 
 protected:
-	static void _exception_set (Bridge < ::CORBA::Environment>* obj, Short code, const char* rep_id, const void* param)
+	static void _exception_set (Bridge < ::CORBA::Environment>* obj, Short code, const char* rep_id, void* param)
 	{
 		try {
 			S::_implementation (obj).exception_set (code, rep_id, param);

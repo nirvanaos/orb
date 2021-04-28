@@ -88,7 +88,7 @@ public:
 		(content ()->_epv ().epv._move) (_b, dst, src, _env);
 	}
 
-	static ABI_boolean __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return (content ()->_epv ().epv._has_marshal) (_b, _env);
 	}

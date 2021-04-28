@@ -149,7 +149,7 @@ public:
 			if (!RepositoryId::compatible (Bridge <Base>::repository_id_, id))
 				::Nirvana::throw_MARSHAL ();
 			return &static_cast <Bridge <Base>&> (BaseImpl::_implementation (derived));
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
@@ -162,7 +162,7 @@ public:
 	{
 		try {
 			return BaseImpl::_implementation (derived)._get_object (id);
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);

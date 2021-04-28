@@ -42,7 +42,7 @@ public:
 	{
 		try {
 			return S::_duplicate (static_cast <Bridge <I>*> (itf));
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);

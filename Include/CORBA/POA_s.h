@@ -45,7 +45,7 @@ protected:
 	{
 		try {
 			return Type <String>::ret (S::_implementation (obj).activate_object (Type <PortableServer::ServantBase>::in (servant)));
-		} catch (const Exception& e) {
+		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
@@ -57,7 +57,7 @@ protected:
 	{
 		try {
 			S::_implementation (obj).deactivate_object (Type <String>::in (objid));
-		} catch (const Exception & e) {
+		} catch (Exception & e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
