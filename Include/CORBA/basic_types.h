@@ -32,8 +32,15 @@
 #include "TypeFixLen.h"
 #include "tc_constants.h"
 
+#ifdef LEGACY_CORBA_CPP
+#define DECLARE_TYPE_OUT(T) typedef T& T##_out;
+#else
+#define DECLARE_TYPE_OUT(T)
+#endif
+
 #define DECLARE_BASIC_TYPE(T, tc) namespace Nirvana { template <> struct Nirvana::Type <T> : Nirvana::TypeFixLen <T> {\
-static I_ptr <TypeCode> type_code () { return tc; } }; }
+static I_ptr <TypeCode> type_code () { return tc; } }; }\
+DECLARE_TYPE_OUT(T)
 
 namespace CORBA {
 

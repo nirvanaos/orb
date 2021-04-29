@@ -183,6 +183,10 @@ struct TypeByRef
 			Var (v)
 		{}
 
+		C_var (Var&& v) :
+			Var (std::move (v))
+		{}
+
 		NIRVANA_DEPRECATED
 		C_var (Var* p) : // MyStruct_var v = new MyStruct();
 			Var (*p)
@@ -194,17 +198,31 @@ struct TypeByRef
 			Var (src)
 		{}
 
+		C_var (C_var&& src) :
+			Var (std::move (src))
+		{}
+
 		C_var& operator = (const Var& v)
 		{
-			if (this != &v)
-				Var::operator = (v);
+			Var::operator = (v);
 			return *this;
 		}
 
-		C_var& operator = (const C_var& v)
+		C_var& operator = (Var&& v)
 		{
-			if (this != &v)
-				Var::operator = (v);
+			Var::operator = (std::move (v));
+			return *this;
+		}
+
+		C_var& operator = (const C_var& src)
+		{
+			Var::operator = (src);
+			return *this;
+		}
+
+		C_var& operator = (C_var&& src)
+		{
+			Var::operator = (std::move (src));
 			return *this;
 		}
 
