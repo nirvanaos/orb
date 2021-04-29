@@ -26,15 +26,14 @@
 #ifndef NIRVANA_ORB_REFERENCECOUNTER_H_
 #define NIRVANA_ORB_REFERENCECOUNTER_H_
 
-#include "Client.h"
-#include "Type_interface.h"
-
 namespace CORBA {
 namespace Nirvana {
 
 class ReferenceCounter;
+#ifdef LEGACY_CORBA_CPP
 typedef I_ptr <ReferenceCounter> ReferenceCounter_ptr;
 typedef I_var <ReferenceCounter> ReferenceCounter_var;
+#endif
 
 template <>
 struct Type <ReferenceCounter> : TypeItf <ReferenceCounter>

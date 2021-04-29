@@ -26,7 +26,7 @@
 #ifndef NIRVANA_ORB_LOCAL_CORE_H_
 #define NIRVANA_ORB_LOCAL_CORE_H_
 
-#include "Client.h"
+#include "Object.h"
 #include "LocalObject.h"
 
 namespace CORBA {

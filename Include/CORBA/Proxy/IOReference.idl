@@ -45,6 +45,9 @@ interface Unmarshal;
 ///        Interface to the implementation of the some Inter-ORB protocol.
 abstract valuetype IOReference
 {
+	/// Returns Object reference.
+	readonly attribute Object object;
+
 	/// Creates Marshal object.
 	Marshal create_marshaler ();
 

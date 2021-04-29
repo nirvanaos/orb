@@ -23,6 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+
 #include <CORBA/local_core.h>
 
 namespace CORBA {

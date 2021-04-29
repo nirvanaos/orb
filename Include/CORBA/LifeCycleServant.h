@@ -26,6 +26,8 @@
 #ifndef NIRVANA_ORB_LIFECYCLESERVANT_H_
 #define NIRVANA_ORB_LIFECYCLESERVANT_H_
 
+#include "Object.h"
+#include "Type_interface.h"
 #include "ReferenceCounter.h"
 #include "DynamicServant_s.h"
 #include "ServantImpl.h"

@@ -26,7 +26,6 @@
 #ifndef NIRVANA_ORB_LOCALOBJECT_H_
 #define NIRVANA_ORB_LOCALOBJECT_H_
 
-#include "Object.h"
 #include "ReferenceCounter.h"
 
 namespace CORBA {
