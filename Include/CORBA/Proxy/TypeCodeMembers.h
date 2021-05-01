@@ -88,7 +88,7 @@ public:
 		return nullptr;
 	}
 
-	static size_t member_count () NIRVANA_NOEXCEPT
+	static ULong member_count () NIRVANA_NOEXCEPT
 	{
 		return 0;
 	}

@@ -79,7 +79,7 @@ template <class T>
 struct CountedArray
 {
 	const T* p;
-	ULong size;
+	size_t size;
 };
 
 /// Function to return TypeCode
