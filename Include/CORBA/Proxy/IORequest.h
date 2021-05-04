@@ -59,12 +59,8 @@ namespace CORBA {
 namespace Nirvana {
 
 class Marshal;
-typedef I_ptr <Marshal> Marshal_ptr;
-typedef I_var <Marshal> Marshal_var;
 
 class IORequest;
-typedef I_ptr <IORequest> IORequest_ptr;
-typedef I_var <IORequest> IORequest_var;
 
 
 NIRVANA_BRIDGE_BEGIN (IORequest, CORBA_NIRVANA_REPOSITORY_ID ("IORequest"))

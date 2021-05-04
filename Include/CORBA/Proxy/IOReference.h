@@ -84,24 +84,12 @@ namespace CORBA {
 namespace Nirvana {
 
 class Marshal;
-#ifdef LEGACY_CORBA_CPP
-typedef I_ptr <Marshal> Marshal_ptr;
-typedef I_var <Marshal> Marshal_var;
-#endif
 
 class Unmarshal;
-#ifdef LEGACY_CORBA_CPP
-typedef I_ptr <Unmarshal> Unmarshal_ptr;
-typedef I_var <Unmarshal> Unmarshal_var;
-#endif
 
 typedef ULong OperationIndex;
 
 class IOReference;
-#ifdef LEGACY_CORBA_CPP
-typedef I_ptr <IOReference> IOReference_ptr;
-typedef I_var <IOReference> IOReference_var;
-#endif
 
 template <>
 struct Type <IOReference> : TypeItf <IOReference>
