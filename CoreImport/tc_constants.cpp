@@ -27,7 +27,7 @@ IMPORT_TC (_tc_wstring);
 
 NIRVANA_OLF_SECTION
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Object = { ::Nirvana::OLF_IMPORT_INTERFACE, Object::repository_id_, TypeCode::repository_id_ };
-NIRVANA_OLF_SECTION
-extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_ValueBase = { ::Nirvana::OLF_IMPORT_INTERFACE, CORBA_REPOSITORY_ID ("ValueBase"), TypeCode::repository_id_ };;
+//NIRVANA_OLF_SECTION
+//extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_ValueBase = { ::Nirvana::OLF_IMPORT_INTERFACE, CORBA_REPOSITORY_ID ("ValueBase"), TypeCode::repository_id_ };;
 
 }
