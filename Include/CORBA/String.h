@@ -34,6 +34,15 @@ namespace CORBA {
 namespace Nirvana {
 
 template <typename C>
+template <class A> inline
+StringBase <C>::StringBase (const std::basic_string <C, std::char_traits <C>, A>& s)
+{
+	this->large_pointer (const_cast <C*> (s.data ()));
+	this->large_size (s.size ());
+	this->allocated (0);
+}
+
+template <typename C>
 struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 {
 	typedef TypeVarLen <StringT <C>, CHECK_STRINGS> Base;

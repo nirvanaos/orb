@@ -72,6 +72,9 @@ public:
 	}
 #endif
 
+	template <class A>
+	StringBase (const std::basic_string <C, std::char_traits <C>, A>&);
+
 	StringBase (const C* p, size_t cc)
 	{
 		if (p && cc) {
