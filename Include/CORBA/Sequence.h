@@ -125,7 +125,7 @@ void Type <Sequence <T> >::check (const ABI& v)
 		if (p)
 			CORBA::Nirvana::_check_pointer (p);
 		size_t cnt = v.size;
-		if (cnt > 0 && (cnt > v.allocated / sizeof (T) || !Var::memory ()->is_readable (p, cnt * sizeof (T))))
+		if (cnt > v.allocated / sizeof (T))
 			::Nirvana::throw_BAD_PARAM ();
 	}
 

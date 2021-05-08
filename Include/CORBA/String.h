@@ -121,7 +121,7 @@ void Type <StringT <C> >::check (const ABI& s)
 		p = s.large_pointer ();
 		cc = s.large_size ();
 		CORBA::Nirvana::_check_pointer (p);
-		if (cc > s.large_capacity () || !Var::memory ()->is_readable (p, (cc + 1) * sizeof (C)))
+		if (cc > s.large_capacity ())
 			::Nirvana::throw_BAD_PARAM ();
 	} else {
 		p = s.small_pointer ();
