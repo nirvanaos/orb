@@ -30,7 +30,7 @@ namespace Nirvana {
 
 Interface::_ref_type get_proxy (PortableServer::Servant core_object)
 {
-	Interface::_ptr_type proxy = AbstractBase::_ptr_type (core_object)->_query_interface (0);
+	Interface::_ptr_type proxy = AbstractBase::_ptr_type (core_object)->_query_interface (nullptr);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
 	return proxy; // Duplicate

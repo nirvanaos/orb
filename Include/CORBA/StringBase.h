@@ -48,42 +48,15 @@ public:
 	}
 
 	template <typename S, typename = typename std::enable_if <std::is_convertible <S, const C*>::value && !std::is_array <S>::value>::type>
-	StringBase (S s)
-	{
-		const C* p = s;
-		if (p) {
-			size_t cc = _length (p);
-			this->large_pointer (const_cast <C*> (p));
-			this->large_size (cc);
-			this->allocated (0);
-		} else
-			this->reset ();
-	}
+	StringBase (S s);
 #else
-	StringBase (const C* p)
-	{
-		if (p) {
-			size_t cc = _length (p);
-			this->large_pointer (const_cast <C*> (p));
-			this->large_size (cc);
-			this->allocated (0);
-		} else
-			this->reset ();
-	}
+	StringBase (const C* p);
 #endif
 
 	template <class A>
 	StringBase (const std::basic_string <C, std::char_traits <C>, A>&);
 
-	StringBase (const C* p, size_t cc)
-	{
-		if (p && cc) {
-			this->large_pointer (const_cast <C*> (p));
-			this->large_size (cc);
-			this->allocated (0);
-		} else
-			this->reset ();
-	}
+	StringBase (const C* p, size_t cc);
 
 	StringBase (nullptr_t)
 	{
@@ -118,6 +91,48 @@ template <> inline
 size_t StringBase <WChar>::_length (const WChar* s)
 {
 	return wcslen (s);
+}
+
+#ifdef NIRVANA_C11
+
+template <typename C>
+template <typename S, typename>
+StringBase <C>::StringBase (S s)
+{
+	const C* p = s;
+	size_t cc;
+	if (p && (cc = _length (p))) {
+		this->large_pointer (const_cast <C*> (p));
+		this->large_size (cc);
+		this->allocated (0);
+	} else
+		this->reset ();
+}
+
+#else
+
+StringBase (const C* p)
+{
+	size_t cc;
+	if (p && (cc = _length (p))) {
+		this->large_pointer (const_cast <C*> (p));
+		this->large_size (cc);
+		this->allocated (0);
+	} else
+		this->reset ();
+}
+
+#endif
+
+template <typename C>
+StringBase <C>::StringBase (const C* p, size_t cc)
+{
+	if (p && cc) {
+		this->large_pointer (const_cast <C*> (p));
+		this->large_size (cc);
+		this->allocated (0);
+	} else
+		this->reset ();
 }
 
 typedef const Nirvana::StringBase <Char>& String_in;
