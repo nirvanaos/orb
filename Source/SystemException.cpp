@@ -24,6 +24,7 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/CORBA.h>
+#include <CORBA/system_exceptions.h>
 #include <algorithm>
 
 namespace CORBA {

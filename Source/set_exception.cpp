@@ -26,6 +26,7 @@
 #include <CORBA/set_exception.h>
 #include <CORBA/exceptions.h>
 #include <CORBA/Environment_c.h>
+#include <CORBA/system_exceptions.h>
 
 #define DEFINE_FUNCTION(e) void set_##e (Interface* env){ set_exception (env, SystemException::EC_##e, RepIdOf<e>::repository_id_, nullptr);}
 
