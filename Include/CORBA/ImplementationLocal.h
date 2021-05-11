@@ -59,7 +59,7 @@ public:
 
 	I_ref <Primary> _this ()
 	{
-		return LocalObjectLink::_get_proxy ().downcast <Primary> ();
+		return LocalObjectLink::_get_proxy ().template downcast <Primary> ();
 	}
 
 protected:

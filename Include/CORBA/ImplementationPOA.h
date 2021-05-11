@@ -63,7 +63,7 @@ public:
 
 	I_ref <Primary> _this ()
 	{
-		return this->_get_proxy ().downcast <Primary> ();
+		return this->_get_proxy ().template downcast <Primary> ();
 	}
 
 protected:

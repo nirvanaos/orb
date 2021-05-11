@@ -58,7 +58,7 @@ public:
 
 	static I_ref <Primary> _this ()
 	{
-		return InterfaceStatic <S, PortableServer::ServantBase>::_get_proxy ().downcast <Primary> ();
+		return InterfaceStatic <S, PortableServer::ServantBase>::_get_proxy ().template downcast <Primary> ();
 	}
 };
 

@@ -59,7 +59,7 @@ public:
 
 	I_ref <Primary> _this ()
 	{
-		return ServantBaseLink::_get_proxy ().downcast <Primary> ();
+		return ServantBaseLink::_get_proxy ().template downcast <Primary> ();
 	}
 
 protected:
