@@ -34,9 +34,9 @@
 namespace PortableServer {
 
 class POA;
-typedef ::CORBA::Nirvana::I_ptr <POA> POA_ptr;
+typedef ::CORBA::Internal::I_ptr <POA> POA_ptr;
 #ifdef LEGACY_CORBA_CPP
-typedef ::CORBA::Nirvana::I_var <POA> POA_var;
+typedef ::CORBA::Internal::I_var <POA> POA_var;
 #endif
 
 class ServantBase;
@@ -44,19 +44,19 @@ class ServantBase;
 }
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
-template <> class ::CORBA::Nirvana::I_ptr < ::PortableServer::ServantBase>;
+template <> class ::CORBA::Internal::I_ptr < ::PortableServer::ServantBase>;
 
 }
 }
 
 namespace PortableServer {
 
-typedef ::CORBA::Nirvana::I_ptr <ServantBase> Servant;
+typedef ::CORBA::Internal::I_ptr <ServantBase> Servant;
 
 #ifdef LEGACY_CORBA_CPP
-typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
+typedef ::CORBA::Internal::I_var <ServantBase> ServantBase_var;
 #endif
 
 }
@@ -65,11 +65,11 @@ namespace CORBA {
 
 typedef Object InterfaceDef; // TODO: Not defined yet
 #ifdef LEGACY_CORBA_CPP
-typedef Nirvana::I_ptr <InterfaceDef> InterfaceDef_ptr;
-typedef Nirvana::I_var <InterfaceDef> InterfaceDef_var;
+typedef Internal::I_ptr <InterfaceDef> InterfaceDef_ptr;
+typedef Internal::I_var <InterfaceDef> InterfaceDef_var;
 #endif
 
-namespace Nirvana {
+namespace Internal {
 
 template <>
 struct Type <PortableServer::ServantBase> : TypeItf <PortableServer::ServantBase>
@@ -199,9 +199,9 @@ public:
 namespace PortableServer {
 
 class ServantBase :
-	public ::CORBA::Nirvana::ClientInterface <ServantBase, ::CORBA::Nirvana::ReferenceCounter>,
+	public ::CORBA::Internal::ClientInterface <ServantBase, ::CORBA::Internal::ReferenceCounter>,
 	// Client methods from AbstractBase are not available directly on pointer to ServantBase.
-	public ::CORBA::Nirvana::ClientBase <ServantBase, ::CORBA::AbstractBase>
+	public ::CORBA::Internal::ClientBase <ServantBase, ::CORBA::AbstractBase>
 {};
 
 #ifdef LEGACY_CORBA_CPP

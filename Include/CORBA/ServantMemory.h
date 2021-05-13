@@ -31,7 +31,7 @@
 #include "ObjectFactory.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class ServantMemory
 {

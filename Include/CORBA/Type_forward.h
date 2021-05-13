@@ -30,14 +30,14 @@
 #include "I_ptr.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class Marshal;
 typedef I_ptr <Marshal> Marshal_ptr;
 class Unmarshal;
 typedef I_ptr <Unmarshal> Unmarshal_ptr;
 
-/** For each structure, union or enum data type T, IDL compiler generates `CORBA::Nirvana::Type <T>` structure.
+/** For each structure, union or enum data type T, IDL compiler generates `CORBA::Internal::Type <T>` structure.
     This structure defines how the parameters are passed between client and server.
 ~~~
 template <> struct Type <T>

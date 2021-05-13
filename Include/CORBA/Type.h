@@ -43,7 +43,7 @@
 #include "Object.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 /// The `void` type.
 template <>

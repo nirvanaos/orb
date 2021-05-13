@@ -29,7 +29,7 @@
 #include "I_ptr.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class I> class I_ref;
 template <> class I_ref <Interface>;
@@ -142,9 +142,9 @@ protected:
 }
 
 template <class S, class ... Args>
-Nirvana::I_ref <typename S::PrimaryInterface> make_pseudo (Args ... args);
+Internal::I_ref <typename S::PrimaryInterface> make_pseudo (Args ... args);
 
-namespace Nirvana {
+namespace Internal {
 
 /// An interface reference smart pointer.
 template <class I>

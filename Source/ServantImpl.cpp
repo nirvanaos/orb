@@ -27,7 +27,7 @@
 #include <Nirvana/throw_exception.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 void _check_pointer (const Interface* obj, const Interface::EPV& epv)
 {

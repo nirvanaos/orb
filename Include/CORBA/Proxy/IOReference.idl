@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-module Nirvana{
+module Nirvana {
 
 native Pointer;
 native ConstPointer;
@@ -32,7 +32,7 @@ native Size;
 };
 
 module CORBA {
-module Nirvana {
+module Internal {
 
 /// Low 16 bits contain the interface index.
 /// High 16 bits contain the operation index within the interface.

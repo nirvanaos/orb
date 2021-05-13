@@ -30,7 +30,7 @@
 #include "I_var.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 #ifdef NIRVANA_C11
 template <class I> using I_in = I_ptr <I>;

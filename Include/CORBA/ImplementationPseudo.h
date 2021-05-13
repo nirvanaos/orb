@@ -35,7 +35,7 @@
 #include "I_ptr.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! \class ImplementationPseudo
 //!

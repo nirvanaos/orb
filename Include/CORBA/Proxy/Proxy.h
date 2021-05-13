@@ -43,7 +43,7 @@
 #include <Nirvana/OLF.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 /// Proxy factory implements ProxyFactory and TypeCode interfaces.
 template <class I> class ProxyFactoryImpl :

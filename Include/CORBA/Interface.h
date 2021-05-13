@@ -32,7 +32,7 @@
 #include "StringBase.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class I> class I_ptr;
 template <class I> class I_ref;
@@ -81,7 +81,7 @@ private:
 };
 
 Interface* interface_duplicate (Interface* obj);
-void interface_release (Nirvana::Interface* itf) NIRVANA_NOEXCEPT;
+void interface_release (Interface* itf) NIRVANA_NOEXCEPT;
 
 }
 

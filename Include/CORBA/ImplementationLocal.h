@@ -32,7 +32,7 @@
 #include "FindInterface.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! \class ImplementationLocal
 //!

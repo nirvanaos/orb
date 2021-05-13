@@ -29,7 +29,7 @@
 #include "Object.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! Object skeleton
 

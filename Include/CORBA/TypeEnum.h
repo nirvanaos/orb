@@ -31,7 +31,7 @@
 #include <type_traits>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 typedef std::conditional_t <sizeof (size_t) >= 4, ULong, size_t> ABI_enum;
 

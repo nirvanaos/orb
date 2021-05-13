@@ -28,7 +28,7 @@
 /*
 ~~~{.idl}
 module CORBA {
-module Nirvana {
+module Internal {
 
 /// Unmarshals data between objects in the same platform domain.
 pseudo interface Unmarshal
@@ -54,7 +54,7 @@ namespace CORBA {
 
 class Object;
 
-namespace Nirvana {
+namespace Internal {
 
 class Unmarshal;
 typedef I_ptr <Unmarshal> Unmarshal_ptr;

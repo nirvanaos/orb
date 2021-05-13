@@ -26,7 +26,7 @@
 #include <CORBA/Proxy/TypeCodeImpl.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 void set_BadKind (Interface* env)
 {

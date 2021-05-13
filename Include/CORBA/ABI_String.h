@@ -40,7 +40,7 @@ template <typename C, class T> class basic_string <C, T, allocator <C> >;
 }
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <typename C>
 using StringT = std::basic_string <C, std::char_traits <C>, std::allocator <C> >;

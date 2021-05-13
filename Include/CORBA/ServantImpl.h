@@ -35,7 +35,7 @@ namespace CORBA {
 
 class Object;
 
-namespace Nirvana {
+namespace Internal {
 
 extern void _check_pointer (const void* p);
 extern void _check_pointer (const Interface* obj, const Interface::EPV& epv);

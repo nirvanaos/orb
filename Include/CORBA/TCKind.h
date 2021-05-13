@@ -30,7 +30,7 @@ namespace CORBA {
 
 class TypeCode;
 
-enum TCKind : Nirvana::ABI_enum
+enum TCKind : Internal::ABI_enum
 {
 	tk_null, tk_void,
 	tk_short, tk_long, tk_ushort, tk_ulong,
@@ -48,7 +48,7 @@ enum TCKind : Nirvana::ABI_enum
 
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_TCKind;
 
-namespace Nirvana {
+namespace Internal {
 template <>
 struct Type <TCKind> : TypeEnum <TCKind, tk_local_interface>
 {

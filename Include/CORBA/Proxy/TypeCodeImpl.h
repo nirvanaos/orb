@@ -33,7 +33,7 @@
 #include <new>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 void set_BadKind (Interface* env);
 void set_Bounds (Interface* env);

@@ -31,7 +31,7 @@
 #include "../TypeEnum.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class E>
 class TypeCodeEnum :

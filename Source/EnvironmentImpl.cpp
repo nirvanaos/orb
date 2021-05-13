@@ -26,7 +26,7 @@
 #include <CORBA/CORBA.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 void EnvironmentBase::exception_free () NIRVANA_NOEXCEPT
 {

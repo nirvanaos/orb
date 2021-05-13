@@ -27,7 +27,7 @@
 
 namespace CORBA {
 
-namespace Nirvana {
+namespace Internal {
 
 void Type <Any>::check (const ABI& any)
 {
@@ -85,7 +85,7 @@ void Type <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst)
 			psrc = src.small_pointer ();
 		}
 		tc->_marshal_out (psrc, marshaler, pdst);
-		Nirvana::interface_release (&tc);
+		interface_release (&tc);
 		src.reset ();
 	}
 }
@@ -124,7 +124,7 @@ void Type <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
 
 }
 
-using namespace Nirvana;
+using namespace Internal;
 
 void Any::clear ()
 {
@@ -207,7 +207,7 @@ void Any::type (I_ptr <TypeCode> alias)
 	}
 }
 
-static_assert (Nirvana::ABI <Any>::SMALL_CAPACITY >= sizeof (SystemException::_Data), "Any data must fit SystemException::_Data.");
+static_assert (Internal::ABI <Any>::SMALL_CAPACITY >= sizeof (SystemException::_Data), "Any data must fit SystemException::_Data.");
 
 void* Any::data ()
 {
@@ -304,12 +304,12 @@ Boolean operator >>= (const Any& any, SystemException& se)
 		||
 			!strncmp (nirvana_prefix, id, countof (nirvana_prefix) - 1)
 		) {
-			const Nirvana::ExceptionEntry* ee = SystemException::_get_exception_entry (id, Exception::EC_SYSTEM_EXCEPTION);
+			const Internal::ExceptionEntry* ee = SystemException::_get_exception_entry (id, Exception::EC_SYSTEM_EXCEPTION);
 			assert (ee);
 			(ee->construct) (&se);
 			const SystemException::_Data& data = *(const SystemException::_Data*)any.data ();
 			se.completed (data.completed);
-			if (Nirvana::RepositoryId::compatible (ee->rep_id, id))
+			if (RepositoryId::compatible (ee->rep_id, id))
 				se.minor (data.minor);
 			return true;
 		}

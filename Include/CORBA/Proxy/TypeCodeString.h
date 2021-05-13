@@ -31,7 +31,7 @@
 #include "../String.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <typename Valtype, ULong bound> class TypeCodeString;
 

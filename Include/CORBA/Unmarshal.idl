@@ -27,7 +27,7 @@
 #include "MarshalContext.idl"
 
 module CORBA {
-module Nirvana {
+module Internal {
 
 /// Unmarshals data between objects in the same platform domain.
 pseudo interface Unmarshal

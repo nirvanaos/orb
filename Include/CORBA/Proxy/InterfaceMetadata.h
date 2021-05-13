@@ -34,7 +34,7 @@
 #include <Nirvana/ImportInterface.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 /// \brief Function to serve request.
 /// \param servant               Interface to servant implementation.

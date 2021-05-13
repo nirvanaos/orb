@@ -31,7 +31,7 @@
 #include "../Sequence.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <typename T, ULong bound = 0>
 class TypeCodeSequence :

@@ -36,7 +36,7 @@ template <class T> class allocator;
 }
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <typename T>
 using Sequence = std::vector <T, std::allocator <T> >;

@@ -36,7 +36,7 @@
 #include "ReferenceCounterPOA.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! \class ImplementationPseudoPOA
 //!

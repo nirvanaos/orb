@@ -30,7 +30,7 @@
 #include "I_ptr.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class S, class I> class ServantStatic;
 
@@ -77,7 +77,7 @@ public:
 	static const typename Bridge <I>::EPV* bridge_;
 };
 
-#define NIRVANA_STATIC_BRIDGE(I, ...) reinterpret_cast <::CORBA::Nirvana::Bridge <I>*> (&::CORBA::Nirvana::InterfaceStaticBase <__VA_ARGS__, I>::bridge_)
+#define NIRVANA_STATIC_BRIDGE(I, ...) reinterpret_cast <::CORBA::Internal::Bridge <I>*> (&::CORBA::Internal::InterfaceStaticBase <__VA_ARGS__, I>::bridge_)
 
 template <class S, class I>
 const typename Bridge <I>::EPV* InterfaceStaticBase <S, I>::bridge_ = &InterfaceStaticBase <S, I>::epv_;

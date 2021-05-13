@@ -37,13 +37,13 @@ template <class T, class ... Args>
 servant_reference <T> make_stateless (Args ... args)
 {
 	typename std::aligned_storage <sizeof (T), alignof (T)>::type tmp;
-	Nirvana::ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (T), 0);
-	Nirvana::g_object_factory->stateless_begin (scb);
+	Internal::ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (T), 0);
+	Internal::g_object_factory->stateless_begin (scb);
 	try {
 		new (&tmp) T (std::forward <Args> (args)...);
-		return ervant_reference ((T*)CORBA::Nirvana::g_object_factory->stateless_end (true), false);
+		return ervant_reference ((T*)Internal::g_object_factory->stateless_end (true), false);
 	} catch (...) {
-		Nirvana::g_object_factory->stateless_end (false);
+		Internal::g_object_factory->stateless_end (false);
 		throw;
 	}
 }

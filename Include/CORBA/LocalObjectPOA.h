@@ -35,7 +35,7 @@
 #endif
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <>
 class NIRVANA_NOVTABLE ServantPOA <LocalObject> :

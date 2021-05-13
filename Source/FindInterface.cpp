@@ -27,7 +27,7 @@
 #include <CORBA/RepositoryId.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 Interface* InterfaceEntry::find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, String_in id)
 {

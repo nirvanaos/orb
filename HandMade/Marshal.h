@@ -28,7 +28,7 @@
 /*
 ~~~{.idl}
 module CORBA {
-module Nirvana {
+module Internal {
 
 /// Marshals data between objects in the same platform domain.
 pseudo interface Marshal
@@ -74,7 +74,7 @@ pseudo interface Marshal
 #include "MarshalContext.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class Marshal;
 typedef I_ptr <Marshal> Marshal_ptr;

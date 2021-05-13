@@ -29,7 +29,7 @@
 #include "EnvironmentImpl.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class Environment :
 	public EnvironmentImpl <Environment>

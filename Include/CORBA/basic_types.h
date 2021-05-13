@@ -38,7 +38,7 @@
 #define DECLARE_TYPE_OUT(T)
 #endif
 
-#define DECLARE_BASIC_TYPE(T, tc) namespace Nirvana { template <> struct Nirvana::Type <T> : Nirvana::TypeFixLen <T> {\
+#define DECLARE_BASIC_TYPE(T, tc) namespace Internal { template <> struct Internal::Type <T> : Internal::TypeFixLen <T> {\
 static I_ptr <TypeCode> type_code () { return tc; } }; }\
 DECLARE_TYPE_OUT(T)
 
@@ -57,7 +57,7 @@ DECLARE_BASIC_TYPE (Float, _tc_float)
 DECLARE_BASIC_TYPE (Double, _tc_double)
 DECLARE_BASIC_TYPE (LongDouble, _tc_longdouble)
 
-namespace Nirvana {
+namespace Internal {
 
 inline
 I_ptr <TypeCode> Type <Boolean>::type_code ()

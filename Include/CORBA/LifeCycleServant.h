@@ -35,7 +35,7 @@
 #include "LifeCycleRefCnt.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 /// \class ReferenceCounterLink
 ///

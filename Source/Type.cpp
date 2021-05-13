@@ -28,7 +28,7 @@
 #include <exception>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 void _check_pointer (const void* p)
 {

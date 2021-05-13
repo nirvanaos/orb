@@ -29,7 +29,7 @@
 #include "StringBase.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class RepositoryId
 {

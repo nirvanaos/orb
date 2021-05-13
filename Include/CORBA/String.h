@@ -31,7 +31,7 @@
 #include "TypeVarLen.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <typename C>
 template <class A> inline
@@ -120,7 +120,7 @@ void Type <StringT <C> >::check (const ABI& s)
 	if (s.is_large ()) {
 		p = s.large_pointer ();
 		cc = s.large_size ();
-		CORBA::Nirvana::_check_pointer (p);
+		CORBA::Internal::_check_pointer (p);
 		if (cc > s.large_capacity ())
 			::Nirvana::throw_BAD_PARAM ();
 	} else {

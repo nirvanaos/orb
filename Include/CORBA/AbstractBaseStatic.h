@@ -32,7 +32,7 @@
 #include "ServantStatic.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! Static implementation of AbstractBase.
 //! \tparam S Servant class implementing operations.

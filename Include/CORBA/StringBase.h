@@ -32,7 +32,7 @@
 #include <string.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <typename C>
 class StringBase : protected ABI <StringT <C> >
@@ -135,8 +135,8 @@ StringBase <C>::StringBase (const C* p, size_t cc)
 		this->reset ();
 }
 
-typedef const Nirvana::StringBase <Char>& String_in;
-typedef const Nirvana::StringBase <WChar>& WString_in;
+typedef const StringBase <Char>& String_in;
+typedef const StringBase <WChar>& WString_in;
 
 }
 }

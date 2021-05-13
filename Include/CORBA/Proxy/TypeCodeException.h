@@ -31,7 +31,7 @@
 #include "TypeCodeMembers.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class E, bool members = false>
 class TypeCodeException :

@@ -33,7 +33,7 @@
 #include "Type_forward.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 /// Serverless dynamic pseudo object (Environment etc).
 template <class T>
@@ -112,7 +112,7 @@ struct TypeServerless
 
 /// CORBA::release
 template <class T> inline
-void release (Nirvana::Serverless <T>* ptr)
+void release (Internal::Serverless <T>* ptr)
 {
 	if (ptr)
 		ptr->_remove_ref ();

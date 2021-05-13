@@ -26,7 +26,7 @@
 #include <CORBA/servant_core.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 Interface::_ref_type get_proxy (PortableServer::Servant core_object)
 {

@@ -29,7 +29,7 @@
 
 namespace CORBA {
 
-using namespace Nirvana;
+using namespace Internal;
 using namespace std;
 
 #define DEFINE_SYSTEM_EXCEPTION(E)\
@@ -37,7 +37,7 @@ const E* E::_downcast (const Exception* ep) NIRVANA_NOEXCEPT { return (ep && (EC
 const char* E::_rep_id () const NIRVANA_NOEXCEPT { return RepIdOf <E>::repository_id_; }\
 GNU_OPTNONE ::CORBA::I_ptr <TypeCode> E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 
-#define EXCEPTION_ENTRY(E) { { Nirvana::RepIdOf <E>::repository_id_, sizeof (E), ::CORBA::Nirvana::construct <E> }, countof (Nirvana::RepIdOf <E>::repository_id_) - 1 },
+#define EXCEPTION_ENTRY(E) { { RepIdOf <E>::repository_id_, sizeof (E), construct <E> }, countof (RepIdOf <E>::repository_id_) - 1 },
 
 SYSTEM_EXCEPTIONS (DEFINE_SYSTEM_EXCEPTION)
 
@@ -45,7 +45,7 @@ const SystemException::ExceptionEntry SystemException::exception_entries_ [Syste
 	SYSTEM_EXCEPTIONS (EXCEPTION_ENTRY)
 };
 
-const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (String_in rep_id, Code hint)
+const Internal::ExceptionEntry* SystemException::_get_exception_entry (String_in rep_id, Code hint)
 {
 	struct Pred
 	{
@@ -62,14 +62,14 @@ const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (String_in 
 
 	if (hint >= 0 && hint < KNOWN_SYSTEM_EXCEPTIONS) {
 		const ExceptionEntry* pe = exception_entries_ + hint;
-		if (Nirvana::RepositoryId::compatible (pe->ee.rep_id, pe->rep_id_len, rep_id))
+		if (RepositoryId::compatible (pe->ee.rep_id, pe->rep_id_len, rep_id))
 			return &(pe->ee);
 		hint = EC_SYSTEM_EXCEPTION;
 	}
 
 	const ExceptionEntry* pe = lower_bound (begin (exception_entries_), end (exception_entries_), rep_id, Pred ());
 	if (pe != end (exception_entries_)) {
-		if (Nirvana::RepositoryId::compatible (pe->ee.rep_id, pe->rep_id_len, rep_id))
+		if (RepositoryId::compatible (pe->ee.rep_id, pe->rep_id_len, rep_id))
 			return &(pe->ee);
 	}
 
@@ -79,7 +79,7 @@ const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (String_in 
 		return nullptr;
 }
 
-const Nirvana::ExceptionEntry* SystemException::_get_exception_entry (I_ptr <TypeCode> tc)
+const Internal::ExceptionEntry* SystemException::_get_exception_entry (I_ptr <TypeCode> tc)
 {
 	if (tc && tc->kind () == tk_except)
 		return _get_exception_entry (tc->id ());

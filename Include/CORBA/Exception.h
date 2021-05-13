@@ -33,7 +33,7 @@
 
 namespace CORBA {
 
-namespace Nirvana {
+namespace Internal {
 template <class I> class I_ptr;
 class Interface;
 }
@@ -54,7 +54,7 @@ public:
 
 	// Nirvana specific
 	virtual Code __code () const NIRVANA_NOEXCEPT = 0;
-	virtual Nirvana::I_ptr <TypeCode> __type_code () const NIRVANA_NOEXCEPT = 0;
+	virtual Internal::I_ptr <TypeCode> __type_code () const NIRVANA_NOEXCEPT = 0;
 
 	virtual void* __data () NIRVANA_NOEXCEPT
 	{
@@ -73,7 +73,7 @@ public:
 	};
 };
 
-namespace Nirvana {
+namespace Internal {
 
 struct ExceptionEntry
 {
@@ -100,7 +100,7 @@ virtual void _raise () const { throw *this; }\
 virtual const char* _rep_id () const NIRVANA_NOEXCEPT;\
 virtual const char* _name () const NIRVANA_NOEXCEPT { return __name (); }\
 static constexpr const char* __name () NIRVANA_NOEXCEPT { return #E; }\
-virtual ::CORBA::Nirvana::I_ptr <::CORBA::TypeCode> __type_code () const NIRVANA_NOEXCEPT;\
+virtual ::CORBA::Internal::I_ptr <::CORBA::TypeCode> __type_code () const NIRVANA_NOEXCEPT;\
 static const E* _downcast (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT;\
 static E* _downcast (::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return const_cast <E*> (_downcast ((const ::CORBA::Exception*)ep)); }\
 static const E* _narrow (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return _downcast (ep); }\

@@ -31,7 +31,7 @@
 #include "ServantBase_s.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! Implementation of PortableServer::ServantBase.
 //! \tparam S Servant class implementing operations.

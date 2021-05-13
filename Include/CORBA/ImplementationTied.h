@@ -34,7 +34,7 @@
 #include "DynamicServant.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class T, class I>
 class ServantTied :

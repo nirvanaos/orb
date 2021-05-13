@@ -33,7 +33,7 @@
 #include "ServantBase.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class DynamicServant;
 #ifdef LEGACY_CORBA_CPP

@@ -28,7 +28,7 @@
 /*
 ~~~{.idl}
 module CORBA {
-module Nirvana {
+module Internal {
 
 /// \brief Interoperable Object Request.
 ///        Interface to the implementation of the some Inter-ORB protocol.
@@ -56,7 +56,7 @@ pseudo interface IORequest
 #define NIRVANA_ORB_IOREQUEST_H_
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class Marshal;
 typedef I_ptr <Marshal> Marshal_ptr;

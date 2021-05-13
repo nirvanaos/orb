@@ -30,7 +30,7 @@
 #include "Bridge.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 struct InterfaceEntry
 {

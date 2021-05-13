@@ -38,21 +38,21 @@ namespace CORBA {
 
 class AbstractBase;
 #ifdef LEGACY_CORBA_CPP
-typedef Nirvana::I_ptr <AbstractBase> AbstractBase_ptr;
-typedef Nirvana::I_var <AbstractBase> AbstractBase_var;
+typedef Internal::I_ptr <AbstractBase> AbstractBase_ptr;
+typedef Internal::I_var <AbstractBase> AbstractBase_var;
 typedef AbstractBase_var& AbstractBase_out;
 #endif
 
 class Object;
 #ifdef LEGACY_CORBA_CPP
-typedef Nirvana::I_ptr <Object> Object_ptr;
-typedef Nirvana::I_var <Object> Object_var;
+typedef Internal::I_ptr <Object> Object_ptr;
+typedef Internal::I_var <Object> Object_var;
 typedef Object_var& Object_out;
 #endif
 
 class ValueBase;
 
-namespace Nirvana {
+namespace Internal {
 
 // AbstractBase
 
@@ -91,7 +91,7 @@ I_ptr <Interface> Client <T, AbstractBase>::_query_interface (String_in type_id)
 }
 
 class AbstractBase :
-	public Nirvana::ClientInterfacePrimary <AbstractBase>
+	public Internal::ClientInterfacePrimary <AbstractBase>
 {
 public:
 #ifdef LEGACY_CORBA_CPP
@@ -106,11 +106,11 @@ public:
 	}
 #endif
 
-	inline Nirvana::I_ref <Object> _to_object ();
-	inline Nirvana::I_ref <ValueBase> _to_value ();
+	inline Internal::I_ref <Object> _to_object ();
+	inline Internal::I_ref <ValueBase> _to_value ();
 };
 
-namespace Nirvana {
+namespace Internal {
 
 // TODO: Move to Client.h
 template <class Primary>

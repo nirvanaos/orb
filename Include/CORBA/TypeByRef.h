@@ -29,7 +29,7 @@
 #include "Type_forward.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 /// Data type, passed by reference.
 /// 

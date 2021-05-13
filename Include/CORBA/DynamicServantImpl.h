@@ -29,7 +29,7 @@
 #include "LifeCycleServant.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 /// \brief Reference counting implementation for servant
 template <class S>

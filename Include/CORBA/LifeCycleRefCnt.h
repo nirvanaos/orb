@@ -29,7 +29,7 @@
 #include "LifeCycleDynamic.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! Life cycle with reference counting.
 template <class S>

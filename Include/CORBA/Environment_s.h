@@ -29,7 +29,7 @@
 #include "Environment_c.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class S, class I> class Skeleton;
 

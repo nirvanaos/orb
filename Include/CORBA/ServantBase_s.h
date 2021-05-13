@@ -30,7 +30,7 @@
 #include "Type_interface.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 // ServantBase skeleton
 

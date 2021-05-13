@@ -29,7 +29,7 @@
 #include "local_core.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! \brief Implements delegate to the core LocalObject implementation.
 class LocalObjectLink :

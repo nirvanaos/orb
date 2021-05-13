@@ -34,7 +34,7 @@
 #include "local_core.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! Static implementation of LocalObject
 //! \tparam S Servant class.

@@ -26,7 +26,7 @@
 #include <CORBA/Server.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 ServantPOA <PortableServer::ServantBase>::ServantPOA () :
 	ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_)

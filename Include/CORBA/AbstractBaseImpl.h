@@ -31,7 +31,7 @@
 #include "DynamicServantImpl.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class S>
 class InterfaceImpl <S, AbstractBase> :

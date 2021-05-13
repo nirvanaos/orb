@@ -29,7 +29,7 @@
 #include "Exception.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! Dynamic servant life cycle.
 //! \tparam S Class implementing `_duplicate()' and `_release()' operations.

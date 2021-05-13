@@ -40,7 +40,7 @@ namespace CORBA {
 class Any;
 class TypeCode;
 
-namespace Nirvana {
+namespace Internal {
 
 template <>
 struct alignas (sizeof (uintptr_t)) ABI <Any>

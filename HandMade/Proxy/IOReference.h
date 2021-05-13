@@ -28,7 +28,7 @@
 /*
 ~~~{.idl}
 module CORBA {
-module Nirvana {
+module Internal {
 
 struct OperationIndex
 {
@@ -80,7 +80,7 @@ pseudo interface IOReference : Object
 #define NIRVANA_ORB_IOREFERENCE_H_
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class Marshal;
 typedef I_ptr <Marshal> Marshal_ptr;

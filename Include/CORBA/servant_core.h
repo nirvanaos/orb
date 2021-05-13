@@ -30,7 +30,7 @@
 #include "ServantBase.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 // TODO: In the final implementation this method won't be called for servants.
 // So we could replace the implementation to throw_BAD_OPERATION() call

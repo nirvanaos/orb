@@ -31,7 +31,7 @@
 #include "Interface.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 /// Bind repository id to a type.
 template <typename T>

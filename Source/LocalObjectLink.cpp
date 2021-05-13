@@ -26,7 +26,7 @@
 #include <CORBA/Server.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 void LocalObjectLink::_construct (Bridge <AbstractBase>& ab)
 {

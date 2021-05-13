@@ -34,9 +34,9 @@
 
 namespace CORBA {
 
-class Any : private Nirvana::ABI <Any>
+class Any : private Internal::ABI <Any>
 {
-	typedef Nirvana::ABI <Any> ABI;
+	typedef Internal::ABI <Any> ABI;
 public:
 	Any ()
 	{
@@ -77,12 +77,12 @@ public:
 		return *this;
 	}
 
-	Nirvana::I_ptr <TypeCode> type () const
+	Internal::I_ptr <TypeCode> type () const
 	{
 		return ABI::type ();
 	}
 
-	void type (Nirvana::I_ptr <TypeCode> alias);
+	void type (Internal::I_ptr <TypeCode> alias);
 
 	void* data ();
 
@@ -239,16 +239,16 @@ public:
 	//Boolean operator >>= (to_wstring) const;
 	//Boolean operator >>= (to_fixed) const;
 
-	void copy_from (Nirvana::I_ptr <TypeCode> tc, const void* val);
-	void move_from (Nirvana::I_ptr <TypeCode> tc, void* val);
+	void copy_from (Internal::I_ptr <TypeCode> tc, const void* val);
+	void move_from (Internal::I_ptr <TypeCode> tc, void* val);
 
 private:
-	friend struct Nirvana::Type <Any>;
+	friend struct Internal::Type <Any>;
 
 	void copy_from (const Any& src);
-	void* prepare (Nirvana::I_ptr <TypeCode> tc);
-	void set_type (Nirvana::I_ptr <TypeCode> tc);
-	void set_type (Nirvana::I_ref <TypeCode>&& tc);
+	void* prepare (Internal::I_ptr <TypeCode> tc);
+	void set_type (Internal::I_ptr <TypeCode> tc);
+	void set_type (Internal::I_ref <TypeCode>&& tc);
 
 	// these functions are private and not implemented
 	// hiding these causes compile-time errors for
@@ -257,7 +257,7 @@ private:
 	Boolean operator >>= (unsigned char &) const;
 };
 
-namespace Nirvana {
+namespace Internal {
 
 template <>
 struct Type <Any> : public TypeVarLen <Any, true>
@@ -296,7 +296,7 @@ struct Type <Any> : public TypeVarLen <Any, true>
 }
 
 #ifdef LEGACY_CORBA_CPP
-typedef Nirvana::Type <Any>::C_var Any_var;
+typedef Internal::Type <Any>::C_var Any_var;
 #endif
 
 void operator <<= (Any&, Short);

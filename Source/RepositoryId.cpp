@@ -29,7 +29,7 @@
 #include <algorithm>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 using namespace std;
 

@@ -31,7 +31,7 @@
 #include "String.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 /// This class provides the backward compatibility with legacy code.
 template <typename C>
@@ -142,8 +142,8 @@ void String_var <C>::adopt (C* s)
 
 #ifdef LEGACY_CORBA_CPP
 
-typedef Nirvana::String_var <Char> String_var;
-typedef Nirvana::String_var <WChar> WString_var;
+typedef Internal::String_var <Char> String_var;
+typedef Internal::String_var <WChar> WString_var;
 typedef String_var& String_out;
 typedef WString_var& WString_out;
 

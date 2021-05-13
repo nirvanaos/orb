@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_MARSHALCONTEXT_H_
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 /// \brief Type of the inter-domain marshal context.
 enum class MarshalContext : ABI_enum

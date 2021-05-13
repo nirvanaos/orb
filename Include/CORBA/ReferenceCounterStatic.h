@@ -30,7 +30,7 @@
 #include "ServantStatic.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class S>
 class InterfaceStatic <S, ReferenceCounter> :

@@ -32,7 +32,7 @@ namespace CORBA {
 
 class Environment;
 
-namespace Nirvana {
+namespace Internal {
 
 NIRVANA_BRIDGE_BEGIN (::CORBA::Environment, CORBA_REPOSITORY_ID ("Environment"))
 void (*exception_set) (Bridge < ::CORBA::Environment>*, Short code, const Char* rep_id, void* param);

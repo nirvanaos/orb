@@ -30,7 +30,7 @@
 
 namespace CORBA {
 
-namespace Nirvana {
+namespace Internal {
 
 class Marshal;
 #ifdef LEGACY_CORBA_CPP
@@ -58,12 +58,12 @@ const ValueModifier VM_TRUNCATABLE = 3;
 
 class TypeCode;
 #ifdef LEGACY_CORBA_CPP
-typedef Nirvana::TypeItf <TypeCode>::C_ptr TypeCode_ptr;
-typedef Nirvana::TypeItf <TypeCode>::C_var TypeCode_var;
-typedef Nirvana::TypeItf <TypeCode>::C_var& TypeCode_out;
+typedef Internal::TypeItf <TypeCode>::C_ptr TypeCode_ptr;
+typedef Internal::TypeItf <TypeCode>::C_var TypeCode_var;
+typedef Internal::TypeItf <TypeCode>::C_var& TypeCode_out;
 #endif
 
-namespace Nirvana {
+namespace Internal {
 
 template <>
 struct Definitions <TypeCode>
@@ -473,14 +473,14 @@ struct Type <TypeCode> : TypeItf <TypeCode>
 
 }
 
-class TypeCode : public Nirvana::ClientInterface <TypeCode>
+class TypeCode : public Internal::ClientInterface <TypeCode>
 {
 public:
-	using Nirvana::Definitions <TypeCode>::_tc_BadKind;
-	using Nirvana::Definitions <TypeCode>::BadKind;
+	using Internal::Definitions <TypeCode>::_tc_BadKind;
+	using Internal::Definitions <TypeCode>::BadKind;
 
-	using Nirvana::Definitions <TypeCode>::_tc_Bounds;
-	using Nirvana::Definitions <TypeCode>::Bounds;
+	using Internal::Definitions <TypeCode>::_tc_Bounds;
+	using Internal::Definitions <TypeCode>::Bounds;
 };
 
 }

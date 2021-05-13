@@ -81,7 +81,7 @@ abstract valuetype IOReference
 #define NIRVANA_ORB_IOREFERENCE_H_
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class Marshal;
 

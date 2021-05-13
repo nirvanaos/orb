@@ -32,13 +32,13 @@ namespace CORBA {
 
 class LocalObject;
 #ifdef LEGACY_CORBA_CPP
-template <> class Nirvana::I_ptr <LocalObject>;
-typedef Nirvana::I_ptr <LocalObject> LocalObject_ptr;
-typedef Nirvana::I_var <LocalObject> LocalObject_var;
+template <> class Internal::I_ptr <LocalObject>;
+typedef Internal::I_ptr <LocalObject> LocalObject_ptr;
+typedef Internal::I_var <LocalObject> LocalObject_var;
 typedef LocalObject_var& LocalObject_out;
 #endif
 
-namespace Nirvana {
+namespace Internal {
 
 template <>
 struct Type <LocalObject> : TypeItf <LocalObject>
@@ -128,7 +128,7 @@ Boolean Client <T, LocalObject>::_non_existent ()
 
 }
 
-class LocalObject : public Nirvana::ClientInterface <LocalObject, Object, Nirvana::ReferenceCounter>
+class LocalObject : public Internal::ClientInterface < LocalObject, Object, Internal::ReferenceCounter >
 {
 public:
 	using ClientInterfacePrimary <LocalObject>::_non_existent;

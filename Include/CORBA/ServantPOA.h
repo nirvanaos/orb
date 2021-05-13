@@ -29,7 +29,7 @@
 #include "ServantImpl.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class I> class ServantPOA;
 

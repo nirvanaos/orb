@@ -32,7 +32,7 @@
 #include <type_traits>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class T>
 class TypeCodeMembers

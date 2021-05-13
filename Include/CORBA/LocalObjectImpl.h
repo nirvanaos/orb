@@ -31,7 +31,7 @@
 #include "LocalObject_s.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! \brief Implementation of CORBA::LocalObject
 //! \tparam S Servant class implementing operations.

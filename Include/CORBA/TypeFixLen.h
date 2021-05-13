@@ -32,7 +32,7 @@
 #include <type_traits>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 /// Fixed-length data types.
 /// Passed by value if sizeof (T) <= 2 * sizeof (size_t).

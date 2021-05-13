@@ -56,7 +56,7 @@ abstract valuetype IORequest
 #define NIRVANA_ORB_IOREQUEST_H_
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class Marshal;
 

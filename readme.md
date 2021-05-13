@@ -16,7 +16,7 @@ The main header for clients is *Include/CORBA/CORBA.h*
 
 Namespace `CORBA` contains definitions compliant to the CORBA C++ mapping specification.
 
-Namespace `CORBA::Nirvana` contains internal implementation details and is not intended
+Namespace `CORBA::Internal` contains internal implementation details and is not intended
 for usage by an application programmer.
 
 The main header for servers is *Include/CORBA/Server.h*

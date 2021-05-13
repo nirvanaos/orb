@@ -32,7 +32,7 @@
 #include "Environment.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class T, class I> class Client;
 

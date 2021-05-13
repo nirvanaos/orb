@@ -27,7 +27,7 @@
 #include <CORBA/local_core.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object, String_in iid)
 {

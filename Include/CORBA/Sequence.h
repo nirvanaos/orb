@@ -31,7 +31,7 @@
 #include "TypeVarLen.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <typename T>
 struct Type <Sequence <T> > :
@@ -123,7 +123,7 @@ void Type <Sequence <T> >::check (const ABI& v)
 	if (CHECK_SEQUENCES) {
 		const T* p = v.ptr;
 		if (p)
-			CORBA::Nirvana::_check_pointer (p);
+			CORBA::Internal::_check_pointer (p);
 		size_t cnt = v.size;
 		if (cnt > v.allocated / sizeof (T))
 			::Nirvana::throw_BAD_PARAM ();

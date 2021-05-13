@@ -32,7 +32,7 @@
 #include "set_exception.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class EnvironmentBase :
 	public Bridge < ::CORBA::Environment>

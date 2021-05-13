@@ -38,7 +38,7 @@
 
 namespace CORBA {
 
-enum CompletionStatus : Nirvana::ABI_enum
+enum CompletionStatus : Internal::ABI_enum
 {
 	COMPLETED_YES,
 	COMPLETED_NO,
@@ -47,7 +47,7 @@ enum CompletionStatus : Nirvana::ABI_enum
 
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_CompletionStatus;
 
-namespace Nirvana {
+namespace Internal {
 
 template <>
 struct Type <CompletionStatus> :
@@ -112,10 +112,10 @@ public:
 		return _downcast (ep);
 	}
 
-	static const Nirvana::ExceptionEntry* _get_exception_entry (Nirvana::String_in rep_id, Code hint = Exception::EC_USER_EXCEPTION);
-	static const Nirvana::ExceptionEntry* _get_exception_entry (Nirvana::I_ptr <TypeCode> tc);
+	static const Internal::ExceptionEntry* _get_exception_entry (Internal::String_in rep_id, Code hint = Exception::EC_USER_EXCEPTION);
+	static const Internal::ExceptionEntry* _get_exception_entry (Internal::I_ptr <TypeCode> tc);
 	
-	static const Nirvana::ExceptionEntry* _get_exception_entry (Code code)
+	static const Internal::ExceptionEntry* _get_exception_entry (Code code)
 	{
 		if (code < 0 || code >= KNOWN_SYSTEM_EXCEPTIONS)
 			code = EC_UNKNOWN;
@@ -164,14 +164,14 @@ private:
 
 	struct ExceptionEntry
 	{
-		Nirvana::ExceptionEntry ee;
+		Internal::ExceptionEntry ee;
 		size_t rep_id_len;
 	};
 
 	static const ExceptionEntry exception_entries_ [KNOWN_SYSTEM_EXCEPTIONS];
 };
 
-namespace Nirvana {
+namespace Internal {
 
 template <>
 struct Type <SystemException::_Data> : TypeFixLen <SystemException::_Data>

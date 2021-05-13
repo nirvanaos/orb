@@ -46,7 +46,7 @@ namespace PortableServer {
 class ServantBase;
 
 #ifdef LEGACY_CORBA_CPP
-typedef ::CORBA::Nirvana::I_var <ServantBase> ServantBase_var;
+typedef ::CORBA::Internal::I_var <ServantBase> ServantBase_var;
 #endif
 
 }
@@ -55,17 +55,17 @@ namespace CORBA {
 
 class ImplementationDef; // Not defined, unused
 #ifdef LEGACY_CORBA_CPP
-typedef Nirvana::I_ptr <ImplementationDef> ImplementationDef_ptr;
-typedef Nirvana::I_var <ImplementationDef> ImplementationDef_var;
+typedef Internal::I_ptr <ImplementationDef> ImplementationDef_ptr;
+typedef Internal::I_var <ImplementationDef> ImplementationDef_var;
 #endif
 
 typedef Object InterfaceDef; // TODO: Not defined yet
 #ifdef LEGACY_CORBA_CPP
-typedef Nirvana::I_ptr <InterfaceDef> InterfaceDef_ptr;
-typedef Nirvana::I_var <InterfaceDef> InterfaceDef_var;
+typedef Internal::I_ptr <InterfaceDef> InterfaceDef_ptr;
+typedef Internal::I_var <InterfaceDef> InterfaceDef_var;
 #endif
 
-namespace Nirvana {
+namespace Internal {
 
 template <>
 struct Type <PortableServer::ServantBase>;
@@ -122,8 +122,8 @@ class Client <T, Object> :
 	public T
 {
 public:
-	Nirvana::I_ref <ImplementationDef> _get_implementation ();
-	Nirvana::I_ref <InterfaceDef> _get_interface ();
+	Internal::I_ref <ImplementationDef> _get_implementation ();
+	Internal::I_ref <InterfaceDef> _get_interface ();
 	Boolean _is_a (String_in type_id);
 	Boolean _non_existent ();
 	Boolean _is_equivalent (I_in <Object> other_object);
@@ -132,13 +132,13 @@ public:
 };
 
 template <class T>
-Nirvana::I_ref <ImplementationDef> Client <T, Object>::_get_implementation ()
+Internal::I_ref <ImplementationDef> Client <T, Object>::_get_implementation ()
 {
 	return I_ref <ImplementationDef> ();
 }
 
 template <class T>
-Nirvana::I_ref <InterfaceDef> Client <T, Object>::_get_interface ()
+Internal::I_ref <InterfaceDef> Client <T, Object>::_get_interface ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
@@ -192,8 +192,8 @@ ULong Client <T, Object>::_hash (ULong maximum)
 }
 
 class Object : 
-	public Nirvana::ClientInterfacePrimary <Object>,
-	public Nirvana::ClientBase <Object, AbstractBase> // AbstractBase operations are not available directly on Object_ptr.
+	public Internal::ClientInterfacePrimary <Object>,
+	public Internal::ClientBase <Object, AbstractBase> // AbstractBase operations are not available directly on Object_ptr.
 {};
 
 inline Object::_ref_type AbstractBase::_to_object ()
@@ -201,7 +201,7 @@ inline Object::_ref_type AbstractBase::_to_object ()
 	return _query_interface <Object> ();
 }
 
-namespace Nirvana {
+namespace Internal {
 
 // TODO: Move to Client.h
 template <class Primary>

@@ -29,7 +29,7 @@
 #include "EnvironmentImpl.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class ... Exceptions>
 class EnvironmentEx :
@@ -49,7 +49,7 @@ private:
 
 template <class ... Exceptions>
 const ExceptionEntry EnvironmentEx <Exceptions...>::user_exceptions_[] = {
-	{ RepIdOf <Exceptions>::repository_id_, sizeof (Exceptions), ::CORBA::Nirvana::construct <Exceptions> }...,
+	{ RepIdOf <Exceptions>::repository_id_, sizeof (Exceptions), ::CORBA::Internal::construct <Exceptions> }...,
 	{0}
 };
 

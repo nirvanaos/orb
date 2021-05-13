@@ -29,7 +29,7 @@
 #include <Nirvana/ImportInterface.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class ObjectFactory;
 

@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_PROXYFACTORY_H_
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class IOReference;
 

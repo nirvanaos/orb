@@ -28,7 +28,7 @@
 #include <CORBA/Environment_c.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 void set_exception (Interface* environment, Exception::Code code, const Char* rep_id, void* param) NIRVANA_NOEXCEPT
 {

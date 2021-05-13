@@ -26,7 +26,7 @@
 #include <CORBA/String_compat.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <typename C>
 class StringAllocator
@@ -54,34 +54,36 @@ public:
 
 }
 
+using namespace Internal;
+
 Char* string_alloc (ULong len)
 {
-	return Nirvana::StringAllocator <Char>::allocate (len);
+	return StringAllocator <Char>::allocate (len);
 }
 
 Char* string_dup (const Char* s)
 {
-	return Nirvana::StringAllocator <Char>::dup (s);
+	return StringAllocator <Char>::dup (s);
 }
 
 void string_free (Char* s)
 {
-	Nirvana::StringAllocator <char>::free (s);
+	StringAllocator <char>::free (s);
 }
 
 WChar* wstring_alloc (ULong len)
 {
-	return Nirvana::StringAllocator <WChar>::allocate (len);
+	return StringAllocator <WChar>::allocate (len);
 }
 
 WChar* wstring_dup (const WChar* s)
 {
-	return Nirvana::StringAllocator <WChar>::dup (s);
+	return StringAllocator <WChar>::dup (s);
 }
 
 void wstring_free (WChar* s)
 {
-	Nirvana::StringAllocator <WChar>::free (s);
+	StringAllocator <WChar>::free (s);
 }
 
 }

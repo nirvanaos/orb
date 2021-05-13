@@ -26,7 +26,7 @@
 #include <CORBA/Server.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 void ServantBaseLink::_construct ()
 {

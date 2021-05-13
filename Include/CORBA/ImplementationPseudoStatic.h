@@ -35,7 +35,7 @@
 #include "LifeCycleStatic.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! \class ImplementationPseudoStatic
 //!

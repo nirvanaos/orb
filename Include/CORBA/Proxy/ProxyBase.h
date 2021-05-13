@@ -35,7 +35,7 @@
 #include "IOReference.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 inline OperationIndex make_op_idx (UShort itf_idx, UShort op_idx)
 {

@@ -62,7 +62,7 @@ private:
 	Any _exception;
 };
 
-namespace Nirvana {
+namespace Internal {
 
 template <>
 const Char RepIdOf <UnknownUserException>::repository_id_ [] = CORBA_REPOSITORY_ID ("UnknownUserException");

@@ -26,7 +26,7 @@
 #include <CORBA/Server.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 PortableServer::POA::_ref_type ServantPOA <LocalObject>::_default_POA ()
 {

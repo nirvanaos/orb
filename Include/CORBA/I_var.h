@@ -31,7 +31,7 @@
 #ifdef LEGACY_CORBA_CPP
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class I> class I_out;
 

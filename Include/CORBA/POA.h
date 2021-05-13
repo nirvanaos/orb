@@ -34,8 +34,8 @@ namespace PortableServer {
 
 class POA;
 #ifdef LEGACY_CORBA_CPP
-typedef ::CORBA::Nirvana::I_ptr <POA> POA_ptr;
-typedef ::CORBA::Nirvana::I_var <POA> POA_var;
+typedef ::CORBA::Internal::I_ptr <POA> POA_ptr;
+typedef ::CORBA::Internal::I_var <POA> POA_var;
 #endif
 
 extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_POA;
@@ -43,7 +43,7 @@ extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_POA;
 }
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <>
 struct Type < ::PortableServer::POA> : TypeLocalObject < ::PortableServer::POA>
@@ -121,14 +121,14 @@ void Client <T, PortableServer::POA>::deactivate_object (String_in oid)
 
 namespace PortableServer {
 
-class POA : public ::CORBA::Nirvana::ClientInterface <POA, CORBA::Object>
+class POA : public ::CORBA::Internal::ClientInterface <POA, CORBA::Object>
 {
 public:
-	using CORBA::Nirvana::Definitions <POA>::_tc_ServantAlreadyActive;
-	using CORBA::Nirvana::Definitions <POA>::ServantAlreadyActive;
+	using CORBA::Internal::Definitions <POA>::_tc_ServantAlreadyActive;
+	using CORBA::Internal::Definitions <POA>::ServantAlreadyActive;
 
-	using CORBA::Nirvana::Definitions <POA>::_tc_ObjectNotActive;
-	using CORBA::Nirvana::Definitions <POA>::ObjectNotActive;
+	using CORBA::Internal::Definitions <POA>::_tc_ObjectNotActive;
+	using CORBA::Internal::Definitions <POA>::ObjectNotActive;
 };
 
 }

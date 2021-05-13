@@ -27,7 +27,7 @@
 #define NIRVANA_ORB_REFERENCECOUNTER_H_
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 class ReferenceCounter;
 #ifdef LEGACY_CORBA_CPP

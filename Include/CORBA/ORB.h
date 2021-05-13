@@ -33,7 +33,7 @@ namespace CORBA {
 class ORB
 {
 public:
-	static void create_environment (Nirvana::Type <Environment>::C_out);
+	static void create_environment (Internal::Type <Environment>::C_out);
 };
 
 }

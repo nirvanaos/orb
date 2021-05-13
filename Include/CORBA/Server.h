@@ -47,16 +47,16 @@ template <class I>
 struct servant_traits
 {
 	/// \brief Servant base.
-	typedef Nirvana::ServantPOA <I> base_type;
+	typedef Internal::ServantPOA <I> base_type;
 
 	/// \brief Servant reference.
-	typedef servant_reference <Nirvana::ServantPOA <I>> ref_type;
+	typedef servant_reference <Internal::ServantPOA <I>> ref_type;
 
 	/// \brief Tied servant.
 	/// 
 	/// \tparam S Servant class that implement the interface.
 	template <class S>
-	using tie_type = Nirvana::ServantTied <S, I>;
+	using tie_type = Internal::ServantTied <S, I>;
 
 	// Nirvana extensions
 
@@ -64,13 +64,13 @@ struct servant_traits
 	/// 
 	/// \tparam S Servant class that implement the interface, derived from Servant <S>.
 	template <class S>
-	using Servant = Nirvana::Servant <S, I>;
+	using Servant = Internal::Servant <S, I>;
 
 	/// \brief Static servant implementation (Nirvana extension).
 	/// 
 	/// \tparam S Servant class that implement the interface, derived from Servant <S>.
 	template <class S>
-	using ServantStatic = Nirvana::ServantStatic <S, I>;
+	using ServantStatic = Internal::ServantStatic <S, I>;
 };
 
 }

@@ -3,7 +3,7 @@
 #include <Nirvana/OLF.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 NIRVANA_OLF_SECTION
 extern const ::Nirvana::ImportInterfaceT <ObjectFactory> g_object_factory = {

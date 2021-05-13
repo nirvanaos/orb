@@ -27,4 +27,4 @@
 #include <Nirvana/OLF.h>
 
 NIRVANA_OLF_SECTION extern const ::Nirvana::ImportInterfaceT <CORBA::TypeCode>
-_tc_SeqLong = { Nirvana::OLF_IMPORT_INTERFACE, CORBA::Nirvana::RepIdOf <CORBA::TCKind>::repository_id_, CORBA::TypeCode::repository_id_ };
+_tc_SeqLong = { Nirvana::OLF_IMPORT_INTERFACE, CORBA::Internal::RepIdOf <CORBA::TCKind>::repository_id_, CORBA::TypeCode::repository_id_ };

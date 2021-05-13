@@ -30,7 +30,7 @@
 #include "ServantPOA.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <>
 class NIRVANA_NOVTABLE ServantPOA <DynamicServant> :

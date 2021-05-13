@@ -28,7 +28,7 @@
 #include <CORBA/Environment.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 Interface* interface_duplicate (Interface* itf)
 {

@@ -34,7 +34,7 @@
 #define DECLARE_FUNCTION(e) void set_##e (Interface* env);
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 SYSTEM_EXCEPTIONS (DECLARE_FUNCTION)
 

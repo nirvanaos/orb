@@ -29,7 +29,7 @@
 #include "servant_core.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 //! \brief Implements delegate to the core ServantBase implementation.
 class ServantBaseLink :

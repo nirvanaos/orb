@@ -27,7 +27,7 @@
 #include <CORBA/core_objects.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 ReferenceCounterLink::ReferenceCounterLink (const Bridge <DynamicServant>::EPV& epv) :
 	Bridge <DynamicServant> (epv),

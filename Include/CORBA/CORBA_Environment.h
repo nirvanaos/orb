@@ -35,15 +35,15 @@ namespace CORBA {
 
 //! CORBA::Environment
 class Environment :
-	public Nirvana::EnvironmentImpl <Environment>,
-	public Nirvana::Serverless <Environment>
+	public Internal::EnvironmentImpl <Environment>,
+	public Internal::Serverless <Environment>
 {
 public:
-	using Nirvana::Serverless <Environment>::_ptr_type;
-	using Nirvana::Serverless <Environment>::_ref_type;
-	using Nirvana::Serverless <Environment>::_out_type;
+	using Internal::Serverless <Environment>::_ptr_type;
+	using Internal::Serverless <Environment>::_ref_type;
+	using Internal::Serverless <Environment>::_out_type;
 #ifdef LEGACYY_CORBA_CPP
-	using Nirvana::Serverless <Environment>::_var_type;
+	using Internal::Serverless <Environment>::_var_type;
 #endif
 
 	Environment () {}
@@ -53,7 +53,7 @@ public:
 		move_from (src);
 	}
 
-	Environment (Nirvana::EnvironmentBase&& src) NIRVANA_NOEXCEPT
+	Environment (Internal::EnvironmentBase&& src) NIRVANA_NOEXCEPT
 	{
 		move_from (src);
 	}
@@ -64,14 +64,14 @@ public:
 		return *this;
 	}
 
-	Environment& operator = (Nirvana::EnvironmentBase&& src) NIRVANA_NOEXCEPT
+	Environment& operator = (Internal::EnvironmentBase&& src) NIRVANA_NOEXCEPT
 	{
 		move_from (src);
 		return *this;
 	}
 };
 
-namespace Nirvana {
+namespace Internal {
 
 template <>
 struct Type < ::CORBA::Environment> : TypeServerless < ::CORBA::Environment>

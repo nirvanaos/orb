@@ -31,7 +31,7 @@
 #include <assert.h>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class I> class I_ptr;
 template <class I> class I_ref_base;
@@ -221,16 +221,16 @@ inline I_ptr <Interface> Interface::_nil () NIRVANA_NOEXCEPT
 
 /// CORBA::release
 template <class I> inline
-void release (const Nirvana::I_ptr <I>& ptr)
+void release (const Internal::I_ptr <I>& ptr)
 {
-	Nirvana::interface_release (&ptr);
+	Internal::interface_release (&ptr);
 }
 
 #endif
 
 /// CORBA::is_nil()
 template <class I> inline
-bool is_nil (const Nirvana::I_ptr <I>& ptr)
+bool is_nil (const Internal::I_ptr <I>& ptr)
 {
 	return !ptr;
 }

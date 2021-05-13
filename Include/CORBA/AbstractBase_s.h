@@ -32,7 +32,7 @@
 // Servant part of an interface
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class S>
 class Skeleton <S, AbstractBase>

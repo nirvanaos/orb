@@ -31,7 +31,7 @@
 #include "../TypeCode.h"
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <const ::Nirvana::ImportInterfaceT <TypeCode>* ref>
 struct Alias {};

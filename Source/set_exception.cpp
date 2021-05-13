@@ -31,7 +31,7 @@
 #define DEFINE_FUNCTION(e) void set_##e (Interface* env){ set_exception (env, SystemException::EC_##e, RepIdOf<e>::repository_id_, nullptr);}
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 SYSTEM_EXCEPTIONS (DEFINE_FUNCTION)
 

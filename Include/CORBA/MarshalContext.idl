@@ -35,7 +35,7 @@ native UIntPtr;
 };
 
 module CORBA {
-module Nirvana {
+module Internal {
 
 /// \brief Type of the inter-domain marshal context.
 enum MarshalContext

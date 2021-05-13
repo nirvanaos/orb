@@ -31,7 +31,7 @@
 #include <new>
 
 namespace CORBA {
-namespace Nirvana {
+namespace Internal {
 
 template <class T, class TABI>
 struct TypeVarLenBase : TypeByRef <T, TABI>
