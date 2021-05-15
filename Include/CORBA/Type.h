@@ -45,28 +45,6 @@
 namespace CORBA {
 namespace Internal {
 
-/// The `void` type.
-template <>
-struct Type <void>
-{
-	static I_ptr <TypeCode> type_code ()
-	{
-		return _tc_void;
-	}
-};
-
-inline
-I_ptr <TypeCode> Type <Any>::type_code ()
-{
-	return _tc_any;
-}
-
-inline
-I_ptr <TypeCode> Type <TypeCode>::type_code ()
-{
-	return _tc_TypeCode;
-}
-
 // Interface marshaling
 
 template <class I> inline

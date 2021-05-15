@@ -32,6 +32,9 @@
 #include "TypeByVal.h"
 
 namespace CORBA {
+
+class TypeCode;
+
 namespace Internal {
 
 /// We can not use `bool' built-in type across the binary boundaries because

@@ -46,8 +46,6 @@ extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_char;
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_wchar;
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_octet;
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_any;
-extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_TypeCode;
-extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Object;
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_string;
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_wstring;
 extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_ValueBase;

@@ -38,7 +38,7 @@ typedef ::CORBA::Internal::I_ptr <POA> POA_ptr;
 typedef ::CORBA::Internal::I_var <POA> POA_var;
 #endif
 
-extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_POA;
+extern const ::Nirvana::ImportInterfaceT < ::CORBA::TypeCode> _tc_POA;
 
 }
 
@@ -48,10 +48,7 @@ namespace Internal {
 template <>
 struct Type < ::PortableServer::POA> : TypeLocalObject < ::PortableServer::POA>
 {
-	static I_ptr <TypeCode> type_code ()
-	{
-		return ::PortableServer::_tc_POA;
-	}
+	static I_ptr <TypeCode> type_code ();
 };
 
 template <>

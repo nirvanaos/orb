@@ -63,12 +63,14 @@ typedef Internal::TypeItf <TypeCode>::C_var TypeCode_var;
 typedef Internal::TypeItf <TypeCode>::C_var& TypeCode_out;
 #endif
 
+extern const Nirvana::ImportInterfaceT <TypeCode> _tc_TypeCode;
+
 namespace Internal {
 
 template <>
 struct Definitions <TypeCode>
 {
-	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_BadKind;
+	static const Nirvana::ImportInterfaceT <TypeCode> _tc_BadKind;
 
 	class BadKind : public UserException
 	{
@@ -76,7 +78,7 @@ struct Definitions <TypeCode>
 		NIRVANA_EXCEPTION_DCL (BadKind);
 	};
 
-	static const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Bounds;
+	static const Nirvana::ImportInterfaceT <TypeCode> _tc_Bounds;
 
 	class Bounds : public UserException
 	{
@@ -112,15 +114,15 @@ Visibility (*member_visibility) (Bridge <TypeCode>*, ULong index, Interface*);
 ValueModifier (*type_modifier) (Bridge <TypeCode>*, Interface*);
 Interface* (*concrete_base_type) (Bridge <TypeCode>*, Interface*);
 
-::Nirvana::Size (*_size) (Bridge <TypeCode>*, Interface*);
-void (*_construct) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*);
-void (*_destruct) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*);
-void (*_copy) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::ConstPointer, Interface*);
-void (*_move) (Bridge <TypeCode>*, ::Nirvana::Pointer, ::Nirvana::Pointer, Interface*);
+Nirvana::Size (*_size) (Bridge <TypeCode>*, Interface*);
+void (*_construct) (Bridge <TypeCode>*, Nirvana::Pointer, Interface*);
+void (*_destruct) (Bridge <TypeCode>*, Nirvana::Pointer, Interface*);
+void (*_copy) (Bridge <TypeCode>*, Nirvana::Pointer, Nirvana::ConstPointer, Interface*);
+void (*_move) (Bridge <TypeCode>*, Nirvana::Pointer, Nirvana::Pointer, Interface*);
 Type <Boolean>::ABI_ret (*_has_marshal) (Bridge <TypeCode>*, Interface*);
-void (*_marshal_in) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, Interface*, ::Nirvana::Pointer, Interface*);
-void (*_marshal_out) (Bridge <TypeCode>*, ::Nirvana::Pointer, Interface*, ::Nirvana::Pointer, Interface*);
-void (*_unmarshal) (Bridge <TypeCode>*, ::Nirvana::ConstPointer, Interface*, ::Nirvana::Pointer, Interface*);
+void (*_marshal_in) (Bridge <TypeCode>*, Nirvana::ConstPointer, Interface*, Nirvana::Pointer, Interface*);
+void (*_marshal_out) (Bridge <TypeCode>*, Nirvana::Pointer, Interface*, Nirvana::Pointer, Interface*);
+void (*_unmarshal) (Bridge <TypeCode>*, Nirvana::ConstPointer, Interface*, Nirvana::Pointer, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
@@ -170,26 +172,26 @@ public:
 	// NOTE: For exceptions, all methods below are related to the exception data, not the exception itself.
 
 	// Size of the object.
-	::Nirvana::Size _size ();
+	Nirvana::Size _size ();
 
 	// Call the default constructor.
-	void _construct (::Nirvana::Pointer p);
+	void _construct (Nirvana::Pointer p);
 
 	// Destroy the object.
-	void _destruct (::Nirvana::Pointer p);
+	void _destruct (Nirvana::Pointer p);
 
 	// Call copy constructor.
-	void _copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src);
+	void _copy (Nirvana::Pointer dst, Nirvana::ConstPointer src);
 
 	// Call move constructor. Fallbacks to copy constructor if no move constructor exists.
-	void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src);
+	void _move (Nirvana::Pointer dst, Nirvana::Pointer src);
 
 	// If returns `false` then `marshaler` and `unmarshaler` parameters may be `nil`.
 	Boolean _has_marshal ();
 
-	void _marshal_in (::Nirvana::ConstPointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst);
-	void _marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst);
-	void _unmarshal (::Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst);
+	void _marshal_in (Nirvana::ConstPointer src, Marshal_ptr marshaler, Nirvana::Pointer dst);
+	void _marshal_out (Nirvana::Pointer src, Marshal_ptr marshaler, Nirvana::Pointer dst);
+	void _unmarshal (Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, Nirvana::Pointer dst);
 };
 
 template <class T>
@@ -383,17 +385,17 @@ I_ref <TypeCode> Client <T, TypeCode>::concrete_base_type ()
 }
 
 template <class T>
-::Nirvana::Size Client <T, TypeCode>::_size ()
+Nirvana::Size Client <T, TypeCode>::_size ()
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
-	::Nirvana::Size _ret = (_b._epv ().epv._size) (&_b, &_env);
+	Nirvana::Size _ret = (_b._epv ().epv._size) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-void Client <T, TypeCode>::_construct (::Nirvana::Pointer p)
+void Client <T, TypeCode>::_construct (Nirvana::Pointer p)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -402,7 +404,7 @@ void Client <T, TypeCode>::_construct (::Nirvana::Pointer p)
 }
 
 template <class T>
-void Client <T, TypeCode>::_destruct (::Nirvana::Pointer p)
+void Client <T, TypeCode>::_destruct (Nirvana::Pointer p)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -411,7 +413,7 @@ void Client <T, TypeCode>::_destruct (::Nirvana::Pointer p)
 }
 
 template <class T>
-void Client <T, TypeCode>::_copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src)
+void Client <T, TypeCode>::_copy (Nirvana::Pointer dst, Nirvana::ConstPointer src)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -420,7 +422,7 @@ void Client <T, TypeCode>::_copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointe
 }
 
 template <class T>
-void Client <T, TypeCode>::_move (::Nirvana::Pointer dst, ::Nirvana::Pointer src)
+void Client <T, TypeCode>::_move (Nirvana::Pointer dst, Nirvana::Pointer src)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -439,7 +441,7 @@ Boolean Client <T, TypeCode>::_has_marshal ()
 }
 
 template <class T>
-void Client <T, TypeCode>::_marshal_in (::Nirvana::ConstPointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
+void Client <T, TypeCode>::_marshal_in (Nirvana::ConstPointer src, Marshal_ptr marshaler, Nirvana::Pointer dst)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -448,7 +450,7 @@ void Client <T, TypeCode>::_marshal_in (::Nirvana::ConstPointer src, Marshal_ptr
 }
 
 template <class T>
-void Client <T, TypeCode>::_marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
+void Client <T, TypeCode>::_marshal_out (Nirvana::Pointer src, Marshal_ptr marshaler, Nirvana::Pointer dst)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));
@@ -457,7 +459,7 @@ void Client <T, TypeCode>::_marshal_out (::Nirvana::Pointer src, Marshal_ptr mar
 }
 
 template <class T>
-void Client <T, TypeCode>::_unmarshal (::Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
+void Client <T, TypeCode>::_unmarshal (Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, Nirvana::Pointer dst)
 {
 	Environment _env;
 	Bridge <TypeCode>& _b (T::_get_bridge (_env));

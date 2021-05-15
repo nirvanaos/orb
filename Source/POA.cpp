@@ -27,14 +27,23 @@
 #include <CORBA/POA.h>
 #include <Nirvana/ImportInterface.h>
 
-NIRVANA_OLF_SECTION const Nirvana::ImportInterfaceT <CORBA::TypeCode>
-CORBA::Internal::Definitions <PortableServer::POA>::_tc_ServantAlreadyActive = { ::Nirvana::OLF_IMPORT_INTERFACE,
-CORBA::Internal::RepIdOf <CORBA::Internal::Definitions <PortableServer::POA>::ServantAlreadyActive>::repository_id_, CORBA::TypeCode::repository_id_ };
+NIRVANA_OLF_SECTION_N (0) extern const Nirvana::ImportInterfaceT <CORBA::TypeCode>
+PortableServer::_tc_POA = { Nirvana::OLF_IMPORT_INTERFACE, PortableServer::POA::repository_id_, CORBA::TypeCode::repository_id_ };
 
-NIRVANA_OLF_SECTION const Nirvana::ImportInterfaceT <CORBA::TypeCode>
-CORBA::Internal::Definitions <PortableServer::POA>::_tc_ObjectNotActive = { ::Nirvana::OLF_IMPORT_INTERFACE,
-CORBA::Internal::RepIdOf <CORBA::Internal::Definitions <PortableServer::POA>::ObjectNotActive>::repository_id_, CORBA::TypeCode::repository_id_ };
+CORBA::TypeCode::_ptr_type CORBA::Internal::Type <PortableServer::POA>::type_code ()
+{
+	return PortableServer::_tc_POA;
+}
 
 NIRVANA_EXCEPTION_DEF (CORBA::Internal::Definitions <PortableServer::POA>::, ServantAlreadyActive);
+
+NIRVANA_OLF_SECTION_N (1) const Nirvana::ImportInterfaceT <CORBA::TypeCode>
+CORBA::Internal::Definitions <PortableServer::POA>::_tc_ServantAlreadyActive = { Nirvana::OLF_IMPORT_INTERFACE,
+CORBA::Internal::RepIdOf <CORBA::Internal::Definitions <PortableServer::POA>::ServantAlreadyActive>::repository_id_, CORBA::TypeCode::repository_id_ };
+
 NIRVANA_EXCEPTION_DEF (CORBA::Internal::Definitions <PortableServer::POA>::, ObjectNotActive);
+
+NIRVANA_OLF_SECTION_N (2) const Nirvana::ImportInterfaceT <CORBA::TypeCode>
+CORBA::Internal::Definitions <PortableServer::POA>::_tc_ObjectNotActive = { Nirvana::OLF_IMPORT_INTERFACE,
+CORBA::Internal::RepIdOf <CORBA::Internal::Definitions <PortableServer::POA>::ObjectNotActive>::repository_id_, CORBA::TypeCode::repository_id_ };
 

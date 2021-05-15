@@ -72,11 +72,11 @@ private:
 
 public:
 	// We can't use `static const` here, because it causes the redundant optimization in CLang.
-	static NIRVANA_OLF_SECTION volatile ::Nirvana::ExportLocal export_struct_;
+	static NIRVANA_OLF_SECTION  NIRVANA_STATIC_IMPORT ::Nirvana::ExportLocal export_struct_;
 };
 
 template <class S> NIRVANA_OLF_SECTION
-volatile ::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ ::Nirvana::OLF_EXPORT_LOCAL, ::Nirvana::StaticId <S>::static_id_
+NIRVANA_STATIC_IMPORT ::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{ ::Nirvana::OLF_EXPORT_LOCAL, ::Nirvana::StaticId <S>::static_id_
 , NIRVANA_STATIC_BRIDGE (LocalObject, S), NIRVANA_STATIC_BRIDGE (AbstractBase, S) };
 
 }

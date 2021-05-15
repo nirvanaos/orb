@@ -65,6 +65,8 @@ typedef Internal::I_ptr <InterfaceDef> InterfaceDef_ptr;
 typedef Internal::I_var <InterfaceDef> InterfaceDef_var;
 #endif
 
+extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Object;
+
 namespace Internal {
 
 template <>
@@ -82,10 +84,7 @@ const Char Bridge <Object>::repository_id_ [] = CORBA_REPOSITORY_ID ("Object");
 template <>
 struct Type <Object> : TypeItf <Object>
 {
-	static I_ptr <TypeCode> type_code ()
-	{
-		return _tc_Object;
-	}
+	static I_ptr <TypeCode> type_code ();
 };
 
 template <>

@@ -30,7 +30,6 @@
 
 #include "Boolean.h"
 #include "TypeFixLen.h"
-#include "tc_constants.h"
 
 #ifdef LEGACY_CORBA_CPP
 #define DECLARE_TYPE_OUT(T) typedef T& T##_out;
@@ -38,35 +37,34 @@
 #define DECLARE_TYPE_OUT(T)
 #endif
 
-#define DECLARE_BASIC_TYPE(T, tc) namespace Internal { template <> struct Internal::Type <T> : Internal::TypeFixLen <T> {\
-static I_ptr <TypeCode> type_code () { return tc; } }; }\
+#define DECLARE_BASIC_TYPE(T) namespace Internal { template <> struct Internal::Type <T> : Internal::TypeFixLen <T> {\
+static I_ptr <TypeCode> type_code (); }; }\
 DECLARE_TYPE_OUT(T)
 
 namespace CORBA {
 
-DECLARE_BASIC_TYPE (Char, _tc_char)
-DECLARE_BASIC_TYPE (WChar, _tc_wchar)
-DECLARE_BASIC_TYPE (Octet, _tc_octet)
-DECLARE_BASIC_TYPE (Short, _tc_short)
-DECLARE_BASIC_TYPE (UShort, _tc_ushort)
-DECLARE_BASIC_TYPE (Long, _tc_long)
-DECLARE_BASIC_TYPE (LongLong, _tc_longlong)
-DECLARE_BASIC_TYPE (ULong, _tc_ulong)
-DECLARE_BASIC_TYPE (ULongLong, _tc_ulonglong)
-DECLARE_BASIC_TYPE (Float, _tc_float)
-DECLARE_BASIC_TYPE (Double, _tc_double)
-DECLARE_BASIC_TYPE (LongDouble, _tc_longdouble)
+DECLARE_BASIC_TYPE (Char)
+DECLARE_BASIC_TYPE (WChar)
+DECLARE_BASIC_TYPE (Octet)
+DECLARE_BASIC_TYPE (Short)
+DECLARE_BASIC_TYPE (UShort)
+DECLARE_BASIC_TYPE (Long)
+DECLARE_BASIC_TYPE (LongLong)
+DECLARE_BASIC_TYPE (ULong)
+DECLARE_BASIC_TYPE (ULongLong)
+DECLARE_BASIC_TYPE (Float)
+DECLARE_BASIC_TYPE (Double)
+DECLARE_BASIC_TYPE (LongDouble)
 
 namespace Internal {
-
-inline
-I_ptr <TypeCode> Type <Boolean>::type_code ()
+/// The `void` type.
+template <>
+struct Type <void>
 {
-	return _tc_boolean;
-}
+	static I_ptr <TypeCode> type_code ();
+};
 
 }
-
 }
 
 #undef DECLARE_BASIC_TYPE
