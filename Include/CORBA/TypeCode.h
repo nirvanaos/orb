@@ -63,8 +63,6 @@ typedef Internal::TypeItf <TypeCode>::C_var TypeCode_var;
 typedef Internal::TypeItf <TypeCode>::C_var& TypeCode_out;
 #endif
 
-extern const Nirvana::ImportInterfaceT <TypeCode> _tc_TypeCode;
-
 namespace Internal {
 
 template <>
@@ -466,12 +464,6 @@ void Client <T, TypeCode>::_unmarshal (Nirvana::ConstPointer src, Unmarshal_ptr 
 	(_b._epv ().epv._unmarshal) (&_b, src, &unmarshaler, dst, &_env);
 	_env.check ();
 }
-
-template <>
-struct Type <TypeCode> : TypeItf <TypeCode>
-{
-	static I_ptr <TypeCode> type_code ();
-};
 
 }
 

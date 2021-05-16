@@ -221,6 +221,12 @@ void Type <Sequence <T> >::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler,
 	}
 }
 
+template <>
+struct Type <TypeCode> : TypeItf <TypeCode>
+{
+	static I_ptr <TypeCode> type_code ();
+};
+
 }
 }
 

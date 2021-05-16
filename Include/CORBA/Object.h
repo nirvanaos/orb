@@ -65,8 +65,6 @@ typedef Internal::I_ptr <InterfaceDef> InterfaceDef_ptr;
 typedef Internal::I_var <InterfaceDef> InterfaceDef_var;
 #endif
 
-extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_Object;
-
 namespace Internal {
 
 template <>

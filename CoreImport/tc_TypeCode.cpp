@@ -26,11 +26,16 @@
 #include <CORBA/CORBA.h>
 #include <Nirvana/OLF.h>
 
-CORBA::TypeCode::_ptr_type CORBA::Internal::Type <CORBA::TypeCode>::type_code ()
-{
-	return CORBA::_tc_TypeCode;
-}
+NIRVANA_OLF_SECTION_N (0)
+const Nirvana::ImportInterfaceT <CORBA::TypeCode>
+CORBA::_tc_TCKind = { Nirvana::OLF_IMPORT_INTERFACE, CORBA::Internal::RepIdOf <CORBA::TCKind>::repository_id_, CORBA::TypeCode::repository_id_ };
 
-NIRVANA_EXCEPTION_DEF (CORBA::Internal::Definitions <CORBA::TypeCode>::, BadKind);
+NIRVANA_OLF_SECTION_N (1)
+const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>
+CORBA::Internal::Definitions <CORBA::TypeCode>::_tc_BadKind = { ::Nirvana::OLF_IMPORT_INTERFACE,
+CORBA::Internal::RepIdOf <CORBA::Internal::Definitions <CORBA::TypeCode>::BadKind>::repository_id_, CORBA::TypeCode::repository_id_ };
 
-NIRVANA_EXCEPTION_DEF (CORBA::Internal::Definitions <CORBA::TypeCode>::, Bounds);
+NIRVANA_OLF_SECTION_N (2)
+const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>
+CORBA::Internal::Definitions <CORBA::TypeCode>::_tc_Bounds = { ::Nirvana::OLF_IMPORT_INTERFACE,
+CORBA::Internal::RepIdOf <CORBA::Internal::Definitions <CORBA::TypeCode>::Bounds>::repository_id_, CORBA::TypeCode::repository_id_ };
