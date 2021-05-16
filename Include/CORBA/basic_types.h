@@ -32,41 +32,33 @@
 #include "TypeFixLen.h"
 
 #ifdef LEGACY_CORBA_CPP
-#define DECLARE_TYPE_OUT(T) typedef T& T##_out;
+#define NIRVANA_TYPE_OUT(T) typedef T& T##_out;
 #else
-#define DECLARE_TYPE_OUT(T)
+#define NIRVANA_TYPE_OUT(T)
 #endif
 
-#define DECLARE_BASIC_TYPE(T) namespace Internal { template <> struct Internal::Type <T> : Internal::TypeFixLen <T> {\
-static I_ptr <TypeCode> type_code (); }; }\
-DECLARE_TYPE_OUT(T)
+#define NIRVANA_BASIC_TYPE(T, tc) namespace Internal { template <> struct Internal::Type <T> : Internal::TypeFixLen <T> {\
+static I_ptr <TypeCode> type_code () { return tc; } }; }\
+NIRVANA_TYPE_OUT(T)
 
 namespace CORBA {
 
-DECLARE_BASIC_TYPE (Char)
-DECLARE_BASIC_TYPE (WChar)
-DECLARE_BASIC_TYPE (Octet)
-DECLARE_BASIC_TYPE (Short)
-DECLARE_BASIC_TYPE (UShort)
-DECLARE_BASIC_TYPE (Long)
-DECLARE_BASIC_TYPE (LongLong)
-DECLARE_BASIC_TYPE (ULong)
-DECLARE_BASIC_TYPE (ULongLong)
-DECLARE_BASIC_TYPE (Float)
-DECLARE_BASIC_TYPE (Double)
-DECLARE_BASIC_TYPE (LongDouble)
-
-namespace Internal {
-/// The `void` type.
-template <>
-struct Type <void>
-{
-	static I_ptr <TypeCode> type_code ();
-};
+NIRVANA_BASIC_TYPE (Char, _tc_char)
+NIRVANA_BASIC_TYPE (WChar, _tc_wchar)
+NIRVANA_BASIC_TYPE (Octet, _tc_octet)
+NIRVANA_BASIC_TYPE (Short, _tc_short)
+NIRVANA_BASIC_TYPE (UShort, _tc_ushort)
+NIRVANA_BASIC_TYPE (Long, _tc_long)
+NIRVANA_BASIC_TYPE (LongLong, _tc_longlong)
+NIRVANA_BASIC_TYPE (ULong, _tc_ulong)
+NIRVANA_BASIC_TYPE (ULongLong, _tc_ulonglong)
+NIRVANA_BASIC_TYPE (Float, _tc_float)
+NIRVANA_BASIC_TYPE (Double, _tc_double)
+NIRVANA_BASIC_TYPE (LongDouble, _tc_longdouble)
 
 }
-}
 
-#undef DECLARE_BASIC_TYPE
+#undef NIRVANA_BASIC_TYPE
+#undef NIRVANA_TYPE_OUT
 
 #endif

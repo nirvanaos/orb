@@ -45,6 +45,16 @@
 namespace CORBA {
 namespace Internal {
 
+/// The `void` type.
+template <>
+struct Type <void>
+{
+	static I_ptr <TypeCode> type_code ()
+	{
+		return _tc_void;
+	}
+};
+
 // Interface marshaling
 
 template <class I> inline
@@ -220,12 +230,6 @@ void Type <Sequence <T> >::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler,
 		tmp.swap (dst);
 	}
 }
-
-template <>
-struct Type <TypeCode> : TypeItf <TypeCode>
-{
-	static I_ptr <TypeCode> type_code ();
-};
 
 }
 }

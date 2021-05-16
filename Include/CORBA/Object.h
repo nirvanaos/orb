@@ -82,7 +82,10 @@ const Char Bridge <Object>::repository_id_ [] = CORBA_REPOSITORY_ID ("Object");
 template <>
 struct Type <Object> : TypeItf <Object>
 {
-	static I_ptr <TypeCode> type_code ();
+	static I_ptr <TypeCode> type_code ()
+	{
+		return _tc_Object;
+	}
 };
 
 template <>

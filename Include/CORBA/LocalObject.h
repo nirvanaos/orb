@@ -42,7 +42,12 @@ namespace Internal {
 
 template <>
 struct Type <LocalObject> : TypeItf <LocalObject>
-{};
+{
+	static I_ptr <TypeCode> type_code ()
+	{
+		return _tc_Object;
+	}
+};
 
 template <class I>
 struct TypeLocalObject : TypeObject <I>

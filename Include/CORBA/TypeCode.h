@@ -66,6 +66,15 @@ typedef Internal::TypeItf <TypeCode>::C_var& TypeCode_out;
 namespace Internal {
 
 template <>
+struct Type <TypeCode> : TypeItf <TypeCode>
+{
+	static I_ptr <TypeCode> type_code ()
+	{
+		return _tc_TypeCode;
+	}
+};
+
+template <>
 struct Definitions <TypeCode>
 {
 	static const Nirvana::ImportInterfaceT <TypeCode> _tc_BadKind;

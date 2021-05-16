@@ -26,11 +26,6 @@
 #include <CORBA/CORBA.h>
 #include <Nirvana/OLF.h>
 
-CORBA::TypeCode::_ptr_type CORBA::Internal::Type <CORBA::TypeCode>::type_code ()
-{
-	return CORBA::_tc_TypeCode;
-}
-
 NIRVANA_EXCEPTION_DEF (CORBA::Internal::Definitions <CORBA::TypeCode>::, BadKind);
 
 NIRVANA_EXCEPTION_DEF (CORBA::Internal::Definitions <CORBA::TypeCode>::, Bounds);

@@ -30,6 +30,7 @@
 
 #include <Nirvana/NirvanaBase.h>
 #include "TypeByVal.h"
+#include "tc_constants.h"
 
 namespace CORBA {
 
@@ -71,7 +72,10 @@ struct Type <Boolean> : TypeByVal <Boolean, Char>
 
 	typedef C_inout C_out;
 
-	static I_ptr <TypeCode> type_code ();
+	static I_ptr <TypeCode> type_code ()
+	{
+		return _tc_boolean;
+	}
 
 	// For the ABI compatibility, compiler uses char as structured type member of boolean type.
 	// So we have 2 kinds unmarshal methods.
@@ -86,6 +90,10 @@ struct Type <Boolean> : TypeByVal <Boolean, Char>
 		dst = (Var)src;
 	}
 };
+
+#ifdef LEGACY_CORBA_CPP
+typedef Boolean& Boolean_out;
+#endif
 
 }
 }

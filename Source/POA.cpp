@@ -30,11 +30,6 @@
 NIRVANA_OLF_SECTION_N (0) extern const Nirvana::ImportInterfaceT <CORBA::TypeCode>
 PortableServer::_tc_POA = { Nirvana::OLF_IMPORT_INTERFACE, PortableServer::POA::repository_id_, CORBA::TypeCode::repository_id_ };
 
-CORBA::TypeCode::_ptr_type CORBA::Internal::Type <PortableServer::POA>::type_code ()
-{
-	return PortableServer::_tc_POA;
-}
-
 NIRVANA_EXCEPTION_DEF (CORBA::Internal::Definitions <PortableServer::POA>::, ServantAlreadyActive);
 
 NIRVANA_OLF_SECTION_N (1) const Nirvana::ImportInterfaceT <CORBA::TypeCode>

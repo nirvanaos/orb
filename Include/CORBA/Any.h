@@ -286,7 +286,10 @@ struct Type <Any> : public TypeVarLen <Any, true>
 		return val;
 	}
 
-	static I_ptr <TypeCode> type_code ();
+	static I_ptr <TypeCode> type_code ()
+	{
+		return _tc_any;
+	}
 
 	static void marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst);
 	static void marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst);

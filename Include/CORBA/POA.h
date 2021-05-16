@@ -48,7 +48,10 @@ namespace Internal {
 template <>
 struct Type < ::PortableServer::POA> : TypeLocalObject < ::PortableServer::POA>
 {
-	static I_ptr <TypeCode> type_code ();
+	static I_ptr <TypeCode> type_code ()
+	{
+		return ::PortableServer::_tc_POA;
+	}
 };
 
 template <>
