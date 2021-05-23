@@ -1,5 +1,5 @@
 /*
-* Nirvana runtime library.
+* Nirvana IDL support library.
 *
 * This is a part of the Nirvana project.
 *
@@ -23,31 +23,12 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_MAKE_STATELESS_H_
-#define NIRVANA_ORB_MAKE_STATELESS_H_
+#ifndef NIRVANA_ORB_OBJECTFACTORYINC_H_
+#define NIRVANA_ORB_OBJECTFACTORYINC_H_
 
-#include "core_objects.h"
-#include "ObjectFactoryInc.h"
-#include "servant_reference.h"
-#include <utility>
-
-namespace CORBA {
-
-template <class T, class ... Args>
-servant_reference <T> make_stateless (Args ... args)
-{
-	typename std::aligned_storage <sizeof (T), alignof (T)>::type tmp;
-	Internal::ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (T), 0);
-	Internal::g_object_factory->stateless_begin (scb);
-	try {
-		new (&tmp) T (std::forward <Args> (args)...);
-		return servant_reference <T> ((T*)Internal::g_object_factory->stateless_end (true), false);
-	} catch (...) {
-		Internal::g_object_factory->stateless_end (false);
-		throw;
-	}
-}
-
-}
+#include "LocalObject.h"
+#include "ServantBase.h"
+#include "DynamicServant.h"
+#include "ObjectFactory.h"
 
 #endif

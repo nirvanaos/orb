@@ -28,7 +28,7 @@
 
 #include "core_objects.h"
 #include "Client.h"
-#include "ObjectFactory.h"
+#include "ObjectFactoryInc.h"
 
 namespace CORBA {
 namespace Internal {

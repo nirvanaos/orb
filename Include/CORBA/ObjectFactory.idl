@@ -1,0 +1,100 @@
+/*
+* Nirvana IDL support library.
+*
+* This is a part of the Nirvana project.
+*
+* Author: Igor Popov
+*
+* Copyright (c) 2021 Igor Popov.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+*
+* Send comments and/or bug reports to:
+*  popov.nirvana@gmail.com
+*/
+
+module Nirvana {
+
+native Pointer;
+native ConstPointer;
+native Size;
+native PtrDiff;
+
+};
+
+module PortableServer{
+
+native ServantBase;
+
+};
+
+module CORBA {
+
+native LocalObject;
+native AbstractBase;
+
+module Internal {
+
+native DynamicServant;
+native ReferenceCounter;
+
+/// ObjectFactory Interface to the core object functionality.
+pseudo interface ObjectFactory
+{
+	/// \brief Allocates memory for servant.
+	///
+	/// If we currently run out of SD, this operation creates a new
+	/// SD and enters into it. Then it allocates memory from the current SD heap.
+	/// This operation is not called for stateless servants.
+	///
+	/// \param size Amount of memory in bytes.
+	Nirvana::Pointer memory_allocate (in Nirvana::Size size);
+
+	/// \brief Releases servant memory.
+	///
+	/// This method detects when memory is stateless and releases it properly.
+	/// \param p Servant memory.
+	/// \param size Amount of memory in bytes.
+	void memory_release (in Nirvana::Pointer p, in Nirvana::Size size);
+
+	/// \brief `TRUE` if stateless object creation is available.
+	readonly attribute boolean stateless_available;
+
+	/// Stateless object creation frame.
+	struct StatelessCreationFrame
+	{
+		Nirvana::ConstPointer tmp; ///< Pointer to the temporary object storage in stack.
+		Nirvana::Size size; ///< Size of the object.
+		Nirvana::PtrDiff offset; ///< Used internally.
+	};
+
+	/// Start creation of a stateless object.
+	/// 
+	/// \throws BAD_OPERATION if stateless creation is not available.
+	void stateless_begin (inout StatelessCreationFrame scf);
+
+	/// Finish creation of stateless object.
+	/// 
+	/// \param success `TRUE` if temporary object successfully constructed.
+	/// 
+	/// \returns Pointer to stateless object created.
+	Nirvana::Pointer stateless_end (in boolean success);
+
+	ReferenceCounter create_reference_counter (in DynamicServant dynamic);
+	PortableServer::ServantBase create_servant (in PortableServer::ServantBase impl);
+	LocalObject create_local_object (in LocalObject impl, in AbstractBase abstract_base);
+};
+
+};
+};

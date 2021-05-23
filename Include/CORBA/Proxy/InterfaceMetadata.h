@@ -50,15 +50,15 @@ namespace Internal {
 ///                              of the `output` parameters in the operation metadata.
 ///                              The return value, if it is not void, must be at the end of structure.
 typedef void (*RequestProc) (Interface* servant, Interface* call,
-	::Nirvana::ConstPointer in_params,
+	const void* in_params,
 	Interface** unmarshaler,
-	::Nirvana::Pointer out_params);
+	void* out_params);
 
-template <class I, void (*proc) (I_ptr <I>, IORequest::_ptr_type, ::Nirvana::ConstPointer, Unmarshal::_ref_type&, ::Nirvana::Pointer)>
+template <class I, void (*proc) (I_ptr <I>, IORequest::_ptr_type, const void*, Unmarshal::_ref_type&, void*)>
 void RqProcWrapper (Interface* servant, Interface* call,
-	::Nirvana::ConstPointer in_params,
+	const void* in_params,
 	Interface** unmarshaler,
-	::Nirvana::Pointer out_params)
+	void* out_params)
 {
 	try {
 		IORequest::_ptr_type rq = IORequest::_check (call);
