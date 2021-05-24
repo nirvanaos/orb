@@ -28,6 +28,14 @@
 namespace CORBA {
 namespace Internal {
 
+// In the full implementation this method is never called for servants.
+// So we could replace the implementation to assert (false) and return nullptr.
+// But we keep this small function just for case.
+Bridge <Object>* get_object_from_core (PortableServer::Servant core_object, String_in iid)
+{
+	return static_cast <Bridge <Object>*> (&AbstractBase::_ptr_type (core_object)->_query_interface (iid));
+}
+
 Interface::_ref_type get_proxy (PortableServer::Servant core_object)
 {
 	Interface::_ptr_type proxy = AbstractBase::_ptr_type (core_object)->_query_interface (nullptr);
