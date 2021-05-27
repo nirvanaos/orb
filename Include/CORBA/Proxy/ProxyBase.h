@@ -67,7 +67,7 @@ public:
 		interface_duplicate (&proxy_manager_);
 	}
 
-	void _remove_ref ()
+	void _remove_ref () NIRVANA_NOEXCEPT
 	{
 		interface_release (&proxy_manager_);
 	}
