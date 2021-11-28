@@ -30,6 +30,7 @@
 #include "primitive_types.h"
 #include <type_traits>
 #include <string.h>
+#include <wchar.h>
 
 namespace CORBA {
 namespace Internal {

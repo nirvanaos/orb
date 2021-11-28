@@ -222,6 +222,14 @@ public:
 #endif
 
 #ifdef NIRVANA_C17
+	typedef std::basic_string_view <C, std::char_traits <C> > __sv_type;
+
+	template<typename _Tp, typename _Res>
+	using _If_sv = std::enable_if_t <
+		std::is_convertible <const _Tp&, __sv_type>::value
+		&& !std::is_convertible <const _Tp*, const Base*>::value
+		&& !std::is_convertible <const _Tp&, const C*>::value,
+		_Res>;
 
 	template <class V, class = _If_sv <V, void> >
 	BoundedStringT (const V& v) :

@@ -63,7 +63,7 @@ public:
 	typedef _var_type& _out_type;
 
 	// TODO: Change return type to I_var?
-	static NIRVANA_NODISCARD I_ptr <I> _duplicate (I_ptr <I> obj)
+	NIRVANA_NODISCARD static I_ptr <I> _duplicate (I_ptr <I> obj)
 	{
 		return static_cast <I*> (interface_duplicate (&obj));
 	}
