@@ -51,8 +51,8 @@ struct alignas (sizeof (uintptr_t)) ABI <Any>
 	struct alignas (sizeof (void*))
 	{
 		void* p;	//< Pointer to large data
-		size_t size;	//< Large data size
-		size_t padding;
+		size_t size;	//< Large data allocated size
+		size_t padding; //< Padding to make small data size enough
 	} data;
 
 	static const size_t SMALL_CAPACITY = sizeof (data);

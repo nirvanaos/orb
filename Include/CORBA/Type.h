@@ -98,13 +98,15 @@ template <typename C>
 void Type <StringT <C> >::marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst)
 {
 	assert (&src != &dst);
-	if (!_small_copy (src, dst)) {
+	if (_small_copy (src, dst))
+		src.release_memory ();
+	else {
 		size_t size = src.large_size ();
 		size_t cb = Var::byte_size (size);
 		dst.large_pointer ((C*)marshaler->marshal_memory (src.large_pointer (), cb, src.allocated ()));
+		src.reset ();
 		dst.large_size (size);
 		dst.allocated (cb);
-		src.reset ();
 	}
 }
 
@@ -157,42 +159,31 @@ template <typename T>
 void Type <Sequence <T> >::marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst)
 {
 	assert (&src != &dst);
-	if (src.empty ())
+	if (src.empty ()) {
+		src.release_memory ();
 		dst.reset ();
-	else {
-		ABI& asrc = static_cast <ABI&> (src);
-		dst.size = asrc.size;
+	} else {
+		size_t size = src.size ();
+		dst.size = size;
+		size_t cb = size * sizeof (T);
 		if (!Type <T>::has_marshal) {
-			size_t cb = asrc.size * sizeof (T);
-			dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated);
+			dst.ptr = (T_ABI*)marshaler->marshal_memory (src.data (), cb, static_cast <ABI&> (src).allocated);
+			src.reset ();
 			dst.allocated = cb;
-			asrc.reset ();
 		} else {
-			T* sp = src.data (), * end = sp + src.size ();
 			T_ABI* dp;
-			size_t cb;
-			MarshalContext mctx = marshaler->marshal_context ();
-			if (MarshalContext::SHARED_MEMORY == mctx)
-				dp = (T_ABI*)sp;
-			else {
-				cb = asrc.size * sizeof (T);
-				void* buf;
-				dst.ptr = (T_ABI*)marshaler->get_buffer (cb, buf);
-				dp = (T_ABI*)buf;
-			}
+			dst.ptr = (T_ABI*)marshaler->get_buffer (cb, (void*&)dp);
+			dst.allocated = cb;
 
+			T* sp = src.data (), * end = sp + src.size ();
 			do {
 				Type <T>::marshal_out (*(sp++), marshaler, *(dp++));
 			} while (sp != end);
 
-			if (MarshalContext::SHARED_MEMORY == mctx)
-				dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, asrc.allocated);
-			else {
+			{
 				Var tmp;
 				src.swap (tmp);
 			}
-
-			dst.allocated = cb;
 		}
 	}
 }

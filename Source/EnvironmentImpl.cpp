@@ -90,7 +90,8 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, void* param,
 						} catch (...) {
 						}
 					}
-				} else if (set_user (rep_id, param, user_exceptions))
+				}
+				if (set_user (rep_id, param, user_exceptions))
 					return;
 				code = Exception::EC_SYSTEM_EXCEPTION; // Will set UNKNOWN
 			}

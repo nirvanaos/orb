@@ -48,7 +48,7 @@ public:
 	UnknownUserException ()
 	{}
 
-	UnknownUserException (Any&& exc) :
+	explicit UnknownUserException (Any&& exc) :
 		_exception (std::move (exc))
 	{}
 

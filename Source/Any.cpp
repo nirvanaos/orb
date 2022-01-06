@@ -38,6 +38,7 @@ void Type <Any>::check (const ABI& any)
 
 void Type <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst)
 {
+	assert (&src != &dst);
 	I_ptr <TypeCode> tc = src.type ();
 	if (!tc)
 		dst.reset ();
@@ -61,6 +62,7 @@ void Type <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst)
 
 void Type <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst)
 {
+	assert (&src != &dst);
 	I_ptr <TypeCode> tc = src.type ();
 	if (!tc)
 		dst.reset ();
@@ -70,23 +72,22 @@ void Type <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst)
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
 			psrc = src.large_pointer ();
-			if (MarshalContext::SHARED_MEMORY == marshaler->marshal_context ()) {
-				dst = src;
+			size_t size = tc->_size ();
+			if (!tc->_has_marshal ()) {
+				uintptr_t p = marshaler->marshal_memory (psrc, size, src.large_size ());
+				dst.large_pointer ((void*)p, size);
 				src.reset ();
-				pdst = dst.large_pointer ();
+				return;
 			} else {
-				size_t size = tc->_size ();
 				uintptr_t p = marshaler->get_buffer (size, pdst);
-				dst.large_pointer ((::Nirvana::Pointer)p, size);
-				pdst = dst.large_pointer ();
+				dst.large_pointer ((void*)p, size);
 			}
 		} else {
 			pdst = dst.small_pointer ();
 			psrc = src.small_pointer ();
 		}
 		tc->_marshal_out (psrc, marshaler, pdst);
-		interface_release (&tc);
-		src.reset ();
+		src.clear ();
 	}
 }
 
