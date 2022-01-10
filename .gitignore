@@ -3,3 +3,5 @@
 /Include/CORBA/Unmarshal.h
 /Include/CORBA/ObjectFactory.h
 /Include/CORBA/OctetSeq.h
+/Include/CORBA/OctetSeq_s.h
+/Source/OctetSeq.cpp
