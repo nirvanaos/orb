@@ -48,6 +48,11 @@ public:
 		this->allocated (0);
 	}
 
+	template <size_t cc>
+	StringBase (C (&s) [cc]) :
+		StringBase ((const C*)s)
+	{}
+
 	template <typename S, typename = typename std::enable_if <std::is_convertible <S, const C*>::value && !std::is_array <S>::value>::type>
 	StringBase (S s);
 #else
