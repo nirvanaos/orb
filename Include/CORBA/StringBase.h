@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_STRINGBASE_H_
 #define NIRVANA_ORB_STRINGBASE_H_
+#pragma once
 
 #include "ABI_String.h"
 #include "primitive_types.h"

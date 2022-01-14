@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_SERVANT_REFERENCE_H_
 #define NIRVANA_ORB_SERVANT_REFERENCE_H_
+#pragma once
 
 #include <utility>
 

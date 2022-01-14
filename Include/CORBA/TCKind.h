@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_TCKIND_H_
 #define NIRVANA_ORB_TCKIND_H_
+#pragma once
 
 namespace CORBA {
 

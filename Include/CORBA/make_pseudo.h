@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_MAKE_PSEUDO_H_
 #define NIRVANA_ORB_MAKE_PSEUDO_H_
+#pragma once
 
 #include "I_ref.h"
 

@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_LIFECYCLEDYNAMIC_H_
 #define NIRVANA_ORB_LIFECYCLEDYNAMIC_H_
+#pragma once
 
 #include "Exception.h"
 

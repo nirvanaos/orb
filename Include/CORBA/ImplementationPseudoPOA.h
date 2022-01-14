@@ -30,6 +30,7 @@
 */
 #ifndef NIRVANA_ORB_IMPLEMENTATIONPSEUDOPOA_H_
 #define NIRVANA_ORB_IMPLEMENTATIONPSEUDOPOA_H_
+#pragma once
 
 #include "ServantImpl.h"
 #include "I_ptr.h"

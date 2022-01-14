@@ -28,6 +28,7 @@
 
 #ifndef NIRVANA_ORB_CLIENT_H_
 #define NIRVANA_ORB_CLIENT_H_
+#pragma once
 
 #include "Environment.h"
 

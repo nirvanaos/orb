@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_SYSTEMEXCEPTION_H_
 #define NIRVANA_ORB_SYSTEMEXCEPTION_H_
+#pragma once
 
 #include "Exception.h"
 #include "system_exceptions.h"

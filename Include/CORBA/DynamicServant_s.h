@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_DYNAMICSERVANT_S_H_
 #define NIRVANA_ORB_DYNAMICSERVANT_S_H_
+#pragma once
 
 #include "DynamicServant.h"
 

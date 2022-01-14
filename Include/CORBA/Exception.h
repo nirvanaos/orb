@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_EXCEPTION_H_
 #define NIRVANA_ORB_EXCEPTION_H_
+#pragma once
 
 #include <Nirvana/NirvanaBase.h>
 #include "primitive_types.h"

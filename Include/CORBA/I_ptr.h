@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -25,6 +26,7 @@
 */
 #ifndef NIRVANA_ORB_I_PTR_H_
 #define NIRVANA_ORB_I_PTR_H_
+#pragma once
 
 #include "Bridge.h"
 #include <Nirvana/throw_exception.h>

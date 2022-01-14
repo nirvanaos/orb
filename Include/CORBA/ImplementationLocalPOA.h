@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_IMPLEMENTATIONLOCALPOA_H_
 #define NIRVANA_ORB_IMPLEMENTATIONLOCALPOA_H_
+#pragma once
 
 #include "LocalObjectPOA.h"
 #include "FindInterface.h"

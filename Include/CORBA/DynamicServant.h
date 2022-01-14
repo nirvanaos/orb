@@ -30,6 +30,7 @@
 */
 #ifndef NIRVANA_ORB_DYNAMICSERVANT_H_
 #define NIRVANA_ORB_DYNAMICSERVANT_H_
+#pragma once
 
 namespace CORBA {
 namespace Internal {

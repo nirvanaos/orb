@@ -27,6 +27,7 @@
 */
 #ifndef NIRVANA_ORB_SERVANTBASE_H_
 #define NIRVANA_ORB_SERVANTBASE_H_
+#pragma once
 
 #include "AbstractBase.h"
 #include "ReferenceCounter.h"

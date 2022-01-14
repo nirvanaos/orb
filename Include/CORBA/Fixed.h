@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_FIXED_H_
 #define NIRVANA_ORB_FIXED_H_
+#pragma once
 
 #include <Nirvana/basic_string.h>
 #include <iosfwd>

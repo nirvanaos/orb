@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_LIFECYCLESERVANT_H_
 #define NIRVANA_ORB_LIFECYCLESERVANT_H_
+#pragma once
 
 #include "Object.h"
 #include "Type_interface.h"

@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_TYPE_H_
 #define NIRVANA_ORB_TYPE_H_
+#pragma once
 
 #include "TypeFixLen.h"
 #include "TypeEnum.h"

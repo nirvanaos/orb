@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_ENVIRONMENT_S_H_
 #define NIRVANA_ORB_ENVIRONMENT_S_H_
+#pragma once
 
 #include "Environment_c.h"
 

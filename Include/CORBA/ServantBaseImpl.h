@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_SERVANTBASEIMPL_H_
 #define NIRVANA_ORB_SERVANTBASEIMPL_H_
+#pragma once
 
 #include "AbstractBaseImpl.h"
 #include "ServantBaseLink.h"

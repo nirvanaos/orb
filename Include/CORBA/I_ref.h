@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -25,6 +26,7 @@
 */
 #ifndef NIRVANA_ORB_I_REF_H_
 #define NIRVANA_ORB_I_REF_H_
+#pragma once
 
 #include "I_ptr.h"
 

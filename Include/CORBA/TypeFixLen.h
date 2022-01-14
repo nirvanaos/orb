@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_TYPEFIXLEN_H_
 #define NIRVANA_ORB_TYPEFIXLEN_H_
+#pragma once
 
 #include <Nirvana/NirvanaBase.h>
 #include "TypeByVal.h"

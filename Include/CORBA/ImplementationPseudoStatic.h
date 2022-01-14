@@ -30,6 +30,7 @@
 */
 #ifndef NIRVANA_ORB_IMPLEMENTATIONPSEUDOSTATIC_H_
 #define NIRVANA_ORB_IMPLEMENTATIONPSEUDOSTATIC_H_
+#pragma once
 
 #include "ServantStatic.h"
 #include "LifeCycleStatic.h"

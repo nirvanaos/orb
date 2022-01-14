@@ -1,4 +1,4 @@
-/// \file Implementation.h
+/// \file
 /// Standard Nirvana servant implementation.
 
 /*
@@ -28,6 +28,7 @@
 */
 #ifndef NIRVANA_ORB_IMPLEMENTATION_H_
 #define NIRVANA_ORB_IMPLEMENTATION_H_
+#pragma once
 
 #include "ServantBaseImpl.h"
 #include "FindInterface.h"

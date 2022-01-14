@@ -27,6 +27,7 @@
 */
 #ifndef NIRVANA_ORB_ABI_STRING_H_
 #define NIRVANA_ORB_ABI_STRING_H_
+#pragma once
 
 #include <Nirvana/NirvanaBase.h>
 #include "ABI.h"

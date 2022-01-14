@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_LIFECYCLEPOA_H_
 #define NIRVANA_ORB_LIFECYCLEPOA_H_
+#pragma once
 
 #include "LifeCycleServant.h"
 #include "ServantPOA.h"

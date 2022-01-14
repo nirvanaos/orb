@@ -26,6 +26,7 @@
 */
 #ifndef NIRVANA_ORB_ABSTRACTBASE_H_
 #define NIRVANA_ORB_ABSTRACTBASE_H_
+#pragma once
 
 #include <Nirvana/NirvanaBase.h>
 #include "Client.h"

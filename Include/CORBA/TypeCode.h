@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_TYPECODE_H_
 #define NIRVANA_ORB_TYPECODE_H_
+#pragma once
 
 #include "TCKind.h"
 

@@ -1,5 +1,4 @@
 /// \file
-/// \author Igor Popov
 /*
 * Nirvana IDL support library.
 *
@@ -27,6 +26,7 @@
 */
 #ifndef NIRVANA_ORB_IMPLEMENTATIONLOCAL_H_
 #define NIRVANA_ORB_IMPLEMENTATIONLOCAL_H_
+#pragma once
 
 #include "LocalObjectImpl.h"
 #include "FindInterface.h"

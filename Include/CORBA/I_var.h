@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_I_VAR_H_
 #define NIRVANA_ORB_I_VAR_H_
+#pragma once
 
 #include "I_ref.h"
 

@@ -26,6 +26,7 @@
 */
 #ifndef NIRVANA_ORB_SEQUENCE_H_
 #define NIRVANA_ORB_SEQUENCE_H_
+#pragma once
 
 #include <Nirvana/vector.h>
 #include "TypeVarLen.h"

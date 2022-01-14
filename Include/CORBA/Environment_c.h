@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_ENVIRONMENT_C_H_
 #define NIRVANA_ORB_ENVIRONMENT_C_H_
+#pragma once
 
 #include "Bridge.h"
 

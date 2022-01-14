@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_PORTABLESERVER_H_
 #define NIRVANA_ORB_PORTABLESERVER_H_
+#pragma once
 
 #include "ImplementationTied.h"
 #include "ImplementationPOA.h"

@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_EXCEPTIONS_H_
 #define NIRVANA_ORB_EXCEPTIONS_H_
+#pragma once
 
 #include "SystemException.h"
 #include <Nirvana/ImportInterface.h>

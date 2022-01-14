@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_TYPE_INTERFACE_H_
 #define NIRVANA_ORB_TYPE_INTERFACE_H_
+#pragma once
 
 #include "Type_forward.h"
 #include "I_var.h"

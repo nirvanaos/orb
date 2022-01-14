@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_REFERENCECOUNTERPOA_H_
 #define NIRVANA_ORB_REFERENCECOUNTERPOA_H_
+#pragma once
 
 #include "DynamicServantPOA.h"
 #include "ReferenceCounter_s.h"

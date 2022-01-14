@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_SERVANTBASESTATIC_H_
 #define NIRVANA_ORB_SERVANTBASESTATIC_H_
+#pragma once
 
 #include <Nirvana/NirvanaBase.h>
 #include <Nirvana/OLF.h>

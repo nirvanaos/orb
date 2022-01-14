@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_SERVANTBASE_S_H_
 #define NIRVANA_ORB_SERVANTBASE_S_H_
+#pragma once
 
 #include "ServantBase.h"
 #include "Type_interface.h"

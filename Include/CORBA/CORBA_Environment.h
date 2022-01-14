@@ -27,6 +27,7 @@
 */
 #ifndef NIRVANA_ORB_CORBA_ENVIRONMENT_H_
 #define NIRVANA_ORB_CORBA_ENVIRONMENT_H_
+#pragma once
 
 #include "EnvironmentImpl.h"
 #include "Serverless.h"

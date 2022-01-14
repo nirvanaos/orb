@@ -28,6 +28,7 @@
 */
 #ifndef NIRVANA_ORB_CORBA_H_
 #define NIRVANA_ORB_CORBA_H_
+#pragma once
 
 /// Define macro LEGACY_CORBA_CPP to support of the legacy C++ mapping specification 1.3.
 //#define LEGACY_CORBA_CPP

@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_REFERENCECOUNTERSTATIC_H_
 #define NIRVANA_ORB_REFERENCECOUNTERSTATIC_H_
+#pragma once
 
 #include "ReferenceCounter_s.h"
 #include "ServantStatic.h"

@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_REFERENCECOUNTER_S_H_
 #define NIRVANA_ORB_REFERENCECOUNTER_S_H_
+#pragma once
 
 #include "ReferenceCounter.h"
 

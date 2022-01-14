@@ -26,6 +26,7 @@
 */
 #ifndef NIRVANA_ORB_ABSTRACTBASESTATIC_H_
 #define NIRVANA_ORB_ABSTRACTBASESTATIC_H_
+#pragma once
 
 #include "AbstractBase_s.h"
 #include "LifeCycleStatic.h"

@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_UNKNOWNUSEREXCEPTION_H_
 #define NIRVANA_ORB_UNKNOWNUSEREXCEPTION_H_
+#pragma once
 
 #include "UserException.h"
 #include "Any.h"

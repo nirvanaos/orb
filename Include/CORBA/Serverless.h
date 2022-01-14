@@ -26,6 +26,7 @@
 */
 #ifndef NIRVANA_ORB_SERVERLESS_H_
 #define NIRVANA_ORB_SERVERLESS_H_
+#pragma once
 
 #include "primitive_types.h"
 #include "servant_reference.h"

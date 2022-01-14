@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_OBJECTFACTORYINC_H_
 #define NIRVANA_ORB_OBJECTFACTORYINC_H_
+#pragma once
 
 #include "LocalObject.h"
 #include "ServantBase.h"

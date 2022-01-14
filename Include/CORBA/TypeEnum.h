@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_TYPEENUM_H_
 #define NIRVANA_ORB_TYPEENUM_H_
+#pragma once
 
 #include <Nirvana/throw_exception.h>
 #include "TypeByVal.h"

@@ -27,6 +27,7 @@
 */
 #ifndef NIRVANA_ORB_SET_EXCEPTION_H_
 #define NIRVANA_ORB_SET_EXCEPTION_H_
+#pragma once
 
 #include "Bridge.h"
 #include "system_exceptions.h"

@@ -27,6 +27,7 @@
 */
 #ifndef NIRVANA_ORB_POA_H_
 #define NIRVANA_ORB_POA_H_
+#pragma once
 
 #include "ServantBase.h"
 

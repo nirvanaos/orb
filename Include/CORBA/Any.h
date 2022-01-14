@@ -26,6 +26,7 @@
 */
 #ifndef NIRVANA_ORB_ANY_H_
 #define NIRVANA_ORB_ANY_H_
+#pragma once
 
 #include "TypeVarLen.h"
 #include "ABI_Any.h"

@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_SERVANTVAR_H_
 #define NIRVANA_ORB_SERVANTVAR_H_
+#pragma once
 
 #include "servant_reference.h"
 

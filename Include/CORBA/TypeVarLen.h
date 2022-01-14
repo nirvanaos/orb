@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_TYPEVARLEN_H_
 #define NIRVANA_ORB_TYPEVARLEN_H_
+#pragma once
 
 #include "TypeByRef.h"
 #include <utility>

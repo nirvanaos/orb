@@ -27,6 +27,7 @@
 */
 #ifndef NIRVANA_ORB_BASIC_TYPES_H_
 #define NIRVANA_ORB_BASIC_TYPES_H_
+#pragma once
 
 #include "Boolean.h"
 #include "TypeFixLen.h"

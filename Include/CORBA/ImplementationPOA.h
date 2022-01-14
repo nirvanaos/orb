@@ -28,6 +28,7 @@
 */
 #ifndef NIRVANA_ORB_IMPLEMENTATIONPOA_H_
 #define NIRVANA_ORB_IMPLEMENTATIONPOA_H_
+#pragma once
 
 #include "ServantBasePOA.h"
 #include "FindInterface.h"

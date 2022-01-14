@@ -27,6 +27,7 @@
 */
 #ifndef NIRVANA_ORB_PRIMITIVE_TYPES_H_
 #define NIRVANA_ORB_PRIMITIVE_TYPES_H_
+#pragma once
 
 #include <stdint.h>
 

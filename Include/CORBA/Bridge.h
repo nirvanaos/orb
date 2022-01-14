@@ -27,6 +27,7 @@
 */
 #ifndef NIRVANA_ORB_BRIDGE_H_
 #define NIRVANA_ORB_BRIDGE_H_
+#pragma once
 
 #include "Interface.h"
 

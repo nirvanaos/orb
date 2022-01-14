@@ -29,6 +29,7 @@
 */
 #ifndef NIRVANA_ORB_ABI_SEQUENCE_H_
 #define NIRVANA_ORB_ABI_SEQUENCE_H_
+#pragma once
 
 namespace std {
 template <class T, class A> class vector;

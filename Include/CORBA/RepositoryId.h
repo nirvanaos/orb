@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_REPOSITORYID_H_
 #define NIRVANA_ORB_REPOSITORYID_H_
+#pragma once
 
 #include "StringBase.h"
 

@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_LOCALOBJECTPOA_H_
 #define NIRVANA_ORB_LOCALOBJECTPOA_H_
+#pragma once
 
 #include "ServantBasePOA.h"
 #include "LocalObjectLink.h"

@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_TYPEBYREF_H_
 #define NIRVANA_ORB_TYPEBYREF_H_
+#pragma once
 
 #include "Type_forward.h"
 

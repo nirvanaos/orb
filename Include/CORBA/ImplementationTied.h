@@ -28,6 +28,7 @@
 */
 #ifndef NIRVANA_ORB_IMPLEMENTATIONTIED_H_
 #define NIRVANA_ORB_IMPLEMENTATIONTIED_H_
+#pragma once
 
 #include "POA.h"
 #include "LocalObject.h"

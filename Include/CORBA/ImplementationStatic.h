@@ -28,6 +28,7 @@
 */
 #ifndef NIRVANA_ORB_IMPLEMENTATIONSTATIC_H_
 #define NIRVANA_ORB_IMPLEMENTATIONSTATIC_H_
+#pragma once
 
 #include "ServantBaseStatic.h"
 

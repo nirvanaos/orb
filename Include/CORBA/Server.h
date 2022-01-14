@@ -27,6 +27,7 @@
 */
 #ifndef NIRVANA_ORB_SERVER_H_
 #define NIRVANA_ORB_SERVER_H_
+#pragma once
 
 #include "CORBA.h"
 #include "Implementation.h"

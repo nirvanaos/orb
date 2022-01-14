@@ -26,6 +26,7 @@
 */
 #ifndef NIRVANA_ORB_OBJECT_H_
 #define NIRVANA_ORB_OBJECT_H_
+#pragma once
 
 #include "AbstractBase.h"
 

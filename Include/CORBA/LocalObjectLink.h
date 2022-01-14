@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_LOCALOBJECTLINK_H_
 #define NIRVANA_ORB_LOCALOBJECTLINK_H_
+#pragma once
 
 #include "local_core.h"
 

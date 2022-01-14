@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_SERVANTMEMORY_H_
 #define NIRVANA_ORB_SERVANTMEMORY_H_
+#pragma once
 
 #include "core_objects.h"
 #include "Client.h"

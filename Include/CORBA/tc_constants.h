@@ -25,6 +25,7 @@
 */
 #ifndef NIRVANA_ORB_TC_CONSTANTS_H_
 #define NIRVANA_ORB_TC_CONSTANTS_H_
+#pragma once
 
 #include <Nirvana/ImportInterface.h>
 
