@@ -115,14 +115,14 @@ class EnvironmentImpl :
 {
 public:
 	template <class I>
-	static Interface* __duplicate (Interface* itf, Interface* env)
+	static Interface* __duplicate (Interface*, Interface* env)
 	{
 		set_NO_IMPLEMENT (env);
 		return 0;
 	}
 
 	template <class I>
-	static void __release (Interface* itf)
+	static void __release (Interface*)
 	{}
 
 protected:

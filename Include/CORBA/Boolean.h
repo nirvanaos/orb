@@ -81,12 +81,12 @@ struct Type <Boolean> : TypeByVal <Boolean, Char>
 	// For the ABI compatibility, compiler uses char as structured type member of boolean type.
 	// So we have 2 kinds unmarshal methods.
 
-	static void unmarshal (ABI src, Unmarshal_ptr unmarshaler, Var& dst) NIRVANA_NOEXCEPT
+	static void unmarshal (ABI src, Unmarshal_ptr, Var& dst) NIRVANA_NOEXCEPT
 	{
 		dst = (Var)src;
 	}
 
-	static void unmarshal (ABI src, Unmarshal_ptr unmarshaler, Char& dst) NIRVANA_NOEXCEPT
+	static void unmarshal (ABI src, Unmarshal_ptr, Char& dst) NIRVANA_NOEXCEPT
 	{
 		dst = (Var)src;
 	}

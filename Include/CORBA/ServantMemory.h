@@ -47,7 +47,7 @@ public:
 		g_object_factory->memory_release (p, size);
 	}
 
-	void* operator new (size_t size, void* p)
+	void* operator new (size_t, void* p)
 	{
 		return p;
 	}

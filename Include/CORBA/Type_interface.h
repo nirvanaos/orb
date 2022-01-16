@@ -367,7 +367,7 @@ struct TypeItf <Interface> : TypeItfBase <Interface>
 {
 	static const bool has_check = false;
 
-	static void check (Interface* p)
+	static void check (Interface*)
 	{}
 
 	typedef Interface* ABI_in;
