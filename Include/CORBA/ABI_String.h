@@ -1,5 +1,4 @@
 /// \file ABI_String.h.
-/// \brief Declares the string ABI
 /*
 * Nirvana IDL support library.
 *
@@ -35,18 +34,21 @@
 #include <stddef.h>
 
 namespace std {
+template <class T> class StdAllocator;
 template <class C, class T, class A> class basic_string;
 template <class C> struct char_traits;
-template <class T> class allocator;
-template <typename C, class T> class basic_string <C, T, allocator <C> >;
+template <typename C, class T> class basic_string <C, T, StdAllocator <C> >;
 }
 
 namespace CORBA {
 namespace Internal {
 
 template <typename C>
-using StringT = std::basic_string <C, std::char_traits <C>, std::allocator <C> >;
+using StringT = std::basic_string <C, std::char_traits <C>, std::StdAllocator <C> >;
 
+/// The string ABI.
+/// 
+/// \tparam C Character type.
 template <typename C>
 struct alignas (sizeof (void*)) ABI <StringT <C> >
 {
@@ -198,8 +200,8 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 	struct Large
 	{
 		C* data;
-		size_t size;
-		size_t allocated;
+		size_t size; ///< Element count
+		size_t allocated; ///< Allocated space in bytes
 	};
 
 	static_assert (sizeof (Large) == sizeof (void*) + 2 * sizeof (size_t), "sizeof (ABI <StringT <C>>::Large)");
@@ -212,7 +214,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			struct
 			{
 				unsigned char padding [sizeof (Large) - 1];
-				unsigned char size;
+				unsigned char size; ///< Element count
 			};
 		};
 	};
@@ -224,8 +226,8 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 
 	union ULS
 	{
-		Large large;
 		Small small;
+		Large large;
 	};
 
 	union alignas (sizeof (void*)) Data

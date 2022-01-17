@@ -1,7 +1,4 @@
 //! \file ABI_Sequence.h.
-//!
-//! \brief Declares the sequence ABI
-
 /*
 * Nirvana IDL support library.
 *
@@ -33,15 +30,18 @@
 
 namespace std {
 template <class T, class A> class vector;
-template <class T> class allocator;
+template <class T> class StdAllocator;
 }
 
 namespace CORBA {
 namespace Internal {
 
 template <typename T>
-using Sequence = std::vector <T, std::allocator <T> >;
+using Sequence = std::vector <T, std::StdAllocator <T> >;
 
+/// Sequence ABI.
+/// 
+/// \tparam The sequence element type.
 template <class T>
 struct alignas (sizeof (void*)) ABI <Sequence <T> >
 {
@@ -53,8 +53,8 @@ struct alignas (sizeof (void*)) ABI <Sequence <T> >
 	}
 
 	T* ptr;
-	size_t size;
-	size_t allocated;
+	size_t size; ///< Element count
+	size_t allocated; ///< Allocated space in bytes
 };
 
 }
