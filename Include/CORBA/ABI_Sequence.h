@@ -30,14 +30,14 @@
 
 namespace std {
 template <class T, class A> class vector;
-template <class T> class StdAllocator;
+template <class T> class allocator;
 }
 
 namespace CORBA {
 namespace Internal {
 
 template <typename T>
-using Sequence = std::vector <T, std::StdAllocator <T> >;
+using Sequence = std::vector <T, std::allocator <T> >;
 
 /// Sequence ABI.
 /// 

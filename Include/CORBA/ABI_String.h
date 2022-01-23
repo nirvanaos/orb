@@ -34,17 +34,17 @@
 #include <stddef.h>
 
 namespace std {
-template <class T> class StdAllocator;
+template <class T> class allocator;
 template <class C, class T, class A> class basic_string;
 template <class C> struct char_traits;
-template <typename C, class T> class basic_string <C, T, StdAllocator <C> >;
+template <typename C, class T> class basic_string <C, T, allocator <C> >;
 }
 
 namespace CORBA {
 namespace Internal {
 
 template <typename C>
-using StringT = std::basic_string <C, std::char_traits <C>, std::StdAllocator <C> >;
+using StringT = std::basic_string <C, std::char_traits <C>, std::allocator <C> >;
 
 /// The string ABI.
 /// 

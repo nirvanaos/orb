@@ -25,6 +25,9 @@
 */
 #include <CORBA/String_compat.h>
 
+using namespace Nirvana;
+using namespace std;
+
 namespace CORBA {
 namespace Internal {
 
@@ -34,13 +37,13 @@ class StringAllocator
 public:
 	static C* allocate (uint32_t len) NIRVANA_NOEXCEPT
 	{
-		return (C*)::Nirvana::g_memory->allocate (0, ((size_t)len + 1) * sizeof (C), ::Nirvana::Memory::EXACTLY);
+		return (C*)g_memory->allocate (0, ((size_t)len + 1) * sizeof (C), Memory::EXACTLY);
 	}
 
 	static C* dup (const C* s) NIRVANA_NOEXCEPT
 	{
 		if (s)
-			return (C*)::Nirvana::g_memory->copy (0, (C*)s, (std::char_traits <C>::length (s) + 1) * sizeof (C), ::Nirvana::Memory::EXACTLY);
+			return (C*)g_memory->copy (0, (C*)s, (char_traits <C>::length (s) + 1) * sizeof (C), Memory::EXACTLY);
 		else
 			return nullptr;
 	}
@@ -48,7 +51,7 @@ public:
 	static void free (C* s) NIRVANA_NOEXCEPT
 	{
 		if (s)
-			::Nirvana::g_memory->release (s, (std::char_traits <C>::length (s) + 1) * sizeof (C));
+			g_memory->release (s, (char_traits <C>::length (s) + 1) * sizeof (C));
 	}
 };
 
