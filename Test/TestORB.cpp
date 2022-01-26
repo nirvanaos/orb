@@ -72,7 +72,7 @@ TEST_F (TestORB, Environment)
 	EXPECT_STREQ (ex->_name (), "NO_MEMORY");
 }
 
-size_t string_size (const CORBA::Internal::String_in& string_in)
+size_t string_size (CORBA::Internal::String_in& string_in)
 {
 	return static_cast <const std::string&> (string_in).size ();
 }
