@@ -74,7 +74,7 @@ struct Type <PortableServer::ServantBase>;
 template <class I>
 struct TypeObject : TypeItf <I>
 {
-	static const CORBA::TCKind tc_kind = tk_objref;
+	static const TCKind tc_kind = TCKind::tk_objref;
 };
 
 template <>
@@ -204,7 +204,6 @@ inline Object::_ref_type AbstractBase::_to_object ()
 
 namespace Internal {
 
-// TODO: Move to Client.h
 template <class Primary>
 class ClientInterfaceBase <Primary, Object> :
 	public Client <ClientBase <Primary, Object>, Object>

@@ -27,8 +27,8 @@ IMPORT_BY_NAME (any);
 IMPORT_BY_NAME (string);
 IMPORT_BY_NAME (wstring);
 
-IMPORT_BY_ID (Object);
 IMPORT_BY_ID (TypeCode);
-//IMPORT_BY_ID (ValueBase);
+IMPORT_BY_ID (Object);
+IMPORT_BY_ID (ValueBase);
 
 }

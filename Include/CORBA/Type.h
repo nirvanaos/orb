@@ -42,6 +42,7 @@
 #include "tc_constants.h"
 #include "Sequence.h"
 #include "Object.h"
+#include "ValueBase.h"
 
 namespace CORBA {
 namespace Internal {
@@ -74,11 +75,22 @@ void TypeItf <I>::marshal_in (I_ptr <I> src, Marshal_ptr marshaler, Interface*& 
 }
 
 // TypeCode marshaling
+
 template <> inline
 void TypeItf <TypeCode>::marshal_in (I_ptr <TypeCode> src, Marshal_ptr marshaler, Interface*& dst)
 {
 	reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
 }
+
+// ValueBase marshaling
+
+template <> inline
+void TypeItf <ValueBase>::marshal_in (I_ptr <ValueBase> src, Marshal_ptr marshaler, Interface*& dst)
+{
+	// TODO: Temparary solution. Implement marshaling by value!
+	reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
+}
+
 
 // String marshaling
 

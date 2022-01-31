@@ -53,7 +53,7 @@ struct Type <LocalObject> : TypeItf <LocalObject>
 template <class I>
 struct TypeLocalObject : TypeObject <I>
 {
-	static const TCKind tc_kind = tk_local_interface;
+	static const TCKind tc_kind = TCKind::tk_local_interface;
 };
 
 NIRVANA_BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))

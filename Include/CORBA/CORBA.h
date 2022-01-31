@@ -36,6 +36,7 @@
 #include <Nirvana/NirvanaBase.h>
 #include "exceptions.h"
 #include "Object.h"
+#include "ValueBase.h"
 #include "LocalObject.h"
 #include "Type.h"
 #include "String_compat.h"

@@ -1,4 +1,4 @@
-/// \file AbstractBase.h
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -113,7 +113,6 @@ public:
 
 namespace Internal {
 
-// TODO: Move to Client.h
 template <class Primary>
 class ClientInterfaceBase <Primary, AbstractBase> :
 	public Client <ClientBase <Primary, AbstractBase>, AbstractBase>
@@ -128,7 +127,7 @@ public:
 template <class I>
 struct TypeAbstractInterface : TypeItf <I>
 {
-	static const TCKind tc_kind = tk_abstract_interface;
+	static const TCKind tc_kind = TCKind::tk_abstract_interface;
 };
 
 }
