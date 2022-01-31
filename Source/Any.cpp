@@ -47,7 +47,7 @@ void Type <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst)
 		::Nirvana::ConstPointer psrc;
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
-			size_t size = tc->_size ();
+			size_t size = tc->n_size ();
 			uintptr_t p = marshaler->get_buffer (size, pdst);
 			dst.large_pointer ((::Nirvana::Pointer)p, size);
 			pdst = dst.large_pointer ();
@@ -56,7 +56,7 @@ void Type <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst)
 			pdst = dst.small_pointer ();
 			psrc = src.small_pointer ();
 		}
-		tc->_marshal_in (psrc, marshaler, pdst);
+		tc->n_marshal_in (psrc, marshaler, pdst);
 	}
 }
 
@@ -72,8 +72,8 @@ void Type <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst)
 		::Nirvana::Pointer pdst;
 		if (src.is_large ()) {
 			psrc = src.large_pointer ();
-			size_t size = tc->_size ();
-			if (!tc->_has_marshal ()) {
+			size_t size = tc->n_size ();
+			if (!tc->n_has_marshal ()) {
 				uintptr_t p = marshaler->marshal_memory (psrc, size, src.large_size ());
 				dst.large_pointer ((void*)p, size);
 				src.reset ();
@@ -86,7 +86,7 @@ void Type <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst)
 			pdst = dst.small_pointer ();
 			psrc = src.small_pointer ();
 		}
-		tc->_marshal_out (psrc, marshaler, pdst);
+		tc->n_marshal_out (psrc, marshaler, pdst);
 		src.clear ();
 	}
 }
@@ -108,7 +108,7 @@ void Type <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
 			else
 				pdst = ::Nirvana::g_memory->allocate (0, size, 0);
 			try {
-				tc->_unmarshal (psrc, unmarshaler, pdst);
+				tc->n_unmarshal (psrc, unmarshaler, pdst);
 			} catch (...) {
 				::Nirvana::g_memory->release (pdst, size);
 				throw;
@@ -117,7 +117,7 @@ void Type <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
 		} else {
 			pdst = dst.small_pointer ();
 			psrc = src.small_pointer ();
-			tc->_unmarshal (psrc, unmarshaler, pdst);
+			tc->n_unmarshal (psrc, unmarshaler, pdst);
 		}
 		dst.set_type (std::move (tc));
 	}
@@ -137,7 +137,7 @@ void Any::clear ()
 			p = large_pointer ();
 		else
 			p = small_pointer ();
-		tc->_destruct (p);
+		tc->n_destruct (p);
 		interface_release (&tc);
 	}
 	if (large)
@@ -150,7 +150,7 @@ void* Any::prepare (I_ptr <TypeCode> tc)
 	clear ();
 	void* dst = nullptr;
 	if (tc) {
-		size_t size = tc->_size ();
+		size_t size = tc->n_size ();
 		if (!size)
 			::Nirvana::throw_BAD_TYPECODE ();
 		if (size <= SMALL_CAPACITY)
@@ -177,7 +177,7 @@ void Any::copy_from (I_ptr <TypeCode> tc, const void* val)
 {
 	void* dst = prepare (tc);
 	if (dst) {
-		tc->_copy (dst, val);
+		tc->n_copy (dst, val);
 		set_type (tc);
 	}
 }
@@ -187,7 +187,7 @@ void Any::copy_from (const Any& src)
 	I_ptr <TypeCode> tc = src.type ();
 	void* dst = prepare (tc);
 	if (dst) {
-		tc->_copy (dst, src.data ());
+		tc->n_copy (dst, src.data ());
 		set_type (tc);
 	}
 }
@@ -195,7 +195,7 @@ void Any::copy_from (const Any& src)
 void Any::move_from (I_ptr <TypeCode> tc, void* val)
 {
 	void* dst = prepare (tc);
-	tc->_move (dst, val);
+	tc->n_move (dst, val);
 	set_type (tc);
 }
 

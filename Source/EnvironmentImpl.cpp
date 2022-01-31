@@ -145,7 +145,7 @@ void EnvironmentBase::set_user (const ExceptionEntry& ee, void* data) NIRVANA_NO
 		try {
 			Exception& e = *exception ();
 			I_ptr <TypeCode> tc = e.__type_code ();
-			tc->_move (e.__data (), data);
+			tc->n_move (e.__data (), data);
 		} catch (...) {
 			new (&data_) NO_MEMORY ();
 		}

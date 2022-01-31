@@ -267,10 +267,10 @@ protected:
 		return 0;
 	}
 
-	static ::Nirvana::Size __size (Bridge <TypeCode>* _b, Interface* _env)
+	static ::Nirvana::Size _n_size (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		try {
-			return S::_implementation (_b)._size ();
+			return S::_implementation (_b).n_size ();
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -279,10 +279,10 @@ protected:
 		return 0;
 	}
 
-	static void __construct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, Interface* _env)
+	static void _n_construct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, Interface* _env)
 	{
 		try {
-			S::_implementation (_b)._construct (p);
+			S::_implementation (_b).n_construct (p);
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -290,10 +290,10 @@ protected:
 		}
 	}
 
-	static void __destruct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, Interface* _env)
+	static void _n_destruct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, Interface* _env)
 	{
 		try {
-			S::_implementation (_b)._destruct (p);
+			S::_implementation (_b).n_destruct (p);
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -301,10 +301,10 @@ protected:
 		}
 	}
 
-	static void __copy (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::ConstPointer src, Interface* _env)
+	static void _n_copy (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::ConstPointer src, Interface* _env)
 	{
 		try {
-			S::_implementation (_b)._copy (dst, src);
+			S::_implementation (_b).n_copy (dst, src);
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -312,10 +312,10 @@ protected:
 		}
 	}
 
-	static void __move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::Pointer src, Interface* _env)
+	static void _n_move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::Pointer src, Interface* _env)
 	{
 		try {
-			S::_implementation (_b)._move (dst, src);
+			S::_implementation (_b).n_move (dst, src);
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -323,10 +323,10 @@ protected:
 		}
 	}
 
-	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <Boolean>::ABI_ret _n_has_marshal (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		try {
-			return Type <Boolean>::ret (S::_implementation (_b)._has_marshal ());
+			return Type <Boolean>::ret (S::_implementation (_b).n_has_marshal ());
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -335,10 +335,10 @@ protected:
 		return 0;
 	}
 
-	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
+	static void _n_marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{
 		try {
-			S::_implementation (_b)._marshal_in (src, Type <Marshal>::in (marshaler), dst);
+			S::_implementation (_b).n_marshal_in (src, Type <Marshal>::in (marshaler), dst);
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -346,10 +346,10 @@ protected:
 		}
 	}
 
-	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
+	static void _n_marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{
 		try {
-			S::_implementation (_b)._marshal_out (src, Type <Marshal>::in (marshaler), dst);
+			S::_implementation (_b).n_marshal_out (src, Type <Marshal>::in (marshaler), dst);
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -357,10 +357,10 @@ protected:
 		}
 	}
 
-	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* unmarshaler, ::Nirvana::Pointer dst, Interface* _env)
+	static void _n_unmarshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* unmarshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{
 		try {
-			S::_implementation (_b)._unmarshal (src, Type <Unmarshal>::in (unmarshaler), dst);
+			S::_implementation (_b).n_unmarshal (src, Type <Unmarshal>::in (unmarshaler), dst);
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -397,15 +397,15 @@ const Bridge <TypeCode>::EPV Skeleton <S, TypeCode>::epv_ = {
 		S::_type_modifier,
 		S::_concrete_base_type,
 
-		S::__size,
-		S::__construct,
-		S::__destruct,
-		S::__copy,
-		S::__move,
-		S::__has_marshal,
-		S::__marshal_in,
-		S::__marshal_out,
-		S::__unmarshal
+		S::_n_size,
+		S::_n_construct,
+		S::_n_destruct,
+		S::_n_copy,
+		S::_n_move,
+		S::_n_has_marshal,
+		S::_n_marshal_in,
+		S::_n_marshal_out,
+		S::_n_unmarshal
 	}
 };
 

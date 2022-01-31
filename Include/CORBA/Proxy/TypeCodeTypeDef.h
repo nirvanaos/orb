@@ -65,57 +65,57 @@ public:
 		return const_string_ret_p (ref->name);
 	}
 
-	static size_t __size (Bridge <TypeCode>* _b, Interface* _env)
+	static size_t _n_size (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return (content ()->_epv ().epv._size) (_b, _env);
+		return (content ()->_epv ().epv.n_size) (_b, _env);
 	}
 
-	static void __construct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p,
+	static void _n_construct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p,
 		Interface* _env)
 	{
-		(content ()->_epv ().epv._construct) (_b, p, _env);
+		(content ()->_epv ().epv.n_construct) (_b, p, _env);
 	}
 
-	static void __destruct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p,
+	static void _n_destruct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p,
 		Interface* _env)
 	{
-		(content ()->_epv ().epv._destruct) (_b, p, _env);
+		(content ()->_epv ().epv.n_destruct) (_b, p, _env);
 	}
 
-	static void __copy (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst,
+	static void _n_copy (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst,
 		::Nirvana::ConstPointer src, Interface* _env)
 	{
-		(content ()->_epv ().epv._copy) (_b, dst, src, _env);
+		(content ()->_epv ().epv.n_copy) (_b, dst, src, _env);
 	}
 
-	static void __move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst,
+	static void _n_move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst,
 		Nirvana::Pointer src, Interface* _env)
 	{
-		(content ()->_epv ().epv._move) (_b, dst, src, _env);
+		(content ()->_epv ().epv.n_move) (_b, dst, src, _env);
 	}
 
-	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b,
+	static Type <Boolean>::ABI_ret _n_has_marshal (Bridge <TypeCode>* _b,
 		Interface* _env)
 	{
-		return (content ()->_epv ().epv._has_marshal) (_b, _env);
+		return (content ()->_epv ().epv.n_has_marshal) (_b, _env);
 	}
 
-	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src,
+	static void _n_marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src,
 		Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{
-		(content ()->_epv ().epv._marshal_in) (_b, src, marshaler, dst, _env);
+		(content ()->_epv ().epv.n_marshal_in) (_b, src, marshaler, dst, _env);
 	}
 
-	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src,
+	static void _n_marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src,
 		Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{
-		(content ()->_epv ().epv._marshal_out) (_b, src, marshaler, dst, _env);
+		(content ()->_epv ().epv.n_marshal_out) (_b, src, marshaler, dst, _env);
 	}
 
-	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src,
+	static void _n_unmarshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src,
 		Interface* unmarshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{
-		(content ()->_epv ().epv._unmarshal) (_b, src, unmarshaler, dst, _env);
+		(content ()->_epv ().epv.n_unmarshal) (_b, src, unmarshaler, dst, _env);
 	}
 
 private:
