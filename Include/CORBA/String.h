@@ -104,7 +104,7 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 		return val;
 	}
 
-	static I_ptr <TypeCode> type_code ();
+	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
 
 	static bool _small_copy (const ABI& src, ABI& dst);
 	static void marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst);
@@ -268,7 +268,7 @@ struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
 		}
 	};
 
-	static I_ptr <TypeCode> type_code ();
+	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
 };
 
 /// Unbounded string. Equivalent to std::string.

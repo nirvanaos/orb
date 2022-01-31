@@ -110,7 +110,7 @@ struct Type <Sequence <T> > :
 		return val;
 	}
 
-	static I_ptr <TypeCode> type_code ();
+	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
 
 	static void marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst);
 	static void marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst);
@@ -231,7 +231,7 @@ struct Type <BoundedSequence <T, bound> > :
 		return static_cast <Var&> (Base::inout (p));
 	}
 
-	static I_ptr <TypeCode> type_code ();
+	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
 };
 
 }

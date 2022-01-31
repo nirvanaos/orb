@@ -1,4 +1,4 @@
-/// \file TypeCodeSequence.h
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -35,7 +35,8 @@ namespace Internal {
 
 template <typename T, ULong bound = 0>
 class TypeCodeSequence :
-	public TypeCodeStatic <TypeCodeSequence <T, bound>, TypeCodeTK <tk_sequence>, TypeCodeOps <Sequence <T> > >,
+	public TypeCodeStatic <TypeCodeSequence <T, bound>, TypeCodeTK <tk_sequence>,
+		TypeCodeOps <Sequence <T> > >,
 	public TypeCodeLength <bound>,
 	public TypeCodeContentType <T>
 {
@@ -44,14 +45,14 @@ public:
 	using TypeCodeLength <bound>::_length;
 	using TypeCodeContentType <T>::_content_type;
 
-	static Boolean equal (I_ptr <TypeCode> other)
+	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return TypeCodeTK <tk_sequence>::equal (other)
 			&& other->length () == bound
 			&& other->content_type ()->equal (ContentType::ptr ());
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other)
+	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		I_ref <TypeCode> otc = TypeCodeBase::dereference_alias (other);
 		return TypeCodeBase::equivalent (tk_sequence, otc)
@@ -61,13 +62,13 @@ public:
 };
 
 template <typename T> inline
-I_ptr <TypeCode> Type <Sequence <T> >::type_code ()
+I_ptr <TypeCode> Type <Sequence <T> >::type_code () NIRVANA_NOEXCEPT
 {
 	return TypeCodeSequence <T, 0>::_get_ptr ();
 }
 
 template <typename T, ULong bound> inline
-I_ptr <TypeCode> Type <BoundedSequence <T, bound> >::type_code ()
+I_ptr <TypeCode> Type <BoundedSequence <T, bound> >::type_code () NIRVANA_NOEXCEPT
 {
 	return TypeCodeSequence <T, bound>::_get_ptr ();
 }

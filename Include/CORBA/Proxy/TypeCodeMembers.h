@@ -1,4 +1,4 @@
-/// \file TypeCodeMembers.h
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -48,12 +48,13 @@ public:
 		return countof (members_);
 	}
 
-	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env) NIRVANA_NOEXCEPT
+	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return member_count ();
 	}
 
-	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>*_b, ULong index, Interface * _env)
+	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>*_b, ULong index,
+		Interface * _env)
 	{
 		if (index >= countof (members_)) {
 			set_Bounds (_env);
@@ -62,7 +63,8 @@ public:
 			return const_string_ret_p (members_ [index].name);
 	}
 
-	static Interface* _member_type (Bridge <TypeCode>*_b, ULong index, Interface * _env)
+	static Interface* _member_type (Bridge <TypeCode>*_b, ULong index,
+		Interface * _env)
 	{
 		if (index >= countof (members_)) {
 			set_Bounds (_env);
@@ -93,13 +95,15 @@ public:
 		return 0;
 	}
 
-	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index,
+		Interface* _env)
 	{
 		set_Bounds (_env);
 		return Type <String>::ret ();
 	}
 
-	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index,
+		Interface* _env)
 	{
 		set_Bounds (_env);
 		return nullptr;
@@ -107,7 +111,8 @@ public:
 };
 
 template <class T, bool members>
-using TypeCodeMembersOptional = typename std::conditional <members, TypeCodeMembers <T>, TypeCodeMembersEmpty>::type;
+using TypeCodeMembersOptional = typename std::conditional <members, 
+	TypeCodeMembers <T>, TypeCodeMembersEmpty>::type;
 
 }
 }

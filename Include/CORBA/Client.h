@@ -70,7 +70,7 @@ public:
 	}
 #endif
 
-	static I_ptr <I> _nil ()
+	static I_ptr <I> _nil () NIRVANA_NOEXCEPT
 	{
 		return I_ptr <I> ((I*)nullptr);
 	}
@@ -80,7 +80,7 @@ public:
 		return static_cast <I*> (Interface::_check (bridge, Bridge <I>::repository_id_));
 	}
 
-	operator I_ptr <Interface> ()
+	operator I_ptr <Interface> () NIRVANA_NOEXCEPT
 	{
 		return this;
 	}

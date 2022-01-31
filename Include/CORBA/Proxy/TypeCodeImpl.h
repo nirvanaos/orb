@@ -35,8 +35,8 @@
 namespace CORBA {
 namespace Internal {
 
-void set_BadKind (Interface* env);
-void set_Bounds (Interface* env);
+void set_BadKind (Interface* env) NIRVANA_NOEXCEPT;
+void set_Bounds (Interface* env) NIRVANA_NOEXCEPT;
 
 template <size_t cc> inline
 Type <String>::ABI_ret const_string_ret (Char const (&s) [cc]) NIRVANA_NOEXCEPT
@@ -55,8 +55,8 @@ Type <String>::ABI_ret const_string_ret_p (const Char* s) NIRVANA_NOEXCEPT
 class TypeCodeBase
 {
 public:
-	static Boolean equal (TCKind tk, I_ptr <TypeCode> other);
-	static Boolean equivalent (TCKind tk, I_ptr <TypeCode> other);
+	static Boolean equal (TCKind tk, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
+	static Boolean equivalent (TCKind tk, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
 
 	static Type <String>::ABI_ret _id (Bridge <TypeCode>* _b, Interface* _env);
 	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env);
@@ -75,13 +75,26 @@ public:
 	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, Interface* _env);
 
 protected:
-	static Boolean equal (TCKind tk, String_in& id, I_ptr <TypeCode> other);
-	static Boolean equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other);
-	static I_ref <TypeCode> dereference_alias (I_ptr <TypeCode> tc);
-	static Boolean equal (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other);
-	static Boolean equivalent (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other);
-	static Boolean equal (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
-	static Boolean equivalent (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
+	static Boolean equal (TCKind tk, String_in& id, I_ptr <TypeCode> other)
+		NIRVANA_NOEXCEPT;
+
+	static Boolean equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other)
+		NIRVANA_NOEXCEPT;
+
+	static I_ref <TypeCode> dereference_alias (I_ptr <TypeCode> tc)
+		NIRVANA_NOEXCEPT;
+
+	static Boolean equal (const Char* const* members, ULong member_cnt,
+		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
+
+	static Boolean equivalent (const Char* const* members, ULong member_cnt,
+		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
+
+	static Boolean equal (const Parameter* members, ULong member_cnt,
+		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
+
+	static Boolean equivalent (const Parameter* members, ULong member_cnt,
+		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
 };
 
 template <TCKind tk>
@@ -91,12 +104,12 @@ class TypeCodeTK :
 public:
 	static const TCKind tk_ = tk;
 
-	static Boolean equal (I_ptr <TypeCode> other)
+	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return TypeCodeBase::equal (tk_, other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other)
+	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return TypeCodeBase::equivalent (tk_, TypeCodeBase::dereference_alias (other));
 	}
@@ -114,14 +127,15 @@ class TypeCodeWithId :
 public:
 	typedef T RepositoryType;
 
-	static Boolean equal (I_ptr <TypeCode> other)
+	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return TypeCodeBase::equal (tk, RepositoryType::repository_id_, other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other)
+	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
-		return TypeCodeBase::equivalent (tk, RepositoryType::repository_id_, TypeCodeBase::dereference_alias (other));
+		return TypeCodeBase::equivalent (tk, RepositoryType::repository_id_,
+			TypeCodeBase::dereference_alias (other));
 	}
 
 	static ABI <String> _id (Bridge <TypeCode>* _b, Interface* _env)
@@ -139,7 +153,7 @@ public:
 		return const_string_ret (name_);
 	}
 
-	static Boolean equal (I_ptr <TypeCode> other)
+	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return other->name ().compare (0, countof (name_) - 1, name_) == 0;
 	}
@@ -160,19 +174,20 @@ public:
 		return sizeof (Var);
 	}
 
-	static void _construct (::Nirvana::Pointer p)
+	static void _construct (Nirvana::Pointer p)
 	{
 		_check_pointer (p);
 		new (p) Var ();
 	}
 
-	static void _destruct (::Nirvana::Pointer p)
+	static void _destruct (Nirvana::Pointer p)
 	{
+		_check_pointer (p);
 		if (p)
 			reinterpret_cast <Var*> (p)->~Var ();
 	}
 
-	static void _copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src)
+	static void _copy (Nirvana::Pointer dst, Nirvana::ConstPointer src)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
@@ -181,7 +196,7 @@ public:
 		new (dst) Var (*reinterpret_cast <const Var*> (src));
 	}
 
-	static void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src)
+	static void _move (Nirvana::Pointer dst, Nirvana::Pointer src)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
@@ -190,35 +205,42 @@ public:
 		new (dst) Var (std::move (*reinterpret_cast <Var*> (src)));
 	}
 
-	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b,
+		Interface* _env)
 	{
 		return Type <T>::has_marshal;
 	}
 
-	static void _marshal_in (::Nirvana::ConstPointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
+	static void _marshal_in (Nirvana::ConstPointer src, Marshal_ptr marshaler,
+		Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
 		if (Type <T>::has_check)
 			Type <T>::check (*reinterpret_cast <const ABI*> (src));
-		Type <T>::marshal_in (*reinterpret_cast <const Var*> (src), marshaler, *reinterpret_cast <ABI*> (dst));
+		Type <T>::marshal_in (*reinterpret_cast <const Var*> (src), marshaler,
+			*reinterpret_cast <ABI*> (dst));
 	}
 
-	static void _marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
+	static void _marshal_out (Nirvana::Pointer src, Marshal_ptr marshaler,
+		Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
 		if (Type <T>::has_check)
 			Type <T>::check (*reinterpret_cast <const ABI*> (src));
-		Type <T>::marshal_out (*reinterpret_cast <Var*> (src), marshaler, *reinterpret_cast <ABI*> (dst));
+		Type <T>::marshal_out (*reinterpret_cast <Var*> (src), marshaler,
+			*reinterpret_cast <ABI*> (dst));
 	}
 
-	static void _unmarshal (::Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
+	static void _unmarshal (Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler,
+		Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
 		// Do not call check() here, unmarshal() will check.
-		Type <T>::unmarshal (*reinterpret_cast <const ABI*> (src), unmarshaler, *reinterpret_cast <Var*> (dst));
+		Type <T>::unmarshal (*reinterpret_cast <const ABI*> (src), unmarshaler,
+			*reinterpret_cast <Var*> (dst));
 	}
 };
 
@@ -233,49 +255,54 @@ public:
 		return sizeof (Var);
 	}
 
-	static void _construct (::Nirvana::Pointer p)
+	static void _construct (Nirvana::Pointer p)
 	{
 		_check_pointer (p);
 	}
 
-	static void _destruct (::Nirvana::Pointer p)
+	static void _destruct (Nirvana::Pointer p)
 	{
+		_check_pointer (p);
 	}
 
-	static void _copy (::Nirvana::Pointer dst, ::Nirvana::ConstPointer src)
-	{
-		_check_pointer (dst);
-		_check_pointer (src);
-		*reinterpret_cast <Var*> (dst) = *reinterpret_cast <const Var*> (src);
-	}
-
-	static void _move (::Nirvana::Pointer dst, ::Nirvana::Pointer src)
+	static void _copy (Nirvana::Pointer dst, Nirvana::ConstPointer src)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
 		*reinterpret_cast <Var*> (dst) = *reinterpret_cast <const Var*> (src);
 	}
 
-	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
-	{
-		return 0;
-	}
-
-	static void _marshal_in (::Nirvana::ConstPointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
+	static void _move (Nirvana::Pointer dst, Nirvana::Pointer src)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
 		*reinterpret_cast <Var*> (dst) = *reinterpret_cast <const Var*> (src);
 	}
 
-	static void _marshal_out (::Nirvana::Pointer src, Marshal_ptr marshaler, ::Nirvana::Pointer dst)
+	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b,
+		Interface* _env) NIRVANA_NOEXCEPT
+	{
+		return false;
+	}
+
+	static void _marshal_in (Nirvana::ConstPointer src, Marshal_ptr marshaler,
+		Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
 		*reinterpret_cast <Var*> (dst) = *reinterpret_cast <const Var*> (src);
 	}
 
-	static void _unmarshal (::Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler, ::Nirvana::Pointer dst)
+	static void _marshal_out (Nirvana::Pointer src, Marshal_ptr marshaler,
+		Nirvana::Pointer dst)
+	{
+		_check_pointer (dst);
+		_check_pointer (src);
+		*reinterpret_cast <Var*> (dst) = *reinterpret_cast <const Var*> (src);
+	}
+
+	static void _unmarshal (Nirvana::ConstPointer src, Unmarshal_ptr unmarshaler,
+		Nirvana::Pointer dst)
 	{
 		_check_pointer (dst);
 		_check_pointer (src);
@@ -294,30 +321,38 @@ public:
 		return 0;
 	}
 
-	static void __construct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, Interface* _env)
+	static void __construct (Bridge <TypeCode>* _b, Nirvana::Pointer p,
+		Interface* _env)
 	{}
 
-	static void __destruct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, Interface* _env)
+	static void __destruct (Bridge <TypeCode>* _b, Nirvana::Pointer p,
+		Interface* _env)
 	{}
 
-	static void __copy (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::ConstPointer src, Interface* _env)
+	static void __copy (Bridge <TypeCode>* _b, Nirvana::Pointer dst,
+		Nirvana::ConstPointer src, Interface* _env)
 	{}
 
-	static void __move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::Pointer src, Interface* _env)
+	static void __move (Bridge <TypeCode>* _b, Nirvana::Pointer dst,
+		Nirvana::Pointer src, Interface* _env)
 	{}
 
-	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b,
+		Interface* _env)
 	{
-		return 0;
+		return false;
 	}
 
-	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
+	static void __marshal_in (Bridge <TypeCode>* _b, Nirvana::ConstPointer src,
+		Interface* marshaler, Nirvana::Pointer dst, Interface* _env)
 	{}
 
-	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
+	static void __marshal_out (Bridge <TypeCode>* _b, Nirvana::Pointer src,
+		Interface* marshaler, Nirvana::Pointer dst, Interface* _env)
 	{}
 
-	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* unmarshaler, ::Nirvana::Pointer, Interface* _env)
+	static void __unmarshal (Bridge <TypeCode>* _b, Nirvana::ConstPointer src,
+		Interface* unmarshaler, Nirvana::Pointer, Interface* _env)
 	{}
 };
 
@@ -348,7 +383,7 @@ public:
 
 	// The get_compact_typecode operation strips out all optional name and member
 	// name fields, but it leaves all alias typecodes intact.
-	I_ref <TypeCode> get_compact_typecode ()
+	I_ref <TypeCode> get_compact_typecode () NIRVANA_NOEXCEPT
 	{
 		// Currently, we don't strip names, just return this type code.
 		return I_ptr <TypeCode> (&static_cast <TypeCode&> (static_cast <Bridge <TypeCode>&> (static_cast <S&> (*this))));
@@ -402,7 +437,7 @@ public:
 	}
 
 protected:
-	static I_ptr <TypeCode> ptr ()
+	static I_ptr <TypeCode> ptr () NIRVANA_NOEXCEPT
 	{
 		return Type <Content>::type_code ();
 	}

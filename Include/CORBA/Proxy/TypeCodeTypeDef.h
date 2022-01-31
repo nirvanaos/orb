@@ -37,23 +37,25 @@ template <const ::Nirvana::ExportInterface* ref> class TypeCodeTypeDef;
 
 template <const ::Nirvana::ExportInterface* ref, class Content>
 class TypeCodeTypeDefImpl :
-	public TypeCodeStatic <TypeCodeTypeDef <ref>, TypeCodeTK <tk_alias>, TypeCodeOps <void> >,
+	public TypeCodeStatic <TypeCodeTypeDef <ref>, TypeCodeTK <tk_alias>,
+		TypeCodeOps <void> >,
 	public TypeCodeContentType <Content>,
 	public TypeCodeName < TypeCodeTypeDef <ref> >
 {
-	typedef TypeCodeStatic <TypeCodeTypeDef <ref>, TypeCodeTK <tk_alias>, TypeCodeOps <void> > Base;
+	typedef TypeCodeStatic <TypeCodeTypeDef <ref>, TypeCodeTK <tk_alias>,
+		TypeCodeOps <void> > Base;
 public:
 	using TypeCodeContentType <Content>::_content_type;
 	typedef TypeCodeName <TypeCodeTypeDef <ref> > Name;
 	using Name::_name;
 
-	static Boolean equal (I_ptr <TypeCode> other)
+	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return Base::equal (other)
 			&& Name::equal (other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other)
+	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return content ()->equivalent (other);
 	}
@@ -68,48 +70,56 @@ public:
 		return (content ()->_epv ().epv._size) (_b, _env);
 	}
 
-	static void __construct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, Interface* _env)
+	static void __construct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p,
+		Interface* _env)
 	{
 		(content ()->_epv ().epv._construct) (_b, p, _env);
 	}
 
-	static void __destruct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p, Interface* _env)
+	static void __destruct (Bridge <TypeCode>* _b, ::Nirvana::Pointer p,
+		Interface* _env)
 	{
 		(content ()->_epv ().epv._destruct) (_b, p, _env);
 	}
 
-	static void __copy (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::ConstPointer src, Interface* _env)
+	static void __copy (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst,
+		::Nirvana::ConstPointer src, Interface* _env)
 	{
 		(content ()->_epv ().epv._copy) (_b, dst, src, _env);
 	}
 
-	static void __move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst, ::Nirvana::Pointer src, Interface* _env)
+	static void __move (Bridge <TypeCode>* _b, ::Nirvana::Pointer dst,
+		Nirvana::Pointer src, Interface* _env)
 	{
 		(content ()->_epv ().epv._move) (_b, dst, src, _env);
 	}
 
-	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <Boolean>::ABI_ret __has_marshal (Bridge <TypeCode>* _b,
+		Interface* _env)
 	{
 		return (content ()->_epv ().epv._has_marshal) (_b, _env);
 	}
 
-	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
+	static void __marshal_in (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src,
+		Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{
 		(content ()->_epv ().epv._marshal_in) (_b, src, marshaler, dst, _env);
 	}
 
-	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src, Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
+	static void __marshal_out (Bridge <TypeCode>* _b, ::Nirvana::Pointer src,
+		Interface* marshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{
 		(content ()->_epv ().epv._marshal_out) (_b, src, marshaler, dst, _env);
 	}
 
-	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src, Interface* unmarshaler, ::Nirvana::Pointer dst, Interface* _env)
+	static void __unmarshal (Bridge <TypeCode>* _b, ::Nirvana::ConstPointer src,
+		Interface* unmarshaler, ::Nirvana::Pointer dst, Interface* _env)
 	{
 		(content ()->_epv ().epv._unmarshal) (_b, src, unmarshaler, dst, _env);
 	}
 
 private:
-	static I_ptr <TypeCode> content ()
+	static I_ptr <TypeCode> content () NIRVANA_NOEXCEPT
 	{
 		return TypeCodeContentType <Content>::ptr ();
 	}

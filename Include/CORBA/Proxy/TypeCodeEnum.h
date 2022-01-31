@@ -35,16 +35,19 @@ namespace Internal {
 
 template <class E>
 class TypeCodeEnum :
-	public TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <tk_enum, RepIdOf <E> >, TypeCodeOps <E> >,
+	public TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <tk_enum, RepIdOf <E> >,
+		TypeCodeOps <E> >,
 	public TypeCodeMemberCount <Type <E>::count_>,
 	public TypeCodeName <E>
 {
-	typedef TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <tk_enum, RepIdOf <E> >, TypeCodeOps <E> > Base;
+	typedef TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <tk_enum, RepIdOf <E> >,
+		TypeCodeOps <E> > Base;
 public:
 	using TypeCodeMemberCount <Type <E>::count_>::_member_count;
 	using TypeCodeName <E>::_name;
 
-	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index,
+		Interface* _env)
 	{
 		if (index >= Type <E>::count_) {
 			set_Bounds (_env);
@@ -53,14 +56,14 @@ public:
 			return const_string_ret_p (members_ [index]);
 	}
 
-	static Boolean equal (I_ptr <TypeCode> other)
+	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return Base::equal (other)
 			&& TypeCodeName <E>::equal (other)
 			&& TypeCodeBase::equal (members_, Type <E>::count_, other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other)
+	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		I_ref <TypeCode> tco = TypeCodeBase::dereference_alias (other);
 		return TypeCodeBase::equivalent (tk_enum, Base::RepositoryType::repository_id_, tco)

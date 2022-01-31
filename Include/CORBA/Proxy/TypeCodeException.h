@@ -1,4 +1,4 @@
-/// \file TypeCodeException.h
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -35,10 +35,12 @@ namespace Internal {
 
 template <class E, bool members = false>
 class TypeCodeException :
-	public TypeCodeStatic <TypeCodeException <E, members>, TypeCodeWithId <tk_except, RepIdOf <E> >, TypeCodeOps <typename E::_Data> >,
+	public TypeCodeStatic <TypeCodeException <E, members>,
+		TypeCodeWithId <tk_except, RepIdOf <E> >, TypeCodeOps <typename E::_Data> >,
 	public TypeCodeMembersOptional <E, members>
 {
-	typedef TypeCodeStatic <TypeCodeException <E, members>, TypeCodeWithId <tk_except, RepIdOf <E> >, TypeCodeOps <typename E::_Data> > Base;
+	typedef TypeCodeStatic <TypeCodeException <E, members>,
+		TypeCodeWithId <tk_except, RepIdOf <E> >, TypeCodeOps <typename E::_Data> > Base;
 	typedef TypeCodeMembersOptional <E, members> Members;
 public:
 	using Members::_member_count;
@@ -50,14 +52,14 @@ public:
 		return const_string_ret_p (E::__name ());
 	}
 
-	static Boolean equal (I_ptr <TypeCode> other)
+	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return Base::equal (other)
 			&& (other->name () == E::__name ())
 			&& TypeCodeBase::equal (Members::members (), Members::member_count (), other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other)
+	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		I_ref <TypeCode> tco = TypeCodeBase::dereference_alias (other);
 		return TypeCodeBase::equivalent (tk_except, RepIdOf <E>::repository_id_, tco)

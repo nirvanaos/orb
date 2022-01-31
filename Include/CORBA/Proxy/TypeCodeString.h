@@ -1,4 +1,4 @@
-/// \file TypeCodeString.h
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -37,19 +37,20 @@ template <typename Valtype, ULong bound> class TypeCodeString;
 
 template <typename Valtype, TCKind tk, ULong bound>
 class TypeCodeStringBase :
-	public TypeCodeStatic <TypeCodeString <Valtype, bound>, TypeCodeTK <tk>, TypeCodeOps <Valtype> >,
+	public TypeCodeStatic <TypeCodeString <Valtype, bound>, TypeCodeTK <tk>,
+		TypeCodeOps <Valtype> >,
 	public TypeCodeLength <bound>
 {
 public:
 	using TypeCodeLength <bound>::_length;
 
-	static Boolean equal (I_ptr <TypeCode> other)
+	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return TypeCodeTK <tk>::equal (other)
 			&& other->length () == bound;
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other)
+	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return TypeCodeTK <tk>::equivalent (other)
 			&& other->length () == bound;
@@ -57,25 +58,27 @@ public:
 };
 
 template <ULong bound>
-class TypeCodeString <StringT <Char>, bound> : public TypeCodeStringBase <String, tk_string, bound> {};
+class TypeCodeString <StringT <Char>, bound> :
+	public TypeCodeStringBase <String, tk_string, bound> {};
 
 template <ULong bound>
-class TypeCodeString <StringT <WChar>, bound> : public TypeCodeStringBase <WString, tk_wstring, bound> {};
+class TypeCodeString <StringT <WChar>, bound> :
+	public TypeCodeStringBase <WString, tk_wstring, bound> {};
 
 template <> inline
-I_ptr <TypeCode> Type <StringT <Char> >::type_code ()
+I_ptr <TypeCode> Type <StringT <Char> >::type_code () NIRVANA_NOEXCEPT
 {
 	return _tc_string;
 }
 
 template <> inline
-I_ptr <TypeCode> Type <StringT <WChar> >::type_code ()
+I_ptr <TypeCode> Type <StringT <WChar> >::type_code () NIRVANA_NOEXCEPT
 {
 	return _tc_wstring;
 }
 
 template <typename C, ULong bound> inline
-I_ptr <TypeCode> Type <BoundedStringT <C, bound> >::type_code ()
+I_ptr <TypeCode> Type <BoundedStringT <C, bound> >::type_code () NIRVANA_NOEXCEPT
 {
 	if (!bound)
 		return Type <StringT <C> >::type_code ();

@@ -28,22 +28,22 @@
 namespace CORBA {
 namespace Internal {
 
-void set_BadKind (Interface* env)
+void set_BadKind (Interface* env) NIRVANA_NOEXCEPT
 {
 	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::BadKind>::repository_id_, nullptr);
 }
 
-void set_Bounds (Interface* env)
+void set_Bounds (Interface* env) NIRVANA_NOEXCEPT
 {
 	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::Bounds>::repository_id_, nullptr);
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equal (TCKind tk, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 {
 	return tk == other->kind ();
 }
 
-I_ref <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc)
+I_ref <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc) NIRVANA_NOEXCEPT
 {
 	I_ref <TypeCode> ret = tc;
 	while (tk_alias == ret->kind ()) {
@@ -52,26 +52,26 @@ I_ref <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc)
 	return ret;
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equivalent (TCKind tk, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 {
 	TCKind tko = other->kind ();
 	assert (tk_alias != tk && tk_alias != tko);
 	return tk == tko;
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, String_in& id, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equal (TCKind tk, String_in& id, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 {
 	return TypeCodeBase::equal (tk, other)
 		&& static_cast <const String&> (id) == other->id ();
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 {
 	return TypeCodeBase::equivalent (tk, other)
 		&& static_cast <const String&> (id) == other->id ();
 }
 
-Boolean TypeCodeBase::equal (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equal (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 {
 	if (other->member_count () != member_cnt)
 		return false;
@@ -83,12 +83,12 @@ Boolean TypeCodeBase::equal (const Char* const* members, ULong member_cnt, I_ptr
 	return true;
 }
 
-Boolean TypeCodeBase::equivalent (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equivalent (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 {
 	return other->member_count () == member_cnt;
 }
 
-Boolean TypeCodeBase::equal (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equal (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 {
 	if (other->member_count () != member_cnt)
 		return false;
@@ -102,7 +102,7 @@ Boolean TypeCodeBase::equal (const Parameter* members, ULong member_cnt, I_ptr <
 	return true;
 }
 
-Boolean TypeCodeBase::equivalent (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equivalent (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 {
 	assert (tk_alias != other->kind ());
 

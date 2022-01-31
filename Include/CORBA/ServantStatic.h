@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -42,7 +43,7 @@ class ServantTraitsStatic :
 {
 public:
 	template <class I>
-	static S& _implementation (Bridge <I>* bridge)
+	static S& _implementation (Bridge <I>* bridge) NIRVANA_NOEXCEPT
 	{
 		return *(S*)nullptr;
 	}
