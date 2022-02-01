@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/RepositoryId.h>
+#include <CORBA/RepId.h>
 #include <CORBA/String.h>
 #include <Nirvana/throw_exception.h>
 #include <algorithm>
@@ -33,9 +33,9 @@ namespace Internal {
 
 using namespace std;
 
-const Char RepositoryId::IDL_ [] = "IDL";
+const Char RepId::IDL_ [] = "IDL";
 
-RepositoryId::Version::Version (const Char* sver) :
+RepId::Version::Version (const Char* sver) :
 	major (0),
 	minor (0)
 {
@@ -46,19 +46,19 @@ RepositoryId::Version::Version (const Char* sver) :
 	}
 }
 
-RepositoryId::CheckResult RepositoryId::check (String_in current, String_in requested)
+RepId::CheckResult RepId::check (String_in current, String_in requested)
 {
 	const String& cur_s = static_cast <const String&> (current);
 	return check (cur_s.c_str (), cur_s.length (), requested);
 }
 
-RepositoryId::CheckResult RepositoryId::check (const Char* current, size_t current_len, String_in requested)
+RepId::CheckResult RepId::check (const Char* current, size_t current_len, String_in requested)
 {
 	const String& req_s = static_cast <const String&> (requested);
 	return check (current, current_len, req_s.c_str (), req_s.length ());
 }
 
-RepositoryId::CheckResult RepositoryId::check (const Char* cur, size_t cur_l, const Char* req, size_t req_l)
+RepId::CheckResult RepId::check (const Char* cur, size_t cur_l, const Char* req, size_t req_l)
 {
 	if (cur == req)
 		return COMPATIBLE;
@@ -81,12 +81,12 @@ RepositoryId::CheckResult RepositoryId::check (const Char* cur, size_t cur_l, co
 	return (cur_l == req_l && equal (cur, cur + cur_l, req)) ? COMPATIBLE : OTHER_INTERFACE;
 }
 
-bool RepositoryId::is_type (const Char* id, const Char* prefix, size_t prefix_l)
+bool RepId::is_type (const Char* id, const Char* prefix, size_t prefix_l)
 {
 	return equal (id, id + prefix_l, prefix) && (id [prefix_l] == ':');
 }
 
-const Char* RepositoryId::version (const Char* begin, const Char* end)
+const Char* RepId::version (const Char* begin, const Char* end)
 {
 	for (const Char* p = end - 1; p > begin; --p) {
 		Char c = *p;
@@ -99,14 +99,14 @@ const Char* RepositoryId::version (const Char* begin, const Char* end)
 	return end;
 }
 
-const Char* RepositoryId::minor_version (const Char* ver, const Char* end)
+const Char* RepId::minor_version (const Char* ver, const Char* end)
 {
 	if (':' == *ver)
 		return find (ver + 1, end, '.');
 	return end;
 }
 
-uint_least16_t RepositoryId::strtou16 (const Char* ver, const Char*& end)
+uint_least16_t RepId::strtou16 (const Char* ver, const Char*& end)
 {
 	uint_least16_t n = 0;
 	for (Char c; (c = *ver); ++ver) {
@@ -125,7 +125,7 @@ uint_least16_t RepositoryId::strtou16 (const Char* ver, const Char*& end)
 	return n;
 }
 
-uint_least16_t RepositoryId::minor_number (const Char* minor_version)
+uint_least16_t RepId::minor_number (const Char* minor_version)
 {
 	if ('.' == *minor_version) {
 		const Char* end;
@@ -136,13 +136,13 @@ uint_least16_t RepositoryId::minor_number (const Char* minor_version)
 		return 0;
 }
 
-int RepositoryId::compare (const Char* cur, size_t cur_l, String_in requested)
+int RepId::compare (const Char* cur, size_t cur_l, String_in requested)
 {
 	const String& req_s = static_cast <const String&> (requested);
 	return compare (cur, cur_l, req_s.c_str (), req_s.length ());
 }
 
-int RepositoryId::compare (const Char* cur, size_t cur_l, const Char* req, size_t req_l)
+int RepId::compare (const Char* cur, size_t cur_l, const Char* req, size_t req_l)
 {
 	const Char* req_end = req + req_l;
 	const Char* cur_end = cur + cur_l;
@@ -162,7 +162,7 @@ int RepositoryId::compare (const Char* cur, size_t cur_l, const Char* req, size_
 		return lex_compare (cur, cur_end, req, req_end);
 }
 
-int RepositoryId::lex_compare (const Char* lhs, const Char* lhs_end, const Char* rhs, const Char* rhs_end)
+int RepId::lex_compare (const Char* lhs, const Char* lhs_end, const Char* rhs, const Char* rhs_end)
 {
 	for (;;) {
 		if (lhs == lhs_end) {

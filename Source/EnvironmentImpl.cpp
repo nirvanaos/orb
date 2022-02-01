@@ -79,7 +79,7 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, void* param,
 		const ExceptionEntry* ee;
 		if (!static_cast <const String&> (rep_id).empty ()) {
 			if (Exception::EC_USER_EXCEPTION == code && user_exceptions) {
-				if (RepositoryId::compatible (RepIdOf <UnknownUserException>::repository_id_, rep_id) && param) {
+				if (RepId::compatible (RepIdOf <UnknownUserException>::repository_id_, rep_id) && param) {
 					Any* pa = (Any*)param;
 					I_ptr <TypeCode> tc = pa->type ();
 					if (tc) {
@@ -107,7 +107,7 @@ bool EnvironmentBase::set_user (String_in rep_id, void* param,
 	const ExceptionEntry* user_exceptions) NIRVANA_NOEXCEPT
 {
 	for (const ExceptionEntry* p = user_exceptions; p->rep_id; ++p) {
-		if (RepositoryId::compatible (p->rep_id, rep_id)) {
+		if (RepId::compatible (p->rep_id, rep_id)) {
 			set_user (*p, param);
 			return true;
 		}

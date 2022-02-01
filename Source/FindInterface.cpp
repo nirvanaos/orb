@@ -24,7 +24,7 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/FindInterface.h>
-#include <CORBA/RepositoryId.h>
+#include <CORBA/RepId.h>
 
 namespace CORBA {
 namespace Internal {
@@ -36,7 +36,7 @@ Interface* InterfaceEntry::find (const InterfaceEntry* begin, const InterfaceEnt
 		ie = begin;
 	else {
 		for (const InterfaceEntry* p = begin; p != end; ++p) {
-			if (RepositoryId::compatible (p->interface_id, p->id_len, id)) {
+			if (RepId::compatible (p->interface_id, p->id_len, id)) {
 				ie = p;
 				break;
 			}

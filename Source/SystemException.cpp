@@ -51,25 +51,25 @@ const Internal::ExceptionEntry* SystemException::_get_exception_entry (String_in
 	{
 		bool operator () (const ExceptionEntry& l, String_in r) const
 		{
-			return RepositoryId::compare (l.ee.rep_id, l.rep_id_len, r) < 0;
+			return RepId::compare (l.ee.rep_id, l.rep_id_len, r) < 0;
 		}
 
 		bool operator () (String_in l, const ExceptionEntry& r) const
 		{
-			return RepositoryId::compare (r.ee.rep_id, r.rep_id_len, l) > 0;
+			return RepId::compare (r.ee.rep_id, r.rep_id_len, l) > 0;
 		}
 	};
 
 	if (hint >= 0 && hint < KNOWN_SYSTEM_EXCEPTIONS) {
 		const ExceptionEntry* pe = exception_entries_ + hint;
-		if (RepositoryId::compatible (pe->ee.rep_id, pe->rep_id_len, rep_id))
+		if (RepId::compatible (pe->ee.rep_id, pe->rep_id_len, rep_id))
 			return &(pe->ee);
 		hint = EC_SYSTEM_EXCEPTION;
 	}
 
 	const ExceptionEntry* pe = lower_bound (begin (exception_entries_), end (exception_entries_), rep_id, Pred ());
 	if (pe != end (exception_entries_)) {
-		if (RepositoryId::compatible (pe->ee.rep_id, pe->rep_id_len, rep_id))
+		if (RepId::compatible (pe->ee.rep_id, pe->rep_id_len, rep_id))
 			return &(pe->ee);
 	}
 

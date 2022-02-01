@@ -29,16 +29,16 @@ public:
 
 TEST_F (TestORB, RepositoryId)
 {
-	EXPECT_TRUE (CORBA::Internal::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/type:1.0"));
-	EXPECT_TRUE (CORBA::Internal::RepositoryId::compatible ("IDL:aaa/bbb/type:1.1", "IDL:aaa/bbb/type:1.0"));
-	EXPECT_FALSE (CORBA::Internal::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/type:1.1"));
-	EXPECT_FALSE (CORBA::Internal::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/other:1.0"));
-	EXPECT_FALSE (CORBA::Internal::RepositoryId::compatible ("IDL:aaa/bbb/type:1.0", "aaa/bbb/type:1.0"));
+	EXPECT_TRUE (CORBA::Internal::RepId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/type:1.0"));
+	EXPECT_TRUE (CORBA::Internal::RepId::compatible ("IDL:aaa/bbb/type:1.1", "IDL:aaa/bbb/type:1.0"));
+	EXPECT_FALSE (CORBA::Internal::RepId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/type:1.1"));
+	EXPECT_FALSE (CORBA::Internal::RepId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/other:1.0"));
+	EXPECT_FALSE (CORBA::Internal::RepId::compatible ("IDL:aaa/bbb/type:1.0", "aaa/bbb/type:1.0"));
 	
 	const char rep_id1 [] = "IDL:Test/I1:1.0";
 	const char rep_id3 [] = "IDL:Test/I3:1.0";
 
-	EXPECT_LT (CORBA::Internal::RepositoryId::compare (rep_id1, size (rep_id1) - 1, rep_id3, size (rep_id3) - 1), 0);
+	EXPECT_LT (CORBA::Internal::RepId::compare (rep_id1, size (rep_id1) - 1, rep_id3, size (rep_id3) - 1), 0);
 }
 
 TEST_F (TestORB, CORBA_Environment)

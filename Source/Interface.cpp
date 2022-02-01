@@ -24,7 +24,7 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/Interface.h>
-#include <CORBA/RepositoryId.h>
+#include <CORBA/RepId.h>
 #include <CORBA/Environment.h>
 
 namespace CORBA {
@@ -54,7 +54,7 @@ Interface* Interface::_check (Interface* bridge, String_in interface_id)
 	if (bridge) {
 		//  _check_pointer (bridge);
 		const Char* bridge_id = bridge->_epv ().interface_id;
-		if (!RepositoryId::compatible (bridge_id, interface_id))
+		if (!RepId::compatible (bridge_id, interface_id))
 			::Nirvana::throw_INV_OBJREF ();
 	}
 	return bridge;

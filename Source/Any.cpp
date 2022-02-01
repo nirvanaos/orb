@@ -310,7 +310,7 @@ Boolean operator >>= (const Any& any, SystemException& se)
 			(ee->construct) (&se);
 			const SystemException::_Data& data = *(const SystemException::_Data*)any.data ();
 			se.completed (data.completed);
-			if (RepositoryId::compatible (ee->rep_id, id))
+			if (RepId::compatible (ee->rep_id, id))
 				se.minor (data.minor);
 			return true;
 		}

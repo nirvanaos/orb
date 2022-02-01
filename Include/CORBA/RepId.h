@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,8 +24,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_REPOSITORYID_H_
-#define NIRVANA_ORB_REPOSITORYID_H_
+#ifndef NIRVANA_ORB_REPID_H_
+#define NIRVANA_ORB_REPID_H_
 #pragma once
 
 #include "StringBase.h"
@@ -32,7 +33,8 @@
 namespace CORBA {
 namespace Internal {
 
-class RepositoryId
+/// Repository identifier operations.
+class RepId
 {
 public:
 	enum CheckResult

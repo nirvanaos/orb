@@ -134,7 +134,7 @@ public:
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, Interface* env)
 	{
 		try {
-			if (!RepositoryId::compatible (Bridge <Base>::repository_id_, id))
+			if (!RepId::compatible (Bridge <Base>::repository_id_, id))
 				::Nirvana::throw_INV_OBJREF ();
 			return static_cast <ProxyBaseInterface <Base>&> (S::_implementation (derived)).get ();
 		} catch (Exception& e) {

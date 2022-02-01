@@ -28,7 +28,7 @@
 #pragma once
 
 #include "Exception.h"
-#include "RepositoryId.h"
+#include "RepId.h"
 #include "Bridge.h"
 #include <Nirvana/throw_exception.h>
 
@@ -65,7 +65,7 @@ public:
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, Interface* env)
 	{
 		try {
-			if (!RepositoryId::compatible (Bridge <Base>::repository_id_, id))
+			if (!RepId::compatible (Bridge <Base>::repository_id_, id))
 				::Nirvana::throw_INV_OBJREF ();
 			return &static_cast <Bridge <Base>&> (S::_implementation (derived));
 		} catch (Exception& e) {
