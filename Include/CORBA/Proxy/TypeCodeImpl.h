@@ -116,7 +116,7 @@ public:
 
 	static Type <TCKind>::ABI_ret _kind (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return tk_;
+		return (ABI_enum)tk_;
 	}
 };
 

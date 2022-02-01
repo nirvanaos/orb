@@ -81,7 +81,7 @@ const Internal::ExceptionEntry* SystemException::_get_exception_entry (String_in
 
 const Internal::ExceptionEntry* SystemException::_get_exception_entry (I_ptr <TypeCode> tc)
 {
-	if (tc && tc->kind () == tk_except)
+	if (tc && tc->kind () == TCKind::tk_except)
 		return _get_exception_entry (tc->id ());
 	else
 		return nullptr;

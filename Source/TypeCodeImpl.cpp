@@ -46,7 +46,7 @@ Boolean TypeCodeBase::equal (TCKind tk, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 I_ref <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc) NIRVANA_NOEXCEPT
 {
 	I_ref <TypeCode> ret = tc;
-	while (tk_alias == ret->kind ()) {
+	while (TCKind::tk_alias == ret->kind ()) {
 		ret = ret->content_type ();
 	}
 	return ret;
@@ -55,7 +55,7 @@ I_ref <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc) NIRVANA_N
 Boolean TypeCodeBase::equivalent (TCKind tk, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 {
 	TCKind tko = other->kind ();
-	assert (tk_alias != tk && tk_alias != tko);
+	assert (TCKind::tk_alias != tk && TCKind::tk_alias != tko);
 	return tk == tko;
 }
 
@@ -104,7 +104,7 @@ Boolean TypeCodeBase::equal (const Parameter* members, ULong member_cnt, I_ptr <
 
 Boolean TypeCodeBase::equivalent (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 {
-	assert (tk_alias != other->kind ());
+	assert (TCKind::tk_alias != other->kind ());
 
 	if (other->member_count () != member_cnt)
 		return false;

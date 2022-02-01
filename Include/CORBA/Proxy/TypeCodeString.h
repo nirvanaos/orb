@@ -59,11 +59,11 @@ public:
 
 template <ULong bound>
 class TypeCodeString <StringT <Char>, bound> :
-	public TypeCodeStringBase <String, tk_string, bound> {};
+	public TypeCodeStringBase <String, TCKind::tk_string, bound> {};
 
 template <ULong bound>
 class TypeCodeString <StringT <WChar>, bound> :
-	public TypeCodeStringBase <WString, tk_wstring, bound> {};
+	public TypeCodeStringBase <WString, TCKind::tk_wstring, bound> {};
 
 template <> inline
 I_ptr <TypeCode> Type <StringT <Char> >::type_code () NIRVANA_NOEXCEPT

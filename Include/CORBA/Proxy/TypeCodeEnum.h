@@ -35,12 +35,12 @@ namespace Internal {
 
 template <class E>
 class TypeCodeEnum :
-	public TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <tk_enum, RepIdOf <E> >,
+	public TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <TCKind::tk_enum, RepIdOf <E> >,
 		TypeCodeOps <E> >,
 	public TypeCodeMemberCount <Type <E>::count_>,
 	public TypeCodeName <E>
 {
-	typedef TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <tk_enum, RepIdOf <E> >,
+	typedef TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <TCKind::tk_enum, RepIdOf <E> >,
 		TypeCodeOps <E> > Base;
 public:
 	using TypeCodeMemberCount <Type <E>::count_>::_member_count;
@@ -66,7 +66,7 @@ public:
 	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		I_ref <TypeCode> tco = TypeCodeBase::dereference_alias (other);
-		return TypeCodeBase::equivalent (tk_enum, Base::RepositoryType::repository_id_, tco)
+		return TypeCodeBase::equivalent (TCKind::tk_enum, Base::RepositoryType::repository_id_, tco)
 			&& TypeCodeBase::equivalent (members_, Type <E>::count_, tco);
 	}
 

@@ -5,3 +5,6 @@
 /Include/CORBA/OctetSeq.h
 /Include/CORBA/OctetSeq_s.h
 /Source/OctetSeq.cpp
+/Include/CORBA/TCKind.h
+/Include/CORBA/TypeCode.h
+/Include/CORBA/TypeCode_s.h

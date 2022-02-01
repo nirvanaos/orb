@@ -37,12 +37,12 @@ template <const ::Nirvana::ExportInterface* ref> class TypeCodeTypeDef;
 
 template <const ::Nirvana::ExportInterface* ref, class Content>
 class TypeCodeTypeDefImpl :
-	public TypeCodeStatic <TypeCodeTypeDef <ref>, TypeCodeTK <tk_alias>,
+	public TypeCodeStatic <TypeCodeTypeDef <ref>, TypeCodeTK <TCKind::tk_alias>,
 		TypeCodeOps <void> >,
 	public TypeCodeContentType <Content>,
 	public TypeCodeName < TypeCodeTypeDef <ref> >
 {
-	typedef TypeCodeStatic <TypeCodeTypeDef <ref>, TypeCodeTK <tk_alias>,
+	typedef TypeCodeStatic <TypeCodeTypeDef <ref>, TypeCodeTK <TCKind::tk_alias>,
 		TypeCodeOps <void> > Base;
 public:
 	using TypeCodeContentType <Content>::_content_type;

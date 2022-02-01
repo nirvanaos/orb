@@ -36,12 +36,12 @@ namespace Internal {
 template <class S>
 class TypeCodeStruct :
 	public TypeCodeStatic <TypeCodeStruct <S>,
-		TypeCodeWithId <tk_struct, RepIdOf <S> >, TypeCodeOps <S> >,
+		TypeCodeWithId <TCKind::tk_struct, RepIdOf <S> >, TypeCodeOps <S> >,
 	public TypeCodeMembers <S>,
 	public TypeCodeName <S>
 {
 	typedef TypeCodeStatic <TypeCodeStruct <S>,
-		TypeCodeWithId <tk_struct, RepIdOf <S> >, TypeCodeOps <S> > Base;
+		TypeCodeWithId <TCKind::tk_struct, RepIdOf <S> >, TypeCodeOps <S> > Base;
 	typedef TypeCodeMembers <S> Members;
 public:
 	using TypeCodeName <S>::_name;
@@ -61,7 +61,7 @@ public:
 	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		I_ref <TypeCode> tco = TypeCodeBase::dereference_alias (other);
-		if (!TypeCodeBase::equivalent (tk_struct, Base::RepositoryType::repository_id_, tco))
+		if (!TypeCodeBase::equivalent (TCKind::tk_struct, Base::RepositoryType::repository_id_, tco))
 			return false;
 		return TypeCodeBase::equivalent (Members::members (), Members::member_count (), tco);
 	}

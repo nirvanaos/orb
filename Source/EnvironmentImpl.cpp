@@ -84,8 +84,8 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, void* param,
 					I_ptr <TypeCode> tc = pa->type ();
 					if (tc) {
 						try {
-							assert (tc->kind () == tk_except);
-							if (tc->kind () == tk_except && set_user (tc->id (), pa->data (), user_exceptions))
+							assert (tc->kind () == TCKind::tk_except);
+							if (tc->kind () == TCKind::tk_except && set_user (tc->id (), pa->data (), user_exceptions))
 								return;
 						} catch (...) {
 						}

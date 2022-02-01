@@ -36,11 +36,11 @@ namespace Internal {
 template <class E, bool members = false>
 class TypeCodeException :
 	public TypeCodeStatic <TypeCodeException <E, members>,
-		TypeCodeWithId <tk_except, RepIdOf <E> >, TypeCodeOps <typename E::_Data> >,
+		TypeCodeWithId <TCKind::tk_except, RepIdOf <E> >, TypeCodeOps <typename E::_Data> >,
 	public TypeCodeMembersOptional <E, members>
 {
 	typedef TypeCodeStatic <TypeCodeException <E, members>,
-		TypeCodeWithId <tk_except, RepIdOf <E> >, TypeCodeOps <typename E::_Data> > Base;
+		TypeCodeWithId <TCKind::tk_except, RepIdOf <E> >, TypeCodeOps <typename E::_Data> > Base;
 	typedef TypeCodeMembersOptional <E, members> Members;
 public:
 	using Members::_member_count;
@@ -62,7 +62,7 @@ public:
 	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		I_ref <TypeCode> tco = TypeCodeBase::dereference_alias (other);
-		return TypeCodeBase::equivalent (tk_except, RepIdOf <E>::repository_id_, tco)
+		return TypeCodeBase::equivalent (TCKind::tk_except, RepIdOf <E>::repository_id_, tco)
 			&& TypeCodeBase::equivalent (Members::members (), Members::member_count (), tco);
 	}
 };
