@@ -25,6 +25,9 @@
 *  popov.nirvana@gmail.com
 */
 
+#ifndef MARSHAL_CONTEXT_IDL_
+#define MARSHAL_CONTEXT_IDL_
+
 module Nirvana{
 
 native Pointer;
@@ -49,3 +52,6 @@ native Interface;
 
 };
 };
+
+#endif
+

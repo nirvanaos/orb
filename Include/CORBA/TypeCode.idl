@@ -1,0 +1,106 @@
+/// \file
+/// TypeCode
+/// CORBA 3.0 Chapter 4
+
+#include "TCKind.idl"
+#include "Marshal.idl"
+#include "Unmarshal.idl"
+
+module CORBA {
+
+#ifdef _PRE_3_0_COMPILER_ 
+#pragma prefix "omg.org"
+#else
+typeprefix CORBA "omg.org";
+#endif
+
+typedef string RepositoryId;
+typedef string Identifier;
+typedef short Visibility;
+
+typedef short ValueModifier;
+const ValueModifier VM_NONE = 0;
+const ValueModifier VM_CUSTOM = 1;
+const ValueModifier VM_ABSTRACT = 2;
+const ValueModifier VM_TRUNCATABLE = 3;
+
+pseudo interface TypeCode
+{
+	exception Bounds {};
+	exception BadKind {};
+
+	// for all TypeCode kinds
+	boolean equal (in TypeCode tc);
+	boolean equivalent (in TypeCode tc);
+	TypeCode get_compact_typecode ();
+	TCKind kind ();
+
+	// for tk_objref, tk_struct,    tk_union,  tk_enum, tk_alias, 
+	//     tk_value,  tk_value_box, tk_native, tk_abstract_interface
+	// and tk_except
+	RepositoryId id () raises (BadKind);
+	
+	// for tk_objref, tk_struct,    tk_union,  tk_enum, tk_alias, 
+	//     tk_value,  tk_value_box, tk_native, tk_abstract_interface
+	// and tk_except
+	Identifier name () raises (BadKind);
+	
+	// for tk_struct, tk_union, tk_enum, tk_value, 
+	// and tk_except
+	unsigned long member_count () raises (BadKind);
+	Identifier member_name (in unsigned long index) raises (BadKind, Bounds);
+	
+	// for tk_struct, tk_union, tk_value, and tk_except
+	TypeCode member_type (in unsigned long index) raises (BadKind, Bounds);
+	
+	// for tk_union
+	any member_label (in unsigned long index) raises (BadKind, Bounds);
+	TypeCode discriminator_type () raises (BadKind);
+	long default_index () raises (BadKind);
+	
+	// for tk_string, tk_sequence, and tk_array
+	unsigned long length () raises (BadKind);
+
+	// for tk_sequence, tk_array, tk_value_box, and tk_alias
+	TypeCode content_type () raises (BadKind);
+
+	// for tk_fixed
+	unsigned short fixed_digits () raises (BadKind);
+	short fixed_scale () raises (BadKind);
+
+	// for tk_value
+	Visibility member_visibility (in unsigned long index) raises (BadKind, Bounds);
+	ValueModifier type_modifier () raises (BadKind);
+	TypeCode concrete_base_type () raises (BadKind);
+
+	///@{
+	/// Nirvana extensions.
+	/// NOTE: For exceptions, all methods below are related to the exception data, not the exception itself.
+
+	/// Size of the object.
+	Nirvana::Size n_size ();
+
+	/// Call the default constructor.
+	void n_construct (in Nirvana::Pointer p);
+
+	/// Destroy the object.
+	void n_destruct (in Nirvana::Pointer p);
+
+	/// Call copy constructor.
+	void n_copy (in Nirvana::Pointer dst, in Nirvana::ConstPointer src);
+
+	/// Call move constructor. Fallbacks to copy constructor if no move constructor exists.
+	void n_move (in Nirvana::Pointer dst, in Nirvana::Pointer src);
+
+	/// If returns `false` then `marshaler` and `unmarshaler` parameters may be `nil`.
+	boolean n_has_marshal ();
+
+	void n_marshal_in (in Nirvana::ConstPointer src, in Internal::Marshal marshaler, in Nirvana::Pointer dst);
+	void n_marshal_out (in Nirvana::Pointer src, in Internal::Marshal marshaler, in Nirvana::Pointer dst);
+	void n_unmarshal (in Nirvana::ConstPointer src, in Internal::Unmarshal unmarshaler, in Nirvana::Pointer dst);
+
+	///@}
+};
+
+};
+
