@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../IORequest.h"
+#include "../IORequest.idl"
 
 module CORBA {
 module Internal {
@@ -31,9 +31,6 @@ module Internal {
 /// Low 16 bits contain the interface index.
 /// High 16 bits contain the operation index within the interface.
 typedef unsigned long OperationIndex;
-
-interface Marshal;
-interface Unmarshal;
 
 /// Interoperable Object Reference.
 /// 
