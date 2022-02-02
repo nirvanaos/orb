@@ -1,0 +1,184 @@
+/// \file
+/*
+* Nirvana IDL support library.
+*
+* This is a part of the Nirvana project.
+*
+* Author: Igor Popov
+*
+* Copyright (c) 2021 Igor Popov.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+*
+* Send comments and/or bug reports to:
+*  popov.nirvana@gmail.com
+*/
+#include <TypeCode.idl>
+
+module CORBA{
+module Internal {
+
+native Interface;
+native CharPtr;
+native ConstCharPtr;
+native WCharPtr;
+native ConstWCharPtr;
+
+/// Interoperable Object Request.
+/// 
+/// Interface to the implementation of the some Inter-ORB protocol.
+pseudo interface IORequest
+{
+  ///@{
+  /// Marshal/unmarshal data that meet the common data representation.
+
+  /// Marshal CDR data.
+  /// 
+  /// \param align Data alignment
+  /// \size Data size.
+  /// \param data Pointer to the data with common-data-representation (CDR).
+  void marshal_CDR (in Nirvana::Size align, in Nirvana::Size size,
+    in Nirvana::ConstPointer data);
+
+  /// Unmarshal CDR data.
+  /// 
+  /// \param align Data alignment
+  /// \size Data size.
+  /// \param [out] data Pointer to the internal data buffer.
+  /// \returns `true` if the byte order must be swapped after unmarshaling.
+  boolean unmarshal_CDR (in Nirvana::Size align, in Nirvana::Size size,
+    out Nirvana::ConstPointer data);
+
+  /// Marshal CDR sequence.
+  /// 
+  /// \param align Data alignment
+  /// \param element_size Element size.
+  /// \param element_count Count of elements.
+  /// \param data Pointer to the data with common-data-representation (CDR).
+  /// \param allocated_size If this parameter is not zero, the request
+  ///        object becomes an owner of the memory block.
+  void marshal_CDR_seq (in Nirvana::Size align, in Nirvana::Size element_size,
+    in Nirvana::Size element_count, in Nirvana::Pointer data,
+    in Nirvana::Size allocated_size);
+
+  /// Unmarshal CDR sequence.
+  /// 
+  /// \param align Data alignment
+  /// \param element_size Element size.
+  /// \param [out] element_count Count of elements.
+  /// \param [out] data Pointer to the data with common-data-representation (CDR).
+  /// \param [out] allocated_size If this parameter is not zero, the caller
+  ///              becomes an owner of the memory block.
+  boolean unmarshal_CDR_seq (in Nirvana::Size align,
+    in Nirvana::Size element_size, out Nirvana::Size element_count,
+    out Nirvana::Pointer data, out Nirvana::Size allocated_size);
+
+  Nirvana::Pointer marshal_get_buffer (in Nirvana::Size align,
+    in Nirvana::Size size_at_least);
+
+  Nirvana::Pointer marshal_get_buffer_seq (in Nirvana::Size align,
+    in Nirvana::Size element_size, out Nirvana::Size element_count);
+
+  ///@}
+
+  ///@{
+  /// Marshal/unmarshal character data.
+
+  void marshal_char (in Nirvana::Size count, in ConstCharPtr data);
+  void unmarshal_char (in Nirvana::Size count, in CharPtr data);
+
+  void marshal_string (inout string data, in boolean move);
+  void unmarshal_string (out string data);
+
+  typedef sequence <char> CharSeq;
+  void marshal_char_seq (inout CharSeq data, in boolean move);
+  void unmarshal_char_seq (out CharSeq data);
+
+  void marshal_wchar (in Nirvana::Size count, in ConstWCharPtr data);
+  void unmarshal_wchar (in Nirvana::Size count, in WCharPtr data);
+
+  void marshal_wstring (inout wstring data, in boolean move);
+  void unmarshal_wstring (out wstring data);
+
+  typedef sequence <wchar> WCharSeq;
+  void marshal_wchar_seq (inout WCharSeq data, in boolean move);
+  void unmarshal_wchar_seq (out WCharSeq data);
+
+  ///@}
+
+  ///@{
+  /// Marshal/unmarshal fixed size non-CDR data.
+
+  void marshal_fixed_size (in Nirvana::Size align,
+    in Nirvana::Size element_size, in Nirvana::Size element_count,
+    in Nirvana::ConstPointer data, in TypeCode element_tc);
+
+  boolean unmarshal_fixed_size (in Nirvana::Size align,
+    in Nirvana::Size element_size, in Nirvana::Size element_count,
+    in Nirvana::Pointer data, in TypeCode element_tc);
+
+  void marshal_fixed_size_seq (in Nirvana::Size align, 
+    in Nirvana::Size element_size, in Nirvana::Size element_count,
+    in Nirvana::Pointer data, in Nirvana::Size allocated_size,
+    in TypeCode element_tc);
+
+  boolean unmarshal_fixed_size_seq (in Nirvana::Size align,
+    in Nirvana::Size element_size, out Nirvana::Size element_count,
+    out Nirvana::Pointer data, out Nirvana::Size allocated_size,
+    in TypeCode element_tc);
+
+  ///@}
+
+  ///@{
+  /// Object operations.
+
+  /// \brief Marshal interface.
+  /// 
+  /// \param obj The interface.
+  void marshal_interface (in Object obj, in Interface itf);
+
+  Interface unmarshal_interface ();
+
+  void marshal_type_code (in TypeCode tc);
+  TypeCode unmarshal_type_code ();
+
+  // TBD:
+  //void marshal_value (in ValueBase val);
+  //ValueBase unmarshal_value (in Interface val_factory);
+
+  ///@}
+
+  ///@{
+  /// Callee operations.
+ 
+  /// Return exception to caller.
+  void set_exception (inout any e);
+
+  /// Marks request as successful.
+  void success ();
+
+  ///@}
+
+  ///@{
+  /// Caller operations.
+
+  boolean is_completed ();
+
+  void wait ();
+
+  ///@}
+};
+
+};
+};

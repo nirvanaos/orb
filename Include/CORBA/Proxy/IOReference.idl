@@ -23,13 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-module Nirvana {
-
-native Pointer;
-native ConstPointer;
-native Size;
-
-};
+#include "../IORequest.h"
 
 module CORBA {
 module Internal {
@@ -41,46 +35,20 @@ typedef unsigned long OperationIndex;
 interface Marshal;
 interface Unmarshal;
 
-/// \brief Interoperable Object Reference.
-///        Interface to the implementation of the some Inter-ORB protocol.
-abstract valuetype IOReference
+/// Interoperable Object Reference.
+/// 
+/// Interface to the implementation of the some Inter-ORB protocol.
+pseudo interface IOReference
 {
 	/// Returns Object reference.
 	readonly attribute Object object;
 
-	/// Creates Marshal object.
-	Marshal create_marshaler ();
+	/// Create request.
+	IORequest create_request ();
 
-	/// Performs a synchronous call.
-	/// \param op                Operation index.
-	/// \param in_params         Input parameters block's pointer.
-	///                          Contains input values for in and inout parameters.
-	///                          May be `nil` if there aren't in and inout parameters.
-	/// \param in_params_size    Size of the input parameters block.
-	/// \param marshaler         `Marshal` object. May be `nil` on input. Always `nil` on output.
-	/// \param out_params        Pointer to a memory buffer for output parameters.
-	/// \param out_params_size   Size of the output parameters block.
-	/// \returns                 `Unmarshal` object for returned data. May be `nil`.
-	Unmarshal call (in OperationIndex op,
-		in ::Nirvana::ConstPointer in_params, in ::Nirvana::Size in_params_size, inout Marshal marshaler,
-		in ::Nirvana::Pointer out_params, in ::Nirvana::Size out_params_size) raises (UnknownUserException);
-
-	/// Performs an asynchronous call.
-	/// \param op              Operation index.
-	/// \param in_params       Input parameters block's pointer.
-	///                        Contains input values for in and inout parameters.
-	///                        May be nil if there aren't in and inout parameters.
-	/// \param in_params_size  Size of the input parameters block.
-	/// \param marshaler       Marshal object. May be nil.
-	/// \param out_params_size Size of the output parameters block.
-	/// \param _oneway         TRUE if this is oneway operation.
-	/// \returns               AsyncCall object. Nil if _oneway is TRUE.
-	
-	/* TODO: Not yet implemented
-	AsyncCall async_call (OperationIndex op,
-		::Nirvana::ConstPointer in_params, ::Nirvana::Size in_params_size, Marshal marshaler,
-		::Nirvana::Size out_params_size, boolean _oneway);
-		*/
+	void call (in IORequest iorq, in OperationIndex op);
+	void call_oneway (in IORequest iorq, in OperationIndex op);
+	// TBD: void call_async (in IORequest iorq, in OperationIndex op, in Interface callback);
 };
 
 };
