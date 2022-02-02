@@ -26,7 +26,7 @@
 */
 #include <TypeCode.idl>
 
-module CORBA{
+module CORBA {
 module Internal {
 
 native Interface;
@@ -146,16 +146,15 @@ pseudo interface IORequest
   /// \brief Marshal interface.
   /// 
   /// \param obj The interface.
-  void marshal_interface (in Object obj, in Interface itf);
+  void marshal_interface (in Interface itf);
 
-  Interface unmarshal_interface ();
+  Interface unmarshal_interface (in string rep_id);
 
   void marshal_type_code (in TypeCode tc);
   TypeCode unmarshal_type_code ();
 
-  // TBD:
-  //void marshal_value (in ValueBase val);
-  //ValueBase unmarshal_value (in Interface val_factory);
+  void marshal_value (in ValueBase val);
+  Interface unmarshal_value (in string rep_id);
 
   ///@}
 
@@ -173,7 +172,7 @@ pseudo interface IORequest
   ///@{
   /// Caller operations.
 
-  boolean is_completed ();
+  readonly attribute boolean completed;
 
   void wait ();
 
