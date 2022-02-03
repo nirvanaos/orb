@@ -102,11 +102,11 @@ pseudo interface TypeCode
 	/// Call move constructor. Fallbacks to copy constructor if no move constructor exists.
 	void n_move (in Nirvana::Pointer dst, in Nirvana::Pointer src);
 
-	void n_marshal_in (in Nirvana::ConstPointer src, in Internal::IORequest iorq);
-	void n_marshal_out (in Nirvana::Pointer src, in Internal::IORequest iorq);
-	void n_unmarshal (in Internal::IORequest iorq, in Nirvana::Pointer dst);
-	void n_to_CDR (in Nirvana::ConstPointer src, in Nirvana::Size count, in Internal::IORequest iorq);
-	void n_from_CDR (in Internal::IORequest iorq, in Nirvana::Size count, in boolean swap_bytes, in Nirvana::Pointer dst);
+	void n_marshal_in (in Nirvana::ConstPointer src, in Nirvana::Size count, in Internal::IORequest iorq);
+	void n_marshal_out (in Nirvana::Pointer src, in Nirvana::Size count, in Internal::IORequest iorq);
+	void n_unmarshal (in Internal::IORequest iorq, in Nirvana::Size count, in Nirvana::Pointer dst);
+	void n_marshal_CDR (in Nirvana::ConstPointer src, in Nirvana::Size count, in Internal::IORequest iorq);
+	void n_unmarshal_CDR (in Internal::IORequest iorq, in Nirvana::Size count, in Nirvana::Pointer dst);
 
 	///@}
 };

@@ -153,23 +153,6 @@ struct TypeByRef
 		return nullptr;
 	}
 
-	static const bool has_marshal = false;
-
-	static void marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst) NIRVANA_NOEXCEPT
-	{
-		dst = reinterpret_cast <const ABI&> (src);
-	}
-
-	static void marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst) NIRVANA_NOEXCEPT
-	{
-		dst = reinterpret_cast <const ABI&> (src);
-	}
-
-	static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst) NIRVANA_NOEXCEPT
-	{
-		dst = reinterpret_cast <const Var&> (src);
-	}
-
 #ifdef LEGACY_CORBA_CPP
 
 	// Client T_var class for the legacy C++ IDL mapping support

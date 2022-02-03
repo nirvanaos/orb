@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,17 +24,17 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_ABI_H_
-#define NIRVANA_ORB_ABI_H_
+#ifndef NIRVANA_ORB_CDR_H_
+#define NIRVANA_ORB_CDR_H_
 #pragma once
 
 namespace CORBA {
 namespace Internal {
 
-/// For each structure, union or enum data type T, IDL compiler generates `CORBA::Internal::ABI <T>` structure.
-/// ABI type must be POD (Plain Old Data, mustn't have any constructors and destructors).
-/// IDL compiler replaces all non-POD struct members with corresponding ABI structures.
-template <class T> struct ABI;
+/// For each fixed length data type T, IDL compiler generates `CORBA::Internal::CDR <T>` structure.
+/// CDR type must be POD (Plain Old Data, mustn't have any constructors and destructors).
+/// IDL compiler replaces all non-POD struct members with corresponding CDR structures.
+template <typename T> struct CDR;
 
 }
 }

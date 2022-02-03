@@ -28,8 +28,7 @@
 #pragma once
 
 #include <Nirvana/throw_exception.h>
-#include "TypeByVal.h"
-#include <type_traits>
+#include "TypeFixLen.h"
 
 namespace CORBA {
 namespace Internal {
@@ -38,13 +37,13 @@ typedef std::conditional_t <sizeof (size_t) >= 4, ULong, size_t> ABI_enum;
 
 /// Base for enum data types
 template <class T, T last>
-struct TypeEnum : TypeByVal <T, ABI_enum>
+struct TypeEnum : TypeFixLen <T, ABI_enum, ULong>
 {
 	static_assert (sizeof (T) == sizeof (ABI_enum), "IDL enumerations must be declared as : ABI_enum.");
 
 	static const ABI_enum count_ = (ABI_enum)last + 1;
 
-	typedef TypeByVal <T, ABI_enum> Base;
+	typedef TypeFixLen <T, ABI_enum, ULong> Base;
 
 	typedef typename Base::Var Var;
 	typedef typename Base::ABI ABI;

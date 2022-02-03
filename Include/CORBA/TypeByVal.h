@@ -116,23 +116,6 @@ struct TypeByVal
 	{
 		return ABI_ret ();
 	}
-
-	static const bool has_marshal = false;
-
-	static void marshal_in (Var src, Marshal_ptr marshaler, ABI& dst) NIRVANA_NOEXCEPT
-	{
-		dst = (ABI)src;
-	}
-
-	static void marshal_out (Var src, Marshal_ptr marshaler, ABI& dst) NIRVANA_NOEXCEPT
-	{
-		dst = (ABI)src;
-	}
-
-	static void unmarshal (ABI src, Unmarshal_ptr unmarshaler, Var& dst) NIRVANA_NOEXCEPT
-	{
-		dst = (Var)src;
-	}
 };
 
 }

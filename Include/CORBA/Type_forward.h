@@ -81,24 +81,49 @@ template <> struct Type <T>
   // Type code
   static I_ptr <TypeCode> type_code ();
 
+  /// Common data representation.
+  typedef CDR <T> CDR;
+
   /// \brief Copies input data to the marshaling buffer.
-  /// \param src Source value.
+  /// \param src Source values.
+  /// \param count Count of source values.
   /// \param rq  IORequest interface.
-  static void marshal_in (const Var& src, IORequest::_ptr_type rq);
+  static void marshal_in (const Var* src, size_t count, IORequest::_ptr_type rq);
 
   /// \brief Moves output data to the marshaling buffer.
-  /// \param src Source value. After marshalling, the value can be released.
+  /// \param src Source values. After marshalling, the values will be released.
+  /// \param count Count of source values.
   /// \param rq  IORequest interface.
-  static void marshal_out (Var& src, IORequest::_ptr_type rq);
+  static void marshal_out (Var* src, size_t count, IORequest::_ptr_type rq);
 
   /// \brief Moves data from marshaling buffer to the local variable.
   /// \param rq  IORequest interface.
-  /// \param dst Destination value.
-  static void unmarshal (IORequest::_ptr_type rq, Var& dst);
+  /// \param count Count values.
+  /// \param dst Destination values buffer.
+  static void unmarshal (IORequest::_ptr_type rq, size_t count, Var* dst);
 
   /// \brief Swap byte order to change endianness.
+  /// Must be defined for:
+  ///   - Integer types
+  ///   - Float types
+  ///   - structures
+  ///   - unions
+  ///   - exceptions
+  /// 
   /// \param val Value.
-  static void byteswap (Var& val);
+  static void byteswap (CDR& cdr);
+
+  /// `true` if data representation is CDR compatible,
+  /// `false` if marshal_CDR() and unmarshal_CDR() must be called.
+  /// Must be defined for fixed length data types, except for characters.
+  ///
+  static const bool is_CDR;
+
+  /// Marshal data as CDR.
+  static void marshal_CDR (const Var* src, size_t count, IORequest::_ptr_type rq);
+
+  /// Unmarshal data from CDR.
+  static void unmarshal_CDR (IORequest::_ptr_type rq, size_t count, Var* dst);
 };
 ~~~
 */

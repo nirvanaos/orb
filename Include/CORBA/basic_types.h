@@ -29,8 +29,9 @@
 #define NIRVANA_ORB_BASIC_TYPES_H_
 #pragma once
 
-#include "Boolean.h"
-#include "TypeFixLen.h"
+#include "TypePrimitive.h"
+#include <Nirvana/ImportInterface.h>
+#include "tc_constants.h"
 
 #ifdef LEGACY_CORBA_CPP
 #define NIRVANA_TYPE_OUT(T) typedef T& T##_out;
@@ -38,12 +39,13 @@
 #define NIRVANA_TYPE_OUT(T)
 #endif
 
-#define NIRVANA_BASIC_TYPE(T, tc) namespace Internal { template <> struct Internal::Type <T> : Internal::TypeFixLen <T> {\
+#define NIRVANA_BASIC_TYPE(T, tc) namespace Internal { template <> struct Internal::Type <T> : Internal::TypePrimitive <T> {\
 static I_ptr <TypeCode> type_code () { return tc; } }; }\
 NIRVANA_TYPE_OUT(T)
 
 namespace CORBA {
 
+NIRVANA_BASIC_TYPE (Boolean, _tc_boolean)
 NIRVANA_BASIC_TYPE (Char, _tc_char)
 NIRVANA_BASIC_TYPE (WChar, _tc_wchar)
 NIRVANA_BASIC_TYPE (Octet, _tc_octet)

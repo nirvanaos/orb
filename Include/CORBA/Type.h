@@ -34,7 +34,6 @@
 #include <Nirvana/ImportInterface.h>
 #include "UserException.h"
 #include "Any.h"
-#include "Boolean.h"
 #include "EnvironmentEx.h"
 #include "TypeCode.h"
 #include "tc_constants.h"
