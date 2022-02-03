@@ -24,7 +24,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <TypeCode.idl>
+#include "TypeCode.idl"
 
 module CORBA {
 module Internal {

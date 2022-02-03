@@ -106,7 +106,7 @@ pseudo interface TypeCode
 	void n_marshal_out (in Nirvana::Pointer src, in Internal::IORequest iorq);
 	void n_unmarshal (in Internal::IORequest iorq, in Nirvana::Pointer dst);
 	void n_to_CDR (in Nirvana::ConstPointer src, in Nirvana::Size count, in Internal::IORequest iorq);
-	void n_from_CDR (in Nirvana::Pointer dst, in Nirvana::Size count, in Internal::IORequest iorq, in boolean swap_bytes);
+	void n_from_CDR (in Internal::IORequest iorq, in Nirvana::Size count, in boolean swap_bytes, in Nirvana::Pointer dst);
 
 	///@}
 };

@@ -82,25 +82,23 @@ template <> struct Type <T>
   static I_ptr <TypeCode> type_code ();
 
   /// \brief Copies input data to the marshaling buffer.
-  /// \param src         Source value.
-  /// \param marshaler   Marshaler interface. May be `nil` if has_marshal is `false`.
-  /// \param dst         Destination value ABI.
-  static void marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst);
+  /// \param src Source value.
+  /// \param rq  IORequest interface.
+  static void marshal_in (const Var& src, IORequest::_ptr_type rq);
 
   /// \brief Moves output data to the marshaling buffer.
-  /// \param src         Source value. After marshalling, the value can be released.
-  /// \param marshaler   Marshaler interface. May be `nil` if has_marshal is `false`.
-  /// \param dst         Destination value ABI.
-  static void marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst);
+  /// \param src Source value. After marshalling, the value can be released.
+  /// \param rq  IORequest interface.
+  static void marshal_out (Var& src, IORequest::_ptr_type rq);
 
   /// \brief Moves data from marshaling buffer to the local variable.
-  /// \param src         Source value ABI.
-  /// \param unmarshaler Unmarshaler interface. May be `nil` if has_marshal is `false`.
-  /// \param dst         Destination value.
-  static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst);
+  /// \param rq  IORequest interface.
+  /// \param dst Destination value.
+  static void unmarshal (IORequest::_ptr_type rq, Var& dst);
 
-  /// \brief `true` if marshal operations are not trivial copy.
-  static const bool has_marshal;
+  /// \brief Swap byte order to change endianness.
+  /// \param val Value.
+  static void byteswap (Var& val);
 };
 ~~~
 */
