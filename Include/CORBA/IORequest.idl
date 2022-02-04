@@ -48,7 +48,7 @@ pseudo interface IORequest
   /// \param align Data alignment
   /// \size Data size.
   /// \param data Pointer to the data with common-data-representation (CDR).
-  void marshal_CDR (in Nirvana::Size align, in Nirvana::Size size,
+  void marshal (in Nirvana::Size align, in Nirvana::Size size,
     in Nirvana::ConstPointer data);
 
   /// Unmarshal CDR data.
@@ -57,7 +57,7 @@ pseudo interface IORequest
   /// \size Data size.
   /// \param [out] data Pointer to the internal data buffer.
   /// \returns `true` if the byte order must be swapped after unmarshaling.
-  boolean unmarshal_CDR (in Nirvana::Size align, in Nirvana::Size size,
+  boolean unmarshal (in Nirvana::Size align, in Nirvana::Size size,
     out Nirvana::Pointer data);
 
   /// Marshal CDR sequence.
@@ -68,7 +68,7 @@ pseudo interface IORequest
   /// \param data Pointer to the data with common-data-representation (CDR).
   /// \param allocated_size If this parameter is not zero, the request
   ///        object becomes an owner of the memory block.
-  void marshal_CDR_seq (in Nirvana::Size align, in Nirvana::Size element_size,
+  void marshal_seq (in Nirvana::Size align, in Nirvana::Size element_size,
     in Nirvana::Size element_count, in Nirvana::Pointer data,
     in Nirvana::Size allocated_size);
 
@@ -80,7 +80,7 @@ pseudo interface IORequest
   /// \param [out] data Pointer to the data with common-data-representation (CDR).
   /// \param [out] allocated_size If this parameter is not zero, the caller
   ///              becomes an owner of the memory block.
-  boolean unmarshal_CDR_seq (in Nirvana::Size align,
+  boolean unmarshal_seq (in Nirvana::Size align,
     in Nirvana::Size element_size, out Nirvana::Size element_count,
     out Nirvana::Pointer data, out Nirvana::Size allocated_size);
 
@@ -114,29 +114,6 @@ pseudo interface IORequest
   typedef sequence <wchar> WCharSeq;
   void marshal_wchar_seq (inout WCharSeq data, in boolean move);
   void unmarshal_wchar_seq (out WCharSeq data);
-
-  ///@}
-
-  ///@{
-  /// Marshal/unmarshal fixed length non-CDR data.
-
-  void marshal_fixed_len (in Nirvana::Size align,
-    in Nirvana::Size element_size, in Nirvana::Size element_count,
-    in Nirvana::ConstPointer data, in TypeCode element_tc);
-
-  void unmarshal_fixed_len (in Nirvana::Size align,
-    in Nirvana::Size element_size, in Nirvana::Size element_count,
-    in Nirvana::Pointer data, in TypeCode element_tc);
-
-  void marshal_fixed_len_seq (in Nirvana::Size align, 
-    in Nirvana::Size element_size, in Nirvana::Size element_count,
-    in Nirvana::Pointer data, in Nirvana::Size allocated_size,
-    in TypeCode element_tc);
-
-  void unmarshal_fixed_len_seq (in Nirvana::Size align,
-    in Nirvana::Size element_size, out Nirvana::Size element_count,
-    out Nirvana::Pointer data, out Nirvana::Size allocated_size,
-    in TypeCode element_tc);
 
   ///@}
 

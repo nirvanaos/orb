@@ -28,7 +28,6 @@
 #define NIRVANA_ORB_TYPEPRIMITIVE_H_
 #pragma once
 
-#include "CDR.h"
 #include "primitive_types.h"
 #include "TypeFixLen.h"
 #include <Nirvana/bitutils.h>
@@ -36,75 +35,11 @@
 namespace CORBA {
 namespace Internal {
 
-/// Check that a primitive type is CDR.
-template <typename T> struct IsCDR
-{
-	static const bool value = 
-		(std::is_integral <T>::value && !std::is_same <Char> && !std::is_same <WChar>)
-		||
-		(std::is_floating_point <T> && std::numeric_limits <T>::is_iec559);
-};
-
-/// SoftFloat is CDR - compatible.
-template <size_t size>
-struct IsCDR <SoftFloat <size> >
-{
-	static const bool value = true;
-};
-
-template <>
-struct CDR <float>
-{
-	CDR (float)
-	{
-		static_assert (std::numeric_limits <float>::is_iec559, "Unknown float representation");
-	}
-
-	operator float () const
-	{
-		return 0;
-	}
-
-	uint32_t u;
-};
-
-template <>
-struct CDR <double>
-{
-	CDR (double)
-	{
-		static_assert (std::numeric_limits <double>::is_iec559, "Unknown double representation");
-	}
-	
-	operator double () const
-	{
-		return 0;
-	}
-
-	uint64_t u;
-};
-
-template <>
-struct CDR <long double>
-{
-	CDR (long double)
-	{
-		static_assert (std::numeric_limits <long double>::is_iec559, "Unknown long double representation");
-	}
-
-	operator long double () const
-	{
-		return 0;
-	}
-
-	uint64_t u [2];
-};
-
 // Byte order swap
 
 inline UShort byteswap (UShort& v)
 {
-	v = Nirvana::byteswap (v);
+	return Nirvana::byteswap (v);
 }
 
 inline Short byteswap (const Short& v)
@@ -155,11 +90,11 @@ inline uint8_t byteswap (const uint8_t& v)
 
 template <typename T>
 struct TypePrimitive :
-	public TypeFixLen <T, T, std::conditional <IsCDR <T>, T, CDR <T> >::type>
+	public TypeFixLen <T, T>
 {
-	static void byteswap (CDR& cdr)
+	static void byteswap (T& v)
 	{
-		cdr = Internal::byteswap (cdr);
+		v = Internal::byteswap (v);
 	}
 };
 
@@ -183,16 +118,6 @@ struct TypePrimitive <Char> :
 	{
 		rq->unmarshal_char (count, dst);
 	}
-
-	static void marshal_CDR (const Char* src, size_t count, IORequest::_ptr_type rq)
-	{
-		marshal_CDR_stub ();
-	}
-
-	static void unmarshal_CDR (IORequest::_ptr_type rq, size_t count, Char* dst)
-	{
-		marshal_CDR_stub ();
-	}
 };
 
 template <>
@@ -215,16 +140,6 @@ struct TypePrimitive <WChar> :
 	{
 		rq->unmarshal_wchar (count, dst);
 	}
-
-	static void marshal_CDR (const WChar* src, size_t count, IORequest::_ptr_type rq)
-	{
-		marshal_CDR_stub ();
-	}
-
-	static void unmarshal_CDR (IORequest::_ptr_type rq, size_t count, WChar* dst)
-	{
-		marshal_CDR_stub ();
-	}
 };
 
 /// We can not use `bool' built-in type across the binary boundaries because
@@ -232,7 +147,7 @@ struct TypePrimitive <WChar> :
 
 template <>
 struct TypePrimitive <Boolean> :
-	public TypeByVal <Boolean, uint8_t>
+	public TypeByVal <Boolean, Char>
 {
 	class C_inout
 	{
@@ -249,37 +164,32 @@ struct TypePrimitive <Boolean> :
 
 		ABI_out operator & ()
 		{
-			return (uint8_t*)&abi_;
+			return (Char*)&abi_;
 		}
 
 	protected:
 		Var& ref_;
 		// The ABI for boolean is Char.
-		// But sizeof(bool) is implementation-dependent and might be > sizeof(uint8_t).
+		// But sizeof(bool) is implementation-dependent and might be > sizeof(Char).
 		// So we reserve size_t (the machine word) as ABI for boolean in assumption that bool implementation can't be wide.
 		size_t abi_;
 	};
 
 	typedef C_inout C_out;
 
-	// For the ABI compatibility, compiler uses uint8_t as structured type member of boolean type.
-	// So we mark it as CDR compatible.
-	static const bool is_CDR = true;
-
 	// We have 2 kinds of marshal unmarshal methods.
 
 	static void marshal_in (const ABI* src, size_t count, IORequest::_ptr_type rq)
 	{
-		rq->marshal_CDR (1, count, src);
+		rq->marshal (1, count, src);
 	}
 
 	static void marshal_in (const Boolean* src, size_t count, IORequest::_ptr_type rq)
 	{
-		assert (false);
-		ABI* dst = (ABI*)rq->marshal_get_buffer (1, count);
-		for (const Boolean *end = src + count; src != end; ++src, ++dst) {
-			*dst = *src;
-		}
+		assert (1 == count);
+		ABI* buf = (ABI*)rq->marshal_get_buffer (alignof (ABI), sizeof (ABI) * count);
+		for (const Boolean* end = src + count; src != end; ++src)
+			*(buf++) = src;
 	}
 
 	static void marshal_out (ABI* src, size_t count, IORequest::_ptr_type rq)
@@ -295,17 +205,17 @@ struct TypePrimitive <Boolean> :
 	static void unmarshal (IORequest::_ptr_type rq, size_t count, ABI* dst)
 	{
 		void* pbuf = nullptr;
-		rq->unmarshal_CDR (1, count, pbuf);
+		rq->unmarshal (1, count, pbuf);
 		real_copy ((const ABI*)pbuf, (const ABI*)pbuf + count, dst);
 	}
 
 	static void unmarshal (IORequest::_ptr_type rq, size_t count, Boolean* dst)
 	{
+		assert (1 == count);
 		void* pbuf = nullptr;
-		rq->unmarshal_CDR (1, count, pbuf);
-		for (ABI* src = (ABI*)pbuf, *end = src + count; src != end; ++src, ++dst) {
-			*dst = src != 0;
-		}
+		rq->unmarshal (1, count, pbuf);
+		for (const ABI* src = (const ABI*)pbuf,* end = src + count; src != end; ++src)
+			*(dst++) = src != 0;
 	}
 };
 

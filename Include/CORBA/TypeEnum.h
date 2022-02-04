@@ -28,7 +28,7 @@
 #pragma once
 
 #include <Nirvana/throw_exception.h>
-#include "TypeFixLen.h"
+#include "TypeByVal.h"
 
 namespace CORBA {
 namespace Internal {
@@ -37,7 +37,7 @@ typedef std::conditional_t <sizeof (size_t) >= 4, ULong, size_t> ABI_enum;
 
 /// Base for enum data types
 template <class T, T last>
-struct TypeEnum : TypeFixLen <T, ABI_enum, ULong>
+struct TypeEnum : TypeByVal <T, ABI_enum>
 {
 	static_assert (sizeof (T) == sizeof (ABI_enum), "IDL enumerations must be declared as : ABI_enum.");
 
@@ -123,6 +123,41 @@ struct TypeEnum : TypeFixLen <T, ABI_enum, ULong>
 		_check_pointer (p);
 		return (Var&)*p;
 	}
+
+	typedef ULong CDR; // In the common data representation, enum is 32 bit.
+
+	static void marshal_in (const T* src, size_t count, IORequest::_ptr_type rq)
+	{
+		if (sizeof (CDR) == sizeof (T))
+			rq->marshal (alignof (T), sizeof (T) * count, src);
+		else {
+			CDR* buf = rq->marshal_get_buffer (alignof (CDR), sizeof (CDR) * count);
+			for (const T* end = src + count; src != end; ++src) {
+				*(buf++) = (CDR)*src;
+			}
+		}
+	}
+
+	static void marshal_out (T* src, size_t count, IORequest::_ptr_type rq)
+	{
+		marshal_in (src, count, rq);
+	}
+
+	static void unmarshal (IORequest::_ptr_type rq, size_t count, T* dst)
+	{
+		void* pbuf = nullptr;
+		if (rq->unmarshal (alignof (T), sizeof (T) * count, pbuf)) {
+			for (CDR* src = (CDR*)pbuf, *end = src + count; src != end; ++src) {
+				Type <T>::byteswap (*src);
+			}
+		}
+		for (CDR* src = (CDR*)pbuf, *end = src + count; src != end; ++src, ++dst) {
+			ABI abi = (ABI)*src;
+			check (abi);
+			*dst = (T)abi;
+		}
+	}
+
 };
 
 }

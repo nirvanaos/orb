@@ -81,9 +81,6 @@ template <> struct Type <T>
   // Type code
   static I_ptr <TypeCode> type_code ();
 
-  /// Common data representation.
-  typedef CDR <T> CDR;
-
   /// \brief Copies input data to the marshaling buffer.
   /// \param src Source values.
   /// \param count Count of source values.
@@ -111,19 +108,7 @@ template <> struct Type <T>
   ///   - exceptions
   /// 
   /// \param val Value.
-  static void byteswap (CDR& cdr);
-
-  /// `true` if data representation is CDR compatible,
-  /// `false` if marshal_CDR() and unmarshal_CDR() must be called.
-  /// Must be defined for fixed length data types, except for characters.
-  ///
-  static const bool is_CDR;
-
-  /// Marshal data as CDR.
-  static void marshal_CDR (const Var* src, size_t count, IORequest::_ptr_type rq);
-
-  /// Unmarshal data from CDR.
-  static void unmarshal_CDR (IORequest::_ptr_type rq, size_t count, Var* dst);
+  static void byteswap (Var&);
 };
 ~~~
 */
