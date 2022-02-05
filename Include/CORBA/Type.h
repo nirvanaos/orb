@@ -29,8 +29,12 @@
 #pragma once
 
 #include "TypeFixLen.inl"
+#include "TypeVarLen.inl"
+#include "TypePrimitive.inl"
 #include "TypeEnum.inl"
+#include "Type_interface.inl"
 #include "Object.inl"
+#include "String.inl"
 #include "Sequence.inl"
 #include "Object.inl"
 #include "ValueBase.inl"

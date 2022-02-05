@@ -34,11 +34,13 @@
 namespace CORBA {
 namespace Internal {
 
+inline
 void TypeItf <TypeCode>::marshal_in (I_ptr <TypeCode> src, IORequest_ptr rq)
 {
 	rq->marshal_type_code (src);
 }
 
+inline
 void TypeItf <TypeCode>::unmarshal (IORequest_ptr rq, I_ref <TypeCode>& dst)
 {
 	dst = rq->unmarshal_type_code ();

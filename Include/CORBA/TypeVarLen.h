@@ -91,6 +91,20 @@ struct TypeVarLenBase : TypeByRef <T, TABI>
 	static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq);
 	static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq);
 	static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst);
+
+	// IDL helper methods
+
+	template <typename MT>
+	static void marshal_members (const MT* begin, const void* end, IORequest_ptr rq);
+
+	template <typename MT>
+	static void marshal_members (const Var& val, const MT* begin, IORequest_ptr rq);
+
+	template <typename MT>
+	static bool unmarshal_members (IORequest_ptr rq, MT* begin, const void* end);
+
+	template <typename MT>
+	static bool unmarshal_members (IORequest_ptr rq, const Var& val, MT* begin);
 };
 
 template <class T, class TABI>

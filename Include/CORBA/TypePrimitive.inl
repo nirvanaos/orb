@@ -38,7 +38,7 @@ namespace Internal {
 inline
 void TypePrimitive <Char>::marshal_in (const Char& src, IORequest_ptr rq)
 {
-	rq->marshal_char (1, src);
+	rq->marshal_char (1, &src);
 }
 
 inline
@@ -50,7 +50,7 @@ void TypePrimitive <Char>::marshal_in_a (const Char* src, size_t count, IOReques
 inline
 void TypePrimitive <Char>::unmarshal (IORequest_ptr rq, Char& dst)
 {
-	rq->unmarshal_char (1, dst);
+	rq->unmarshal_char (1, &dst);
 }
 
 inline
@@ -62,7 +62,7 @@ void TypePrimitive <Char>::unmarshal_a (IORequest_ptr rq, size_t count, Char* ds
 inline
 void TypePrimitive <WChar>::marshal_in (const WChar& src, IORequest_ptr rq)
 {
-	rq->marshal_wchar (1, src);
+	rq->marshal_wchar (1, &src);
 }
 
 inline
@@ -74,7 +74,7 @@ void TypePrimitive <WChar>::marshal_in_a (const WChar* src, size_t count, IORequ
 inline
 void TypePrimitive <WChar>::unmarshal (IORequest_ptr rq, WChar& dst)
 {
-	rq->unmarshal_wchar (1, dst);
+	rq->unmarshal_wchar (1, &dst);
 }
 
 inline

@@ -189,6 +189,9 @@ struct TypePrimitive <Boolean> :
 		unmarshal (rq, abi);
 		dst = abi != 0;
 	}
+
+	static void byteswap (ABI&) NIRVANA_NOEXCEPT
+	{}
 };
 
 #ifdef LEGACY_CORBA_CPP

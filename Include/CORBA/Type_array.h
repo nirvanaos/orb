@@ -30,7 +30,7 @@
 
 #include "TypeFixLen.h"
 #include "TypeVarLen.h"
-#include <array>
+#include <Nirvana/array_bool.h>
 
 namespace CORBA {
 namespace Internal {
