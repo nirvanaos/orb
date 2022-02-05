@@ -75,13 +75,22 @@ template <class I>
 struct TypeObject : TypeItf <I>
 {
 	static const TCKind tc_kind = TCKind::tk_objref;
+
+	static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
+
+	static void marshal_out (I_ref <I>& src, IORequest_ptr rq)
+	{
+		marshal_in (src, rq);
+	}
+
+	static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
 };
 
 template <>
 const Char Bridge <Object>::repository_id_ [] = CORBA_REPOSITORY_ID ("Object");
 
 template <>
-struct Type <Object> : TypeItf <Object>
+struct Type <Object> : TypeObject <Object>
 {
 	static I_ptr <TypeCode> type_code ()
 	{

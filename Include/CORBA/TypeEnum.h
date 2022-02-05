@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -33,7 +34,7 @@
 namespace CORBA {
 namespace Internal {
 
-typedef std::conditional_t <sizeof (size_t) >= 4, ULong, size_t> ABI_enum;
+typedef ULong ABI_enum;
 
 /// Base for enum data types
 template <class T, T last>
@@ -43,7 +44,7 @@ struct TypeEnum : TypeByVal <T, ABI_enum>
 
 	static const ABI_enum count_ = (ABI_enum)last + 1;
 
-	typedef TypeFixLen <T, ABI_enum, ULong> Base;
+	typedef TypeByVal <T, ABI_enum> Base;
 
 	typedef typename Base::Var Var;
 	typedef typename Base::ABI ABI;
@@ -124,39 +125,11 @@ struct TypeEnum : TypeByVal <T, ABI_enum>
 		return (Var&)*p;
 	}
 
-	typedef ULong CDR; // In the common data representation, enum is 32 bit.
+	static void marshal_in (const T& src, IORequest_ptr rq);
+	static void marshal_in_a (const T* src, size_t count, IORequest_ptr rq);
 
-	static void marshal_in (const T* src, size_t count, IORequest::_ptr_type rq)
-	{
-		if (sizeof (CDR) == sizeof (T))
-			rq->marshal (alignof (T), sizeof (T) * count, src);
-		else {
-			CDR* buf = rq->marshal_get_buffer (alignof (CDR), sizeof (CDR) * count);
-			for (const T* end = src + count; src != end; ++src) {
-				*(buf++) = (CDR)*src;
-			}
-		}
-	}
-
-	static void marshal_out (T* src, size_t count, IORequest::_ptr_type rq)
-	{
-		marshal_in (src, count, rq);
-	}
-
-	static void unmarshal (IORequest::_ptr_type rq, size_t count, T* dst)
-	{
-		void* pbuf = nullptr;
-		if (rq->unmarshal (alignof (T), sizeof (T) * count, pbuf)) {
-			for (CDR* src = (CDR*)pbuf, *end = src + count; src != end; ++src) {
-				Type <T>::byteswap (*src);
-			}
-		}
-		for (CDR* src = (CDR*)pbuf, *end = src + count; src != end; ++src, ++dst) {
-			ABI abi = (ABI)*src;
-			check (abi);
-			*dst = (T)abi;
-		}
-	}
+	static void unmarshal (IORequest_ptr rq, T& dst);
+	static void unmarshal_a (IORequest_ptr rq, size_t count, T* dst);
 
 };
 

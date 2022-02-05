@@ -27,41 +27,16 @@
 #ifndef NIRVANA_ORB_FLOAT_TYPES_H_
 #define NIRVANA_ORB_FLOAT_TYPES_H_
 #pragma once
+
+#include "SoftFloat.h"
 #include <limits>
 #include <type_traits>
 
 namespace CORBA {
-namespace Internal {
 
-// TODO: Implement SoftFloat classes based on the SoftFloat library.
-template <size_t size>
-class SoftFloat
-{
-public:
-	// Operators
-	SoftFloat& operator = (const SoftFloat& val);
-	SoftFloat& operator += (const SoftFloat& val);
-	SoftFloat& operator -= (const SoftFloat& val);
-	SoftFloat& operator *= (const SoftFloat& val);
-	SoftFloat& operator /= (const SoftFloat& val);
-	SoftFloat& operator ++ ();
-	SoftFloat operator ++ (int);
-	SoftFloat& operator -- ();
-	SoftFloat operator -- (int);
-	SoftFloat operator + () const;
-	SoftFloat operator - () const;
-	bool operator! () const;
-};
-
-}
-
-typedef float Float;
-
-static_assert (std::numeric_limits <long double>::is_iec559, "Unknown long double representation");
-typedef double Double;
-
-static_assert (sizeof (long double) != 16 || std::numeric_limits <double>::is_iec559, "Unknown double representation");
-typedef std::conditional <sizeof (long double) == 16, long double, Internal::SoftFloat <16> >::type LongDouble;
+typedef std::conditional <sizeof (float) == 4 && std::numeric_limits <float>::is_iec559, float, Internal::SoftFloat <4> >::type Float;
+typedef std::conditional <sizeof (double) == 8 && std::numeric_limits <double>::is_iec559, double, Internal::SoftFloat <8> >::type Double;
+typedef std::conditional <sizeof (long double) == 16 && std::numeric_limits <long double>::is_iec559, long double, Internal::SoftFloat <16> >::type LongDouble;
 
 }
 

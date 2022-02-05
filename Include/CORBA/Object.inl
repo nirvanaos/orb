@@ -24,38 +24,29 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPE_H_
-#define NIRVANA_ORB_TYPE_H_
+#ifndef NIRVANA_ORB_OBJECT_INL_
+#define NIRVANA_ORB_OBJECT_INL_
 #pragma once
 
-#include "TypeFixLen.inl"
-#include "TypeEnum.inl"
-#include "Object.inl"
-#include "Sequence.inl"
-#include "Object.inl"
-#include "ValueBase.inl"
+#include "Object.h"
+#include "IORequestClient.h"
 
 namespace CORBA {
 namespace Internal {
 
-/// The `void` type.
-template <>
-struct Type <void>
+template <class I> inline
+void TypeObject <I>::marshal_in (I_ptr <I> src, IORequest_ptr rq)
 {
-	static I_ptr <TypeCode> type_code ()
-	{
-		return _tc_void;
-	}
-};
-
-}
+	rq->marshal_interface (src);
 }
 
-// IDL::traits
-namespace IDL {
+template <class I> inline
+void TypeObject <I>::unmarshal (IORequest_ptr rq, I_ref <I>& dst)
+{
+	dst = rq->unmarshal_interface (I::repository_id_).downcast <I> ();
+}
 
-template <class T> struct traits;
-
+}
 }
 
 #endif

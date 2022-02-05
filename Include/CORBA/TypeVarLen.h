@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -37,6 +38,8 @@ namespace Internal {
 template <class T, class TABI>
 struct TypeVarLenBase : TypeByRef <T, TABI>
 {
+	static const bool fixed_len = false;
+
 	typedef TypeByRef <T, TABI> Base;
 	typedef typename Base::Var Var;
 	typedef typename Base::C_in C_in;
@@ -85,24 +88,42 @@ struct TypeVarLenBase : TypeByRef <T, TABI>
 		return abi;
 	}
 
-	/// Variable-length types marshalling is always not trivial and can throw exceptions.
-	static const bool has_marshal = true;
-
-	/// This method has no implementation and just hides TypeByRef method.
-	static void marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst);
-
-	/// This method has no implementation and just hides TypeByRef method.
-	static void marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst);
-
-	/// This method has no implementation and just hides TypeByRef method.
-	static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst);
+	static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq);
+	static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq);
+	static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst);
 };
+
+template <class T, class TABI>
+void TypeVarLenBase <T, TABI>::marshal_in_a (const Var* src, size_t count, IORequest_ptr rq)
+{
+	for (const Var* end = src + count; src != end; ++src) {
+		Type <Var>::marshal_in (*src, rq);
+	}
+}
+
+template <class T, class TABI>
+void TypeVarLenBase <T, TABI>::marshal_out_a (Var* src, size_t count, IORequest_ptr rq)
+{
+	for (Var* end = src + count; src != end; ++src) {
+		Type <Var>::marshal_out (*src, rq);
+	}
+}
+
+template <class T, class TABI>
+void TypeVarLenBase <T, TABI>::unmarshal_a (IORequest_ptr rq, size_t count, Var* dst)
+{
+	for (const Var* end = dst + count; dst != end; ++dst) {
+		Type <Var>::unmarshal (rq, dst);
+	}
+}
 
 template <class T, bool with_check, class TABI = ABI <T> > struct TypeVarLen;
 
 template <class T, class TABI>
 struct TypeVarLen <T, false, TABI> : TypeVarLenBase <T, TABI>
-{};
+{
+	static const bool has_check = false;
+};
 
 /// Base for variable-length data types
 template <class T, class TABI>

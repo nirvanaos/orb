@@ -1,4 +1,4 @@
-/// \file Any.h
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -292,9 +292,9 @@ struct Type <Any> : public TypeVarLen <Any, true>
 		return _tc_any;
 	}
 
-	static void marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst);
-	static void marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst);
-	static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst);
+	static void marshal_in (const Any& src, IORequest_ptr rq);
+	static void marshal_out (Any& src, IORequest_ptr rq);
+	static void unmarshal (IORequest_ptr rq, Any& dst);
 };
 
 }

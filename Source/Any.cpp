@@ -36,89 +36,30 @@ void Type <Any>::check (const ABI& any)
 		::Nirvana::throw_BAD_PARAM ();
 }
 
-void Type <Any>::marshal_in (const Any& src, Marshal_ptr marshaler, ABI& dst)
+void Type <Any>::marshal_in (const Any& src, IORequest_ptr rq)
 {
-	assert (&src != &dst);
 	I_ptr <TypeCode> tc = src.type ();
-	if (!tc)
-		dst.reset ();
-	else {
-		dst.type ((::Nirvana::Pointer)marshaler->marshal_interface (tc));
-		::Nirvana::ConstPointer psrc;
-		::Nirvana::Pointer pdst;
-		if (src.is_large ()) {
-			size_t size = tc->n_size ();
-			uintptr_t p = marshaler->get_buffer (size, pdst);
-			dst.large_pointer ((::Nirvana::Pointer)p, size);
-			pdst = dst.large_pointer ();
-			psrc = src.large_pointer ();
-		} else {
-			pdst = dst.small_pointer ();
-			psrc = src.small_pointer ();
-		}
-		tc->n_marshal_in (psrc, marshaler, pdst);
-	}
+	rq->marshal_type_code (tc);
+	if (tc)
+		tc->n_marshal_in (src.data (), 1, rq);
 }
 
-void Type <Any>::marshal_out (Any& src, Marshal_ptr marshaler, ABI& dst)
+void Type <Any>::marshal_out (Any& src, IORequest_ptr rq)
 {
-	assert (&src != &dst);
 	I_ptr <TypeCode> tc = src.type ();
-	if (!tc)
-		dst.reset ();
-	else {
-		dst.type ((::Nirvana::Pointer)marshaler->marshal_interface (tc));
-		::Nirvana::Pointer psrc;
-		::Nirvana::Pointer pdst;
-		if (src.is_large ()) {
-			psrc = src.large_pointer ();
-			size_t size = tc->n_size ();
-			if (!tc->n_has_marshal ()) {
-				uintptr_t p = marshaler->marshal_memory (psrc, size, src.large_size ());
-				dst.large_pointer ((void*)p, size);
-				src.reset ();
-				return;
-			} else {
-				uintptr_t p = marshaler->get_buffer (size, pdst);
-				dst.large_pointer ((void*)p, size);
-			}
-		} else {
-			pdst = dst.small_pointer ();
-			psrc = src.small_pointer ();
-		}
-		tc->n_marshal_out (psrc, marshaler, pdst);
+	rq->marshal_type_code (tc);
+	if (tc) {
+		tc->n_marshal_out (src.data (), 1, rq);
 		src.clear ();
 	}
 }
 
-void Type <Any>::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Any& dst)
+void Type <Any>::unmarshal (IORequest_ptr rq, Any& dst)
 {
-	TypeCode* ptc = src.type ();
-	if (!ptc)
-		dst.reset ();
-	else {
-		I_ref <TypeCode> tc (unmarshaler->unmarshal_interface <TypeCode> (ptc));
-		::Nirvana::ConstPointer psrc;
-		::Nirvana::Pointer pdst;
-		if (src.is_large ()) {
-			psrc = src.large_pointer ();
-			size_t size = src.large_size ();
-			if (size)
-				unmarshaler->adopt_memory (pdst = const_cast <::Nirvana::Pointer> (psrc), size);
-			else
-				pdst = ::Nirvana::g_memory->allocate (0, size, 0);
-			try {
-				tc->n_unmarshal (psrc, unmarshaler, pdst);
-			} catch (...) {
-				::Nirvana::g_memory->release (pdst, size);
-				throw;
-			}
-			dst.large_pointer (pdst, size);
-		} else {
-			pdst = dst.small_pointer ();
-			psrc = src.small_pointer ();
-			tc->n_unmarshal (psrc, unmarshaler, pdst);
-		}
+	I_ref <TypeCode> tc = rq->unmarshal_type_code ();
+	if (tc && tc->kind () != TCKind::tk_void) {
+		void* p = dst.prepare (tc);
+		tc->n_unmarshal (rq, 1, p);
 		dst.set_type (std::move (tc));
 	}
 }

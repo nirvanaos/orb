@@ -43,19 +43,23 @@ namespace Internal {
 
 // ValueBase
 
+template <class I>
+struct TypeValue : TypeItf <I>
+{
+	static const TCKind tc_kind = TCKind::tk_value;
+
+	static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
+	static void marshal_out (I_ref <I>& src, IORequest_ptr rq);
+	static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
+};
+
 template <>
-struct Type <ValueBase> : TypeItf <ValueBase>
+struct Type <ValueBase> : TypeValue <ValueBase>
 {
 	static I_ptr <TypeCode> type_code ()
 	{
 		return _tc_ValueBase;
 	}
-};
-
-template <class I>
-struct TypeValue : TypeItf <I>
-{
-	static const TCKind tc_kind = TCKind::tk_value;
 };
 
 NIRVANA_BRIDGE_BEGIN (ValueBase, CORBA_REPOSITORY_ID ("ValueBase"))

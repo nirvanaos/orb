@@ -1,4 +1,3 @@
-/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -24,38 +23,17 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPE_H_
-#define NIRVANA_ORB_TYPE_H_
+#ifndef NIRVANA_ORB_IOREQUESTCLIENT_H_
+#define NIRVANA_ORB_IOREQUESTCLIENT_H_
 #pragma once
 
-#include "TypeFixLen.inl"
-#include "TypeEnum.inl"
-#include "Object.inl"
-#include "Sequence.inl"
-#include "Object.inl"
-#include "ValueBase.inl"
-
-namespace CORBA {
-namespace Internal {
-
-/// The `void` type.
-template <>
-struct Type <void>
-{
-	static I_ptr <TypeCode> type_code ()
-	{
-		return _tc_void;
-	}
-};
-
-}
-}
-
-// IDL::traits
-namespace IDL {
-
-template <class T> struct traits;
-
-}
+#include "Client.h"
+#include "UserException.h"
+#include "Any.h"
+#include "Sequence.h"
+#include "ValueBase.h"
+#include "EnvironmentEx.h"
+#include <Nirvana/native.h>
+#include "IORequest.h"
 
 #endif

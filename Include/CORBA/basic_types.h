@@ -30,7 +30,6 @@
 #pragma once
 
 #include "TypePrimitive.h"
-#include <Nirvana/ImportInterface.h>
 #include "tc_constants.h"
 
 #ifdef LEGACY_CORBA_CPP

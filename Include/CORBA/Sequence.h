@@ -112,9 +112,9 @@ struct Type <Sequence <T> > :
 
 	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
 
-	static void marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst);
-	static void marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst);
-	static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst);
+	static void marshal_in (const Var& src, IORequest_ptr rq);
+	static void marshal_out (Var& src, IORequest_ptr rq);
+	static void unmarshal (IORequest_ptr rq, Var& dst);
 };
 
 template <typename T>

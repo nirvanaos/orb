@@ -28,11 +28,8 @@
 #pragma once
 
 #include <Nirvana/NirvanaBase.h>
-#include <Nirvana/real_copy.h>
 #include "TypeByVal.h"
 #include "TypeByRef.h"
-#include "Client.h"
-#include "IORequest.h"
 #include <type_traits>
 
 namespace CORBA {
@@ -46,28 +43,23 @@ namespace Internal {
 template <typename T, typename TABI = T>
 struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t), TypeByVal <T, TABI>, TypeByRef <T, TABI> >
 {
-	static void marshal_in (const T* src, size_t count, IORequest::_ptr_type rq)
+	static const bool fixed_len = true;
+
+	static void marshal_in (const T& src, IORequest_ptr rq);
+	static void marshal_in_a (const T* src, size_t count, IORequest_ptr rq);
+
+	static void marshal_out (T& src, IORequest_ptr rq)
 	{
-		rq->marshal (alignof (T), sizeof (T) * count, src);
+		Type <T>::marshal_in (src, rq);
 	}
 
-	static void marshal_out (T* src, size_t count, IORequest::_ptr_type rq)
+	static void marshal_out_a (T* src, size_t count, IORequest_ptr rq)
 	{
-		marshal_in (src, count, rq);
+		Type <T>::marshal_in_a (src, count, rq);
 	}
-
-	static void unmarshal (IORequest::_ptr_type rq, size_t count, T* dst)
-	{
-		void* pbuf = nullptr;
-		if (rq->unmarshal (alignof (T), sizeof (T) * count, pbuf)) {
-			for (T* src = (T*)pbuf, *end = src + count; src != end; ++src, ++dst) {
-				Type <T>::byteswap (*src);
-				*dst = *src;
-			}
-		} else
-			real_copy ((const T*)pbuf, (const T*)pbuf + count, dst);
-	}
-
+	
+	static void unmarshal (IORequest_ptr rq, T& dst);
+	static void unmarshal_a (IORequest_ptr rq, size_t count, T* dst);
 };
 
 }

@@ -29,7 +29,7 @@
 #define NIRVANA_ORB_STRING_COMPAT_H_
 #pragma once
 
-#include "String.h"
+#include "String.inl"
 
 namespace CORBA {
 namespace Internal {

@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *

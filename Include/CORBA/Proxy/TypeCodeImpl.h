@@ -205,12 +205,6 @@ public:
 		new (dst) Var (std::move (*reinterpret_cast <Var*> (src)));
 	}
 
-	static Type <Boolean>::ABI_ret _n_has_marshal (Bridge <TypeCode>* _b,
-		Interface* _env)
-	{
-		return Type <T>::has_marshal;
-	}
-
 	static void n_marshal_in (Nirvana::ConstPointer src, Marshal_ptr marshaler,
 		Nirvana::Pointer dst)
 	{

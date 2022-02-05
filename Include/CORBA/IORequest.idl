@@ -46,15 +46,15 @@ pseudo interface IORequest
   /// Marshal CDR data.
   /// 
   /// \param align Data alignment
-  /// \size Data size.
-  /// \param data Pointer to the data with common-data-representation (CDR).
+  /// \param size  Data size.
+  /// \param data  Pointer to the data with common-data-representation (CDR).
   void marshal (in Nirvana::Size align, in Nirvana::Size size,
     in Nirvana::ConstPointer data);
 
   /// Unmarshal CDR data.
   /// 
   /// \param align Data alignment
-  /// \size Data size.
+  /// \param size  Data size.
   /// \param [out] data Pointer to the internal data buffer.
   /// \returns `true` if the byte order must be swapped after unmarshaling.
   boolean unmarshal (in Nirvana::Size align, in Nirvana::Size size,
@@ -84,11 +84,14 @@ pseudo interface IORequest
     in Nirvana::Size element_size, out Nirvana::Size element_count,
     out Nirvana::Pointer data, out Nirvana::Size allocated_size);
 
-  Nirvana::Pointer marshal_get_buffer (in Nirvana::Size align,
-    in Nirvana::Size size);
+  ///@}
 
-  Nirvana::Pointer marshal_get_buffer_seq (in Nirvana::Size align,
-    in Nirvana::Size element_size, out Nirvana::Size element_count);
+  ///@{
+  /// Marshal/unmarshal sequences.
+
+  void marshal_seq_begin (in Nirvana::Size element_count);
+
+  Nirvana::Size unmarshal_seq_begin ();
 
   ///@}
 
@@ -122,7 +125,7 @@ pseudo interface IORequest
 
   /// \brief Marshal interface.
   /// 
-  /// \param obj The interface.
+  /// \param obj The interface derived from Object or LocalObject.
   void marshal_interface (in Interface itf);
 
   Interface unmarshal_interface (in string rep_id);
@@ -130,7 +133,7 @@ pseudo interface IORequest
   void marshal_type_code (in TypeCode tc);
   TypeCode unmarshal_type_code ();
 
-  void marshal_value (in ValueBase val);
+  void marshal_value (in ValueBase val, in boolean no_copy);
   Interface unmarshal_value (in string rep_id);
 
   ///@}

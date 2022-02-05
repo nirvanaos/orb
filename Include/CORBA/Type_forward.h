@@ -33,10 +33,8 @@
 namespace CORBA {
 namespace Internal {
 
-class Marshal;
-typedef I_ptr <Marshal> Marshal_ptr;
-class Unmarshal;
-typedef I_ptr <Unmarshal> Unmarshal_ptr;
+class IORequest;
+typedef I_ptr <IORequest> IORequest_ptr;
 
 /** For each structure, union or enum data type T, IDL compiler generates `CORBA::Internal::Type <T>` structure.
     This structure defines how the parameters are passed between client and server.
@@ -81,23 +79,41 @@ template <> struct Type <T>
   // Type code
   static I_ptr <TypeCode> type_code ();
 
+  /// Is this data type fixed length?
+  static const bool fixed_len;
+
   /// \brief Copies input data to the marshaling buffer.
-  /// \param src Source values.
-  /// \param count Count of source values.
+  /// \param src Source value.
   /// \param rq  IORequest interface.
-  static void marshal_in (const Var* src, size_t count, IORequest::_ptr_type rq);
+  static void marshal_in (const Var& src, IORequest_ptr rq);
+
+  /// \brief Copies input data array to the marshaling buffer.
+  /// \param src   Source values.
+  /// \param count Count of source values.
+  /// \param rq    IORequest interface.
+  static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq);
 
   /// \brief Moves output data to the marshaling buffer.
-  /// \param src Source values. After marshalling, the values will be released.
-  /// \param count Count of source values.
+  /// \param src Source value. After marshalling, the value will be released.
   /// \param rq  IORequest interface.
-  static void marshal_out (Var* src, size_t count, IORequest::_ptr_type rq);
+  static void marshal_out (Var& src, IORequest_ptr rq);
+
+  /// \brief Moves output data array to the marshaling buffer.
+  /// \param src   Source values. After marshalling, the values will be released.
+  /// \param count Count of source values.
+  /// \param rq    IORequest interface.
+  static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq);
 
   /// \brief Moves data from marshaling buffer to the local variable.
-  /// \param rq  IORequest interface.
-  /// \param count Count values.
-  /// \param dst Destination values buffer.
-  static void unmarshal (IORequest::_ptr_type rq, size_t count, Var* dst);
+  /// \param rq    IORequest interface.
+  /// \param dst   Destination value.
+  static void unmarshal (IORequest_ptr rq, Var& dst);
+
+  /// \brief Moves data array from marshaling buffer to the local variables.
+  /// \param rq    IORequest interface.
+  /// \param count Count of values.
+  /// \param dst   Destination values buffer.
+  static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst);
 
   /// \brief Swap byte order to change endianness.
   /// Must be defined for:
