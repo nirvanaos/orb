@@ -29,6 +29,7 @@
 #pragma once
 
 #include "TypeByRef.h"
+#include "TypeVarLenA.h"
 #include <utility>
 #include <new>
 
@@ -36,7 +37,9 @@ namespace CORBA {
 namespace Internal {
 
 template <class T, class TABI>
-struct TypeVarLenBase : TypeByRef <T, TABI>
+struct TypeVarLenBase :
+	TypeByRef <T, TABI>,
+	TypeVarLenA <T, TypeByRef <T, TABI>::Var>
 {
 	static const bool fixed_len = false;
 
@@ -88,10 +91,6 @@ struct TypeVarLenBase : TypeByRef <T, TABI>
 		return abi;
 	}
 
-	static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq);
-	static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq);
-	static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst);
-
 	// IDL helper methods
 
 	template <typename MT>
@@ -106,30 +105,6 @@ struct TypeVarLenBase : TypeByRef <T, TABI>
 	template <typename MT>
 	static bool unmarshal_members (IORequest_ptr rq, const Var& val, MT* begin);
 };
-
-template <class T, class TABI>
-void TypeVarLenBase <T, TABI>::marshal_in_a (const Var* src, size_t count, IORequest_ptr rq)
-{
-	for (const Var* end = src + count; src != end; ++src) {
-		Type <Var>::marshal_in (*src, rq);
-	}
-}
-
-template <class T, class TABI>
-void TypeVarLenBase <T, TABI>::marshal_out_a (Var* src, size_t count, IORequest_ptr rq)
-{
-	for (Var* end = src + count; src != end; ++src) {
-		Type <Var>::marshal_out (*src, rq);
-	}
-}
-
-template <class T, class TABI>
-void TypeVarLenBase <T, TABI>::unmarshal_a (IORequest_ptr rq, size_t count, Var* dst)
-{
-	for (const Var* end = dst + count; dst != end; ++dst) {
-		Type <Var>::unmarshal (rq, dst);
-	}
-}
 
 template <class T, bool with_check, class TABI = ABI <T> > struct TypeVarLen;
 

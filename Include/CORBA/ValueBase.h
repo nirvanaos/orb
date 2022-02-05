@@ -44,7 +44,7 @@ namespace Internal {
 // ValueBase
 
 template <class I>
-struct TypeValue : TypeItf <I>
+struct TypeValue : TypeItfMarshalable <I>
 {
 	static const TCKind tc_kind = TCKind::tk_value;
 

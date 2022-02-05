@@ -30,6 +30,7 @@
 
 #include "Type_forward.h"
 #include "I_var.h"
+#include "TypeVarLenA.h"
 
 namespace CORBA {
 
@@ -362,16 +363,23 @@ template <class I>
 struct TypeItf : TypeItfCommon <I>
 {};
 
+template <class I>
+struct TypeItfMarshalable :
+	TypeItfCommon <I>,
+	TypeVarLenA <I, I_ref <I> >
+{
+	// By default, for interfaces, in and out parameters marshalled in the same manner.
+	// But this method is overridden for value types.
+	static void marshal_out (I_ref <I>& src, IORequest_ptr rq)
+	{
+		Type <I>::marshal_in (src, rq);
+	}
+};
+
 template <>
-struct TypeItf <TypeCode> : TypeItfCommon <TypeCode>
+struct TypeItf <TypeCode> : TypeItfMarshalable <TypeCode>
 {
 	static void marshal_in (I_ptr <TypeCode> src, IORequest_ptr rq);
-
-	static void marshal_out (I_ref <TypeCode>& src, IORequest_ptr rq)
-	{
-		marshal_in (src, rq);
-	}
-
 	static void unmarshal (IORequest_ptr rq, I_ref <TypeCode>& dst);
 };
 

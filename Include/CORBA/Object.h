@@ -72,17 +72,11 @@ template <>
 struct Type <PortableServer::ServantBase>;
 
 template <class I>
-struct TypeObject : TypeItf <I>
+struct TypeObject : TypeItfMarshalable <I>
 {
 	static const TCKind tc_kind = TCKind::tk_objref;
 
 	static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
-
-	static void marshal_out (I_ref <I>& src, IORequest_ptr rq)
-	{
-		marshal_in (src, rq);
-	}
-
 	static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
 };
 

@@ -38,7 +38,7 @@ template <typename T>
 void Type <Sequence <T> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
 	if (Type <T>::fixed_len)
-		rq->marshal_seq (alignof (T), sizeof (T), src.size (), src.data (), 0);
+		rq->marshal_seq (alignof (T), sizeof (T), src.size (), const_cast <T*> (src.data ()), 0);
 	else {
 		rq->marshal_seq_begin (src.size ());
 		Type <T>::marshal_in_a (src.data (), src.size (), rq);
@@ -94,9 +94,9 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 	} else {
 		size_t size = rq->unmarshal_seq_begin ();
 		if (size) {
-			T* p = Nirvana::g_memory->allocate (nullptr, size, 0);
+			T* p = (T*)Nirvana::g_memory->allocate (nullptr, size, 0);
 			size_t au = Nirvana::g_memory->query (p, Nirvana::Memory::QueryParam::ALLOCATION_UNIT);
-			size_t allocated = round_up (size, au);
+			size_t allocated = Nirvana::round_up (size, au);
 			try {
 				Type <T>::unmarshal_a (rq, size, p);
 			} catch (...) {

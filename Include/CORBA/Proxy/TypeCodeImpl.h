@@ -174,7 +174,7 @@ public:
 		return sizeof (Var);
 	}
 
-	static bool _n_fixed_len (Bridge <TypeCode>*, Interface*)
+	static Type <Boolean>::ABI_ret _n_fixed_len (Bridge <TypeCode>*, Interface*)
 	{
 		return Type <T>::fixed_len;
 	}
@@ -245,7 +245,7 @@ public:
 		return 0;
 	}
 
-	static bool _n_fixed_len (Bridge <TypeCode>*, Interface*)
+	static Type <Boolean>::ABI_ret _n_fixed_len (Bridge <TypeCode>*, Interface*)
 	{
 		return true;
 	}
@@ -298,7 +298,7 @@ public:
 	using Impl::_concrete_base_type;
 
 	using Ops::_n_size;
-	using Ops::_n_has_marshal;
+	using Ops::_n_fixed_len;
 
 	// The get_compact_typecode operation strips out all optional name and member
 	// name fields, but it leaves all alias typecodes intact.
