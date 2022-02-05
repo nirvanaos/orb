@@ -140,6 +140,10 @@ pseudo interface IORequest
 
   ///@{
   /// Callee operations.
+
+  /// End of the input parameters unmarshaling.
+  /// This method is called only if the input parameters are present.
+  void unmarshal_end ();
  
   /// Return exception to caller.
   void set_exception (inout any e);
@@ -155,6 +159,8 @@ pseudo interface IORequest
   readonly attribute boolean completed;
 
   void wait ();
+
+  boolean check (in Interface env);
 
   ///@}
 };
