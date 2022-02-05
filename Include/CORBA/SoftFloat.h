@@ -28,15 +28,15 @@
 #define NIRVANA_ORB_SOFTFLOAT_H_
 #pragma once
 
-#include <softfloat.h>
 #include <iosfwd>
 
 namespace CORBA {
 namespace Internal {
 
 ///  Software floating point support.
-template <size_t size>
-class SoftFloat
+template <size_t size> class SoftFloat;
+
+template <> class SoftFloat <4>
 {
 public:
 	// Constructors
@@ -71,6 +71,89 @@ public:
 	SoftFloat operator + () const;
 	SoftFloat operator - () const;
 	bool operator! () const;
+
+private:
+	uint32_t d_;
+};
+
+template <> class SoftFloat <8>
+{
+public:
+	// Constructors
+	SoftFloat ();
+	SoftFloat (float val);
+	SoftFloat (double val);
+	SoftFloat (long double val);
+	SoftFloat (long val);
+	SoftFloat (unsigned long val);
+	SoftFloat (long long val);
+	SoftFloat (unsigned long long val);
+
+	SoftFloat (const SoftFloat& val);
+
+	// Conversions
+	operator float () const;
+	operator double () const;
+	operator long double () const;
+	operator long () const;
+	operator long long () const;
+
+	// Operators
+	SoftFloat& operator = (const SoftFloat& val);
+	SoftFloat& operator += (const SoftFloat& val);
+	SoftFloat& operator -= (const SoftFloat& val);
+	SoftFloat& operator *= (const SoftFloat& val);
+	SoftFloat& operator /= (const SoftFloat& val);
+	SoftFloat& operator ++ ();
+	SoftFloat operator ++ (int);
+	SoftFloat& operator -- ();
+	SoftFloat operator -- (int);
+	SoftFloat operator + () const;
+	SoftFloat operator - () const;
+	bool operator! () const;
+
+private:
+	uint64_t d_;
+};
+
+template <> class SoftFloat <16>
+{
+public:
+	// Constructors
+	SoftFloat ();
+	SoftFloat (float val);
+	SoftFloat (double val);
+	SoftFloat (long double val);
+	SoftFloat (long val);
+	SoftFloat (unsigned long val);
+	SoftFloat (long long val);
+	SoftFloat (unsigned long long val);
+
+	SoftFloat (const SoftFloat& val);
+
+	// Conversions
+	operator float () const;
+	operator double () const;
+	operator long double () const;
+	operator long () const;
+	operator long long () const;
+
+	// Operators
+	SoftFloat& operator = (const SoftFloat& val);
+	SoftFloat& operator += (const SoftFloat& val);
+	SoftFloat& operator -= (const SoftFloat& val);
+	SoftFloat& operator *= (const SoftFloat& val);
+	SoftFloat& operator /= (const SoftFloat& val);
+	SoftFloat& operator ++ ();
+	SoftFloat operator ++ (int);
+	SoftFloat& operator -- ();
+	SoftFloat operator -- (int);
+	SoftFloat operator + () const;
+	SoftFloat operator - () const;
+	bool operator! () const;
+
+private:
+	uint64_t d_ [2];
 };
 
 template <size_t size>
