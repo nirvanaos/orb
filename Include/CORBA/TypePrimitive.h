@@ -126,7 +126,7 @@ struct TypePrimitive <WChar> :
 
 template <>
 struct TypePrimitive <Boolean> :
-	public TypeByVal <Boolean, Char>
+	public TypeByVal <Boolean, Octet>
 {
 	class C_inout
 	{
@@ -143,7 +143,7 @@ struct TypePrimitive <Boolean> :
 
 		ABI_out operator & ()
 		{
-			return (Char*)&abi_;
+			return (Octet*)&abi_;
 		}
 
 	protected:
