@@ -34,49 +34,49 @@
 namespace CORBA {
 namespace Internal {
 
-inline
+template <> inline
 void Type <StringT <Char> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
 	rq->marshal_string (const_cast <Var&> (src), false);
 }
 
-inline
+template <> inline
 void Type <StringT <Char> >::marshal_out (Var& src, IORequest_ptr rq)
 {
 	rq->marshal_string (src, true);
 }
 
-inline
+template <> inline
 void Type <StringT <Char> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	rq->unmarshal_string (dst);
 }
 
-inline
+template <> inline
 I_ptr <TypeCode> Type <StringT <Char> >::type_code () NIRVANA_NOEXCEPT
 {
 	return _tc_string;
 }
 
-inline
+template <> inline
 void Type <StringT <WChar> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
 	rq->marshal_wstring (const_cast <Var&> (src), false);
 }
 
-inline
+template <> inline
 void Type <StringT <WChar> >::marshal_out (Var& src, IORequest_ptr rq)
 {
 	rq->marshal_wstring (src, true);
 }
 
-inline
+template <> inline
 void Type <StringT <WChar> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	rq->unmarshal_wstring (dst);
 }
 
-inline
+template <> inline
 I_ptr <TypeCode> Type <StringT <WChar> >::type_code () NIRVANA_NOEXCEPT
 {
 	return _tc_wstring;

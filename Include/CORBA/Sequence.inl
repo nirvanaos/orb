@@ -111,37 +111,37 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 	dst = std::move (tmp);
 }
 
-template <>
+template <> inline
 void Type <Sequence <Char> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
 	rq->marshal_char_seq (const_cast <Var&> (src), false);
 }
 
-template <>
+template <> inline
 void Type <Sequence <Char> >::marshal_out (Var& src, IORequest_ptr rq)
 {
 	rq->marshal_char_seq (const_cast <Var&> (src), true);
 }
 
-template <>
+template <> inline
 void Type <Sequence <Char> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	rq->unmarshal_char_seq (dst);
 }
 
-template <>
+template <> inline
 void Type <Sequence <WChar> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
 	rq->marshal_wchar_seq (const_cast <Var&> (src), false);
 }
 
-template <>
+template <> inline
 void Type <Sequence <WChar> >::marshal_out (Var& src, IORequest_ptr rq)
 {
 	rq->marshal_wchar_seq (const_cast <Var&> (src), true);
 }
 
-template <>
+template <> inline
 void Type <Sequence <WChar> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	rq->unmarshal_wchar_seq (dst);
