@@ -1,4 +1,4 @@
-/// \file ProxyBase.h
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -37,17 +37,17 @@
 namespace CORBA {
 namespace Internal {
 
-inline OperationIndex make_op_idx (UShort itf_idx, UShort op_idx)
+inline IOReference::OperationIndex make_op_idx (UShort itf_idx, UShort op_idx)
 {
 	return (ULong)itf_idx << 16 | op_idx;
 }
 
-inline UShort interface_idx (OperationIndex oi)
+inline UShort interface_idx (IOReference::OperationIndex oi)
 {
 	return oi >> 16;
 }
 
-inline UShort operation_idx (OperationIndex oi)
+inline UShort operation_idx (IOReference::OperationIndex oi)
 {
 	return (UShort)oi;
 }
@@ -82,10 +82,12 @@ public:
 		return interface_idx_;
 	}
 
-	ULong _make_op_idx (UShort op_idx) const
+	IOReference::OperationIndex _make_op_idx (UShort op_idx) const
 	{
 		return make_op_idx (interface_idx_, op_idx);
 	}
+
+	static void check_request (IORequest::_ptr_type rq);
 
 protected:
 	ProxyRoot (IOReference::_ptr_type proxy_manager, UShort interface_idx) :

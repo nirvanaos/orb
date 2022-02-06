@@ -1,5 +1,6 @@
+/// \file
 /*
-* Nirvana runtime library.
+* Nirvana IDL support library.
 *
 * This is a part of the Nirvana project.
 *
@@ -23,30 +24,23 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../IORequest.idl"
 
-module CORBA {
-module Internal {
+#include <CORBA/Proxy/ProxyBase.h>
 
-/// Interoperable Object Reference.
-/// 
-/// Interface to the implementation of the some Inter-ORB protocol.
-pseudo interface IOReference
+namespace CORBA {
+namespace Internal {
+
+void ProxyRoot::check_request (IORequest::_ptr_type rq)
 {
-	/// Returns Object reference.
-	readonly attribute Object object;
+	Any ex;
+	if (rq->unmarshal_exception (ex)) {
+		std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type se;
+		if (ex >>= reinterpret_cast <SystemException&> (se))
+			reinterpret_cast <SystemException&> (se)._raise ();
+		else
+			throw UnknownUserException (std::move (ex));
+	}
+}
 
-	/// Create request.
-	IORequest create_request ();
-
-	/// Low 16 bits contain the interface index.
-	/// High 16 bits contain the operation index within the interface.
-	typedef unsigned long OperationIndex;
-
-	void call (in OperationIndex op, in IORequest iorq);
-	void call_oneway (in OperationIndex op, in IORequest iorq);
-	// TBD: void call_async (in OperationIndex op, in IORequest iorq, DeadlineTime dt, in Interface callback);
-};
-
-};
-};
+}
+}

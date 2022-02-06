@@ -146,7 +146,8 @@ pseudo interface IORequest
   void unmarshal_end ();
  
   /// Return exception to caller.
-  void set_exception (inout any e);
+  /// Operation has move semantics so `e` may be cleared.
+  void marshal_exception (inout any e);
 
   /// Marks request as successful.
   void success ();
@@ -160,7 +161,7 @@ pseudo interface IORequest
 
   void wait ();
 
-  boolean check (in Interface env);
+  boolean unmarshal_exception (out any e);
 
   ///@}
 };

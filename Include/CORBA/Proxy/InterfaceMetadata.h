@@ -54,7 +54,7 @@ void RqProcWrapper (Interface* servant, Interface* call)
 		} catch (Exception & e) {
 			Any any;
 			any <<= std::move (e);
-			rq->set_exception (any);
+			rq->marshal_exception (any);
 		}
 	} catch (...) {
 	}
