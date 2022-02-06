@@ -24,8 +24,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPEVARLENA_H_
-#define NIRVANA_ORB_TYPEVARLENA_H_
+#ifndef NIRVANA_ORB_TYPEVARLENHELPER_H_
+#define NIRVANA_ORB_TYPEVARLENHELPER_H_
 #pragma once
 
 #include "Type_forward.h"
@@ -35,15 +35,18 @@ namespace Internal {
 
 /// Variable-legth type array marshaling/unmarshaling.
 template <class T, class Var>
-struct TypeVarLenA
+struct TypeVarLenHelper
 {
 	static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq);
 	static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq);
 	static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst);
+	
+	static void byteswap (Var& v)
+	{}
 };
 
 template <class T, class Var>
-void TypeVarLenA <T, Var>::marshal_in_a (const Var* src, size_t count, IORequest_ptr rq)
+void TypeVarLenHelper <T, Var>::marshal_in_a (const Var* src, size_t count, IORequest_ptr rq)
 {
 	for (const Var* end = src + count; src != end; ++src) {
 		Type <T>::marshal_in (*src, rq);
@@ -51,7 +54,7 @@ void TypeVarLenA <T, Var>::marshal_in_a (const Var* src, size_t count, IORequest
 }
 
 template <class T, class Var>
-void TypeVarLenA <T, Var>::marshal_out_a (Var* src, size_t count, IORequest_ptr rq)
+void TypeVarLenHelper <T, Var>::marshal_out_a (Var* src, size_t count, IORequest_ptr rq)
 {
 	for (Var* end = src + count; src != end; ++src) {
 		Type <T>::marshal_out (*src, rq);
@@ -59,7 +62,7 @@ void TypeVarLenA <T, Var>::marshal_out_a (Var* src, size_t count, IORequest_ptr 
 }
 
 template <class T, class Var>
-void TypeVarLenA <T, Var>::unmarshal_a (IORequest_ptr rq, size_t count, Var* dst)
+void TypeVarLenHelper <T, Var>::unmarshal_a (IORequest_ptr rq, size_t count, Var* dst)
 {
 	for (Var* end = dst + count; dst != end; ++dst) {
 		Type <T>::unmarshal (rq, *dst);

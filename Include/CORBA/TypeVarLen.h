@@ -29,7 +29,7 @@
 #pragma once
 
 #include "TypeByRef.h"
-#include "TypeVarLenA.h"
+#include "TypeVarLenHelper.h"
 #include <utility>
 #include <new>
 
@@ -39,7 +39,7 @@ namespace Internal {
 template <class T, class TABI>
 struct TypeVarLenBase :
 	TypeByRef <T, TABI>,
-	TypeVarLenA <T, TypeByRef <T, TABI>::Var>
+	TypeVarLenHelper <T, TypeByRef <T, TABI>::Var>
 {
 	static const bool fixed_len = false;
 
