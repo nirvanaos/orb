@@ -39,7 +39,7 @@ namespace Internal {
 template <class T, class TABI>
 struct TypeVarLenBase :
 	TypeByRef <T, TABI>,
-	TypeVarLenHelper <T, TypeByRef <T, TABI>::Var>
+	TypeVarLenHelper <T, typename TypeByRef <T, TABI>::Var>
 {
 	static const bool fixed_len = false;
 
