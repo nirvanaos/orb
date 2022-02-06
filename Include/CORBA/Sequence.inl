@@ -74,7 +74,7 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 			}
 			if (Base::has_check) {
 				try {
-					Type <T>::ABI* p = (Type <T>::ABI*)data, * end = p + size;
+					typename Type <T>::ABI* p = (typename Type <T>::ABI*)data, * end = p + size;
 					do {
 						Type <T>::check (*p);
 					} while (end != ++p);
