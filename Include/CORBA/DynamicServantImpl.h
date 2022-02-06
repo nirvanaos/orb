@@ -39,6 +39,11 @@ class InterfaceImpl <S, DynamicServant> :
 	public LifeCycleServant <S>
 {
 public:
+	void delete_object ()
+	{
+		delete& static_cast <S&> (*this);
+	}
+
 	/// \brief For the performance reasons, we don't implement 
 	///        the ReferenceCounter interface and just return bridge to 
 	///        the core implementation.

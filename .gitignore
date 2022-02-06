@@ -7,3 +7,5 @@
 /Include/CORBA/TypeCode_s.h
 /Include/CORBA/IORequest.h
 /Include/CORBA/Proxy/IOReference.h
+/Include/CORBA/DynamicServant.h
+/Include/CORBA/DynamicServant_s.h

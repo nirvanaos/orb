@@ -127,6 +127,11 @@ class ProxyLifeCycle :
 	public InterfaceImplBase <S, DynamicServant>
 {
 public:
+	void delete_object ()
+	{
+		delete& static_cast <S&> (*this);
+	}
+
 	DynamicServant* _dynamic_servant ()
 	{
 		return &static_cast <DynamicServant&> (static_cast <Bridge <DynamicServant>&> (*this));
