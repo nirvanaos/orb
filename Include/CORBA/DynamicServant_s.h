@@ -38,16 +38,16 @@ class Skeleton <S, DynamicServant>
 public:
 	static const typename Bridge <DynamicServant>::EPV epv_;
 
-	void _delete ()
+	void delete_object ()
 	{
 		delete &static_cast <S&> (*this);
 	}
 
 protected:
-	static void __delete (Bridge <DynamicServant>* obj, Interface* env)
+	static void _delete_object (Bridge <DynamicServant>* obj, Interface* env)
 	{
 		try {
-			S::_implementation (obj)._delete ();
+			S::_implementation (obj).delete_object ();
 		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -64,7 +64,7 @@ const Bridge <DynamicServant>::EPV Skeleton <S, DynamicServant>::epv_ = {
 		S::template __release <DynamicServant>
 	},
 	{ // epv
-		S::__delete
+		S::_delete_object
 	}
 };
 

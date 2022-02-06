@@ -1,6 +1,6 @@
 //! \interface DynamicServant
 //! \brief The interface for dynamically allocated servant garbage collection.
-//! \fn DynamicServant::_delete()
+//! \fn DynamicServant::delete_object()
 //! \brief Called by the garbage collector.
 
 /*
@@ -46,7 +46,7 @@ struct Type <DynamicServant> : TypeItf <DynamicServant>
 {};
 
 NIRVANA_BRIDGE_BEGIN (DynamicServant, CORBA_NIRVANA_REPOSITORY_ID ("DynamicServant"))
-void (*_delete) (Bridge <DynamicServant>*, Interface*);
+void (*delete_object) (Bridge <DynamicServant>*, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
@@ -54,18 +54,18 @@ class Client <T, DynamicServant> :
 	public T
 {
 public:
-	void _delete ();
+	void delete_object ();
 };
 
 class DynamicServant : public ClientInterface <DynamicServant>
 {};
 
 template <class T>
-void Client <T, DynamicServant>::_delete ()
+void Client <T, DynamicServant>::delete_object ()
 {
 	Environment _env;
 	Bridge <DynamicServant>& _b (T::_get_bridge (_env));
-	(_b._epv ().epv._delete) (&_b, &_env);
+	(_b._epv ().epv.delete_object) (&_b, &_env);
 	_env.check ();
 }
 
