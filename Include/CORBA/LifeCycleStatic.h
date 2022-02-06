@@ -38,16 +38,16 @@ class LifeCycleStatic
 {
 public:
 	template <class I>
-	static Interface* __duplicate (Interface* itf, Interface*)
+	static Interface* __duplicate (Interface* itf, Interface* env) NIRVANA_NOEXCEPT
 	{
-		interface_duplicate (::Nirvana::g_module.imp.itf);
+		(Nirvana::g_module.imp.itf->_epv ().duplicate) (Nirvana::g_module.imp.itf, env);
 		return itf;
 	}
 
 	template <class I>
-	static void __release (Interface*)
+	static void __release (Interface*) NIRVANA_NOEXCEPT
 	{
-		interface_release (::Nirvana::g_module.imp.itf);
+		(Nirvana::g_module.imp.itf->_epv ().release) (Nirvana::g_module.imp.itf);
 	}
 };
 

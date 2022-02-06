@@ -50,7 +50,7 @@ void TypeValue <I>::marshal_out (I_ref <I>& src, IORequest_ptr rq)
 template <class I> inline
 void TypeValue <I>::unmarshal (IORequest_ptr rq, I_ref <I>& dst)
 {
-	dst = rq->unmarshal_value (I::repository_id_).downcast <I> ();
+	dst = rq->unmarshal_value (I::repository_id_).template downcast <I> ();
 }
 
 }

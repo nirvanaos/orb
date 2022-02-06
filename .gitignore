@@ -9,3 +9,5 @@
 /Include/CORBA/Proxy/IOReference.h
 /Include/CORBA/DynamicServant.h
 /Include/CORBA/DynamicServant_s.h
+/Include/CORBA/Proxy/ProxyFactory.h
+/Include/CORBA/Proxy/ProxyFactory_s.h

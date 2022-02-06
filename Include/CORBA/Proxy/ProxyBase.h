@@ -32,6 +32,7 @@
 #include "../ServantMemory.h"
 #include "../DynamicServant_s.h"
 #include "../LifeCycleRefCnt.h"
+#include "../LifeCycleStatic.h"
 #include "IOReference.h"
 
 namespace CORBA {
@@ -137,15 +138,43 @@ class ProxyLifeCycle :
 	public InterfaceImplBase <S, DynamicServant>
 {
 public:
+	template <class I>
+	static Interface* __duplicate (Interface* itf, Interface* env) NIRVANA_NOEXCEPT
+	{
+		return LifeCycleRefCnt <S>::template __duplicate <I> (itf, env);
+	}
+
+	template <class I>
+	static void __release (Interface* itf) NIRVANA_NOEXCEPT
+	{
+		LifeCycleRefCnt <S>::template __release <I> (itf);
+	}
+
+	// DynamicServant
+	template <>
+	static Interface* __duplicate <DynamicServant> (Interface* itf, Interface* env)
+		NIRVANA_NOEXCEPT
+	{
+		return LifeCycleStatic::template __duplicate <DynamicServant> (itf, env);
+	}
+
+	template <>
+	static void __release <DynamicServant> (Interface* itf) NIRVANA_NOEXCEPT
+	{
+		LifeCycleStatic::template __release <DynamicServant> (itf);
+	}
+
 	void delete_object ()
 	{
 		delete& static_cast <S&> (*this);
 	}
 
-	DynamicServant* _dynamic_servant ()
+	DynamicServant::_ptr_type _dynamic_servant ()
 	{
 		return &static_cast <DynamicServant&> (static_cast <Bridge <DynamicServant>&> (*this));
 	}
+
+	// Wide interface
 
 	template <class Base, class Derived>
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, Interface* env)
