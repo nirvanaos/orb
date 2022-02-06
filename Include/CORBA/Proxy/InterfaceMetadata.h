@@ -36,29 +36,13 @@ namespace CORBA {
 namespace Internal {
 
 /// \brief Function to serve request.
-/// \param servant               Interface to servant implementation.
-///                              This interface haven't to be checked. The Proxy Manager
-///                              guarantees that it is compatible with the proxy primary interface.
-/// \param call                  IORequest object.
+/// \param servant Interface to servant implementation.
+///                This interface haven't to be checked. The Proxy Manager
+///                guarantees that it is compatible with the proxy primary interface.
+/// \param call    IORequest object.
 /// 
-typedef void (*RequestProc) (Interface* servant, Interface* call);
-
-template <class I, void (*proc) (I_ptr <I>, IORequest::_ptr_type)>
-void RqProcWrapper (Interface* servant, Interface* call)
-{
-	try {
-		IORequest::_ptr_type rq = IORequest::_check (call);
-		try {
-			proc (&static_cast <I&> (*servant), rq);
-			rq->success ();
-		} catch (Exception & e) {
-			Any any;
-			any <<= std::move (e);
-			rq->marshal_exception (any);
-		}
-	} catch (...) {
-	}
-}
+/// \returns       `true` on success, `false` if unexpected unhandled error occured (rarely).
+typedef bool (*RequestProc) (Interface* servant, Interface* call);
 
 /// Counted array for metadata.
 template <class T>

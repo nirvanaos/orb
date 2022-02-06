@@ -30,6 +30,24 @@
 namespace CORBA {
 namespace Internal {
 
+bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call)
+{
+	IORequest::_ptr_type rq = IORequest::_nil ();
+	try {
+		rq = IORequest::_check (call);
+		proc (servant, rq);
+		rq->success ();
+	} catch (Exception& e) {
+		if (!rq)
+			return false;
+
+		Any any;
+		any <<= std::move (e);
+		rq->marshal_exception (any);
+	}
+	return true;
+}
+
 void ProxyRoot::check_request (IORequest::_ptr_type rq)
 {
 	Any ex;

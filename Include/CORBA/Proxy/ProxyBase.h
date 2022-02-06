@@ -37,6 +37,16 @@
 namespace CORBA {
 namespace Internal {
 
+typedef void (*RqProcInternal) (Interface* servant, IORequest::_ptr_type call);
+
+bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call);
+
+template <class I, void (*proc) (I_ptr <I>, IORequest::_ptr_type)>
+bool RqProcWrapper (Interface* servant, Interface* call)
+{
+	return call_request_proc ((RqProcInternal)proc, servant, call);
+}
+
 inline IOReference::OperationIndex make_op_idx (UShort itf_idx, UShort op_idx)
 {
 	return (ULong)itf_idx << 16 | op_idx;
