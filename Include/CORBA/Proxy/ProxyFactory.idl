@@ -1,0 +1,16 @@
+#include "../TypeCode.idl"
+
+module CORBA {
+module Nirvana {
+
+native InterfaceMetadataPtr;
+native InterfacePtr;
+
+pseudo interface ProxyFactory : TypeCode
+{
+	readonly attribute InterfaceMetadataPtr metadata;
+	InterfacePtr create_proxy (IOReference target, unsigned short interface_idx, out DynamicServant deleter);
+};
+
+};
+};

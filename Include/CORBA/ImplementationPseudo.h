@@ -47,12 +47,10 @@ namespace Internal {
 //!
 //! \tparam S Servant class implementing operations.
 //! \tparam Primary Primary interface.
-//! \tparam Bases All base interfaces derived directly or indirectly.
 
-template <class S, class Primary, class ... Bases>
+template <class S, class Primary>
 class ImplementationPseudo :
 	public ServantTraits <S>,
-	public InterfaceImplBase <S, Bases> ...,
 	public InterfaceImplBase <S, Primary>
 {
 public:

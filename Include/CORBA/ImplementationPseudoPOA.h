@@ -44,12 +44,10 @@ namespace Internal {
 //! \brief POA-style (virtual) implementation of the pseudo interface.
 //!
 //! \tparam Primary Primary interface.
-//! \tparam Bases All base interfaces derived directly.
 
-template <class Primary, class ... Bases>
+template <class Primary>
 class NIRVANA_NOVTABLE ImplementationPseudoPOA :
 	public virtual ServantPOA <ReferenceCounter>,
-	public virtual ServantPOA <Bases>...,
 	public InterfaceImpl <ServantPOA <Primary>, Primary>
 {
 public:

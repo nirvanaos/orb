@@ -44,13 +44,11 @@ namespace Internal {
 //!
 //! \tparam S Servant class implementing operations.
 //! \tparam Primary Primary interface.
-//! \tparam Bases All base interfaces derived directly or indirectly.
 
-template <class S, class Primary, class ... Bases>
+template <class S, class Primary>
 class ImplementationPseudoStatic :
 	public ServantTraitsStatic <S>,
 	public LifeCycleStatic,
-	public InterfaceStaticBase <S, Bases> ...,
 	public InterfaceStaticBase <S, Primary>
 {
 public:
