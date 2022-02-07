@@ -39,13 +39,8 @@ pseudo interface IOReference
 	/// Create request.
 	IORequest create_request ();
 
-	/// Low 16 bits contain the interface index.
-	/// High 16 bits contain the operation index within the interface.
-	typedef unsigned long OperationIndex;
-
-	void call (in OperationIndex op, in IORequest iorq);
-	void call_oneway (in OperationIndex op, in IORequest iorq);
-	// TBD: void call_async (in OperationIndex op, in IORequest iorq, DeadlineTime dt, in Interface callback);
+	/// Create oneway request.
+	IORequest create_request_oneway ();
 };
 
 };

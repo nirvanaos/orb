@@ -141,10 +141,6 @@ pseudo interface IORequest
   ///@{
   /// Callee operations.
 
-  /// End of the input parameters unmarshaling.
-  /// This method is called only if the input parameters are present.
-  void unmarshal_end ();
- 
   /// Return exception to caller.
   /// Operation has move semantics so `e` may be cleared.
   void marshal_exception (inout any e);
@@ -156,6 +152,12 @@ pseudo interface IORequest
 
   ///@{
   /// Caller operations.
+
+  /// Low 16 bits contain the interface index.
+  /// High 16 bits contain the operation index within the interface.
+  typedef unsigned long OperationIndex;
+
+  void issue (in OperationIndex op);
 
   readonly attribute boolean completed;
 

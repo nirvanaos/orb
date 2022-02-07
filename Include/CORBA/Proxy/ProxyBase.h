@@ -48,17 +48,17 @@ bool RqProcWrapper (Interface* servant, Interface* call)
 	return call_request_proc ((RqProcInternal)proc, servant, call);
 }
 
-inline IOReference::OperationIndex make_op_idx (UShort itf_idx, UShort op_idx)
+inline IORequest::OperationIndex make_op_idx (UShort itf_idx, UShort op_idx)
 {
 	return (ULong)itf_idx << 16 | op_idx;
 }
 
-inline UShort interface_idx (IOReference::OperationIndex oi)
+inline UShort interface_idx (IORequest::OperationIndex oi)
 {
 	return oi >> 16;
 }
 
-inline UShort operation_idx (IOReference::OperationIndex oi)
+inline UShort operation_idx (IORequest::OperationIndex oi)
 {
 	return (UShort)oi;
 }
@@ -93,7 +93,7 @@ public:
 		return interface_idx_;
 	}
 
-	IOReference::OperationIndex _make_op_idx (UShort op_idx) const
+	IORequest::OperationIndex _make_op_idx (UShort op_idx) const
 	{
 		return make_op_idx (interface_idx_, op_idx);
 	}
