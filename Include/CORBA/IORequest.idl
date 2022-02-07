@@ -80,17 +80,23 @@ pseudo interface IORequest
   /// \param [out] data Pointer to the data with common-data-representation (CDR).
   /// \param [out] allocated_size If this parameter is not zero, the caller
   ///              becomes an owner of the memory block.
-  boolean unmarshal_seq (in Nirvana::Size align,
-    in Nirvana::Size element_size, out Nirvana::Size element_count,
-    out Nirvana::Pointer data, out Nirvana::Size allocated_size);
+  boolean unmarshal_seq (in Nirvana::Size align, in Nirvana::Size element_size,
+    out Nirvana::Size element_count, out Nirvana::Pointer data,
+    out Nirvana::Size allocated_size);
 
   ///@}
 
   ///@{
   /// Marshal/unmarshal sequences.
 
+  /// Write marshaling sequence size.
+  /// 
+  /// \param element_count The sequence size.
   void marshal_seq_begin (in Nirvana::Size element_count);
 
+  /// Get unmarshalling sequence size.
+  /// 
+  /// \returns The sequence size.
   Nirvana::Size unmarshal_seq_begin ();
 
   ///@}
@@ -123,17 +129,39 @@ pseudo interface IORequest
   ///@{
   /// Object operations.
 
-  /// \brief Marshal interface.
+  /// Marshal interface.
   /// 
-  /// \param obj The interface derived from Object or LocalObject.
+  /// \param itf The interface derived from Object or LocalObject.
   void marshal_interface (in Interface itf);
 
+  /// Unmarshal interface.
+  /// 
+  /// \param rep_id The interface repository id.
+  /// 
+  /// \returns Interface.
   Interface unmarshal_interface (in string rep_id);
 
+  /// Marshal TypeCode.
+  /// 
+  /// \param tc TypeCode.
   void marshal_type_code (in TypeCode tc);
+
+  /// Unmarshal TypeCode.
+  /// 
+  /// \returns TypeCode.
   TypeCode unmarshal_type_code ();
 
-  void marshal_value (in ValueBase val, in boolean no_copy);
+  /// Marshal value type.
+  /// 
+  /// \param val  ValueBase.
+  /// \param move Use move semantics. Do not perform deep copy.
+  void marshal_value (in ValueBase val, in boolean move);
+
+  /// Unmarshal value type.
+  /// 
+  /// \param rep_id The value type repository id.
+  /// 
+  /// \returns Value type interface.
   Interface unmarshal_value (in string rep_id);
 
   ///@}
@@ -157,6 +185,9 @@ pseudo interface IORequest
   /// High 16 bits contain the operation index within the interface.
   typedef unsigned long OperationIndex;
 
+  /// Issue request.
+  /// 
+  /// \param op The index of the target operation.
   void issue (in OperationIndex op);
 
   readonly attribute boolean completed;
