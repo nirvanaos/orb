@@ -191,11 +191,14 @@ pseudo interface IORequest
   /// Low 16 bits contain the interface index.
   /// High 16 bits contain the operation index within the interface.
   typedef unsigned long OperationIndex;
+  typedef unsigned long long DeadlineTime;
 
   /// Issue request.
   /// 
-  /// \param op The index of the target operation.
-  void issue (in OperationIndex op);
+  /// \param op       The index of the target operation.
+  /// \param deadline Asynchronous request deadline.
+  ///                 Ignored for synchronous requests.
+  void issue (in OperationIndex op, in DeadlineTime deadline);
 
   readonly attribute boolean completed;
 

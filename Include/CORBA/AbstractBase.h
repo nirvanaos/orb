@@ -70,8 +70,10 @@ class Client <T, AbstractBase> :
 	public T
 {
 public:
+	/// This method does not increment reference counter
 	I_ptr <Interface> _query_interface (String_in type_id);
 
+	/// This method does not increment reference counter
 	template <class I>
 	I_ptr <I> _query_interface ()
 	{

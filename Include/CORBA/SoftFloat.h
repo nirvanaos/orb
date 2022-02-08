@@ -40,7 +40,9 @@ template <> class SoftFloat <4>
 {
 public:
 	// Constructors
-	SoftFloat ();
+	SoftFloat () {}
+	SoftFloat (const SoftFloat& val) = default;
+
 	SoftFloat (float val);
 	SoftFloat (double val);
 	SoftFloat (long double val);
@@ -48,8 +50,6 @@ public:
 	SoftFloat (unsigned long val);
 	SoftFloat (long long val);
 	SoftFloat (unsigned long long val);
-
-	SoftFloat (const SoftFloat& val);
 
 	// Conversions
 	operator float () const;
@@ -59,7 +59,7 @@ public:
 	operator long long () const;
 
 	// Operators
-	SoftFloat& operator = (const SoftFloat& val);
+	SoftFloat& operator = (const SoftFloat& val) = default;
 	SoftFloat& operator += (const SoftFloat& val);
 	SoftFloat& operator -= (const SoftFloat& val);
 	SoftFloat& operator *= (const SoftFloat& val);
@@ -80,7 +80,9 @@ template <> class SoftFloat <8>
 {
 public:
 	// Constructors
-	SoftFloat ();
+	SoftFloat () {}
+	SoftFloat (const SoftFloat& val) = default;
+
 	SoftFloat (float val);
 	SoftFloat (double val);
 	SoftFloat (long double val);
@@ -88,8 +90,6 @@ public:
 	SoftFloat (unsigned long val);
 	SoftFloat (long long val);
 	SoftFloat (unsigned long long val);
-
-	SoftFloat (const SoftFloat& val);
 
 	// Conversions
 	operator float () const;
@@ -120,7 +120,9 @@ template <> class SoftFloat <16>
 {
 public:
 	// Constructors
-	SoftFloat ();
+	SoftFloat () {}
+	SoftFloat (const SoftFloat& val) = default;
+
 	SoftFloat (float val);
 	SoftFloat (double val);
 	SoftFloat (long double val);
@@ -128,8 +130,6 @@ public:
 	SoftFloat (unsigned long val);
 	SoftFloat (long long val);
 	SoftFloat (unsigned long long val);
-
-	SoftFloat (const SoftFloat& val);
 
 	// Conversions
 	operator float () const;
@@ -139,7 +139,7 @@ public:
 	operator long long () const;
 
 	// Operators
-	SoftFloat& operator = (const SoftFloat& val);
+	SoftFloat& operator = (const SoftFloat& val) = default;
 	SoftFloat& operator += (const SoftFloat& val);
 	SoftFloat& operator -= (const SoftFloat& val);
 	SoftFloat& operator *= (const SoftFloat& val);
