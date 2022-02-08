@@ -32,6 +32,7 @@
 #include "TypeEnum.h"
 #include "TypeFixLen.h"
 #include <Nirvana/ImportInterface.h>
+#include <Nirvana/bitutils.h>
 
 #define OMGVMCID 0x4f4d0000
 #define MAKE_MINOR(vmcid, c) (vmcid | c)
@@ -67,7 +68,7 @@ class NIRVANA_NOVTABLE SystemException : public Exception
 public:
 	struct _Data
 	{
-		uint32_t minor;
+		ULong minor;
 		CompletionStatus completed;
 	};
 
@@ -176,7 +177,13 @@ namespace Internal {
 
 template <>
 struct Type <SystemException::_Data> : TypeFixLen <SystemException::_Data>
-{};
+{
+	static void byteswap (Var& v) NIRVANA_NOEXCEPT
+	{
+		v.minor = Nirvana::byteswap (v.minor);
+		v.completed = (CompletionStatus)Nirvana::byteswap ((ABI_enum)v.completed);
+	}
+};
 
 }
 

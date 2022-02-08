@@ -131,6 +131,10 @@ struct TypeEnum : TypeByVal <T, ABI_enum>
 	static void unmarshal (IORequest_ptr rq, T& dst);
 	static void unmarshal_a (IORequest_ptr rq, size_t count, T* dst);
 
+	static void byteswap (Var& v) NIRVANA_NOEXCEPT
+	{
+		Type <ABI>::byteswap ((ABI&)v);
+	}
 };
 
 }

@@ -129,6 +129,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 	void large_size (size_t s)
 	{
 		data.large.size = s;
+		assert (is_large ());
 	}
 
 	size_t large_size () const

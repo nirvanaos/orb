@@ -44,7 +44,7 @@ template <class I> inline
 void TypeValue <I>::marshal_out (I_ref <I>& src, IORequest_ptr rq)
 {
 	rq->marshal_value (src, true);
-	src.reset ();
+	src = nullptr;
 }
 
 template <class I> inline

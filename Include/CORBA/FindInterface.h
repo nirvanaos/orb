@@ -39,7 +39,8 @@ struct InterfaceEntry
 	size_t id_len;
 	Interface* (*cast) (void* servant);
 
-	static Interface* find (const InterfaceEntry* begin, const InterfaceEntry* end, void* servant, String_in id);
+	static Interface* find (const InterfaceEntry* begin, const InterfaceEntry* end,
+		void* servant, String_in id) NIRVANA_NOEXCEPT;
 };
 
 template <class S, class Primary, class ... I>
@@ -52,7 +53,7 @@ class InterfaceFinder
 	}
 
 public:
-	static Interface* find (S& servant, String_in id);
+	static Interface* find (S& servant, String_in id) NIRVANA_NOEXCEPT;
 
 private:
 	static const InterfaceEntry itable_ [];
@@ -65,7 +66,7 @@ const InterfaceEntry InterfaceFinder <S, Primary, I...>::itable_ [] = {
 };
 
 template <class S, class Primary, class ... I>
-inline Interface* InterfaceFinder <S, Primary, I...>::find (S& servant, String_in id)
+inline Interface* InterfaceFinder <S, Primary, I...>::find (S& servant, String_in id) NIRVANA_NOEXCEPT
 {
 	return InterfaceEntry::find (itable_, itable_ + countof (itable_), &servant, id);
 }
@@ -75,7 +76,7 @@ class FindInterface
 {
 public:
 	template <class S>
-	static Interface* find (S& servant, String_in id)
+	static Interface* find (S& servant, String_in id) NIRVANA_NOEXCEPT
 	{
 		return InterfaceFinder <S, Primary, I...>::find (servant, id);
 	}

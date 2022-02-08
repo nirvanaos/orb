@@ -60,13 +60,13 @@ public:
 	//!
 	//! \return The primary interface pointer.
 
-	I_ptr <Primary> _get_ptr ()
+	I_ptr <Primary> _get_ptr () NIRVANA_NOEXCEPT
 	{
 		return I_ptr <Primary> (&static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this)));
 	}
 
 protected:
-	ImplementationPseudoPOA ()
+	ImplementationPseudoPOA () NIRVANA_NOEXCEPT
 	{}
 };
 

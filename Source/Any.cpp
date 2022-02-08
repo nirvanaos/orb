@@ -163,14 +163,14 @@ void* Any::data ()
 void Any::operator <<= (from_boolean from)
 {
 	clear ();
-	*(Boolean*)small_pointer () = from.val;
+	*(Type <Boolean>::ABI*)small_pointer () = from.val;
 	set_type (_tc_boolean);
 }
 
 Boolean Any::operator >>= (to_boolean to) const
 {
 	if (type ()->equivalent (_tc_boolean)) {
-		to.ref = *(const Boolean*)small_pointer ();
+		to.ref = *(const Type <Boolean>::ABI*)small_pointer ();
 		return true;
 	} else
 		return false;

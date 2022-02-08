@@ -57,6 +57,11 @@ inline Long byteswap (const Long& v) NIRVANA_NOEXCEPT
 	return Nirvana::byteswap ((const uint32_t&)v);
 }
 
+inline LongLong byteswap (const ULongLong& v) NIRVANA_NOEXCEPT
+{
+	return Nirvana::byteswap (v);
+}
+
 inline LongLong byteswap (const LongLong& v) NIRVANA_NOEXCEPT
 {
 	return Nirvana::byteswap ((const uint64_t&)v);

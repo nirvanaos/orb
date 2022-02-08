@@ -166,8 +166,9 @@ template <typename T>
 class TypeCodeOps
 {
 public:
-	typedef typename Type <T>::Var Var;
 	typedef typename Type <T>::ABI ABI;
+	typedef typename std::conditional <std::is_same <T, Boolean>::value,
+		Type <Boolean>::ABI, typename Type <T>::Var>::type Var;
 
 	static size_t _n_size (Bridge <TypeCode>*, Interface*)
 	{

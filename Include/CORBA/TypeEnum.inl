@@ -50,7 +50,7 @@ void TypeEnum <T, last>::unmarshal (IORequest_ptr rq, T& dst)
 {
 	void* pbuf = nullptr;
 	if (rq->unmarshal (alignof (T), sizeof (T), pbuf))
-		byteswap (*(ABI*)pbuf);
+		byteswap (*(Var*)pbuf);
 	check (*(ABI*)pbuf);
 	dst = (T)*(ABI*)pbuf;
 }
@@ -60,7 +60,7 @@ void TypeEnum <T, last>::unmarshal_a (IORequest_ptr rq, size_t count, T* dst)
 {
 	void* pbuf = nullptr;
 	if (rq->unmarshal (alignof (T), sizeof (T) * count, pbuf)) {
-		for (ABI* src = (ABI*)pbuf, *end = src + count; src != end; ++src) {
+		for (Var* src = (Var*)pbuf, *end = src + count; src != end; ++src) {
 			byteswap (*src);
 		}
 	}

@@ -58,7 +58,7 @@ public:
 	//!   Works like _this() method but doesn't increment the reference counter.
 	//!
 	//! \return The primary interface pointer.
-	static Primary* _get_ptr ()
+	static Primary* _get_ptr () NIRVANA_NOEXCEPT
 	{
 		return static_cast <Primary*> (InterfaceStaticBase <S, Primary>::_bridge ());
 	}
