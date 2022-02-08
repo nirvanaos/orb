@@ -76,7 +76,7 @@ public:
 
 	Interface* create_proxy (
 		IOReference::_ptr_type proxy_manager, UShort interface_idx,
-		DynamicServant::_ref_type& deleter)
+		Interface*& deleter)
 	{
 		typedef Proxy <I> ProxyClass;
 		ProxyClass* proxy;

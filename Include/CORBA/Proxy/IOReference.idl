@@ -36,11 +36,12 @@ pseudo interface IOReference
 	/// Returns Object reference.
 	readonly attribute Object object;
 
-	/// Create request.
-	IORequest create_request ();
+	/// Low 16 bits contain the interface index.
+	/// High 16 bits contain the operation index within the interface.
+	typedef unsigned long OperationIndex;
 
-	/// Create oneway request.
-	IORequest create_request_oneway ();
+	/// Create request.
+	IORequest create_request (in OperationIndex op);
 };
 
 };

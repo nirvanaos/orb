@@ -32,7 +32,6 @@
 #include "../ServantMemory.h"
 #include "../DynamicServant_s.h"
 #include "../LifeCycleRefCnt.h"
-#include "../LifeCycleStatic.h"
 #include "IOReference.h"
 
 namespace CORBA {
@@ -48,17 +47,17 @@ bool RqProcWrapper (Interface* servant, Interface* call)
 	return call_request_proc ((RqProcInternal)proc, servant, call);
 }
 
-inline IORequest::OperationIndex make_op_idx (UShort itf_idx, UShort op_idx)
+inline IOReference::OperationIndex make_op_idx (UShort itf_idx, UShort op_idx)
 {
 	return (ULong)itf_idx << 16 | op_idx;
 }
 
-inline UShort interface_idx (IORequest::OperationIndex oi)
+inline UShort interface_idx (IOReference::OperationIndex oi)
 {
 	return oi >> 16;
 }
 
-inline UShort operation_idx (IORequest::OperationIndex oi)
+inline UShort operation_idx (IOReference::OperationIndex oi)
 {
 	return (UShort)oi;
 }
@@ -93,7 +92,7 @@ public:
 		return interface_idx_;
 	}
 
-	IORequest::OperationIndex _make_op_idx (UShort op_idx) const
+	IOReference::OperationIndex _make_op_idx (UShort op_idx) const
 	{
 		return make_op_idx (interface_idx_, op_idx);
 	}
@@ -138,38 +137,12 @@ class ProxyLifeCycle :
 	public InterfaceImplBase <S, DynamicServant>
 {
 public:
-	template <class I>
-	static Interface* __duplicate (Interface* itf, Interface* env) NIRVANA_NOEXCEPT
-	{
-		return LifeCycleRefCnt <S>::template __duplicate <I> (itf, env);
-	}
-
-	template <class I>
-	static void __release (Interface* itf) NIRVANA_NOEXCEPT
-	{
-		LifeCycleRefCnt <S>::template __release <I> (itf);
-	}
-
-	// DynamicServant
-	template <>
-	static Interface* __duplicate <DynamicServant> (Interface* itf, Interface* env)
-		NIRVANA_NOEXCEPT
-	{
-		return LifeCycleStatic::template __duplicate <DynamicServant> (itf, env);
-	}
-
-	template <>
-	static void __release <DynamicServant> (Interface* itf) NIRVANA_NOEXCEPT
-	{
-		LifeCycleStatic::template __release <DynamicServant> (itf);
-	}
-
 	void delete_object ()
 	{
 		delete& static_cast <S&> (*this);
 	}
 
-	DynamicServant::_ptr_type _dynamic_servant ()
+	DynamicServant* _dynamic_servant ()
 	{
 		return &static_cast <DynamicServant&> (static_cast <Bridge <DynamicServant>&> (*this));
 	}

@@ -43,15 +43,17 @@ bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call
 
 		Any any;
 		any <<= std::move (e);
-		rq->marshal_exception (any);
+		rq->set_exception (any);
 	}
 	return true;
 }
 
 void ProxyRoot::check_request (IORequest::_ptr_type rq)
 {
-	Any ex;
-	if (rq->unmarshal_exception (ex)) {
+	if (rq->is_exception ()) {
+		Any ex;
+		Type <Any>::unmarshal (rq, ex);
+
 		std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type se;
 		if (ex >>= reinterpret_cast <SystemException&> (se))
 			reinterpret_cast <SystemException&> (se)._raise ();

@@ -140,7 +140,7 @@ pseudo interface IORequest
   /// \param rep_id The interface repository id.
   /// 
   /// \returns Interface.
-  Interface unmarshal_interface (in string rep_id);
+  Interface unmarshal_interface (in string interface_id);
 
   /// Marshal TypeCode.
   /// 
@@ -163,7 +163,7 @@ pseudo interface IORequest
   /// \param rep_id The value type repository id.
   /// 
   /// \returns Value type interface.
-  Interface unmarshal_value (in string rep_id);
+  Interface unmarshal_value (in string interface_id);
 
   ///@}
 
@@ -178,7 +178,7 @@ pseudo interface IORequest
 
   /// Return exception to caller.
   /// Operation has move semantics so `e` may be cleared.
-  void marshal_exception (inout any e);
+  void set_exception (inout any e);
 
   /// Marks request as successful.
   void success ();
@@ -188,23 +188,20 @@ pseudo interface IORequest
   ///@{
   /// Caller operations.
 
-  /// Low 16 bits contain the interface index.
-  /// High 16 bits contain the operation index within the interface.
-  typedef unsigned long OperationIndex;
   typedef unsigned long long DeadlineTime;
 
-  /// Issue request.
-  /// 
-  /// \param op       The index of the target operation.
-  /// \param deadline Asynchronous request deadline.
-  ///                 Ignored for synchronous requests.
-  void issue (in OperationIndex op, in DeadlineTime deadline);
+  /// Invoke request.
+  void invoke ();
 
-  readonly attribute boolean completed;
+  /// Send request asynchronously.
+  /// 
+  /// \param deadline Asynchronous request deadline.
+  void send (in DeadlineTime deadline);
 
   void wait ();
 
-  boolean unmarshal_exception (out any e);
+  readonly attribute boolean completed;
+  readonly attribute boolean is_exception;
 
   ///@}
 };

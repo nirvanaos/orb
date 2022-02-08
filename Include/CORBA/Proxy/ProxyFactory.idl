@@ -36,7 +36,7 @@ native InterfacePtr;
 pseudo interface ProxyFactory
 {
 	readonly attribute InterfaceMetadataPtr metadata;
-	InterfacePtr create_proxy (in IOReference target, in unsigned short interface_idx, out DynamicServant deleter);
+	InterfacePtr create_proxy (in IOReference target, in unsigned short interface_idx, out InterfacePtr deleter);
 };
 
 };
