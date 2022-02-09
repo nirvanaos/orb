@@ -36,6 +36,11 @@ extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_UnknownUserExce
 
 class UnknownUserException : public UserException
 {
+	virtual Code __code () const NIRVANA_NOEXCEPT
+	{
+		return EC_UNKNOWN_USER_EXCEPTION;
+	}
+
 public:
 	NIRVANA_EXCEPTION_DCL (UnknownUserException);
 
