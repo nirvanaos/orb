@@ -36,9 +36,15 @@ pseudo interface IOReference
 	/// Returns Object reference.
 	readonly attribute Object object;
 
-	/// Low 16 bits contain the interface index.
-	/// High 16 bits contain the operation index within the interface.
-	typedef unsigned long OperationIndex;
+	/// Operation index
+	struct OperationIndex
+	{
+		/// Index of interface
+		unsigned short interface_idx;
+
+		/// Index of operation within the interface
+		unsigned short operation_idx;
+	};
 
 	/// Create request.
 	IORequest create_request (in OperationIndex op);

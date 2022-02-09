@@ -37,21 +37,6 @@
 namespace CORBA {
 namespace Internal {
 
-inline IOReference::OperationIndex make_op_idx (UShort itf_idx, UShort op_idx)
-{
-	return (ULong)itf_idx << 16 | op_idx;
-}
-
-inline UShort interface_idx (IOReference::OperationIndex oi)
-{
-	return oi >> 16;
-}
-
-inline UShort operation_idx (IOReference::OperationIndex oi)
-{
-	return (UShort)oi;
-}
-
 template <class I> class Proxy;
 
 class ProxyRoot : public ServantMemory
@@ -84,7 +69,7 @@ public:
 
 	IOReference::OperationIndex _make_op_idx (UShort op_idx) const
 	{
-		return make_op_idx (interface_idx_, op_idx);
+		return IOReference::OperationIndex (interface_idx_, op_idx);
 	}
 
 	typedef void (*RqProcInternal) (Interface::_ptr_type servant, IORequest::_ptr_type call);
