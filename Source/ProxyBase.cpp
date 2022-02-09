@@ -30,7 +30,7 @@
 namespace CORBA {
 namespace Internal {
 
-bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call)
+bool ProxyRoot::call_request_proc (RqProcInternal proc, Interface* servant, Interface* call)
 {
 	IORequest::_ptr_type rq = IORequest::_nil ();
 	try {

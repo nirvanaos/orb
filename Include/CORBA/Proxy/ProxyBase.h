@@ -37,10 +37,6 @@
 namespace CORBA {
 namespace Internal {
 
-typedef void (*RqProcInternal) (Interface::_ptr_type servant, IORequest::_ptr_type call);
-
-bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call);
-
 inline IOReference::OperationIndex make_op_idx (UShort itf_idx, UShort op_idx)
 {
 	return (ULong)itf_idx << 16 | op_idx;
@@ -90,6 +86,10 @@ public:
 	{
 		return make_op_idx (interface_idx_, op_idx);
 	}
+
+	typedef void (*RqProcInternal) (Interface::_ptr_type servant, IORequest::_ptr_type call);
+
+	static bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call);
 
 	static void check_request (IORequest::_ptr_type rq);
 
@@ -169,6 +169,12 @@ public:
 	Interface* _proxy ()
 	{
 		return &static_cast <Bridge <I>&> (*this);
+	}
+
+	template <void (*proc) (I_ptr <I>, IORequest::_ptr_type)>
+	static bool RqProcWrapper (Interface* servant, Interface* call)
+	{
+		return call_request_proc ((RqProcInternal)proc, servant, call);
 	}
 
 protected:
