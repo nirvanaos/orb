@@ -23,45 +23,16 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_LIFECYCLEDYNAMIC_H_
-#define NIRVANA_ORB_LIFECYCLEDYNAMIC_H_
-#pragma once
+module CORBA {
+module Internal {
 
-#include "Exception.h"
-
-namespace CORBA {
-namespace Internal {
-
-//! Dynamic servant life cycle.
-//! \tparam S Class implementing `_duplicate()' and `_release()' operations.
-template <class S>
-class LifeCycleDynamic
+/// \interface DynamicServant
+/// \brief The interface for dynamically allocated servant garbage collection.
+pseudo interface DynamicServant
 {
-public:
-	template <class I>
-	static Interface* __duplicate (Interface* itf, Interface* env) NIRVANA_NOEXCEPT
-	{
-		try {
-			return S::_duplicate (static_cast <Bridge <I>*> (itf));
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
-	}
-
-	template <class I>
-	static void __release (Interface* itf) NIRVANA_NOEXCEPT
-	{
-		try {
-			S::_release (static_cast <Bridge <I>*> (itf));
-		} catch (...) {
-		}
-	}
+	/// \brief Called by the garbage collector.
+	void delete_object ();
 };
 
-}
-}
-
-#endif
+};
+};

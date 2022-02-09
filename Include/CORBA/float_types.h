@@ -1,5 +1,6 @@
+/// \file
 /*
-* Nirvana runtime library.
+* Nirvana IDL support library.
 *
 * This is a part of the Nirvana project.
 *
@@ -23,28 +24,20 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-module CORBA {
-module Internal {
+#ifndef NIRVANA_ORB_FLOAT_TYPES_H_
+#define NIRVANA_ORB_FLOAT_TYPES_H_
+#pragma once
 
-interface Marshal;
+#include "SoftFloat.h"
+#include <limits>
+#include <type_traits>
 
-/// \brief Interoperable Object Request.
-///        Interface to the implementation of the some Inter-ORB protocol.
-abstract valuetype IORequest
-{
-	/// Returns a marshaler associated with this call.
-	/// If the marshaler does not exist, it will be created.
-	/// Caller mustn't duplicate this interface.
-	readonly attribute Marshal marshaler;
+namespace CORBA {
 
-	/// Return exception to caller.
-	void set_exception (inout any e);
+typedef std::conditional <sizeof (float) == 4 && std::numeric_limits <float>::is_iec559, float, Internal::SoftFloat <4> >::type Float;
+typedef std::conditional <sizeof (double) == 8 && std::numeric_limits <double>::is_iec559, double, Internal::SoftFloat <8> >::type Double;
+typedef std::conditional <sizeof (long double) == 16 && std::numeric_limits <long double>::is_iec559, long double, Internal::SoftFloat <16> >::type LongDouble;
 
-	/// Marks request as successful.
-	/// If request procedure return without the explicit call of success (), request will
-	/// return UNKNOWN exception to caller.
-	void success ();
-};
+}
 
-};
-};
+#endif

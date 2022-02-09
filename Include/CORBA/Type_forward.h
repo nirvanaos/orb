@@ -33,10 +33,8 @@
 namespace CORBA {
 namespace Internal {
 
-class Marshal;
-typedef I_ptr <Marshal> Marshal_ptr;
-class Unmarshal;
-typedef I_ptr <Unmarshal> Unmarshal_ptr;
+class IORequest;
+typedef I_ptr <IORequest> IORequest_ptr;
 
 /** For each structure, union or enum data type T, IDL compiler generates `CORBA::Internal::Type <T>` structure.
     This structure defines how the parameters are passed between client and server.
@@ -81,26 +79,52 @@ template <> struct Type <T>
   // Type code
   static I_ptr <TypeCode> type_code ();
 
+  /// Is this data type fixed length?
+  static const bool fixed_len;
+
   /// \brief Copies input data to the marshaling buffer.
-  /// \param src         Source value.
-  /// \param marshaler   Marshaler interface. May be `nil` if has_marshal is `false`.
-  /// \param dst         Destination value ABI.
-  static void marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst);
+  /// \param src Source value.
+  /// \param rq  IORequest interface.
+  static void marshal_in (const Var& src, IORequest_ptr rq);
+
+  /// \brief Copies input data array to the marshaling buffer.
+  /// \param src   Source values.
+  /// \param count Count of source values.
+  /// \param rq    IORequest interface.
+  static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq);
 
   /// \brief Moves output data to the marshaling buffer.
-  /// \param src         Source value. After marshalling, the value can be released.
-  /// \param marshaler   Marshaler interface. May be `nil` if has_marshal is `false`.
-  /// \param dst         Destination value ABI.
-  static void marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst);
+  /// \param src Source value. After marshalling, the value will be released.
+  /// \param rq  IORequest interface.
+  static void marshal_out (Var& src, IORequest_ptr rq);
+
+  /// \brief Moves output data array to the marshaling buffer.
+  /// \param src   Source values. After marshalling, the values will be released.
+  /// \param count Count of source values.
+  /// \param rq    IORequest interface.
+  static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq);
 
   /// \brief Moves data from marshaling buffer to the local variable.
-  /// \param src         Source value ABI.
-  /// \param unmarshaler Unmarshaler interface. May be `nil` if has_marshal is `false`.
-  /// \param dst         Destination value.
-  static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst);
+  /// \param rq    IORequest interface.
+  /// \param dst   Destination value.
+  static void unmarshal (IORequest_ptr rq, Var& dst);
 
-  /// \brief `true` if marshal operations are not trivial copy.
-  static const bool has_marshal;
+  /// \brief Moves data array from marshaling buffer to the local variables.
+  /// \param rq    IORequest interface.
+  /// \param count Count of values.
+  /// \param dst   Destination values buffer.
+  static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst);
+
+  /// \brief Swap byte order to change endianness.
+  /// Must be defined for:
+  ///   - Integer types
+  ///   - Float types
+  ///   - structures
+  ///   - unions
+  ///   - exceptions
+  /// 
+  /// \param val Value.
+  static void byteswap (Var&);
 };
 ~~~
 */

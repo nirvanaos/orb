@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -41,19 +42,15 @@ typedef LocalObject_var& LocalObject_out;
 
 namespace Internal {
 
-template <>
-struct Type <LocalObject> : TypeItf <LocalObject>
-{
-	static I_ptr <TypeCode> type_code ()
-	{
-		return _tc_Object;
-	}
-};
-
 template <class I>
 struct TypeLocalObject : TypeObject <I>
 {
 	static const TCKind tc_kind = TCKind::tk_local_interface;
+};
+
+template <>
+struct Type <LocalObject> : TypeLocalObject <LocalObject>
+{
 };
 
 NIRVANA_BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))

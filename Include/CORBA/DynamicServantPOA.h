@@ -57,6 +57,11 @@ public:
 		return LifeCycleServant <ServantPOA <DynamicServant> >::_refcount_value ();
 	}
 
+	virtual void delete_object ()
+	{
+		delete this;
+	}
+
 protected:
 	ServantPOA ()
 	{}

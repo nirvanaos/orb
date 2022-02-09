@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,43 +24,27 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_LIFECYCLEDYNAMIC_H_
-#define NIRVANA_ORB_LIFECYCLEDYNAMIC_H_
+#ifndef NIRVANA_ORB_TYPE_INTERFACE_INL_
+#define NIRVANA_ORB_TYPE_INTERFACE_INL_
 #pragma once
 
-#include "Exception.h"
+#include "Type_interface.h"
+#include "IORequestClient.h"
 
 namespace CORBA {
 namespace Internal {
 
-//! Dynamic servant life cycle.
-//! \tparam S Class implementing `_duplicate()' and `_release()' operations.
-template <class S>
-class LifeCycleDynamic
+inline
+void TypeItf <TypeCode>::marshal_in (I_ptr <TypeCode> src, IORequest_ptr rq)
 {
-public:
-	template <class I>
-	static Interface* __duplicate (Interface* itf, Interface* env) NIRVANA_NOEXCEPT
-	{
-		try {
-			return S::_duplicate (static_cast <Bridge <I>*> (itf));
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
-	}
+	rq->marshal_type_code (src);
+}
 
-	template <class I>
-	static void __release (Interface* itf) NIRVANA_NOEXCEPT
-	{
-		try {
-			S::_release (static_cast <Bridge <I>*> (itf));
-		} catch (...) {
-		}
-	}
-};
+inline
+void TypeItf <TypeCode>::unmarshal (IORequest_ptr rq, I_ref <TypeCode>& dst)
+{
+	dst = rq->unmarshal_type_code ();
+}
 
 }
 }

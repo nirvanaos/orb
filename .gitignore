@@ -1,6 +1,3 @@
-/Include/CORBA/Marshal.h
-/Include/CORBA/MarshalContext.h
-/Include/CORBA/Unmarshal.h
 /Include/CORBA/ObjectFactory.h
 /Include/CORBA/OctetSeq.h
 /Include/CORBA/OctetSeq_s.h
@@ -8,3 +5,9 @@
 /Include/CORBA/TCKind.h
 /Include/CORBA/TypeCode.h
 /Include/CORBA/TypeCode_s.h
+/Include/CORBA/IORequest.h
+/Include/CORBA/Proxy/IOReference.h
+/Include/CORBA/DynamicServant.h
+/Include/CORBA/DynamicServant_s.h
+/Include/CORBA/Proxy/ProxyFactory.h
+/Include/CORBA/Proxy/ProxyFactory_s.h

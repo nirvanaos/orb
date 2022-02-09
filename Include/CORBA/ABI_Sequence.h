@@ -1,4 +1,4 @@
-//! \file ABI_Sequence.h.
+//! \file
 /*
 * Nirvana IDL support library.
 *

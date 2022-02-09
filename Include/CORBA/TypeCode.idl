@@ -3,8 +3,14 @@
 /// CORBA 3.0 Chapter 4
 
 #include "TCKind.idl"
-#include "Marshal.idl"
-#include "Unmarshal.idl"
+
+module Nirvana {
+
+native Pointer;
+native ConstPointer;
+native Size;
+
+};
 
 module CORBA {
 
@@ -23,6 +29,10 @@ const ValueModifier VM_NONE = 0;
 const ValueModifier VM_CUSTOM = 1;
 const ValueModifier VM_ABSTRACT = 2;
 const ValueModifier VM_TRUNCATABLE = 3;
+
+module Internal {
+pseudo interface IORequest;
+};
 
 pseudo interface TypeCode
 {
@@ -80,6 +90,9 @@ pseudo interface TypeCode
 	/// Size of the object.
 	Nirvana::Size n_size ();
 
+	/// Is fixed-length type
+	boolean n_fixed_len ();
+
 	/// Call the default constructor.
 	void n_construct (in Nirvana::Pointer p);
 
@@ -92,12 +105,9 @@ pseudo interface TypeCode
 	/// Call move constructor. Fallbacks to copy constructor if no move constructor exists.
 	void n_move (in Nirvana::Pointer dst, in Nirvana::Pointer src);
 
-	/// If returns `false` then `marshaler` and `unmarshaler` parameters may be `nil`.
-	boolean n_has_marshal ();
-
-	void n_marshal_in (in Nirvana::ConstPointer src, in Internal::Marshal marshaler, in Nirvana::Pointer dst);
-	void n_marshal_out (in Nirvana::Pointer src, in Internal::Marshal marshaler, in Nirvana::Pointer dst);
-	void n_unmarshal (in Nirvana::ConstPointer src, in Internal::Unmarshal unmarshaler, in Nirvana::Pointer dst);
+	void n_marshal_in (in Nirvana::ConstPointer src, in Nirvana::Size count, in Internal::IORequest iorq);
+	void n_marshal_out (in Nirvana::Pointer src, in Nirvana::Size count, in Internal::IORequest iorq);
+	void n_unmarshal (in Internal::IORequest iorq, in Nirvana::Size count, in Nirvana::Pointer dst);
 
 	///@}
 };

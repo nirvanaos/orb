@@ -32,7 +32,7 @@ namespace Internal {
 
 /// For each structure, union or enum data type T, IDL compiler generates `CORBA::Internal::ABI <T>` structure.
 /// ABI type must be POD (Plain Old Data, mustn't have any constructors and destructors).
-/// Compiler replaces all non-POD struct members with corresponding ABI structures.
+/// IDL compiler replaces all non-POD struct members with corresponding ABI structures.
 template <class T> struct ABI;
 
 }

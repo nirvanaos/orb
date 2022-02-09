@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -28,6 +29,7 @@
 #pragma once
 
 #include "TypeByRef.h"
+#include "TypeVarLenHelper.h"
 #include <utility>
 #include <new>
 
@@ -35,8 +37,12 @@ namespace CORBA {
 namespace Internal {
 
 template <class T, class TABI>
-struct TypeVarLenBase : TypeByRef <T, TABI>
+struct TypeVarLenBase :
+	TypeByRef <T, TABI>,
+	TypeVarLenHelper <T, typename TypeByRef <T, TABI>::Var>
 {
+	static const bool fixed_len = false;
+
 	typedef TypeByRef <T, TABI> Base;
 	typedef typename Base::Var Var;
 	typedef typename Base::C_in C_in;
@@ -85,24 +91,28 @@ struct TypeVarLenBase : TypeByRef <T, TABI>
 		return abi;
 	}
 
-	/// Variable-length types marshalling is always not trivial and can throw exceptions.
-	static const bool has_marshal = true;
+	// IDL helper methods
 
-	/// This method has no implementation and just hides TypeByRef method.
-	static void marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst);
+	template <typename MT>
+	static void marshal_members (const MT* begin, const void* end, IORequest_ptr rq);
 
-	/// This method has no implementation and just hides TypeByRef method.
-	static void marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst);
+	template <typename MT>
+	static void marshal_members (const Var& val, const MT* begin, IORequest_ptr rq);
 
-	/// This method has no implementation and just hides TypeByRef method.
-	static void unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst);
+	template <typename MT>
+	static bool unmarshal_members (IORequest_ptr rq, MT* begin, const void* end);
+
+	template <typename MT>
+	static bool unmarshal_members (IORequest_ptr rq, const Var& val, MT* begin);
 };
 
 template <class T, bool with_check, class TABI = ABI <T> > struct TypeVarLen;
 
 template <class T, class TABI>
 struct TypeVarLen <T, false, TABI> : TypeVarLenBase <T, TABI>
-{};
+{
+	static const bool has_check = false;
+};
 
 /// Base for variable-length data types
 template <class T, class TABI>

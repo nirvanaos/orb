@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,45 +24,43 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_LIFECYCLEDYNAMIC_H_
-#define NIRVANA_ORB_LIFECYCLEDYNAMIC_H_
-#pragma once
 
-#include "Exception.h"
+#include <CORBA/Proxy/ProxyBase.h>
 
 namespace CORBA {
 namespace Internal {
 
-//! Dynamic servant life cycle.
-//! \tparam S Class implementing `_duplicate()' and `_release()' operations.
-template <class S>
-class LifeCycleDynamic
+bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call)
 {
-public:
-	template <class I>
-	static Interface* __duplicate (Interface* itf, Interface* env) NIRVANA_NOEXCEPT
-	{
-		try {
-			return S::_duplicate (static_cast <Bridge <I>*> (itf));
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
-	}
+	IORequest::_ptr_type rq = IORequest::_nil ();
+	try {
+		rq = IORequest::_check (call);
+		proc (servant, rq);
+		rq->success ();
+	} catch (Exception& e) {
+		if (!rq)
+			return false;
 
-	template <class I>
-	static void __release (Interface* itf) NIRVANA_NOEXCEPT
-	{
-		try {
-			S::_release (static_cast <Bridge <I>*> (itf));
-		} catch (...) {
-		}
+		Any any;
+		any <<= std::move (e);
+		rq->set_exception (any);
 	}
-};
+	return true;
+}
+
+void ProxyRoot::check_request (IORequest::_ptr_type rq)
+{
+	if (rq->is_exception ()) {
+		Any ex;
+		Type <Any>::unmarshal (rq, ex);
+
+		std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type se;
+		if (ex >>= reinterpret_cast <SystemException&> (se))
+			reinterpret_cast <SystemException&> (se)._raise ();
+		else
+			throw UnknownUserException (std::move (ex));
+	}
+}
 
 }
 }
-
-#endif

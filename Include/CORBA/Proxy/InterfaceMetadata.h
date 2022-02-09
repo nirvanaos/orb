@@ -29,50 +29,20 @@
 #ifndef NIRVANA_ORB_INTERFACEMETADATA_H_
 #define NIRVANA_ORB_INTERFACEMETADATA_H_
 
-#include "IORequest.h"
-#include "../Unmarshal.h"
+#include "../IORequestClient.h"
 #include <Nirvana/ImportInterface.h>
 
 namespace CORBA {
 namespace Internal {
 
 /// \brief Function to serve request.
-/// \param servant               Interface to servant implementation.
-///                              This interface haven't to be checked. The Proxy Manager
-///                              guarantees that it is compatible with the proxy primary interface.
-/// \param call                  IORequest object.
-/// \param in_params             Pointer to the input parameters structure.
-///                              The order of values in the structure must correspond to order
-///                              of the `input` parameters in the operation metadata.
-/// \param [in, out] unmarshaler Unmarshaler should be released after the unmarshal completion.
-/// \param [out] out_params      Pointer to the output parameters structure.
-///                              The order of values in the structure must correspond to order
-///                              of the `output` parameters in the operation metadata.
-///                              The return value, if it is not void, must be at the end of structure.
-typedef void (*RequestProc) (Interface* servant, Interface* call,
-	const void* in_params,
-	Interface** unmarshaler,
-	void* out_params);
-
-template <class I, void (*proc) (I_ptr <I>, IORequest::_ptr_type, const void*, Unmarshal::_ref_type&, void*)>
-void RqProcWrapper (Interface* servant, Interface* call,
-	const void* in_params,
-	Interface** unmarshaler,
-	void* out_params)
-{
-	try {
-		IORequest::_ptr_type rq = IORequest::_check (call);
-		try {
-			proc (&static_cast <I&> (*servant), rq, in_params, Type <Unmarshal>::inout (unmarshaler), out_params);
-			rq->success ();
-		} catch (Exception & e) {
-			Any any;
-			any <<= std::move (e);
-			rq->set_exception (any);
-		}
-	} catch (...) {
-	}
-}
+/// \param servant Interface to servant implementation.
+///                This interface haven't to be checked. The Proxy Manager
+///                guarantees that it is compatible with the proxy primary interface.
+/// \param call    IORequest object.
+/// 
+/// \returns       `true` on success, `false` if unexpected unhandled error occured (rarely).
+typedef bool (*RequestProc) (Interface* servant, Interface* call);
 
 /// Counted array for metadata.
 template <class T>

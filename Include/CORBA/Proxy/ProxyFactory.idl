@@ -1,6 +1,5 @@
-/// \file
 /*
-* Nirvana IDL support library.
+* Nirvana runtime library.
 *
 * This is a part of the Nirvana project.
 *
@@ -24,20 +23,20 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "MarshalContext.idl"
+#include "IOReference.idl"
+#include "../DynamicServant.idl"
 
 module CORBA {
 module Internal {
 
-/// Unmarshals data between objects in the same platform domain.
-pseudo interface Unmarshal
-{
-	/// Returns marshal context.
-	/// Used for proxy code optimization.
-	readonly attribute MarshalContext marshal_context;
+native InterfaceMetadataPtr;
+native InterfacePtr;
 
-	void adopt_memory (in ::Nirvana::ConstPointer p, in ::Nirvana::Size size);
-	Interface unmarshal_interface (in ::Nirvana::ConstPointer marshal_data, in string interface_id);
+/// The proxy factory
+pseudo interface ProxyFactory
+{
+	readonly attribute InterfaceMetadataPtr metadata;
+	InterfacePtr create_proxy (in IOReference target, in unsigned short interface_idx, out InterfacePtr deleter);
 };
 
 };

@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -29,8 +30,12 @@
 
 #include "Type_forward.h"
 #include "I_var.h"
+#include "TypeVarLenHelper.h"
 
 namespace CORBA {
+
+class TypeCode;
+
 namespace Internal {
 
 #ifdef NIRVANA_C11
@@ -262,6 +267,8 @@ public:
 template <class I>
 struct TypeItfBase
 {
+	static const bool fixed_len = false;
+
 	typedef I_ref <I> Var;
 	typedef Interface* ABI;
 
@@ -325,7 +332,7 @@ struct TypeItfBase
 };
 
 template <class I>
-struct TypeItf : TypeItfBase <I>
+struct TypeItfCommon : TypeItfBase <I>
 {
 	typedef TypeItfBase <I> Base;
 	typedef typename Base::ABI_in ABI_in;
@@ -350,16 +357,30 @@ struct TypeItf : TypeItfBase <I>
 		return reinterpret_cast <I_ref <I>&> (*p);
 	}
 
-	static const bool has_marshal = true;
+};
 
-	static void marshal_in (I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst);
-	
-	static void marshal_out (I_ref <I>& src, Marshal_ptr marshaler, Interface*& dst)
+template <class I>
+struct TypeItf : TypeItfCommon <I>
+{};
+
+template <class I>
+struct TypeItfMarshalable :
+	TypeItfCommon <I>,
+	TypeVarLenHelper <I, I_ref <I> >
+{
+	// By default, for interfaces, in and out parameters marshalled in the same manner.
+	// But this method is overridden for value types.
+	static void marshal_out (I_ref <I>& src, IORequest_ptr rq)
 	{
-		marshal_in (src, marshaler, dst);
+		Type <I>::marshal_in (src, rq);
 	}
+};
 
-	static void unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_ref <I>& dst);
+template <>
+struct TypeItf <TypeCode> : TypeItfMarshalable <TypeCode>
+{
+	static void marshal_in (I_ptr <TypeCode> src, IORequest_ptr rq);
+	static void unmarshal (IORequest_ptr rq, I_ref <TypeCode>& dst);
 };
 
 template <>

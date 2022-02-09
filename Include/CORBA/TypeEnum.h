@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -29,12 +30,11 @@
 
 #include <Nirvana/throw_exception.h>
 #include "TypeByVal.h"
-#include <type_traits>
 
 namespace CORBA {
 namespace Internal {
 
-typedef std::conditional_t <sizeof (size_t) >= 4, ULong, size_t> ABI_enum;
+typedef ULong ABI_enum;
 
 /// Base for enum data types
 template <class T, T last>
@@ -123,6 +123,17 @@ struct TypeEnum : TypeByVal <T, ABI_enum>
 	{
 		_check_pointer (p);
 		return (Var&)*p;
+	}
+
+	static void marshal_in (const T& src, IORequest_ptr rq);
+	static void marshal_in_a (const T* src, size_t count, IORequest_ptr rq);
+
+	static void unmarshal (IORequest_ptr rq, T& dst);
+	static void unmarshal_a (IORequest_ptr rq, size_t count, T* dst);
+
+	static void byteswap (Var& v) NIRVANA_NOEXCEPT
+	{
+		Type <ABI>::byteswap ((ABI&)v);
 	}
 };
 

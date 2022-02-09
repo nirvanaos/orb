@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -40,6 +41,8 @@ namespace Internal {
 template <typename T, typename TABI = T>
 struct TypeByVal
 {
+	static const bool fixed_len = true;
+
 	typedef T Var;
 	typedef Var ConstRef; // By value
 	typedef Var S_in; // By value
@@ -117,21 +120,14 @@ struct TypeByVal
 		return ABI_ret ();
 	}
 
-	static const bool has_marshal = false;
-
-	static void marshal_in (Var src, Marshal_ptr marshaler, ABI& dst) NIRVANA_NOEXCEPT
+	static void marshal_out (Var& src, IORequest_ptr rq)
 	{
-		dst = (ABI)src;
+		Type <T>::marshal_in (src, rq);
 	}
 
-	static void marshal_out (Var src, Marshal_ptr marshaler, ABI& dst) NIRVANA_NOEXCEPT
+	static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq)
 	{
-		dst = (ABI)src;
-	}
-
-	static void unmarshal (ABI src, Unmarshal_ptr unmarshaler, Var& dst) NIRVANA_NOEXCEPT
-	{
-		dst = (Var)src;
+		Type <T>::marshal_in_a (src, count, rq);
 	}
 };
 

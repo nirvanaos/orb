@@ -1,4 +1,3 @@
-/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -24,34 +23,17 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+#ifndef NIRVANA_ORB_IOREQUESTCLIENT_H_
+#define NIRVANA_ORB_IOREQUESTCLIENT_H_
+#pragma once
 
-#ifndef MARSHAL_CONTEXT_IDL_
-#define MARSHAL_CONTEXT_IDL_
-
-module Nirvana{
-
-native Pointer;
-native ConstPointer;
-native Size;
-native UIntPtr;
-
-};
-
-module CORBA {
-module Internal {
-
-/// \brief Type of the inter-domain marshal context.
-enum MarshalContext
-{
-	SHARED_MEMORY,            ///< Both domains share common memory heap.
-	SHARED_PROTECTION_DOMAIN, ///< Different heaps in the common protection domain.
-	OTHER_PROTECTION_DOMAIN   ///< Different protection domains.
-};
-
-native Interface;
-
-};
-};
+#include "Client.h"
+#include "UserException.h"
+#include "Any.h"
+#include "Sequence.h"
+#include "ValueBase.h"
+#include "EnvironmentEx.h"
+#include <Nirvana/native.h>
+#include "IORequest.h"
 
 #endif
-

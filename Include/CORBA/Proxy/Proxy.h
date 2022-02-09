@@ -31,7 +31,7 @@
 #include "InterfaceMetadata.h"
 #include "ProxyFactory_s.h"
 #include "IOReference.h"
-#include "IORequest.h"
+#include "../IORequest.h"
 #include "ProxyBase.h"
 #include "TypeCodeString.h"
 #include "TypeCodeSequence.h"
@@ -45,28 +45,45 @@
 namespace CORBA {
 namespace Internal {
 
-/// Proxy factory implements ProxyFactory and TypeCode interfaces.
+/// Proxy factory implements AbstractBase, ProxyFactory and TypeCode interfaces.
+template <class S>
+class ProxyFactoryServant :
+	public InterfaceStaticBase <S, AbstractBase>,
+	public InterfaceStaticBase <S, TypeCode>,
+	public ServantStatic <S, ProxyFactory>
+{
+public:
+	// AbstractBase
+	Interface* _query_interface (String_in id)
+	{
+		return FindInterface <ProxyFactory, TypeCode>::find (*(S*)nullptr, id);
+	}
+};
+
 template <class I> class ProxyFactoryImpl :
-	public TypeCodeImpl <ServantStatic <ProxyFactoryImpl <I>, ProxyFactory>, TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> >
+	public TypeCodeImpl <ProxyFactoryServant <ProxyFactoryImpl <I> >,
+		TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> >
 {
 public:
 	// ProxyFactory
 	static const InterfaceMetadata metadata_;
 
-	static InterfaceMetadataPtr __get_metadata (Bridge <ProxyFactory>* obj, Interface* env)
+	static InterfaceMetadataPtr __get_metadata (Bridge <ProxyFactory>* obj, 
+		Interface* env)
 	{
 		return &metadata_;
 	}
 
 	Interface* create_proxy (
-		I_ptr <IOReference> proxy_manager, UShort interface_idx,
+		IOReference::_ptr_type proxy_manager, UShort interface_idx,
 		Interface*& deleter)
 	{
 		typedef Proxy <I> ProxyClass;
 		ProxyClass* proxy;
 
 		if (g_object_factory->stateless_available ()) {
-			typename std::aligned_storage <sizeof (ProxyClass), alignof (ProxyClass)>::type tmp;
+			typename std::aligned_storage <sizeof (ProxyClass), 
+				alignof (ProxyClass)>::type tmp;
 			ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (ProxyClass), 0);
 			g_object_factory->stateless_begin (scb);
 			try {

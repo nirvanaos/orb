@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,43 +24,27 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_LIFECYCLEDYNAMIC_H_
-#define NIRVANA_ORB_LIFECYCLEDYNAMIC_H_
+#ifndef NIRVANA_ORB_OBJECT_INL_
+#define NIRVANA_ORB_OBJECT_INL_
 #pragma once
 
-#include "Exception.h"
+#include "Object.h"
+#include "IORequestClient.h"
 
 namespace CORBA {
 namespace Internal {
 
-//! Dynamic servant life cycle.
-//! \tparam S Class implementing `_duplicate()' and `_release()' operations.
-template <class S>
-class LifeCycleDynamic
+template <class I> inline
+void TypeObject <I>::marshal_in (I_ptr <I> src, IORequest_ptr rq)
 {
-public:
-	template <class I>
-	static Interface* __duplicate (Interface* itf, Interface* env) NIRVANA_NOEXCEPT
-	{
-		try {
-			return S::_duplicate (static_cast <Bridge <I>*> (itf));
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
-	}
+	rq->marshal_interface (src);
+}
 
-	template <class I>
-	static void __release (Interface* itf) NIRVANA_NOEXCEPT
-	{
-		try {
-			S::_release (static_cast <Bridge <I>*> (itf));
-		} catch (...) {
-		}
-	}
-};
+template <class I> inline
+void TypeObject <I>::unmarshal (IORequest_ptr rq, I_ref <I>& dst)
+{
+	dst = rq->unmarshal_interface <I> ();
+}
 
 }
 }

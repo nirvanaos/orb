@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_TYPECODESTRING_H_
 
 #include "TypeCodeImpl.h"
-#include "../String.h"
+#include "../String.inl"
 
 namespace CORBA {
 namespace Internal {
@@ -64,18 +64,6 @@ class TypeCodeString <StringT <Char>, bound> :
 template <ULong bound>
 class TypeCodeString <StringT <WChar>, bound> :
 	public TypeCodeStringBase <WString, TCKind::tk_wstring, bound> {};
-
-template <> inline
-I_ptr <TypeCode> Type <StringT <Char> >::type_code () NIRVANA_NOEXCEPT
-{
-	return _tc_string;
-}
-
-template <> inline
-I_ptr <TypeCode> Type <StringT <WChar> >::type_code () NIRVANA_NOEXCEPT
-{
-	return _tc_wstring;
-}
 
 template <typename C, ULong bound> inline
 I_ptr <TypeCode> Type <BoundedStringT <C, bound> >::type_code () NIRVANA_NOEXCEPT

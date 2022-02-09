@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,50 +24,34 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_DYNAMICSERVANT_S_H_
-#define NIRVANA_ORB_DYNAMICSERVANT_S_H_
+#ifndef NIRVANA_ORB_VALUEBASE_INL_
+#define NIRVANA_ORB_VALUEBASE_INL_
 #pragma once
 
-#include "DynamicServant.h"
+#include "ValueBase.h"
+#include "IORequestClient.h"
 
 namespace CORBA {
 namespace Internal {
 
-template <class S>
-class Skeleton <S, DynamicServant>
+template <class I> inline
+void TypeValue <I>::marshal_in (I_ptr <I> src, IORequest_ptr rq)
 {
-public:
-	static const typename Bridge <DynamicServant>::EPV epv_;
+	rq->marshal_value (src, false);
+}
 
-	void _delete ()
-	{
-		delete &static_cast <S&> (*this);
-	}
+template <class I> inline
+void TypeValue <I>::marshal_out (I_ref <I>& src, IORequest_ptr rq)
+{
+	rq->marshal_value ((I_ptr <I>)src, true);
+	src = nullptr;
+}
 
-protected:
-	static void __delete (Bridge <DynamicServant>* obj, Interface* env)
-	{
-		try {
-			S::_implementation (obj)._delete ();
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-	}
-};
-
-template <class S>
-const Bridge <DynamicServant>::EPV Skeleton <S, DynamicServant>::epv_ = {
-	{ // header
-		Bridge <DynamicServant>::repository_id_,
-		S::template __duplicate <DynamicServant>,
-		S::template __release <DynamicServant>
-	},
-	{ // epv
-		S::__delete
-	}
-};
+template <class I> inline
+void TypeValue <I>::unmarshal (IORequest_ptr rq, I_ref <I>& dst)
+{
+	dst = rq->unmarshal_value <I> ();
+}
 
 }
 }

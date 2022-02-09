@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -27,22 +28,16 @@
 #define NIRVANA_ORB_TYPE_H_
 #pragma once
 
-#include "TypeFixLen.h"
-#include "TypeEnum.h"
-#include "Type_interface.h"
-#include "Client.h"
-#include <Nirvana/ImportInterface.h>
-#include "UserException.h"
-#include "Any.h"
-#include "Boolean.h"
-#include "EnvironmentEx.h"
-#include "TypeCode.h"
-#include "Marshal.h"
-#include "Unmarshal.h"
-#include "tc_constants.h"
-#include "Sequence.h"
-#include "Object.h"
-#include "ValueBase.h"
+#include "TypeFixLen.inl"
+#include "TypeVarLen.inl"
+#include "TypePrimitive.inl"
+#include "TypeEnum.inl"
+#include "Type_interface.inl"
+#include "Object.inl"
+#include "String.inl"
+#include "Sequence.inl"
+#include "Object.inl"
+#include "ValueBase.inl"
 
 namespace CORBA {
 namespace Internal {
@@ -56,184 +51,6 @@ struct Type <void>
 		return _tc_void;
 	}
 };
-
-// Interface marshaling
-
-template <class I> inline
-void TypeItf <I>::unmarshal (Interface* src, Unmarshal_ptr unmarshaler, I_ref <I>& dst)
-{
-	dst = unmarshaler->unmarshal_interface <I> (src);
-}
-
-template <class I>
-void TypeItf <I>::marshal_in (I_ptr <I> src, Marshal_ptr marshaler, Interface*& dst)
-{
-	if (marshaler->marshal_context () < MarshalContext::OTHER_PROTECTION_DOMAIN)
-		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
-	else
-		reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (Object::_ptr_type (src));
-}
-
-// TypeCode marshaling
-
-template <> inline
-void TypeItf <TypeCode>::marshal_in (I_ptr <TypeCode> src, Marshal_ptr marshaler, Interface*& dst)
-{
-	reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
-}
-
-// ValueBase marshaling
-
-template <> inline
-void TypeItf <ValueBase>::marshal_in (I_ptr <ValueBase> src, Marshal_ptr marshaler, Interface*& dst)
-{
-	// TODO: Temparary solution. Implement marshaling by value!
-	reinterpret_cast <uintptr_t&> (dst) = marshaler->marshal_interface (src);
-}
-
-
-// String marshaling
-
-template <typename C>
-void Type <StringT <C> >::marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst)
-{
-	assert (&src != &dst);
-	if (!_small_copy (src, dst)) {
-		size_t size = src.large_size ();
-		size_t cb = Var::byte_size (size);
-		dst.large_pointer ((C*)marshaler->marshal_memory (const_cast <C*> (src.large_pointer ()), cb, 0));
-		dst.large_size (size);
-		dst.allocated (cb);
-	}
-}
-
-template <typename C>
-void Type <StringT <C> >::marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst)
-{
-	assert (&src != &dst);
-	if (_small_copy (src, dst))
-		src.release_memory ();
-	else {
-		size_t size = src.large_size ();
-		size_t cb = Var::byte_size (size);
-		dst.large_pointer ((C*)marshaler->marshal_memory (src.large_pointer (), cb, src.allocated ()));
-		src.reset ();
-		dst.large_size (size);
-		dst.allocated (cb);
-	}
-}
-
-template <typename C>
-void Type <StringT <C> >::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst)
-{
-	if (Base::has_check)
-		check (src);
-
-	if (src.is_large ()) {
-		size_t cb = src.allocated ();
-		if (cb) {
-			unmarshaler->adopt_memory (src.large_pointer (), cb);
-			static_cast <ABI&> (dst) = src;
-		} else
-			dst.assign_internal (src.large_size (), src.large_pointer ());
-	} else
-		static_cast <ABI&> (dst) = src;
-}
-
-// Sequence marshaling
-
-template <typename T>
-void Type <Sequence <T> >::marshal_in (const Var& src, Marshal_ptr marshaler, ABI& dst)
-{
-	assert (&src != &dst);
-	if (src.empty ())
-		dst.reset ();
-	else {
-		const ABI& asrc = static_cast <const ABI&> (src);
-		if (!Type <T>::has_marshal) {
-			size_t cb = asrc.size * sizeof (T);
-			dst.ptr = (T_ABI*)marshaler->marshal_memory (asrc.ptr, cb, 0);
-			dst.allocated = cb;
-			dst.size = asrc.size;
-		} else {
-			size_t cb = asrc.size * sizeof (T);
-			void* buf;
-			dst.ptr = (T_ABI*)marshaler->get_buffer (cb, buf);
-			T_ABI* dp = (T_ABI*)buf;
-			const T* sp = src.data (), * end = sp + src.size ();
-			do {
-				Type <T>::marshal_in (*(sp++), marshaler, *(dp++));
-			} while (sp != end);
-		}
-	}
-}
-
-template <typename T>
-void Type <Sequence <T> >::marshal_out (Var& src, Marshal_ptr marshaler, ABI& dst)
-{
-	assert (&src != &dst);
-	if (src.empty ()) {
-		src.release_memory ();
-		dst.reset ();
-	} else {
-		size_t size = src.size ();
-		dst.size = size;
-		size_t cb = size * sizeof (T);
-		if (!Type <T>::has_marshal) {
-			dst.ptr = (T_ABI*)marshaler->marshal_memory (src.data (), cb, static_cast <ABI&> (src).allocated);
-			src.reset ();
-			dst.allocated = cb;
-		} else {
-			T_ABI* dp;
-			dst.ptr = (T_ABI*)marshaler->get_buffer (cb, (void*&)dp);
-			dst.allocated = cb;
-
-			T* sp = src.data (), * end = sp + src.size ();
-			do {
-				Type <T>::marshal_out (*(sp++), marshaler, *(dp++));
-			} while (sp != end);
-
-			{
-				Var tmp;
-				src.swap (tmp);
-			}
-		}
-	}
-}
-
-template <typename T>
-void Type <Sequence <T> >::unmarshal (const ABI& src, Unmarshal_ptr unmarshaler, Var& dst)
-{
-	if (Base::has_check)
-		check (src);
-
-	if (!src.size)
-		dst.reset ();
-	else {
-		Var tmp;
-		ABI& adst = static_cast <ABI&> (tmp);
-		if (src.allocated) {
-			unmarshaler->adopt_memory (src.ptr, src.allocated);
-			adst.ptr = src.ptr;
-			adst.allocated = src.allocated;
-		} else
-			adst.ptr = (T*)::Nirvana::MemoryHelper::assign (0, adst.allocated, 0, src.size * sizeof (T), src.ptr);
-		if (Type <T>::has_marshal) {
-			T_ABI* sp = src.ptr, * end = sp + src.size;
-			T* dp = adst.ptr;
-			try {
-				do {
-					Type <T>::unmarshal (*(sp++), unmarshaler, *(dp++));
-				} while (sp != end);
-			} catch (...) {
-				adst.size = dp - adst.ptr;
-				throw;
-			}
-		}
-		adst.size = src.size;
-		tmp.swap (dst);
-	}
-}
 
 }
 }
