@@ -108,7 +108,11 @@ public:
 	static const Char name_ [];
 };
 
-template <class I> struct ProxyTraits;
+template <class I, void (*proc) (I_ptr <I>, IORequest::_ptr_type)>
+static bool RqProcWrapper (Interface* servant, Interface* call)
+{
+	return call_request_proc ((RqProcInternal)proc, servant, call);
+}
 
 }
 }
