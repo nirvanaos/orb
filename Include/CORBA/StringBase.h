@@ -32,11 +32,27 @@
 #include <type_traits>
 #include <string.h>
 #include <wchar.h>
+#include <Nirvana/throw_exception.h>
 
 namespace CORBA {
 namespace Internal {
 
 template <typename C>
+size_t string_len (const C* s);
+
+template <> inline
+size_t string_len (const Char* s)
+{
+	return strlen (s);
+}
+
+template <> inline
+size_t string_len (const WChar* s)
+{
+	return wcslen (s);
+}
+
+template <typename C, ULong bound = 0>
 class StringBase : protected ABI <StringT <C> >
 {
 public:
@@ -44,6 +60,8 @@ public:
 	template <size_t cc>
 	StringBase (C const (&s) [cc])
 	{
+		if (bound && cc - 1 > bound)
+			Nirvana::throw_BAD_PARAM ();
 		this->large_pointer (const_cast <C*> (s));
 		this->large_size (cc - 1);
 		this->allocated (0);
@@ -85,30 +103,23 @@ protected:
 	{}
 
 private:
-	static size_t _length (const C* s);
+	static size_t _length (const C* s)
+	{
+		return string_len (s);
+	}
 };
-
-template <> inline
-size_t StringBase <Char>::_length (const Char* s)
-{
-	return strlen (s);
-}
-
-template <> inline
-size_t StringBase <WChar>::_length (const WChar* s)
-{
-	return wcslen (s);
-}
 
 #ifdef NIRVANA_C11
 
-template <typename C>
+template <typename C, ULong bound>
 template <typename S, typename>
-StringBase <C>::StringBase (S s)
+StringBase <C, bound>::StringBase (S s)
 {
 	const C* p = s;
 	size_t cc;
 	if (p && (cc = _length (p))) {
+		if (bound && cc > bound)
+			Nirvana::throw_BAD_PARAM ();
 		this->large_pointer (const_cast <C*> (p));
 		this->large_size (cc);
 		this->allocated (0);
@@ -118,10 +129,14 @@ StringBase <C>::StringBase (S s)
 
 #else
 
-StringBase (const C* p)
+template <typename C, ULong bound>
+template <typename S, typename>
+StringBase <C, bound>::StringBase (const C* p)
 {
 	size_t cc;
 	if (p && (cc = _length (p))) {
+		if (bound && cc > bound)
+			Nirvana::throw_BAD_PARAM ();
 		this->large_pointer (const_cast <C*> (p));
 		this->large_size (cc);
 		this->allocated (0);
@@ -131,10 +146,12 @@ StringBase (const C* p)
 
 #endif
 
-template <typename C>
-StringBase <C>::StringBase (const C* p, size_t cc)
+template <typename C, ULong bound>
+StringBase <C, bound>::StringBase (const C* p, size_t cc)
 {
 	if (p && cc) {
+		if (bound && cc > bound)
+			Nirvana::throw_BAD_PARAM ();
 		this->large_pointer (const_cast <C*> (p));
 		this->large_size (cc);
 		this->allocated (0);

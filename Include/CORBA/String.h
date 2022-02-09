@@ -34,12 +34,15 @@
 namespace CORBA {
 namespace Internal {
 
-template <typename C>
+template <typename C, ULong bound>
 template <class A> inline
-StringBase <C>::StringBase (const std::basic_string <C, std::char_traits <C>, A>& s)
+StringBase <C, bound>::StringBase (const std::basic_string <C, std::char_traits <C>, A>& s)
 {
+	size_t size = s.size ();
+	if (bound && size > bound)
+		Nirvana::throw_BAD_PARAM ();
 	this->large_pointer (const_cast <C*> (s.data ()));
-	this->large_size (s.size ());
+	this->large_size (size);
 	this->allocated (0);
 }
 
@@ -258,16 +261,7 @@ struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
 	}
 
 	// Check in C_in for member assignments
-	class C_in : public Base::C_in
-	{
-	public:
-		C_in (const Var& v) :
-			Base::C_in (v)
-		{
-			if (v.size () > bound)
-				::Nirvana::throw_BAD_PARAM ();
-		}
-	};
+	typedef const StringBase <C, bound>& C_in;
 
 	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
 };
