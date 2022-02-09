@@ -155,8 +155,8 @@ pseudo interface IORequest
   /// Marshal value type.
   /// 
   /// \param val  ValueBase.
-  /// \param move Use move semantics. Do not perform deep copy.
-  void marshal_value (in ValueBase val, in boolean move);
+  /// \param move Use move semantics. Haven't to perform deep copy.
+  void marshal_value (in Interface val, in boolean move);
 
   /// Unmarshal value type.
   /// 
