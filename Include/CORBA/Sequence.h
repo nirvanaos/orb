@@ -36,9 +36,11 @@ namespace Internal {
 
 template <typename T>
 struct Type <Sequence <T> > :
-	public TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check>
+	public TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check,
+	ABI <Sequence <T> > >
 {
-	typedef TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check> Base;
+	typedef TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check,
+		ABI <Sequence <T> > > Base;
 	typedef typename Type <T>::ABI T_ABI;
 	typedef typename Base::Var Var;
 	typedef typename Base::ABI ABI;
@@ -199,10 +201,7 @@ struct Type <BoundedSequence <T, bound> > :
 {
 	typedef Type <Sequence <T> > Base;
 	typedef typename Base::ABI ABI;
-	typedef typename Base::ABI_ret ABI_ret;
-	typedef typename Base::ABI_in ABI_in;
-	typedef typename Base::ABI_out ABI_out;
-	typedef BoundedSequence <T, bound> Var;
+	typedef Base::Var Var;
 
 	static const bool has_check = true;
 
@@ -211,27 +210,17 @@ struct Type <BoundedSequence <T, bound> > :
 		if (Base::has_check)
 			Base::check (v);
 		if (v.size > bound)
-			::Nirvana::throw_BAD_PARAM ();
-	}
-
-	typedef typename TypeVarLen <BoundedSequence <T, bound>, true, ABI>::C_ret C_ret;
-
-	static const Var& in (ABI_in p)
-	{
-		return static_cast <const Var&> (Base::in (p));
-	}
-
-	static Var& out (ABI_out p)
-	{
-		return static_cast <Var&> (Base::out (p));
-	}
-
-	static Var& inout (ABI_out p)
-	{
-		return static_cast <Var&> (Base::inout (p));
+			Nirvana::throw_BAD_PARAM ();
 	}
 
 	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
+
+	static void unmarshal (IORequest_ptr rq, Var& dst)
+	{
+		Base::unmarshal (rq, dst);
+		if (dst.size () > bound)
+			Nirvana::throw_BAD_PARAM ();
+	}
 };
 
 }

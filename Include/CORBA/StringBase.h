@@ -53,8 +53,10 @@ size_t string_len (const WChar* s)
 }
 
 template <typename C, ULong bound = 0>
-class StringBase : protected ABI <StringT <C> >
+class StringBase : protected
+	ABI <StringT <C> >
 {
+	typedef ABI <StringT <C> > ABI;
 public:
 #ifdef NIRVANA_C11
 	template <size_t cc>
@@ -88,14 +90,14 @@ public:
 		this->reset ();
 	}
 
-	const ABI <StringT <C> >* operator & () const
+	const ABI* operator & () const
 	{
 		return this;
 	}
 
 	bool empty () const
 	{
-		return ABI <StringT <C> >::empty ();
+		return ABI::empty ();
 	}
 
 protected:

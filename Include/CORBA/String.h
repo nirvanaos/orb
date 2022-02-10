@@ -47,9 +47,10 @@ StringBase <C, bound>::StringBase (const std::basic_string <C, std::char_traits 
 }
 
 template <typename C>
-struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
+struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS,
+	ABI <StringT <C> > >
 {
-	typedef TypeVarLen <StringT <C>, CHECK_STRINGS> Base;
+	typedef TypeVarLen <StringT <C>, CHECK_STRINGS, ABI <StringT <C> > > Base;
 	typedef typename Base::Var Var;
 	typedef typename Base::ABI ABI;
 	typedef typename Base::ABI_in ABI_in;
@@ -103,13 +104,11 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 		Var& val = static_cast <Var&> (*p);
 		// Must be empty
 		if (!val.empty ())
-			::Nirvana::throw_BAD_PARAM ();
+			Nirvana::throw_BAD_PARAM ();
 		return val;
 	}
 
 	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
-
-	static bool _small_copy (const ABI& src, ABI& dst);
 
 	static void marshal_in (const Var& src, IORequest_ptr rq);
 	static void marshal_out (Var& src, IORequest_ptr rq);
@@ -132,29 +131,10 @@ void Type <StringT <C> >::check (const ABI& s)
 		p = s.small_pointer ();
 		cc = s.small_size ();
 		if (cc > ABI::SMALL_CAPACITY)
-			::Nirvana::throw_BAD_PARAM ();
+			Nirvana::throw_BAD_PARAM ();
 	}
 	if (p [cc])
-		::Nirvana::throw_BAD_PARAM (); // Not zero-terminated
-}
-
-template <typename C>
-bool Type <StringT <C> >::_small_copy (const ABI& src, ABI& dst)
-{
-	const C* p;
-	size_t len;
-	if (src.is_large ()) {
-		len = src.large_size ();
-		if (len > ABI::SMALL_CAPACITY)
-			return false;
-		p = src.large_pointer ();
-	} else {
-		p = src.small_pointer ();
-		len = src.small_size ();
-	}
-	::Nirvana::real_copy (p, p + len + 1, dst.small_pointer ());
-	dst.small_size (len);
-	return true;
+		Nirvana::throw_BAD_PARAM (); // Not zero-terminated
 }
 
 template <typename C, ULong bound>
@@ -203,7 +183,7 @@ public:
 
 	template <class InputIterator
 #ifdef NIRVANA_C11
-		, typename = ::Nirvana::_RequireInputIter <InputIterator>
+		, typename = Nirvana::_RequireInputIter <InputIterator>
 #endif
 	>
 	BoundedStringT (InputIterator b, InputIterator e) :
@@ -257,13 +237,20 @@ struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
 	{
 		Base::check (v);
 		if (v.size > bound)
-			::Nirvana::throw_BAD_PARAM ();
+			Nirvana::throw_BAD_PARAM ();
 	}
 
 	// Check in C_in for member assignments
 	typedef const StringBase <C, bound>& C_in;
 
 	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
+
+	static void unmarshal (IORequest_ptr rq, Var& dst)
+	{
+		Base::unmarshal (rq, dst);
+		if (dst.size () > bound)
+			Nirvana::throw_BAD_PARAM ();
+	}
 };
 
 /// Unbounded string. Equivalent to std::string.
