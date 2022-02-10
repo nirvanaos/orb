@@ -47,10 +47,9 @@ StringBase <C, bound>::StringBase (const std::basic_string <C, std::char_traits 
 }
 
 template <typename C>
-struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS,
-	ABI <StringT <C> > >
+struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 {
-	typedef TypeVarLen <StringT <C>, CHECK_STRINGS, ABI <StringT <C> > > Base;
+	typedef TypeVarLen <StringT <C>, CHECK_STRINGS> Base;
 	typedef typename Base::Var Var;
 	typedef typename Base::ABI ABI;
 	typedef typename Base::ABI_in ABI_in;

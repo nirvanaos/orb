@@ -133,6 +133,7 @@ template <class T> struct Type;
 // Constraints check
 const bool CHECK_STRINGS = true;
 const bool CHECK_SEQUENCES = true;
+const bool CHECK_ENUMS = true;
 
 // Helper functions.
 extern void _check_pointer (const void* p);

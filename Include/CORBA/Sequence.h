@@ -36,11 +36,9 @@ namespace Internal {
 
 template <typename T>
 struct Type <Sequence <T> > :
-	public TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check,
-	ABI <Sequence <T> > >
+	public TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check>
 {
-	typedef TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check,
-		ABI <Sequence <T> > > Base;
+	typedef TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check> Base;
 	typedef typename Type <T>::ABI T_ABI;
 	typedef typename Base::Var Var;
 	typedef typename Base::ABI ABI;

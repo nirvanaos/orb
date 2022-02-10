@@ -52,6 +52,8 @@ void TypeFixLen <T, TABI>::unmarshal (IORequest_ptr rq, T& dst)
 	void* pbuf = nullptr;
 	if (rq->unmarshal (alignof (T), sizeof (T), pbuf))
 		Type <T>::byteswap (*(T*)pbuf);
+	if (Type <T>::has_check)
+		Type <T>::check (*(const Type <T>::ABI*)pbuf);
 	dst = *(T*)pbuf;
 }
 
@@ -62,6 +64,11 @@ void TypeFixLen <T, TABI>::unmarshal_a (IORequest_ptr rq, size_t count, T* dst)
 	if (rq->unmarshal (alignof (T), sizeof (T) * count, pbuf)) {
 		for (T* src = (T*)pbuf, *end = src + count; src != end; ++src, ++dst) {
 			Type <T>::byteswap (*src);
+		}
+	}
+	if (Type <T>::has_check) {
+		for (T* src = (T*)pbuf, *end = src + count; src != end; ++src, ++dst) {
+			Type <T>::check (*(const Type <T>::ABI*)src);
 			*dst = *src;
 		}
 	} else
