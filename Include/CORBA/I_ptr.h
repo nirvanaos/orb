@@ -167,6 +167,7 @@ public:
 	}
 
 private:
+	// Calls EPV function to obtain pointer to the base interface.
 	template <class I1>
 	static I* wide (I1* p)
 	{

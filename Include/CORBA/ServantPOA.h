@@ -38,17 +38,11 @@ class ServantTraitsPOA :
 	public ServantTraits <ServantTraitsPOA>
 {
 public:
-	template <class I, class IS>
-	static ServantPOA <IS>& __implementation (Bridge <I>* bridge)
-	{
-		_check_pointer (bridge, Skeleton <ServantPOA <IS>, I>::epv_.header);
-		return static_cast <ServantPOA <IS>&> (*bridge);
-	}
-
 	template <class I>
 	static ServantPOA <I>& _implementation (Bridge <I>* bridge)
 	{
-		return __implementation <I, I> (bridge);
+		_check_pointer (bridge, Skeleton <ServantPOA <I>, I>::epv_.header);
+		return static_cast <ServantPOA <I>&> (*bridge);
 	}
 };
 
