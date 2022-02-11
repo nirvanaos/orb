@@ -35,8 +35,8 @@ namespace Internal {
 
 template <>
 class NIRVANA_NOVTABLE ServantPOA <ReferenceCounter> :
-	public ServantPOA <DynamicServant>,
-	public InterfaceImpl <ServantPOA <ReferenceCounter>, ReferenceCounter>
+	public InterfaceImpl <ServantPOA <ReferenceCounter>, ReferenceCounter>,
+	public ServantPOA <DynamicServant> // TODO: virtual?
 {
 protected:
 	ServantPOA ()

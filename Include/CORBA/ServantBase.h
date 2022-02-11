@@ -200,9 +200,9 @@ public:
 namespace PortableServer {
 
 class ServantBase :
-	public ::CORBA::Internal::ClientInterface <ServantBase, ::CORBA::Internal::ReferenceCounter>,
 	// Client methods from AbstractBase are not available directly on pointer to ServantBase.
-	public ::CORBA::Internal::ClientBase <ServantBase, ::CORBA::AbstractBase>
+	public ::CORBA::Internal::ClientBase <ServantBase, ::CORBA::AbstractBase>,
+	public ::CORBA::Internal::ClientInterface <ServantBase, ::CORBA::Internal::ReferenceCounter>
 {};
 
 #ifdef LEGACY_CORBA_CPP

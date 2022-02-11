@@ -35,8 +35,8 @@ namespace Internal {
 /// \brief Reference counting implementation for servant
 template <class S>
 class InterfaceImpl <S, DynamicServant> :
-	public ServantTraits <S>,
-	public LifeCycleServant <S>
+	public LifeCycleServant <S>,
+	public ServantTraits <S>
 {
 public:
 	void delete_object ()

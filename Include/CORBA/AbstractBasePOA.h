@@ -38,8 +38,8 @@ namespace Internal {
 
 template <>
 class NIRVANA_NOVTABLE ServantPOA <AbstractBase> :
-	public ServantPOA <ReferenceCounter>, // TODO: Is virtual inheritance need there?
-	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>
+	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
+	public virtual ServantPOA <ReferenceCounter>
 {
 public:
 	virtual Interface* _query_interface (const String& id) = 0;

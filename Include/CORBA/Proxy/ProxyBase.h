@@ -111,9 +111,9 @@ private:
 
 template <class S>
 class ProxyLifeCycle :
+	public InterfaceImplBase <S, DynamicServant>,
 	public ServantTraits <S>,
-	public LifeCycleRefCnt <S>,
-	public InterfaceImplBase <S, DynamicServant>
+	public LifeCycleRefCnt <S>
 {
 public:
 	void delete_object ()
@@ -146,9 +146,9 @@ public:
 
 template <class I>
 class ProxyBase :
+	public InterfaceImplBase <Proxy <I>, I>,
 	public ProxyRoot,
-	public ProxyLifeCycle <Proxy <I> >,
-	public InterfaceImplBase <Proxy <I>, I>
+	public ProxyLifeCycle <Proxy <I> >
 {
 public:
 	Interface* _proxy ()

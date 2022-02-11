@@ -47,9 +47,9 @@ namespace Internal {
 
 template <class S, class Primary>
 class ImplementationPseudoStatic :
+	public InterfaceStaticBase <S, Primary>,
 	public ServantTraitsStatic <S>,
-	public LifeCycleStatic,
-	public InterfaceStaticBase <S, Primary>
+	public LifeCycleStatic
 {
 public:
 	typedef Primary PrimaryInterface;

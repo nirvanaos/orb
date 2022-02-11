@@ -50,8 +50,8 @@ namespace Internal {
 
 template <class S, class Primary>
 class ImplementationPseudo :
-	public ServantTraits <S>,
-	public InterfaceImplBase <S, Primary>
+	public InterfaceImplBase <S, Primary>,
+	public ServantTraits <S>
 {
 public:
 	typedef Primary PrimaryInterface;

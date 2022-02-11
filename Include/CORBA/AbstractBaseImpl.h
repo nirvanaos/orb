@@ -36,8 +36,8 @@ namespace Internal {
 
 template <class S>
 class InterfaceImpl <S, AbstractBase> :
-	public InterfaceImpl <S, DynamicServant>,
-	public InterfaceImplBase <S, AbstractBase>
+	public InterfaceImplBase <S, AbstractBase>,
+	public InterfaceImpl <S, DynamicServant>
 {};
 
 }

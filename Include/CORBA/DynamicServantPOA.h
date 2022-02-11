@@ -35,8 +35,8 @@ namespace Internal {
 
 template <>
 class NIRVANA_NOVTABLE ServantPOA <DynamicServant> :
-	public ServantTraitsPOA,
-	public LifeCycleServant <ServantPOA <DynamicServant> >
+	public LifeCycleServant <ServantPOA <DynamicServant> >,
+	public ServantTraitsPOA
 {
 public:
 	virtual ~ServantPOA ()

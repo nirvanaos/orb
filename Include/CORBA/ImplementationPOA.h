@@ -45,9 +45,9 @@ namespace Internal {
 
 template <class Primary, class ... Bases>
 class ImplementationPOA :
-	public virtual ServantPOA <PortableServer::ServantBase>,
+	public InterfaceImpl <ServantPOA <Primary>, Primary>,
 	public virtual ServantPOA <Bases>...,
-	public InterfaceImpl <ServantPOA <Primary>, Primary>
+	public virtual ServantPOA <PortableServer::ServantBase>
 {
 public:
 	typedef Primary PrimaryInterface;
@@ -55,8 +55,10 @@ public:
 	virtual Interface* _query_interface (const String& id)
 	{
 #ifdef _DEBUG
-		Bridge <AbstractBase>* ab = this;
-		const Bridge <AbstractBase>::EPV& epv = ab->_epv ();
+		ServantPOA <PortableServer::ServantBase>* sb = this;
+		ServantPOA <AbstractBase>* ab = sb;
+		Bridge <AbstractBase>* abb = ab;
+		const Bridge <AbstractBase>::EPV& epv = abb->_epv ();
 		assert (!strcmp (epv.header.interface_id, Bridge <AbstractBase>::repository_id_));
 #endif
 		return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);

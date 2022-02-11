@@ -37,9 +37,9 @@ namespace Internal {
 // POA implementation of PortableServer::ServantBase
 template <>
 class NIRVANA_NOVTABLE ServantPOA <PortableServer::ServantBase> :
+	public ServantBaseLink,
 	public virtual ServantPOA <AbstractBase>,
-	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>,
-	public ServantBaseLink
+	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>
 {
 public:
 	virtual Bridge <Object>* _get_object (String_in iid)
@@ -78,8 +78,6 @@ protected:
 	virtual Interface::_ref_type _get_proxy ();
 
 private:
-	friend class ServantTraitsPOA;
-
 	void _check_construct ()
 	{
 		if (!ServantBaseLink::core_object_)

@@ -47,8 +47,8 @@ namespace Internal {
 
 template <class Primary>
 class NIRVANA_NOVTABLE ImplementationPseudoPOA :
-	public virtual ServantPOA <ReferenceCounter>,
-	public InterfaceImpl <ServantPOA <Primary>, Primary>
+	public InterfaceImpl <ServantPOA <Primary>, Primary>,
+	public virtual ServantPOA <ReferenceCounter>
 {
 public:
 	typedef Primary PrimaryInterface;

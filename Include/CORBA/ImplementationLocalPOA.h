@@ -42,9 +42,9 @@ namespace Internal {
 
 template <class Primary, class ... Bases>
 class NIRVANA_NOVTABLE ImplementationLocalPOA :
-	public virtual ServantPOA <LocalObject>,
+	public InterfaceImpl <ServantPOA <Primary>, Primary>,
 	public virtual ServantPOA <Bases>...,
-	public InterfaceImpl <ServantPOA <Primary>, Primary>
+	public virtual ServantPOA <LocalObject>
 {
 public:
 	typedef Primary PrimaryInterface;

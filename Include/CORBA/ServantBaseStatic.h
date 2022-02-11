@@ -41,9 +41,9 @@ namespace Internal {
 //! \tparam S Servant class implementing operations.
 template <class S>
 class InterfaceStatic <S, PortableServer::ServantBase> :
+	public InterfaceStaticBase <S, PortableServer::ServantBase>,
 	public InterfaceStatic <S, AbstractBase>,
-	public InterfaceStatic <S, ReferenceCounter>,
-	public InterfaceStaticBase <S, PortableServer::ServantBase>
+	public InterfaceStatic <S, ReferenceCounter>
 {
 public:
 	static Bridge <Object>* _get_object (String_in iid)

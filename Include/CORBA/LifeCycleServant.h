@@ -43,8 +43,8 @@ namespace Internal {
 /// \brief Delegates reference counting to core
 ///        implementation of the ReferenceCounter interface.
 class ReferenceCounterLink :
-	public ServantMemory,
-	public Bridge <DynamicServant>
+	public Bridge <DynamicServant>,
+	public ServantMemory
 {
 	ReferenceCounterLink (const ReferenceCounterLink&) = delete;
 public:
@@ -90,8 +90,8 @@ private:
 /// So reference counting for objects implemented at the core.
 template <class S>
 class LifeCycleServant :
-	public Skeleton <S, DynamicServant>,
 	public ReferenceCounterLink,
+	public Skeleton <S, DynamicServant>,
 	public LifeCycleRefCnt <S>
 {
 protected:
