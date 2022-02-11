@@ -1,0 +1,23 @@
+// Partial implementation for now
+#include "OctetSeq.idl"
+
+module PortableServer {
+
+typeprefix PortableServer "omg.org";
+
+typedef CORBA::OctetSeq ObjectId;
+
+local interface POA
+{
+  exception ServantAlreadyActive {};
+  exception ObjectNotActive {};
+  exception WrongPolicy {};
+
+  ObjectId activate_object (in Servant p_servant)
+    raises (ServantAlreadyActive, WrongPolicy);
+
+  void deactivate_object (in ObjectId oid)
+    raises (ObjectNotActive, WrongPolicy);
+};
+
+};
