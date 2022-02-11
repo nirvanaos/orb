@@ -199,7 +199,7 @@ struct Type <BoundedSequence <T, bound> > :
 {
 	typedef Type <Sequence <T> > Base;
 	typedef typename Base::ABI ABI;
-	typedef Base::Var Var;
+	typedef typename Base::Var Var;
 
 	static const bool has_check = true;
 
