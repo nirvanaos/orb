@@ -5,6 +5,7 @@ module PortableServer {
 
 typeprefix PortableServer "omg.org";
 
+native Servant;
 typedef CORBA::OctetSeq ObjectId;
 
 local interface POA

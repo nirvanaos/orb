@@ -35,7 +35,7 @@ native PtrDiff;
 
 module PortableServer{
 
-native ServantBase;
+native Servant;
 
 };
 
@@ -92,7 +92,7 @@ pseudo interface ObjectFactory
 	Nirvana::Pointer stateless_end (in boolean success);
 
 	ReferenceCounter create_reference_counter (in DynamicServant dynamic);
-	PortableServer::ServantBase create_servant (in PortableServer::ServantBase impl);
+	PortableServer::Servant create_servant (in PortableServer::Servant impl);
 	LocalObject create_local_object (in LocalObject impl, in AbstractBase abstract_base);
 };
 

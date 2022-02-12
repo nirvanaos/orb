@@ -30,9 +30,12 @@
 #define NIRVANA_ORB_IMPLEMENTATIONTIED_H_
 #pragma once
 
-#include "POA.h"
 #include "LocalObject.h"
 #include "DynamicServant.h"
+
+namespace PortableServer {
+class POA;
+}
 
 namespace CORBA {
 namespace Internal {
@@ -48,7 +51,7 @@ public:
 		rel_ (false)
 	{}
 
-	ServantTied (T& t, ::PortableServer::POA::_ptr_type poa) :
+	ServantTied (T& t, I_ptr <PortableServer::POA> poa) :
 		ptr_ (&t),
 		rel_ (false),
 		poa_ (poa)
@@ -59,7 +62,7 @@ public:
 		rel_ (release)
 	{}
 
-	ServantTied (T* tp, ::PortableServer::POA::_ptr_type poa, Boolean release = true) :
+	ServantTied (T* tp, I_ptr <PortableServer::POA> poa, Boolean release = true) :
 		ptr_ (tp),
 		rel_ (release),
 		poa_ (poa)
@@ -94,7 +97,7 @@ public:
 		rel_ = b;
 	}
 
-	::PortableServer::POA::_ref_type _defauilt_POA ()
+	I_ref <PortableServer::POA> _defauilt_POA ()
 	{
 		if (poa_)
 			return poa_;
@@ -189,7 +192,7 @@ public:
 private:
 	T* ptr_;
 	Boolean rel_;
-	::PortableServer::POA::_ref_type poa_;
+	I_ref <PortableServer::POA> poa_;
 };
 
 }

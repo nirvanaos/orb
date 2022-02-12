@@ -37,7 +37,10 @@
 #include "ImplementationPseudo.h"
 #include "ImplementationPseudoStatic.h"
 #include "ImplementationPseudoPOA.h"
+#include "ImplementationTied.h"
 #include "PortableServer.h"
+#include "ImplementationPOA.h"
+#include "ImplementationLocalPOA.h"
 
 namespace CORBA {
 
