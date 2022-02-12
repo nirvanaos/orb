@@ -44,17 +44,58 @@ extern const Nirvana::ImportInterfaceT <CORBA::TypeCode> _tc_Servant;
 namespace CORBA {
 namespace Internal {
 
-template <> class I_ptr <PortableServer::ServantBase>;
+template <> /// We can obtain I_ptr <ServantBase> directly from servant pointer
+class I_ptr <PortableServer::ServantBase> : public I_ptr_base <PortableServer::ServantBase>
+{
+public:
+	I_ptr () NIRVANA_NOEXCEPT
+	{}
+
+	/// We can obtain I_ptr directly from servant pointer
+	I_ptr (Bridge <PortableServer::ServantBase>* p) NIRVANA_NOEXCEPT :
+		I_ptr_base <PortableServer::ServantBase> (reinterpret_cast <PortableServer::ServantBase*> (p))
+	{}
+
+	I_ptr (const I_ptr& src) NIRVANA_NOEXCEPT :
+		I_ptr_base (src)
+	{}
+
+	I_ptr (const I_ref <PortableServer::ServantBase>& var) NIRVANA_NOEXCEPT :
+		I_ptr_base (var)
+	{}
+
+	/// Move constructor in case returned I_var assigned to I_ptr:
+	///    Object_var func ();
+	///    Object_ptr obj = func ();
+	I_ptr (I_ref <PortableServer::ServantBase>&& var) NIRVANA_NOEXCEPT
+	{
+		this->move_from (var);
+	}
+
+	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
+	{
+		I_ptr_base::operator = (src);
+		return *this;
+	}
+
+	/// When servant returns `I_ptr`, skeleton must be able to convert
+	/// it to the ABI return type `Interface*`
+	Bridge <PortableServer::ServantBase>* operator & () const NIRVANA_NOEXCEPT
+	{
+		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
+		return reinterpret_cast <Bridge <::PortableServer::ServantBase>*> (this->p_);
+	}
+};
 
 }
 }
 
 namespace PortableServer {
 
-typedef ::CORBA::Internal::I_ptr <ServantBase> Servant;
+typedef CORBA::Internal::I_ptr <ServantBase> Servant;
 
 #ifdef LEGACY_CORBA_CPP
-typedef ::CORBA::Internal::I_var <ServantBase> ServantBase_var;
+typedef CORBA::Internal::I_var <ServantBase> ServantBase_var;
 #endif
 
 }
@@ -68,6 +109,15 @@ typedef Internal::I_var <InterfaceDef> InterfaceDef_var;
 #endif
 
 namespace Internal {
+
+template <>
+struct Type <PortableServer::Servant> : TypeItf <PortableServer::ServantBase>
+{
+	static I_ptr <TypeCode> type_code ()
+	{
+		return PortableServer::_tc_Servant;
+	}
+};
 
 NIRVANA_BRIDGE_BEGIN (::PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("ServantBase"))
 NIRVANA_BASE_ENTRY (AbstractBase, CORBA_AbstractBase)
@@ -143,58 +193,6 @@ template <class T>
 	_env.check ();
 	return _ret;
 }
-
-template <> /// We can obtain I_ptr <ServantBase> directly from servant pointer
-class I_ptr <PortableServer::ServantBase> : public I_ptr_base <PortableServer::ServantBase>
-{
-public:
-	I_ptr () NIRVANA_NOEXCEPT
-	{}
-
-	/// We can obtain I_ptr directly from servant pointer
-	I_ptr (Bridge <PortableServer::ServantBase>* p) NIRVANA_NOEXCEPT :
-		I_ptr_base <PortableServer::ServantBase> (reinterpret_cast <PortableServer::ServantBase*> (p))
-	{}
-
-	I_ptr (const I_ptr& src) NIRVANA_NOEXCEPT :
-		I_ptr_base (src)
-	{}
-
-	I_ptr (const I_ref <PortableServer::ServantBase>& var) NIRVANA_NOEXCEPT :
-		I_ptr_base (var)
-	{}
-
-	/// Move constructor in case returned I_var assigned to I_ptr:
-	///    Object_var func ();
-	///    Object_ptr obj = func ();
-	I_ptr (I_ref <PortableServer::ServantBase>&& var) NIRVANA_NOEXCEPT
-	{
-		this->move_from (var);
-	}
-
-	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
-	{
-		I_ptr_base::operator = (src);
-		return *this;
-	}
-
-	/// When servant returns `I_ptr`, skeleton must be able to convert
-	/// it to the ABI return type `Interface*`
-	Bridge <PortableServer::ServantBase>* operator & () const NIRVANA_NOEXCEPT
-	{
-		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
-		return reinterpret_cast <Bridge <::PortableServer::ServantBase>*> (this->p_);
-	}
-};
-
-template <>
-struct Type <PortableServer::Servant> : TypeItf <PortableServer::ServantBase>
-{
-	static I_ptr <TypeCode> type_code ()
-	{
-		return PortableServer::_tc_Servant;
-	}
-};
 
 }
 }
