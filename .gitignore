@@ -13,3 +13,5 @@
 /Include/CORBA/Proxy/ProxyFactory_s.h
 /Include/CORBA/PortableServer.h
 /Source/PortableServer.cpp
+/Source/TypeCode.cpp
+/Source/TCKind.cpp

@@ -61,11 +61,12 @@ template <typename T, typename TABI> inline
 void TypeFixLen <T, TABI>::unmarshal_a (IORequest_ptr rq, size_t count, T* dst)
 {
 	void* pbuf = nullptr;
-	if (rq->unmarshal (alignof (T), sizeof (T) * count, pbuf)) {
+	if (rq->unmarshal (alignof (T), sizeof (T) * count, pbuf) && sizeof (T) > 1) {
 		for (T* src = (T*)pbuf, *end = src + count; src != end; ++src, ++dst) {
 			Type <T>::byteswap (*src);
 		}
 	}
+
 	if (Type <T>::has_check) {
 		for (T* src = (T*)pbuf, *end = src + count; src != end; ++src, ++dst) {
 			Type <T>::check (*(const typename Type <T>::ABI*)src);

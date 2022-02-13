@@ -66,13 +66,15 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 		size_t size, allocated;
 		bool swap_bytes = rq->unmarshal_seq (alignof (T), sizeof (T), size, data, allocated);
 		if (size) {
-			if (swap_bytes) {
+
+			if (sizeof (T) > 1 && swap_bytes) {
 				T* p = (T*)data, *end = p + size;
 				do {
 					Type <T>::byteswap (*p);
 				} while (end != ++p);
 			}
-			if (Base::has_check) {
+
+			if (Type <T>::has_check) {
 				try {
 					typename Type <T>::ABI* p = (typename Type <T>::ABI*)data, * end = p + size;
 					do {
@@ -84,6 +86,7 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 					throw;
 				}
 			}
+
 			if (allocated) {
 				static_cast <ABI&> (tmp).ptr = (T*)data;
 				static_cast <ABI&> (tmp).size = size;
@@ -91,7 +94,9 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 			} else
 				tmp.assign ((const T*)data, (const T*)data + size);
 		}
+
 	} else {
+
 		size_t size = rq->unmarshal_seq_begin ();
 		if (size) {
 			T* p = (T*)Nirvana::g_memory->allocate (nullptr, size, 0);
