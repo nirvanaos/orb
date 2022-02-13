@@ -45,7 +45,7 @@ public:
 #ifdef _DEBUG
 		ServantPOA <I>* impl = static_cast <ServantPOA <I>*> (bridge);
 		// Bridge must be first base of the servant to reduce the code overhead:
-		assert ((uintptr_t)bridge - (uintptr_t)impl == sizeof (void*));
+		assert ((uintptr_t)bridge - (uintptr_t)impl <= sizeof (void*));
 		return *impl;
 #else
 		return static_cast <ServantPOA <I>&> (*bridge);

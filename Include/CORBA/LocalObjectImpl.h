@@ -38,9 +38,9 @@ namespace Internal {
 //! \tparam S Servant class implementing operations.
 template <class S>
 class InterfaceImpl <S, LocalObject> :
+	public LocalObjectLink,
 	public Skeleton <S, LocalObject>,
-	public InterfaceImpl <S, AbstractBase>,
-	public LocalObjectLink
+	public InterfaceImpl <S, AbstractBase>
 {
 protected:
 	InterfaceImpl () :

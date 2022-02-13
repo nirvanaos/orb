@@ -42,9 +42,9 @@ namespace Internal {
 //! \tparam Primary Primary interface.
 template <class S>
 class InterfaceStatic <S, LocalObject> :
+	public InterfaceStaticBase <S, LocalObject>,
 	public InterfaceStatic <S, AbstractBase>,
-	public InterfaceStatic <S, ReferenceCounter>,
-	public InterfaceStaticBase <S, LocalObject>
+	public InterfaceStatic <S, ReferenceCounter>
 {
 public:
 	static Bridge <Object>* _get_object (String_in iid)

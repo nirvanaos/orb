@@ -40,9 +40,9 @@ namespace Internal {
 
 template <>
 class NIRVANA_NOVTABLE ServantPOA <LocalObject> :
-	public virtual ServantPOA <PortableServer::ServantBase>,
+	public LocalObjectLink,
 	public Skeleton <ServantPOA <LocalObject>, LocalObject>,
-	public LocalObjectLink
+	public virtual ServantPOA <PortableServer::ServantBase>
 {
 public:
 	virtual Bridge <Object>* _get_object (String_in iid);
