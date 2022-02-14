@@ -62,13 +62,14 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	Var tmp;
 	if (Type <T>::fixed_len) {
-		void* data;
-		size_t size, allocated;
-		bool swap_bytes = rq->unmarshal_seq (alignof (T), sizeof (T), size, data, allocated);
-		if (size) {
+		ABI abi;
+		bool swap_bytes = rq->unmarshal_seq (alignof (T), sizeof (T), abi.size, (void*&)abi.ptr, abi.allocated);
+		if (abi.size) {
+
+			check_ABI (abi);
 
 			if (sizeof (T) > 1 && swap_bytes) {
-				T* p = (T*)data, *end = p + size;
+				T* p = abi.ptr, *end = p + abi.size;
 				do {
 					Type <T>::byteswap (*p);
 				} while (end != ++p);
@@ -76,23 +77,21 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 
 			if (Type <T>::has_check) {
 				try {
-					typename Type <T>::ABI* p = (typename Type <T>::ABI*)data, * end = p + size;
+					typename Type <T>::ABI* p = (typename Type <T>::ABI*)abi.ptr, * end = p + abi.size;
 					do {
 						Type <T>::check (*p);
 					} while (end != ++p);
 				} catch (...) {
-					if (allocated)
-						Nirvana::g_memory->release (data, allocated);
+					if (abi.allocated)
+						Nirvana::g_memory->release (abi.ptr, abi.allocated);
 					throw;
 				}
 			}
 
-			if (allocated) {
-				static_cast <ABI&> (tmp).ptr = (T*)data;
-				static_cast <ABI&> (tmp).size = size;
-				static_cast <ABI&> (tmp).allocated = allocated;
-			} else
-				tmp.assign ((const T*)data, (const T*)data + size);
+			if (abi.allocated)
+				static_cast <ABI&> (tmp)= abi;
+			else
+				tmp.assign ((const T*)abi.ptr, (const T*)abi.ptr + abi.size);
 		}
 
 	} else {

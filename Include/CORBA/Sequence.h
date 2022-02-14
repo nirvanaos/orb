@@ -46,6 +46,7 @@ struct Type <Sequence <T> > :
 	typedef typename Base::ABI_out ABI_out;
 
 	static void check (const ABI& v);
+	static void check_ABI (const ABI& v);
 
 	class C_in : public Base::C_in
 	{
@@ -118,7 +119,7 @@ struct Type <Sequence <T> > :
 };
 
 template <typename T>
-void Type <Sequence <T> >::check (const ABI& v)
+void Type <Sequence <T> >::check_ABI (const ABI& v)
 {
 	// Do some check
 	if (CHECK_SEQUENCES) {
@@ -129,9 +130,15 @@ void Type <Sequence <T> >::check (const ABI& v)
 		if (cnt > v.allocated / sizeof (T))
 			::Nirvana::throw_BAD_PARAM ();
 	}
+}
+
+template <typename T>
+void Type <Sequence <T> >::check (const ABI& v)
+{
+	check_ABI (v);
 
 	if (Type <T>::has_check) {
-		for (const T_ABI* p = v.ptr, *end = p + v.size; p != end; ++p)
+		for (const T_ABI* p = (const T_ABI*)v.ptr, *end = p + v.size; p != end; ++p)
 			Type <T>::check (*p);
 	}
 }
