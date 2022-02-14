@@ -42,7 +42,18 @@
 #include "String_compat.h"
 #include "UnknownUserException.h"
 #include "ORB.h"
+#include "CORBA_Environment.h"
 #include "make_stateless.h"
 #include "make_pseudo.h"
+
+namespace CORBA {
+
+inline
+ORB::_ptr_type ORB_init (int&, char**, Internal::String_in) NIRVANA_NOEXCEPT
+{
+	return g_ORB;
+}
+
+}
 
 #endif
