@@ -4,6 +4,12 @@
 
 module CORBA {
 
+#ifdef _PRE_3_0_COMPILER_
+#pragma prefix "omg.org"
+#else
+typeprefix CORBA "omg.org";
+#endif
+
 /// ORB
 pseudo interface ORB
 {
