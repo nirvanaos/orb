@@ -1,0 +1,21 @@
+/// \file
+/// CORBA 3.0, Chapter 4
+/// Reduced for now
+
+module CORBA {
+
+/// ORB
+pseudo interface ORB
+{
+	typedef string ObjectId;
+	typedef sequence <ObjectId> ObjectIdList;
+
+	exception InvalidName{};
+
+	/// Initial reference operation
+	Object resolve_initial_references (
+		in ObjectId identifier
+	) raises (InvalidName);
+};
+
+};

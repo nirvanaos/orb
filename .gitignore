@@ -15,3 +15,5 @@
 /Source/PortableServer.cpp
 /Source/TypeCode.cpp
 /Source/TCKind.cpp
+/Include/CORBA/ORB.h
+/Source/ORB.cpp

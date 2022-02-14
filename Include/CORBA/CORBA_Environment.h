@@ -80,9 +80,8 @@ struct Type < ::CORBA::Environment> : TypeServerless < ::CORBA::Environment>
 
 }
 
-typedef Environment* Environment_ptr;
-
 #ifdef LEGACY_CORBA_CPP
+typedef Environment* Environment_ptr;
 typedef Environment::_var_type Environment_var;
 typedef Environment_var& Environment_out;
 #endif
