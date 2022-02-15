@@ -52,17 +52,7 @@ class ImplementationPOA :
 public:
 	typedef Primary PrimaryInterface;
 
-	virtual Interface* _query_interface (const String& id)
-	{
-#ifdef _DEBUG
-		ServantPOA <PortableServer::ServantBase>* sb = this;
-		ServantPOA <AbstractBase>* ab = sb;
-		Bridge <AbstractBase>* abb = ab;
-		const Bridge <AbstractBase>::EPV& epv = abb->_epv ();
-		assert (!strcmp (epv.header.interface_id, Bridge <AbstractBase>::repository_id_));
-#endif
-		return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
-	}
+	virtual Interface* _query_interface (const String& id);
 
 	I_ref <Primary> _this ()
 	{
@@ -73,6 +63,17 @@ protected:
 	ImplementationPOA ()
 	{}
 };
+
+template <class Primary, class ... Bases>
+Interface* ImplementationPOA <Primary, Bases...>::_query_interface (const String& id)
+{
+#ifdef _DEBUG
+	Bridge <AbstractBase>* ab = this;
+	const Bridge <AbstractBase>::EPV& epv = ab->_epv ();
+	assert (!strcmp (epv.header.interface_id, Bridge <AbstractBase>::repository_id_));
+#endif
+	return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
+}
 
 }
 }
