@@ -124,7 +124,7 @@ public:
 		return &exception_entries_ [code].ee;
 	}
 
-	static void _raise_by_code (Code ec);
+	static void _raise_by_code (Code ec, unsigned minor = 0);
 
 #define EXCEPTION_CODE(e) EC_##e,
 

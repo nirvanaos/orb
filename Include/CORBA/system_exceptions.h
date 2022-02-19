@@ -70,7 +70,7 @@
 /// Nirvana system exceptions.
 #define NIRVANA_EXCEPTIONS(M) /*
 */ M (ILLEGAL_INSTRUCTION) /* Illegal instruction.
-*/ M (ARITH_ERROR) /* Arithmetic error. The minor() contains FPE_... value, see siginfo.h
+*/ M (ARITHMETIC_ERROR) /* Arithmetic error. The minor() contains FPE_... value, see siginfo.h
 */ M (ACCESS_VIOLATION) /* Access violation
 */
 
