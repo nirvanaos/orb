@@ -67,8 +67,12 @@
 */ M (UNKNOWN) /* the unknown exception
 */
 
-/// Nirvana system exceptions. Currently, we do not define one.
-#define NIRVANA_EXCEPTIONS(M)
+/// Nirvana system exceptions.
+#define NIRVANA_EXCEPTIONS(M) /*
+*/ M (ILLEGAL_INSTRUCTION) /* Illegal instruction.
+*/ M (ARITH_ERROR) /* Arithmetic error. The minor() contains FPE_... value, see siginfo.h
+*/ M (ACCESS_VIOLATION) /* Access violation
+*/
 
 #define SYSTEM_EXCEPTIONS(M) \
 CORBA_EXCEPTIONS (M)\

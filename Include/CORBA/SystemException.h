@@ -68,18 +68,18 @@ class NIRVANA_NOVTABLE SystemException : public Exception
 public:
 	struct _Data
 	{
-		ULong minor;
+		uint32_t minor;
 		CompletionStatus completed;
 	};
 
 	virtual void* __data () NIRVANA_NOEXCEPT;
 
-	ULong minor () const
+	uint32_t minor () const
 	{
 		return _data.minor;
 	}
 
-	void minor (ULong minor)
+	void minor (uint32_t minor)
 	{
 		_data.minor = minor;
 	}

@@ -31,7 +31,7 @@
 #include "InterfaceMetadata.h"
 #include "ProxyFactory_s.h"
 #include "IOReference.h"
-#include "../IORequest.h"
+#include "../IORequestClient.h"
 #include "ProxyBase.h"
 #include "TypeCodeString.h"
 #include "TypeCodeSequence.h"
