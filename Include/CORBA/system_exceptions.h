@@ -27,8 +27,11 @@
 *  popov.nirvana@gmail.com
 */
 
-/// CORBA system exceptions
+/// CORBA system exceptions.
+/// Must be lexicographically ordered.
 #define CORBA_EXCEPTIONS(M)/*
+*/ M (ACTIVITY_COMPLETED) /* bad quality of service
+*/ M (ACTIVITY_REQUIRED) /* bad quality of service
 */ M (BAD_CONTEXT) /* error processing context object
 */ M (BAD_INV_ORDER) /* routine invocations out of order
 */ M (BAD_OPERATION) /* invalid operation
@@ -43,6 +46,7 @@
 */ M (INITIALIZE) /* ORB initialization failure
 */ M (INTERNAL) /* ORB internal error
 */ M (INTF_REPOS) /* error accessing interface repository
+*/ M (INVALID_ACTIVITY) /* bad quality of service
 */ M (INVALID_TRANSACTION) /* invalid transaction
 */ M (INV_FLAG) /* invalid flag was specified
 */ M (INV_IDENT) /* invalid identifier syntax
@@ -68,12 +72,16 @@
 */
 
 /// Nirvana system exceptions.
+/// Must be lexicographically ordered.
 #define NIRVANA_EXCEPTIONS(M) /*
-*/ M (ILLEGAL_INSTRUCTION) /* Illegal instruction.
-*/ M (ARITHMETIC_ERROR) /* Arithmetic error. The minor() contains FPE_... value, see siginfo.h
 */ M (ACCESS_VIOLATION) /* Access violation
+*/ M (ARITHMETIC_ERROR) /* Arithmetic error. The minor() contains FPE_... value, see siginfo.h
+*/ M (ILLEGAL_INSTRUCTION) /* Illegal instruction.
 */
 
+// Nirvana exceptions are prepended with "IDL:CORBA/".
+// CORBA exceptions are prepended with "IDL:omg.org/CORBA/".
+// So NIRVANA_EXCEPTIONS are lexicographically before CORBA_EXCEPTIONS.
 #define SYSTEM_EXCEPTIONS(M) \
-CORBA_EXCEPTIONS (M)\
-NIRVANA_EXCEPTIONS (M)
+NIRVANA_EXCEPTIONS (M)\
+CORBA_EXCEPTIONS (M)
