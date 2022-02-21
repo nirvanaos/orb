@@ -75,7 +75,7 @@
 /// Must be lexicographically ordered.
 #define NIRVANA_EXCEPTIONS(M) /*
 */ M (ACCESS_VIOLATION) /* Access violation
-*/ M (ARITHMETIC_ERROR) /* Arithmetic error. The minor() contains FPE_... value, see siginfo.h
+*/ M (ARITHMETIC_ERROR) /* Arithmetic error. The minor() contains FPE_... value, see signal.h
 */ M (ILLEGAL_INSTRUCTION) /* Illegal instruction.
 */
 
