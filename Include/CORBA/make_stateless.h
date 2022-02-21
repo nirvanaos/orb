@@ -28,6 +28,9 @@
 #pragma once
 
 #include "core_objects.h"
+
+#ifndef NIRVANA_PROCESS
+
 #include "ObjectFactoryInc.h"
 #include "servant_reference.h"
 #include <utility>
@@ -51,4 +54,5 @@ servant_reference <T> make_stateless (Args ... args)
 
 }
 
+#endif
 #endif
