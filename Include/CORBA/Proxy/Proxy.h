@@ -84,7 +84,7 @@ public:
 		if (g_object_factory->stateless_available ()) {
 			typename std::aligned_storage <sizeof (ProxyClass), 
 				alignof (ProxyClass)>::type tmp;
-			ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (ProxyClass), 0);
+			ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (ProxyClass), 0, nullptr);
 			g_object_factory->stateless_begin (scb);
 			try {
 				new (&tmp) ProxyClass (proxy_manager, interface_idx);

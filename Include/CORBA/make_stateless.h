@@ -41,7 +41,7 @@ template <class T, class ... Args>
 servant_reference <T> make_stateless (Args ... args)
 {
 	typename std::aligned_storage <sizeof (T), alignof (T)>::type tmp;
-	Internal::ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (T), 0);
+	Internal::ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (T), 0, nullptr);
 	Internal::g_object_factory->stateless_begin (scb);
 	try {
 		new (&tmp) T (std::forward <Args> (args)...);

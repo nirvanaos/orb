@@ -77,6 +77,7 @@ pseudo interface ObjectFactory
 		Nirvana::ConstPointer tmp; ///< Pointer to the temporary object storage in stack.
 		Nirvana::Size size; ///< Size of the object.
 		Nirvana::PtrDiff offset; ///< Used internally.
+		Nirvana::Pointer next;
 	};
 
 	/// Start creation of a stateless object.
