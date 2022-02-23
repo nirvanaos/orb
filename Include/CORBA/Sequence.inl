@@ -98,18 +98,19 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 
 		size_t size = rq->unmarshal_seq_begin ();
 		if (size) {
-			T* p = (T*)Nirvana::g_memory->allocate (nullptr, size, 0);
+			size_t cb = sizeof (T) * size;
+			T* p = (T*)Nirvana::g_memory->allocate (nullptr, cb, 0);
 			size_t au = Nirvana::g_memory->query (p, Nirvana::Memory::QueryParam::ALLOCATION_UNIT);
-			size_t allocated = Nirvana::round_up (size, au);
+			cb = Nirvana::round_up (cb, au);
 			try {
 				Type <T>::unmarshal_a (rq, size, p);
 			} catch (...) {
-				Nirvana::g_memory->release (p, size);
+				Nirvana::g_memory->release (p, cb);
 				throw;
 			}
 			static_cast <ABI&> (tmp).ptr = p;
 			static_cast <ABI&> (tmp).size = size;
-			static_cast <ABI&> (tmp).allocated = allocated;
+			static_cast <ABI&> (tmp).allocated = cb;
 		}
 	}
 	dst = std::move (tmp);
