@@ -86,11 +86,12 @@ struct Type <Sequence <T> > :
 		}
 	};
 
-	static const Var& in (ABI_in p)
+	// `const` is removed to let servant adopt the unmarshaled input data.
+	static Var& in (ABI_in p)
 	{
 		Base::in (p);	// Check
 		// Use static_cast to ensure that we are using own vector implementation.
-		return static_cast <const Var&> (*p);
+		return static_cast <Var&> (const_cast <ABI&> (*p));
 	}
 
 	static Var& inout (ABI_out p)

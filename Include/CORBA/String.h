@@ -82,11 +82,12 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
 		}
 	};
 
-	static const Var& in (ABI_in p)
+	// `const` is removed to let servant adopt the unmarshaled input data.
+	static Var& in (ABI_in p)
 	{
 		Base::in (p);	// Check
 		// Use static_cast to ensure that we are using own basic_string implementation.
-		return static_cast <const StringT <C>&> (*p);
+		return static_cast <StringT <C>&> (const_cast <ABI&> (*p));
 	}
 
 	static Var& inout (ABI_out p)

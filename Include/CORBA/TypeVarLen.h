@@ -47,10 +47,11 @@ struct TypeVarLenBase :
 	typedef typename Base::Var Var;
 	typedef typename Base::C_in C_in;
 	typedef typename Base::C_inout C_inout;
+	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_ret ABI_ret;
 	typedef typename Base::ABI ABI;
 
-	/// C_out class clears output variable
+	// C_out class clears output variable
 	class C_out : public Base::C_out
 	{
 	public:
@@ -76,6 +77,13 @@ struct TypeVarLenBase :
 	protected:
 		Var val_;
 	};
+
+	// `const` is removed to let servant adopt the unmarshaled input data.
+	static Var& in (ABI_in p)
+	{
+		_check_pointer (p);
+		return reinterpret_cast <const Var&> (const_cast <ABI&> (*p));
+	}
 
 	static ABI_ret ret (Var&& v)
 	{
