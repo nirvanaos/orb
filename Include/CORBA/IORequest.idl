@@ -201,15 +201,8 @@ pseudo interface IORequest
   ///@{
   /// Caller operations.
 
-  typedef unsigned long long DeadlineTime;
-
   /// Invoke request.
   void invoke ();
-
-  /// Send request asynchronously.
-  /// 
-  /// \param deadline Asynchronous request deadline.
-  void send (in DeadlineTime deadline);
 
   void wait ();
 
