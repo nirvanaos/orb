@@ -93,10 +93,22 @@ class ValueBase :
 	public Internal::ClientBase <ValueBase, AbstractBase> // AbstractBase operations are not available directly on Object_ptr.
 {};
 
+
+#ifdef LEGACY_CORBA_CPP
+
+inline ValueBase::_ptr_type AbstractBase::_to_value ()
+{
+	return ValueBase::_duplicate (_query_interface <ValueBase> ());
+}
+
+#else
+
 inline ValueBase::_ref_type AbstractBase::_to_value ()
 {
 	return _query_interface <ValueBase> ();
 }
+
+#endif
 
 namespace Internal {
 

@@ -78,7 +78,7 @@ protected:
 	}
 
 private:
-	ReferenceCounter::_ref_type reference_counter_;
+	I_ref <ReferenceCounter> reference_counter_;
 };
 
 /// \brief Dynamic servant life cycle implementation

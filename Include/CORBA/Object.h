@@ -45,6 +45,7 @@ struct IOR;
 namespace PortableServer {
 
 class ServantBase;
+typedef CORBA::Internal::I_ptr <ServantBase> Servant;
 
 #ifdef LEGACY_CORBA_CPP
 typedef ::CORBA::Internal::I_var <ServantBase> ServantBase_var;
@@ -69,7 +70,7 @@ typedef Internal::I_var <InterfaceDef> InterfaceDef_var;
 namespace Internal {
 
 template <>
-struct Type <PortableServer::ServantBase>;
+struct Type <PortableServer::Servant>;
 
 template <class I>
 struct TypeObject : TypeItfMarshalable <I>
@@ -200,10 +201,21 @@ class Object :
 	public Internal::ClientBase <Object, AbstractBase> // AbstractBase operations are not available directly on Object_ptr.
 {};
 
+#ifdef LEGACY_CORBA_CPP
+
+inline Object::_ptr_type AbstractBase::_to_object ()
+{
+	return Object::_duplicate (_query_interface <Object> ());
+}
+
+#else
+
 inline Object::_ref_type AbstractBase::_to_object ()
 {
 	return _query_interface <Object> ();
 }
+
+#endif
 
 namespace Internal {
 

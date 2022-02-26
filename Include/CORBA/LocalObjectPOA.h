@@ -61,7 +61,7 @@ protected:
 		LocalObjectLink (Skeleton <ServantPOA <LocalObject>, LocalObject>::epv_)
 	{}
 
-	virtual Interface::_ref_type _get_proxy ();
+	virtual I_ref <Interface> _get_proxy ();
 
 private:
 	void _check_construct ()

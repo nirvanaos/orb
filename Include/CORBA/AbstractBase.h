@@ -98,19 +98,27 @@ class AbstractBase :
 {
 public:
 #ifdef LEGACY_CORBA_CPP
+
 	static AbstractBase_ptr _narrow (AbstractBase_ptr obj)
 	{
 		return _duplicate (obj);
 	}
+
+	inline Internal::I_ptr <Object> _to_object ();
+	inline Internal::I_ptr <ValueBase> _to_value ();
+
 #else
+
 	static AbstractBase::_ref_type _narrow (AbstractBase::_ptr_type obj)
 	{
 		return obj;
 	}
-#endif
 
 	inline Internal::I_ref <Object> _to_object ();
 	inline Internal::I_ref <ValueBase> _to_value ();
+
+#endif
+
 };
 
 namespace Internal {

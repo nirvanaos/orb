@@ -37,6 +37,9 @@ namespace Internal {
 
 template <class I> class I_ptr;
 template <class I> class I_ref;
+#ifdef LEGACY_CORBA_CPP
+template <class I> class I_var;
+#endif
 class Interface;
 template <> class I_ptr <Interface>;
 template <> class I_ref <Interface>;
@@ -73,8 +76,11 @@ public:
 	static Interface* _check (Interface* obj, String_in interface_id);
 
 	typedef I_ptr <Interface> _ptr_type;
+#ifdef LEGACY_CORBA_CPP
+	typedef I_var <Interface> _var_type;
+#else
 	typedef I_ref <Interface> _ref_type;
-
+#endif
 	static I_ptr <Interface> _nil () NIRVANA_NOEXCEPT;
 
 private:

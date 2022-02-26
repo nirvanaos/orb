@@ -36,7 +36,7 @@ Bridge <Object>* get_object_from_core (PortableServer::Servant core_object, Stri
 	return static_cast <Bridge <Object>*> (&AbstractBase::_ptr_type (core_object)->_query_interface (iid));
 }
 
-Interface::_ref_type get_proxy (PortableServer::Servant core_object)
+I_ref <Interface> get_proxy (PortableServer::Servant core_object)
 {
 	Interface::_ptr_type proxy = AbstractBase::_ptr_type (core_object)->_query_interface (nullptr);
 	if (!proxy)

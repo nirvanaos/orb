@@ -145,7 +145,7 @@ public:
 #ifdef LEGACY_CORBA_CPP
 
 	/// Move constructor in case returned I_ref assigned to I_ptr:
-	///    Object::_ref_type func ();
+	///    I_ref <Object> func ();
 	///    Object_ptr obj = func ();
 	I_ptr (I_ref <I>&& src) NIRVANA_NOEXCEPT
 	{

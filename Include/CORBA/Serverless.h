@@ -42,11 +42,13 @@ class Serverless
 {
 public:
 	typedef T* _ptr_type;
-	typedef servant_reference <T> _ref_type;
 #ifdef LEGACY_CORBA_CPP
 	typedef PortableServer::Servant_var <T> _var_type;
-#endif
+	typedef _var_type& _out_type;
+#else
+	typedef servant_reference <T> _ref_type;
 	typedef _ref_type& _out_type;
+#endif
 
 	Serverless () :
 		ref_cnt_ (1)
@@ -97,12 +99,14 @@ private:
 template <class T>
 struct TypeServerless
 {
+#ifdef LEGACY_CORBA_CPP
+	typedef typename Serverless <T>::_var_type Var;
+#else
 	typedef typename Serverless <T>::_ref_type Var;
+#endif
 	typedef const Var& ConstRef;
 	typedef ConstRef C_in;
-#ifdef LEGACY_CORBA_CPP
-	typedef typename Serverless <T>::_var_type C_var;
-#endif
+	typedef Var C_var;
 	typedef servant_out <T> C_out;
 	typedef Var& C_inout;
 };

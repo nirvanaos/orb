@@ -41,10 +41,11 @@ class Environment :
 {
 public:
 	using Internal::Serverless <Environment>::_ptr_type;
-	using Internal::Serverless <Environment>::_ref_type;
 	using Internal::Serverless <Environment>::_out_type;
-#ifdef LEGACYY_CORBA_CPP
+#ifdef LEGACY_CORBA_CPP
 	using Internal::Serverless <Environment>::_var_type;
+#else
+	using Internal::Serverless <Environment>::_ref_type;
 #endif
 
 	Environment () {}

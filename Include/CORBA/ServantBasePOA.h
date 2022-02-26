@@ -75,7 +75,7 @@ public:
 protected:
 	ServantPOA ();
 
-	virtual Interface::_ref_type _get_proxy ();
+	virtual I_ref <Interface> _get_proxy ();
 
 private:
 	void _check_construct ()

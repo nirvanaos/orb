@@ -38,7 +38,7 @@ Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object, Strin
 	return obj;
 }
 
-Interface::_ref_type get_proxy (LocalObject::_ptr_type core_object)
+I_ref <Interface> get_proxy (LocalObject::_ptr_type core_object)
 {
 	Interface::_ptr_type proxy = AbstractBase::_ptr_type (Object::_ptr_type (core_object))->_query_interface (nullptr);
 	if (!proxy)

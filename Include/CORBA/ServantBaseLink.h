@@ -88,13 +88,13 @@ protected:
 
 	void _construct ();
 
-	Interface::_ref_type _get_proxy ()
+	I_ref <Interface> _get_proxy () const
 	{
 		return get_proxy (core_object_);
 	}
 
 protected:
-	PortableServer::ServantBase::_ref_type core_object_;
+	I_ref <PortableServer::ServantBase> core_object_;
 };
 
 }

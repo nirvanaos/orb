@@ -28,12 +28,12 @@
 namespace CORBA {
 namespace Internal {
 
-PortableServer::POA::_ref_type ServantPOA <LocalObject>::_default_POA ()
+I_ref <PortableServer::POA> ServantPOA <LocalObject>::_default_POA ()
 {
 	return PortableServer::POA::_nil ();
 }
 
-InterfaceDef::_ref_type ServantPOA <LocalObject>::_get_interface ()
+I_ref <InterfaceDef> ServantPOA <LocalObject>::_get_interface ()
 {
 	_check_construct ();
 	return LocalObjectLink::core_object_->_get_interface ();
@@ -50,7 +50,7 @@ Boolean ServantPOA <LocalObject>::_non_existent ()
 	return LocalObjectLink::_non_existent ();
 }
 
-Interface::_ref_type ServantPOA <LocalObject>::_get_proxy ()
+I_ref <Interface> ServantPOA <LocalObject>::_get_proxy ()
 {
 	_check_construct ();
 	return LocalObjectLink::_get_proxy ();

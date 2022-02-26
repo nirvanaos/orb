@@ -32,7 +32,7 @@ ServantPOA <PortableServer::ServantBase>::ServantPOA () :
 	ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_)
 {}
 
-Interface::_ref_type ServantPOA <PortableServer::ServantBase>::_get_proxy ()
+I_ref <Interface> ServantPOA <PortableServer::ServantBase>::_get_proxy ()
 {
 	_check_construct ();
 	return ServantBaseLink::_get_proxy ();

@@ -35,7 +35,7 @@ namespace Internal {
 
 Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object, String_in iid);
 
-Interface::_ref_type get_proxy (LocalObject::_ptr_type core_object);
+I_ref <Interface> get_proxy (LocalObject::_ptr_type core_object);
 
 }
 }
