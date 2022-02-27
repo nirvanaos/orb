@@ -55,7 +55,7 @@ struct Type <LocalObject> : TypeLocalObject <LocalObject>
 
 NIRVANA_BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))
 NIRVANA_BASE_ENTRY (CORBA::Object, CORBA_Object)
-NIRVANA_BASE_ENTRY (ReferenceCounter, _ReferenceCounter)
+NIRVANA_BASE_ENTRY (ReferenceCounter, CORBA_Internal_ReferenceCounter)
 NIRVANA_BRIDGE_EPV
 Type <Boolean>::ABI_ret (*non_existent) (Bridge <LocalObject>*, Interface*);
 NIRVANA_BRIDGE_END ()
@@ -131,7 +131,7 @@ Boolean Client <T, LocalObject>::_non_existent ()
 
 }
 
-class LocalObject : public Internal::ClientInterface < LocalObject, Object, Internal::ReferenceCounter >
+class LocalObject : public Internal::ClientInterface <LocalObject, Object, Internal::ReferenceCounter>
 {
 public:
 	using ClientInterfacePrimary <LocalObject>::_non_existent;

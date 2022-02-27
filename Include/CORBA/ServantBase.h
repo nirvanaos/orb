@@ -121,7 +121,7 @@ struct Type <PortableServer::Servant> : TypeItf <PortableServer::ServantBase>
 
 NIRVANA_BRIDGE_BEGIN (::PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("ServantBase"))
 NIRVANA_BASE_ENTRY (AbstractBase, CORBA_AbstractBase)
-NIRVANA_BASE_ENTRY (ReferenceCounter, CORBA_Nirvana_ReferenceCounter)
+NIRVANA_BASE_ENTRY (ReferenceCounter, CORBA_Internal_ReferenceCounter)
 NIRVANA_BRIDGE_EPV
 Interface* (*default_POA) (Bridge < ::PortableServer::ServantBase>*, Interface*);
 Interface* (*get_interface) (Bridge < ::PortableServer::ServantBase>*, Interface*);
