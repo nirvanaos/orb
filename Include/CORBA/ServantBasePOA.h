@@ -55,11 +55,7 @@ public:
 		return ServantBaseLink::_default_POA ();
 	}
 
-	virtual I_ref <InterfaceDef> _get_interface ()
-	{
-		_check_construct ();
-		return ServantBaseLink::_get_interface ();
-	}
+	virtual I_ref <InterfaceDef> _get_interface ();
 
 	virtual Boolean _is_a (String_in type_id)
 	{
@@ -71,6 +67,10 @@ public:
 	{
 		return false;
 	}
+
+	virtual void _add_ref ();
+	virtual void _remove_ref ();
+	virtual ULong _refcount_value ();
 
 protected:
 	ServantPOA ();

@@ -29,7 +29,7 @@
 #pragma once
 
 #include "AbstractBase_s.h"
-#include "DynamicServantImpl.h"
+#include "LifeCycleRefCnt.h"
 
 namespace CORBA {
 namespace Internal {
@@ -37,7 +37,8 @@ namespace Internal {
 template <class S>
 class InterfaceImpl <S, AbstractBase> :
 	public InterfaceImplBase <S, AbstractBase>,
-	public InterfaceImpl <S, DynamicServant>
+	public LifeCycleRefCnt <S>,
+	public ServantTraits <S>
 {};
 
 }

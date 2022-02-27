@@ -55,9 +55,12 @@ struct Type <LocalObject> : TypeLocalObject <LocalObject>
 
 NIRVANA_BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))
 NIRVANA_BASE_ENTRY (CORBA::Object, CORBA_Object)
-NIRVANA_BASE_ENTRY (ReferenceCounter, CORBA_Internal_ReferenceCounter)
 NIRVANA_BRIDGE_EPV
 Type <Boolean>::ABI_ret (*non_existent) (Bridge <LocalObject>*, Interface*);
+void (*add_ref) (Bridge <LocalObject>*, Interface*);
+void (*remove_ref) (Bridge <LocalObject>*, Interface*);
+ULong (*refcount_value) (Bridge <LocalObject>*, Interface*);
+void (*delete_object) (Bridge <LocalObject>*, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <> /// We can obtain I_ptr <LocalObject> directly from servant pointer
@@ -117,6 +120,12 @@ class Client <T, LocalObject> :
 {
 public:
 	Boolean _non_existent ();
+	void _add_ref ();
+	void _remove_ref ();
+	ULong _refcount_value ();
+
+	// Nirvana extensions
+	void __delete_object ();
 };
 
 template <class T>
@@ -129,9 +138,46 @@ Boolean Client <T, LocalObject>::_non_existent ()
 	return _ret;
 }
 
+template <class T>
+void Client <T, LocalObject>::_add_ref ()
+{
+	Environment _env;
+	Bridge <LocalObject>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.add_ref) (&_b, &_env);
+	_env.check ();
 }
 
-class LocalObject : public Internal::ClientInterface <LocalObject, Object, Internal::ReferenceCounter>
+template <class T>
+void Client <T, LocalObject>::_remove_ref ()
+{
+	Environment _env;
+	Bridge <LocalObject>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.remove_ref) (&_b, &_env);
+	_env.check ();
+}
+
+template <class T>
+ULong Client <T, LocalObject>::_refcount_value ()
+{
+	Environment _env;
+	Bridge <LocalObject>& _b (T::_get_bridge (_env));
+	ULong _ret = (_b._epv ().epv.refcount_value) (&_b, &_env);
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
+void Client <T, LocalObject>::__delete_object ()
+{
+	Environment _env;
+	Bridge <LocalObject>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.delete_object) (&_b, &_env);
+	_env.check ();
+}
+
+}
+
+class LocalObject : public Internal::ClientInterface <LocalObject, Object>
 {
 public:
 	using ClientInterfacePrimary <LocalObject>::_non_existent;

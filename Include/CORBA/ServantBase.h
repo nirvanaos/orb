@@ -30,7 +30,6 @@
 #pragma once
 
 #include "AbstractBase.h"
-#include "ReferenceCounter.h"
 
 namespace PortableServer {
 
@@ -119,77 +118,121 @@ struct Type <PortableServer::Servant> : TypeItf <PortableServer::ServantBase>
 	}
 };
 
-NIRVANA_BRIDGE_BEGIN (::PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("ServantBase"))
+NIRVANA_BRIDGE_BEGIN (PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("ServantBase"))
 NIRVANA_BASE_ENTRY (AbstractBase, CORBA_AbstractBase)
-NIRVANA_BASE_ENTRY (ReferenceCounter, CORBA_Internal_ReferenceCounter)
 NIRVANA_BRIDGE_EPV
-Interface* (*default_POA) (Bridge < ::PortableServer::ServantBase>*, Interface*);
-Interface* (*get_interface) (Bridge < ::PortableServer::ServantBase>*, Interface*);
-Type <Boolean>::ABI_ret (*is_a) (Bridge < ::PortableServer::ServantBase>*, Type <String>::ABI_in type_id, Interface*);
-Type <Boolean>::ABI_ret (*non_existent) (Bridge < ::PortableServer::ServantBase>*, Interface*);
-Interface* (*core_servant) (Bridge < ::PortableServer::ServantBase>*, Interface*);
+Interface* (*default_POA) (Bridge <PortableServer::ServantBase>*, Interface*);
+Interface* (*get_interface) (Bridge <PortableServer::ServantBase>*, Interface*);
+Type <Boolean>::ABI_ret (*is_a) (Bridge <PortableServer::ServantBase>*, Type <String>::ABI_in type_id, Interface*);
+Type <Boolean>::ABI_ret (*non_existent) (Bridge <PortableServer::ServantBase>*, Interface*);
+void (*add_ref) (Bridge <PortableServer::ServantBase>*, Interface*);
+void (*remove_ref) (Bridge <PortableServer::ServantBase>*, Interface*);
+ULong (*refcount_value) (Bridge <PortableServer::ServantBase>*, Interface*);
+void (*delete_object) (Bridge <PortableServer::ServantBase>*, Interface*);
+Interface* (*core_servant) (Bridge <PortableServer::ServantBase>*, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
-class Client <T, ::PortableServer::ServantBase> :
+class Client <T, PortableServer::ServantBase> :
 	public T
 {
 public:
-	I_ref < ::PortableServer::POA> _default_POA ();
+	I_ref <PortableServer::POA> _default_POA ();
 	I_ref <InterfaceDef> _get_interface ();
 	Boolean _is_a (String_in type_id);
 	Boolean _non_existent ();
+	void _add_ref ();
+	void _remove_ref ();
+	ULong _refcount_value ();
 
-	// Nirvana extension
-	::PortableServer::Servant __core_servant ();
+	// Nirvana extensions
+	void __delete_object ();
+	PortableServer::Servant __core_servant ();
 };
 
 template <class T>
-I_ref < ::PortableServer::POA> Client <T, ::PortableServer::ServantBase>::_default_POA ()
+I_ref <PortableServer::POA> Client <T, PortableServer::ServantBase>::_default_POA ()
 {
 	Environment _env;
-	Bridge <::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
-	I_ret <::PortableServer::POA> _ret = (_b._epv ().epv.default_POA) (&_b, &_env);
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
+	I_ret <PortableServer::POA> _ret = (_b._epv ().epv.default_POA) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-I_ref <InterfaceDef> Client <T, ::PortableServer::ServantBase>::_get_interface ()
+I_ref <InterfaceDef> Client <T, PortableServer::ServantBase>::_get_interface ()
 {
 	Environment _env;
-	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
 	I_ret <InterfaceDef> _ret = (_b._epv ().epv.get_interface) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-Boolean Client <T, ::PortableServer::ServantBase>::_is_a (String_in type_id)
+Boolean Client <T, PortableServer::ServantBase>::_is_a (String_in type_id)
 {
 	Environment _env;
-	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
 	Type <Boolean>::C_ret _ret = (_b._epv ().epv.is_a) (&_b, &type_id, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-Boolean Client <T, ::PortableServer::ServantBase>::_non_existent ()
+Boolean Client <T, PortableServer::ServantBase>::_non_existent ()
 {
 	Environment _env;
-	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
 	Type <Boolean>::C_ret _ret = (_b._epv ().epv.non_existent) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
+void Client <T, PortableServer::ServantBase>::_add_ref ()
+{
+	Environment _env;
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.add_ref) (&_b, &_env);
+	_env.check ();
+}
+
+template <class T>
+void Client <T, PortableServer::ServantBase>::_remove_ref ()
+{
+	Environment _env;
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.remove_ref) (&_b, &_env);
+	_env.check ();
+}
+
+template <class T>
+ULong Client <T, PortableServer::ServantBase>::_refcount_value ()
+{
+	Environment _env;
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
+	ULong _ret = (_b._epv ().epv.refcount_value) (&_b, &_env);
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
+void Client <T, PortableServer::ServantBase>::__delete_object ()
+{
+	Environment _env;
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.delete_object) (&_b, &_env);
+	_env.check ();
+}
+
+template <class T>
 ::PortableServer::Servant Client <T, ::PortableServer::ServantBase>::__core_servant ()
 {
 	Environment _env;
-	Bridge < ::PortableServer::ServantBase>& _b (T::_get_bridge (_env));
-	I_VT_ret <::PortableServer::ServantBase> _ret = (_b._epv ().epv.core_servant) (&_b, &_env);
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
+	I_VT_ret <PortableServer::ServantBase> _ret = (_b._epv ().epv.core_servant) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -200,9 +243,10 @@ template <class T>
 namespace PortableServer {
 
 class ServantBase :
+	public CORBA::Internal::ClientInterface <ServantBase>,
 	// Client methods from AbstractBase are not available directly on pointer to ServantBase.
-	public ::CORBA::Internal::ClientBase <ServantBase, ::CORBA::AbstractBase>,
-	public ::CORBA::Internal::ClientInterface <ServantBase, ::CORBA::Internal::ReferenceCounter>
+	// To call AbstractBase methods, reference must be explicitly cast to AbstractBase.
+	public CORBA::Internal::ClientBase <ServantBase, CORBA::AbstractBase>
 {};
 
 #ifdef LEGACY_CORBA_CPP

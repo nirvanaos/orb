@@ -53,8 +53,15 @@ public:
 	virtual I_ref <InterfaceDef> _get_interface ();
 	virtual Boolean _is_a (String_in type_id);
 	virtual Boolean _non_existent ();
+	virtual void _add_ref ();
+	virtual void _remove_ref ();
+	virtual ULong _refcount_value ();
 
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__non_existent;
+	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__add_ref;
+	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__remove_ref;
+	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__refcount_value;
+	using Skeleton <ServantPOA <LocalObject>, LocalObject>::___delete_object;
 
 protected:
 	ServantPOA () :

@@ -50,6 +50,21 @@ Boolean ServantPOA <LocalObject>::_non_existent ()
 	return LocalObjectLink::_non_existent ();
 }
 
+void ServantPOA <LocalObject>::_add_ref ()
+{
+	LocalObjectLink::_add_ref ();
+}
+
+void ServantPOA <LocalObject>::_remove_ref ()
+{
+	LocalObjectLink::_remove_ref ();
+}
+
+ULong ServantPOA <LocalObject>::_refcount_value ()
+{
+	return LocalObjectLink::_refcount_value ();
+}
+
 I_ref <Interface> ServantPOA <LocalObject>::_get_proxy ()
 {
 	_check_construct ();

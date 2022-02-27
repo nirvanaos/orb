@@ -64,6 +64,21 @@ public:
 		return false;
 	}
 
+	void _add_ref () const
+	{
+		core_object_->_add_ref ();
+	}
+
+	void _remove_ref () const
+	{
+		core_object_->_remove_ref ();
+	}
+
+	ULong _refcount_value () const
+	{
+		return core_object_->_refcount_value ();
+	}
+
 	// Our extensions
 	Boolean _is_active () const
 	{

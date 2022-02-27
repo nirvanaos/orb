@@ -50,6 +50,52 @@ protected:
 		}
 		return 0;
 	}
+
+	static void __add_ref (Bridge <LocalObject>* obj, Interface* env)
+	{
+		try {
+			S::_implementation (obj)._add_ref ();
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+	}
+
+	static void __remove_ref (Bridge <LocalObject>* obj, Interface* env)
+	{
+		try {
+			S::_implementation (obj)._remove_ref ();
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+	}
+
+	static ULong __refcount_value (Bridge <LocalObject>* obj, Interface* env)
+	{
+		try {
+			return S::_implementation (obj)._refcount_value ();
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return 0;
+	}
+
+	static void ___delete_object (Bridge <LocalObject>* _b, Interface* _env)
+	{
+		try {
+			S::_implementation (_b).__delete_object ();
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+	}
+
 };
 
 template <class S>
@@ -60,11 +106,14 @@ const Bridge <LocalObject>::EPV Skeleton <S, LocalObject>::epv_ = {
 		S::template __release <LocalObject>
 	},
 	{ // base
-		S::template _wide_object <LocalObject>,
-		S::template _wide <ReferenceCounter, LocalObject>
+		S::template _wide_object <LocalObject>
 	},
 	{ // epv
-		S::__non_existent
+		S::__non_existent,
+		S::__add_ref,
+		S::__remove_ref,
+		S::__refcount_value,
+		S::___delete_object
 	}
 };
 

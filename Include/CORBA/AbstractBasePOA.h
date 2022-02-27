@@ -29,9 +29,17 @@
 #pragma once
 
 #include "AbstractBase_s.h"
-#include "ReferenceCounterPOA.h"
+#include "ServantPOA.h"
+#include "LifeCycleRefCnt.h"
+
+namespace PortableServer {
+class ServantBase;
+}
 
 namespace CORBA {
+
+class LocalObject;
+
 namespace Internal {
 
 //! POA implementation of AbstractBase
@@ -39,13 +47,33 @@ namespace Internal {
 template <>
 class NIRVANA_NOVTABLE ServantPOA <AbstractBase> :
 	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
-	public virtual ServantPOA <ReferenceCounter>
+	public LifeCycleRefCnt <ServantPOA <AbstractBase> >,
+	public ServantTraitsPOA
 {
 public:
 	virtual Interface* _query_interface (const String& id) = 0;
 
 protected:
+	friend class LifeCycleRefCnt <ServantPOA <AbstractBase> >;
+
+	virtual void _add_ref () = 0;
+	virtual void _remove_ref () = 0;
+	virtual ULong _refcount_value () = 0;
+
+private:
+	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
+	friend class Skeleton <ServantPOA <LocalObject>, LocalObject>;
+
+	virtual void __delete_object ()
+	{
+		delete this;
+	}
+
+protected:
 	ServantPOA ()
+	{}
+
+	virtual ~ServantPOA ()
 	{}
 };
 
