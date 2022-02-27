@@ -30,7 +30,6 @@
 #include <Nirvana/NirvanaBase.h>
 #include <Nirvana/OLF.h>
 #include "AbstractBaseStatic.h"
-#include "ReferenceCounterStatic.h"
 #include "LocalObject_s.h"
 #include "local_core.h"
 
@@ -43,8 +42,7 @@ namespace Internal {
 template <class S>
 class InterfaceStatic <S, LocalObject> :
 	public InterfaceStaticBase <S, LocalObject>,
-	public InterfaceStatic <S, AbstractBase>,
-	public InterfaceStatic <S, ReferenceCounter>
+	public InterfaceStatic <S, AbstractBase>
 {
 public:
 	static Bridge <Object>* _get_object (String_in iid)
@@ -57,6 +55,17 @@ public:
 	static Boolean _non_existent ()
 	{
 		return false;
+	}
+
+	static void _add_ref () NIRVANA_NOEXCEPT
+	{}
+
+	static void _remove_ref () NIRVANA_NOEXCEPT
+	{}
+
+	static ULong _refcount_value () NIRVANA_NOEXCEPT
+	{
+		return 1;
 	}
 
 protected:

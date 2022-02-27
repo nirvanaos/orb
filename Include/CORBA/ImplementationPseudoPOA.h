@@ -32,9 +32,8 @@
 #define NIRVANA_ORB_IMPLEMENTATIONPSEUDOPOA_H_
 #pragma once
 
-#include "ServantImpl.h"
+#include "ServantPOA.h"
 #include "I_ptr.h"
-#include "ReferenceCounterPOA.h"
 
 namespace CORBA {
 namespace Internal {
@@ -47,8 +46,7 @@ namespace Internal {
 
 template <class Primary>
 class NIRVANA_NOVTABLE ImplementationPseudoPOA :
-	public InterfaceImpl <ServantPOA <Primary>, Primary>,
-	public virtual ServantPOA <ReferenceCounter>
+	public InterfaceImpl <ServantPOA <Primary>, Primary>
 {
 public:
 	typedef Primary PrimaryInterface;

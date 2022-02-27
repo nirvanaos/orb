@@ -30,7 +30,6 @@
 #include <Nirvana/NirvanaBase.h>
 #include <Nirvana/OLF.h>
 #include "AbstractBaseStatic.h"
-#include "ReferenceCounterStatic.h"
 #include "ServantBase_s.h"
 #include "servant_core.h"
 
@@ -42,8 +41,7 @@ namespace Internal {
 template <class S>
 class InterfaceStatic <S, PortableServer::ServantBase> :
 	public InterfaceStaticBase <S, PortableServer::ServantBase>,
-	public InterfaceStatic <S, AbstractBase>,
-	public InterfaceStatic <S, ReferenceCounter>
+	public InterfaceStatic <S, AbstractBase>
 {
 public:
 	static Bridge <Object>* _get_object (String_in iid)
@@ -68,9 +66,25 @@ public:
 		return servant_base ()->_is_a (type_id);
 	}
 
-	static Boolean _non_existent ()
+	static Boolean _non_existent () NIRVANA_NOEXCEPT
 	{
 		return false;
+	}
+
+	static void _add_ref () NIRVANA_NOEXCEPT
+	{}
+
+	static void _remove_ref () NIRVANA_NOEXCEPT
+	{}
+
+	static ULong _refcount_value () NIRVANA_NOEXCEPT
+	{
+		return 1;
+	}
+
+	static void __delete_object () NIRVANA_NOEXCEPT
+	{
+		Nirvana::throw_NO_IMPLEMENT ();
 	}
 
 	static PortableServer::Servant __core_servant ()

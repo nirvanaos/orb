@@ -29,7 +29,6 @@
 
 #include "LocalObject.h"
 #include "ServantBase.h"
-#include "DynamicServant.h"
 #include "ObjectFactory.h"
 
 #endif

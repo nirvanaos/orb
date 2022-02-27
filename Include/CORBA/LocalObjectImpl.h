@@ -52,6 +52,11 @@ protected:
 	InterfaceImpl (const InterfaceImpl&) :
 		InterfaceImpl ()
 	{}
+
+	void __delete_object ()
+	{
+		delete& static_cast <S&> (*this);
+	}
 };
 
 }

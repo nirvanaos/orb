@@ -28,8 +28,6 @@
 #define NIRVANA_ORB_LOCALOBJECT_H_
 #pragma once
 
-#include "ReferenceCounter.h"
-
 namespace CORBA {
 
 class LocalObject;

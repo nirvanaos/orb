@@ -92,7 +92,6 @@ pseudo interface ObjectFactory
 	/// \returns Pointer to stateless object created.
 	Nirvana::Pointer stateless_end (in boolean success);
 
-	ReferenceCounter create_reference_counter (in DynamicServant dynamic);
 	PortableServer::Servant create_servant (in PortableServer::Servant impl);
 	LocalObject create_local_object (in LocalObject impl, in AbstractBase abstract_base);
 };
