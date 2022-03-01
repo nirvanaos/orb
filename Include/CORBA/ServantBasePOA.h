@@ -70,6 +70,13 @@ public:
 		return false;
 	}
 
+#ifndef LEGACY_CORBA_CPP
+protected:
+	template <class> friend class LifeCycleRefCnt;
+	template <class> friend class servant_reference;
+	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
+#endif
+
 	virtual void _add_ref ();
 	virtual void _remove_ref ();
 	virtual ULong _refcount_value ();

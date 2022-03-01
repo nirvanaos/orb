@@ -66,6 +66,8 @@ NIRVANA_BRIDGE_BEGIN (ValueBase, CORBA_REPOSITORY_ID ("ValueBase"))
 NIRVANA_BASE_ENTRY (AbstractBase, CORBA_AbstractBase)
 NIRVANA_BRIDGE_EPV
 Interface* (*copy_value) (Bridge <ValueBase>* _b, Interface* _env);
+void (*marshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
+void (*unmarshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 NIRVANA_BRIDGE_END ()
 
 template <class T>

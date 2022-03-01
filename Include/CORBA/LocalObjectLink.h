@@ -49,6 +49,15 @@ public:
 		return false;
 	}
 
+	// Reference counter
+
+#ifndef LEGACY_CORBA_CPP
+protected:
+	template <class> friend class LifeCycleRefCnt;
+	template <class> friend class servant_reference;
+	template <class, class> friend class Skeleton;
+#endif
+
 	void _add_ref () const
 	{
 		core_object_->_add_ref ();
