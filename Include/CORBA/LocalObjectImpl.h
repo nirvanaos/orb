@@ -30,6 +30,7 @@
 #include "AbstractBaseImpl.h"
 #include "LocalObjectLink.h"
 #include "LocalObject_s.h"
+#include "ServantMemory.h"
 
 namespace CORBA {
 namespace Internal {
@@ -40,7 +41,8 @@ template <class S>
 class InterfaceImpl <S, LocalObject> :
 	public LocalObjectLink,
 	public Skeleton <S, LocalObject>,
-	public InterfaceImpl <S, AbstractBase>
+	public InterfaceImpl <S, AbstractBase>,
+	public ServantMemory
 {
 public:
 	void __delete_object () NIRVANA_NOEXCEPT

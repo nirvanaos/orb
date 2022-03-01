@@ -30,6 +30,7 @@
 #include "AbstractBasePOA.h"
 #include "ServantBaseLink.h"
 #include "ServantBase_s.h"
+#include "ServantMemory.h"
 
 namespace CORBA {
 namespace Internal {
@@ -39,7 +40,8 @@ template <>
 class NIRVANA_NOVTABLE ServantPOA <PortableServer::ServantBase> :
 	public ServantBaseLink,
 	public virtual ServantPOA <AbstractBase>,
-	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>
+	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>,
+	public ServantMemory
 {
 public:
 	virtual Bridge <Object>* _get_object (String_in iid)

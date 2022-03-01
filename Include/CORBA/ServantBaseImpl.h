@@ -30,6 +30,7 @@
 #include "AbstractBaseImpl.h"
 #include "ServantBaseLink.h"
 #include "ServantBase_s.h"
+#include "ServantMemory.h"
 
 namespace CORBA {
 namespace Internal {
@@ -40,7 +41,8 @@ template <class S>
 class InterfaceImpl <S, PortableServer::ServantBase> :
 	public ServantBaseLink,
 	public Skeleton <S, PortableServer::ServantBase>,
-	public InterfaceImpl <S, AbstractBase>
+	public InterfaceImpl <S, AbstractBase>,
+	public ServantMemory
 {
 public:
 	void __delete_object () NIRVANA_NOEXCEPT
