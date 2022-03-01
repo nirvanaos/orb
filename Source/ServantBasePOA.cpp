@@ -46,16 +46,19 @@ I_ref <Interface> ServantPOA <PortableServer::ServantBase>::_get_proxy ()
 
 void ServantPOA <PortableServer::ServantBase>::_add_ref ()
 {
+	_check_construct ();
 	ServantBaseLink::_add_ref ();
 }
 
 void ServantPOA <PortableServer::ServantBase>::_remove_ref ()
 {
+	_check_construct ();
 	ServantBaseLink::_remove_ref ();
 }
 
 ULong ServantPOA <PortableServer::ServantBase>::_refcount_value ()
 {
+	_check_construct ();
 	return ServantBaseLink::_refcount_value ();
 }
 

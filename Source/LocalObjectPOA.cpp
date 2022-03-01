@@ -52,16 +52,19 @@ Boolean ServantPOA <LocalObject>::_non_existent ()
 
 void ServantPOA <LocalObject>::_add_ref ()
 {
+	_check_construct ();
 	LocalObjectLink::_add_ref ();
 }
 
 void ServantPOA <LocalObject>::_remove_ref ()
 {
+	_check_construct ();
 	LocalObjectLink::_remove_ref ();
 }
 
 ULong ServantPOA <LocalObject>::_refcount_value ()
 {
+	_check_construct ();
 	return LocalObjectLink::_refcount_value ();
 }
 
