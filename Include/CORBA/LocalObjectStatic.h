@@ -68,6 +68,11 @@ public:
 		return 1;
 	}
 
+	static void __delete_object () NIRVANA_NOEXCEPT
+	{
+		Nirvana::throw_NO_IMPLEMENT ();
+	}
+
 protected:
 	static Interface* _get_proxy ()
 	{

@@ -42,6 +42,12 @@ class InterfaceImpl <S, LocalObject> :
 	public Skeleton <S, LocalObject>,
 	public InterfaceImpl <S, AbstractBase>
 {
+public:
+	void __delete_object () NIRVANA_NOEXCEPT
+	{
+		delete& static_cast <S&> (*this);
+	}
+
 protected:
 	InterfaceImpl () :
 		LocalObjectLink (Skeleton <S, LocalObject>::epv_)
@@ -53,10 +59,6 @@ protected:
 		InterfaceImpl ()
 	{}
 
-	void __delete_object ()
-	{
-		delete& static_cast <S&> (*this);
-	}
 };
 
 }
