@@ -250,6 +250,24 @@ public:
 		return ret;
 	}
 
+#ifdef LEGACY_CORBA_CPP
+
+	operator I_ptr <Interface> ()
+	{
+		I_ptr <Interface> ret = ptr_;
+		ptr_ = nullptr;
+		return ret;
+	}
+
+	operator I_var <Interface> ()
+	{
+		I_ptr <Interface> ret = ptr_;
+		ptr_ = nullptr;
+		return ret;
+	}
+
+#endif
+
 private:
 	Interface* ptr_;
 };
@@ -269,7 +287,6 @@ struct TypeItfBase
 {
 	static const bool fixed_len = false;
 
-	typedef I_ref <I> Var;
 	typedef Interface* ABI;
 
 	typedef Interface* ABI_in;
@@ -279,13 +296,35 @@ struct TypeItfBase
 
 	typedef I_ptr <I> C_ptr;
 #ifdef LEGACY_CORBA_CPP
+	typedef I_var <I> Var;
 	typedef I_var <I> C_var;
+	typedef I_ptr <I> VRet;
+#else
+	typedef I_ref <I> Var;
+	typedef Var VRet;
 #endif
 	typedef I_in <I> C_in;
 	typedef I_out <I> C_out;
 	typedef I_inout <I> C_inout;
 	typedef I_ret <I> C_ret;
 	typedef I_VT_ret <I> C_VT_ret;
+
+#ifdef LEGACY_CORBA_CPP
+
+	static Interface* ret (const I_ptr <I>& ptr)
+	{
+		return &ptr;
+	}
+
+	static I_var <I>& out (ABI_out p)
+	{
+		_check_pointer (p);
+		if (*p)
+			::Nirvana::throw_BAD_PARAM ();
+		return reinterpret_cast <I_var <I>&> (*p);
+	}
+
+#else
 
 	static I_ref <I>& out (ABI_out p)
 	{
@@ -295,11 +334,6 @@ struct TypeItfBase
 		return reinterpret_cast <I_ref <I>&> (*p);
 	}
 
-#ifdef LEGACY_CORBA_CPP
-	static Interface* ret (const I_ptr <I>& ptr)
-	{
-		return &ptr;
-	}
 #endif
 
 	static Interface* ret (I_ref <I>&& var) NIRVANA_NOEXCEPT
@@ -350,6 +384,17 @@ struct TypeItfCommon : TypeItfBase <I>
 		return I::_check (p);
 	}
 
+#ifdef LEGACY_CORBA_CPP
+
+	static I_var <I>& inout (ABI_out p)
+	{
+		_check_pointer (p);
+		I::_check (*p);
+		return reinterpret_cast <I_var <I>&> (*p);
+	}
+
+#else
+
 	static I_ref <I>& inout (ABI_out p)
 	{
 		_check_pointer (p);
@@ -357,6 +402,7 @@ struct TypeItfCommon : TypeItfBase <I>
 		return reinterpret_cast <I_ref <I>&> (*p);
 	}
 
+#endif
 };
 
 template <class I>

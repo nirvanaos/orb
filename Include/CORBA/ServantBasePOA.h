@@ -77,9 +77,23 @@ protected:
 	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
 #endif
 
-	virtual void _add_ref ();
-	virtual void _remove_ref ();
-	virtual ULong _refcount_value ();
+	virtual void _add_ref ()
+	{
+		_check_construct ();
+		ServantBaseLink::_add_ref ();
+	}
+
+	virtual void _remove_ref ()
+	{
+		_check_construct ();
+		ServantBaseLink::_remove_ref ();
+	}
+
+	virtual ULong _refcount_value ()
+	{
+		_check_construct ();
+		return ServantBaseLink::_refcount_value ();
+	}
 
 protected:
 	ServantPOA ();

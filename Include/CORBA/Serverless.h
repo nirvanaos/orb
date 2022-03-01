@@ -101,8 +101,10 @@ struct TypeServerless
 {
 #ifdef LEGACY_CORBA_CPP
 	typedef typename Serverless <T>::_var_type Var;
+	typedef typename Serverless <T>::_ptr_type VRet;
 #else
 	typedef typename Serverless <T>::_ref_type Var;
+	typedef Var VRet;
 #endif
 	typedef const Var& ConstRef;
 	typedef ConstRef C_in;

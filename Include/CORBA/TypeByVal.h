@@ -44,6 +44,7 @@ struct TypeByVal
 	static const bool fixed_len = true;
 
 	typedef T Var;
+	typedef T VRet;
 	typedef Var ConstRef; // By value
 	typedef Var S_in; // By value
 

@@ -67,9 +67,23 @@ protected:
 	friend class Skeleton <ServantPOA <LocalObject>, LocalObject>;
 #endif
 
-	virtual void _add_ref ();
-	virtual void _remove_ref ();
-	virtual ULong _refcount_value ();
+	virtual void _add_ref ()
+	{
+		_check_construct ();
+		LocalObjectLink::_add_ref ();
+	}
+
+	virtual void _remove_ref ()
+	{
+		_check_construct ();
+		LocalObjectLink::_remove_ref ();
+	}
+
+	virtual ULong _refcount_value ()
+	{
+		_check_construct ();
+		return LocalObjectLink::_refcount_value ();
+	}
 
 protected:
 	ServantPOA () :

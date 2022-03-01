@@ -42,6 +42,7 @@ template <typename T, typename TABI = T>
 struct TypeByRef
 {
 	typedef T Var;
+	typedef T VRet;
 	typedef const Var& ConstRef;
 
 	// ABI data types

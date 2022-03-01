@@ -300,14 +300,14 @@ public:
 	}
 
 	template <class I>
-	I_ref <I> downcast ()
+	I_ref <I> downcast () NIRVANA_NOEXCEPT
 	{
 		I_ref <I> ret (static_cast <I*> (p_));
 		p_ = nullptr;
 		return ret;
 	}
 
-private:
+protected:
 	friend class I_ret <Interface>;
 	I_ref (Interface* p) :
 		Base (p)

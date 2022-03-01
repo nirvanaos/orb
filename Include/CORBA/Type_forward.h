@@ -42,6 +42,7 @@ typedef I_ptr <IORequest> IORequest_ptr;
 template <> struct Type <T>
 {
   typedef T Var;
+  typedef Var VRet;
   typedef const T& ConstRef;
   typedef ABI <T> ABI;
 

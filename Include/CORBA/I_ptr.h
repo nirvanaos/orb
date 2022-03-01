@@ -211,6 +211,12 @@ public:
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
 		return this->p_;
 	}
+
+	template <class I>
+	I_ptr <I> downcast () NIRVANA_NOEXCEPT
+	{
+		return static_cast <I*> (p_);
+	}
 };
 
 inline I_ptr <Interface> Interface::_nil () NIRVANA_NOEXCEPT
