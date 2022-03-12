@@ -68,7 +68,7 @@ public:
 		return 1;
 	}
 
-	static void __delete_object () NIRVANA_NOEXCEPT
+	static void _delete_object () NIRVANA_NOEXCEPT
 	{
 		Nirvana::throw_NO_IMPLEMENT ();
 	}

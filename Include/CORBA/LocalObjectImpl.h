@@ -45,7 +45,7 @@ class InterfaceImpl <S, LocalObject> :
 	public ServantMemory
 {
 public:
-	void __delete_object () NIRVANA_NOEXCEPT
+	void _delete_object () NIRVANA_NOEXCEPT
 	{
 		delete& static_cast <S&> (*this);
 	}

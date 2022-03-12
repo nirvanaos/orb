@@ -124,10 +124,10 @@ protected:
 		return 0;
 	}
 
-	static void ___delete_object (Bridge <PortableServer::ServantBase>* _b, Interface* _env)
+	static void __delete_object (Bridge <PortableServer::ServantBase>* _b, Interface* _env)
 	{
 		try {
-			S::_implementation (_b).__delete_object ();
+			S::_implementation (_b)._delete_object ();
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -135,10 +135,10 @@ protected:
 		}
 	}
 
-	static Interface* ___core_servant (Bridge <PortableServer::ServantBase>* obj, Interface* env)
+	static Interface* __core_servant (Bridge <PortableServer::ServantBase>* obj, Interface* env)
 	{
 		try {
-			return Type <PortableServer::Servant>::VT_ret (S::_implementation (obj).__core_servant ());
+			return Type <PortableServer::Servant>::VT_ret (S::_implementation (obj)._core_servant ());
 		} catch (Exception & e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -166,8 +166,8 @@ const Bridge <PortableServer::ServantBase>::EPV Skeleton <S, PortableServer::Ser
 		S::__add_ref,
 		S::__remove_ref,
 		S::__refcount_value,
-		S::___delete_object,
-		S::___core_servant
+		S::__delete_object,
+		S::__core_servant
 	}
 };
 

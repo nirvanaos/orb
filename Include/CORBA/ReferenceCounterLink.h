@@ -23,44 +23,53 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_SERVANTBASEIMPL_H_
-#define NIRVANA_ORB_SERVANTBASEIMPL_H_
+#ifndef NIRVANA_ORB_REFERENCECOUNTERLINK_H_
+#define NIRVANA_ORB_REFERENCECOUNTERLINK_H_
 #pragma once
 
-#include "AbstractBaseImpl.h"
-#include "ServantBaseLink.h"
-#include "ServantBase_s.h"
-#include "ServantMemory.h"
+#include "ObjectFactoryInc.h"
+#include "ValueBase.h"
+#include "core_objects.h"
+#include "primitive_types.h"
 
 namespace CORBA {
 namespace Internal {
 
-//! Implementation of PortableServer::ServantBase.
-//! \tparam S Servant class implementing operations.
-template <class S>
-class InterfaceImpl <S, PortableServer::ServantBase> :
-	public ServantBaseLink,
-	public Skeleton <S, PortableServer::ServantBase>,
-	public InterfaceImpl <S, AbstractBase>,
-	public ServantMemory
+class ReferenceCounterLink :
+	public Bridge <ValueBase>
 {
 public:
-	void _delete_object () NIRVANA_NOEXCEPT
+
+#ifndef LEGACY_CORBA_CPP
+protected:
+	template <class> friend class LifeCycleRefCnt;
+	template <class> friend class servant_reference;
+	template <class, class> friend class Skeleton;
+#endif
+
+	void _add_ref ()
 	{
-		delete& static_cast <S&> (*this);
+		core_object_->add_ref ();
+	}
+
+	void _remove_ref ()
+	{
+		core_object_->remove_ref ();
+	}
+
+	ULong _refcount_value ()
+	{
+		return core_object_->refcount_value ();
 	}
 
 protected:
-	InterfaceImpl () :
-		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_)
-	{
-		_construct ();
-	}
-
-	InterfaceImpl (const InterfaceImpl&) :
-		InterfaceImpl ()
+	ReferenceCounterLink (const Bridge <ValueBase>::EPV& epv) :
+		Bridge <ValueBase> (epv),
+		core_object_ (g_object_factory->create_reference_counter (ValueBase::_ptr_type (this)))
 	{}
 
+private:
+	ReferenceCounter::_ref_type core_object_;
 };
 
 }

@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,38 +24,29 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_LOCALOBJECT_S_H_
-#define NIRVANA_ORB_LOCALOBJECT_S_H_
+#ifndef NIRVANA_ORB_VALUEBASE_S_H_
+#define NIRVANA_ORB_VALUEBASE_S_H_
 #pragma once
 
-#include "LocalObject.h"
+#include "ValueBase.h"
+#include "Type_interface.h"
 
 namespace CORBA {
 namespace Internal {
 
+// ServantBase skeleton
+
 template <class S>
-class Skeleton <S, LocalObject>
+class Skeleton <S, ValueBase>
 {
 public:
-	static const typename Bridge <LocalObject>::EPV epv_;
+	static const typename Bridge <ValueBase>::EPV epv_;
 
 protected:
-	static Type <Boolean>::ABI_ret __non_existent (Bridge <LocalObject>* obj, Interface* env)
+	static Interface* __copy_value (Bridge <ValueBase>* _b, Interface* _env)
 	{
 		try {
-			return S::_implementation (obj)._non_existent ();
-		} catch (Exception & e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return 0;
-	}
-
-	static void __add_ref (Bridge <LocalObject>* obj, Interface* env)
-	{
-		try {
-			S::_implementation (obj)._add_ref ();
+			return Type <Interface>::ret (S::_implementation (obj)._copy_value ());
 		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -62,10 +54,10 @@ protected:
 		}
 	}
 
-	static void __remove_ref (Bridge <LocalObject>* obj, Interface* env)
+	static void __marshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
 	{
 		try {
-			S::_implementation (obj)._remove_ref ();
+			S::_implementation (obj)._marshal (Type <IORequest>::in (rq));
 		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -73,19 +65,18 @@ protected:
 		}
 	}
 
-	static ULong __refcount_value (Bridge <LocalObject>* obj, Interface* env)
+	static void __unmarshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
 	{
 		try {
-			return S::_implementation (obj)._refcount_value ();
+			S::_implementation (obj)._unmarshal (Type <IORequest>::in (rq));
 		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return 0;
 	}
 
-	static void __delete_object (Bridge <LocalObject>* _b, Interface* _env)
+	static void __delete_object (Bridge <PortableServer::ServantBase>* _b, Interface* _env)
 	{
 		try {
 			S::_implementation (_b)._delete_object ();
@@ -99,20 +90,19 @@ protected:
 };
 
 template <class S>
-const Bridge <LocalObject>::EPV Skeleton <S, LocalObject>::epv_ = {
-	{ // interface
-		Bridge <LocalObject>::repository_id_,
-		S::template __duplicate <LocalObject>,
-		S::template __release <LocalObject>
+const Bridge <ValueBase>::EPV Skeleton <S, ValueBase>::epv_ = {
+	{ // header
+		Bridge <ValueBase>::repository_id_,
+		S::template __duplicate <ValueBase>,
+		S::template __release <ValueBase>
 	},
 	{ // base
-		S::template _wide_object <LocalObject>
+		S::template _wide <AbstractBase, ValueBase>
 	},
 	{ // epv
-		S::__non_existent,
-		S::__add_ref,
-		S::__remove_ref,
-		S::__refcount_value,
+		S::__copy_value,
+		S::__marshal,
+		S::__unmarshal,
 		S::__delete_object
 	}
 };

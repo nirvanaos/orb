@@ -46,8 +46,12 @@ native AbstractBase;
 
 module Internal {
 
-native DynamicServant;
-native ReferenceCounter;
+pseudo interface ReferenceCounter
+{
+	void add_ref ();
+	void remove_ref ();
+	unsigned long refcount_value ();
+};
 
 /// ObjectFactory Interface to the core object functionality.
 pseudo interface ObjectFactory
@@ -94,6 +98,7 @@ pseudo interface ObjectFactory
 
 	PortableServer::Servant create_servant (in PortableServer::Servant impl);
 	LocalObject create_local_object (in LocalObject impl, in AbstractBase abstract_base);
+	ReferenceCounter create_reference_counter (in ValueBase impl);
 };
 
 };

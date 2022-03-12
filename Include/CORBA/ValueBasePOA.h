@@ -1,4 +1,4 @@
-/// \file AbstractBasePOA.h
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -24,56 +24,48 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_ABSTRACTBASEPOA_H_
-#define NIRVANA_ORB_ABSTRACTBASEPOA_H_
+#ifndef NIRVANA_ORB_VALUEBASEPOA_H_
+#define NIRVANA_ORB_VALUEBASEPOA_H_
 #pragma once
 
-#include "AbstractBase_s.h"
-#include "ServantPOA.h"
-#include "LifeCycleRefCnt.h"
-
-namespace PortableServer {
-class ServantBase;
-}
+#include "AbstractBasePOA.h"
+#include "ReferenceCounterLink.h"
+#include "ValueBase_s.h"
 
 namespace CORBA {
-
-class LocalObject;
-
 namespace Internal {
 
-//! POA implementation of AbstractBase
-
 template <>
-class NIRVANA_NOVTABLE ServantPOA <AbstractBase> :
-	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
-	public LifeCycleRefCnt <ServantPOA <AbstractBase> >,
-	public ServantTraitsPOA
+class NIRVANA_NOVTABLE ServantPOA <ValueBase> :
+	public ReferenceCounterLink,
+	public virtual ServantPOA <AbstractBase>,
+	public Skeleton <ServantPOA <ValueBase>, ValueBase>
 {
 public:
-	virtual Interface* _query_interface (const String& id) = 0;
+	virtual I_ref <ValueBase> _copy_value () = 0;
+	virtual void _marshal (I_ptr <IORequest> rq) = 0;
+	virtual void _unmarshal (I_ptr <IORequest> rq) = 0;
 
+#ifndef LEGACY_CORBA_CPP
 protected:
-	friend class LifeCycleRefCnt <ServantPOA <AbstractBase> >;
-
-	virtual void _add_ref () = 0;
-	virtual void _remove_ref () = 0;
-	virtual ULong _refcount_value () = 0;
-
-private:
+	template <class> friend class LifeCycleRefCnt;
+	template <class> friend class servant_reference;
 	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
-	friend class Skeleton <ServantPOA <LocalObject>, LocalObject>;
+#endif
 
-	virtual void _delete_object ()
+	virtual void _add_ref ()
 	{
-		delete this;
+		ReferenceCounterLink::_add_ref ();
+	}
+
+	virtual void _remove_ref ()
+	{
+		ReferenceCounterLink::_remove_ref ();
 	}
 
 protected:
-	ServantPOA ()
-	{}
-
-	virtual ~ServantPOA ()
+	ServantPOA () :
+		ReferenceCounterLink (Skeleton <ServantPOA <ValueBase>, ValueBase>::epv_)
 	{}
 };
 

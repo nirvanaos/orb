@@ -66,7 +66,7 @@ public:
 
 	// Our extensions
 
-	PortableServer::Servant __core_servant () const
+	PortableServer::Servant _core_servant () const
 	{
 		return core_object_;
 	}

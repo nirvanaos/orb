@@ -24,7 +24,6 @@
 *  popov.nirvana@gmail.com
 */
 #include "IOReference.idl"
-#include "../DynamicServant.idl"
 
 module CORBA {
 module Internal {

@@ -146,8 +146,8 @@ public:
 	ULong _refcount_value ();
 
 	// Nirvana extensions
-	void __delete_object ();
-	PortableServer::Servant __core_servant ();
+	void _delete_object ();
+	PortableServer::Servant _core_servant ();
 };
 
 template <class T>
@@ -219,7 +219,7 @@ ULong Client <T, PortableServer::ServantBase>::_refcount_value ()
 }
 
 template <class T>
-void Client <T, PortableServer::ServantBase>::__delete_object ()
+void Client <T, PortableServer::ServantBase>::_delete_object ()
 {
 	Environment _env;
 	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
@@ -228,7 +228,7 @@ void Client <T, PortableServer::ServantBase>::__delete_object ()
 }
 
 template <class T>
-::PortableServer::Servant Client <T, ::PortableServer::ServantBase>::__core_servant ()
+::PortableServer::Servant Client <T, ::PortableServer::ServantBase>::_core_servant ()
 {
 	Environment _env;
 	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));

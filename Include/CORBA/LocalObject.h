@@ -123,7 +123,7 @@ public:
 	ULong _refcount_value ();
 
 	// Nirvana extensions
-	void __delete_object ();
+	void _delete_object ();
 };
 
 template <class T>
@@ -165,7 +165,7 @@ ULong Client <T, LocalObject>::_refcount_value ()
 }
 
 template <class T>
-void Client <T, LocalObject>::__delete_object ()
+void Client <T, LocalObject>::_delete_object ()
 {
 	Environment _env;
 	Bridge <LocalObject>& _b (T::_get_bridge (_env));

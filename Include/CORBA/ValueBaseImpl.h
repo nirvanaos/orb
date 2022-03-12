@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,26 +24,21 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_SERVANTBASEIMPL_H_
-#define NIRVANA_ORB_SERVANTBASEIMPL_H_
+#ifndef NIRVANA_ORB_VALUEBASEIMPL_H_
+#define NIRVANA_ORB_VALUEBASEIMPL_H_
 #pragma once
 
-#include "AbstractBaseImpl.h"
-#include "ServantBaseLink.h"
-#include "ServantBase_s.h"
-#include "ServantMemory.h"
+#include "ReferenceCounterLink.h"
+#include "ValueBase_s.h"
 
 namespace CORBA {
 namespace Internal {
 
-//! Implementation of PortableServer::ServantBase.
+//! Implementation of ValueBase.
 //! \tparam S Servant class implementing operations.
 template <class S>
-class InterfaceImpl <S, PortableServer::ServantBase> :
-	public ServantBaseLink,
-	public Skeleton <S, PortableServer::ServantBase>,
-	public InterfaceImpl <S, AbstractBase>,
-	public ServantMemory
+class InterfaceImpl <S, ValueBase> :
+	public ReferenceCounterLink
 {
 public:
 	void _delete_object () NIRVANA_NOEXCEPT
@@ -52,10 +48,8 @@ public:
 
 protected:
 	InterfaceImpl () :
-		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_)
-	{
-		_construct ();
-	}
+		ReferenceCounterLink (Skeleton <S, ValueBase>::epv_)
+	{}
 
 	InterfaceImpl (const InterfaceImpl&) :
 		InterfaceImpl ()

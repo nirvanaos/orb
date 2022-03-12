@@ -68,6 +68,7 @@ NIRVANA_BRIDGE_EPV
 Interface* (*copy_value) (Bridge <ValueBase>* _b, Interface* _env);
 void (*marshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 void (*unmarshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
+void (*delete_object) (Bridge <ValueBase>* _b, Interface* _env);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
@@ -76,6 +77,9 @@ class Client <T, ValueBase> :
 {
 public:
 	Type <ValueBase>::Var _copy_value ();
+	void _marshal (I_ptr <IORequest> rq);
+	void _unmarshal (I_ptr <IORequest> rq);
+	void _delete_object ();
 };
 
 template <class T>
@@ -86,6 +90,33 @@ Type <ValueBase>::Var Client <T, ValueBase>::_copy_value ()
 	Type <ValueBase>::C_ret _ret = (_b._epv ().epv.copy_value) (&_b, &_env);
 	_env.check ();
 	return _ret;
+}
+
+template <class T>
+void Client <T, ValueBase>::_marshal (I_ptr <IORequest> rq)
+{
+	Environment _env;
+	Bridge <ValueBase>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.marshal) (&_b, &rq, &_env);
+	_env.check ();
+}
+
+template <class T>
+void Client <T, ValueBase>::_unmarshal (I_ptr <IORequest> rq)
+{
+	Environment _env;
+	Bridge <ValueBase>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.unmarshal) (&_b, &rq, &_env);
+	_env.check ();
+}
+
+template <class T>
+void Client <T, ValueBase>::_delete_object ()
+{
+	Environment _env;
+	Bridge <ValueBase>& _b (T::_get_bridge (_env));
+	(_b._epv ().epv.delete_object) (&_b, &_env);
+	_env.check ();
 }
 
 }
@@ -119,7 +150,7 @@ class ClientInterfaceBase <Primary, ValueBase> :
 	public Client <ClientBase <Primary, ValueBase>, ValueBase>
 {
 public:
-	static I_ref <Primary> _downcast (ValueBase::_ptr_type obj)
+	static I_ptr <Primary> _downcast (ValueBase::_ptr_type obj)
 	{
 		return AbstractBase::_ptr_type (obj)->_query_interface <Primary> ();
 	}

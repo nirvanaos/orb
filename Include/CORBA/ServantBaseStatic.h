@@ -82,12 +82,12 @@ public:
 		return 1;
 	}
 
-	static void __delete_object () NIRVANA_NOEXCEPT
+	static void _delete_object () NIRVANA_NOEXCEPT
 	{
 		Nirvana::throw_NO_IMPLEMENT ();
 	}
 
-	static PortableServer::Servant __core_servant ()
+	static PortableServer::Servant _core_servant ()
 	{
 		return servant_base ();
 	}

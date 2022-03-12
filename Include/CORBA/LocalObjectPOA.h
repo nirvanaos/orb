@@ -58,7 +58,7 @@ public:
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__add_ref;
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__remove_ref;
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__refcount_value;
-	using Skeleton <ServantPOA <LocalObject>, LocalObject>::___delete_object;
+	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__delete_object;
 
 #ifndef LEGACY_CORBA_CPP
 protected:
