@@ -23,53 +23,15 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_REFERENCECOUNTERLINK_H_
-#define NIRVANA_ORB_REFERENCECOUNTERLINK_H_
-#pragma once
-
-#include "ObjectFactoryInc.h"
-#include "ValueBase.h"
-#include "core_objects.h"
-#include "primitive_types.h"
+#include <CORBA/CORBA.h>
 
 namespace CORBA {
 namespace Internal {
 
-class ReferenceCounterLink :
-	public Bridge <ValueBase>
-{
-public:
-
-#ifndef LEGACY_CORBA_CPP
-protected:
-	template <class> friend class LifeCycleRefCnt;
-	template <class> friend class servant_reference;
-	template <class, class> friend class Skeleton;
-#endif
-
-	void _add_ref () const
-	{
-		core_object_->add_ref ();
-	}
-
-	void _remove_ref () const
-	{
-		core_object_->remove_ref ();
-	}
-
-	uint32_t _refcount_value () const
-	{
-		return core_object_->refcount_value ();
-	}
-
-protected:
-	ReferenceCounterLink (const Bridge <ValueBase>::EPV& epv);
-
-private:
-	ReferenceCounter::_ref_type core_object_;
-};
+ReferenceCounterLink::ReferenceCounterLink (const Bridge <ValueBase>::EPV& epv) :
+	Bridge <ValueBase> (epv),
+	core_object_ (g_object_factory->create_reference_counter (I_ptr <ValueBase> (this)))
+{}
 
 }
 }
-
-#endif

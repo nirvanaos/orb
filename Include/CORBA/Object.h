@@ -228,6 +228,8 @@ public:
 	{
 		return AbstractBase::_ptr_type (obj)->_query_interface <Primary> ();
 	}
+
+	static const bool _has_proxy = true;
 };
 
 }

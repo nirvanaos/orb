@@ -124,8 +124,10 @@ void Client <T, ValueBase>::_delete_object ()
 class ValueBase :
 	public Internal::ClientInterfacePrimary <ValueBase>,
 	public Internal::ClientBase <ValueBase, AbstractBase> // AbstractBase operations are not available directly on Object_ptr.
-{};
-
+{
+public:
+	static const bool _has_proxy = false;
+};
 
 #ifdef LEGACY_CORBA_CPP
 
@@ -154,6 +156,8 @@ public:
 	{
 		return AbstractBase::_ptr_type (obj)->_query_interface <Primary> ();
 	}
+
+	static const bool _has_proxy = false;
 };
 
 }

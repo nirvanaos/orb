@@ -70,7 +70,7 @@ public:
 };
 
 template <class S, class Primary, class ... Bases>
-class ImplementationValLocal :
+class ImplementationValLocalPOA :
 	public InterfaceImpl <ServantPOA <Primary>, Primary>,
 	public virtual ServantPOA <Bases>...,
 	public virtual ServantPOA <ValueBase>,

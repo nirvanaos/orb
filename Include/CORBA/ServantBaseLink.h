@@ -28,6 +28,7 @@
 #pragma once
 
 #include "servant_core.h"
+#include "PortableServer.h"
 
 namespace CORBA {
 namespace Internal {

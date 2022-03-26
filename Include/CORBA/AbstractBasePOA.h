@@ -63,6 +63,7 @@ protected:
 private:
 	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
 	friend class Skeleton <ServantPOA <LocalObject>, LocalObject>;
+	friend class Skeleton <ServantPOA <ValueBase>, ValueBase>;
 
 	virtual void _delete_object ()
 	{

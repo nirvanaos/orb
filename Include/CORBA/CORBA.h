@@ -36,15 +36,20 @@
 #include <Nirvana/NirvanaBase.h>
 #include "exceptions.h"
 #include "Object.h"
-#include "ValueBase.h"
 #include "LocalObject.h"
 #include "Type.h"
 #include "String_compat.h"
 #include "UnknownUserException.h"
 #include "ORB.h"
 #include "CORBA_Environment.h"
-#include "make_stateless.h"
-#include "make_pseudo.h"
+#include "core_objects.h"
+
+#ifndef NIRVANA_PROCESS
+
+#include "ImplementationValue.h"
+#include "ImplementationValuePOA.h"
+
+#endif
 
 namespace CORBA {
 

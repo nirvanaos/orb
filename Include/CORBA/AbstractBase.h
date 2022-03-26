@@ -132,6 +132,8 @@ public:
 	{
 		return obj->_query_interface <Primary> ();
 	}
+
+	static const bool _has_proxy = true;
 };
 
 template <class I>

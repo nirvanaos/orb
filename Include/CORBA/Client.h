@@ -87,7 +87,7 @@ public:
 	}
 };
 
-//! ClientBase - How base client obtains pointer to bridge from primary.
+//! ClientBase - How base client obtains pointer to bridge from primary interface.
 template <class Primary, class Base>
 class ClientBase
 {

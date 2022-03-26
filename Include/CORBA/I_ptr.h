@@ -154,6 +154,12 @@ public:
 
 #endif
 
+	/// If interface does not have proxy we can obtain I_ptr directly from servant pointer
+	template <class = std::enable_if_t <!I::_has_proxy> >
+	I_ptr (Bridge <I>* p) NIRVANA_NOEXCEPT :
+		Base (reinterpret_cast <I*> (p))
+	{}
+
 	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
 	{
 		Base::operator = (src);

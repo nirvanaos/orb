@@ -41,6 +41,8 @@
 #include "PortableServer.h"
 #include "ImplementationPOA.h"
 #include "ImplementationLocalPOA.h"
+#include "make_stateless.h"
+#include "make_pseudo.h"
 
 namespace CORBA {
 

@@ -46,37 +46,37 @@ protected:
 	static Interface* __copy_value (Bridge <ValueBase>* _b, Interface* _env)
 	{
 		try {
-			return Type <Interface>::ret (S::_implementation (obj)._copy_value ());
+			return Type <ValueBase>::ret (S::_implementation (_b)._copy_value ());
 		} catch (Exception& e) {
-			set_exception (env, e);
+			set_exception (_env, e);
 		} catch (...) {
-			set_unknown_exception (env);
+			set_unknown_exception (_env);
 		}
 	}
 
 	static void __marshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
 	{
 		try {
-			S::_implementation (obj)._marshal (Type <IORequest>::in (rq));
+			S::_implementation (_b)._marshal (Type <IORequest>::in (rq));
 		} catch (Exception& e) {
-			set_exception (env, e);
+			set_exception (_env, e);
 		} catch (...) {
-			set_unknown_exception (env);
+			set_unknown_exception (_env);
 		}
 	}
 
 	static void __unmarshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
 	{
 		try {
-			S::_implementation (obj)._unmarshal (Type <IORequest>::in (rq));
+			S::_implementation (_b)._unmarshal (Type <IORequest>::in (rq));
 		} catch (Exception& e) {
-			set_exception (env, e);
+			set_exception (_env, e);
 		} catch (...) {
-			set_unknown_exception (env);
+			set_unknown_exception (_env);
 		}
 	}
 
-	static void __delete_object (Bridge <PortableServer::ServantBase>* _b, Interface* _env)
+	static void __delete_object (Bridge <ValueBase>* _b, Interface* _env)
 	{
 		try {
 			S::_implementation (_b)._delete_object ();

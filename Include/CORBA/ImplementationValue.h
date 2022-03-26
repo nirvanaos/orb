@@ -56,7 +56,7 @@ template <class S, class Primary, class ... Bases>
 class ImplementationValObject :
 	public InterfaceImpl <S, Primary>,
 	public InterfaceImpl <S, Bases>...,
-	public InterfaceImpl <S, ValueBase>,
+	public InterfaceImplBase <S, ValueBase>,
 	public InterfaceImpl <S, PortableServer::ServantBase>
 {
 public:
@@ -72,7 +72,7 @@ template <class S, class Primary, class ... Bases>
 class ImplementationValLocal :
 	public InterfaceImpl <S, Primary>,
 	public InterfaceImpl <S, Bases>...,
-	public InterfaceImpl <S, ValueBase>,
+	public InterfaceImplBase <S, ValueBase>,
 	public InterfaceImpl <S, LocalObject>
 {
 public:
@@ -82,6 +82,30 @@ public:
 	{
 		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);
 	}
+};
+
+template <class T>
+class ValueBox :
+	public InterfaceImpl <ValueBox <T>, ValueBase>
+{
+public:
+	typename Type <T>::ConstRef _value () const
+	{
+		return val_;
+	}
+
+	T& _value ()
+	{
+		return val_;
+	}
+
+	void _value (typename Type <T>::ConstRef v)
+	{
+		val_ = v;
+	}
+
+private:
+	T val_;
 };
 
 }
