@@ -43,16 +43,28 @@ public:
 	static const typename Bridge <AbstractBase>::EPV epv_;
 
 protected:
-	static Interface* __query_interface (Bridge <AbstractBase>* base, Type <String>::ABI_in id, Interface* env)
+	static Interface* __to_object (Bridge <AbstractBase>* _b, Interface* _env)
 	{
 		try {
-			return Type <Interface>::VT_ret (S::_implementation (base)._query_interface (Type <String>::in (id)));
+			return Type <Object>::ret (S::_implementation (_b)._to_object ());
 		} catch (Exception& e) {
-			set_exception (env, e);
+			set_exception (_env, e);
 		} catch (...) {
-			set_unknown_exception (env);
+			set_unknown_exception (_env);
 		}
-		return Type <Interface>::VT_ret ();
+		return Type <Interface>::ret ();
+	}
+
+	static Interface* __to_value (Bridge <AbstractBase>* _b, Interface* _env)
+	{
+		try {
+			return Type <ValueBase>::ret (S::_implementation (_b)._to_value ());
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return Type <Interface>::ret ();
 	}
 };
 
@@ -60,11 +72,12 @@ template <class S>
 const Bridge <AbstractBase>::EPV Skeleton <S, AbstractBase>::epv_ = {
 	{	// header
 		Bridge <AbstractBase>::repository_id_,
-		&S::template __duplicate <AbstractBase>,
-		&S::template __release <AbstractBase>
+		S::template __duplicate <AbstractBase>,
+		S::template __release <AbstractBase>
 	},
 	{	// epv
-		&S::__query_interface
+		S::__to_object,
+		S::__to_value
 	}
 };
 

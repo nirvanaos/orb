@@ -41,7 +41,6 @@ namespace Internal {
 //! \tparam S Servant class implementing operations.
 //! \tparam Primary Primary interface.
 //! \tparam Bases All base interfaces derived directly or indirectly.
-//!    Don't include AbstractBase in base list.
 
 template <class S, class Primary, class ... Bases>
 class ImplementationLocal :

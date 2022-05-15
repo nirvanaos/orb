@@ -29,7 +29,12 @@
 #define NIRVANA_ORB_SERVANTBASE_H_
 #pragma once
 
-#include "AbstractBase.h"
+#include "Client.h"
+#include "Type_interface.h"
+#include "String.h"
+#include "basic_types.h"
+#include "TCKind.h"
+#include <Nirvana/ImportInterface.h>
 
 namespace PortableServer {
 
@@ -70,8 +75,6 @@ struct Type <PortableServer::Servant> : TypeItf <PortableServer::ServantBase>
 };
 
 NIRVANA_BRIDGE_BEGIN (PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("ServantBase"))
-NIRVANA_BASE_ENTRY (AbstractBase, CORBA_AbstractBase)
-NIRVANA_BRIDGE_EPV
 Interface* (*default_POA) (Bridge <PortableServer::ServantBase>*, Interface*);
 Interface* (*get_interface) (Bridge <PortableServer::ServantBase>*, Interface*);
 Type <Boolean>::ABI_ret (*is_a) (Bridge <PortableServer::ServantBase>*, Type <String>::ABI_in type_id, Interface*);
@@ -80,6 +83,7 @@ void (*add_ref) (Bridge <PortableServer::ServantBase>*, Interface*);
 void (*remove_ref) (Bridge <PortableServer::ServantBase>*, Interface*);
 ULong (*refcount_value) (Bridge <PortableServer::ServantBase>*, Interface*);
 void (*delete_object) (Bridge <PortableServer::ServantBase>*, Interface*);
+Interface* (*query_interface) (Bridge <PortableServer::ServantBase>*, Type <String>::ABI_in, Interface*);
 Interface* (*core_servant) (Bridge <PortableServer::ServantBase>*, Interface*);
 NIRVANA_BRIDGE_END ()
 
@@ -97,7 +101,19 @@ public:
 	ULong _refcount_value ();
 
 	// Nirvana extensions
+
 	void _delete_object ();
+
+	/// This method does not increment reference counter
+	I_ptr <Interface> _query_interface (String_in type_id);
+
+	/// This method does not increment reference counter
+	template <class I>
+	I_ptr <I> _query_interface ()
+	{
+		return static_cast <I*> (&_query_interface (Bridge <I>::repository_id_));
+	}
+
 	PortableServer::Servant _core_servant ();
 };
 
@@ -179,6 +195,16 @@ void Client <T, PortableServer::ServantBase>::_delete_object ()
 }
 
 template <class T>
+I_ptr <Interface> Client <T, PortableServer::ServantBase>::_query_interface (String_in type_id)
+{
+	Environment _env;
+	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
+	I_VT_ret <Interface> _ret = (_b._epv ().epv.query_interface) (&_b, &type_id, &_env);
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
 ::PortableServer::Servant Client <T, ::PortableServer::ServantBase>::_core_servant ()
 {
 	Environment _env;
@@ -194,10 +220,7 @@ template <class T>
 namespace PortableServer {
 
 class ServantBase :
-	public CORBA::Internal::ClientInterface <ServantBase>,
-	// Client methods from AbstractBase are not available directly on pointer to ServantBase.
-	// To call AbstractBase methods, reference must be explicitly cast to AbstractBase.
-	public CORBA::Internal::ClientBase <ServantBase, CORBA::AbstractBase>
+	public CORBA::Internal::ClientInterfacePrimary <ServantBase>
 {
 public:
 	static const bool _has_proxy = false;

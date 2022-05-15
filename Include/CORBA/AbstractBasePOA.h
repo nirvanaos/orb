@@ -1,4 +1,4 @@
-/// \file AbstractBasePOA.h
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -46,12 +46,15 @@ namespace Internal {
 
 template <>
 class NIRVANA_NOVTABLE ServantPOA <AbstractBase> :
-	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
-	public LifeCycleRefCnt <ServantPOA <AbstractBase> >,
-	public ServantTraitsPOA
+	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>
 {
 public:
-	virtual Interface* _query_interface (const String& id) = 0;
+	I_ref <Object> _to_object ()
+	{
+		return nullptr;
+	}
+
+	virtual I_ref <ValueBase> _to_value () = 0;
 
 protected:
 	friend class LifeCycleRefCnt <ServantPOA <AbstractBase> >;

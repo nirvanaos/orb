@@ -60,6 +60,7 @@ void (*add_ref) (Bridge <LocalObject>*, Interface*);
 void (*remove_ref) (Bridge <LocalObject>*, Interface*);
 ULong (*refcount_value) (Bridge <LocalObject>*, Interface*);
 void (*delete_object) (Bridge <LocalObject>*, Interface*);
+Interface* (*query_interface) (Bridge <LocalObject>*, Type <String>::ABI_in, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
@@ -73,6 +74,7 @@ public:
 	ULong _refcount_value ();
 
 	// Nirvana extensions
+	
 	void _delete_object ();
 };
 

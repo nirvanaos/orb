@@ -28,9 +28,7 @@
 #define NIRVANA_ORB_I_PTR_H_
 #pragma once
 
-#include "Bridge.h"
-#include <Nirvana/throw_exception.h>
-#include <assert.h>
+#include "ServantImpl.h"
 
 namespace CORBA {
 namespace Internal {
@@ -154,10 +152,9 @@ public:
 
 #endif
 
-	/// If interface does not have proxy we can obtain I_ptr directly from servant pointer
-	template <class = std::enable_if_t <!I::_has_proxy> >
-	I_ptr (Bridge <I>* p) NIRVANA_NOEXCEPT :
-		Base (reinterpret_cast <I*> (p))
+	template <class S>
+	I_ptr (ValueImpl <S, I>* p) NIRVANA_NOEXCEPT :
+		Base (reinterpret_cast <I*> (static_cast <Bridge <I>*> (p)))
 	{}
 
 	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT

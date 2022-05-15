@@ -29,14 +29,12 @@
 
 #include "ObjectFactoryInc.h"
 #include "ValueBase.h"
-#include "core_objects.h"
 #include "primitive_types.h"
 
 namespace CORBA {
 namespace Internal {
 
-class ReferenceCounterLink :
-	public Bridge <ValueBase>
+class ReferenceCounterLink
 {
 public:
 
@@ -44,7 +42,7 @@ public:
 protected:
 	template <class> friend class LifeCycleRefCnt;
 	template <class> friend class servant_reference;
-	template <class, class> friend class Skeleton;
+	// ??? template <class, class> friend class Skeleton;
 #endif
 
 	void _add_ref () const
@@ -57,16 +55,16 @@ protected:
 		core_object_->remove_ref ();
 	}
 
-	uint32_t _refcount_value () const
+	ULong _refcount_value () const
 	{
 		return core_object_->refcount_value ();
 	}
 
 protected:
-	ReferenceCounterLink (const Bridge <ValueBase>::EPV& epv);
+	void _construct (Bridge <ValueBase>& vb);
 
 private:
-	ReferenceCounter::_ref_type core_object_;
+	I_ref <ReferenceCounter> core_object_;
 };
 
 }

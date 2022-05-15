@@ -27,7 +27,6 @@
 #define NIRVANA_ORB_LOCALOBJECTIMPL_H_
 #pragma once
 
-#include "AbstractBaseImpl.h"
 #include "LocalObjectLink.h"
 #include "LocalObject_s.h"
 #include "ServantMemory.h"
@@ -38,10 +37,9 @@ namespace Internal {
 //! \brief Implementation of CORBA::LocalObject
 //! \tparam S Servant class implementing operations.
 template <class S>
-class InterfaceImpl <S, LocalObject> :
+class ValueImpl <S, LocalObject> :
 	public LocalObjectLink,
 	public Skeleton <S, LocalObject>,
-	public InterfaceImpl <S, AbstractBase>,
 	public ServantMemory
 {
 public:
@@ -51,14 +49,14 @@ public:
 	}
 
 protected:
-	InterfaceImpl () :
+	ValueImpl () :
 		LocalObjectLink (Skeleton <S, LocalObject>::epv_)
 	{
 		_construct (*this);
 	}
 
-	InterfaceImpl (const InterfaceImpl&) :
-		InterfaceImpl ()
+	ValueImpl (const ValueImpl&) :
+		ValueImpl ()
 	{}
 
 };

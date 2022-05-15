@@ -28,12 +28,8 @@
 #define NIRVANA_ORB_ABSTRACTBASE_H_
 #pragma once
 
-#include <Nirvana/NirvanaBase.h>
-#include "Client.h"
-#include "Type_interface.h"
-#include "String.h"
-#include "basic_types.h"
-#include "TCKind.h"
+#include "Object.h"
+#include "ValueBase.h"
 
 namespace CORBA {
 
@@ -44,15 +40,6 @@ typedef Internal::I_var <AbstractBase> AbstractBase_var;
 typedef AbstractBase_var& AbstractBase_out;
 #endif
 
-class Object;
-#ifdef LEGACY_CORBA_CPP
-typedef Internal::I_ptr <Object> Object_ptr;
-typedef Internal::I_var <Object> Object_var;
-typedef Object_var& Object_out;
-#endif
-
-class ValueBase;
-
 namespace Internal {
 
 // AbstractBase
@@ -62,7 +49,8 @@ struct Type <AbstractBase> : TypeItf <AbstractBase>
 {};
 
 NIRVANA_BRIDGE_BEGIN (AbstractBase, CORBA_REPOSITORY_ID ("AbstractBase"))
-	Interface* (*query_interface) (Bridge <AbstractBase>*, Type <String>::ABI_in, Interface*);
+Interface* (*to_object) (Bridge <AbstractBase>*, Interface*);
+Interface* (*to_value) (Bridge <AbstractBase>*, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
@@ -70,23 +58,26 @@ class Client <T, AbstractBase> :
 	public T
 {
 public:
-	/// This method does not increment reference counter
-	I_ptr <Interface> _query_interface (String_in type_id);
-
-	/// This method does not increment reference counter
-	template <class I>
-	I_ptr <I> _query_interface ()
-	{
-		return static_cast <I*> (&_query_interface (Bridge <I>::repository_id_));
-	}
+	I_ref <Object> _to_object ();
+	I_ref <ValueBase> _to_value ();
 };
 
 template <class T>
-I_ptr <Interface> Client <T, AbstractBase>::_query_interface (String_in type_id)
+I_ref <Object> Client <T, AbstractBase>::_to_object ()
 {
 	Environment _env;
 	Bridge <AbstractBase>& _b (T::_get_bridge (_env));
-	I_VT_ret <Interface> _ret = (_b._epv ().epv.query_interface) (&_b, &type_id, &_env);
+	I_ret <Object> _ret = (_b._epv ().epv.to_object) (&_b, &_env);
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
+I_ref <ValueBase> Client <T, AbstractBase>::_to_value ()
+{
+	Environment _env;
+	Bridge <AbstractBase>& _b (T::_get_bridge (_env));
+	I_ret <ValueBase> _ret = (_b._epv ().epv.to_value) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -97,27 +88,10 @@ class AbstractBase :
 	public Internal::ClientInterfacePrimary <AbstractBase>
 {
 public:
-#ifdef LEGACY_CORBA_CPP
-
-	static AbstractBase_ptr _narrow (AbstractBase_ptr obj)
-	{
-		return _duplicate (obj);
-	}
-
-	inline Internal::I_ptr <Object> _to_object ();
-	inline Internal::I_ptr <ValueBase> _to_value ();
-
-#else
-
-	static AbstractBase::_ref_type _narrow (AbstractBase::_ptr_type obj)
+	static Internal::I_ref <AbstractBase> _narrow (AbstractBase::_ptr_type obj)
 	{
 		return obj;
 	}
-
-	inline Internal::I_ref <Object> _to_object ();
-	inline Internal::I_ref <ValueBase> _to_value ();
-
-#endif
 
 };
 
@@ -128,9 +102,27 @@ class ClientInterfaceBase <Primary, AbstractBase> :
 	public Client <ClientBase <Primary, AbstractBase>, AbstractBase>
 {
 public:
-	static I_ref <Primary> _narrow (AbstractBase::_ptr_type obj)
+	static I_ref <Primary> _narrow (AbstractBase::_ptr_type ab)
 	{
-		return obj->_query_interface <Primary> ();
+		if (ab) {
+			I_ref <Object> obj = ab->_to_object ();
+			if (obj)
+				return _narrow (obj);
+			return _narrow (ab->_to_value ());
+		}
+		return nullptr;
+	}
+
+	static I_ref <Primary> _narrow (Object::_ptr_type obj)
+	{
+		if (obj)
+			return obj->_query_interface <Primary> ();
+		return nullptr;
+	}
+
+	static I_ref <Primary> _narrow (ValueBase::_ptr_type obj)
+	{
+		return obj->_query_valuetype <Primary> ();
 	}
 
 	static const bool _has_proxy = true;

@@ -40,13 +40,12 @@ template <class S, class Primary, class ... Bases>
 class ImplementationValue :
 	public InterfaceImpl <S, Primary>,
 	public InterfaceImpl <S, Bases>...,
-	public InterfaceImpl <S, ValueBase>,
-	public InterfaceImpl <S, AbstractBase>
+	public InterfaceImpl <S, ValueBase>
 {
 public:
 	typedef Primary PrimaryInterface;
 
-	Interface* _query_interface (String_in id) NIRVANA_NOEXCEPT
+	Interface* _query_valuetype (String_in id) NIRVANA_NOEXCEPT
 	{
 		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);
 	}

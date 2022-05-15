@@ -103,6 +103,18 @@ protected:
 	// TODO: Other Object operations shall be here...
 
 	// Internals
+	static Interface* __query_interface (Bridge <Object>* base, Type <String>::ABI_in id, Interface* env)
+	{
+		try {
+			return Type <Interface>::VT_ret (S::_implementation (base)._query_interface (Type <String>::in (id)));
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return Type <Interface>::VT_ret ();
+	}
+
 	static Interface* __get_servant (Bridge <Object>* obj, Interface* env)
 	{
 		set_MARSHAL (env);
@@ -117,18 +129,15 @@ const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 		S::template __duplicate <Object>,
 		S::template __release <Object>
 	},
-	{ // base
-		S::template _wide <AbstractBase, Object>
-	},
 	{ // epv
 		S::__get_interface,
 		S::__is_a,
 		S::__non_existent,
 		S::__is_equivalent,
-		S::__hash
+		S::__hash,
 		// TODO: Other Object operations shall be here...
-	},
-	{
+		
+		S::__query_interface,
 		S::__get_servant
 	}
 };

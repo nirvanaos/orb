@@ -121,7 +121,7 @@ ClientBase <Primary, Base>::operator I_ptr <Base> ()
 }
 
 //! Base interface client implementation.
-//! Has specializations for Object and AbstractBase.
+//! Has specializations for Object and ValueBase.
 template <class Primary, class I>
 class ClientInterfaceBase :
 	public Client <ClientBase <Primary, I>, I>

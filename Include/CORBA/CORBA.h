@@ -43,6 +43,7 @@
 #include "ORB.h"
 #include "CORBA_Environment.h"
 #include "core_objects.h"
+#include "ReferenceCounterLink.h"
 
 #ifndef NIRVANA_PROCESS
 

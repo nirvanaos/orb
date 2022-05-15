@@ -28,7 +28,11 @@
 #define NIRVANA_ORB_OBJECT_H_
 #pragma once
 
-#include "AbstractBase.h"
+#include "Client.h"
+#include "Type_interface.h"
+#include "String.h"
+#include "basic_types.h"
+#include "TCKind.h"
 
 /// CORBA::Object interface
 
@@ -82,9 +86,6 @@ struct TypeObject : TypeItfMarshalable <I>
 };
 
 template <>
-const Char Bridge <Object>::repository_id_ [] = CORBA_REPOSITORY_ID ("Object");
-
-template <>
 struct Type <Object> : TypeObject <Object>
 {
 	static I_ptr <TypeCode> type_code ()
@@ -93,34 +94,17 @@ struct Type <Object> : TypeObject <Object>
 	}
 };
 
-template <>
-struct Bridge <Object>::EPV
-{
-	typedef Bridge <Object> MyBridge;
+NIRVANA_BRIDGE_BEGIN (CORBA::Object, CORBA_REPOSITORY_ID ("Object"))
+Interface* (*get_interface) (Bridge <Object>*, Interface*);
+Type <Boolean>::ABI_ret (*is_a) (Bridge <Object>*,  Type <String>::ABI_in type_id, Interface*);
+Type <Boolean>::ABI_ret (*non_existent) (Bridge <Object>*, Interface*);
+Type <Boolean>::ABI_ret (*is_equivalent) (Bridge <Object>*, Interface*, Interface*);
+ULong (*hash) (Bridge <Object>*, ULong maximum, Interface*);
+// TODO: Other Object operations shall be here...
 
-	Interface::EPV header;
-
-	struct
-	{
-		NIRVANA_BASE_ENTRY (CORBA::AbstractBase, CORBA_AbstractBase)
-	} base;
-
-	struct
-	{
-		Interface* (*get_interface) (Bridge <Object>*, Interface*);
-		Type <Boolean>::ABI_ret (*is_a) (Bridge <Object>*,  Type <String>::ABI_in type_id, Interface*);
-		Type <Boolean>::ABI_ret (*non_existent) (Bridge <Object>*, Interface*);
-		Type <Boolean>::ABI_ret (*is_equivalent) (Bridge <Object>*, Interface*, Interface*);
-		ULong (*hash) (Bridge <Object>*, ULong maximum, Interface*);
-		// TODO: Other Object operations shall be here...
-	} epv;
-
-	struct
-	{
-		Interface* (*get_servant) (Bridge <Object>*, Interface*);
-//		const IOP::IOR* (*object_reference) (ABI_in <Boolean> local);
-	} internal;
-};
+Interface* (*query_interface) (Bridge <Object>*, Type <String>::ABI_in, Interface*);
+Interface* (*get_servant) (Bridge <Object>*, Interface*);
+NIRVANA_BRIDGE_END ()
 
 template <class T>
 class Client <T, Object> :
@@ -134,6 +118,16 @@ public:
 	Boolean _is_equivalent (I_in <Object> other_object);
 	ULong _hash (ULong maximum);
 	// TODO: Other Object operations shall be here...
+
+	/// This method does not increment reference counter
+	I_ptr <Interface> _query_interface (String_in type_id);
+
+	/// This method does not increment reference counter
+	template <class I>
+	I_ptr <I> _query_interface ()
+	{
+		return static_cast <I*> (&_query_interface (Bridge <I>::repository_id_));
+	}
 };
 
 template <class T>
@@ -194,28 +188,21 @@ ULong Client <T, Object>::_hash (ULong maximum)
 
 // TODO: Other Object operations shall be here...
 
+template <class T>
+I_ptr <Interface> Client <T, Object>::_query_interface (String_in type_id)
+{
+	Environment _env;
+	Bridge <Object>& _b (T::_get_bridge (_env));
+	I_VT_ret <Interface> _ret = (_b._epv ().epv.query_interface) (&_b, &type_id, &_env);
+	_env.check ();
+	return _ret;
+}
+
 }
 
 class Object : 
-	public Internal::ClientInterfacePrimary <Object>,
-	public Internal::ClientBase <Object, AbstractBase> // AbstractBase operations are not available directly on Object_ptr.
+	public Internal::ClientInterfacePrimary <Object>
 {};
-
-#ifdef LEGACY_CORBA_CPP
-
-inline Object::_ptr_type AbstractBase::_to_object ()
-{
-	return Object::_duplicate (_query_interface <Object> ());
-}
-
-#else
-
-inline Object::_ref_type AbstractBase::_to_object ()
-{
-	return _query_interface <Object> ();
-}
-
-#endif
 
 namespace Internal {
 
@@ -226,7 +213,9 @@ class ClientInterfaceBase <Primary, Object> :
 public:
 	static I_ref <Primary> _narrow (Object::_ptr_type obj)
 	{
-		return AbstractBase::_ptr_type (obj)->_query_interface <Primary> ();
+		if (obj)
+			return obj->_query_interface <Primary> ();
+		return nullptr;
 	}
 
 	static const bool _has_proxy = true;

@@ -84,7 +84,7 @@ protected:
 		return *this; // Do nothing
 	}
 
-	void _construct (Bridge <AbstractBase>& ab);
+	void _construct ();
 
 	I_ref <Interface> _get_proxy () const
 	{

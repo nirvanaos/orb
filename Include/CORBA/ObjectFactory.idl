@@ -97,7 +97,7 @@ pseudo interface ObjectFactory
 	Nirvana::Pointer stateless_end (in boolean success);
 
 	PortableServer::Servant create_servant (in PortableServer::Servant impl);
-	LocalObject create_local_object (in LocalObject impl, in AbstractBase abstract_base);
+	LocalObject create_local_object (in LocalObject impl);
 	ReferenceCounter create_reference_counter (in ValueBase impl);
 };
 

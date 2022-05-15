@@ -135,14 +135,26 @@ protected:
 		}
 	}
 
-	static Interface* __core_servant (Bridge <PortableServer::ServantBase>* obj, Interface* env)
+	static Interface* __query_interface (Bridge <PortableServer::ServantBase>* _b, Type <String>::ABI_in id, Interface* _env)
 	{
 		try {
-			return Type <PortableServer::Servant>::VT_ret (S::_implementation (obj)._core_servant ());
-		} catch (Exception & e) {
-			set_exception (env, e);
+			return Type <Interface>::VT_ret (S::_implementation (_b)._query_interface (Type <String>::in (id)));
+		} catch (Exception& e) {
+			set_exception (_env, e);
 		} catch (...) {
-			set_unknown_exception (env);
+			set_unknown_exception (_env);
+		}
+		return Type <Interface>::VT_ret ();
+	}
+
+	static Interface* __core_servant (Bridge <PortableServer::ServantBase>* _b, Interface* _env)
+	{
+		try {
+			return Type <PortableServer::Servant>::VT_ret (S::_implementation (_b)._core_servant ());
+		} catch (Exception & e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
 		}
 		return 0;
 	}
@@ -155,9 +167,6 @@ const Bridge <PortableServer::ServantBase>::EPV Skeleton <S, PortableServer::Ser
 		S::template __duplicate <PortableServer::ServantBase>,
 		S::template __release <PortableServer::ServantBase>
 	},
-	{ // base
-		S::template _wide <AbstractBase, PortableServer::ServantBase>
-	},
 	{ // epv
 		S::__default_POA,
 		S::__get_interface,
@@ -167,6 +176,7 @@ const Bridge <PortableServer::ServantBase>::EPV Skeleton <S, PortableServer::Ser
 		S::__remove_ref,
 		S::__refcount_value,
 		S::__delete_object,
+		S::__query_interface,
 		S::__core_servant
 	}
 };

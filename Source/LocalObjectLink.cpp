@@ -28,9 +28,10 @@
 namespace CORBA {
 namespace Internal {
 
-void LocalObjectLink::_construct (Bridge <AbstractBase>& ab)
+void LocalObjectLink::_construct ()
 {
-	core_object_ = g_object_factory->create_local_object (LocalObject::_ptr_type (this), AbstractBase::_ptr_type (&static_cast <AbstractBase&> (ab)));
+	core_object_ = g_object_factory->create_local_object (LocalObject::_ptr_type (
+		&static_cast <LocalObject&> (static_cast <Bridge <LocalObject>&> (*this))));
 }
 
 }

@@ -27,7 +27,6 @@
 #define NIRVANA_ORB_SERVANTBASEIMPL_H_
 #pragma once
 
-#include "AbstractBaseImpl.h"
 #include "ServantBaseLink.h"
 #include "ServantBase_s.h"
 #include "ServantMemory.h"
@@ -38,10 +37,9 @@ namespace Internal {
 //! Implementation of PortableServer::ServantBase.
 //! \tparam S Servant class implementing operations.
 template <class S>
-class InterfaceImpl <S, PortableServer::ServantBase> :
+class ValueImpl <S, PortableServer::ServantBase> :
 	public ServantBaseLink,
 	public Skeleton <S, PortableServer::ServantBase>,
-	public InterfaceImpl <S, AbstractBase>,
 	public ServantMemory
 {
 public:
@@ -51,14 +49,14 @@ public:
 	}
 
 protected:
-	InterfaceImpl () :
+	ValueImpl () :
 		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_)
 	{
 		_construct ();
 	}
 
-	InterfaceImpl (const InterfaceImpl&) :
-		InterfaceImpl ()
+	ValueImpl (const ValueImpl&) :
+		ValueImpl ()
 	{}
 
 };

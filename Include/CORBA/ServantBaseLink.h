@@ -40,7 +40,7 @@ class ServantBaseLink :
 public:
 	Bridge <Object>* _get_object (String_in iid) const
 	{
-		return get_object_from_core (core_object_, iid);
+		return get_object_from_core (PortableServer::Servant (core_object_), iid);
 	}
 
 	// ServantBase operations
@@ -111,7 +111,7 @@ protected:
 
 	I_ref <Interface> _get_proxy () const
 	{
-		return get_proxy (core_object_);
+		return get_proxy (PortableServer::Servant (core_object_));
 	}
 
 protected:

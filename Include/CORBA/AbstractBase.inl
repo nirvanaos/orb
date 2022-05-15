@@ -24,28 +24,34 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_VALUEBASEIMPL_H_
-#define NIRVANA_ORB_VALUEBASEIMPL_H_
+#ifndef NIRVANA_ORB_ABSTRACTBASE_INL_
+#define NIRVANA_ORB_ABSTRACTBASE_INL_
 #pragma once
 
-#include "ValueBase_s.h"
+#include "AbstractBase.h"
+#include "IORequestClient.h"
 
 namespace CORBA {
 namespace Internal {
 
-//! Implementation of ValueBase.
-//! \tparam S Servant class implementing operations.
-template <class S>
-class ValueImpl <S, ValueBase> :
-	public ValueImplBase <S, ValueBase>
+template <class I> inline
+void TypeAbstractInterface <I>::marshal_in (I_ptr <I> src, IORequest_ptr rq)
 {
-public:
-	void _delete_object () NIRVANA_NOEXCEPT
-	{
-		delete& static_cast <S&> (*this);
-	}
+	rq->marshal_abstract (src, false);
+}
 
-};
+template <class I> inline
+void TypeAbstractInterface <I>::marshal_out (I_ref <I>& src, IORequest_ptr rq)
+{
+	rq->marshal_abstract (src, true);
+	src = nullptr;
+}
+
+template <class I> inline
+void TypeAbstractInterface <I>::unmarshal (IORequest_ptr rq, I_ref <I>& dst)
+{
+	dst = rq->unmarshal_abstract <I> ();
+}
 
 }
 }

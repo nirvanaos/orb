@@ -40,7 +40,7 @@ Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object, Strin
 
 I_ref <Interface> get_proxy (LocalObject::_ptr_type core_object)
 {
-	Interface::_ptr_type proxy = AbstractBase::_ptr_type (Object::_ptr_type (core_object))->_query_interface (nullptr);
+	Interface::_ptr_type proxy = Object::_ptr_type (core_object)->_query_interface (nullptr);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
 	return proxy; // Duplicate

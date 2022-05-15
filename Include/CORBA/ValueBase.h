@@ -28,7 +28,11 @@
 #define NIRVANA_ORB_VALUEBASE_H_
 #pragma once
 
-#include "AbstractBase.h"
+#include "Client.h"
+#include "Type_interface.h"
+#include "String.h"
+#include "basic_types.h"
+#include "TCKind.h"
 
 namespace CORBA {
 
@@ -63,12 +67,11 @@ struct Type <ValueBase> : TypeValue <ValueBase>
 };
 
 NIRVANA_BRIDGE_BEGIN (ValueBase, CORBA_REPOSITORY_ID ("ValueBase"))
-NIRVANA_BASE_ENTRY (AbstractBase, CORBA_AbstractBase)
-NIRVANA_BRIDGE_EPV
 Interface* (*copy_value) (Bridge <ValueBase>* _b, Interface* _env);
 void (*marshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 void (*unmarshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 void (*delete_object) (Bridge <ValueBase>* _b, Interface* _env);
+Interface* (*query_valuetype) (Bridge <ValueBase>*, Type <String>::ABI_in, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
@@ -80,6 +83,16 @@ public:
 	void _marshal (I_ptr <IORequest> rq);
 	void _unmarshal (I_ptr <IORequest> rq);
 	void _delete_object ();
+
+	/// This method does not increment reference counter
+	I_ptr <Interface> _query_valuetype (String_in type_id);
+
+	/// This method does not increment reference counter
+	template <class I>
+	I_ptr <I> _query_valuetype ()
+	{
+		return static_cast <I*> (&_query_valuetype (Bridge <I>::repository_id_));
+	}
 };
 
 template <class T>
@@ -119,31 +132,24 @@ void Client <T, ValueBase>::_delete_object ()
 	_env.check ();
 }
 
+template <class T>
+I_ptr <Interface> Client <T, ValueBase>::_query_valuetype (String_in type_id)
+{
+	Environment _env;
+	Bridge <ValueBase>& _b (T::_get_bridge (_env));
+	I_VT_ret <Interface> _ret = (_b._epv ().epv.query_valuetype) (&_b, &type_id, &_env);
+	_env.check ();
+	return _ret;
+}
+
 }
 
 class ValueBase :
-	public Internal::ClientInterfacePrimary <ValueBase>,
-	public Internal::ClientBase <ValueBase, AbstractBase> // AbstractBase operations are not available directly on Object_ptr.
+	public Internal::ClientInterfacePrimary <ValueBase>
 {
 public:
 	static const bool _has_proxy = false;
 };
-
-#ifdef LEGACY_CORBA_CPP
-
-inline ValueBase::_ptr_type AbstractBase::_to_value ()
-{
-	return ValueBase::_duplicate (_query_interface <ValueBase> ());
-}
-
-#else
-
-inline ValueBase::_ref_type AbstractBase::_to_value ()
-{
-	return _query_interface <ValueBase> ();
-}
-
-#endif
 
 namespace Internal {
 
@@ -152,9 +158,11 @@ class ClientInterfaceBase <Primary, ValueBase> :
 	public Client <ClientBase <Primary, ValueBase>, ValueBase>
 {
 public:
-	static I_ptr <Primary> _downcast (ValueBase::_ptr_type obj)
+	static I_ptr <Primary> _downcast (ValueBase::_ptr_type val)
 	{
-		return AbstractBase::_ptr_type (obj)->_query_interface <Primary> ();
+		if (val)
+			return val->_query_valuetype <Primary> ();
+		return nullptr;
 	}
 
 	static const bool _has_proxy = false;

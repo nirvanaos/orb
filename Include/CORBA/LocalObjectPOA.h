@@ -59,6 +59,7 @@ public:
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__remove_ref;
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__refcount_value;
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__delete_object;
+	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__query_interface;
 
 #ifndef LEGACY_CORBA_CPP
 protected:
@@ -96,7 +97,7 @@ private:
 	void _check_construct ()
 	{
 		if (!LocalObjectLink::core_object_)
-			LocalObjectLink::_construct (*this);
+			LocalObjectLink::_construct ();
 	}
 };
 

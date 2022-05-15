@@ -27,10 +27,11 @@
 #define NIRVANA_ORB_SERVANTBASEPOA_H_
 #pragma once
 
-#include "AbstractBasePOA.h"
+#include "ServantPOA.h"
 #include "ServantBaseLink.h"
 #include "ServantBase_s.h"
 #include "ServantMemory.h"
+#include "LifeCycleRefCnt.h"
 
 namespace CORBA {
 namespace Internal {
@@ -39,11 +40,14 @@ namespace Internal {
 template <>
 class NIRVANA_NOVTABLE ServantPOA <PortableServer::ServantBase> :
 	public ServantBaseLink,
-	public virtual ServantPOA <AbstractBase>,
+	public ServantTraitsPOA,
+	public LifeCycleRefCnt <ServantPOA <PortableServer::ServantBase> >,
 	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>,
 	public ServantMemory
 {
 public:
+	virtual Interface* _query_interface (const String& id) = 0;
+
 	virtual Bridge <Object>* _get_object (String_in iid)
 	{
 		return ServantBaseLink::_get_object (iid);
@@ -72,10 +76,10 @@ public:
 
 #ifndef LEGACY_CORBA_CPP
 protected:
+#endif
 	template <class> friend class LifeCycleRefCnt;
 	template <class> friend class servant_reference;
 	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
-#endif
 
 	virtual void _add_ref ()
 	{
@@ -96,7 +100,16 @@ protected:
 	}
 
 protected:
+	virtual void _delete_object () NIRVANA_NOEXCEPT
+	{
+		delete this;
+	}
+
+protected:
 	ServantPOA ();
+
+	virtual ~ServantPOA ()
+	{}
 
 	virtual I_ref <Interface> _get_proxy ();
 

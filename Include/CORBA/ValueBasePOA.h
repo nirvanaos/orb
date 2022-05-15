@@ -28,8 +28,7 @@
 #define NIRVANA_ORB_VALUEBASEPOA_H_
 #pragma once
 
-#include "AbstractBasePOA.h"
-#include "ReferenceCounterLink.h"
+#include "ServantPOA.h"
 #include "ValueBase_s.h"
 
 namespace CORBA {
@@ -37,35 +36,17 @@ namespace Internal {
 
 template <>
 class NIRVANA_NOVTABLE ServantPOA <ValueBase> :
-	public ReferenceCounterLink,
-	public virtual ServantPOA <AbstractBase>,
+	public ServantTraitsPOA,
 	public Skeleton <ServantPOA <ValueBase>, ValueBase>
 {
 public:
 	virtual I_ref <ValueBase> _copy_value () = 0;
 	virtual void _marshal (I_ptr <IORequest> rq) = 0;
 	virtual void _unmarshal (I_ptr <IORequest> rq) = 0;
-
-#ifndef LEGACY_CORBA_CPP
-protected:
-	template <class> friend class LifeCycleRefCnt;
-	template <class> friend class servant_reference;
-	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
-#endif
-
-	virtual void _add_ref ()
-	{
-		ReferenceCounterLink::_add_ref ();
-	}
-
-	virtual void _remove_ref ()
-	{
-		ReferenceCounterLink::_remove_ref ();
-	}
+	virtual Interface* _query_valuetype (const String& id) = 0;
 
 protected:
-	ServantPOA () :
-		ReferenceCounterLink (Skeleton <ServantPOA <ValueBase>, ValueBase>::epv_)
+	ServantPOA ()
 	{}
 };
 

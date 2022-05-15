@@ -96,6 +96,17 @@ protected:
 		}
 	}
 
+	static Interface* __query_interface (Bridge <LocalObject>* _b, Type <String>::ABI_in id, Interface* _env)
+	{
+		try {
+			return Type <Interface>::VT_ret (S::_implementation (_b)._query_interface (Type <String>::in (id)));
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return Type <Interface>::VT_ret ();
+	}
 };
 
 template <class S>
@@ -113,7 +124,8 @@ const Bridge <LocalObject>::EPV Skeleton <S, LocalObject>::epv_ = {
 		S::__add_ref,
 		S::__remove_ref,
 		S::__refcount_value,
-		S::__delete_object
+		S::__delete_object,
+		S::__query_interface
 	}
 };
 

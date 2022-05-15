@@ -24,22 +24,30 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_ABSTRACTBASEIMPL_H_
-#define NIRVANA_ORB_ABSTRACTBASEIMPL_H_
+#ifndef NIRVANA_ORB_ABSTRACTBASEVAL_H_
+#define NIRVANA_ORB_ABSTRACTBASEVAL_H_
 #pragma once
 
 #include "AbstractBase_s.h"
-#include "LifeCycleRefCnt.h"
 
 namespace CORBA {
 namespace Internal {
 
 template <class S>
-class InterfaceImpl <S, AbstractBase> :
-	public InterfaceImplBase <S, AbstractBase>,
-	public LifeCycleRefCnt <S>,
-	public ServantTraits <S>
-{};
+class AbstractBaseVal :
+	public InterfaceImplBase <S, AbstractBase>
+{
+public:
+	static I_ref <Object> _to_object () NIRVANA_NOEXCEPT
+	{
+		return nullptr;
+	}
+
+	I_ref <ValueBase> _to_value ()
+	{
+		return &static_cast <ValueBase&> (static_cast <Bridge <ValueBase>&> (static_cast <S&> (*this)));
+	}
+};
 
 }
 }

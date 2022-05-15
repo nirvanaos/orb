@@ -67,11 +67,6 @@ protected:
 template <class Primary, class ... Bases>
 Interface* ImplementationPOA <Primary, Bases...>::_query_interface (const String& id)
 {
-#ifdef _DEBUG
-	Bridge <AbstractBase>* ab = this;
-	const Bridge <AbstractBase>::EPV& epv = ab->_epv ();
-	assert (!strcmp (epv.header.interface_id, Bridge <AbstractBase>::repository_id_));
-#endif
 	return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
 }
 

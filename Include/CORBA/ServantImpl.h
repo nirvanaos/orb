@@ -113,6 +113,29 @@ class InterfaceImpl :
 	public InterfaceImplBase <S, I>
 {};
 
+//! Standard valuetype implementation.
+//! \tparam S Servant class implementing operations. Must derive from this mix-in.
+//! \tparam I Interface.
+template <class S, class I>
+class ValueImplBase :
+	public Bridge <I>,
+	public Skeleton <S, I>
+{
+protected:
+	ValueImplBase () :
+		Bridge <I> (Skeleton <S, I>::epv_)
+	{}
+
+	ValueImplBase (const ValueImplBase&) :
+		ValueImplBase ()
+	{}
+};
+
+template <class S, class I>
+class ValueImpl :
+	public ValueImplBase <S, I>
+{};
+
 }
 }
 
