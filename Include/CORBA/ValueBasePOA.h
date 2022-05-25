@@ -30,6 +30,7 @@
 
 #include "ServantPOA.h"
 #include "ValueBase_s.h"
+#include "LifeCycleRefCnt.h"
 
 namespace CORBA {
 namespace Internal {
@@ -37,13 +38,25 @@ namespace Internal {
 template <>
 class NIRVANA_NOVTABLE ServantPOA <ValueBase> :
 	public ServantTraitsPOA,
-	public Skeleton <ServantPOA <ValueBase>, ValueBase>
+	public LifeCycleRefCnt <ServantPOA <ValueBase> >,
+	public ValueImpl <ServantPOA <ValueBase>, ValueBase>
 {
 public:
 	virtual I_ref <ValueBase> _copy_value () = 0;
 	virtual void _marshal (I_ptr <IORequest> rq) = 0;
 	virtual void _unmarshal (I_ptr <IORequest> rq) = 0;
 	virtual Interface* _query_valuetype (const String& id) = 0;
+
+#ifndef LEGACY_CORBA_CPP
+protected:
+#endif
+	template <class> friend class LifeCycleRefCnt;
+	template <class> friend class servant_reference;
+	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
+
+	virtual void _add_ref () = 0;
+	virtual void _remove_ref () = 0;
+	virtual ULong _refcount_value () = 0;
 
 protected:
 	ServantPOA ()

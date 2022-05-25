@@ -35,6 +35,7 @@
 namespace CORBA {
 
 class Object;
+class AbstractBase;
 
 namespace Internal {
 
@@ -81,6 +82,19 @@ public:
 	{
 		try {
 			return S::_implementation (derived)._get_object (id);
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return nullptr;
+	}
+
+	template <class Derived>
+	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, String_in id, Interface* env)
+	{
+		try {
+			return S::_implementation (derived)._to_abstract ();
 		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {

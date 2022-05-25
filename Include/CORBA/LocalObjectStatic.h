@@ -29,9 +29,10 @@
 
 #include <Nirvana/NirvanaBase.h>
 #include <Nirvana/OLF.h>
-#include "AbstractBaseStatic.h"
 #include "LocalObject_s.h"
 #include "local_core.h"
+#include "ServantStatic.h"
+#include "LifeCycleStatic.h"
 
 namespace CORBA {
 namespace Internal {
@@ -42,7 +43,8 @@ namespace Internal {
 template <class S>
 class InterfaceStatic <S, LocalObject> :
 	public InterfaceStaticBase <S, LocalObject>,
-	public InterfaceStatic <S, AbstractBase>
+	public ServantTraitsStatic <S>,
+	public LifeCycleStatic
 {
 public:
 	static Bridge <Object>* _get_object (String_in iid)

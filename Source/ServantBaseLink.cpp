@@ -30,7 +30,7 @@ namespace Internal {
 
 void ServantBaseLink::_construct ()
 {
-	core_object_ = g_object_factory->create_servant (PortableServer::Servant (this));
+	core_object_ = g_object_factory->create_servant (&reinterpret_cast <PortableServer::ServantBase&> (*this));
 }
 
 }

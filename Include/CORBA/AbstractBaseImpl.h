@@ -24,8 +24,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_ABSTRACTBASEVAL_H_
-#define NIRVANA_ORB_ABSTRACTBASEVAL_H_
+#ifndef NIRVANA_ORB_ABSTRACTBASEIMPL_H_
+#define NIRVANA_ORB_ABSTRACTBASEIMPL_H_
 #pragma once
 
 #include "AbstractBase_s.h"
@@ -34,8 +34,8 @@ namespace CORBA {
 namespace Internal {
 
 template <class S>
-class AbstractBaseVal :
-	public InterfaceImplBase <S, AbstractBase>
+class ValueImpl <S, AbstractBase> :
+	public ValueImplBase <S, AbstractBase>
 {
 public:
 	static I_ref <Object> _to_object () NIRVANA_NOEXCEPT
@@ -43,7 +43,7 @@ public:
 		return nullptr;
 	}
 
-	I_ref <ValueBase> _to_value ()
+	I_ref <ValueBase> _to_value () NIRVANA_NOEXCEPT
 	{
 		return &static_cast <ValueBase&> (static_cast <Bridge <ValueBase>&> (static_cast <S&> (*this)));
 	}

@@ -87,15 +87,16 @@ protected:
 		}
 	}
 
-	static void __query_valuetype (Bridge <ValueBase>* _b, Type <String>::ABI_in id, Interface* _env)
+	static Interface* __query_valuetype (Bridge <ValueBase>* _b, Type <String>::ABI_in id, Interface* _env)
 	{
 		try {
-			S::_implementation (_b)._query_valuetype (Type <String>::in (id));
+			return Type <Interface>::VT_ret (S::_implementation (_b)._query_valuetype (Type <String>::in (id)));
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
+		return Type <Interface>::VT_ret ();
 	}
 
 };

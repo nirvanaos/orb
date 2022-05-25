@@ -33,12 +33,12 @@ namespace Internal {
 // But we keep this small function just for case.
 Bridge <Object>* get_object_from_core (PortableServer::Servant core_object, String_in iid)
 {
-	return static_cast <Bridge <Object>*> (&AbstractBase::_ptr_type (core_object)->_query_interface (iid));
+	return static_cast <Bridge <Object>*> (&core_object->_query_interface (iid));
 }
 
 I_ref <Interface> get_proxy (PortableServer::Servant core_object)
 {
-	Interface::_ptr_type proxy = AbstractBase::_ptr_type (core_object)->_query_interface (nullptr);
+	Interface::_ptr_type proxy = core_object->_query_interface (nullptr);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
 	return proxy; // Duplicate

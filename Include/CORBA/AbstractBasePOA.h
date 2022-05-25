@@ -28,49 +28,28 @@
 #define NIRVANA_ORB_ABSTRACTBASEPOA_H_
 #pragma once
 
+#include "ValueBasePOA.h"
 #include "AbstractBase_s.h"
-#include "ServantPOA.h"
-#include "LifeCycleRefCnt.h"
-
-namespace PortableServer {
-class ServantBase;
-}
 
 namespace CORBA {
-
-class LocalObject;
-
 namespace Internal {
 
-//! POA implementation of AbstractBase
-
+/// POA implementation of AbstractBase
+/// Only value types derive this class.
 template <>
 class NIRVANA_NOVTABLE ServantPOA <AbstractBase> :
-	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>
+	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
+	public virtual ServantPOA <ValueBase>
 {
 public:
-	I_ref <Object> _to_object ()
+	I_ref <Object> _to_object () NIRVANA_NOEXCEPT
 	{
 		return nullptr;
 	}
 
-	virtual I_ref <ValueBase> _to_value () = 0;
-
-protected:
-	friend class LifeCycleRefCnt <ServantPOA <AbstractBase> >;
-
-	virtual void _add_ref () = 0;
-	virtual void _remove_ref () = 0;
-	virtual ULong _refcount_value () = 0;
-
-private:
-	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
-	friend class Skeleton <ServantPOA <LocalObject>, LocalObject>;
-	friend class Skeleton <ServantPOA <ValueBase>, ValueBase>;
-
-	virtual void _delete_object ()
+	virtual I_ref <ValueBase> _to_value () NIRVANA_NOEXCEPT
 	{
-		delete this;
+		return I_ptr <ValueBase> (static_cast <ServantPOA <ValueBase>*> (this));
 	}
 
 protected:
