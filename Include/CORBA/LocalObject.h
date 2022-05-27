@@ -76,6 +76,17 @@ public:
 	// Nirvana extensions
 	
 	void _delete_object ();
+
+	/// This method does not increment reference counter
+	I_ptr <Interface> _query_interface (String_in type_id);
+
+	/// This method does not increment reference counter
+	template <class I>
+	I_ptr <I> _query_interface ()
+	{
+		return static_cast <I*> (&_query_interface (Bridge <I>::repository_id_));
+	}
+
 };
 
 template <class T>
@@ -125,12 +136,23 @@ void Client <T, LocalObject>::_delete_object ()
 	_env.check ();
 }
 
+template <class T>
+I_ptr <Interface> Client <T, LocalObject>::_query_interface (String_in type_id)
+{
+	Environment _env;
+	Bridge <LocalObject>& _b (T::_get_bridge (_env));
+	I_VT_ret <Interface> _ret = (_b._epv ().epv.query_interface) (&_b, &type_id, &_env);
+	_env.check ();
+	return _ret;
+}
+
 }
 
 class LocalObject : public Internal::ClientInterface <LocalObject, Object>
 {
 public:
 	using ClientInterfacePrimary <LocalObject>::_non_existent;
+	using ClientInterfacePrimary <LocalObject>::_query_interface;
 
 	static const bool _has_proxy = false;
 };
