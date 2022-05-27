@@ -48,7 +48,7 @@ template <class S, class Primary, class ... Bases>
 class Implementation :
 	public InterfaceImpl <S, Primary>,
 	public InterfaceImpl <S, Bases>...,
-	public InterfaceImpl <S, PortableServer::ServantBase> // ServantBase implementation must be constructed after all interfaces.
+	public ValueImpl <S, PortableServer::ServantBase> // ServantBase implementation must be constructed after all interfaces.
 {
 public:
 	typedef Primary PrimaryInterface;

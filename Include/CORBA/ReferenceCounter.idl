@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,47 +24,16 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_LOCALOBJECTIMPL_H_
-#define NIRVANA_ORB_LOCALOBJECTIMPL_H_
-#pragma once
+module CORBA{
 
-#include "LocalObjectLink.h"
-#include "LocalObject_s.h"
-#include "ServantMemory.h"
+module Internal {
 
-namespace CORBA {
-namespace Internal {
-
-//! \brief Implementation of CORBA::LocalObject
-//! \tparam S Servant class implementing operations.
-template <class S>
-class ValueImpl <S, LocalObject> :
-	public LocalObjectLink,
-	public Skeleton <S, LocalObject>,
-	public LifeCycleRefCnt <S>,
-	public ServantTraits <S>,
-	public ServantMemory
+pseudo interface ReferenceCounter
 {
-public:
-	void _delete_object () NIRVANA_NOEXCEPT
-	{
-		delete& static_cast <S&> (*this);
-	}
-
-protected:
-	ValueImpl () :
-		LocalObjectLink (Skeleton <S, LocalObject>::epv_)
-	{
-		_construct ();
-	}
-
-	ValueImpl (const ValueImpl&) :
-		ValueImpl ()
-	{}
-
+	void add_ref ();
+	void remove_ref ();
+	unsigned long refcount_value ();
 };
 
-}
-}
-
-#endif
+};
+};

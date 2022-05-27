@@ -41,6 +41,7 @@
 #include "PortableServer.h"
 #include "ImplementationPOA.h"
 #include "ImplementationLocalPOA.h"
+#include "PseudoBase_s.h"
 #include "make_stateless.h"
 #include "make_pseudo.h"
 

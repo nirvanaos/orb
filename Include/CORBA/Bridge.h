@@ -89,7 +89,7 @@ template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EP
 
 #define CORBA_REPOSITORY_ID(t) "IDL:omg.org/CORBA/" t ":1.0"
 #define NIRVANA_REPOSITORY_ID(t) "IDL:Nirvana/" t ":1.0"
-#define CORBA_NIRVANA_REPOSITORY_ID(t) "IDL:CORBA/Nirvana/" t ":1.0"
+#define CORBA_INTERNAL_REPOSITORY_ID(t) "IDL:CORBA/Internal/" t ":1.0"
 #define PORTABLESERVER_REPOSITORY_ID(t) "IDL:omg.org/PortableServer/" t ":1.0"
 
 #endif

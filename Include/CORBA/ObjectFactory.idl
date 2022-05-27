@@ -24,6 +24,9 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+
+#include "ReferenceCounter.idl"
+
 module Nirvana {
 
 native Pointer;
@@ -45,13 +48,6 @@ native LocalObject;
 native AbstractBase;
 
 module Internal {
-
-pseudo interface ReferenceCounter
-{
-	void add_ref ();
-	void remove_ref ();
-	unsigned long refcount_value ();
-};
 
 /// ObjectFactory Interface to the core object functionality.
 pseudo interface ObjectFactory

@@ -45,10 +45,10 @@
 namespace CORBA {
 namespace Internal {
 
-/// Proxy factory implements AbstractBase, ProxyFactory and TypeCode interfaces.
+/// Proxy factory implements PseudoBase, ProxyFactory and TypeCode interfaces.
 template <class S>
 class ProxyFactoryServant :
-	public InterfaceStaticBase <S, AbstractBase>,
+	public InterfaceStaticBase <S, PseudoBase>,
 	public InterfaceStaticBase <S, TypeCode>,
 	public ServantStatic <S, ProxyFactory>
 {

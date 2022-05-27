@@ -25,12 +25,15 @@
 */
 #include <CORBA/Server.h>
 
+using namespace PortableServer;
+
 namespace CORBA {
 namespace Internal {
 
 void ServantBaseLink::_construct ()
 {
-	core_object_ = g_object_factory->create_servant (&reinterpret_cast <PortableServer::ServantBase&> (*this));
+	core_object_ = g_object_factory->create_servant (
+		&static_cast <ServantBase&> (static_cast <Bridge <ServantBase>&> (*this)));
 }
 
 }

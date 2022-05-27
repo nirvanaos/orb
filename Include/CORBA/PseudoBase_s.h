@@ -1,3 +1,4 @@
+/// \file AbstractBase_s.h
 /*
 * Nirvana IDL support library.
 *
@@ -23,44 +24,48 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_LOCALOBJECTIMPL_H_
-#define NIRVANA_ORB_LOCALOBJECTIMPL_H_
+#ifndef NIRVANA_ORB_PSEUDOBASE_S_H_
+#define NIRVANA_ORB_PSEUDOBASE_S_H_
 #pragma once
 
-#include "LocalObjectLink.h"
-#include "LocalObject_s.h"
-#include "ServantMemory.h"
+#include "PseudoBase.h"
+
+// Servant part of an interface
 
 namespace CORBA {
 namespace Internal {
 
-//! \brief Implementation of CORBA::LocalObject
-//! \tparam S Servant class implementing operations.
 template <class S>
-class ValueImpl <S, LocalObject> :
-	public LocalObjectLink,
-	public Skeleton <S, LocalObject>,
-	public LifeCycleRefCnt <S>,
-	public ServantTraits <S>,
-	public ServantMemory
+class Skeleton <S, PseudoBase>
 {
 public:
-	void _delete_object () NIRVANA_NOEXCEPT
-	{
-		delete& static_cast <S&> (*this);
-	}
+	typedef S ServantType;
+	static const typename Bridge <PseudoBase>::EPV epv_;
 
 protected:
-	ValueImpl () :
-		LocalObjectLink (Skeleton <S, LocalObject>::epv_)
+	static Interface* __query_interface (Bridge <PseudoBase>* base, Type <String>::ABI_in id, Interface* env)
 	{
-		_construct ();
+		try {
+			return Type <Interface>::VT_ret (S::_implementation (base)._query_interface (Type <String>::in (id)));
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return Type <Interface>::VT_ret ();
 	}
+};
 
-	ValueImpl (const ValueImpl&) :
-		ValueImpl ()
-	{}
-
+template <class S>
+const Bridge <PseudoBase>::EPV Skeleton <S, PseudoBase>::epv_ = {
+	{	// header
+		Bridge <PseudoBase>::repository_id_,
+		&S::template __duplicate <PseudoBase>,
+		&S::template __release <PseudoBase>
+	},
+	{	// epv
+		&S::__query_interface
+	}
 };
 
 }

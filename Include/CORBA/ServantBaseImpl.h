@@ -40,6 +40,8 @@ template <class S>
 class ValueImpl <S, PortableServer::ServantBase> :
 	public ServantBaseLink,
 	public Skeleton <S, PortableServer::ServantBase>,
+	public LifeCycleRefCnt <S>,
+	public ServantTraits <S>,
 	public ServantMemory
 {
 public:

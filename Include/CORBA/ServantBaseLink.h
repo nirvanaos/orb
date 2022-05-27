@@ -29,6 +29,7 @@
 
 #include "servant_core.h"
 #include "PortableServer.h"
+#include "LifeCycleRefCnt.h"
 
 namespace CORBA {
 namespace Internal {

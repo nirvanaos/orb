@@ -31,7 +31,6 @@
 #include "ServantBaseLink.h"
 #include "ServantBase_s.h"
 #include "ServantMemory.h"
-#include "LifeCycleRefCnt.h"
 
 namespace CORBA {
 namespace Internal {

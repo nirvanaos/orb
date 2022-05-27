@@ -93,21 +93,14 @@ template <class I>
 class ProxyBaseInterface
 {
 public:
-	void init (PortableServer::ServantBase::_ptr_type ab)
+	void init (I_ptr <Object> obj)
 	{
-		proxy_ = static_cast <Bridge <I>*> (&ab->_query_interface (I::repository_id_));
+		proxy_ = static_cast <Bridge <I>*> (&obj->_query_interface (I::repository_id_));
 		if (!proxy_)
 			throw OBJ_ADAPTER ();
 	}
 
-	void init (LocalObject::_ptr_type ab)
-	{
-		proxy_ = static_cast <Bridge <I>*> (&ab->_query_interface (I::repository_id_));
-		if (!proxy_)
-			throw OBJ_ADAPTER ();
-	}
-
-	Bridge <I>* get () const
+	Bridge <I>* get () const NIRVANA_NOEXCEPT
 	{
 		return proxy_;
 	}
