@@ -59,6 +59,13 @@ typedef ::CORBA::Internal::I_var <ServantBase> ServantBase_var;
 
 namespace CORBA {
 
+class Object;
+#ifdef LEGACY_CORBA_CPP
+typedef Internal::I_ptr <Object> Object_ptr;
+typedef Internal::I_var <Object> Object_var;
+typedef Object_var& Object_out;
+#endif
+
 class ImplementationDef; // Not defined, unused
 #ifdef LEGACY_CORBA_CPP
 typedef Internal::I_ptr <ImplementationDef> ImplementationDef_ptr;
