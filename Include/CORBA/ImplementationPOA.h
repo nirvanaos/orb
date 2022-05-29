@@ -44,15 +44,18 @@ namespace Internal {
 //! \tparam Bases All base interfaces derived directly or indirectly.
 
 template <class Primary, class ... Bases>
-class ImplementationPOA :
-	public InterfaceImpl <ServantPOA <Primary>, Primary>,
+class NIRVANA_NOVTABLE ImplementationPOA :
+	public virtual ServantPOA <PortableServer::ServantBase>,
 	public virtual ServantPOA <Bases>...,
-	public virtual ServantPOA <PortableServer::ServantBase>
+	public InterfaceImpl <ServantPOA <Primary>, Primary>
 {
 public:
 	typedef Primary PrimaryInterface;
 
-	virtual Interface* _query_interface (const String& id);
+	virtual Interface* _query_interface (const String& id) override
+	{
+		return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
+	}
 
 	I_ref <Primary> _this ()
 	{
@@ -63,12 +66,6 @@ protected:
 	ImplementationPOA ()
 	{}
 };
-
-template <class Primary, class ... Bases>
-Interface* ImplementationPOA <Primary, Bases...>::_query_interface (const String& id)
-{
-	return FindInterface <Primary, Bases...>::find (static_cast <ServantPOA <Primary>&> (*this), id);
-}
 
 }
 }

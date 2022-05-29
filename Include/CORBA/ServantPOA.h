@@ -42,14 +42,7 @@ public:
 	static ServantPOA <I>& _implementation (Bridge <I>* bridge)
 	{
 		_check_pointer (bridge, Skeleton <ServantPOA <I>, I>::epv_.header);
-#ifdef _DEBUG
-		ServantPOA <I>* impl = static_cast <ServantPOA <I>*> (bridge);
-		// Bridge must be first base of the servant to reduce the code overhead:
-		assert ((uintptr_t)bridge - (uintptr_t)impl <= sizeof (void*));
-		return *impl;
-#else
 		return static_cast <ServantPOA <I>&> (*bridge);
-#endif
 	}
 };
 
