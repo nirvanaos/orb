@@ -36,6 +36,9 @@
 #endif
 
 namespace CORBA {
+
+template <class> class servant_reference;
+
 namespace Internal {
 
 template <>
@@ -64,7 +67,7 @@ public:
 #ifndef LEGACY_CORBA_CPP
 protected:
 	template <class> friend class LifeCycleRefCnt;
-	template <class> friend class servant_reference;
+	template <class> friend class CORBA::servant_reference;
 	friend class Skeleton <ServantPOA <LocalObject>, LocalObject>;
 #endif
 

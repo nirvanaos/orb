@@ -40,10 +40,6 @@ servant_reference <T> make_reference (Args ...);
 template <class T, class ... Args>
 servant_reference <T> make_stateless (Args ...);
 
-}
-
-namespace CORBA {
-
 template <class T>
 class servant_reference
 {

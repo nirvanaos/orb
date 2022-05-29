@@ -52,6 +52,7 @@ protected:
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
+		return Type <ValueBase>::ret ();
 	}
 
 	static void __marshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)

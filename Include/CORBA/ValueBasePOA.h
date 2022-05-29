@@ -33,6 +33,9 @@
 #include "LifeCycleRefCnt.h"
 
 namespace CORBA {
+
+template <class> class servant_reference;
+
 namespace Internal {
 
 template <>
@@ -51,7 +54,7 @@ public:
 protected:
 #endif
 	template <class> friend class LifeCycleRefCnt;
-	template <class> friend class servant_reference;
+	template <class> friend class CORBA::servant_reference;
 	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
 
 	virtual void _add_ref () = 0;

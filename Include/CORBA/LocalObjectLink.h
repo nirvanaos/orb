@@ -30,6 +30,9 @@
 #include "local_core.h"
 
 namespace CORBA {
+
+template <class> class servant_reference;
+
 namespace Internal {
 
 //! \brief Implements delegate to the core LocalObject implementation.
@@ -54,7 +57,7 @@ public:
 #ifndef LEGACY_CORBA_CPP
 protected:
 	template <class> friend class LifeCycleRefCnt;
-	template <class> friend class servant_reference;
+	template <class> friend class CORBA::servant_reference;
 	template <class, class> friend class Skeleton;
 #endif
 
