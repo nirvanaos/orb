@@ -55,14 +55,23 @@ protected:
 #endif
 	template <class> friend class LifeCycleRefCnt;
 	template <class> friend class CORBA::servant_reference;
-	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
+	friend class Skeleton <ServantPOA <ValueBase>, ValueBase>;
 
 	virtual void _add_ref () = 0;
 	virtual void _remove_ref () = 0;
 	virtual ULong _refcount_value () = 0;
 
 protected:
+protected:
+	virtual void _delete_object () NIRVANA_NOEXCEPT
+	{
+		delete this;
+	}
+
 	ServantPOA ()
+	{}
+
+	virtual ~ServantPOA ()
 	{}
 };
 
