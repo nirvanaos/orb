@@ -47,7 +47,7 @@ public:
 		return nullptr;
 	}
 
-	virtual I_ref <ValueBase> _to_value () NIRVANA_NOEXCEPT
+	I_ref <ValueBase> _to_value () NIRVANA_NOEXCEPT
 	{
 		return I_ptr <ValueBase> (static_cast <ServantPOA <ValueBase>*> (this));
 	}

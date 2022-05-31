@@ -39,9 +39,27 @@ namespace Internal {
 
 template <class I> class Proxy;
 
-class ProxyRoot : public ServantMemory
+class ProxyRoot
 {
 public:
+	void* operator new (size_t size)
+	{
+		return Nirvana::g_memory->allocate (nullptr, size, 0);
+	}
+
+	void operator delete (void* p, size_t size)
+	{
+		g_object_factory->memory_release (p, size);
+	}
+
+	void* operator new (size_t, void* p)
+	{
+		return p;
+	}
+
+	void operator delete (void*, void*)
+	{}
+
 	Bridge <Object>* _get_object (String_in iid) const
 	{
 		return &proxy_manager_->object ();

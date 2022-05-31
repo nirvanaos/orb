@@ -32,16 +32,28 @@
 #include "ObjectFactoryInc.h"
 
 namespace CORBA {
+
+template <class> class servant_reference;
+template <class T, class ... Args>
+servant_reference <T> make_reference (Args ... args);
+
 namespace Internal {
 
 class ServantMemory
 {
+#ifdef LEGACY_CORBA_CPP
 public:
+#else
+	template <class T, class ... Args>
+	friend CORBA::servant_reference <T> CORBA::make_reference (Args ... args);
+#endif
+
 	void* operator new (size_t size)
 	{
 		return g_object_factory->memory_allocate (size);
 	}
 
+public:
 	void operator delete (void* p, size_t size)
 	{
 		g_object_factory->memory_release (p, size);

@@ -82,6 +82,7 @@ protected:
 	template <class> friend class LifeCycleRefCnt;
 	template <class> friend class CORBA::servant_reference;
 	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
+	friend class Skeleton <ServantPOA <LocalObject>, LocalObject>;
 
 	virtual void _add_ref ()
 	{

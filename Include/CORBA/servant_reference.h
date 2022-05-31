@@ -43,6 +43,7 @@ servant_reference <T> make_stateless (Args ...);
 template <class T>
 class servant_reference
 {
+	template <class> friend class servant_reference;
 public:
 	servant_reference () :
 		p_ (nullptr)
@@ -64,6 +65,20 @@ public:
 	{
 		if (p_)
 			p_->_add_ref ();
+	}
+
+	template <class T1>
+	servant_reference (const servant_reference <T1>& src) :
+		p_ (src.p_)
+	{
+		if (p_)
+			p_->_add_ref ();
+	}
+
+	servant_reference (servant_reference&& src) :
+		p_ (src.p_)
+	{
+		src.p_ = nullptr;
 	}
 
 	template <class T1>

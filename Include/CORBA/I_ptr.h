@@ -153,8 +153,8 @@ public:
 #endif
 
 	template <class S>
-	I_ptr (ValueImplBase <S, I>* p) NIRVANA_NOEXCEPT :
-		Base (reinterpret_cast <I*> (static_cast <Bridge <I>*> (p)))
+	I_ptr (ValueImpl <S, I>* p) NIRVANA_NOEXCEPT :
+		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
 	{}
 
 	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
