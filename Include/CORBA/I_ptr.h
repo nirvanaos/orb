@@ -31,6 +31,10 @@
 #include "ServantImpl.h"
 
 namespace CORBA {
+
+template <class>
+class servant_reference;
+
 namespace Internal {
 
 template <class I> class I_ptr;
@@ -155,6 +159,11 @@ public:
 	template <class S>
 	I_ptr (ValueImpl <S, I>* p) NIRVANA_NOEXCEPT :
 		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
+	{}
+
+	template <class S>
+	I_ptr (const servant_reference <S>& sr) NIRVANA_NOEXCEPT :
+		I_ptr (static_cast <S*> (sr))
 	{}
 
 	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
