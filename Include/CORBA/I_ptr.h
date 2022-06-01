@@ -44,6 +44,7 @@ template <class I> class I_var;
 template <class I> class I_inout;
 template <class I> class I_ret;
 template <class I> class ClientInterfacePrimary;
+template <class T> struct Type;
 
 #ifdef _DEBUG
 const uintptr_t UNINITIALIZED_PTR = 1;
@@ -156,9 +157,9 @@ public:
 
 #endif
 
-	template <class S>
-	I_ptr (ValueImpl <S, I>* p) NIRVANA_NOEXCEPT :
-		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
+	template <class = std::enable_if_t <!Type <I>::has_proxy> >
+	I_ptr (Bridge <I>* p) NIRVANA_NOEXCEPT :
+		Base (static_cast <I*> (p))
 	{}
 
 	template <class S>

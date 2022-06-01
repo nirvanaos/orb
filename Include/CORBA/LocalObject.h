@@ -50,6 +50,7 @@ struct TypeLocalObject : TypeObject <I>
 template <>
 struct Type <LocalObject> : TypeLocalObject <LocalObject>
 {
+	static const bool has_proxy = false;
 };
 
 NIRVANA_BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))

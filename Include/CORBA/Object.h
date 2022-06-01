@@ -90,6 +90,8 @@ struct TypeObject : TypeItfMarshalable <I>
 
 	static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
 	static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
+
+	static const bool has_proxy = true;
 };
 
 template <>
