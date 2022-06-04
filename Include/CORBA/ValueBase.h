@@ -148,8 +148,6 @@ I_ptr <Interface> Client <T, ValueBase>::_query_valuetype (String_in type_id)
 class ValueBase :
 	public Internal::ClientInterfacePrimary <ValueBase>
 {
-public:
-	static const bool _has_proxy = false;
 };
 
 namespace Internal {
@@ -165,8 +163,6 @@ public:
 			return val->_query_valuetype <Primary> ();
 		return nullptr;
 	}
-
-	static const bool _has_proxy = false;
 };
 
 }

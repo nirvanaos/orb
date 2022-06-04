@@ -227,7 +227,6 @@ public:
 		return nullptr;
 	}
 
-	static const bool _has_proxy = true;
 };
 
 }

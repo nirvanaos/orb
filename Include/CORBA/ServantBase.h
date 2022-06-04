@@ -66,13 +66,18 @@ typedef Internal::I_var <InterfaceDef> InterfaceDef_var;
 namespace Internal {
 
 template <>
-struct Type <PortableServer::Servant> : TypeItf <PortableServer::ServantBase>
+struct Type <PortableServer::ServantBase> : TypeItf <PortableServer::ServantBase>
 {
 	static I_ptr <TypeCode> type_code ()
 	{
 		return PortableServer::_tc_Servant;
 	}
 };
+
+// Type for native Servant
+template <>
+struct Type <PortableServer::Servant> : Type <PortableServer::ServantBase>
+{};
 
 NIRVANA_BRIDGE_BEGIN (PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("ServantBase"))
 Interface* (*default_POA) (Bridge <PortableServer::ServantBase>*, Interface*);
@@ -221,10 +226,7 @@ namespace PortableServer {
 
 class ServantBase :
 	public CORBA::Internal::ClientInterfacePrimary <ServantBase>
-{
-public:
-	static const bool _has_proxy = false;
-};
+{};
 
 #ifdef LEGACY_CORBA_CPP
 

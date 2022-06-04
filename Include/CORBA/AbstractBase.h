@@ -124,8 +124,6 @@ public:
 	{
 		return obj->_query_valuetype <Primary> ();
 	}
-
-	static const bool _has_proxy = true;
 };
 
 template <class I>

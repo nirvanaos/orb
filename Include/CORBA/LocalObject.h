@@ -154,8 +154,6 @@ class LocalObject : public Internal::ClientInterface <LocalObject, Object>
 public:
 	using ClientInterfacePrimary <LocalObject>::_non_existent;
 	using ClientInterfacePrimary <LocalObject>::_query_interface;
-
-	static const bool _has_proxy = false;
 };
 
 }
