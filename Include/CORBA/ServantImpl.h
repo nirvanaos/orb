@@ -35,6 +35,7 @@
 namespace CORBA {
 
 class Object;
+class LocalObject;
 class AbstractBase;
 
 namespace Internal {
@@ -79,6 +80,12 @@ public:
 
 	template <class Derived>
 	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, String_in id, Interface* env)
+	{
+		return nullptr;
+	}
+
+	template <>
+	static Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, String_in id, Interface* env)
 	{
 		try {
 			return S::_implementation (derived)._get_object (id);

@@ -153,20 +153,26 @@ public:
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return 0;
+		return nullptr;
 	}
 
 	template <class Derived>
 	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, String_in id, Interface* env)
 	{
+		return nullptr;
+	}
+
+	template <>
+	static Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, String_in id, Interface* env)
+	{
 		try {
 			return BaseImpl::_implementation (derived)._get_object (id);
-		} catch (Exception & e) {
+		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return 0;
+		return nullptr;
 	}
 
 	template <class I1>

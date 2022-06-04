@@ -33,8 +33,6 @@
 namespace CORBA {
 namespace Internal {
 
-Bridge <Object>* get_object_from_core (PortableServer::Servant core_object, String_in iid);
-
 I_ref <Interface> get_proxy (PortableServer::Servant core_object);
 
 }

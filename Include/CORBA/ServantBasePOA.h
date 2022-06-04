@@ -50,11 +50,6 @@ class NIRVANA_NOVTABLE ServantPOA <PortableServer::ServantBase> :
 public:
 	virtual Interface* _query_interface (const String& id) = 0;
 
-	virtual Bridge <Object>* _get_object (String_in iid)
-	{
-		return ServantBaseLink::_get_object (iid);
-	}
-
 	// ServantBase operations
 
 	virtual I_ref <PortableServer::POA> _default_POA ()

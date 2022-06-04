@@ -160,6 +160,19 @@ public:
 		}
 		return nullptr;
 	}
+
+	template <class Derived>
+	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, String_in id, Interface* env)
+	{
+		try {
+			return S::_implementation (derived)._get_object (id);
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return nullptr;
+	}
 };
 
 template <class I>
