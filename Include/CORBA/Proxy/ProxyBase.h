@@ -65,6 +65,11 @@ public:
 		return static_cast <Bridge <Object>*> (proxy_manager_->get_object (iid));
 	}
 
+	Bridge <AbstractBase>* _get_abstract_base (String_in iid) const
+	{
+		return static_cast <Bridge <AbstractBase>*> (proxy_manager_->get_abstract_base (iid));
+	}
+
 	void _add_ref ()
 	{
 		interface_duplicate (&proxy_manager_);
@@ -166,6 +171,19 @@ public:
 	{
 		try {
 			return S::_implementation (derived)._get_object (id);
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return nullptr;
+	}
+
+	template <class Derived>
+	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, String_in id, Interface* env)
+	{
+		try {
+			return S::_implementation (derived)._get_abstract_base (id);
 		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {

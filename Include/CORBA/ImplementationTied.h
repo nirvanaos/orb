@@ -175,6 +175,12 @@ public:
 		return nullptr;
 	}
 
+	template <class Derived>
+	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, String_in id, Interface* env)
+	{
+		return nullptr;
+	}
+
 	template <class I1>
 	static Bridge <I1>* _duplicate (Bridge <I1>* itf)
 	{

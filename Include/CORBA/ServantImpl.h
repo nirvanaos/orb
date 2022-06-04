@@ -101,7 +101,7 @@ public:
 	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, String_in id, Interface* env)
 	{
 		try {
-			return S::_implementation (derived)._to_abstract ();
+			return S::_implementation (derived)._get_abstract_base ();
 		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
