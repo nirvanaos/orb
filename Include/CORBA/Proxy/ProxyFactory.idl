@@ -29,7 +29,6 @@ module CORBA {
 module Internal {
 
 native InterfaceMetadataPtr;
-native InterfacePtr;
 
 /// The proxy factory
 pseudo interface ProxyFactory

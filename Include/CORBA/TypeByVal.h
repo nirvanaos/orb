@@ -132,6 +132,13 @@ struct TypeByVal
 	}
 };
 
+// native InterfacePtr;
+typedef Interface* InterfacePtr;
+
+template <>
+struct Type <InterfacePtr> : TypeByVal <InterfacePtr>
+{};
+
 }
 }
 

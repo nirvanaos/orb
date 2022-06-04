@@ -62,7 +62,7 @@ public:
 
 	Bridge <Object>* _get_object (String_in iid) const
 	{
-		return &proxy_manager_->object ();
+		return static_cast <Bridge <Object>*> (proxy_manager_->get_object (iid));
 	}
 
 	void _add_ref ()

@@ -28,13 +28,15 @@
 module CORBA {
 module Internal {
 
-/// Interoperable Object Reference.
+native InterfacePtr;
+
+/// /// Interoperable Object Reference.
 /// 
 /// Interface to the implementation of the some Inter-ORB protocol.
 pseudo interface IOReference
 {
 	/// Returns Object reference.
-	readonly attribute Object object;
+	InterfacePtr get_object (in string id);
 
 	/// Operation index
 	struct OperationIndex
