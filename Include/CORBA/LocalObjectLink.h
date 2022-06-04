@@ -37,7 +37,7 @@ namespace Internal {
 
 //! \brief Implements delegate to the core LocalObject implementation.
 class LocalObjectLink :
-	public Bridge <LocalObject>
+	public BridgeVal <LocalObject>
 {
 public:
 	Bridge <Object>* _get_object (String_in iid) const
@@ -78,7 +78,7 @@ protected:
 
 protected:
 	LocalObjectLink (const Bridge <LocalObject>::EPV& epv) :
-		Bridge <LocalObject> (epv)
+		BridgeVal <LocalObject> (epv)
 	{}
 
 	LocalObjectLink (const LocalObjectLink&) = delete;

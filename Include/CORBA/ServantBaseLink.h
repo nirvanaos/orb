@@ -39,7 +39,7 @@ namespace Internal {
 
 //! \brief Implements delegate to the core ServantBase implementation.
 class ServantBaseLink :
-	public Bridge <PortableServer::ServantBase>
+	public BridgeVal <PortableServer::ServantBase>
 {
 public:
 	Bridge <Object>* _get_object (String_in iid) const
@@ -102,7 +102,7 @@ protected:
 
 protected:
 	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv) :
-		Bridge <PortableServer::ServantBase> (epv)
+		BridgeVal <PortableServer::ServantBase> (epv)
 	{}
 
 	ServantBaseLink (const ServantBaseLink&) = delete;

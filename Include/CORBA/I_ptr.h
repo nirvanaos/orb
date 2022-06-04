@@ -66,6 +66,10 @@ public:
 		p_ (p)
 	{}
 
+	I_ptr_base (nullptr_t) NIRVANA_NOEXCEPT :
+		p_ (nullptr)
+	{}
+
 	I_ptr_base (const I_ptr_base& src) NIRVANA_NOEXCEPT :
 		p_ (src.p_)
 	{}
@@ -128,6 +132,10 @@ public:
 		Base (p)
 	{}
 
+	I_ptr (nullptr_t) NIRVANA_NOEXCEPT :
+		Base (nullptr)
+	{}
+
 	I_ptr (const I_ptr& src) NIRVANA_NOEXCEPT :
 		Base (src)
 	{}
@@ -156,8 +164,7 @@ public:
 
 #endif
 
-	template <class S>
-	I_ptr (ValueImpl <S, I>* p) NIRVANA_NOEXCEPT :
+	I_ptr (BridgeVal <I>* p) NIRVANA_NOEXCEPT :
 		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
 	{}
 
@@ -197,6 +204,10 @@ public:
 
 	I_ptr (Interface* p) NIRVANA_NOEXCEPT :
 		Base (p)
+	{}
+
+	I_ptr (nullptr_t) NIRVANA_NOEXCEPT :
+		Base (nullptr)
 	{}
 
 	I_ptr (const I_ptr& src) NIRVANA_NOEXCEPT :

@@ -76,6 +76,20 @@ protected:
 	}
 };
 
+/// The bridge for value types.
+template <class I>
+class BridgeVal :
+	public Bridge <I>
+{
+protected:
+	BridgeVal (const typename Bridge <I>::EPV& epv) NIRVANA_NOEXCEPT :
+		Bridge <I> (epv)
+	{}
+};
+
+}
+}
+
 #define NIRVANA_BASE_ENTRY(type, name) MyBridge::Wide <type>::Func name;\
 operator const MyBridge::Wide < type>::Func () const { return name; }
 
@@ -83,9 +97,6 @@ operator const MyBridge::Wide < type>::Func () const { return name; }
 template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EPV header; struct {
 #define NIRVANA_BRIDGE_EPV } base; struct {
 #define NIRVANA_BRIDGE_END() } epv;};
-
-}
-}
 
 #define CORBA_REPOSITORY_ID(t) "IDL:omg.org/CORBA/" t ":1.0"
 #define NIRVANA_REPOSITORY_ID(t) "IDL:Nirvana/" t ":1.0"

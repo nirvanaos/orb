@@ -132,12 +132,12 @@ class InterfaceImpl :
 //! \tparam I Interface.
 template <class S, class I>
 class ValueImplBase :
-	public Bridge <I>,
+	public BridgeVal <I>,
 	public Skeleton <S, I>
 {
 protected:
 	ValueImplBase () :
-		Bridge <I> (Skeleton <S, I>::epv_)
+		BridgeVal <I> (Skeleton <S, I>::epv_)
 	{}
 
 	ValueImplBase (const ValueImplBase&) :

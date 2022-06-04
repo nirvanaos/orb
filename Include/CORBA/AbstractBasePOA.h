@@ -49,7 +49,7 @@ public:
 
 	I_ref <ValueBase> _to_value () NIRVANA_NOEXCEPT
 	{
-		return I_ptr <ValueBase> (static_cast <Bridge <ValueBase>*> (this));
+		return I_ptr <ValueBase> (this);
 	}
 
 protected:
