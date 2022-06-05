@@ -89,6 +89,12 @@ public:
 		return servant_base ();
 	}
 
+	static Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
+		Interface* env) NIRVANA_NOEXCEPT
+	{
+		return nullptr;
+	}
+
 protected:
 	static Interface* _get_proxy ()
 	{
