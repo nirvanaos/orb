@@ -102,7 +102,7 @@ class ClientInterfaceBase <Primary, AbstractBase> :
 	public Client <ClientBase <Primary, AbstractBase>, AbstractBase>
 {
 public:
-	static I_ref <Primary> _narrow (AbstractBase::_ptr_type ab)
+	static I_ref <Primary> _narrow (I_ptr <AbstractBase> ab)
 	{
 		if (ab) {
 			I_ref <Object> obj = ab->_to_object ();
@@ -113,16 +113,33 @@ public:
 		return nullptr;
 	}
 
-	static I_ref <Primary> _narrow (Object::_ptr_type obj)
+	static I_ref <Primary> _narrow (const I_ref <AbstractBase>& ab)
+	{
+		return _narrow (I_ptr <AbstractBase> (ab));
+	}
+
+	static I_ref <Primary> _narrow (I_ptr <Object> obj)
 	{
 		if (obj)
 			return obj->_query_interface <Primary> ();
 		return nullptr;
 	}
 
-	static I_ref <Primary> _narrow (ValueBase::_ptr_type obj)
+	static I_ref <Primary> _narrow (const I_ref <Object>& obj)
 	{
-		return obj->_query_valuetype <Primary> ();
+		return _narrow (I_ptr <Object> (obj));
+	}
+
+	static I_ref <Primary> _narrow (I_ptr <ValueBase> obj)
+	{
+		if (obj)
+			return obj->_query_valuetype <Primary> ();
+		return nullptr;
+	}
+
+	static I_ref <Primary> _narrow (const I_ref <ValueBase>& obj)
+	{
+		return _narrow (I_ptr <ValueBase> (obj));
 	}
 };
 
