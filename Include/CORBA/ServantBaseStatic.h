@@ -46,11 +46,6 @@ class InterfaceStatic <S, PortableServer::ServantBase> :
 	public LifeCycleStatic
 {
 public:
-	static Bridge <Object>* _get_object (String_in iid)
-	{
-		return get_object_from_core (servant_base (), iid);
-	}
-
 	// ServantBase operations
 
 	static I_ref <PortableServer::POA> _default_POA ()

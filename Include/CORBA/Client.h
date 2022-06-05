@@ -99,7 +99,7 @@ protected:
 	{
 		Primary& t = static_cast <Primary&> (*this);
 		typename Bridge <Primary>:: template Wide <Base>::Func func = t._epv ().base;
-		Bridge <Base>* ret = (func)(&t, Bridge <Base>::repository_id_, &env);
+		Bridge <Base>* ret = (func)(&t, &StringBase <Char> (Bridge <Base>::repository_id_), &env);
 		env.check ();
 		return ret;
 	}

@@ -65,10 +65,10 @@ public:
 	}
 
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, Interface* env)
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
 	{
 		try {
-			if (!RepId::compatible (Bridge <Base>::repository_id_, id))
+			if (!RepId::compatible (Bridge <Base>::repository_id_, Type <String>::in (id)))
 				::Nirvana::throw_INV_OBJREF ();
 			return &static_cast <Bridge <Base>&> (S::_implementation (derived));
 		} catch (Exception& e) {
@@ -80,19 +80,19 @@ public:
 	}
 
 	template <class Derived>
-	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, String_in id, Interface* env)
+	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
 	{
 		return nullptr;
 	}
 
 	template <>
-	static Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, String_in id, Interface* env)
+	static Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, Type <String>::ABI_in id, Interface* env)
 	{
 		return S::_implementation (derived)._get_object (id, env);
 	}
 
 	template <class Derived>
-	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, String_in id, Interface* env)
+	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
 	{
 		return S::_implementation (derived)._get_abstract_base (id, env);
 	}

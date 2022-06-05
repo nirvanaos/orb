@@ -30,6 +30,7 @@
 #pragma once
 
 #include "Interface.h"
+#include "StringBase.h"
 
 namespace CORBA {
 namespace Internal {
@@ -63,7 +64,7 @@ public:
 	template <class Base>
 	struct Wide
 	{
-		typedef Bridge <Base>* (*Func) (Bridge <I>*, String_in base_id, Interface* environment);
+		typedef Bridge <Base>* (*Func) (Bridge <I>*, const ABI <String>* base_id, Interface* environment);
 	};
 
 protected:

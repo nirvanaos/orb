@@ -198,6 +198,12 @@ StringBase <C, bound>::StringBase (const C* p, size_t cc)
 typedef const StringBase <Char>& String_in;
 typedef const StringBase <WChar>& WString_in;
 
+/// Unbounded string. Equivalent to std::string.
+typedef StringT <Char> String;
+
+/// Unbounded wide string. Equivalent to std::wstring.
+typedef StringT <WChar> WString;
+
 }
 }
 

@@ -56,7 +56,7 @@ I_ref <Interface> ServantPOA <LocalObject>::_get_proxy ()
 	return LocalObjectLink::_get_proxy ();
 }
 
-Bridge <Object>* ServantPOA <LocalObject>::_get_object (String_in iid, Interface* env)
+Bridge <Object>* ServantPOA <LocalObject>::_get_object (Type <String>::ABI_in iid, Interface* env)
 {
 	_check_construct ();
 	return LocalObjectLink::_get_object (iid, env);

@@ -240,12 +240,6 @@ struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
 	}
 };
 
-/// Unbounded string. Equivalent to std::string.
-typedef StringT <Char> String;
-
-/// Unbounded wide string. Equivalent to std::wstring.
-typedef StringT <WChar> WString;
-
 /// Bounded string type
 /// 
 /// \tparam bound Maximal string length.

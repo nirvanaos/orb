@@ -60,16 +60,16 @@ public:
 	void operator delete (void*, void*)
 	{}
 
-	Bridge <Object>* _get_object (String_in iid, Interface* env) const
+	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) const
 	{
 		return static_cast <Bridge <Object>*> (
-			(proxy_manager_->_epv ().epv.get_object) (&proxy_manager_, &iid, env));
+			(proxy_manager_->_epv ().epv.get_object) (&proxy_manager_, iid, env));
 	}
 
-	Bridge <AbstractBase>* _get_abstract_base (String_in iid, Interface* env) const
+	Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid, Interface* env) const
 	{
 		return static_cast <Bridge <AbstractBase>*> (
-			(proxy_manager_->_epv ().epv.get_abstract_base) (&proxy_manager_, &iid, env));
+			(proxy_manager_->_epv ().epv.get_abstract_base) (&proxy_manager_, iid, env));
 	}
 
 	void _add_ref ()
@@ -154,10 +154,10 @@ public:
 	// Wide interface
 
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, Interface* env)
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
 	{
 		try {
-			if (!RepId::compatible (Bridge <Base>::repository_id_, id))
+			if (!RepId::compatible (Bridge <Base>::repository_id_, Type <String>::in (id)))
 				::Nirvana::throw_INV_OBJREF ();
 			return static_cast <ProxyBaseInterface <Base>&> (S::_implementation (derived)).get ();
 		} catch (Exception& e) {
@@ -169,13 +169,13 @@ public:
 	}
 
 	template <class Derived>
-	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, String_in id, Interface* env)
+	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
 	{
 		return S::_implementation (derived)._get_object (id, env);
 	}
 
 	template <class Derived>
-	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, String_in id, Interface* env)
+	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
 	{
 		return S::_implementation (derived)._get_abstract_base (id, env);
 	}

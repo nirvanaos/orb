@@ -42,12 +42,6 @@ class ServantBaseLink :
 	public BridgeVal <PortableServer::ServantBase>
 {
 public:
-	/*
-	Bridge <Object>* _get_object (String_in iid) const
-	{
-		return get_object_from_core (PortableServer::Servant (core_object_), iid);
-	}*/
-
 	// ServantBase operations
 
 	I_ref <PortableServer::POA> _default_POA () const
