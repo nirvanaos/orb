@@ -28,8 +28,9 @@
 #define NIRVANA_ORB_ABSTRACTBASEPOA_H_
 #pragma once
 
-#include "ValueBasePOA.h"
+#include "ServantPOA.h"
 #include "AbstractBase_s.h"
+#include "LifeCycleRefCnt.h"
 
 namespace CORBA {
 namespace Internal {
@@ -38,8 +39,9 @@ namespace Internal {
 /// Only value types derive this class.
 template <>
 class NIRVANA_NOVTABLE ServantPOA <AbstractBase> :
-	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>,
-	public virtual ServantPOA <ValueBase>
+	public ServantTraitsPOA,
+	public LifeCycleRefCnt <ServantPOA <AbstractBase> >,
+	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>
 {
 public:
 	I_ref <Object> _to_object () NIRVANA_NOEXCEPT
@@ -47,10 +49,24 @@ public:
 		return nullptr;
 	}
 
-	I_ref <ValueBase> _to_value () NIRVANA_NOEXCEPT
+	virtual I_ref <ValueBase> _to_value () NIRVANA_NOEXCEPT
 	{
-		return I_ptr <ValueBase> (this);
+		return nullptr;
 	}
+
+	Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
+		Interface* env) NIRVANA_NOEXCEPT
+	{
+		return this;
+	}
+
+#ifndef LEGACY_CORBA_CPP
+protected:
+#endif
+	template <class> friend class LifeCycleRefCnt;
+
+	virtual void _add_ref () = 0;
+	virtual void _remove_ref () = 0;
 
 protected:
 	ServantPOA ()

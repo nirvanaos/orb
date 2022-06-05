@@ -27,7 +27,7 @@
 #define NIRVANA_ORB_SERVANTBASEPOA_H_
 #pragma once
 
-#include "ServantPOA.h"
+#include "AbstractBasePOA.h"
 #include "ServantBaseLink.h"
 #include "ServantBase_s.h"
 #include "ServantMemory.h"
@@ -42,9 +42,8 @@ namespace Internal {
 template <>
 class NIRVANA_NOVTABLE ServantPOA <PortableServer::ServantBase> :
 	public ServantBaseLink,
-	public ServantTraitsPOA,
-	public LifeCycleRefCnt <ServantPOA <PortableServer::ServantBase> >,
 	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>,
+	public virtual ServantPOA <AbstractBase>,
 	public ServantMemory
 {
 public:
