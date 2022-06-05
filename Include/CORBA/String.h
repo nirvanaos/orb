@@ -28,23 +28,14 @@
 #define NIRVANA_ORB_STRING_H_
 #pragma once
 
-#include <Nirvana/basic_string.h>
+#include "StringBase.h"
 #include "TypeVarLen.h"
 
 namespace CORBA {
-namespace Internal {
 
-template <typename C, ULong bound>
-template <class A> inline
-StringBase <C, bound>::StringBase (const std::basic_string <C, std::char_traits <C>, A>& s)
-{
-	size_t size = s.size ();
-	if (bound && size > bound)
-		Nirvana::throw_BAD_PARAM ();
-	this->large_pointer (const_cast <C*> (s.data ()));
-	this->large_size (size);
-	this->allocated (0);
-}
+class TypeCode;
+
+namespace Internal {
 
 template <typename C>
 struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
@@ -181,11 +172,7 @@ public:
 		Base (cnt, c)
 	{}
 
-	template <class InputIterator
-#ifdef NIRVANA_C11
-		, typename = Nirvana::_RequireInputIter <InputIterator>
-#endif
-	>
+	template <class InputIterator>
 	BoundedStringT (InputIterator b, InputIterator e) :
 		Base (b, e)
 	{}

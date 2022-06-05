@@ -53,11 +53,45 @@ size_t string_len (const WChar* s)
 }
 
 template <typename C, ULong bound = 0>
-class StringBase : protected
-	ABI <StringT <C> >
+class StringBase : protected ABI <StringT <C> >
 {
 	typedef ABI <StringT <C> > ABI;
 public:
+	StringBase (const StringBase& s) NIRVANA_NOEXCEPT
+	{
+		size_t size;
+		const C* p;
+		if (s.is_large ()) {
+			size = s.large_size ();
+			p = s.large_pointer ();
+		} else {
+			size = s.small_size ();
+			p = s.small_pointer ();
+		}
+		this->large_pointer (const_cast <C*> (p));
+		this->large_size (size);
+		this->allocated (0);
+	}
+
+	template <ULong bound1>
+	StringBase (const StringBase <C, bound1>& s)
+	{
+		size_t size;
+		const C* p;
+		if (s.is_large ()) {
+			size = s.large_size ();
+			p = s.large_pointer ();
+		} else {
+			size = s.small_size ();
+			p = s.small_pointer ();
+		}
+		if (bound && (!bound1 || bound1 > bound) && size > bound)
+			Nirvana::throw_BAD_PARAM ();
+		this->large_pointer (const_cast <C*> (p));
+		this->large_size (size);
+		this->allocated (0);
+	}
+
 #ifdef NIRVANA_C11
 	template <size_t cc>
 	StringBase (C const (&s) [cc])

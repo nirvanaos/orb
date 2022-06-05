@@ -30,6 +30,7 @@
 #include "Exception.h"
 #include "RepId.h"
 #include "Bridge.h"
+#include "String.h"
 #include <Nirvana/throw_exception.h>
 
 namespace CORBA {
