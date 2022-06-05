@@ -43,7 +43,7 @@ void TypeAbstractInterface <I>::marshal_in (I_ptr <I> src, IORequest_ptr rq)
 template <class I> inline
 void TypeAbstractInterface <I>::marshal_out (I_ref <I>& src, IORequest_ptr rq)
 {
-	rq->marshal_abstract (src, true);
+	rq->marshal_abstract (I_ptr <I> (src), true);
 	src = nullptr;
 }
 

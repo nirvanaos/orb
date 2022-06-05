@@ -127,7 +127,7 @@ public:
 };
 
 template <class I>
-struct TypeAbstractInterface : TypeItf <I>
+struct TypeAbstractInterface : TypeItfMarshalable <I>
 {
 	static const bool has_proxy = true;
 

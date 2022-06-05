@@ -38,6 +38,7 @@
 #include "Sequence.inl"
 #include "Object.inl"
 #include "ValueBase.inl"
+#include "AbstractBase.inl"
 
 namespace CORBA {
 namespace Internal {

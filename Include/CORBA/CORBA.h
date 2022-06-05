@@ -35,11 +35,6 @@
 
 #include <Nirvana/NirvanaBase.h>
 #include "exceptions.h"
-#include "Object.h"
-#include "LocalObject.h"
-#include "ValueBase.h"
-#include "AbstractBase.h"
-#include "PseudoBase.h"
 #include "Type.h"
 #include "String_compat.h"
 #include "UnknownUserException.h"
@@ -49,6 +44,7 @@
 #include "ReferenceCounterLink.h"
 //#include "ImplementationValue.h"
 #include "AbstractBasePOA.h"
+#include "PseudoBase.h"
 
 namespace CORBA {
 
