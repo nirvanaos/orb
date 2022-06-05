@@ -60,14 +60,16 @@ public:
 	void operator delete (void*, void*)
 	{}
 
-	Bridge <Object>* _get_object (String_in iid) const
+	Bridge <Object>* _get_object (String_in iid, Interface* env) const
 	{
-		return static_cast <Bridge <Object>*> (proxy_manager_->get_object (iid));
+		return static_cast <Bridge <Object>*> (
+			(proxy_manager_->_epv ().epv.get_object) (&proxy_manager_, &iid, env));
 	}
 
-	Bridge <AbstractBase>* _get_abstract_base (String_in iid) const
+	Bridge <AbstractBase>* _get_abstract_base (String_in iid, Interface* env) const
 	{
-		return static_cast <Bridge <AbstractBase>*> (proxy_manager_->get_abstract_base (iid));
+		return static_cast <Bridge <AbstractBase>*> (
+			(proxy_manager_->_epv ().epv.get_abstract_base) (&proxy_manager_, &iid, env));
 	}
 
 	void _add_ref ()
@@ -169,27 +171,13 @@ public:
 	template <class Derived>
 	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, String_in id, Interface* env)
 	{
-		try {
-			return S::_implementation (derived)._get_object (id);
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
+		return S::_implementation (derived)._get_object (id, env);
 	}
 
 	template <class Derived>
 	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, String_in id, Interface* env)
 	{
-		try {
-			return S::_implementation (derived)._get_abstract_base (id);
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
+		return S::_implementation (derived)._get_abstract_base (id, env);
 	}
 };
 

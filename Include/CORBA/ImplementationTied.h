@@ -111,38 +111,32 @@ public:
 	}
 
 	static ServantTied <T, I>& _implementation (Bridge <AbstractBase>* itf)
-	{
-		return BaseImpl::_implementation (itf);
-	}
-
-	static ServantTied <T, I>& _implementation (Bridge <DynamicServant>* itf)
+		NIRVANA_NOEXCEPT
 	{
 		return BaseImpl::_implementation (itf);
 	}
 
 	static ServantTied <T, I>& _implementation (Bridge <PortableServer::ServantBase>* itf)
-	{
-		return BaseImpl::_implementation (itf);
-	}
-
-	static ServantTied <T, I>& _implementation (Bridge <Object>* itf)
+		NIRVANA_NOEXCEPT
 	{
 		return BaseImpl::_implementation (itf);
 	}
 
 	static ServantTied <T, I>& _implementation (Bridge <LocalObject>* itf)
+		NIRVANA_NOEXCEPT
 	{
 		return BaseImpl::_implementation (itf);
 	}
 
 	template <class I1>
-	static T& _implementation (Bridge <I1>* bridge)
+	static T& _implementation (Bridge <I1>* bridge) NIRVANA_NOEXCEPT
 	{
 		return *(BaseImpl::_implementation (bridge).ptr_);
 	}
 
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id, Interface* env)
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, String_in id,
+		Interface* env) NIRVANA_NOEXCEPT
 	{
 		try {
 			if (!RepId::compatible (Bridge <Base>::repository_id_, id))
@@ -157,26 +151,22 @@ public:
 	}
 
 	template <class Derived>
-	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, String_in id, Interface* env)
+	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, String_in id,
+		Interface* env) NIRVANA_NOEXCEPT
 	{
 		return nullptr;
 	}
 
 	template <>
-	static Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, String_in id, Interface* env)
+	static Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, String_in id,
+		Interface* env) NIRVANA_NOEXCEPT
 	{
-		try {
-			return BaseImpl::_implementation (derived)._get_object (id);
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
+		return BaseImpl::_implementation (derived)._get_object (id, env);
 	}
 
 	template <class Derived>
-	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, String_in id, Interface* env)
+	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, String_in id,
+		Interface* env) NIRVANA_NOEXCEPT
 	{
 		return nullptr;
 	}

@@ -47,9 +47,9 @@ class InterfaceStatic <S, LocalObject> :
 	public LifeCycleStatic
 {
 public:
-	static Bridge <Object>* _get_object (String_in iid)
+	static Bridge <Object>* _get_object (String_in iid, Interface* env) NIRVANA_NOEXCEPT
 	{
-		return get_object_from_core (core_object (), iid);
+		return get_object_from_core (core_object (), iid, env);
 	}
 
 	// Object operations

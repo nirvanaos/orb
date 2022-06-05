@@ -29,13 +29,10 @@
 namespace CORBA {
 namespace Internal {
 
-Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object, String_in iid)
+Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object, 
+	String_in iid, Interface* env) NIRVANA_NOEXCEPT
 {
-	Bridge <LocalObject>* bridge = &core_object;
-	Environment env;
-	Bridge <Object>* obj = bridge->_epv ().base.CORBA_Object (bridge, iid, &env);
-	env.check ();
-	return obj;
+	return core_object->_epv ().base.CORBA_Object (&core_object, iid, env);
 }
 
 I_ref <Interface> get_proxy (LocalObject::_ptr_type core_object)

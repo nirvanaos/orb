@@ -87,27 +87,13 @@ public:
 	template <>
 	static Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, String_in id, Interface* env)
 	{
-		try {
-			return S::_implementation (derived)._get_object (id);
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
+		return S::_implementation (derived)._get_object (id, env);
 	}
 
 	template <class Derived>
 	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, String_in id, Interface* env)
 	{
-		try {
-			return S::_implementation (derived)._get_abstract_base ();
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
+		return S::_implementation (derived)._get_abstract_base (id, env);
 	}
 };
 

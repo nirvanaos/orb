@@ -48,7 +48,7 @@ class NIRVANA_NOVTABLE ServantPOA <LocalObject> :
 	public virtual ServantPOA <PortableServer::ServantBase>
 {
 public:
-	Bridge <Object>* _get_object (String_in iid);
+	Bridge <Object>* _get_object (String_in iid, Interface* env);
 
 	// Object operations
 

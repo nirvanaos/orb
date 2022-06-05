@@ -40,9 +40,9 @@ class LocalObjectLink :
 	public BridgeVal <LocalObject>
 {
 public:
-	Bridge <Object>* _get_object (String_in iid) const
+	Bridge <Object>* _get_object (String_in iid, Interface* env) const NIRVANA_NOEXCEPT
 	{
-		return get_object_from_core (I_ptr <LocalObject> (core_object_), iid);
+		return get_object_from_core (I_ptr <LocalObject> (core_object_), iid, env);
 	}
 
 	// Object operations
