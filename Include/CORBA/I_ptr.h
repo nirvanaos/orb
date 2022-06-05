@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_I_PTR_H_
 #pragma once
 
-#include "ServantImpl.h"
+#include "Bridge.h"
 
 namespace CORBA {
 
