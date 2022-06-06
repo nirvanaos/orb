@@ -114,14 +114,14 @@ struct TypeEnum : TypeByVal <T, ABI_enum>
 
 	static Var& inout (ABI_out p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		check (*p);
 		return (Var&)*p;
 	}
 
 	static Var& out (ABI_out p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		return (Var&)*p;
 	}
 

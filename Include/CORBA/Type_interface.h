@@ -319,7 +319,7 @@ struct TypeItfBase
 
 	static I_var <I>& out (ABI_out p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		if (*p)
 			::Nirvana::throw_BAD_PARAM ();
 		return reinterpret_cast <I_var <I>&> (*p);
@@ -329,7 +329,7 @@ struct TypeItfBase
 
 	static I_ref <I>& out (ABI_out p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		if (*p)
 			::Nirvana::throw_BAD_PARAM ();
 		return reinterpret_cast <I_ref <I>&> (*p);
@@ -389,7 +389,7 @@ struct TypeItfCommon : TypeItfBase <I>
 
 	static I_var <I>& inout (ABI_out p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		I::_check (*p);
 		return reinterpret_cast <I_var <I>&> (*p);
 	}
@@ -398,7 +398,7 @@ struct TypeItfCommon : TypeItfBase <I>
 
 	static I_ref <I>& inout (ABI_out p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		I::_check (*p);
 		return reinterpret_cast <I_ref <I>&> (*p);
 	}
@@ -460,7 +460,7 @@ struct TypeItf <Interface> : TypeItfBase <Interface>
 
 	static I_ref <Interface>& inout (ABI_out p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		return reinterpret_cast <I_ref <Interface>&> (*p);
 	}
 };

@@ -52,7 +52,7 @@ void interface_release (Interface* itf) NIRVANA_NOEXCEPT
 Interface* Interface::_check (Interface* bridge, String_in interface_id)
 {
 	if (bridge) {
-		//  _check_pointer (bridge);
+		//  check_pointer (bridge);
 		const Char* bridge_id = bridge->_epv ().interface_id;
 		if (!RepId::compatible (bridge_id, interface_id))
 			::Nirvana::throw_INV_OBJREF ();

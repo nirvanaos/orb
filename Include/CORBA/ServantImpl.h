@@ -41,8 +41,8 @@ class AbstractBase;
 
 namespace Internal {
 
-extern void _check_pointer (const void* p);
-extern void _check_pointer (const Interface* obj, const Interface::EPV& epv);
+extern void check_pointer (const void* p);
+extern void check_pointer (const Interface* obj, const Interface::EPV& epv);
 
 template <class S, class I> class Skeleton;
 
@@ -60,13 +60,15 @@ public:
 	template <class I>
 	static S& _implementation (Bridge <I>* bridge)
 	{
-		_check_pointer (bridge, Skeleton <S, I>::epv_.header);
+		check_pointer (bridge, Skeleton <S, I>::epv_.header);
 		return static_cast <S&> (*bridge);
 	}
 
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id,
+		Interface* env) NIRVANA_NOEXCEPT
 	{
+		// TODO: It really needed only for value types!
 		try {
 			if (!RepId::compatible (Bridge <Base>::repository_id_, Type <String>::in (id)))
 				::Nirvana::throw_INV_OBJREF ();

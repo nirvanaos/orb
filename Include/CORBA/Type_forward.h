@@ -137,7 +137,7 @@ const bool CHECK_SEQUENCES = true;
 const bool CHECK_ENUMS = true;
 
 // Helper functions.
-extern void _check_pointer (const void* p);
+extern void check_pointer (const void* p);
 extern bool uncaught_exception ();
 
 }

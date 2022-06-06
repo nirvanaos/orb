@@ -29,9 +29,9 @@
 namespace CORBA {
 namespace Internal {
 
-void _check_pointer (const Interface* obj, const Interface::EPV& epv)
+void check_pointer (const Interface* obj, const Interface::EPV& epv)
 {
-	_check_pointer (obj);
+	check_pointer (obj);
 	if (&obj->_epv () != &epv)
 		::Nirvana::throw_INV_OBJREF ();	// Invalid object pointer
 }

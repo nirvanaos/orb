@@ -115,7 +115,7 @@ void Type <StringT <C> >::check (const ABI& s)
 	if (s.is_large ()) {
 		p = s.large_pointer ();
 		cc = s.large_size ();
-		CORBA::Internal::_check_pointer (p);
+		check_pointer (p);
 		if (cc > s.large_capacity ())
 			::Nirvana::throw_BAD_PARAM ();
 	} else {

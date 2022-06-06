@@ -182,21 +182,21 @@ public:
 
 	static void n_construct (void* p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		new (p) Var ();
 	}
 
 	static void n_destruct (void* p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		if (p)
 			reinterpret_cast <Var*> (p)->~Var ();
 	}
 
 	static void n_copy (void* dst, const void* src)
 	{
-		_check_pointer (dst);
-		_check_pointer (src);
+		check_pointer (dst);
+		check_pointer (src);
 		if (Type <T>::has_check)
 			Type <T>::check (*reinterpret_cast <const ABI*> (src));
 		new (dst) Var (*reinterpret_cast <const Var*> (src));
@@ -204,8 +204,8 @@ public:
 
 	static void n_move (void* dst, void* src)
 	{
-		_check_pointer (dst);
-		_check_pointer (src);
+		check_pointer (dst);
+		check_pointer (src);
 		if (Type <T>::has_check)
 			Type <T>::check (*reinterpret_cast <const ABI*> (src));
 		new (dst) Var (std::move (*reinterpret_cast <Var*> (src)));
@@ -213,7 +213,7 @@ public:
 
 	static void n_marshal_in (const void* src, size_t count, IORequest_ptr rq)
 	{
-		_check_pointer (src);
+		check_pointer (src);
 		if (Type <T>::has_check)
 			Type <T>::check (*reinterpret_cast <const ABI*> (src));
 		Type <T>::marshal_in_a (reinterpret_cast <const Var*> (src), count, rq);
@@ -221,7 +221,7 @@ public:
 
 	static void n_marshal_out (void* src, size_t count, IORequest_ptr rq)
 	{
-		_check_pointer (src);
+		check_pointer (src);
 		if (Type <T>::has_check)
 			Type <T>::check (*reinterpret_cast <const ABI*> (src));
 		Type <T>::marshal_out_a (reinterpret_cast <Var*> (src), count, rq);
@@ -229,7 +229,7 @@ public:
 
 	static void n_unmarshal (IORequest_ptr rq, size_t count, void* dst)
 	{
-		_check_pointer (dst);
+		check_pointer (dst);
 		// Do not call check() here, unmarshal() will check.
 		Type <T>::unmarshal_a (rq, count, reinterpret_cast <Var*> (dst));
 	}

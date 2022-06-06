@@ -91,13 +91,13 @@ struct TypeByVal
 
 	static Var& out (ABI_out p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		return reinterpret_cast <Var&> (*p);
 	}
 
 	static Var& inout (ABI_out p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		return reinterpret_cast <Var&> (*p);
 	}
 

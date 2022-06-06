@@ -81,7 +81,7 @@ struct TypeVarLenBase :
 	// `const` is removed to let servant adopt the unmarshaled input data.
 	static Var& in (ABI_in p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		return reinterpret_cast <const Var&> (const_cast <ABI&> (*p));
 	}
 
@@ -177,14 +177,14 @@ struct TypeVarLen <T, true, TABI> : TypeVarLenBase <T, TABI>
 
 	static const Var& in (typename Base::ABI_in p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		Type <Var>::check (*p);
 		return reinterpret_cast <const Var&> (*p);
 	}
 
 	static Var& inout (typename Base::ABI_out p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		Type <Var>::check (*p);
 		return reinterpret_cast <Var&> (*p);
 	}

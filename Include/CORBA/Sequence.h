@@ -126,7 +126,7 @@ void Type <Sequence <T> >::check_ABI (const ABI& v)
 	if (CHECK_SEQUENCES) {
 		const T* p = v.ptr;
 		if (p)
-			CORBA::Internal::_check_pointer (p);
+			check_pointer (p);
 		size_t cnt = v.size;
 		if (cnt > v.allocated / sizeof (T))
 			::Nirvana::throw_BAD_PARAM ();

@@ -108,7 +108,7 @@ struct TypeByRef
 
 		operator ConstRef () const
 		{
-			_check_pointer (p_);
+			check_pointer (p_);
 			return *p_;
 		}
 
@@ -120,7 +120,7 @@ struct TypeByRef
 
 	static ConstRef in (ABI_in p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		return reinterpret_cast <const Var&> (*p);
 	}
 
@@ -131,7 +131,7 @@ struct TypeByRef
 
 	static Var& inout (ABI_out p)
 	{
-		_check_pointer (p);
+		check_pointer (p);
 		return reinterpret_cast <Var&> (*p);
 	}
 

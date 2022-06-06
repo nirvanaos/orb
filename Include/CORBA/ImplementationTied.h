@@ -138,6 +138,7 @@ public:
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id,
 		Interface* env) NIRVANA_NOEXCEPT
 	{
+		// TODO: It really needed only for value types!
 		try {
 			if (!RepId::compatible (Bridge <Base>::repository_id_, Type <String>::in (id)))
 				::Nirvana::throw_MARSHAL ();
