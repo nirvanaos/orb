@@ -28,6 +28,7 @@
 #define NIRVANA_ORB_VALUEBASEIMPL_H_
 #pragma once
 
+#include "ReferenceCounterLink.h"
 #include "ValueBase_s.h"
 
 namespace CORBA {
@@ -37,7 +38,8 @@ namespace Internal {
 //! \tparam S Servant class implementing operations.
 template <class S>
 class ValueImpl <S, ValueBase> :
-	public ValueImplBase <S, ValueBase>
+	public ValueImplBase <S, ValueBase>,
+	public ReferenceCounterLink
 {
 public:
 	void _delete_object () NIRVANA_NOEXCEPT

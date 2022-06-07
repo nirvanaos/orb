@@ -30,12 +30,6 @@
 namespace CORBA {
 namespace Internal {
 
-void check_pointer (const void* p)
-{
-	if (!p)
-		::Nirvana::throw_BAD_PARAM ();	// Invalid pointer
-}
-
 bool uncaught_exception ()
 {
 #ifdef NIRVANA_C17

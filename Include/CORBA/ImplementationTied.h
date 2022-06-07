@@ -155,6 +155,7 @@ public:
 	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, Type <String>::ABI_in id,
 		Interface* env) NIRVANA_NOEXCEPT
 	{
+		assert (false);
 		return nullptr;
 	}
 
@@ -169,6 +170,9 @@ public:
 	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, Type <String>::ABI_in id,
 		Interface* env) NIRVANA_NOEXCEPT
 	{
+		// Tied implementation hardly ever will be used for value types.
+		// For objects this function is never called.
+		assert (false);
 		return nullptr;
 	}
 

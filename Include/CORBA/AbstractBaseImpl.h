@@ -34,8 +34,8 @@ namespace CORBA {
 namespace Internal {
 
 template <class S>
-class ValueImpl <S, AbstractBase> :
-	public ValueImplBase <S, AbstractBase>
+class InterfaceImpl <S, AbstractBase> :
+	public InterfaceImplBase <S, AbstractBase>
 {
 public:
 	static I_ref <Object> _to_object () NIRVANA_NOEXCEPT

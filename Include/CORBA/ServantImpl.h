@@ -84,6 +84,7 @@ public:
 	template <class Derived>
 	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
 	{
+		assert (false);
 		return nullptr;
 	}
 

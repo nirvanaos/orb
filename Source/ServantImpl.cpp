@@ -29,6 +29,12 @@
 namespace CORBA {
 namespace Internal {
 
+void check_pointer (const void* p)
+{
+	if (!p)
+		::Nirvana::throw_BAD_PARAM ();	// Invalid pointer
+}
+
 void check_pointer (const Interface* obj, const Interface::EPV& epv)
 {
 	check_pointer (obj);

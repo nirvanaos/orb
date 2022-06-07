@@ -42,7 +42,7 @@
 #include "CORBA_Environment.h"
 #include "core_objects.h"
 #include "ReferenceCounterLink.h"
-//#include "ImplementationValue.h"
+#include "ValueBaseImpl.h"
 #include "AbstractBasePOA.h"
 #include "PseudoBase.h"
 
