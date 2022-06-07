@@ -147,6 +147,8 @@ class ValueImpl :
 	public ValueImplBase <S, I>
 {};
 
+template <class I> class ValueData;
+
 }
 }
 

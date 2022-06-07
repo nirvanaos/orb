@@ -32,6 +32,11 @@
 #include "ValueBase_s.h"
 
 namespace CORBA {
+
+template <class> class servant_reference;
+template <class T, class ... Args>
+servant_reference <T> make_reference (Args ... args);
+
 namespace Internal {
 
 //! Implementation of ValueBase.
@@ -41,7 +46,23 @@ class ValueImpl <S, ValueBase> :
 	public ValueImplBase <S, ValueBase>,
 	public ReferenceCounterLink
 {
+#ifdef LEGACY_CORBA_CPP
 public:
+#else
+	template <class T, class ... Args>
+	friend CORBA::servant_reference <T> CORBA::make_reference (Args ... args);
+#endif
+	void* operator new (size_t size)
+	{
+		return Nirvana::g_memory->allocate (nullptr, size, 0);
+	}
+
+public:
+	void operator delete (void* p, size_t size)
+	{
+		Nirvana::g_memory->release (p, size);
+	}
+
 	void _delete_object () NIRVANA_NOEXCEPT
 	{
 		delete& static_cast <S&> (*this);
