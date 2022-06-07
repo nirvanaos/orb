@@ -70,6 +70,16 @@ public:
 
 };
 
+template <class S>
+class ValueTraits
+{
+public:
+	I_ref <ValueBase> _copy_value () const
+	{
+		return make_reference <S> (static_cast <const S&> (*this));
+	}
+};
+
 }
 }
 

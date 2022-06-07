@@ -68,7 +68,15 @@ public:
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id,
 		Interface* env) NIRVANA_NOEXCEPT
 	{
-		// TODO: It really needed only for value types!
+		// It really needed only for value types.
+		assert (false);
+		return nullptr;
+	}
+
+	template <class Base, class Derived>
+	static Bridge <Base>* _wide_val (Bridge <Derived>* derived, Type <String>::ABI_in id,
+		Interface* env) NIRVANA_NOEXCEPT
+	{
 		try {
 			if (!RepId::compatible (Bridge <Base>::repository_id_, Type <String>::in (id)))
 				::Nirvana::throw_INV_OBJREF ();
