@@ -52,12 +52,12 @@ using StringT = std::basic_string <C, std::char_traits <C>, std::allocator <C> >
 template <typename C>
 struct alignas (sizeof (void*)) ABI <StringT <C> >
 {
-	static size_t max_size ()
+	static size_t max_size () NIRVANA_NOEXCEPT
 	{
 		return (SIZE_MAX / 2 + 1) / sizeof (C) - 1;
 	}
 
-	size_t size () const
+	size_t size () const NIRVANA_NOEXCEPT
 	{
 		if (is_large ())
 			return large_size ();
@@ -65,7 +65,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return small_size ();
 	}
 
-	size_t capacity () const
+	size_t capacity () const NIRVANA_NOEXCEPT
 	{
 		if (is_large ())
 			return large_capacity ();
@@ -73,12 +73,12 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return SMALL_CAPACITY;
 	}
 
-	bool empty () const
+	bool empty () const NIRVANA_NOEXCEPT
 	{
 		return size () == 0;
 	}
 
-	const C* _ptr () const
+	const C* _ptr () const NIRVANA_NOEXCEPT
 	{
 		if (is_large ())
 			return large_pointer ();
@@ -86,7 +86,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return small_pointer ();
 	}
 
-	C* _ptr ()
+	C* _ptr () NIRVANA_NOEXCEPT
 	{
 		if (is_large ())
 			return large_pointer ();
@@ -94,7 +94,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return small_pointer ();
 	}
 
-	void reset ()
+	void reset () NIRVANA_NOEXCEPT
 	{
 		size_t* p = data.raw, *end = p + countof (data.raw);
 		do {
@@ -102,12 +102,12 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 		} while (end != ++p);
 	}
 
-	bool is_large () const
+	bool is_large () const NIRVANA_NOEXCEPT
 	{
 		return (data.small.size & SMALL_MASK) != 0;
 	}
 
-	void small_size (size_t s)
+	void small_size (size_t s) NIRVANA_NOEXCEPT
 	{
 		assert (s <= SMALL_CAPACITY);
 		if (::Nirvana::endian::native == ::Nirvana::endian::big)
@@ -117,7 +117,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 		assert (!is_large ());
 	}
 
-	size_t small_size () const
+	size_t small_size () const NIRVANA_NOEXCEPT
 	{
 		assert (!is_large ());
 		if (::Nirvana::endian::native == ::Nirvana::endian::big)
@@ -126,18 +126,18 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return data.small.size;
 	}
 
-	void large_size (size_t s)
+	void large_size (size_t s) NIRVANA_NOEXCEPT
 	{
 		data.large.size = s;
 	}
 
-	size_t large_size () const
+	size_t large_size () const NIRVANA_NOEXCEPT
 	{
 		assert (is_large ());
 		return data.large.size;
 	}
 
-	void allocated (size_t cb)
+	void allocated (size_t cb) NIRVANA_NOEXCEPT
 	{
 		assert (!(cb & 2));
 		if (::Nirvana::endian::native == ::Nirvana::endian::big)
@@ -147,7 +147,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 		assert (is_large ());
 	}
 
-	size_t allocated () const
+	size_t allocated () const NIRVANA_NOEXCEPT
 	{
 		size_t space = data.large.allocated;
 		if (space & LARGE_MASK) {
@@ -159,7 +159,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return 0;
 	}
 
-	size_t large_capacity () const
+	size_t large_capacity () const NIRVANA_NOEXCEPT
 	{
 		assert (is_large ());
 		size_t space = allocated ();
@@ -169,27 +169,27 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return large_size ();
 	}
 
-	void large_pointer (C* p)
+	void large_pointer (C* p) NIRVANA_NOEXCEPT
 	{
 		data.large.data = p;
 	}
 
-	const C* large_pointer () const
+	const C* large_pointer () const NIRVANA_NOEXCEPT
 	{
 		return data.large.data;
 	}
 
-	C* large_pointer ()
+	C* large_pointer () NIRVANA_NOEXCEPT
 	{
 		return data.large.data;
 	}
 
-	const C* small_pointer () const
+	const C* small_pointer () const NIRVANA_NOEXCEPT
 	{
 		return data.small.data;
 	}
 
-	C* small_pointer ()
+	C* small_pointer () NIRVANA_NOEXCEPT
 	{
 		return data.small.data;
 	}

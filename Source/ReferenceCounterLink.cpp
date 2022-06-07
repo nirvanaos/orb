@@ -30,7 +30,7 @@ namespace Internal {
 
 void ReferenceCounterLink::_construct (Bridge <ValueBase>& vb)
 {
-	core_object_ = g_object_factory->create_reference_counter (I_ptr <ValueBase> (&static_cast <ValueBase&> (vb)));
+	core_object_ = g_ORB->create_reference_counter (I_ptr <ValueBase> (&static_cast <ValueBase&> (vb)));
 }
 
 }

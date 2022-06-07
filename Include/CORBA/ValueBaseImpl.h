@@ -68,6 +68,11 @@ public:
 		delete& static_cast <S&> (*this);
 	}
 
+protected:
+	ValueImpl ()
+	{
+		_construct (*this);
+	}
 };
 
 template <class S>
