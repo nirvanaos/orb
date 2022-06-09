@@ -34,36 +34,16 @@
 namespace CORBA {
 namespace Internal {
 
-template <class T, class TABI>
 template <typename MT> inline
-void TypeVarLenBase <T, TABI>::marshal_members (const MT* begin, const void* end, IORequest_ptr rq)
+void marshal_members (const MT* begin, const void* end, IORequest_ptr rq)
 {
 	rq->marshal (alignof (MT), (const Octet*)end - (const Octet*)begin, begin);
 }
 
-template <class T, class TABI>
 template <typename MT> inline
-void TypeVarLenBase <T, TABI>::marshal_members (const Var& val, const MT* begin, IORequest_ptr rq)
-{
-	rq->marshal (alignof (MT), (const Octet*)(&val + 1) - (const Octet*)begin, begin);
-}
-
-template <class T, class TABI>
-template <typename MT> inline
-bool TypeVarLenBase <T, TABI>::unmarshal_members (IORequest_ptr rq, MT* begin, const void* end)
+bool unmarshal_members (IORequest_ptr rq, MT* begin, const void* end)
 {
 	size_t size = (const Octet*)&end - (const Octet*)&begin;
-	void* buf;
-	bool swap_bytes = rq->unmarshal (alignof (MT), size, buf);
-	Nirvana::real_copy ((const Octet*)buf, (const Octet*)buf + size, (Octet*)begin);
-	return swap_bytes;
-}
-
-template <class T, class TABI>
-template <typename MT> inline
-bool TypeVarLenBase <T, TABI>::unmarshal_members (IORequest_ptr rq, const Var& val, MT* begin)
-{
-	size_t size = (const Octet*)(&val + 1) - (const Octet*)begin;
 	void* buf;
 	bool swap_bytes = rq->unmarshal (alignof (MT), size, buf);
 	Nirvana::real_copy ((const Octet*)buf, (const Octet*)buf + size, (Octet*)begin);
