@@ -51,6 +51,23 @@ protected:
 		}
 		return Type <ValueBase>::ret ();
 	}
+
+	static Interface* __query_factory (Bridge <ValueFactoryBase>* _b, Type <String>::ABI_in id, Interface* _env)
+	{
+		try {
+			return Type <Interface>::VT_ret (S::_implementation (_b)._query_factory (Type <String>::in (id)));
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return Type <Interface>::VT_ret ();
+	}
+
+	static I_ptr <Interface> _query_factory () NIRVANA_NOEXCEPT
+	{
+		return nullptr;
+	}
 };
 
 template <class S>
@@ -61,7 +78,8 @@ const Bridge <ValueFactoryBase>::EPV Skeleton <S, ValueFactoryBase>::epv_ = {
 		S::template __release <ValueFactoryBase>
 	},
 	{ // epv
-		S::_create_for_unmarshal
+		S::_create_for_unmarshal,
+		S::__query_factory
 	}
 };
 

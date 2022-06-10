@@ -148,6 +148,11 @@ I_ptr <Interface> Client <T, ValueBase>::_query_valuetype (String_in type_id)
 class ValueBase :
 	public Internal::ClientInterfacePrimary <ValueBase>
 {
+public:
+	static ValueBase::_ptr_type _downcast (ValueBase::_ptr_type val) NIRVANA_NOEXCEPT
+	{
+		return val;
+	}
 };
 
 namespace Internal {

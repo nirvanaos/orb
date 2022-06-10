@@ -47,12 +47,24 @@ struct Type <ValueFactoryBase> : TypeItf <ValueFactoryBase>
 
 NIRVANA_BRIDGE_BEGIN (ValueFactoryBase, CORBA_REPOSITORY_ID ("ValueFactoryBase"))
 Interface* (*create_for_unmarshal) (Bridge <ValueFactoryBase>*, Interface*);
+Interface* (*query_factory) (Bridge <ValueBase>*, Type <String>::ABI_in, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
 class Client <T, ValueFactoryBase> :
 	public T
 {
+public:
+	/// This method does not increment reference counter
+	I_ptr <Interface> _query_factory (String_in type_id);
+
+	/// This method does not increment reference counter
+	template <class I>
+	I_ptr <I> _query_factory ()
+	{
+		return static_cast <I*> (&_query_factory (Bridge <I>::repository_id_));
+	}
+
 private:
 	Type <ValueBase>::Var create_for_unmarshal ();
 };
@@ -67,11 +79,28 @@ Type <ValueBase>::Var Client <T, ValueFactoryBase>::create_for_unmarshal ()
 	return _ret;
 }
 
+template <class T>
+I_ptr <Interface> Client <T, ValueFactoryBase>::_query_factory (String_in type_id)
+{
+	Environment _env;
+	Bridge <ValueFactoryBase>& _b (T::_get_bridge (_env));
+	I_VT_ret <Interface> _ret = (_b._epv ().epv.query_factory) (&_b, &type_id, &_env);
+	_env.check ();
+	return _ret;
+}
+
 }
 
 class ValueFactoryBase :
 	public Internal::ClientInterfacePrimary <ValueFactoryBase>
-{};
+{
+public:
+	static ValueFactoryBase::_ptr_type _downcast (ValueFactoryBase::_ptr_type f)
+		NIRVANA_NOEXCEPT
+	{
+		return f;
+	}
+};
 
 namespace Internal {
 
@@ -79,10 +108,16 @@ template <class Primary>
 class ClientInterfaceBase <Primary, ValueFactoryBase> :
 	public Client <ClientBase <Primary, ValueFactoryBase>, ValueFactoryBase>
 {
+public:
+	static I_ptr <Primary> _downcast (ValueFactoryBase::_ptr_type f)
+	{
+		if (f)
+			return f->_query_factory <Primary> ();
+		return nullptr;
+	}
 };
 
 }
 }
 
 #endif
-

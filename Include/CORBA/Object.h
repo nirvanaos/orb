@@ -211,7 +211,13 @@ I_ptr <Interface> Client <T, Object>::_query_interface (String_in type_id)
 
 class Object : 
 	public Internal::ClientInterfacePrimary <Object>
-{};
+{
+public:
+	static Internal::I_ref <Object> _narrow (Object::_ptr_type obj) NIRVANA_NOEXCEPT
+	{
+		return obj;
+	}
+};
 
 namespace Internal {
 
