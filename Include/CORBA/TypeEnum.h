@@ -57,7 +57,7 @@ struct TypeEnum : TypeByVal <T, ABI_enum>
 	static void check (ABI val)
 	{
 		if (has_check && val >= count_)
-			::Nirvana::throw_BAD_PARAM ();
+			::Nirvana::throw_BAD_PARAM (MAKE_OMG_MINOR (25));
 	}
 
 	class C_inout

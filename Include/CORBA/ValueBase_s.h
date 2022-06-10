@@ -29,12 +29,11 @@
 #pragma once
 
 #include "ValueBase.h"
-#include "Type_interface.h"
 
 namespace CORBA {
 namespace Internal {
 
-// ServantBase skeleton
+// ValueBase skeleton
 
 template <class S>
 class Skeleton <S, ValueBase>

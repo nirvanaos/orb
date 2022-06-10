@@ -34,10 +34,6 @@
 #include <Nirvana/ImportInterface.h>
 #include <Nirvana/bitutils.h>
 
-#define OMGVMCID 0x4f4d0000
-#define MAKE_MINOR(vmcid, c) (vmcid | c)
-#define MAKE_OMG_MINOR(c) (MAKE_MINOR (OMGVMCID, c))
-
 namespace CORBA {
 
 enum CompletionStatus : Internal::ABI_enum
