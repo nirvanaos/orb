@@ -116,6 +116,36 @@ Boolean TypeCodeBase::equivalent (const Parameter* members, ULong member_cnt, I_
 	return true;
 }
 
+Boolean TypeCodeBase::equal (const ValueMember* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+{
+	if (other->member_count () != member_cnt)
+		return false;
+
+	for (ULong i = 0; i < member_cnt; ++i) {
+		if (other->member_name (i) != members [i].name)
+			return false;
+		if (!other->member_type (i)->equal ((members [i].type) ()))
+			return false;
+	}
+	return true;
+}
+
+Boolean TypeCodeBase::equivalent (const ValueMember* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+{
+	assert (TCKind::tk_alias != other->kind ());
+
+	if (other->member_count () != member_cnt)
+		return false;
+
+	for (ULong i = 0; i < member_cnt; ++i) {
+		if (!other->member_type (i)->equivalent ((members [i].type) ()))
+			return false;
+		if (other->member_visibility (i) != members [i].visibility)
+			return false;
+	}
+	return true;
+}
+
 Type <String>::ABI_ret TypeCodeBase::_id (Bridge <TypeCode>* _b, Interface* _env)
 {
 	set_BadKind (_env);

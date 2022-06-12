@@ -47,7 +47,7 @@ namespace Internal {
 
 template <class I>
 class TypeCodeInterface :
-	public TypeCodeWithId <Type <I>::tc_kind, I>,
+	public TypeCodeStatic <TypeCodeInterface <I>, TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> >,
 	public TypeCodeName <I>
 {
 public:
@@ -61,26 +61,22 @@ public:
 };
 
 /// Proxy factory implements PseudoBase, ProxyFactory and TypeCode interfaces.
-template <class S>
-class ProxyFactoryServant :
-	public InterfaceStaticBase <S, PseudoBase>,
-	public InterfaceStaticBase <S, TypeCode>,
-	public ServantStatic <S, ProxyFactory>
-{
-public:
-	// AbstractBase
-	Interface* _query_interface (String_in id)
-	{
-		return FindInterface <ProxyFactory, TypeCode>::find (*(S*)nullptr, id);
-	}
-};
-
 template <class I>
 class ProxyFactoryImpl :
-	public TypeCodeImpl <ProxyFactoryServant <ProxyFactoryImpl <I> >,
-		TypeCodeInterface <I>, TypeCodeOps <I> >
+	public TypeCodeInterface <I>,
+	public InterfaceStaticBase <ProxyFactoryImpl <I>, PseudoBase>,
+	public InterfaceStaticBase <ProxyFactoryImpl <I>, ProxyFactory>,
+	public ServantTraitsStatic <ProxyFactoryImpl <I> >
 {
 public:
+	using ServantTraitsStatic <ProxyFactoryImpl <I> >::_implementation;
+
+	// PseudoBase
+	Interface* _query_interface (String_in id)
+	{
+		return FindInterface <ProxyFactory, TypeCode>::find (*(ProxyFactoryImpl <I>*)nullptr, id);
+	}
+
 	// ProxyFactory
 	static const InterfaceMetadata metadata_;
 

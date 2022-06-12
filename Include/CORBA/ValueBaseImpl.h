@@ -29,6 +29,7 @@
 #pragma once
 
 #include "ReferenceCounterLink.h"
+#include "LifeCycleRefCnt.h"
 #include "ValueBase_s.h"
 
 namespace CORBA {
@@ -43,6 +44,8 @@ namespace Internal {
 //! \tparam S Servant class implementing operations.
 template <class S>
 class ValueImpl <S, ValueBase> :
+	public LifeCycleRefCnt <S>,
+	public ServantTraits <S>,
 	public ValueImplBase <S, ValueBase>,
 	public ReferenceCounterLink
 {

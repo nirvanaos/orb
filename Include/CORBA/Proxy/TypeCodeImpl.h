@@ -52,6 +52,13 @@ Type <String>::ABI_ret const_string_ret_p (const Char* s) NIRVANA_NOEXCEPT
 	return Type <String>::ret (std::move (static_cast <String&> (sb)));
 }
 
+struct ValueMember
+{
+	const Char* name;
+	const GetTypeCode type;
+	Visibility visibility;
+};
+
 class TypeCodeBase
 {
 public:
@@ -94,6 +101,12 @@ protected:
 		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
 
 	static Boolean equivalent (const Parameter* members, ULong member_cnt,
+		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
+
+	static Boolean equal (const ValueMember* members, ULong member_cnt,
+		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
+
+	static Boolean equivalent (const ValueMember* members, ULong member_cnt,
 		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
 };
 
