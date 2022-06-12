@@ -22,7 +22,10 @@ typeprefix CORBA "omg.org";
 
 typedef string RepositoryId;
 typedef string Identifier;
+
 typedef short Visibility;
+const Visibility PRIVATE_MEMBER = 0;
+const Visibility PUBLIC_MEMBER = 1;
 
 typedef short ValueModifier;
 const ValueModifier VM_NONE = 0;
