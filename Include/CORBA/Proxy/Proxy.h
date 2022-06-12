@@ -45,6 +45,21 @@
 namespace CORBA {
 namespace Internal {
 
+template <class I>
+class TypeCodeInterface :
+	public TypeCodeWithId <Type <I>::tc_kind, I>,
+	public TypeCodeName <I>
+{
+public:
+	using TypeCodeName <I>::_name;
+
+	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	{
+		return TypeCodeWithId <Type <I>::tc_kind, I>::equal (other)
+			&& TypeCodeName <I>::equal (other);
+	}
+};
+
 /// Proxy factory implements PseudoBase, ProxyFactory and TypeCode interfaces.
 template <class S>
 class ProxyFactoryServant :
@@ -60,9 +75,10 @@ public:
 	}
 };
 
-template <class I> class ProxyFactoryImpl :
+template <class I>
+class ProxyFactoryImpl :
 	public TypeCodeImpl <ProxyFactoryServant <ProxyFactoryImpl <I> >,
-		TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> >
+		TypeCodeInterface <I>, TypeCodeOps <I> >
 {
 public:
 	// ProxyFactory
@@ -99,18 +115,11 @@ public:
 		return proxy->_proxy ();
 	}
 
-	// TypeCode
-	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env)
-	{
-		return const_string_ret (name_);
-	}
-
-	static const Char name_ [];
 };
 
 }
 }
 
-#define IMPLEMENT_PROXY_FACTORY(ns, I) template <> const Char ProxyFactoryImpl <ns I>::name_ [] = #I
+#define IMPLEMENT_PROXY_FACTORY(ns, I) template <> const Char TypeCodeName <ns I>::name_ [] = #I
 
 #endif

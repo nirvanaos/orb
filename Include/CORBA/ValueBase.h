@@ -51,7 +51,6 @@ template <class I>
 struct TypeValue : TypeItfMarshalable <I>
 {
 	static const TCKind tc_kind = TCKind::tk_value;
-	static const bool has_proxy = false;
 
 	static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
 	static void marshal_out (I_ref <I>& src, IORequest_ptr rq);

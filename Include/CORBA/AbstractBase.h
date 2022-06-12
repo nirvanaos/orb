@@ -146,8 +146,6 @@ public:
 template <class I>
 struct TypeAbstractInterface : TypeItfMarshalable <I>
 {
-	static const bool has_proxy = true;
-
 	static const TCKind tc_kind = TCKind::tk_abstract_interface;
 
 	static void marshal_in (I_ptr <I> src, IORequest_ptr rq);

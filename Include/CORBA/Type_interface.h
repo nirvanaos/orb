@@ -286,7 +286,6 @@ template <class I>
 struct TypeItfBase
 {
 	static const bool fixed_len = false;
-	static const bool has_proxy = false;
 
 	typedef Interface* ABI;
 
