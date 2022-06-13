@@ -190,6 +190,15 @@ public:
 		Base (Base::duplicate (wide (p.p_)))
 	{}
 
+	I_ref (BridgeVal <I>* p) :
+		Base (I_ptr <I> (p))
+	{}
+
+	template <class S>
+	I_ref (const servant_reference <S>& sr) NIRVANA_NOEXCEPT :
+		Base (I_ptr <I> (static_cast <S*> (sr)))
+	{}
+
 	I_ref& operator = (const I_ref& src)
 	{
 		Base::operator = (src);

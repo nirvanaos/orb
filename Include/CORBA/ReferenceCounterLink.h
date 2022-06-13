@@ -32,7 +32,12 @@
 #include "primitive_types.h"
 
 namespace CORBA {
+
+template <class> class servant_reference;
+
 namespace Internal {
+
+template <class> class LifeCycleRefCnt;
 
 class ReferenceCounterLink
 {
@@ -40,8 +45,8 @@ public:
 
 #ifndef LEGACY_CORBA_CPP
 protected:
-	template <class> friend class LifeCycleRefCnt;
-	template <class> friend class servant_reference;
+	template <class> friend class CORBA::Internal::LifeCycleRefCnt;
+	template <class> friend class CORBA::servant_reference;
 	// ??? template <class, class> friend class Skeleton;
 #endif
 
