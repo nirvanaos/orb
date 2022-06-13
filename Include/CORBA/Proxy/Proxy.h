@@ -40,25 +40,13 @@
 #include "TypeCodeStruct.h"
 #include "TypeAlias.h"
 #include "TypeCodeTypeDef.h"
+#include "TypeCodeInterface.h"
+#include "TypeCodeValue.h"
+#include "TypeCodeNative.h"
 #include <Nirvana/OLF.h>
 
 namespace CORBA {
 namespace Internal {
-
-template <class I>
-class TypeCodeInterface :
-	public TypeCodeStatic <TypeCodeInterface <I>, TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> >,
-	public TypeCodeName <I>
-{
-public:
-	using TypeCodeName <I>::_name;
-
-	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
-	{
-		return TypeCodeWithId <Type <I>::tc_kind, I>::equal (other)
-			&& TypeCodeName <I>::equal (other);
-	}
-};
 
 /// Proxy factory implements PseudoBase, ProxyFactory and TypeCode interfaces.
 template <class I>
@@ -72,7 +60,7 @@ public:
 	using ServantTraitsStatic <ProxyFactoryImpl <I> >::_implementation;
 
 	// PseudoBase
-	Interface* _query_interface (String_in id)
+	static Interface* _query_interface (String_in id)
 	{
 		return FindInterface <ProxyFactory, TypeCode>::find (*(ProxyFactoryImpl <I>*)nullptr, id);
 	}
@@ -115,7 +103,5 @@ public:
 
 }
 }
-
-#define IMPLEMENT_PROXY_FACTORY(ns, I) template <> const Char TypeCodeName <ns I>::name_ [] = #I
 
 #endif

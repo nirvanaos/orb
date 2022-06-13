@@ -45,19 +45,14 @@ public:
 	using TypeCodeLength <bound>::_length;
 	using TypeCodeContentType <T>::_content_type;
 
-	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeTK <TCKind::tk_sequence>::equal (other)
-			&& other->length () == bound
-			&& other->content_type ()->equal (ContentType::ptr ());
+		return TypeCodeBase::equal (TCKind::tk_sequence, bound, ContentType::ptr (), other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		I_ref <TypeCode> otc = TypeCodeBase::dereference_alias (other);
-		return TypeCodeBase::equivalent (TCKind::tk_sequence, otc)
-			&& otc->length () == bound
-			&& otc->content_type ()->equivalent (ContentType::ptr ());
+		return TypeCodeBase::equivalent (TCKind::tk_sequence, bound, ContentType::ptr (), other);
 	}
 };
 

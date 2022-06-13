@@ -38,12 +38,7 @@ void set_Bounds (Interface* env) NIRVANA_NOEXCEPT
 	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::Bounds>::repository_id_, nullptr);
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
-{
-	return tk == other->kind ();
-}
-
-I_ref <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc) NIRVANA_NOEXCEPT
+I_ref <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc)
 {
 	I_ref <TypeCode> ret = tc;
 	while (TCKind::tk_alias == ret->kind ()) {
@@ -52,28 +47,60 @@ I_ref <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc) NIRVANA_N
 	return ret;
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+Boolean TypeCodeBase::equal (TCKind tk, I_ptr <TypeCode> other)
 {
-	TCKind tko = other->kind ();
-	assert (TCKind::tk_alias != tk && TCKind::tk_alias != tko);
-	return tk == tko;
+	return tk == other->kind ();
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, String_in& id, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+Boolean TypeCodeBase::equivalent (TCKind tk, I_ptr <TypeCode> other)
 {
-	return TypeCodeBase::equal (tk, other)
+	return equal (tk, dereference_alias (other));
+}
+
+Boolean TypeCodeBase::equal (TCKind tk, ULong bound, I_ptr <TypeCode> other)
+{
+	return tk == other->kind () && other->length () == bound;
+}
+
+Boolean TypeCodeBase::equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> other)
+{
+	return equal (tk, bound, dereference_alias (other));
+}
+
+Boolean TypeCodeBase::equal (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other)
+{
+	return equal (tk, bound, other) && content->equal (other->content_type ());
+}
+
+Boolean TypeCodeBase::equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other)
+{
+	I_ref <TypeCode> tco = dereference_alias (other);
+	return equal (tk, bound, tco) && content->equivalent (tco->content_type ());
+}
+
+Boolean TypeCodeBase::equal (TCKind tk, String_in& id, I_ptr <TypeCode> other)
+{
+	return equal (tk, other)
 		&& static_cast <const String&> (id) == other->id ();
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other)
 {
-	return TypeCodeBase::equivalent (tk, other)
-		&& static_cast <const String&> (id) == other->id ();
+	return equal (tk, id, dereference_alias (other));
 }
 
-Boolean TypeCodeBase::equal (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name, I_ptr <TypeCode> other)
 {
-	if (other->member_count () != member_cnt)
+	if (!equal (tk, id, other))
+		return false;
+
+	return static_cast <const String&> (name) == other->name ();
+}
+
+Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name,
+	const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other)
+{
+	if (!equivalent_ (tk, id, member_cnt, other))
 		return false;
 
 	for (ULong i = 0; i < member_cnt; ++i) {
@@ -83,13 +110,24 @@ Boolean TypeCodeBase::equal (const Char* const* members, ULong member_cnt, I_ptr
 	return true;
 }
 
-Boolean TypeCodeBase::equivalent (const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+Boolean TypeCodeBase::equivalent_ (TCKind tk, String_in& id, ULong member_cnt, I_ptr <TypeCode> other)
 {
+	if (!equal (tk, id, other))
+		return false;
 	return other->member_count () == member_cnt;
 }
 
-Boolean TypeCodeBase::equal (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, ULong member_cnt, I_ptr <TypeCode> other)
 {
+	return equivalent_ (tk, id, member_cnt, dereference_alias (other));
+}
+
+Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name,
+	const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other)
+{
+	if (!equal (tk, id, name, other))
+		return false;
+
 	if (other->member_count () != member_cnt)
 		return false;
 
@@ -102,23 +140,28 @@ Boolean TypeCodeBase::equal (const Parameter* members, ULong member_cnt, I_ptr <
 	return true;
 }
 
-Boolean TypeCodeBase::equivalent (const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id,
+	const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
-	assert (TCKind::tk_alias != other->kind ());
-
-	if (other->member_count () != member_cnt)
+	I_ref <TypeCode> tco = dereference_alias (other);
+	if (!equivalent_ (tk, id, member_cnt, tco))
 		return false;
 
 	for (ULong i = 0; i < member_cnt; ++i) {
-		if (!other->member_type (i)->equivalent ((members [i].type) ()))
+		if (!tco->member_type (i)->equivalent ((members [i].type) ()))
 			return false;
 	}
 	return true;
 }
 
-Boolean TypeCodeBase::equal (const ValueMember* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+Boolean TypeCodeBase::equal (String_in& id, String_in& name,
+	ValueModifier mod, GetTypeCode base,
+	const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
-	if (other->member_count () != member_cnt)
+	if (!equal (TCKind::tk_value, id, name, other))
+		return false;
+
+	if (!equal (mod, base, other))
 		return false;
 
 	for (ULong i = 0; i < member_cnt; ++i) {
@@ -126,15 +169,21 @@ Boolean TypeCodeBase::equal (const ValueMember* members, ULong member_cnt, I_ptr
 			return false;
 		if (!other->member_type (i)->equal ((members [i].type) ()))
 			return false;
+		if (other->member_visibility (i) != members [i].visibility)
+			return false;
 	}
 	return true;
 }
 
-Boolean TypeCodeBase::equivalent (const ValueMember* members, ULong member_cnt, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+Boolean TypeCodeBase::equivalent (String_in& id, ValueModifier mod, GetTypeCode base,
+	const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
-	assert (TCKind::tk_alias != other->kind ());
+	I_ref <TypeCode> tco = dereference_alias (other);
 
-	if (other->member_count () != member_cnt)
+	if (!equivalent_ (TCKind::tk_value, id, member_cnt, tco))
+		return false;
+
+	if (!equal (mod, base, tco))
 		return false;
 
 	for (ULong i = 0; i < member_cnt; ++i) {
@@ -143,6 +192,22 @@ Boolean TypeCodeBase::equivalent (const ValueMember* members, ULong member_cnt, 
 		if (other->member_visibility (i) != members [i].visibility)
 			return false;
 	}
+	return true;
+}
+
+Boolean TypeCodeBase::equal (ValueModifier mod, GetTypeCode base, I_ptr <TypeCode> other)
+{
+	if (other->type_modifier () != mod)
+		return false;
+
+	I_ptr <TypeCode> other_base = other->concrete_base_type ();
+	if (base) {
+		I_ptr <TypeCode> tc_base ((base)());
+		if (!other_base || !tc_base->equal (other_base))
+			return false;
+	} else if (other_base)
+		return false;
+
 	return true;
 }
 

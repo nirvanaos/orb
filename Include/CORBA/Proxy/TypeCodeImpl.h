@@ -52,7 +52,7 @@ Type <String>::ABI_ret const_string_ret_p (const Char* s) NIRVANA_NOEXCEPT
 	return Type <String>::ret (std::move (static_cast <String&> (sb)));
 }
 
-struct ValueMember
+struct StateMember
 {
 	const Char* name;
 	const GetTypeCode type;
@@ -62,9 +62,6 @@ struct ValueMember
 class TypeCodeBase
 {
 public:
-	static Boolean equal (TCKind tk, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
-	static Boolean equivalent (TCKind tk, I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
-
 	static Type <String>::ABI_ret _id (Bridge <TypeCode>* _b, Interface* _env);
 	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env);
 	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env);
@@ -82,32 +79,45 @@ public:
 	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, Interface* _env);
 
 protected:
-	static Boolean equal (TCKind tk, String_in& id, I_ptr <TypeCode> other)
-		NIRVANA_NOEXCEPT;
+	static I_ref <TypeCode> dereference_alias (I_ptr <TypeCode> tc);
 
-	static Boolean equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other)
-		NIRVANA_NOEXCEPT;
+	static Boolean equal (TCKind tk, I_ptr <TypeCode> other);
+	static Boolean equivalent (TCKind tk, I_ptr <TypeCode> other);
 
-	static I_ref <TypeCode> dereference_alias (I_ptr <TypeCode> tc)
-		NIRVANA_NOEXCEPT;
+	static Boolean equal (TCKind tk, ULong bound, I_ptr <TypeCode> other);
+	static Boolean equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> other);
 
-	static Boolean equal (const Char* const* members, ULong member_cnt,
-		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
+	static Boolean equal (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
+	static Boolean equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
 
-	static Boolean equivalent (const Char* const* members, ULong member_cnt,
-		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
+	static Boolean equal (TCKind tk, String_in& id, I_ptr <TypeCode> other);
+	static Boolean equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other);
 
-	static Boolean equal (const Parameter* members, ULong member_cnt,
-		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
+	static Boolean equal (TCKind tk, String_in& id, String_in& name, I_ptr <TypeCode> other);
 
-	static Boolean equivalent (const Parameter* members, ULong member_cnt,
-		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
+	static Boolean equal (TCKind tk, String_in& id, String_in& name,
+		const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other);
 
-	static Boolean equal (const ValueMember* members, ULong member_cnt,
-		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
+	static Boolean equivalent (TCKind tk, String_in& id, ULong member_cnt,
+		I_ptr <TypeCode> other);
 
-	static Boolean equivalent (const ValueMember* members, ULong member_cnt,
-		I_ptr <TypeCode> other) NIRVANA_NOEXCEPT;
+	static Boolean equal (TCKind tk, String_in& id, String_in& name,
+		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
+
+	static Boolean equivalent (TCKind tk, String_in& id,
+		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
+
+	static Boolean equal (String_in& id, String_in& name, ValueModifier mod, GetTypeCode base,
+		const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other);
+
+	static Boolean equivalent (String_in& id, ValueModifier mod, GetTypeCode base,
+		const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other);
+
+private:
+	static Boolean equivalent_ (TCKind tk, String_in& id, ULong member_cnt,
+		I_ptr <TypeCode> other);
+
+	static Boolean equal (ValueModifier mod, GetTypeCode base, I_ptr <TypeCode> other);
 };
 
 template <TCKind tk>
@@ -117,14 +127,14 @@ class TypeCodeTK :
 public:
 	static const TCKind tk_ = tk;
 
-	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equal (I_ptr <TypeCode> other)
 	{
 		return TypeCodeBase::equal (tk_, other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (tk_, TypeCodeBase::dereference_alias (other));
+		return TypeCodeBase::equivalent (tk_, other);
 	}
 
 	static Type <TCKind>::ABI_ret _kind (Bridge <TypeCode>* _b, Interface* _env)
@@ -140,15 +150,16 @@ class TypeCodeWithId :
 public:
 	typedef T RepositoryType;
 
+	// TODO: Remove
 	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return TypeCodeBase::equal (tk, RepositoryType::repository_id_, other);
 	}
 
+	// TODO: Remove
 	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
-		return TypeCodeBase::equivalent (tk, RepositoryType::repository_id_,
-			TypeCodeBase::dereference_alias (other));
+		return TypeCodeBase::equivalent (tk, RepositoryType::repository_id_, other);
 	}
 
 	static ABI <String> _id (Bridge <TypeCode>* _b, Interface* _env)
@@ -166,12 +177,7 @@ public:
 		return const_string_ret (name_);
 	}
 
-	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
-	{
-		return other->name ().compare (0, countof (name_) - 1, name_) == 0;
-	}
-
-private:
+protected:
 	static const Char name_ [];
 };
 

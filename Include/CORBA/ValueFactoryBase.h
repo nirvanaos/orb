@@ -47,7 +47,7 @@ struct Type <ValueFactoryBase> : TypeItf <ValueFactoryBase>
 
 NIRVANA_BRIDGE_BEGIN (ValueFactoryBase, CORBA_REPOSITORY_ID ("ValueFactoryBase"))
 Interface* (*create_for_unmarshal) (Bridge <ValueFactoryBase>*, Interface*);
-Interface* (*query_factory) (Bridge <ValueBase>*, Type <String>::ABI_in, Interface*);
+Interface* (*query_factory) (Bridge <ValueFactoryBase>*, Type <String>::ABI_in, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>

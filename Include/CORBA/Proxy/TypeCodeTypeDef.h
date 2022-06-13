@@ -49,13 +49,12 @@ public:
 	typedef TypeCodeName <TypeCodeTypeDef <ref> > Name;
 	using Name::_name;
 
-	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return Base::equal (other)
-			&& Name::equal (other);
+		return TypeCodeBase::equal (TCKind::tk_alias, ref->name, Name::name_, other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
 		return content ()->equivalent (other);
 	}

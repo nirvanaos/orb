@@ -49,21 +49,17 @@ public:
 	using TypeCodeMembers <S>::_member_name;
 	using TypeCodeMembers <S>::_member_type;
 
-	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		if (!Base::equal (other))
-			return false;
-		if (!TypeCodeName <S>::equal (other))
-			return false;
-		return TypeCodeBase::equal (Members::members (), Members::member_count (), other);
+		return TypeCodeBase::equal (TCKind::tk_struct, Base::RepositoryType::repository_id_,
+			TypeCodeName <S>::name_,
+			Members::members (), Members::member_count (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
-		I_ref <TypeCode> tco = TypeCodeBase::dereference_alias (other);
-		if (!TypeCodeBase::equivalent (TCKind::tk_struct, Base::RepositoryType::repository_id_, tco))
-			return false;
-		return TypeCodeBase::equivalent (Members::members (), Members::member_count (), tco);
+		return TypeCodeBase::equivalent (TCKind::tk_struct, Base::RepositoryType::repository_id_,
+			Members::members (), Members::member_count (), other);
 	}
 };
 

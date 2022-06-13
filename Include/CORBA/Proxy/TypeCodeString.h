@@ -44,16 +44,14 @@ class TypeCodeStringBase :
 public:
 	using TypeCodeLength <bound>::_length;
 
-	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeTK <tk>::equal (other)
-			&& other->length () == bound;
+		return TypeCodeBase::equal (tk, bound, other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeTK <tk>::equivalent (other)
-			&& other->length () == bound;
+		return TypeCodeBase::equivalent (tk, bound, other);
 	}
 };
 
