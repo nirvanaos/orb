@@ -169,6 +169,9 @@ public:
 	}
 };
 
+template <class I>
+Interface* query_creator_interface (String_in id);
+
 }
 }
 

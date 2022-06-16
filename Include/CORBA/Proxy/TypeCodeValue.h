@@ -31,13 +31,16 @@
 
 namespace CORBA {
 namespace Internal {
+
+template <class I> class TypeCodeValue;
+
 template <class I>
 class TypeCodeValueAbstract :
-	public TypeCodeStatic <TypeCodeValueAbstract <I>,
+	public TypeCodeStatic <TypeCodeValue <I>,
 	TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> >,
 	public TypeCodeName <I>
 {
-	typedef TypeCodeStatic <TypeCodeValueAbstract <I>,
+	typedef TypeCodeStatic <TypeCodeValue <I>,
 		TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> > Base;
 public:
 	static Boolean equal (I_ptr <TypeCode> other)
@@ -145,6 +148,7 @@ public:
 protected:
 	static const StateMember members_ [];
 };
+
 class TypeCodeStateMembersEmpty :
 	public TypeCodeMemberCount <0>
 {
@@ -188,13 +192,13 @@ using TypeCodeStateMembersOptional = typename std::conditional <members,
 	TypeCodeStateMembers <T>, TypeCodeStateMembersEmpty>::type;
 
 template <class I, ValueModifier vm, bool members, GetTypeCode base = nullptr>
-class TypeCodeValue :
-	public TypeCodeStatic <TypeCodeValue <I, vm, members, base>,
+class TypeCodeValueConcrete :
+	public TypeCodeStatic <TypeCodeValue <I>,
 	TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> >,
 	public TypeCodeName <I>,
 	public TypeCodeStateMembersOptional <I, members>
 {
-	typedef TypeCodeStatic <TypeCodeValue <I, vm, members, base>,
+	typedef TypeCodeStatic <TypeCodeValue <I>,
 		TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> > Base;
 public:
 	typedef TypeCodeName <I> Name;

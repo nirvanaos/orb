@@ -1,6 +1,4 @@
-/// \file CORBA.h
-/// The main header.
-
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -26,35 +24,37 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_CORBA_H_
-#define NIRVANA_ORB_CORBA_H_
+#ifndef NIRVANA_ORB_VALUEFACTORY_H_
+#define NIRVANA_ORB_VALUEFACTORY_H_
 #pragma once
 
-/// Define macro LEGACY_CORBA_CPP to support of the legacy C++ mapping specification 1.3.
-//#define LEGACY_CORBA_CPP
-
-#include <Nirvana/NirvanaBase.h>
-#include "exceptions.h"
-#include "Type.h"
-#include "String_compat.h"
-#include "UnknownUserException.h"
-#include "ORB.h"
-#include "CORBA_Environment.h"
-#include "core_objects.h"
-#include "ReferenceCounterLink.h"
-#include "ValueBaseImpl.h"
-#include "AbstractBasePOA.h"
-#include "PseudoBase.h"
-#include "ValueFactoryBase.h"
+#include "../ValueFactoryBase_s.h"
+#include "TypeCodeValue.h"
 
 namespace CORBA {
+namespace Internal {
 
-inline
-ORB::_ptr_type ORB_init (int&, char**, Internal::String_in) NIRVANA_NOEXCEPT
+template <class I>
+class ValueFactory :
+	public InterfaceStaticBase <ValueFactory <I>, PseudoBase>,
+	public InterfaceStaticBase <TypeCodeValue <I>, TypeCode>,
+	public ServantTraitsStatic <ValueFactory <I> >,
+	public LifeCycleStatic
 {
-	return g_ORB;
-}
+public:
+	using ServantTraitsStatic <ValueFactory <I> >::_implementation;
 
+	// PseudoBase
+	static Interface* _query_interface (String_in id)
+	{
+		Interface* itf = query_creator_interface <I> (id);
+		if (!itf && RepId::compatible (TypeCode::repository_id_, id))
+			itf = InterfaceStaticBase <TypeCodeValue <I>, TypeCode>::_bridge ();
+		return itf;
+	}
+};
+
+}
 }
 
 #endif

@@ -41,8 +41,10 @@
 #include "ServantBasePOA.h"
 #include "LocalObjectPOA.h"
 #include "PseudoBase_s.h"
+#include "ValueFactoryBase_s.h"
 #include "make_stateless.h"
 #include "make_pseudo.h"
+#include "ValueCreator.h"
 
 namespace CORBA {
 

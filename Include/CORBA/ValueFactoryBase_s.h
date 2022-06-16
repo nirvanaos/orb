@@ -55,7 +55,7 @@ protected:
 	static Interface* __query_factory (Bridge <ValueFactoryBase>* _b, Type <String>::ABI_in id, Interface* _env)
 	{
 		try {
-			return Type <Interface>::VT_ret (S::_implementation (_b)._query_interface (Type <String>::in (id)));
+			return Type <Interface>::VT_ret (S::_implementation (_b)._query_factory (Type <String>::in (id)));
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {

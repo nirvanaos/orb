@@ -66,12 +66,12 @@ class InterfaceStaticBase :
 	public Skeleton <S, I>
 {
 public:
-	operator Bridge <I>& () const
+	operator Bridge <I>& () const NIRVANA_NOEXCEPT
 	{
 		return *_bridge ();
 	}
 
-	static Bridge <I>* _bridge ()
+	static Bridge <I>* _bridge () NIRVANA_NOEXCEPT
 	{
 		return reinterpret_cast <Bridge <I>*> (&bridge_);
 	}
