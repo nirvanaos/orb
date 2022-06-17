@@ -90,6 +90,7 @@ protected:
 		core_object_->_remove_ref ();
 	}
 
+public:
 	ULong _refcount_value () const
 	{
 		return core_object_->_refcount_value ();

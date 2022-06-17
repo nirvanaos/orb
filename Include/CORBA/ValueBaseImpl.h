@@ -50,6 +50,7 @@ class ValueImpl <S, ValueBase> :
 #ifdef LEGACY_CORBA_CPP
 public:
 #else
+private:
 	template <class T, class ... Args>
 	friend CORBA::servant_reference <T> CORBA::make_reference (Args ... args);
 	template <class> friend class CORBA::Internal::LifeCycleRefCnt;
@@ -72,6 +73,7 @@ public:
 			delete& static_cast <S&> (*this);
 	}
 
+public:
 	ULong _refcount_value () const NIRVANA_NOEXCEPT
 	{
 		return ref_cnt_;
