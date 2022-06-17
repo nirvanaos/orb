@@ -41,7 +41,7 @@
 #include "ORB.h"
 #include "CORBA_Environment.h"
 #include "core_objects.h"
-#include "ReferenceCounterLink.h"
+#include "LocalObject.h"
 #include "ValueBaseImpl.h"
 #include "AbstractBaseImpl.h"
 #include "AbstractBasePOA.h"

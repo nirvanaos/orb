@@ -68,6 +68,11 @@ protected:
 		ValueImpl ()
 	{}
 
+	ValueImpl& operator = (const ValueImpl&) NIRVANA_NOEXCEPT
+	{
+		return *this; // Do nothing
+	}
+
 };
 
 }

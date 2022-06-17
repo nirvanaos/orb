@@ -76,17 +76,6 @@ protected:
 		}
 	}
 
-	static void __delete_object (Bridge <ValueBase>* _b, Interface* _env)
-	{
-		try {
-			S::_implementation (_b)._delete_object ();
-		} catch (Exception& e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
-	}
-
 	static Interface* __query_valuetype (Bridge <ValueBase>* _b, Type <String>::ABI_in id, Interface* _env)
 	{
 		try {
@@ -112,7 +101,6 @@ const Bridge <ValueBase>::EPV Skeleton <S, ValueBase>::epv_ = {
 		S::__copy_value,
 		S::__marshal,
 		S::__unmarshal,
-		S::__delete_object,
 		S::__query_valuetype
 	}
 };

@@ -2,8 +2,6 @@
 /// CORBA 3.0, Chapter 4
 /// Reduced for now
 
-#include "ReferenceCounter.idl"
-
 module CORBA {
 
 #ifdef _PRE_3_0_COMPILER_
@@ -25,8 +23,6 @@ pseudo interface ORB
 		in ObjectId identifier
 	) raises (InvalidName);
 
-	/// Nirvana extension
-	Internal::ReferenceCounter create_reference_counter (in ValueBase impl);
 };
 
 };

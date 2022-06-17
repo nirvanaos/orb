@@ -50,15 +50,15 @@ public:
 	typedef _ref_type& _out_type;
 #endif
 
-	Serverless () :
+	Serverless () NIRVANA_NOEXCEPT :
 		ref_cnt_ (1)
 	{}
 
-	Serverless (const Serverless&) :
+	Serverless (const Serverless&) NIRVANA_NOEXCEPT :
 		ref_cnt_ (1)
 	{}
 
-	Serverless& operator = (const Serverless&)
+	Serverless& operator = (const Serverless&) NIRVANA_NOEXCEPT
 	{
 		return *this; // Do nothing
 	}
@@ -75,19 +75,19 @@ public:
 			delete& static_cast <T&> (*this);
 	}
 
-	ULong _refcount_value () const
+	ULong _refcount_value () const NIRVANA_NOEXCEPT
 	{
 		return ref_cnt_;
 	}
 
-	static T* _duplicate (T* obj)
+	static T* _duplicate (T* obj) NIRVANA_NOEXCEPT
 	{
 		if (obj)
 			obj->_add_ref ();
 		return obj;
 	}
 
-	static T* _nil ()
+	static T* _nil () NIRVANA_NOEXCEPT
 	{
 		return 0;
 	}

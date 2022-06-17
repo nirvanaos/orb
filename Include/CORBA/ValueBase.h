@@ -70,7 +70,6 @@ NIRVANA_BRIDGE_BEGIN (ValueBase, CORBA_REPOSITORY_ID ("ValueBase"))
 Interface* (*copy_value) (Bridge <ValueBase>* _b, Interface* _env);
 void (*marshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 void (*unmarshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
-void (*delete_object) (Bridge <ValueBase>* _b, Interface* _env);
 Interface* (*query_valuetype) (Bridge <ValueBase>*, Type <String>::ABI_in, Interface*);
 NIRVANA_BRIDGE_END ()
 
@@ -82,7 +81,6 @@ public:
 	Type <ValueBase>::Var _copy_value ();
 	void _marshal (I_ptr <IORequest> rq);
 	void _unmarshal (I_ptr <IORequest> rq);
-	void _delete_object ();
 
 	/// This method does not increment reference counter
 	I_ptr <Interface> _query_valuetype (String_in type_id);
@@ -120,15 +118,6 @@ void Client <T, ValueBase>::_unmarshal (I_ptr <IORequest> rq)
 	Environment _env;
 	Bridge <ValueBase>& _b (T::_get_bridge (_env));
 	(_b._epv ().epv.unmarshal) (&_b, &rq, &_env);
-	_env.check ();
-}
-
-template <class T>
-void Client <T, ValueBase>::_delete_object ()
-{
-	Environment _env;
-	Bridge <ValueBase>& _b (T::_get_bridge (_env));
-	(_b._epv ().epv.delete_object) (&_b, &_env);
 	_env.check ();
 }
 
