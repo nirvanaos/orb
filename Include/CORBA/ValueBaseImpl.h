@@ -76,6 +76,11 @@ protected:
 	{
 		_construct (*this);
 	}
+
+	ValueImpl (const ValueImpl&)
+	{
+		_construct (*this);
+	}
 };
 
 template <class S>
@@ -84,7 +89,7 @@ class ValueTraits
 public:
 	I_ref <ValueBase> _copy_value () const
 	{
-		return make_reference <S> (static_cast <const S&> (*this));
+		return make_reference <S> (std::ref (static_cast <const S&> (*this)));
 	}
 };
 

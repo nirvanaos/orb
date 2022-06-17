@@ -190,7 +190,7 @@ private:
 	template <class I1>
 	static I* wide (I1* p)
 	{
-		return p ? static_cast <I*> (&static_cast <I_ptr <I>> (*p)) : nullptr;
+		return p ? static_cast <I*> (&static_cast <I_ptr <I> > (*p)) : nullptr;
 	}
 };
 

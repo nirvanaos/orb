@@ -94,4 +94,8 @@ public:
 }
 }
 
+#define NIRVANA_VALUETYPE_IMPL(V, Impl) template <>\
+CORBA::Internal::Interface* CORBA::Internal::query_creator_interface <V> (String_in id)\
+{ return ValueCreator <Impl, V>::_query_interface (id); }
+
 #endif

@@ -45,7 +45,7 @@ public:
 
 	I_ref <ValueBase> _to_value () NIRVANA_NOEXCEPT
 	{
-		return &static_cast <ValueBase&> (static_cast <Bridge <ValueBase>&> (static_cast <S&> (*this)));
+		return I_ptr <ValueBase> (&static_cast <ValueBase&> (static_cast <Bridge <ValueBase>&> (static_cast <S&> (*this))));
 	}
 
 	Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,

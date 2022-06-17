@@ -66,6 +66,12 @@ protected:
 	}
 
 protected:
+	ReferenceCounterLink ()
+	{}
+
+	ReferenceCounterLink (const ReferenceCounterLink&)
+	{}
+
 	void _construct (Bridge <ValueBase>& vb);
 
 private:

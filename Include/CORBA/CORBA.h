@@ -43,6 +43,7 @@
 #include "core_objects.h"
 #include "ReferenceCounterLink.h"
 #include "ValueBaseImpl.h"
+#include "AbstractBaseImpl.h"
 #include "AbstractBasePOA.h"
 #include "PseudoBase.h"
 #include "ValueFactoryBase.h"
