@@ -38,18 +38,17 @@ void set_Bounds (Interface* env) NIRVANA_NOEXCEPT
 	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::Bounds>::repository_id_, nullptr);
 }
 
-I_ref <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc)
+I_ptr <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc)
 {
-	I_ref <TypeCode> ret = tc;
-	while (TCKind::tk_alias == ret->kind ()) {
-		ret = ret->content_type ();
+	while (tc && TCKind::tk_alias == tc->kind ()) {
+		tc = tc->content_type ();
 	}
-	return ret;
+	return tc;
 }
 
 Boolean TypeCodeBase::equal (TCKind tk, I_ptr <TypeCode> other)
 {
-	return tk == other->kind ();
+	return other && tk == other->kind ();
 }
 
 Boolean TypeCodeBase::equivalent (TCKind tk, I_ptr <TypeCode> other)
@@ -74,7 +73,7 @@ Boolean TypeCodeBase::equal (TCKind tk, ULong bound, I_ptr <TypeCode> content, I
 
 Boolean TypeCodeBase::equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other)
 {
-	I_ref <TypeCode> tco = dereference_alias (other);
+	I_ptr <TypeCode> tco = dereference_alias (other);
 	return equal (tk, bound, tco) && content->equivalent (tco->content_type ());
 }
 
@@ -100,7 +99,10 @@ Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name, I_ptr <T
 Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name,
 	const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
-	if (!equivalent_ (tk, id, member_cnt, other))
+	if (!equal (tk, id, name, other))
+		return false;
+
+	if (other->member_count () != member_cnt)
 		return false;
 
 	for (ULong i = 0; i < member_cnt; ++i) {
@@ -110,16 +112,23 @@ Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name,
 	return true;
 }
 
-Boolean TypeCodeBase::equivalent_ (TCKind tk, String_in& id, ULong member_cnt, I_ptr <TypeCode> other)
+TypeCodeBase::EqResult TypeCodeBase::equivalent_ (TCKind tk, String_in& id, I_ptr <TypeCode> other)
 {
-	if (!equal (tk, id, other))
-		return false;
-	return other->member_count () == member_cnt;
+	if (!equal (tk, other))
+		return EqResult::NO;
+	const String& oid = other->id ();
+	if (!id.empty () && !oid.empty ())
+		return static_cast <const String&> (id) == oid ? EqResult::YES : EqResult::NO;
+	return EqResult::UNKNOWN;
 }
 
 Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, ULong member_cnt, I_ptr <TypeCode> other)
 {
-	return equivalent_ (tk, id, member_cnt, dereference_alias (other));
+	I_ptr <TypeCode> tco = dereference_alias (other);
+	EqResult eq = equivalent_ (tk, id, tco);
+	if (EqResult::UNKNOWN != eq)
+		return EqResult::YES == eq;
+	return member_cnt == tco->member_count ();
 }
 
 Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name,
@@ -143,8 +152,12 @@ Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name,
 Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id,
 	const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
-	I_ref <TypeCode> tco = dereference_alias (other);
-	if (!equivalent_ (tk, id, member_cnt, tco))
+	I_ptr <TypeCode> tco = dereference_alias (other);
+	EqResult eq = equivalent_ (tk, id, tco);
+	if (EqResult::UNKNOWN != eq)
+		return EqResult::YES == eq;
+
+	if (other->member_count () != member_cnt)
 		return false;
 
 	for (ULong i = 0; i < member_cnt; ++i) {
@@ -154,49 +167,18 @@ Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id,
 	return true;
 }
 
-Boolean TypeCodeBase::equal (String_in& id, String_in& name,
+Boolean TypeCodeBase::equal (Bridge <TypeCode>* bridge, String_in& id, String_in& name,
 	ValueModifier mod, GetTypeCode base,
 	const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
+#ifndef _DEBUG
+	if (bridge == &other)
+		return true;
+#endif
+
 	if (!equal (TCKind::tk_value, id, name, other))
 		return false;
 
-	if (!equal (mod, base, other))
-		return false;
-
-	for (ULong i = 0; i < member_cnt; ++i) {
-		if (other->member_name (i) != members [i].name)
-			return false;
-		if (!other->member_type (i)->equal ((members [i].type) ()))
-			return false;
-		if (other->member_visibility (i) != members [i].visibility)
-			return false;
-	}
-	return true;
-}
-
-Boolean TypeCodeBase::equivalent (String_in& id, ValueModifier mod, GetTypeCode base,
-	const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other)
-{
-	I_ref <TypeCode> tco = dereference_alias (other);
-
-	if (!equivalent_ (TCKind::tk_value, id, member_cnt, tco))
-		return false;
-
-	if (!equal (mod, base, tco))
-		return false;
-
-	for (ULong i = 0; i < member_cnt; ++i) {
-		if (!other->member_type (i)->equivalent ((members [i].type) ()))
-			return false;
-		if (other->member_visibility (i) != members [i].visibility)
-			return false;
-	}
-	return true;
-}
-
-Boolean TypeCodeBase::equal (ValueModifier mod, GetTypeCode base, I_ptr <TypeCode> other)
-{
 	if (other->type_modifier () != mod)
 		return false;
 
@@ -208,7 +190,155 @@ Boolean TypeCodeBase::equal (ValueModifier mod, GetTypeCode base, I_ptr <TypeCod
 	} else if (other_base)
 		return false;
 
+	if (other->member_count () != member_cnt)
+		return false;
+
+	CompareSet cs (bridge, &other);
+
+	for (ULong i = 0; i < member_cnt; ++i) {
+		if (other->member_name (i) != members [i].name)
+			return false;
+		if (!equal (cs, (members [i].type) (), other->member_type (i)))
+			return false;
+		if (other->member_visibility (i) != members [i].visibility)
+			return false;
+	}
 	return true;
+}
+
+Boolean TypeCodeBase::equal (CompareSet& cs,
+	I_ptr <TypeCode> left, I_ptr <TypeCode> right)
+{
+#ifndef _DEBUG
+	if (&left == &right)
+		return true;
+#endif
+
+	// If this is a value type with members, we prevent the recursion
+	if (left->kind () == TCKind::tk_value) {
+		ULong member_cnt = left->member_count ();
+		if (member_cnt > 0) {
+			if (cs.insert (&left, &right)) {
+				if (right->kind () != TCKind::tk_value)
+					return false;
+				if (right->member_count () != member_cnt)
+					return false;
+				if (left->id () != right->id ())
+					return false;
+				if (left->name () != right->name ())
+					return false;
+
+				I_ptr <TypeCode> lb = left->concrete_base_type (),
+					rb = right->concrete_base_type ();
+
+				if (lb) {
+					if (!rb || !lb->equal (rb))
+						return false;
+				} else if (rb)
+					return false;
+
+				for (ULong i = 0; i < member_cnt; ++i) {
+					if (left->member_name (i) != right->member_name (i))
+						return false;
+					if (!equal (cs, left->member_type (i), right->member_type (i)))
+						return false;
+					if (left->member_visibility (i) != right->member_visibility (i))
+						return false;
+				}
+			}
+			return true;
+		}
+	}
+
+	// Otherwise as usual
+	return left->equal (right);
+}
+
+Boolean TypeCodeBase::equivalent (Bridge <TypeCode>* bridge, String_in& id,
+	ValueModifier mod, GetTypeCode base,
+	const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other)
+{
+	I_ptr <TypeCode> tco = dereference_alias (other);
+
+#ifndef _DEBUG
+	if (bridge == &tco)
+		return true;
+#endif
+
+	EqResult eq = equivalent_ (TCKind::tk_value, id, tco);
+	if (EqResult::UNKNOWN != eq)
+		return EqResult::YES == eq;
+
+	I_ptr <TypeCode> other_base = tco->concrete_base_type ();
+	if (base) {
+		I_ptr <TypeCode> tc_base ((base)());
+		if (!other_base || !tc_base->equivalent (other_base))
+			return false;
+	} else if (other_base)
+		return false;
+
+	if (tco->member_count () != member_cnt)
+		return false;
+
+	CompareSet cs (bridge, &tco);
+
+	for (ULong i = 0; i < member_cnt; ++i) {
+		if (!equivalent (cs, (members [i].type) (), tco->member_type (i)))
+			return false;
+		if (tco->member_visibility (i) != members [i].visibility)
+			return false;
+	}
+	return true;
+}
+
+Boolean TypeCodeBase::equivalent (CompareSet& cs,
+	I_ptr <TypeCode> l, I_ptr <TypeCode> r)
+{
+	I_ptr <TypeCode> left = dereference_alias (l);
+	I_ptr <TypeCode> right = dereference_alias (r);
+
+#ifndef _DEBUG
+	if (&left == &right)
+		return true;
+#endif
+
+	// If this is a value type with members, we prevent the recursion
+	if (left->kind () == TCKind::tk_value) {
+		ULong member_cnt = left->member_count ();
+		if (member_cnt > 0) {
+			if (cs.insert (&left, &right)) {
+				if (right->kind () != TCKind::tk_value)
+					return false;
+
+				String lid = left->id (), rid = right->id ();
+				if (!lid.empty () && !rid.empty ())
+					return lid == rid;
+
+				if (right->member_count () != member_cnt)
+					return false;
+
+				I_ptr <TypeCode> lb = left->concrete_base_type (),
+					rb = right->concrete_base_type ();
+
+				if (lb) {
+					if (!rb || !lb->equal (rb))
+						return false;
+				} else if (rb)
+					return false;
+
+				for (ULong i = 0; i < member_cnt; ++i) {
+					if (!equivalent (cs, left->member_type (i), right->member_type (i)))
+						return false;
+					if (left->member_visibility (i) != right->member_visibility (i))
+						return false;
+				}
+			}
+			return true;
+		}
+	}
+
+	// Otherwise as usual
+	return left->equivalent (right);
 }
 
 Type <String>::ABI_ret TypeCodeBase::_id (Bridge <TypeCode>* _b, Interface* _env)

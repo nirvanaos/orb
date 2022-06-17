@@ -52,10 +52,6 @@ pseudo interface TypeCode
 	//     tk_value,  tk_value_box, tk_native, tk_abstract_interface
 	// and tk_except
 	RepositoryId id () raises (BadKind);
-	
-	// for tk_objref, tk_struct,    tk_union,  tk_enum, tk_alias, 
-	//     tk_value,  tk_value_box, tk_native, tk_abstract_interface
-	// and tk_except
 	Identifier name () raises (BadKind);
 	
 	// for tk_struct, tk_union, tk_enum, tk_value, 
@@ -71,7 +67,7 @@ pseudo interface TypeCode
 	TypeCode discriminator_type () raises (BadKind);
 	long default_index () raises (BadKind);
 	
-	// for tk_string, tk_sequence, and tk_array
+	// for tk_string, tk_wstring, tk_sequence, and tk_array
 	unsigned long length () raises (BadKind);
 
 	// for tk_sequence, tk_array, tk_value_box, and tk_alias

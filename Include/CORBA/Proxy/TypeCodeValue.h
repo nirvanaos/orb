@@ -212,13 +212,13 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (Base::RepositoryType::repository_id_, Name::name_,
+		return TypeCodeBase::equal (Base::_bridge (), Base::RepositoryType::repository_id_, Name::name_,
 			vm, base, Members::members (), Members::member_count (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (Base::RepositoryType::repository_id_,
+		return TypeCodeBase::equivalent (Base::_bridge (), Base::RepositoryType::repository_id_,
 			vm, base, Members::members (), Members::member_count (), other);
 	}
 

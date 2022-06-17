@@ -79,14 +79,17 @@ public:
 	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, Interface* _env);
 
 protected:
-	static I_ref <TypeCode> dereference_alias (I_ptr <TypeCode> tc);
+	static I_ptr <TypeCode> dereference_alias (I_ptr <TypeCode> tc);
 
+	// Scalar
 	static Boolean equal (TCKind tk, I_ptr <TypeCode> other);
 	static Boolean equivalent (TCKind tk, I_ptr <TypeCode> other);
 
+	// String
 	static Boolean equal (TCKind tk, ULong bound, I_ptr <TypeCode> other);
 	static Boolean equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> other);
 
+	// Sequence and array
 	static Boolean equal (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
 	static Boolean equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
 
@@ -107,17 +110,67 @@ protected:
 	static Boolean equivalent (TCKind tk, String_in& id,
 		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
 
-	static Boolean equal (String_in& id, String_in& name, ValueModifier mod, GetTypeCode base,
+	// Value type
+
+	static Boolean equal (Bridge <TypeCode>* bridge, String_in& id, String_in& name,
+		ValueModifier mod, GetTypeCode base,
 		const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other);
 
-	static Boolean equivalent (String_in& id, ValueModifier mod, GetTypeCode base,
+	static Boolean equivalent (Bridge <TypeCode>* bridge, String_in& id,
+		ValueModifier mod, GetTypeCode base,
 		const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other);
 
 private:
-	static Boolean equivalent_ (TCKind tk, String_in& id, ULong member_cnt,
-		I_ptr <TypeCode> other);
+	enum class EqResult
+	{
+		YES,
+		NO,
+		UNKNOWN
+	};
 
-	static Boolean equal (ValueModifier mod, GetTypeCode base, I_ptr <TypeCode> other);
+	static EqResult equivalent_ (TCKind tk, String_in& id, I_ptr <TypeCode> other);
+
+	// To prevent recursion for value types, use simply set implemented as vector.
+	struct CompareEntry
+	{
+		Bridge <TypeCode>* first, * second;
+
+		bool operator == (const CompareEntry& rhs) const
+		{
+			return first == rhs.first && second == rhs.second;
+		}
+	};
+
+	class CompareSet :
+		private std::vector <CompareEntry>
+	{
+	public:
+		CompareSet (Bridge <TypeCode>* first, Bridge <TypeCode>* second) :
+			std::vector <CompareEntry> (1, { first, second })
+		{}
+
+		bool insert (Bridge <TypeCode>* first, Bridge <TypeCode>* second)
+		{
+			CompareEntry ce{ first, second };
+			if (std::find (begin (), end (), ce) == end ()) {
+				push_back (ce);
+				return true;
+			}
+			return false;
+		}
+
+		I_ptr <TypeCode> other () const
+		{
+			return static_cast <TypeCode*> (back ().second);
+		}
+	};
+
+	// Compare value members
+
+	static Boolean equal (CompareSet& cs,
+		I_ptr <TypeCode> left, I_ptr <TypeCode> right);
+	static Boolean equivalent (CompareSet& cs,
+		I_ptr <TypeCode> left, I_ptr <TypeCode> right);
 };
 
 template <TCKind tk>
@@ -150,13 +203,11 @@ class TypeCodeWithId :
 public:
 	typedef T RepositoryType;
 
-	// TODO: Remove
 	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return TypeCodeBase::equal (tk, RepositoryType::repository_id_, other);
 	}
 
-	// TODO: Remove
 	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
 		return TypeCodeBase::equivalent (tk, RepositoryType::repository_id_, other);
