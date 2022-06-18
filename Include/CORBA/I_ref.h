@@ -345,4 +345,3 @@ I_ptr <I>::I_ptr (const I_ref <I1>& src) :
 }
 
 #endif
-

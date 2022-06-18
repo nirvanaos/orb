@@ -87,13 +87,11 @@ public:
 	}
 };
 
-//! ClientBase - How base client obtains pointer to bridge from primary interface.
+/// Obtain pointer to bridge from primary interface.
+/// No conversion to I_ptr <Base>.
 template <class Primary, class Base>
-class ClientBase
+class ClientBaseNoPtr
 {
-public:
-	operator I_ptr <Base> ();
-
 protected:
 	Bridge <Base>* _get_bridge_ptr (EnvironmentBase& env)
 	{
@@ -113,25 +111,41 @@ protected:
 	}
 };
 
+/// Add conversion to I_ptr <Base>
 template <class Primary, class Base>
-ClientBase <Primary, Base>::operator I_ptr <Base> ()
+class ClientBase : public ClientBaseNoPtr <Primary, Base>
 {
-	Environment env;
-	return static_cast <Base*> (_get_bridge_ptr (env));
-}
+public:
+	operator I_ptr <Base> ()
+	{
+		Environment env;
+		return static_cast <Base*> (this->_get_bridge_ptr (env));
+	}
+};
 
-//! Base interface client implementation.
-//! Has specializations for Object and ValueBase.
+/// Base interface client implementation.
+/// Has specializations for Object and ValueBase.
 template <class Primary, class I>
 class ClientInterfaceBase :
 	public Client <ClientBase <Primary, I>, I>
 {};
 
-//! Base for client interface.
+/// Base for client interface.
 template <class Primary, class ... Bases>
 class ClientInterface :
 	public ClientInterfacePrimary <Primary>,
 	public ClientInterfaceBase <Primary, Bases>...
+{};
+
+/// Support interface client implementation.
+template <class Primary, class I>
+class ClientInterfaceSupport :
+	public Client <ClientBaseNoPtr <Primary, I>, I>
+{};
+
+template <class Primary, class ... Intfs>
+class ClientSupports :
+	public ClientInterfaceSupport <Primary, Intfs>...
 {};
 
 }
