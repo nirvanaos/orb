@@ -28,21 +28,17 @@
 #define NIRVANA_ORB_SERVERLESS_H_
 #pragma once
 
-#include "primitive_types.h"
+#include "RefCountBase.h"
 #include "servant_reference.h"
 #include "Servant_var.h"
 #include "Type_forward.h"
 
 namespace CORBA {
-
-template <class T, class ... Args>
-servant_reference <T> make_reference (Args ... args);
-
 namespace Internal {
 
 /// Serverless dynamic pseudo object (Environment etc).
 template <class T>
-class Serverless
+class Serverless : public RefCountBase <T>
 {
 public:
 	typedef T* _ptr_type;
@@ -55,69 +51,18 @@ public:
 #endif
 
 #ifdef LEGACY_CORBA_CPP
-public:
-#else
-private:
-	template <class T, class ... Args>
-	friend CORBA::servant_reference <T> CORBA::make_reference (Args ... args);
-	template <class> friend class CORBA::servant_reference;
-#endif
-	void* operator new (size_t size)
-	{
-		return Nirvana::g_memory->allocate (nullptr, size, 0);
-	}
-
-	void _add_ref () NIRVANA_NOEXCEPT
-	{
-		++ref_cnt_;
-	}
-
-	void _remove_ref () NIRVANA_NOEXCEPT
-	{
-		assert (ref_cnt_);
-		if (!--ref_cnt_)
-			delete& static_cast <T&> (*this);
-	}
-
-protected:
-	Serverless () NIRVANA_NOEXCEPT :
-		ref_cnt_ (1)
-	{}
-
-	Serverless (const Serverless&) NIRVANA_NOEXCEPT :
-		ref_cnt_ (1)
-	{}
-
-	Serverless& operator = (const Serverless&) NIRVANA_NOEXCEPT
-	{
-		return *this; // Do nothing
-	}
-
-	void operator delete (void* p, size_t size)
-	{
-		Nirvana::g_memory->release (p, size);
-	}
-
-public:
-	ULong _refcount_value () const NIRVANA_NOEXCEPT
-	{
-		return ref_cnt_;
-	}
-
 	static T* _duplicate (T* obj) NIRVANA_NOEXCEPT
 	{
 		if (obj)
 			obj->_add_ref ();
 		return obj;
 	}
+#endif
 
 	static T* _nil () NIRVANA_NOEXCEPT
 	{
 		return 0;
 	}
-
-private:
-	ULong ref_cnt_;
 };
 
 template <class T>

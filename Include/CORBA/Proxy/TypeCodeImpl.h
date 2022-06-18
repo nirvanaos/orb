@@ -130,7 +130,8 @@ private:
 
 	static EqResult equivalent_ (TCKind tk, String_in& id, I_ptr <TypeCode> other);
 
-	// To prevent recursion for value types, use simply set implemented as vector.
+	// To prevent recursion for value types, use simply set implemented over std::vector.
+
 	struct CompareEntry
 	{
 		Bridge <TypeCode>* first, * second;
@@ -157,11 +158,6 @@ private:
 				return true;
 			}
 			return false;
-		}
-
-		I_ptr <TypeCode> other () const
-		{
-			return static_cast <TypeCode*> (back ().second);
 		}
 	};
 

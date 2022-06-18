@@ -29,14 +29,10 @@
 #pragma once
 
 #include "LifeCycleRefCnt.h"
+#include "RefCountBase.h"
 #include "ValueBase_s.h"
 
 namespace CORBA {
-
-template <class> class servant_reference;
-template <class T, class ... Args>
-servant_reference <T> make_reference (Args ... args);
-
 namespace Internal {
 
 //! Implementation of ValueBase.
@@ -45,63 +41,9 @@ template <class S>
 class ValueImpl <S, ValueBase> :
 	public LifeCycleRefCnt <S>,
 	public ServantTraits <S>,
-	public ValueImplBase <S, ValueBase>
-{
-#ifdef LEGACY_CORBA_CPP
-public:
-#else
-private:
-	template <class T, class ... Args>
-	friend CORBA::servant_reference <T> CORBA::make_reference (Args ... args);
-	template <class> friend class CORBA::Internal::LifeCycleRefCnt;
-	template <class> friend class CORBA::servant_reference;
-#endif
-	void* operator new (size_t size)
-	{
-		return Nirvana::g_memory->allocate (nullptr, size, 0);
-	}
-
-	void _add_ref () NIRVANA_NOEXCEPT
-	{
-		++ref_cnt_;
-	}
-
-	void _remove_ref () NIRVANA_NOEXCEPT
-	{
-		assert (ref_cnt_);
-		if (!--ref_cnt_)
-			delete& static_cast <S&> (*this);
-	}
-
-public:
-	ULong _refcount_value () const NIRVANA_NOEXCEPT
-	{
-		return ref_cnt_;
-	}
-
-protected:
-	ValueImpl () :
-		ref_cnt_ (1)
-	{}
-
-	ValueImpl (const ValueImpl&) :
-		ref_cnt_ (1)
-	{}
-
-	ValueImpl& operator = (const ValueImpl&) NIRVANA_NOEXCEPT
-	{
-		return *this; // Do nothing
-	}
-
-private:
-	void operator delete (void* p, size_t size)
-	{
-		Nirvana::g_memory->release (p, size);
-	}
-
-private:
-	ULong ref_cnt_;
-};
+	public ValueImplBase <S, ValueBase>,
+	public RefCountBase <S>
+{};
 
 template <class S>
 class ValueTraits

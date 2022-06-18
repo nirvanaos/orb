@@ -29,6 +29,7 @@
 #define NIRVANA_ORB_PRIMITIVE_TYPES_H_
 #pragma once
 
+#include <Nirvana/NirvanaBase.h>
 #include "float_types.h"
 #include <stdint.h>
 
