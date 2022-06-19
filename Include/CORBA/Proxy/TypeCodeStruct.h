@@ -36,12 +36,12 @@ namespace Internal {
 template <class S>
 class TypeCodeStruct :
 	public TypeCodeStatic <TypeCodeStruct <S>,
-		TypeCodeWithId <TCKind::tk_struct, RepIdOf <S> >, TypeCodeOps <S> >,
+		TypeCodeWithId <TCKind::tk_struct, S>, TypeCodeOps <S> >,
 	public TypeCodeMembers <S>,
 	public TypeCodeName <S>
 {
 	typedef TypeCodeStatic <TypeCodeStruct <S>,
-		TypeCodeWithId <TCKind::tk_struct, RepIdOf <S> >, TypeCodeOps <S> > Base;
+		TypeCodeWithId <TCKind::tk_struct, S>, TypeCodeOps <S> > Base;
 	typedef TypeCodeMembers <S> Members;
 public:
 	using TypeCodeName <S>::_name;

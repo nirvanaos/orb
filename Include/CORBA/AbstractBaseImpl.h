@@ -51,7 +51,7 @@ public:
 	Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
 		Interface* env) NIRVANA_NOEXCEPT
 	{
-		if (!RepId::compatible (Bridge <AbstractBase>::repository_id_, Type <String>::in (iid)))
+		if (!RepId::compatible (RepIdOf <AbstractBase>::repository_id_, Type <String>::in (iid)))
 			::Nirvana::throw_INV_OBJREF ();
 		return this;
 	}

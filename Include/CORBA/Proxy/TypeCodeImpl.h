@@ -197,7 +197,7 @@ class TypeCodeWithId :
 	public TypeCodeTK <tk>
 {
 public:
-	typedef T RepositoryType;
+	typedef RepIdOf <T> RepositoryType;
 
 	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{

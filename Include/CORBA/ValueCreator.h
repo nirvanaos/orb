@@ -78,14 +78,14 @@ class ValueFactoryImpl :
 public:
 	static Interface* _query_factory (String_in id)
 	{
-		if (RepId::compatible (Factory::repository_id_, id))
+		if (RepId::compatible (RepIdOf <Factory>::repository_id_, id))
 			return InterfaceStaticBase <S, Factory>::_bridge ();
 		return nullptr;
 	}
 
 	static Interface* _query_interface (String_in id)
 	{
-		if (RepId::compatible (ValueFactoryBase::repository_id_, id))
+		if (RepId::compatible (RepIdOf <ValueFactoryBase>::repository_id_, id))
 			return InterfaceStaticBase <S, ValueFactoryBase>::_bridge ();
 		return _query_factory (id);
 	}

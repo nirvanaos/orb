@@ -112,7 +112,7 @@ protected:
 template <class S>
 const Bridge <LocalObject>::EPV Skeleton <S, LocalObject>::epv_ = {
 	{ // interface
-		Bridge <LocalObject>::repository_id_,
+		RepIdOf <LocalObject>::repository_id_,
 		S::template __duplicate <LocalObject>,
 		S::template __release <LocalObject>
 	},

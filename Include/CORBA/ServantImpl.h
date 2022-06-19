@@ -78,7 +78,7 @@ public:
 		Interface* env) NIRVANA_NOEXCEPT
 	{
 		try {
-			if (!RepId::compatible (Bridge <Base>::repository_id_, Type <String>::in (id)))
+			if (!RepId::compatible (RepIdOf <Base>::repository_id_, Type <String>::in (id)))
 				::Nirvana::throw_INV_OBJREF ();
 			return &static_cast <Bridge <Base>&> (S::_implementation (derived));
 		} catch (Exception& e) {

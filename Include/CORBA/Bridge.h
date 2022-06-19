@@ -57,9 +57,6 @@ public:
 		return (const EPV&)Interface::_epv ();
 	}
 
-	/// Interface repository id
-	static const Char repository_id_ [];
-
 	/// Helper for widening to a base interface
 	template <class Base>
 	struct Wide
@@ -94,7 +91,7 @@ protected:
 #define NIRVANA_BASE_ENTRY(type, name) MyBridge::Wide <type>::Func name;\
 operator const MyBridge::Wide < type>::Func () const { return name; }
 
-#define NIRVANA_BRIDGE_BEGIN(I, id) template <> const Char Bridge <I>::repository_id_ [] = id;\
+#define NIRVANA_BRIDGE_BEGIN(I, id) template <> const Char RepIdOf <I>::repository_id_ [] = id;\
 template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EPV header; struct {
 #define NIRVANA_BRIDGE_EPV } base; struct {
 #define NIRVANA_BRIDGE_END() } epv;};

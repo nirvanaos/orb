@@ -5,8 +5,8 @@
 namespace CORBA {
 
 NIRVANA_OLF_SECTION
-extern const Nirvana::ImportInterfaceT <ORB> g_ORB = {
-	Nirvana::OLF_IMPORT_INTERFACE, "CORBA/g_ORB", ORB::repository_id_
+extern const Nirvana::ImportInterfaceT <ORB> g_ORB = {Nirvana::OLF_IMPORT_INTERFACE,
+"CORBA/g_ORB", CORBA::Internal::RepIdOf <ORB>::repository_id_
 };
 
 }

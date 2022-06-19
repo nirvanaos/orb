@@ -36,11 +36,11 @@ namespace Internal {
 template <class E, bool members = false>
 class TypeCodeException :
 	public TypeCodeStatic <TypeCodeException <E, members>,
-		TypeCodeWithId <TCKind::tk_except, RepIdOf <E> >, TypeCodeOps <typename E::_Data> >,
+		TypeCodeWithId <TCKind::tk_except, E>, TypeCodeOps <typename E::_Data> >,
 	public TypeCodeMembersOptional <E, members>
 {
 	typedef TypeCodeStatic <TypeCodeException <E, members>,
-		TypeCodeWithId <TCKind::tk_except, RepIdOf <E> >, TypeCodeOps <typename E::_Data> > Base;
+		TypeCodeWithId <TCKind::tk_except, E>, TypeCodeOps <typename E::_Data> > Base;
 	typedef TypeCodeMembersOptional <E, members> Members;
 public:
 	using Members::_member_count;

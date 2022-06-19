@@ -35,12 +35,12 @@ namespace Internal {
 
 template <class E>
 class TypeCodeEnum :
-	public TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <TCKind::tk_enum, RepIdOf <E> >,
+	public TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <TCKind::tk_enum, E>,
 		TypeCodeOps <E> >,
 	public TypeCodeMemberCount <Type <E>::count_>,
 	public TypeCodeName <E>
 {
-	typedef TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <TCKind::tk_enum, RepIdOf <E> >,
+	typedef TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <TCKind::tk_enum, E>,
 		TypeCodeOps <E> > Base;
 public:
 	using TypeCodeMemberCount <Type <E>::count_>::_member_count;

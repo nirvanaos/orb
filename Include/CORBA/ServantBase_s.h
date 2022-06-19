@@ -163,7 +163,7 @@ protected:
 template <class S>
 const Bridge <PortableServer::ServantBase>::EPV Skeleton <S, PortableServer::ServantBase>::epv_ = {
 	{ // header
-		Bridge <PortableServer::ServantBase>::repository_id_,
+		RepIdOf <PortableServer::ServantBase>::repository_id_,
 		S::template __duplicate <PortableServer::ServantBase>,
 		S::template __release <PortableServer::ServantBase>
 	},

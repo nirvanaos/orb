@@ -79,7 +79,7 @@ protected:
 template <class S>
 const Bridge < ::CORBA::Environment>::EPV Skeleton <S, ::CORBA::Environment>::epv_ = {
 	{ // header
-		Bridge < ::CORBA::Environment>::repository_id_,
+		RepIdOf < ::CORBA::Environment>::repository_id_,
 		S::template __duplicate < ::CORBA::Environment>,
 		S::template __release < ::CORBA::Environment>
 	},

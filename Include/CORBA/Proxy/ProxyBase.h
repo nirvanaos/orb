@@ -122,7 +122,7 @@ class ProxyBaseInterface
 public:
 	void init (I_ptr <Object> obj)
 	{
-		proxy_ = static_cast <Bridge <I>*> (&obj->_query_interface (I::repository_id_));
+		proxy_ = static_cast <Bridge <I>*> (&obj->_query_interface (RepIdOf <I>::repository_id_));
 		if (!proxy_)
 			throw OBJ_ADAPTER ();
 	}
@@ -159,7 +159,7 @@ public:
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
 	{
 		try {
-			if (!RepId::compatible (Bridge <Base>::repository_id_, Type <String>::in (id)))
+			if (!RepId::compatible (RepIdOf <Base>::repository_id_, Type <String>::in (id)))
 				::Nirvana::throw_INV_OBJREF ();
 			return static_cast <ProxyBaseInterface <Base>&> (S::_implementation (derived)).get ();
 		} catch (Exception& e) {

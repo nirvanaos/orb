@@ -116,7 +116,7 @@ public:
 	template <class I>
 	I_ptr <I> _query_interface ()
 	{
-		return static_cast <I*> (&_query_interface (Bridge <I>::repository_id_));
+		return static_cast <I*> (&_query_interface (RepIdOf <I>::repository_id_));
 	}
 
 	PortableServer::Servant _core_servant ();

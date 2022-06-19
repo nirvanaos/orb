@@ -32,7 +32,7 @@ namespace Internal {
 
 void set_exception (Interface* environment, Exception::Code code, const Char* rep_id, void* param) NIRVANA_NOEXCEPT
 {
-	if (environment && RepId::compatible (environment->_epv ().interface_id, Bridge < ::CORBA::Environment>::repository_id_)) {
+	if (environment && RepId::compatible (environment->_epv ().interface_id, RepIdOf < ::CORBA::Environment>::repository_id_)) {
 		Bridge < ::CORBA::Environment>* b = &static_cast <Bridge < ::CORBA::Environment>&> (*environment);
 		(b->_epv ().epv.exception_set) (b, code, rep_id, param);
 	}
