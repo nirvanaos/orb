@@ -91,14 +91,6 @@ struct TypeByRef
 
 	typedef C_inout C_out;
 
-	struct C_ret : ABI_ret
-	{
-		operator const Var& () const
-		{
-			return reinterpret_cast <const Var&> (*this);
-		}
-	};
-
 	class C_VT_ret
 	{
 	public:
@@ -133,16 +125,6 @@ struct TypeByRef
 	{
 		check_pointer (p);
 		return reinterpret_cast <Var&> (*p);
-	}
-
-	static ABI_ret ret (Var& v)
-	{
-		return reinterpret_cast <ABI_ret&> (v);
-	}
-
-	static ABI_ret ret ()
-	{
-		return Var ();
 	}
 
 	static ABI_VT_ret VT_ret (const Var& v)

@@ -24,19 +24,19 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPECODESEQUENCE_H_
-#define NIRVANA_ORB_TYPECODESEQUENCE_H_
+#ifndef NIRVANA_ORB_TYPECODEARRAY_H_
+#define NIRVANA_ORB_TYPECODEARRAY_H_
 
 #include "TypeCodeImpl.h"
-#include "../Sequence.h"
+#include "../Type_array.h"
 
 namespace CORBA {
 namespace Internal {
 
-template <typename T, ULong bound = 0>
-class TypeCodeSequence :
-	public TypeCodeStatic <TypeCodeSequence <T, bound>, TypeCodeTK <TCKind::tk_sequence>,
-		TypeCodeOps <Sequence <T> > >,
+template <class T, size_t bound>
+class TypeCodeArray :
+	public TypeCodeStatic <TypeCodeArray <T, bound>, TypeCodeTK <TCKind::tk_array>,
+		TypeCodeOps <std::array <T, bound> > >,
 	public TypeCodeLength <bound>,
 	public TypeCodeContentType <T>
 {
@@ -47,25 +47,19 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (TCKind::tk_sequence, bound, ContentType::ptr (), other);
+		return TypeCodeBase::equal (TCKind::tk_array, bound, ContentType::ptr (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (TCKind::tk_sequence, bound, ContentType::ptr (), other);
+		return TypeCodeBase::equivalent (TCKind::tk_array, bound, ContentType::ptr (), other);
 	}
 };
 
-template <typename T> inline
-I_ptr <TypeCode> Type <Sequence <T> >::type_code () NIRVANA_NOEXCEPT
+template <typename T, size_t bound> inline
+I_ptr <TypeCode> Type <std::array <T, bound> >::type_code () NIRVANA_NOEXCEPT
 {
-	return TypeCodeSequence <T, 0>::_get_ptr ();
-}
-
-template <typename T, ULong bound> inline
-I_ptr <TypeCode> Type <BoundedSequence <T, bound> >::type_code () NIRVANA_NOEXCEPT
-{
-	return TypeCodeSequence <T, bound>::_get_ptr ();
+	return TypeCodeArray <T, bound>::_get_ptr ();
 }
 
 }

@@ -114,7 +114,8 @@ TEST_F (TestORB, Array)
 	typedef std::array <std::array <int, 3>, 4> Arr;
 	EXPECT_EQ (ArrayTraits <Arr>::size, 3 * 4);
 
-	size_t sz = Type <Arr>::total_size;
+	EXPECT_EQ (Type <Arr>::total_size, 3 * 4);
+	EXPECT_TRUE (Type <Arr>::fixed_len);
 }
 
 }

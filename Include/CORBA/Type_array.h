@@ -30,6 +30,7 @@
 
 #include "TypeFixLen.h"
 #include "TypeVarLen.h"
+#include "ABI.h"
 #include <Nirvana/array_bool.h>
 
 namespace CORBA {
@@ -42,84 +43,81 @@ struct ArrayTraits
   static const size_t size = 1;
 };
 
-template <class T, size_t S>
-struct ArrayTraits <std::array <T, S> >
+template <class T, size_t bound>
+struct ArrayTraits <std::array <T, bound> >
 {
   typedef typename ArrayTraits <T>::ElType ElType;
-  static const size_t size = ArrayTraits <T>::size * S;
+  static const size_t size = ArrayTraits <T>::size * bound;
 };
 
-template <class AT, size_t AS>
-using TypeArrayBase = typename std::conditional <Type <typename ArrayTraits <AT>::ElType>::fixed_len,
-	TypeFixLen <std::array <AT, AS>, std::array <AT, AS> >,
-	TypeVarLen <std::array <AT, AS>, Type <typename ArrayTraits <AT>::ElType>::has_check, std::array <AT, AS> >
+template <class T, size_t bound>
+using TypeArrayBase = typename std::conditional <Type <typename ArrayTraits <T>::ElType>::fixed_len,
+	TypeFixLen <std::array <T, bound> >,
+	TypeVarLen <std::array <T, bound>, Type <typename ArrayTraits <T>::ElType>::has_check, std::array <T, bound> >
 >::type;
 
-template <class AT, size_t AS>
-struct Type <std::array <AT, AS> > : public 
-	std::conditional <Type <typename ArrayTraits <AT>::ElType>::fixed_len,
-	TypeFixLen <std::array <AT, AS>, std::array <AT, AS> >,
-	TypeVarLen <std::array <AT, AS>, Type <typename ArrayTraits <AT>::ElType>::has_check, std::array <AT, AS> >
-	>::type
+template <class T, size_t bound>
+struct Type <std::array <T, bound> > :
+	public TypeArrayBase <T, bound>
 {
-	typedef typename std::conditional <Type <typename ArrayTraits <AT>::ElType>::fixed_len,
-		TypeFixLen <std::array <AT, AS>, std::array <AT, AS> >,
-		TypeVarLen <std::array <AT, AS>, Type <typename ArrayTraits <AT>::ElType>::has_check, std::array <AT, AS> >
-	>::type Base;
+	typedef TypeArrayBase <T, bound> Base;
 
 	typedef typename Base::Var Var;
-	typedef typename ArrayTraits <Var>::ElType VT;
+	typedef typename ArrayTraits <Var>::ElType ET;
 	typedef typename Base::ABI ABI;
+	typedef typename Type <ET>::ABI VT_ABI;
 
 	static const size_t total_size = ArrayTraits <Var>::size;
-	static const bool fixed_len = Type <VT>::fixed_len;
-	static const bool has_check = Type <VT>::has_check;
+	static const bool fixed_len = Type <ET>::fixed_len;
+	static const bool has_check = Type <ET>::has_check;
 
 	static void check (const ABI& abi)
 	{
 		if (has_check) {
-			const VT* p = reinterpret_cast <const VT*> (abi.data ()), * end = p + total_size;
+			const VT_ABI* p = reinterpret_cast <const VT_ABI*> (abi.data ()), * end = p + total_size;
 			do {
-				Type <VT>::check (*(p++));
+				Type <ET>::check (*(p++));
 			} while (p != end);
 		}
 	}
 
+	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
+
 	static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq)
 	{
-		Type <VT>::marshal_in_a (reinterpret_cast <const VT*> (src->data ()), total_size * count, rq);
+		Type <ET>::marshal_in_a (reinterpret_cast <const ET*> (src->data ()), total_size * count, rq);
 	}
 
 	static void marshal_in (const Var& src, IORequest_ptr rq)
 	{
-		Type <VT>::marshal_in_a (reinterpret_cast <const VT*> (src.data ()), total_size, rq);
+		Type <ET>::marshal_in_a (reinterpret_cast <const ET*> (src.data ()), total_size, rq);
 	}
 
 	static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq)
 	{
-		Type <VT>::marshal_out_a (reinterpret_cast <VT*> (src->data ()), total_size * count, rq);
+		Type <ET>::marshal_out_a (reinterpret_cast <ET*> (src->data ()), total_size * count, rq);
 	}
 
 	static void marshal_out (Var& src, IORequest_ptr rq)
 	{
-		Type <VT>::marshal_out_a (reinterpret_cast <VT*> (src->data ()), total_size, rq);
+		Type <ET>::marshal_out_a (reinterpret_cast <ET*> (src.data ()), total_size, rq);
 	}
 
 	static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst)
 	{
-		Type <VT>::unmarshal_a (rq, total_size * count, reinterpret_cast <VT*> (dst->data ()));
+		Type <ET>::unmarshal_a (rq, total_size * count, reinterpret_cast <ET*> (dst->data ()));
 	}
 
 	static void unmarshal (IORequest_ptr rq, Var& dst)
 	{
-		Type <VT>::unmarshal_a (rq, total_size, *reinterpret_cast <VT*> (dst->data ()));
+		Type <ET>::unmarshal_a (rq, total_size, reinterpret_cast <ET*> (dst.data ()));
 	}
 
 	static void byteswap (Var& var)
 	{
-		VT* p = var.data (), *end = p + total_size;
+		ET* p = reinterpret_cast <ET*> (var.data ()), *end = p + total_size;
 		do {
-			Type <VT>::byteswap (*(p++));
+			Type <ET>::byteswap (*(p++));
 		} while (p != end);
 	}
 };

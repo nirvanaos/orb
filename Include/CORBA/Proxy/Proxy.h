@@ -43,6 +43,7 @@
 #include "TypeCodeInterface.h"
 #include "TypeCodeValue.h"
 #include "TypeCodeNative.h"
+#include "TypeCodeArray.h"
 #include "ValueFactory.h"
 #include <Nirvana/OLF.h>
 

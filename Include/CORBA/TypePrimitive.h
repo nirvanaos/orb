@@ -95,7 +95,7 @@ inline uint8_t byteswap (const uint8_t& v) NIRVANA_NOEXCEPT
 
 template <typename T>
 struct TypePrimitive :
-	public TypeFixLen <T, T>
+	public TypeFixLen <T>
 {
 	static void byteswap (T& v) NIRVANA_NOEXCEPT
 	{

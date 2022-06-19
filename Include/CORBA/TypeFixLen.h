@@ -40,10 +40,22 @@ namespace Internal {
 /// 
 /// \tparam T The variable type.
 /// \tparam TABI The ABI type.
-template <typename T, typename TABI = T>
-struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t), TypeByVal <T, TABI>, TypeByRef <T, TABI> >
+template <typename T>
+struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t), TypeByVal <T, T>, TypeByRef <T, T> >
 {
 	static const bool fixed_len = true;
+
+	typedef T C_ret;
+
+	static T ret (T v)
+	{
+		return v;
+	}
+
+	static T ret ()
+	{
+		return T ();
+	}
 
 	static void marshal_in (const T& src, IORequest_ptr rq);
 	static void marshal_in_a (const T* src, size_t count, IORequest_ptr rq);
