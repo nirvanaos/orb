@@ -58,13 +58,13 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
-		return TypeCodeBase::equal (TCKind::tk_enum, Base::RepositoryType::repository_id_,
+		return TypeCodeBase::equal (TCKind::tk_enum, Base::RepositoryType::id_,
 			TypeCodeName <E>::name_, members_, Type <E>::count_, other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
-		return TypeCodeBase::equivalent (TCKind::tk_enum, Base::RepositoryType::repository_id_,
+		return TypeCodeBase::equivalent (TCKind::tk_enum, Base::RepositoryType::id_,
 			Type <E>::count_, other);
 	}
 

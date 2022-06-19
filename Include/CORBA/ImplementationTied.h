@@ -140,7 +140,7 @@ public:
 	{
 		// TODO: It really needed only for value types!
 		try {
-			if (!RepId::compatible (RepIdOf <Base>::repository_id_, Type <String>::in (id)))
+			if (!RepId::compatible (RepIdOf <Base>::id_, Type <String>::in (id)))
 				::Nirvana::throw_MARSHAL ();
 			return &static_cast <Bridge <Base>&> (BaseImpl::_implementation (derived));
 		} catch (Exception& e) {

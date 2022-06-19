@@ -62,7 +62,7 @@ public:
 	template <class I>
 	I_ptr <I> _query_factory ()
 	{
-		return static_cast <I*> (&_query_factory (RepIdOf <I>::repository_id_));
+		return static_cast <I*> (&_query_factory (RepIdOf <I>::id_));
 	}
 
 private:

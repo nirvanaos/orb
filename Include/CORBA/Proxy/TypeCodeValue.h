@@ -45,13 +45,13 @@ class TypeCodeValueAbstract :
 public:
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (Base::RepositoryType::repository_id_,
+		return TypeCodeBase::equal (Base::RepositoryType::id_,
 			TypeCodeName <I>::name_, VM_ABSTRACT, nullptr, nullptr, 0);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (Base::RepositoryType::repository_id_,
+		return TypeCodeBase::equivalent (Base::RepositoryType::id_,
 			VM_ABSTRACT, nullptr, nullptr, 0);
 	}
 
@@ -212,13 +212,13 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (Base::_bridge (), Base::RepositoryType::repository_id_, Name::name_,
+		return TypeCodeBase::equal (Base::_bridge (), Base::RepositoryType::id_, Name::name_,
 			vm, base, Members::members (), Members::member_count (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (Base::_bridge (), Base::RepositoryType::repository_id_,
+		return TypeCodeBase::equivalent (Base::_bridge (), Base::RepositoryType::id_,
 			vm, base, Members::members (), Members::member_count (), other);
 	}
 

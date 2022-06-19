@@ -82,7 +82,7 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, void* param,
 				if (
 					Exception::EC_UNKNOWN_USER_EXCEPTION == code
 					&&
-					RepId::compatible (RepIdOf <UnknownUserException>::repository_id_, rep_id)
+					RepId::compatible (RepIdOf <UnknownUserException>::id_, rep_id)
 					&& 
 					param
 				) {

@@ -201,17 +201,17 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
-		return TypeCodeBase::equal (tk, RepositoryType::repository_id_, other);
+		return TypeCodeBase::equal (tk, RepositoryType::id_, other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
-		return TypeCodeBase::equivalent (tk, RepositoryType::repository_id_, other);
+		return TypeCodeBase::equivalent (tk, RepositoryType::id_, other);
 	}
 
 	static ABI <String> _id (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return const_string_ret (RepositoryType::repository_id_);
+		return const_string_ret (RepositoryType::id_);
 	}
 };
 

@@ -71,7 +71,7 @@ private:
 namespace Internal {
 
 template <>
-const Char RepIdOf <UnknownUserException>::repository_id_ [] = CORBA_REPOSITORY_ID ("UnknownUserException");
+const Char RepIdOf <UnknownUserException>::id_ [] = CORBA_REPOSITORY_ID ("UnknownUserException");
 }
 
 }

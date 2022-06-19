@@ -89,7 +89,7 @@ public:
 	template <class I>
 	I_ptr <I> _query_valuetype ()
 	{
-		return static_cast <I*> (&_query_valuetype (RepIdOf <I>::repository_id_));
+		return static_cast <I*> (&_query_valuetype (RepIdOf <I>::id_));
 	}
 };
 

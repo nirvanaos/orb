@@ -78,7 +78,7 @@ public:
 
 	static I_ptr <I> _check (Interface* bridge)
 	{
-		return static_cast <I*> (Interface::_check (bridge, RepIdOf <I>::repository_id_));
+		return static_cast <I*> (Interface::_check (bridge, RepIdOf <I>::id_));
 	}
 
 	operator I_ptr <Interface> () NIRVANA_NOEXCEPT
@@ -97,7 +97,7 @@ protected:
 	{
 		Primary& t = static_cast <Primary&> (*this);
 		typename Bridge <Primary>:: template Wide <Base>::Func func = t._epv ().base;
-		Bridge <Base>* ret = (func)(&t, &StringBase <Char> (RepIdOf <Base>::repository_id_), &env);
+		Bridge <Base>* ret = (func)(&t, &StringBase <Char> (RepIdOf <Base>::id_), &env);
 		env.check ();
 		return ret;
 	}

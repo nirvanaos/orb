@@ -39,7 +39,7 @@ namespace Internal {
 template <typename T>
 struct RepIdOf
 {
-	static const Char repository_id_ [];
+	static const Char id_ [];
 };
 
 /// The ABI for a particular interface I.
@@ -91,7 +91,7 @@ protected:
 #define NIRVANA_BASE_ENTRY(type, name) MyBridge::Wide <type>::Func name;\
 operator const MyBridge::Wide < type>::Func () const { return name; }
 
-#define NIRVANA_BRIDGE_BEGIN(I, id) template <> const Char RepIdOf <I>::repository_id_ [] = id;\
+#define NIRVANA_BRIDGE_BEGIN(I, id) template <> const Char RepIdOf <I>::id_ [] = id;\
 template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EPV header; struct {
 #define NIRVANA_BRIDGE_EPV } base; struct {
 #define NIRVANA_BRIDGE_END() } epv;};

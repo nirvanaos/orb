@@ -29,19 +29,19 @@
 NIRVANA_OLF_SECTION_N (0)
 const Nirvana::ImportInterfaceT <CORBA::TypeCode>
 CORBA::_tc_TCKind = { Nirvana::OLF_IMPORT_INTERFACE,
-	CORBA::Internal::RepIdOf <CORBA::TCKind>::repository_id_,
-	CORBA::Internal::RepIdOf <CORBA::TypeCode>::repository_id_ };
+	CORBA::Internal::RepIdOf <CORBA::TCKind>::id_,
+	CORBA::Internal::RepIdOf <CORBA::TypeCode>::id_ };
 
 NIRVANA_OLF_SECTION_N (1)
 const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>
 CORBA::Internal::Definitions <CORBA::TypeCode>::_tc_BadKind = {
 	Nirvana::OLF_IMPORT_INTERFACE,
-	CORBA::Internal::RepIdOf <CORBA::Internal::Definitions <CORBA::TypeCode>::BadKind>::repository_id_,
-	CORBA::Internal::RepIdOf <CORBA::TypeCode>::repository_id_ };
+	CORBA::Internal::RepIdOf <CORBA::Internal::Definitions <CORBA::TypeCode>::BadKind>::id_,
+	CORBA::Internal::RepIdOf <CORBA::TypeCode>::id_ };
 
 NIRVANA_OLF_SECTION_N (2)
 const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>
 CORBA::Internal::Definitions <CORBA::TypeCode>::_tc_Bounds = {
 	::Nirvana::OLF_IMPORT_INTERFACE,
-	CORBA::Internal::RepIdOf <CORBA::Internal::Definitions <CORBA::TypeCode>::Bounds>::repository_id_,
-	CORBA::Internal::RepIdOf <CORBA::TypeCode>::repository_id_ };
+	CORBA::Internal::RepIdOf <CORBA::Internal::Definitions <CORBA::TypeCode>::Bounds>::id_,
+	CORBA::Internal::RepIdOf <CORBA::TypeCode>::id_ };
