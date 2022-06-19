@@ -107,4 +107,14 @@ TEST_F (TestORB, String_in)
 	}
 }
 
+TEST_F (TestORB, Array)
+{
+	using namespace CORBA::Internal;
+
+	typedef std::array <std::array <int, 3>, 4> Arr;
+	EXPECT_EQ (ArrayTraits <Arr>::size, 3 * 4);
+
+	size_t sz = Type <Arr>::total_size;
+}
+
 }

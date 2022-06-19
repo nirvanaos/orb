@@ -39,6 +39,7 @@
 #include "Object.inl"
 #include "ValueBase.inl"
 #include "AbstractBase.inl"
+#include "Type_array.h"
 
 namespace CORBA {
 namespace Internal {

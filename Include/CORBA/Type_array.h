@@ -38,27 +38,41 @@ namespace Internal {
 template <class T>
 struct ArrayTraits
 {
-  typedef T Type;
+  typedef T ElType;
   static const size_t size = 1;
 };
 
 template <class T, size_t S>
-struct ArrayTraits <std::array <T, S>>
+struct ArrayTraits <std::array <T, S> >
 {
-  typedef typename ArrayTraits <T>::Type Type;
+  typedef typename ArrayTraits <T>::ElType ElType;
   static const size_t size = ArrayTraits <T>::size * S;
 };
 
 template <class AT, size_t AS>
-struct Type <std::array <AT, AS> > : public 
-	std::conditional <ArrayTraits <AT>::Type::fixed_len,
+using TypeArrayBase = typename std::conditional <Type <typename ArrayTraits <AT>::ElType>::fixed_len,
 	TypeFixLen <std::array <AT, AS>, std::array <AT, AS> >,
-	TypeVarLen <std::array <AT, AS>, ArrayTraits <AT>::Type::has_check, std::array <AT, AS> >
+	TypeVarLen <std::array <AT, AS>, Type <typename ArrayTraits <AT>::ElType>::has_check, std::array <AT, AS> >
+>::type;
+
+template <class AT, size_t AS>
+struct Type <std::array <AT, AS> > : public 
+	std::conditional <Type <typename ArrayTraits <AT>::ElType>::fixed_len,
+	TypeFixLen <std::array <AT, AS>, std::array <AT, AS> >,
+	TypeVarLen <std::array <AT, AS>, Type <typename ArrayTraits <AT>::ElType>::has_check, std::array <AT, AS> >
 	>::type
 {
-	typedef ArrayTraits <Var>::Type VT;
+	typedef typename std::conditional <Type <typename ArrayTraits <AT>::ElType>::fixed_len,
+		TypeFixLen <std::array <AT, AS>, std::array <AT, AS> >,
+		TypeVarLen <std::array <AT, AS>, Type <typename ArrayTraits <AT>::ElType>::has_check, std::array <AT, AS> >
+	>::type Base;
+
+	typedef typename Base::Var Var;
+	typedef typename ArrayTraits <Var>::ElType VT;
+	typedef typename Base::ABI ABI;
+
 	static const size_t total_size = ArrayTraits <Var>::size;
-	static const bool is_fixed_len = Type <VT>::is_fixed_len;
+	static const bool fixed_len = Type <VT>::fixed_len;
 	static const bool has_check = Type <VT>::has_check;
 
 	static void check (const ABI& abi)
@@ -93,12 +107,12 @@ struct Type <std::array <AT, AS> > : public
 
 	static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst)
 	{
-		Type <VT>::unmarshal_a (rq, total_size * count, reinterpret_cast <VT*> (src->data ()));
+		Type <VT>::unmarshal_a (rq, total_size * count, reinterpret_cast <VT*> (dst->data ()));
 	}
 
 	static void unmarshal (IORequest_ptr rq, Var& dst)
 	{
-		Type <VT>::unmarshal_a (rq, total_size, *reinterpret_cast <VT*> (src->data ()));
+		Type <VT>::unmarshal_a (rq, total_size, *reinterpret_cast <VT*> (dst->data ()));
 	}
 
 	static void byteswap (Var& var)

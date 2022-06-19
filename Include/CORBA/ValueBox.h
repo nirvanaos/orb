@@ -35,7 +35,7 @@ namespace Internal {
 
 template <class T>
 class ValueBox :
-	public ValueBaseImpl <ValueBox <T> >
+	public ValueImpl <ValueBox <T>, ValueBase>
 {
 public:
 };
