@@ -34,10 +34,10 @@ using namespace std;
 
 #define DEFINE_SYSTEM_EXCEPTION(E)\
 const E* E::_downcast (const Exception* ep) NIRVANA_NOEXCEPT { return (ep && (EC_##E == ep->__code ())) ? static_cast <const E*> (ep) : 0; }\
-const char* E::_rep_id () const NIRVANA_NOEXCEPT { return RepIdOf <E>::id_; }\
+const char* E::_rep_id () const NIRVANA_NOEXCEPT { return RepIdOf <E>::id; }\
 GNU_OPTNONE ::CORBA::I_ptr <TypeCode> E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 
-#define EXCEPTION_ENTRY(E) { { RepIdOf <E>::id_, sizeof (E), construct <E> }, countof (RepIdOf <E>::id_) - 1 },
+#define EXCEPTION_ENTRY(E) { { RepIdOf <E>::id, sizeof (E), construct <E> }, countof (RepIdOf <E>::id) - 1 },
 
 SYSTEM_EXCEPTIONS (DEFINE_SYSTEM_EXCEPTION)
 

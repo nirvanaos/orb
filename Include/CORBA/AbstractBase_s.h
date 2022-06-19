@@ -71,7 +71,7 @@ protected:
 template <class S>
 const Bridge <AbstractBase>::EPV Skeleton <S, AbstractBase>::epv_ = {
 	{	// header
-		RepIdOf <AbstractBase>::id_,
+		RepIdOf <AbstractBase>::id,
 		S::template __duplicate <AbstractBase>,
 		S::template __release <AbstractBase>
 	},

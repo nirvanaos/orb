@@ -51,14 +51,14 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (TCKind::tk_struct, Base::RepositoryType::id_,
+		return TypeCodeBase::equal (TCKind::tk_struct, Base::RepositoryType::id,
 			TypeCodeName <S>::name_,
 			Members::members (), Members::member_count (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
-		return TypeCodeBase::equivalent (TCKind::tk_struct, Base::RepositoryType::id_,
+		return TypeCodeBase::equivalent (TCKind::tk_struct, Base::RepositoryType::id,
 			Members::members (), Members::member_count (), other);
 	}
 };

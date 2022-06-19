@@ -48,7 +48,7 @@ public:
 	static Interface* _query_interface (String_in id)
 	{
 		Interface* itf = query_creator_interface <I> (id);
-		if (!itf && RepId::compatible (RepIdOf <TypeCode>::id_, id))
+		if (!itf && RepId::compatible (RepIdOf <TypeCode>::id, id))
 			itf = InterfaceStaticBase <TypeCodeValue <I>, TypeCode>::_bridge ();
 		return itf;
 	}

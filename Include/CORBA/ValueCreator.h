@@ -61,7 +61,7 @@ public:
 
 	static Interface* _query_interface (String_in id)
 	{
-		if (RepId::compatible (ValueFactoryBase::id_, id))
+		if (RepId::compatible (ValueFactoryBase::id, id))
 			return InterfaceStaticBase <ValueCreatorNoFactory <Impl>, ValueFactoryBase>::_bridge ();
 		return _query_factory (id);
 	}
@@ -78,14 +78,14 @@ class ValueFactoryImpl :
 public:
 	static Interface* _query_factory (String_in id)
 	{
-		if (RepId::compatible (RepIdOf <Factory>::id_, id))
+		if (RepId::compatible (RepIdOf <Factory>::id, id))
 			return InterfaceStaticBase <S, Factory>::_bridge ();
 		return nullptr;
 	}
 
 	static Interface* _query_interface (String_in id)
 	{
-		if (RepId::compatible (RepIdOf <ValueFactoryBase>::id_, id))
+		if (RepId::compatible (RepIdOf <ValueFactoryBase>::id, id))
 			return InterfaceStaticBase <S, ValueFactoryBase>::_bridge ();
 		return _query_factory (id);
 	}

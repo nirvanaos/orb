@@ -61,8 +61,8 @@ private:
 
 template <class S, class Primary, class ... I>
 const InterfaceEntry InterfaceFinder <S, Primary, I...>::itable_ [] = {
-	{ RepIdOf <Primary>::id_, countof (RepIdOf <Primary>::id_) - 1, cast <Primary> },
-	{ RepIdOf <I>::id_, countof (RepIdOf <I>::id_) - 1, cast <I> }...
+	{ RepIdOf <Primary>::id, countof (RepIdOf <Primary>::id) - 1, cast <Primary> },
+	{ RepIdOf <I>::id, countof (RepIdOf <I>::id) - 1, cast <I> }...
 };
 
 template <class S, class Primary, class ... I>

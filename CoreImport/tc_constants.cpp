@@ -4,10 +4,10 @@
 namespace CORBA {
 
 #define IMPORT_BY_NAME(t) NIRVANA_OLF_SECTION_N (_tc_##t) extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_##t \
-{ ::Nirvana::OLF_IMPORT_INTERFACE, "CORBA/_tc_" #t, Internal::RepIdOf <TypeCode>::id_ }
+{ ::Nirvana::OLF_IMPORT_INTERFACE, "CORBA/_tc_" #t, Internal::RepIdOf <TypeCode>::id }
 
 #define IMPORT_BY_ID(obj) NIRVANA_OLF_SECTION_N (_tc_##obj) extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_##obj \
-{ ::Nirvana::OLF_IMPORT_INTERFACE, Internal::RepIdOf <obj>::id_, Internal::RepIdOf <TypeCode>::id_ }
+{ ::Nirvana::OLF_IMPORT_INTERFACE, Internal::RepIdOf <obj>::id, Internal::RepIdOf <TypeCode>::id }
 
 IMPORT_BY_NAME (void);
 IMPORT_BY_NAME (short);

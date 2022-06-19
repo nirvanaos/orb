@@ -84,7 +84,7 @@ public:
 	template <class I>
 	I_ptr <I> _query_interface ()
 	{
-		return static_cast <I*> (&_query_interface (RepIdOf <I>::id_));
+		return static_cast <I*> (&_query_interface (RepIdOf <I>::id));
 	}
 
 };

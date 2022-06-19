@@ -50,7 +50,7 @@ private:
 
 template <class ... Exceptions>
 const ExceptionEntry EnvironmentEx <Exceptions...>::user_exceptions_[] = {
-	{ RepIdOf <Exceptions>::id_, sizeof (Exceptions), ::CORBA::Internal::construct <Exceptions> }...,
+	{ RepIdOf <Exceptions>::id, sizeof (Exceptions), ::CORBA::Internal::construct <Exceptions> }...,
 	{0}
 };
 

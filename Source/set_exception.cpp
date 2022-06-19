@@ -28,7 +28,7 @@
 #include <CORBA/Environment_c.h>
 #include <CORBA/system_exceptions.h>
 
-#define DEFINE_FUNCTION(e) void set_##e (Interface* env){ set_exception (env, SystemException::EC_##e, RepIdOf<e>::id_, nullptr);}
+#define DEFINE_FUNCTION(e) void set_##e (Interface* env){ set_exception (env, SystemException::EC_##e, RepIdOf<e>::id, nullptr);}
 
 namespace CORBA {
 namespace Internal {

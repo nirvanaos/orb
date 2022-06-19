@@ -43,7 +43,7 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (TCKind::tk_native, Base::RepositoryType::id_, TypeCodeName <T>::name_, other);
+		return TypeCodeBase::equal (TCKind::tk_native, Base::RepositoryType::id, TypeCodeName <T>::name_, other);
 	}
 };
 

@@ -93,7 +93,7 @@ protected:
 template <class S>
 const Bridge <ValueBase>::EPV Skeleton <S, ValueBase>::epv_ = {
 	{ // header
-		RepIdOf <ValueBase>::id_,
+		RepIdOf <ValueBase>::id,
 		S::template __duplicate <ValueBase>,
 		S::template __release <ValueBase>
 	},

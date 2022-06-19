@@ -30,12 +30,12 @@ namespace Internal {
 
 void set_BadKind (Interface* env) NIRVANA_NOEXCEPT
 {
-	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::BadKind>::id_, nullptr);
+	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::BadKind>::id, nullptr);
 }
 
 void set_Bounds (Interface* env) NIRVANA_NOEXCEPT
 {
-	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::Bounds>::id_, nullptr);
+	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::Bounds>::id, nullptr);
 }
 
 I_ptr <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc)

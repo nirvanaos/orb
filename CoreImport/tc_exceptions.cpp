@@ -9,7 +9,7 @@ namespace CORBA {
 using namespace Internal;
 
 #define IMPORT_TC(E) NIRVANA_OLF_SECTION extern const ImportInterfaceT <TypeCode> _tc_##E = {\
-OLF_IMPORT_INTERFACE, RepIdOf <E>::id_, RepIdOf <TypeCode>::id_ };
+OLF_IMPORT_INTERFACE, RepIdOf <E>::id, RepIdOf <TypeCode>::id };
 
 SYSTEM_EXCEPTIONS (IMPORT_TC)
 
