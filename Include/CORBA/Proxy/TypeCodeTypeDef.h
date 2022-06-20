@@ -51,7 +51,7 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (TCKind::tk_alias, ref->name, Name::name_, other);
+		return TypeCodeBase::equal (TCKind::tk_alias, ref->name, Name::name_, content (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)

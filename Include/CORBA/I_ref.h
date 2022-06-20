@@ -69,7 +69,7 @@ public:
 
 	~I_ref_base () NIRVANA_NOEXCEPT
 	{
-		interface_release (p_);
+		release (p_);
 	}
 
 	I_ref_base& operator = (const I_ref_base& src)
@@ -81,7 +81,7 @@ public:
 	I_ref_base& operator = (I_ref_base&& src) NIRVANA_NOEXCEPT
 	{
 		if (&src != this) {
-			interface_release (p_);
+			release (p_);
 			p_ = src.p_;
 			src.p_ = nullptr;
 		}
@@ -90,7 +90,7 @@ public:
 
 	I_ref_base& operator = (nullptr_t) NIRVANA_NOEXCEPT
 	{
-		interface_release (p_);
+		release (p_);
 		p_ = nullptr;
 		return *this;
 	}
@@ -122,13 +122,18 @@ protected:
 		if (p_ != p) {
 			I* tmp = p_;
 			p_ = duplicate (p);
-			interface_release (tmp);
+			release (tmp);
 		}
 	}
 
 	static I* duplicate (I* p)
 	{
-		return static_cast <I*> (interface_duplicate (p));
+		return I::_unsafe_cast (interface_duplicate (&I_ptr <Interface> (I_ptr <I> (p))));
+	}
+
+	static void release (I* p)
+	{
+		interface_release (&I_ptr <Interface> (I_ptr <I> (p)));
 	}
 
 protected:
@@ -311,7 +316,7 @@ public:
 	template <class I>
 	I_ref <I> downcast () NIRVANA_NOEXCEPT
 	{
-		I_ref <I> ret (static_cast <I*> (p_));
+		I_ref <I> ret (I::_unsafe_cast (p_));
 		p_ = nullptr;
 		return ret;
 	}

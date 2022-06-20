@@ -65,7 +65,7 @@ public:
 	// TODO: Change return type to I_var?
 	NIRVANA_NODISCARD static _ptr_type _duplicate (_ptr_type obj)
 	{
-		return static_cast <I*> (interface_duplicate (&obj));
+		return _unsafe_cast (interface_duplicate (&obj));
 	}
 #else
 	typedef I_ref <I> _ref_type;
@@ -78,18 +78,20 @@ public:
 
 	static _ptr_type _check (Interface* bridge)
 	{
-		return _wide (Interface::_check (bridge, RepIdOf <I>::id));
+		return _unsafe_cast (Interface::_check (bridge, RepIdOf <I>::id));
 	}
 
 private:
 	friend class I_ptr <Interface>;
+	friend class I_ref <Interface>;
+	friend class I_ref_base <I>;
 
 	operator Interface* () NIRVANA_NOEXCEPT
 	{
 		return this;
 	}
 
-	static _ptr_type _wide (Interface* itf) NIRVANA_NOEXCEPT
+	static I* _unsafe_cast (Interface* itf) NIRVANA_NOEXCEPT
 	{
 		return static_cast <I*> (itf);
 	}

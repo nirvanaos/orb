@@ -83,6 +83,11 @@ public:
 #endif
 	static I_ptr <Interface> _nil () NIRVANA_NOEXCEPT;
 
+	static Interface* _unsafe_cast (Interface* p) NIRVANA_NOEXCEPT
+	{
+		return p;
+	}
+
 private:
 	const EPV& _epv_ref;
 };

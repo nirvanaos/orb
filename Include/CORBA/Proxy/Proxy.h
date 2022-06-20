@@ -42,6 +42,7 @@
 #include "TypeCodeTypeDef.h"
 #include "TypeCodeInterface.h"
 #include "TypeCodeValue.h"
+#include "TypeCodeValueBox.h"
 #include "TypeCodeNative.h"
 #include "TypeCodeArray.h"
 #include "ValueFactory.h"

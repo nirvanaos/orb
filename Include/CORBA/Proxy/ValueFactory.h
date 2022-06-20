@@ -36,10 +36,9 @@ namespace Internal {
 
 template <class I>
 class ValueFactory :
+	public TypeCodeValue <I>,
 	public InterfaceStaticBase <ValueFactory <I>, PseudoBase>,
-	public InterfaceStaticBase <TypeCodeValue <I>, TypeCode>,
-	public ServantTraitsStatic <ValueFactory <I> >,
-	public LifeCycleStatic
+	public ServantTraitsStatic <ValueFactory <I> >
 {
 public:
 	using ServantTraitsStatic <ValueFactory <I> >::_implementation;
@@ -51,6 +50,34 @@ public:
 		if (!itf && RepId::compatible (RepIdOf <TypeCode>::id, id))
 			itf = InterfaceStaticBase <TypeCodeValue <I>, TypeCode>::_bridge ();
 		return itf;
+	}
+};
+
+template <class I>
+class ValueBoxFactory :
+	public TypeCodeValueBox <I>,
+	public InterfaceStaticBase <ValueBoxFactory <I>, PseudoBase>,
+	public InterfaceStaticBase <ValueBoxFactory <I>, ValueFactoryBase>,
+	public ServantTraitsStatic <ValueBoxFactory <I> >
+{
+public:
+	using ServantTraitsStatic <ValueBoxFactory <I> >::_implementation;
+
+	// PseudoBase
+	static Interface* _query_interface (String_in id)
+	{
+		return FindInterface <ValueFactoryBase, TypeCode>::find (*(ValueBoxFactory <I>*)nullptr, id);
+	}
+
+	// ValueFactoryBase
+	static Interface* _query_factory (String_in id) NIRVANA_NOEXCEPT
+	{
+		return nullptr;
+	}
+
+	static ValueBase::_ref_type create_for_unmarshal ()
+	{
+		return make_reference <I> ();
 	}
 };
 

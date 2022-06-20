@@ -77,6 +77,19 @@ Boolean TypeCodeBase::equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> conte
 	return equal (tk, bound, tco) && content->equivalent (tco->content_type ());
 }
 
+Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name, I_ptr <TypeCode> content, I_ptr <TypeCode> other)
+{
+	return equal (tk, id, name, other) && content->equal (other->content_type ());
+}
+
+Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> content, I_ptr <TypeCode> other)
+{
+	EqResult eq = equivalent_ (tk, id, other);
+	if (EqResult::UNKNOWN != eq)
+		return EqResult::NO != eq;
+	return content->equal (other->content_type ());
+}
+
 Boolean TypeCodeBase::equal (TCKind tk, String_in& id, I_ptr <TypeCode> other)
 {
 	return equal (tk, other)

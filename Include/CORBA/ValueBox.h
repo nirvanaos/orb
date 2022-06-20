@@ -78,7 +78,7 @@ public:
 	typedef I_ptr <S> _ptr_type;
 
 #ifdef LEGACY_CORBA_CPP
-	typedef Servant_var <S> _var_type;
+	typedef I_var <S> _var_type;
 	typedef _var_type& _out_type;
 
 	// TODO: Change return type to I_var?
@@ -87,8 +87,13 @@ public:
 		return static_cast <S*> (LifeCycleRefCnt <S>::_duplicate (&obj));
 	}
 #else
-	typedef servant_reference <S> _ref_type;
+	typedef I_ref <S> _ref_type;
 #endif
+
+	operator ValueBase::_ptr_type () NIRVANA_NOEXCEPT
+	{
+		return &static_cast <BridgeVal <ValueBase>&> (*this);
+	}
 
 	static _ptr_type _nil () NIRVANA_NOEXCEPT
 	{
@@ -97,7 +102,7 @@ public:
 
 	static _ptr_type _check (Interface* bridge)
 	{
-		return _wide (Interface::_check (bridge, RepIdOf <S>::id));
+		return _unsafe_cast (Interface::_check (bridge, RepIdOf <S>::id));
 	}
 
 	static _ptr_type _downcast (ValueBase::_ptr_type val)
@@ -157,13 +162,15 @@ protected:
 
 private:
 	friend class I_ptr <Interface>;
+	friend class I_ref <Interface>;
+	friend class I_ref_base <S>;
 
 	operator Interface* () NIRVANA_NOEXCEPT
 	{
 		return &static_cast <Bridge <ValueBoxBridge>&> (*this);
 	}
 
-	static _ptr_type _wide (Interface* itf) NIRVANA_NOEXCEPT
+	static S* _unsafe_cast (Interface* itf) NIRVANA_NOEXCEPT
 	{
 		return static_cast <S*> (
 			static_cast <Bridge <ValueBoxBridge>*> (itf));

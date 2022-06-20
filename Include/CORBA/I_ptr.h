@@ -240,7 +240,7 @@ public:
 	template <class I>
 	I_ptr <I> downcast () NIRVANA_NOEXCEPT
 	{
-		return I::_wide (p_);
+		return I::_unsafe_cast (p_);
 	}
 
 };

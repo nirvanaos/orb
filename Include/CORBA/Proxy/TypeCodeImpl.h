@@ -89,6 +89,12 @@ protected:
 	static Boolean equal (TCKind tk, ULong bound, I_ptr <TypeCode> other);
 	static Boolean equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> other);
 
+	// Value box and alias
+	static Boolean equal (TCKind tk, String_in& id, String_in& name, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
+
+	// Value box
+	static Boolean equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
+
 	// Sequence and array
 	static Boolean equal (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
 	static Boolean equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
