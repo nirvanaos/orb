@@ -84,8 +84,16 @@ public:
 	// TODO: Change return type to I_var?
 	NIRVANA_NODISCARD static _ptr_type _duplicate (_ptr_type obj)
 	{
-		return static_cast <S*> (LifeCycleRefCnt <S>::_duplicate (&obj));
+		obj->_add_ref ();
+		return obj;
 	}
+
+	template <class I>
+	static Bridge <I>* _duplicate (Bridge <I>* itf)
+	{
+		return LifeCycleRefCnt <S>::_duplicate (itf);
+	}
+
 #else
 	typedef I_ref <S> _ref_type;
 #endif

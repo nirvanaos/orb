@@ -91,7 +91,11 @@ protected:
 		return *this;
 	}
 
+#ifdef LEGACY_CORBA_CPP
+public:
+#else
 private:
+#endif
 	void operator delete (void* p, size_t size)
 	{
 		Nirvana::g_memory->release (p, size);
