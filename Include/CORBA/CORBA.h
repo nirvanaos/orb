@@ -47,6 +47,7 @@
 #include "AbstractBasePOA.h"
 #include "PseudoBase.h"
 #include "ValueFactoryBase.h"
+#include "ValueBox.h"
 
 namespace CORBA {
 

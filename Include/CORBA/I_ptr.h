@@ -194,6 +194,8 @@ private:
 	}
 };
 
+template <class S, class T> class ValueBox;
+
 template <>
 class I_ptr <Interface> : public I_ptr_base <Interface>
 {
@@ -216,7 +218,7 @@ public:
 
 	template <class I>
 	I_ptr (const I_ptr <I>& src) :
-		Base (src.p_)
+		Base (static_cast <Interface*> (*src.p_))
 	{}
 
 	I_ptr (const I_ref <Interface>& src) NIRVANA_NOEXCEPT :
@@ -238,8 +240,9 @@ public:
 	template <class I>
 	I_ptr <I> downcast () NIRVANA_NOEXCEPT
 	{
-		return static_cast <I*> (p_);
+		return I::_wide (p_);
 	}
+
 };
 
 inline I_ptr <Interface> Interface::_nil () NIRVANA_NOEXCEPT

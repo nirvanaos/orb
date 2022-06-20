@@ -1,4 +1,4 @@
-#include <CORBA/CORBA.h>
+#include "ValueBox.h"
 #include <gtest/gtest.h>
 
 using namespace std;
@@ -34,7 +34,7 @@ TEST_F (TestORB, RepositoryId)
 	EXPECT_FALSE (CORBA::Internal::RepId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/type:1.1"));
 	EXPECT_FALSE (CORBA::Internal::RepId::compatible ("IDL:aaa/bbb/type:1.0", "IDL:aaa/bbb/other:1.0"));
 	EXPECT_FALSE (CORBA::Internal::RepId::compatible ("IDL:aaa/bbb/type:1.0", "aaa/bbb/type:1.0"));
-	
+
 	const char rep_id1 [] = "IDL:Test/I1:1.0";
 	const char rep_id3 [] = "IDL:Test/I3:1.0";
 
@@ -116,6 +116,20 @@ TEST_F (TestORB, Array)
 
 	EXPECT_EQ (Type <Arr>::total_size, 3 * 4);
 	EXPECT_TRUE (Type <Arr>::fixed_len);
+}
+
+TEST_F (TestORB, ValueBox)
+{
+	StringVal::_ref_type vb = CORBA::make_reference <StringVal> ("test");
+
+	StringVal::_ptr_type p = vb;
+	p->_value ();
+
+	CORBA::ValueBase::_ptr_type base = vb;
+
+	p = StringVal::_downcast (base);
+
+	CORBA::Internal::Interface::_ptr_type pi (p);
 }
 
 }
