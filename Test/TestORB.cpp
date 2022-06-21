@@ -120,14 +120,16 @@ TEST_F (TestORB, Array)
 
 TEST_F (TestORB, ValueBox)
 {
-	StringVal::_ref_type vb = CORBA::make_reference <StringVal> ("test");
+	servant_reference <StringVal> s = CORBA::make_reference <StringVal> ("test");
+	StringVal::_ref_type vb = s;
 
 	StringVal::_ptr_type p = vb;
-	p->_value ();
+	EXPECT_EQ (p->_value (), "test");
 
 	CORBA::ValueBase::_ptr_type base = vb;
 
 	p = StringVal::_downcast (base);
+	EXPECT_TRUE (p);
 
 	CORBA::Internal::Interface::_ptr_type pi (p);
 }
