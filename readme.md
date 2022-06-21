@@ -29,7 +29,6 @@ It is included as a Git submodule in a Nirvana library project.
 To build the library under Visual C++ use *nirvanaos/library.vc* repository.
 
 ## Does not implemented yet
-* Value types
-* Array
+* Unions
 * Fixed
 * DII/DSI

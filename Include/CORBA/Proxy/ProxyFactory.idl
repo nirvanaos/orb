@@ -23,12 +23,13 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "IOReference.idl"
 
-module CORBA {
+module CORBA{
 module Internal {
 
+native InterfacePtr;
 native InterfaceMetadataPtr;
+pseudo interface IOReference;
 
 /// The proxy factory
 pseudo interface ProxyFactory
