@@ -78,7 +78,7 @@ public:
 	typedef I_ptr <S> _ptr_type;
 
 #ifdef LEGACY_CORBA_CPP
-	typedef I_var <S> _var_type;
+	typedef PortableServer::Servant_var <S> _var_type;
 	typedef _var_type& _out_type;
 
 	// TODO: Change return type to I_var?
@@ -95,7 +95,7 @@ public:
 	}
 
 #else
-	typedef I_ref <S> _ref_type;
+	typedef servant_reference <S> _ref_type;
 #endif
 
 	operator ValueBase::_ptr_type () NIRVANA_NOEXCEPT
