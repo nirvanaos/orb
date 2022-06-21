@@ -38,8 +38,6 @@ private:
 	{}
 
 private:
-	friend class CORBA::Internal::ValueBox <StringVal, CORBA::Internal::String>;
-
 	BoxedType value_;
 };
 

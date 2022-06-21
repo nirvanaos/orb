@@ -45,7 +45,16 @@ public:
 	I_var () NIRVANA_NOEXCEPT
 	{}
 
-	// No add reference
+	// No add reference on construct
+
+	I_var (I* p) NIRVANA_NOEXCEPT :
+		Base (p)
+	{}
+
+	I_var (BridgeVal <I>* p) :
+		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
+	{}
+
 	I_var (const I_ptr <I>& p) NIRVANA_NOEXCEPT :
 		Base (p.p_)
 	{}
@@ -67,16 +76,29 @@ public:
 	{}
 
 	// No add reference
-	I_var& operator = (const I_ptr <I>& p) NIRVANA_NOEXCEPT
+	I_var& operator = (I* p) NIRVANA_NOEXCEPT
 	{
-		if (p.p_ != Base::p_) {
+		if (p != Base::p_) {
 			I* tmp = Base::p_;
-			Base::p_ = p.p_;
+			Base::p_ = p;
 			interface_release (tmp);
 		}
 		return *this;
 	}
 
+	// No add reference
+	I_var& operator = (const I_ptr <I>& p) NIRVANA_NOEXCEPT
+	{
+		return operator = (p.p_);
+	}
+
+	// No add reference
+	I_var& operator = (BridgeVal <I>* p) NIRVANA_NOEXCEPT
+	{
+		return operator = (static_cast <I*> (static_cast <Bridge <I>*> (p)));
+	}
+
+	// Add reference
 	I_var& operator = (const I_var& src)
 	{
 		Base::operator = (src);

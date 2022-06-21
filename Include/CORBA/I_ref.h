@@ -128,12 +128,12 @@ protected:
 
 	static I* duplicate (I* p)
 	{
-		return I::_unsafe_cast (interface_duplicate (&I_ptr <Interface> (I_ptr <I> (p))));
+		return I::_unsafe_cast (interface_duplicate (p));
 	}
 
-	static void release (I* p)
+	static void release (I* p) NIRVANA_NOEXCEPT
 	{
-		interface_release (&I_ptr <Interface> (I_ptr <I> (p)));
+		interface_release (p);
 	}
 
 protected:

@@ -24,45 +24,36 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPE_H_
-#define NIRVANA_ORB_TYPE_H_
+#ifndef NIRVANA_ORB_VALUEBOX_INL_
+#define NIRVANA_ORB_VALUEBOX_INL_
 #pragma once
 
-#include "TypeFixLen.inl"
-#include "TypeVarLen.inl"
-#include "TypePrimitive.inl"
-#include "TypeEnum.inl"
-#include "Type_interface.inl"
-#include "Object.inl"
-#include "String.inl"
-#include "Sequence.inl"
-#include "Object.inl"
-#include "ValueBase.inl"
-#include "ValueBox.inl"
-#include "AbstractBase.inl"
-#include "Type_array.h"
+#include "ValueBox.h"
+#include "IORequestClient.h"
 
 namespace CORBA {
 namespace Internal {
 
-/// The `void` type.
-template <>
-struct Type <void>
+template <class I> inline
+void TypeValueBox <I>::marshal_in (I_ptr <typename I::BoxClient> src, IORequest_ptr rq)
 {
-	static I_ptr <TypeCode> type_code ()
-	{
-		return _tc_void;
-	}
-};
-
-}
+	rq->marshal_value (src, false);
 }
 
-// IDL::traits
-namespace IDL {
+template <class I> inline
+void TypeValueBox <I>::marshal_out (I_ref <typename I::BoxClient>& src, IORequest_ptr rq)
+{
+	rq->marshal_value (I_ptr <typename I::BoxClient> (src), true);
+	src = nullptr;
+}
 
-template <class T> struct traits;
+template <class I> inline
+void TypeValueBox <I>::unmarshal (IORequest_ptr rq, I_ref <typename I::BoxClient>& dst)
+{
+	dst = rq->unmarshal_value (RepIdOf <I>::id).template downcast <typename I::BoxClient> ();
+}
 
+}
 }
 
 #endif

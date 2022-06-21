@@ -58,55 +58,70 @@ template <class S>
 const Bridge <ValueBoxBridge>::EPV Skeleton <S, ValueBoxBridge>::epv_ = {
 	{ // header
 		RepIdOf <S>::id,
-		S::template __duplicate <ValueBase>,
-		S::template __release <ValueBase>
+		S::template __duplicate <ValueBoxBridge>,
+		S::template __release <ValueBoxBridge>
 	},
 	{ // base
 		S::template _wide_val <ValueBase, ValueBoxBridge>
 	}
 };
 
-template <class S, class T>
-class ValueBox :
-	public ValueImpl <S, ValueBase>,
-	public ValueTraits <S>,
-	public Bridge <ValueBoxBridge>
+class ValueBoxBridge :
+	public Bridge <ValueBoxBridge>,
+	public ClientInterfaceBase <ValueBoxBridge, ValueBase>
 {
+protected:
+	ValueBoxBridge (const Bridge <ValueBoxBridge>::EPV& epv) :
+		Bridge <ValueBoxBridge> (epv)
+	{}
+};
+
+template <class S, class T> class ValueBoxClientEx;
+
+template <class S, class T>
+class ValueBoxClient :
+	public ValueBoxBridge
+{
+	typedef ValueBoxClient <S, T> BoxClient;
+
 public:
 	typedef typename Type <T>::Var BoxedType;
 
-	typedef I_ptr <S> _ptr_type;
+	const BoxedType& _value () const
+	{
+		return static_cast <const ValueBoxClientEx <S, T>&> (*this).value_;
+	}
+
+	BoxedType& _value ()
+	{
+		return static_cast <ValueBoxClientEx <S, T>&> (*this).value_;
+	}
+
+	void _value (const BoxedType& v)
+	{
+		static_cast <ValueBoxClientEx <S, T>&> (*this).value_ = v;
+	}
+
+	void _value (BoxedType&& v)
+	{
+		static_cast <ValueBoxClientEx <S, T>&> (*this).value_ = std::move (v);
+	}
+
+public:
+	typedef I_ptr <BoxClient> _ptr_type;
 
 #ifdef LEGACY_CORBA_CPP
-	typedef PortableServer::Servant_var <S> _var_type;
+	typedef I_var <BoxClient> _var_type;
 	typedef _var_type& _out_type;
 
 	// TODO: Change return type to I_var?
 	NIRVANA_NODISCARD static _ptr_type _duplicate (_ptr_type obj)
 	{
-		obj->_add_ref ();
-		return obj;
+		return _unsafe_cast (interface_duplicate (&obj));
 	}
-
-	template <class I>
-	static Bridge <I>* _duplicate (Bridge <I>* itf)
-	{
-		return LifeCycleRefCnt <S>::_duplicate (itf);
-	}
-
 #else
-	typedef servant_reference <S> _ref_type;
+	typedef I_ref <BoxClient> _ref_type;
 #endif
-
-	operator ValueBase::_ptr_type () NIRVANA_NOEXCEPT
-	{
-		return &static_cast <BridgeVal <ValueBase>&> (*this);
-	}
-
-	static _ptr_type _nil () NIRVANA_NOEXCEPT
-	{
-		return _ptr_type (nullptr);
-	}
 
 	static _ptr_type _check (Interface* bridge)
 	{
@@ -116,38 +131,74 @@ public:
 	static _ptr_type _downcast (ValueBase::_ptr_type val)
 	{
 		if (val)
-			return val->_query_valuetype <S> ();
+			return val->_query_valuetype (RepIdOf <S>::id).template downcast <BoxClient> ();
 		return nullptr;
 	}
 
-	const BoxedType& _value () const
+	static _ptr_type _nil () NIRVANA_NOEXCEPT
 	{
-		return static_cast <const S&> (*this).value_;
+		return _ptr_type (nullptr);
 	}
 
-	BoxedType& _value ()
+protected:
+	ValueBoxClient (const Bridge <ValueBoxBridge>::EPV& epv) :
+		ValueBoxBridge (epv)
+	{}
+
+private:
+	friend class I_ref_base <BoxClient>;
+	friend class I_ptr <Interface>;
+	friend class I_ref <Interface>;
+
+	static BoxClient* _unsafe_cast (Interface* itf) NIRVANA_NOEXCEPT
 	{
-		return static_cast <S&> (*this).value_;
+		assert (!itf || RepId::compatible (itf->_epv ().interface_id, RepIdOf <S>::id));
+		return static_cast <BoxClient*> (itf);
 	}
 
-	void _value (const BoxedType& v)
-	{
-		static_cast <S&> (*this).value_ = v;
-	}
+};
 
-	void _value (BoxedType&& v)
-	{
-		static_cast <S&> (*this).value_ = std::move (v);
-	}
+template <class S, class T>
+class ValueBoxClientEx :
+	public ValueBoxClient <S, T>
+{
+private:
+	friend class ValueBoxClient <S, T>;
+	typename Type <T>::Var value_;
+};
+
+template <class S, class T>
+class ValueBox :
+	public ValueImpl <S, ValueBase>,
+	public ValueTraits <S>,
+	public ValueBoxClient <S, T>
+{
+public:
+	typedef ValueBoxClient <S, T> BoxClient;
+
+	typedef typename BoxClient::_ptr_type _ptr_type;
+	using BoxClient::_nil;
+
+#ifdef LEGACY_CORBA_CPP
+	typedef typename BoxClient::_var_type _var_type;
+	typedef typename BoxClient::_out_type _out_type;
+
+	using BoxClient::_duplicate;
+	using LifeCycleRefCnt <S>::_duplicate;
+#else
+	typedef typename BoxClient::_ref_type _ref_type;
+#endif
+
+	using ValueTraits <S>::_copy_value;
 
 	void _marshal (IORequest_ptr rq) const
 	{
-		Type <T>::marshal_in (static_cast <const S&> (*this).value_, rq);
+		Type <T>::marshal_in (BoxClient::_value (), rq);
 	}
 
 	void _unmarshal (IORequest_ptr rq)
 	{
-		Type <T>::unmarshal (rq, static_cast <S&> (*this).value_);
+		Type <T>::unmarshal (rq, BoxClient::_value ());
 	}
 
 	Interface* _query_valuetype (String_in id) NIRVANA_NOEXCEPT
@@ -158,37 +209,27 @@ public:
 	}
 
 protected:
-	typedef typename CORBA::Internal::Type <T>::Var _ValueType;
-
 	ValueBox () :
-		Bridge <ValueBoxBridge> (Skeleton <S, ValueBoxBridge>::epv_)
+		BoxClient (Skeleton <S, ValueBoxBridge>::epv_)
 	{}
 
 	ValueBox (const ValueBox&) :
-		Bridge <ValueBoxBridge> (Skeleton <S, ValueBoxBridge>::epv_)
+		BoxClient (Skeleton <S, ValueBoxBridge>::epv_)
 	{}
 
-private:
-	friend class I_ptr <Interface>;
-	friend class I_ref <Interface>;
-	friend class I_ref_base <S>;
-
-	operator Interface* () NIRVANA_NOEXCEPT
-	{
-		return &static_cast <Bridge <ValueBoxBridge>&> (*this);
-	}
-
-	static S* _unsafe_cast (Interface* itf) NIRVANA_NOEXCEPT
-	{
-		return static_cast <S*> (
-			static_cast <Bridge <ValueBoxBridge>*> (itf));
-	}
 };
 
 template <class I>
-struct TypeValueBox : TypeValue <I>
+struct TypeValueBox :
+	TypeItfCommon <typename I::BoxClient>,
+	TypeVarLenHelper <I, I_ref <typename I::BoxClient> >
 {
 	static const TCKind tc_kind = TCKind::tk_value_box;
+
+	static void marshal_in (I_ptr <typename I::BoxClient> src, IORequest_ptr rq);
+	static void marshal_out (I_ref <typename I::BoxClient>& src, IORequest_ptr rq);
+	static void unmarshal (IORequest_ptr rq, I_ref <typename I::BoxClient>& dst);
+
 };
 
 }

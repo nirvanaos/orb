@@ -179,10 +179,10 @@ public:
 		return *this;
 	}
 
-	Bridge <I>* operator & () const NIRVANA_NOEXCEPT
+	Interface* operator & () const NIRVANA_NOEXCEPT
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
-		return static_cast <Bridge <I>*> (this->p_);
+		return this->p_;
 	}
 
 private:
@@ -218,7 +218,7 @@ public:
 
 	template <class I>
 	I_ptr (const I_ptr <I>& src) :
-		Base (static_cast <Interface*> (*src.p_))
+		Base (src.p_)
 	{}
 
 	I_ptr (const I_ref <Interface>& src) NIRVANA_NOEXCEPT :

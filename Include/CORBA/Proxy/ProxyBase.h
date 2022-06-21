@@ -64,14 +64,14 @@ public:
 		NIRVANA_NOEXCEPT
 	{
 		return static_cast <Bridge <Object>*> (
-			(proxy_manager_->_epv ().epv.get_object) (&proxy_manager_, iid, env));
+			(proxy_manager_->_epv ().epv.get_object) (static_cast <Bridge <IOReference>*> (&proxy_manager_), iid, env));
 	}
 
 	Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid, Interface* env) const
 		NIRVANA_NOEXCEPT
 	{
 		return static_cast <Bridge <AbstractBase>*> (
-			(proxy_manager_->_epv ().epv.get_abstract_base) (&proxy_manager_, iid, env));
+			(proxy_manager_->_epv ().epv.get_abstract_base) (static_cast <Bridge <IOReference>*> (&proxy_manager_), iid, env));
 	}
 
 	void _add_ref ()

@@ -32,7 +32,7 @@ namespace Internal {
 Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object, 
 	Type <String>::ABI_in iid, Interface* env) NIRVANA_NOEXCEPT
 {
-	return (core_object->_epv ().base.CORBA_Object) (&core_object, iid, env);
+	return (core_object->_epv ().base.CORBA_Object) (static_cast <Bridge <LocalObject>*> (&core_object), iid, env);
 }
 
 I_ref <Interface> get_proxy (LocalObject::_ptr_type core_object)

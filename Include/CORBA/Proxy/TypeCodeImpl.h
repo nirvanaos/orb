@@ -140,7 +140,7 @@ private:
 
 	struct CompareEntry
 	{
-		Bridge <TypeCode>* first, * second;
+		Interface* first, * second;
 
 		bool operator == (const CompareEntry& rhs) const
 		{
@@ -152,11 +152,11 @@ private:
 		private std::vector <CompareEntry>
 	{
 	public:
-		CompareSet (Bridge <TypeCode>* first, Bridge <TypeCode>* second) :
+		CompareSet (Interface* first, Interface* second) :
 			std::vector <CompareEntry> (1, { first, second })
 		{}
 
-		bool insert (Bridge <TypeCode>* first, Bridge <TypeCode>* second)
+		bool insert (Interface* first, Interface* second)
 		{
 			CompareEntry ce{ first, second };
 			if (std::find (begin (), end (), ce) == end ()) {

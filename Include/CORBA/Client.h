@@ -86,13 +86,9 @@ private:
 	friend class I_ref <Interface>;
 	friend class I_ref_base <I>;
 
-	operator Interface* () NIRVANA_NOEXCEPT
-	{
-		return this;
-	}
-
 	static I* _unsafe_cast (Interface* itf) NIRVANA_NOEXCEPT
 	{
+		assert (!itf || RepId::compatible (itf->_epv ().interface_id, RepIdOf <I>::id));
 		return static_cast <I*> (itf);
 	}
 };
