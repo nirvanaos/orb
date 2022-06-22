@@ -18,3 +18,5 @@
 /Source/TCKind.cpp
 /Include/CORBA/ORB.h
 /Source/ORB.cpp
+/Include/CORBA/InterfaceRepository.h
+/Source/InterfaceRepository.cpp

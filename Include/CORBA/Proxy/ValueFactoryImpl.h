@@ -35,13 +35,13 @@ namespace CORBA {
 namespace Internal {
 
 template <class I>
-class ValueFactory :
+class ValueFactoryImpl :
 	public TypeCodeValue <I>,
-	public InterfaceStaticBase <ValueFactory <I>, PseudoBase>,
-	public ServantTraitsStatic <ValueFactory <I> >
+	public InterfaceStaticBase <ValueFactoryImpl <I>, PseudoBase>,
+	public ServantTraitsStatic <ValueFactoryImpl <I> >
 {
 public:
-	using ServantTraitsStatic <ValueFactory <I> >::_implementation;
+	using ServantTraitsStatic <ValueFactoryImpl <I> >::_implementation;
 
 	// PseudoBase
 	static Interface* _query_interface (String_in id)

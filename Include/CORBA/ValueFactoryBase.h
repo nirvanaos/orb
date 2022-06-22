@@ -33,16 +33,23 @@
 namespace CORBA {
 
 class ValueFactoryBase;
-#ifdef LEGACY_CORBA_CPP
+
 typedef Internal::I_ptr <ValueFactoryBase> ValueFactory;
-typedef Internal::I_var <ValueBase> ValueBase_var;
-typedef ValueBase_var& ValueBase_out;
+
+#ifdef LEGACY_CORBA_CPP
+typedef Internal::I_var <ValueFactoryBase> ValueFactoryBase_var;
+typedef ValueFactoryBase_var& ValueFactoryBase_out;
 #endif
 
 namespace Internal {
 
 template <>
 struct Type <ValueFactoryBase> : TypeItf <ValueFactoryBase>
+{};
+
+// Type for native ValueFactory
+template <>
+struct Type <ValueFactory> : Type <ValueFactoryBase>
 {};
 
 NIRVANA_BRIDGE_BEGIN (ValueFactoryBase, CORBA_REPOSITORY_ID ("ValueFactoryBase"))

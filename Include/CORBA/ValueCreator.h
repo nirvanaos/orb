@@ -69,7 +69,7 @@ public:
 };
 
 template <class S, class Factory>
-class ValueFactoryImpl :
+class ValueCreatorImpl :
 	public InterfaceStaticBase <S, ValueFactoryBase>,
 	public InterfaceStaticBase <S, Factory>,
 	public ServantTraitsStatic <S>,

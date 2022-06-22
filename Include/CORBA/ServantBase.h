@@ -29,40 +29,17 @@
 #define NIRVANA_ORB_SERVANTBASE_H_
 #pragma once
 
-#include "Client.h"
-#include "Type_interface.h"
-#include "String.h"
-#include "basic_types.h"
-#include "TCKind.h"
-#include <Nirvana/ImportInterface.h>
+#include "Object.h"
 
 namespace PortableServer {
 
 class POA;
-class ServantBase;
 
 extern const Nirvana::ImportInterfaceT <CORBA::TypeCode> _tc_Servant;
 
 }
 
-namespace PortableServer {
-
-typedef CORBA::Internal::I_ptr <ServantBase> Servant;
-
-#ifdef LEGACY_CORBA_CPP
-typedef CORBA::Internal::I_var <ServantBase> ServantBase_var;
-#endif
-
-}
-
 namespace CORBA {
-
-typedef Object InterfaceDef; // TODO: Not defined yet
-#ifdef LEGACY_CORBA_CPP
-typedef Internal::I_ptr <InterfaceDef> InterfaceDef_ptr;
-typedef Internal::I_var <InterfaceDef> InterfaceDef_var;
-#endif
-
 namespace Internal {
 
 template <>

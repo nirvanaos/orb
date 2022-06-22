@@ -36,7 +36,7 @@ namespace Internal {
 template <class T, T last> inline
 void TypeEnum <T, last>::marshal_in (const T& src, IORequest_ptr rq)
 {
-	rq->marshal (alignof (T), sizeof (T), src);
+	rq->marshal (alignof (T), sizeof (T), &src);
 }
 
 template <class T, T last> inline
@@ -48,7 +48,7 @@ void TypeEnum <T, last>::marshal_in_a (const T* src, size_t count, IORequest_ptr
 template <class T, T last> inline
 void TypeEnum <T, last>::unmarshal (IORequest_ptr rq, T& dst)
 {
-	void* pbuf = nullptr;
+	void* pbuf;
 	if (rq->unmarshal (alignof (T), sizeof (T), pbuf))
 		byteswap (*(Var*)pbuf);
 	check (*(ABI*)pbuf);

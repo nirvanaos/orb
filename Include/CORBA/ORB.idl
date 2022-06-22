@@ -2,6 +2,8 @@
 /// CORBA 3.0, Chapter 4
 /// Reduced for now
 
+#include "TypeCode.idl"
+
 module CORBA {
 
 #ifdef _PRE_3_0_COMPILER_
@@ -9,6 +11,8 @@ module CORBA {
 #else
 typeprefix CORBA "omg.org";
 #endif
+
+native ValueFactory;
 
 /// ORB
 pseudo interface ORB
@@ -22,6 +26,17 @@ pseudo interface ORB
 	Object resolve_initial_references (
 		in ObjectId identifier
 	) raises (InvalidName);
+
+  ValueFactory register_value_factory (
+    in RepositoryId             id,
+    in ValueFactory             _factory
+  );
+
+  void unregister_value_factory (
+    in RepositoryId             id);
+
+  ValueFactory lookup_value_factory (
+    in RepositoryId             id);
 
 };
 

@@ -38,7 +38,6 @@
 #include "Type.h"
 #include "String_compat.h"
 #include "UnknownUserException.h"
-#include "ORB.h"
 #include "CORBA_Environment.h"
 #include "core_objects.h"
 #include "LocalObject.h"
@@ -47,6 +46,8 @@
 #include "AbstractBasePOA.h"
 #include "PseudoBase.h"
 #include "ValueFactoryBase.h"
+#include "ORB.h"
+#include "InterfaceRepository.h"
 
 namespace CORBA {
 

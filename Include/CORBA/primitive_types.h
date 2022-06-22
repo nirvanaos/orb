@@ -70,6 +70,10 @@ typedef Long Flags;
 const bool TRUE = true;
 const bool FALSE = false;
 
+namespace Internal {
+typedef ULong ABI_enum;
+}
+
 }
 
 #endif

@@ -34,8 +34,6 @@
 namespace CORBA {
 namespace Internal {
 
-typedef ULong ABI_enum;
-
 /// Base for enum data types
 template <class T, T last>
 struct TypeEnum : TypeByVal <T, ABI_enum>

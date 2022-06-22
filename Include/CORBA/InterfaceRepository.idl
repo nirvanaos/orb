@@ -1,6 +1,8 @@
 // File: CORBA_InterfaceRepository.idl
 // CORBA 3.0, Chapter 10
 
+#include "TypeCode.idl"
+
 module CORBA {
 
  #ifdef _PRE_3_0_COMPILER_
@@ -9,36 +11,43 @@ module CORBA {
 typeprefix CORBA "omg.org";
 #endif
 
+interface ArrayDef;
+interface Container;
+interface FixedDef;
+interface PrimitiveDef;
+interface Repository;
+interface SequenceDef;
+interface StringDef;
+interface WstringDef;
 
-  typedef string ScopedName;
-    typedef string RepositoryId;
+typedef string ScopedName;
 
-    enum DefinitionKind
- {
-dk_none,        dk_all,
-dk_Attribute,   dk_Constant,    dk_Exception,   dk_Interface,
-dk_Module,      dk_Operation,   dk_Typedef,
-dk_Alias,       dk_Struct,      dk_Union,       dk_Enum,
-dk_Primitive,   dk_String,      dk_Sequence,    dk_Array,
-dk_Repository,
-dk_Wstring,     dk_Fixed,
-dk_Value,       dk_ValueBox,    dk_ValueMember,
-dk_Native,
-dk_AbstractInterface,
-dk_LocalInterface,
-dk_Component, dk_Home,
-dk_Factory, dk_Finder,
-dk_Emits, dk_Publishes, dk_Consumes,
-dk_Provides, dk_Uses,
-dk_Event
-  };
-
-  interface IRObject
+enum DefinitionKind
 {
-    // read interface
-    readonly attribute  DefinitionKind  def_kind;
-    // write interface
-    void                destroy ();
+  dk_none,        dk_all,
+  dk_Attribute,   dk_Constant,    dk_Exception,   dk_Interface,
+  dk_Module,      dk_Operation,   dk_Typedef,
+  dk_Alias,       dk_Struct,      dk_Union,       dk_Enum,
+  dk_Primitive,   dk_String,      dk_Sequence,    dk_Array,
+  dk_Repository,
+  dk_Wstring,     dk_Fixed,
+  dk_Value,       dk_ValueBox,    dk_ValueMember,
+  dk_Native,
+  dk_AbstractInterface,
+  dk_LocalInterface,
+  dk_Component, dk_Home,
+  dk_Factory, dk_Finder,
+  dk_Emits, dk_Publishes, dk_Consumes,
+  dk_Provides, dk_Uses,
+  dk_Event
+};
+
+interface IRObject
+{
+  // read interface
+  readonly attribute  DefinitionKind  def_kind;
+  // write interface
+  void                destroy ();
 };
 
 typedef string VersionSpec;
@@ -55,16 +64,16 @@ interface Contained : IRObject
   readonly attribute  ScopedName      absolute_name;
   readonly attribute  Repository      containing_repository;
   struct Description
-{
-DefinitionKind  kind;
-any             value;
-};
-Description         describe ();
-// write interface
-void                move (in Container    new_container,
+  {
+    DefinitionKind  kind;
+    any             value;
+  };
+  Description         describe ();
+  // write interface
+  void                move (in Container    new_container,
                             in Identifier   new_name,
                             in VersionSpec  new_version
-);
+  );
 };
 
 interface ModuleDef;
@@ -154,63 +163,63 @@ interface Container : IRObject
       in boolean                      exclude_inherited
   );
   struct Description
-{
-Contained                       contained_object;
-DefinitionKind                  kind;
-any                             value;
-};
-typedef sequence<Description> DescriptionSeq;
-DescriptionSeq describe_contents (
+  {
+  Contained                       contained_object;
+  DefinitionKind                  kind;
+  any                             value;
+  };
+  typedef sequence<Description> DescriptionSeq;
+  DescriptionSeq describe_contents (
     in DefinitionKind               limit_type,
     in boolean                      exclude_inherited,
     in long                         max_returned_objs
-);
-// write interface
-ModuleDef create_module (
+  );
+  // write interface
+  ModuleDef create_module (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version
-);
-ConstantDef create_constant (
+  );
+  ConstantDef create_constant (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version,
     in IDLType                      type,
     in any                          value
-);
-StructDef create_struct (
+  );
+  StructDef create_struct (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version,
     in StructMemberSeq              members
-);
-UnionDef create_union (
+  );
+  UnionDef create_union (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version,
     in IDLType                      discriminator_type,
     in UnionMemberSeq               members
-);
-EnumDef create_enum (
+  );
+  EnumDef create_enum (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version,
     in EnumMemberSeq                members
-);
-AliasDef create_alias (
+  );
+  AliasDef create_alias (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version,
     in IDLType                      original_type
-);
-InterfaceDef create_interface (
+  );
+  InterfaceDef create_interface (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version,
     in InterfaceDefSeq              base_interfaces,
     in boolean                      is_abstract
-);
-ValueDef create_value (
+  );
+  ValueDef create_value (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version,
@@ -221,61 +230,62 @@ ValueDef create_value (
     in ValueDefSeq                  abstract_base_values,
     in InterfaceDefSeq              supported_interfaces,
     in InitializerSeq               initializers
-);
-ValueBoxDef create_value_box (
+  );
+  ValueBoxDef create_value_box (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version,
     in IDLType                      original_type_def
-);
-ExceptionDef create_exception (
+  );
+  ExceptionDef create_exception (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version,
     in StructMemberSeq              members
-);
-NativeDef create_native (
+  );
+  NativeDef create_native (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version
-);
-AbstractInterfaceDef create_abstract_interface (
+  );
+  AbstractInterfaceDef create_abstract_interface (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version,
     in AbstractInterfaceDefSeq      base_interfaces
-);
-LocalInterfaceDef create_local_interface (
+  );
+  LocalInterfaceDef create_local_interface (
     in RepositoryId                 id,
     in Identifier                   name,
     in VersionSpec                  version,
     in InterfaceDefSeq              base_interfaces
-);
-ExtValueDef create_ext_value (
-in RepositoryId id,
-in Identifier name,
-in VersionSpec version,
-in boolean is_custom,
-in boolean is_abstract,
-in ValueDef base_value,
-in boolean is_truncatable,
-in ValueDefSeq abstract_base_values,
-in InterfaceDefSeq supported_interfaces,
-in ExtInitializerSeq initializers
-);
-  };
-  interface IDLType : IRObject
+  );
+  ExtValueDef create_ext_value (
+    in RepositoryId id,
+    in Identifier name,
+    in VersionSpec version,
+    in boolean is_custom,
+    in boolean is_abstract,
+    in ValueDef base_value,
+    in boolean is_truncatable,
+    in ValueDefSeq abstract_base_values,
+    in InterfaceDefSeq supported_interfaces,
+    in ExtInitializerSeq initializers
+  );
+};
+
+interface IDLType : IRObject
 {
-readonly attribute TypeCode     type;
+  readonly attribute TypeCode     type;
 };
 
 enum PrimitiveKind
 {
-pk_null,    pk_void,      pk_short,     pk_long,   pk_ushort, pk_ulong,
-pk_float,   pk_double,    pk_boolean,   pk_char,   pk_octet,
-pk_any,     pk_TypeCode,  pk_Principal, pk_string, pk_objref,
-pk_longlong,pk_ulonglong, pk_longdouble,
-pk_wchar,   pk_wstring,   pk_value_base
+  pk_null,    pk_void,      pk_short,     pk_long,   pk_ushort, pk_ulong,
+  pk_float,   pk_double,    pk_boolean,   pk_char,   pk_octet,
+  pk_any,     pk_TypeCode,  pk_Principal, pk_string, pk_objref,
+  pk_longlong,pk_ulonglong, pk_longdouble,
+  pk_wchar,   pk_wstring,   pk_value_base
 };
 
 interface Repository : Container
@@ -297,6 +307,7 @@ interface Repository : Container
                                        in short           scale
   );
 };
+
 interface ModuleDef : Container, Contained
 {};
 
@@ -523,15 +534,15 @@ interface InterfaceAttrExtension
   // read interface
   struct ExtFullInterfaceDescription
 {
-Identifier name;
-RepositoryId id;
-RepositoryId defined_in;
-VersionSpec version;
-OpDescriptionSeq operations;
-ExtAttrDescriptionSeq attributes;
-RepositoryIdSeq base_interfaces;
-TypeCode type;
-    };
+  Identifier name;
+  RepositoryId id;
+  RepositoryId defined_in;
+  VersionSpec version;
+  OpDescriptionSeq operations;
+  ExtAttrDescriptionSeq attributes;
+  RepositoryIdSeq base_interfaces;
+  TypeCode type;
+};
     ExtFullInterfaceDescription describe_ext_interface ();
     // write interface
     ExtAttributeDef create_ext_attribute (
@@ -545,13 +556,9 @@ in ExceptionDefSeq set_exceptions
     );
   };
 
-  interface ExtInterfaceDef : InterfaceDef, InterfaceAttrExtension {};
+interface ExtInterfaceDef : InterfaceDef, InterfaceAttrExtension {};
 
-  typedef short Visibility;
-  const Visibility PRIVATE_MEMBER = 0;
-  const Visibility PUBLIC_MEMBER = 1;
-
-  struct ValueMember
+struct ValueMember
 {
 Identifier                      name;
 RepositoryId                    id;

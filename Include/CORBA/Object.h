@@ -58,30 +58,7 @@ typedef ::CORBA::Internal::I_var <ServantBase> ServantBase_var;
 }
 
 namespace CORBA {
-
-class Object;
-#ifdef LEGACY_CORBA_CPP
-typedef Internal::I_ptr <Object> Object_ptr;
-typedef Internal::I_var <Object> Object_var;
-typedef Object_var& Object_out;
-#endif
-
-class ImplementationDef; // Not defined, unused
-#ifdef LEGACY_CORBA_CPP
-typedef Internal::I_ptr <ImplementationDef> ImplementationDef_ptr;
-typedef Internal::I_var <ImplementationDef> ImplementationDef_var;
-#endif
-
-typedef Object InterfaceDef; // TODO: Not defined yet
-#ifdef LEGACY_CORBA_CPP
-typedef Internal::I_ptr <InterfaceDef> InterfaceDef_ptr;
-typedef Internal::I_var <InterfaceDef> InterfaceDef_var;
-#endif
-
 namespace Internal {
-
-template <>
-struct Type <PortableServer::Servant>;
 
 template <class I>
 struct TypeObject : TypeItfMarshalable <I>
@@ -92,6 +69,51 @@ struct TypeObject : TypeItfMarshalable <I>
 	static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
 
 };
+
+}
+}
+
+#ifndef IDL_DECLARED_CORBA_InterfaceDef
+#define IDL_DECLARED_CORBA_InterfaceDef
+
+namespace CORBA {
+
+class InterfaceDef;
+extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_InterfaceDef;
+
+namespace Internal {
+
+template <>
+struct Type <InterfaceDef> : TypeObject <InterfaceDef>
+{
+
+	static I_ptr <TypeCode> type_code ()
+	{
+		return _tc_InterfaceDef;
+	}
+
+};
+
+}
+}
+
+#endif
+
+namespace CORBA {
+
+class Object;
+#ifdef LEGACY_CORBA_CPP
+typedef Internal::I_ptr <Object> Object_ptr;
+typedef Internal::I_var <Object> Object_var;
+typedef Object_var& Object_out;
+#endif
+
+typedef Internal::Interface ImplementationDef; // Not defined, unused
+
+namespace Internal {
+
+template <>
+struct Type <PortableServer::Servant>;
 
 template <>
 struct Type <Object> : TypeObject <Object>

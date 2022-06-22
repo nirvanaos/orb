@@ -45,7 +45,7 @@
 #include "TypeCodeValueBox.h"
 #include "TypeCodeNative.h"
 #include "TypeCodeArray.h"
-#include "ValueFactory.h"
+#include "ValueFactoryImpl.h"
 #include <Nirvana/OLF.h>
 
 namespace CORBA {
