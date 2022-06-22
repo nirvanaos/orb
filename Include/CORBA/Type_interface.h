@@ -463,9 +463,21 @@ template <>
 struct Type <Interface> : TypeItf <Interface>
 {};
 
+// For sequences and arrays map reference type to interface type
+
+#ifndef LEGACY_CORBA_CPP
+
 template <class I>
 struct Type <I_ref <I> > : public Type <I>
 {};
+
+#else
+
+template <class I>
+struct Type <I_var <I> > : public Type <I>
+{};
+
+#endif
 
 }
 }

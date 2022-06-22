@@ -57,13 +57,13 @@ public:
 };
 
 template <typename T> inline
-I_ptr <TypeCode> TypeSequence <T>::type_code () NIRVANA_NOEXCEPT
+I_ptr <TypeCode> Type <Sequence <T> >::type_code () NIRVANA_NOEXCEPT
 {
 	return TypeCodeSequence <T, 0>::_get_ptr ();
 }
 
 template <typename T, ULong bound> inline
-I_ptr <TypeCode> TypeBoundedSequence <T, bound>::type_code () NIRVANA_NOEXCEPT
+I_ptr <TypeCode> Type <BoundedSequence <T, bound> >::type_code () NIRVANA_NOEXCEPT
 {
 	return TypeCodeSequence <T, bound>::_get_ptr ();
 }

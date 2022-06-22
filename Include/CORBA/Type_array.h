@@ -43,6 +43,8 @@ struct ArrayTraits
   static const size_t size = 1;
 };
 
+template <class, class> class ValueBoxClient;
+
 #ifndef LEGACY_CORBA_CPP
 
 template <class I>
@@ -52,12 +54,26 @@ struct ArrayTraits <I_ref <I> >
 	static const size_t size = 1;
 };
 
+template <class S, class T>
+struct ArrayTraits <I_ref <ValueBoxClient <S, T> > >
+{
+	typedef S ElType;
+	static const size_t size = 1;
+};
+
 #else
 
 template <class I>
 struct ArrayTraits <I_var <I> >
 {
 	typedef I ElType;
+	static const size_t size = 1;
+};
+
+template <class S, class T>
+struct ArrayTraits <I_var <ValueBoxClient <S, T> > >
+{
+	typedef S ElType;
 	static const size_t size = 1;
 };
 
@@ -85,7 +101,8 @@ struct Type <std::array <T, bound> > :
 	typedef typename Base::Var Var;
 	typedef typename ArrayTraits <Var>::ElType ET;
 	typedef typename Base::ABI ABI;
-	typedef typename Type <ET>::ABI VT_ABI;
+	typedef typename Type <ET>::ABI ET_ABI;
+	typedef typename Type <ET>::Var ET_Var;
 
 	static const size_t total_size = ArrayTraits <Var>::size;
 	static const bool fixed_len = Type <ET>::fixed_len;
@@ -94,7 +111,7 @@ struct Type <std::array <T, bound> > :
 	static void check (const ABI& abi)
 	{
 		if (has_check) {
-			const VT_ABI* p = reinterpret_cast <const VT_ABI*> (abi.data ()), * end = p + total_size;
+			const ET_ABI* p = reinterpret_cast <const ET_ABI*> (abi.data ()), * end = p + total_size;
 			do {
 				Type <ET>::check (*(p++));
 			} while (p != end);
@@ -105,37 +122,37 @@ struct Type <std::array <T, bound> > :
 
 	static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq)
 	{
-		Type <ET>::marshal_in_a (reinterpret_cast <const ET*> (src->data ()), total_size * count, rq);
+		Type <ET>::marshal_in_a (reinterpret_cast <const ET_Var*> (src->data ()), total_size * count, rq);
 	}
 
 	static void marshal_in (const Var& src, IORequest_ptr rq)
 	{
-		Type <ET>::marshal_in_a (reinterpret_cast <const ET*> (src.data ()), total_size, rq);
+		Type <ET>::marshal_in_a (reinterpret_cast <const ET_Var*> (src.data ()), total_size, rq);
 	}
 
 	static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq)
 	{
-		Type <ET>::marshal_out_a (reinterpret_cast <ET*> (src->data ()), total_size * count, rq);
+		Type <ET>::marshal_out_a (reinterpret_cast <ET_Var*> (src->data ()), total_size * count, rq);
 	}
 
 	static void marshal_out (Var& src, IORequest_ptr rq)
 	{
-		Type <ET>::marshal_out_a (reinterpret_cast <ET*> (src.data ()), total_size, rq);
+		Type <ET>::marshal_out_a (reinterpret_cast <ET_Var*> (src.data ()), total_size, rq);
 	}
 
 	static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst)
 	{
-		Type <ET>::unmarshal_a (rq, total_size * count, reinterpret_cast <ET*> (dst->data ()));
+		Type <ET>::unmarshal_a (rq, total_size * count, reinterpret_cast <ET_Var*> (dst->data ()));
 	}
 
 	static void unmarshal (IORequest_ptr rq, Var& dst)
 	{
-		Type <ET>::unmarshal_a (rq, total_size, reinterpret_cast <ET*> (dst.data ()));
+		Type <ET>::unmarshal_a (rq, total_size, reinterpret_cast <ET_Var*> (dst.data ()));
 	}
 
 	static void byteswap (Var& var)
 	{
-		ET* p = reinterpret_cast <ET*> (var.data ()), *end = p + total_size;
+		ET_Var* p = reinterpret_cast <ET_Var*> (var.data ()), *end = p + total_size;
 		do {
 			Type <ET>::byteswap (*(p++));
 		} while (p != end);

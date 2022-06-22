@@ -232,6 +232,22 @@ struct TypeValueBox :
 
 };
 
+// For sequences and arrays map reference type to interface type
+
+#ifndef LEGACY_CORBA_CPP
+
+template <class S, class T>
+struct Type <I_ref <ValueBoxClient <S, T> > > : public Type <S>
+{};
+
+#else
+
+template <class S, class T>
+struct Type <I_var <ValueBoxClient <S, T> > > : public Type <S>
+{};
+
+#endif
+
 }
 }
 

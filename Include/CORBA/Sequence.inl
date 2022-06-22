@@ -35,7 +35,7 @@ namespace CORBA {
 namespace Internal {
 
 template <typename T>
-void TypeSequence <T>::marshal_in (const Var& src, IORequest_ptr rq)
+void Type <Sequence <T> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
 	if (Type <T>::fixed_len)
 		rq->marshal_seq (alignof (T_Var), sizeof (T_Var), src.size (), const_cast <T_Var*> (src.data ()), 0);
@@ -46,7 +46,7 @@ void TypeSequence <T>::marshal_in (const Var& src, IORequest_ptr rq)
 }
 
 template <typename T>
-void TypeSequence <T>::marshal_out (Var& src, IORequest_ptr rq)
+void Type <Sequence <T> >::marshal_out (Var& src, IORequest_ptr rq)
 {
 	if (Type <T>::fixed_len) {
 		rq->marshal_seq (alignof (T_Var), sizeof (T_Var), src.size (), src.data (), static_cast <ABI&> (src).allocated);
@@ -58,7 +58,7 @@ void TypeSequence <T>::marshal_out (Var& src, IORequest_ptr rq)
 }
 
 template <typename T>
-void TypeSequence <T>::unmarshal (IORequest_ptr rq, Var& dst)
+void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	Var tmp;
 	if (Type <T>::fixed_len) {
@@ -89,16 +89,16 @@ void TypeSequence <T>::unmarshal (IORequest_ptr rq, Var& dst)
 			}
 
 			if (abi.allocated)
-				static_cast <ABI&> (tmp) = abi;
+				static_cast <ABI&> (tmp)= abi;
 			else
-				tmp.assign ((const T_Var*)abi.ptr, (const T_Var*)abi.ptr + abi.size);
+				tmp.assign ((const T*)abi.ptr, (const T*)abi.ptr + abi.size);
 		}
 
 	} else {
 
 		size_t size = rq->unmarshal_seq_begin ();
 		if (size) {
-			size_t cb = sizeof (T) * size;
+			size_t cb = sizeof (T_Var) * size;
 			T_Var* p = (T_Var*)Nirvana::g_memory->allocate (nullptr, cb, 0);
 			size_t au = Nirvana::g_memory->query (p, Nirvana::Memory::QueryParam::ALLOCATION_UNIT);
 			cb = Nirvana::round_up (cb, au);
@@ -113,42 +113,41 @@ void TypeSequence <T>::unmarshal (IORequest_ptr rq, Var& dst)
 			static_cast <ABI&> (tmp).allocated = cb;
 		}
 	}
-
 	dst = std::move (tmp);
 }
 
 template <> inline
-void TypeSequence <Char>::marshal_in (const Var& src, IORequest_ptr rq)
+void Type <Sequence <Char> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
 	rq->marshal_char_seq (const_cast <Var&> (src), false);
 }
 
 template <> inline
-void TypeSequence <Char>::marshal_out (Var& src, IORequest_ptr rq)
+void Type <Sequence <Char> >::marshal_out (Var& src, IORequest_ptr rq)
 {
 	rq->marshal_char_seq (const_cast <Var&> (src), true);
 }
 
 template <> inline
-void TypeSequence <Char>::unmarshal (IORequest_ptr rq, Var& dst)
+void Type <Sequence <Char> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	rq->unmarshal_char_seq (dst);
 }
 
 template <> inline
-void TypeSequence <WChar>::marshal_in (const Var& src, IORequest_ptr rq)
+void Type <Sequence <WChar> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
 	rq->marshal_wchar_seq (const_cast <Var&> (src), false);
 }
 
 template <> inline
-void TypeSequence <WChar>::marshal_out (Var& src, IORequest_ptr rq)
+void Type <Sequence <WChar> >::marshal_out (Var& src, IORequest_ptr rq)
 {
 	rq->marshal_wchar_seq (const_cast <Var&> (src), true);
 }
 
 template <> inline
-void TypeSequence <WChar>::unmarshal (IORequest_ptr rq, Var& dst)
+void Type <Sequence <WChar> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	rq->unmarshal_wchar_seq (dst);
 }
