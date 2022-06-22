@@ -33,6 +33,9 @@
 #include "ABI.h"
 #include <Nirvana/array_bool.h>
 
+// Note that reference types mapped to interface types.
+// So Type <I_ref <I> > is the same as Type <I>.
+
 namespace CORBA {
 namespace Internal {
 
@@ -42,42 +45,6 @@ struct ArrayTraits
   typedef T ElType;
   static const size_t size = 1;
 };
-
-template <class, class> class ValueBoxClient;
-
-#ifndef LEGACY_CORBA_CPP
-
-template <class I>
-struct ArrayTraits <I_ref <I> >
-{
-	typedef I ElType;
-	static const size_t size = 1;
-};
-
-template <class S, class T>
-struct ArrayTraits <I_ref <ValueBoxClient <S, T> > >
-{
-	typedef S ElType;
-	static const size_t size = 1;
-};
-
-#else
-
-template <class I>
-struct ArrayTraits <I_var <I> >
-{
-	typedef I ElType;
-	static const size_t size = 1;
-};
-
-template <class S, class T>
-struct ArrayTraits <I_var <ValueBoxClient <S, T> > >
-{
-	typedef S ElType;
-	static const size_t size = 1;
-};
-
-#endif
 
 template <class T, size_t bound>
 struct ArrayTraits <std::array <T, bound> >

@@ -34,6 +34,9 @@
 namespace CORBA {
 namespace Internal {
 
+// Note that reference types mapped to interface types.
+// So Type <I_ref <I> > is the same as Type <I>.
+
 template <typename T>
 struct Type <Sequence <T> > :
 	public TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check>
