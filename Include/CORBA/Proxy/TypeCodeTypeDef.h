@@ -45,9 +45,9 @@ class TypeCodeTypeDefImpl :
 	typedef TypeCodeStatic <TypeCodeTypeDef <ref>, TypeCodeTK <TCKind::tk_alias>,
 		TypeCodeOps <void> > Base;
 public:
-	using TypeCodeContentType <Content>::_content_type;
+	using TypeCodeContentType <Content>::_s_content_type;
 	typedef TypeCodeName <TypeCodeTypeDef <ref> > Name;
-	using Name::_name;
+	using Name::_s_name;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
@@ -59,57 +59,57 @@ public:
 		return content ()->equivalent (other);
 	}
 
-	static ABI <String> _id (Bridge <TypeCode>* _b, Interface* _env)
+	static ABI <String> _s_id (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return const_string_ret_p (ref->name);
 	}
 
-	static size_t _n_size (Bridge <TypeCode>* _b, Interface* _env)
+	static size_t _s_n_size (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return (content ()->_epv ().epv.n_size) (_b, _env);
 	}
 
-	static Type <Boolean>::ABI_ret _n_fixed_len (Bridge <TypeCode>* _b,
+	static Type <Boolean>::ABI_ret _s_n_fixed_len (Bridge <TypeCode>* _b,
 		Interface* _env)
 	{
 		return (content ()->_epv ().epv.n_fixed_len) (_b, _env);
 	}
 
-	static void _n_construct (Bridge <TypeCode>* _b, void* p, Interface* _env)
+	static void _s_n_construct (Bridge <TypeCode>* _b, void* p, Interface* _env)
 	{
 		(content ()->_epv ().epv.n_construct) (_b, p, _env);
 	}
 
-	static void _n_destruct (Bridge <TypeCode>* _b, void* p, Interface* _env)
+	static void _s_n_destruct (Bridge <TypeCode>* _b, void* p, Interface* _env)
 	{
 		(content ()->_epv ().epv.n_destruct) (_b, p, _env);
 	}
 
-	static void _n_copy (Bridge <TypeCode>* _b, void* dst, const void* src,
+	static void _s_n_copy (Bridge <TypeCode>* _b, void* dst, const void* src,
 		Interface* _env)
 	{
 		(content ()->_epv ().epv.n_copy) (_b, dst, src, _env);
 	}
 
-	static void _n_move (Bridge <TypeCode>* _b, void* dst, void* src,
+	static void _s_n_move (Bridge <TypeCode>* _b, void* dst, void* src,
 		Interface* _env)
 	{
 		(content ()->_epv ().epv.n_move) (_b, dst, src, _env);
 	}
 
-	static void _n_marshal_in (Bridge <TypeCode>* _b, const void* src, size_t size,
+	static void _s_n_marshal_in (Bridge <TypeCode>* _b, const void* src, size_t size,
 		Interface* call, Interface* _env)
 	{
 		(content ()->_epv ().epv.n_marshal_in) (_b, src, size, call, _env);
 	}
 
-	static void _n_marshal_out (Bridge <TypeCode>* _b, void* src, size_t size,
+	static void _s_n_marshal_out (Bridge <TypeCode>* _b, void* src, size_t size,
 		Interface* call, Interface* _env)
 	{
 		(content ()->_epv ().epv.n_marshal_out) (_b, src, size, call, _env);
 	}
 
-	static void _n_unmarshal (Bridge <TypeCode>* _b, Interface* call, size_t size,
+	static void _s_n_unmarshal (Bridge <TypeCode>* _b, Interface* call, size_t size,
 		void* dst, Interface* _env)
 	{
 		(content ()->_epv ().epv.n_unmarshal) (_b, call, size, dst, _env);

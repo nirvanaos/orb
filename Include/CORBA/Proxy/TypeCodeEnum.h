@@ -43,10 +43,10 @@ class TypeCodeEnum :
 	typedef TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <TCKind::tk_enum, E>,
 		TypeCodeOps <E> > Base;
 public:
-	using TypeCodeMemberCount <Type <E>::count_>::_member_count;
-	using TypeCodeName <E>::_name;
+	using TypeCodeMemberCount <Type <E>::count_>::_s_member_count;
+	using TypeCodeName <E>::_s_name;
 
-	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index,
+	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env)
 	{
 		if (index >= Type <E>::count_) {

@@ -55,39 +55,39 @@ public:
 			VM_ABSTRACT, nullptr, nullptr, 0);
 	}
 
-	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env) NIRVANA_NOEXCEPT
+	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) NIRVANA_NOEXCEPT
 	{
 		return 0;
 	}
 
-	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index,
+	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env) NIRVANA_NOEXCEPT
 	{
 		set_Bounds (_env);
 		return Type <String>::ret ();
 	}
 
-	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index,
+	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env) NIRVANA_NOEXCEPT
 	{
 		set_Bounds (_env);
 		return nullptr;
 	}
 
-	static Visibility _member_visibility (Bridge <TypeCode>* _b, ULong index,
+	static Visibility _s_member_visibility (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env) NIRVANA_NOEXCEPT
 	{
 		set_Bounds (_env);
 		return 0;
 	}
 
-	static ValueModifier _type_modifier (Bridge <TypeCode>* _b, Interface* _env)
+	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env)
 		NIRVANA_NOEXCEPT
 	{
 		return VM_ABSTRACT;
 	}
 
-	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
+	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
 		NIRVANA_NOEXCEPT
 	{
 		return nullptr;
@@ -108,12 +108,12 @@ public:
 		return countof (members_);
 	}
 
-	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env)
+	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return member_count ();
 	}
 
-	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index,
+	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env)
 	{
 		if (index >= countof (members_)) {
@@ -123,7 +123,7 @@ public:
 			return const_string_ret_p (members_ [index].name);
 	}
 
-	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index,
+	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env)
 	{
 		if (index >= countof (members_)) {
@@ -135,7 +135,7 @@ public:
 		}
 	}
 
-	static Visibility _member_visibility (Bridge <TypeCode>*, ULong index,
+	static Visibility _s_member_visibility (Bridge <TypeCode>*, ULong index,
 		Interface* _env)
 	{
 		if (index >= countof (members_)) {
@@ -153,7 +153,7 @@ class TypeCodeStateMembersEmpty :
 	public TypeCodeMemberCount <0>
 {
 public:
-	using TypeCodeMemberCount <0>::_member_count;
+	using TypeCodeMemberCount <0>::_s_member_count;
 
 	static const StateMember* members () NIRVANA_NOEXCEPT
 	{
@@ -165,21 +165,21 @@ public:
 		return 0;
 	}
 
-	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index,
+	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env)
 	{
 		set_Bounds (_env);
 		return Type <String>::ret ();
 	}
 
-	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index,
+	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env)
 	{
 		set_Bounds (_env);
 		return nullptr;
 	}
 
-	static Visibility _member_visibility (Bridge <TypeCode>*, ULong index,
+	static Visibility _s_member_visibility (Bridge <TypeCode>*, ULong index,
 		Interface* _env)
 	{
 		set_Bounds (_env);
@@ -202,13 +202,13 @@ class TypeCodeValueConcrete :
 		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> > Base;
 public:
 	typedef TypeCodeName <I> Name;
-	using Name::_name;
+	using Name::_s_name;
 
 	typedef TypeCodeStateMembersOptional <I, members> Members;
-	using Members::_member_count;
-	using Members::_member_name;
-	using Members::_member_type;
-	using Members::_member_visibility;
+	using Members::_s_member_count;
+	using Members::_s_member_name;
+	using Members::_s_member_type;
+	using Members::_s_member_visibility;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
@@ -222,12 +222,12 @@ public:
 			vm, base, Members::members (), Members::member_count (), other);
 	}
 
-	static ValueModifier _type_modifier (Bridge <TypeCode>* _b, Interface* _env)
+	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return vm;
 	}
 
-	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
+	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		if (!base)
 			return nullptr;

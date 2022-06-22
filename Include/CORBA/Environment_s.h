@@ -41,7 +41,7 @@ public:
 	static const typename Bridge < ::CORBA::Environment>::EPV epv_;
 
 protected:
-	static void _exception_set (Bridge < ::CORBA::Environment>* obj, Short code, const char* rep_id, void* param)
+	static void _s_exception_set (Bridge < ::CORBA::Environment>* obj, Short code, const char* rep_id, void* param)
 	{
 		try {
 			S::_implementation (obj).exception_set (code, rep_id, param);
@@ -49,7 +49,7 @@ protected:
 		}
 	}
 
-	static const Char* _exception_id (Bridge < ::CORBA::Environment>* obj)
+	static const Char* _s_exception_id (Bridge < ::CORBA::Environment>* obj)
 	{
 		try {
 			return S::_implementation (obj).exception_id ();
@@ -58,7 +58,7 @@ protected:
 		return 0;
 	}
 
-	static const void* _exception_value (Bridge < ::CORBA::Environment>* obj)
+	static const void* _s_exception_value (Bridge < ::CORBA::Environment>* obj)
 	{
 		try {
 			return S::_implementation (obj).exception_value ();
@@ -67,7 +67,7 @@ protected:
 		return 0;
 	}
 
-	static void _exception_free (Bridge < ::CORBA::Environment>* obj)
+	static void _s_exception_free (Bridge < ::CORBA::Environment>* obj)
 	{
 		try {
 			S::_implementation (obj).exception_free ();
@@ -84,10 +84,10 @@ const Bridge < ::CORBA::Environment>::EPV Skeleton <S, ::CORBA::Environment>::ep
 		S::template __release < ::CORBA::Environment>
 	},
 	{ // epv
-		S::_exception_set,
-		S::_exception_id,
-		S::_exception_value,
-		S::_exception_free
+		S::_s_exception_set,
+		S::_s_exception_id,
+		S::_s_exception_value,
+		S::_s_exception_free
 	}
 };
 

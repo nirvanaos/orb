@@ -44,10 +44,10 @@ class TypeCodeStruct :
 		TypeCodeWithId <TCKind::tk_struct, S>, TypeCodeOps <S> > Base;
 	typedef TypeCodeMembers <S> Members;
 public:
-	using TypeCodeName <S>::_name;
-	using TypeCodeMembers <S>::_member_count;
-	using TypeCodeMembers <S>::_member_name;
-	using TypeCodeMembers <S>::_member_type;
+	using TypeCodeName <S>::_s_name;
+	using Members::_s_member_count;
+	using Members::_s_member_name;
+	using Members::_s_member_type;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{

@@ -40,7 +40,7 @@ public:
 	static const typename Bridge <ValueFactoryBase>::EPV epv_;
 
 protected:
-	static Interface* _create_for_unmarshal (Bridge <ValueFactoryBase>* _b, Interface* _env)
+	static Interface* _s_create_for_unmarshal (Bridge <ValueFactoryBase>* _b, Interface* _env)
 	{
 		try {
 			return Type <ValueBase>::ret (S::_implementation (_b).create_for_unmarshal ());
@@ -74,7 +74,7 @@ const Bridge <ValueFactoryBase>::EPV Skeleton <S, ValueFactoryBase>::epv_ = {
 		S::template __release <ValueFactoryBase>
 	},
 	{ // epv
-		S::_create_for_unmarshal,
+		S::_s_create_for_unmarshal,
 		S::__query_factory
 	}
 };

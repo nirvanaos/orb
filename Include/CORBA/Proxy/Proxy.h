@@ -71,7 +71,7 @@ public:
 	// ProxyFactory
 	static const InterfaceMetadata metadata_;
 
-	static InterfaceMetadataPtr __get_metadata (Bridge <ProxyFactory>* obj, 
+	static InterfaceMetadataPtr _s_get_metadata (Bridge <ProxyFactory>* obj, 
 		Interface* env)
 	{
 		return &metadata_;

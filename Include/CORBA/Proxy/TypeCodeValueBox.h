@@ -44,8 +44,8 @@ class TypeCodeValueBox :
 	typedef TypeCodeContentType <typename I::BoxedType> Content;
 	typedef TypeCodeName <I> Name;
 public:
-	using Name::_name;
-	using Content::_content_type;
+	using Name::_s_name;
+	using Content::_s_content_type;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{

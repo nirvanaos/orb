@@ -43,11 +43,11 @@ class TypeCodeException :
 		TypeCodeWithId <TCKind::tk_except, E>, TypeCodeOps <typename E::_Data> > Base;
 	typedef TypeCodeMembersOptional <E, members> Members;
 public:
-	using Members::_member_count;
-	using Members::_member_name;
-	using Members::_member_type;
+	using Members::_s_member_count;
+	using Members::_s_member_name;
+	using Members::_s_member_type;
 
-	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return const_string_ret_p (E::__name ());
 	}

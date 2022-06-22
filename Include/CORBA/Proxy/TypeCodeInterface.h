@@ -39,7 +39,7 @@ class TypeCodeInterface :
 {
 	typedef TypeCodeStatic <TypeCodeInterface <I>, TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> > Base;
 public:
-	using TypeCodeName <I>::_name;
+	using TypeCodeName <I>::_s_name;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{

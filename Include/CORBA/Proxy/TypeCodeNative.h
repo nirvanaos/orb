@@ -39,7 +39,7 @@ class TypeCodeNative :
 {
 	typedef TypeCodeStatic <TypeCodeNative <T>, TypeCodeWithId <TCKind::tk_native, T>, TypeCodeOps <void> > Base;
 public:
-	using TypeCodeName <T>::_name;
+	using TypeCodeName <T>::_s_name;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{

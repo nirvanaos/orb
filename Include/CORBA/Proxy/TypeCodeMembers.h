@@ -48,12 +48,12 @@ public:
 		return countof (members_);
 	}
 
-	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env)
+	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return member_count ();
 	}
 
-	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>*_b, ULong index,
+	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>*_b, ULong index,
 		Interface * _env)
 	{
 		if (index >= countof (members_)) {
@@ -63,7 +63,7 @@ public:
 			return const_string_ret_p (members_ [index].name);
 	}
 
-	static Interface* _member_type (Bridge <TypeCode>*_b, ULong index,
+	static Interface* _s_member_type (Bridge <TypeCode>*_b, ULong index,
 		Interface * _env)
 	{
 		if (index >= countof (members_)) {
@@ -83,7 +83,7 @@ class TypeCodeMembersEmpty :
 	public TypeCodeMemberCount <0>
 {
 public:
-	using TypeCodeMemberCount <0>::_member_count;
+	using TypeCodeMemberCount <0>::_s_member_count;
 
 	static const Parameter* members () NIRVANA_NOEXCEPT
 	{
@@ -95,14 +95,14 @@ public:
 		return 0;
 	}
 
-	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index,
+	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env)
 	{
 		set_Bounds (_env);
 		return Type <String>::ret ();
 	}
 
-	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index,
+	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env)
 	{
 		set_Bounds (_env);

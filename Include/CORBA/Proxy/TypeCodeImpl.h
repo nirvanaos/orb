@@ -62,21 +62,21 @@ struct StateMember
 class TypeCodeBase
 {
 public:
-	static Type <String>::ABI_ret _id (Bridge <TypeCode>* _b, Interface* _env);
-	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env);
-	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env);
-	static Type <String>::ABI_ret _member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env);
-	static Interface* _member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env);
-	static Type <Any>::ABI_ret _member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env);
-	static Interface* _discriminator_type (Bridge <TypeCode>* _b, Interface* _env);
-	static Long _default_index (Bridge <TypeCode>* _b, Interface* _env);
-	static ULong _length (Bridge <TypeCode>* _b, Interface* _env);
-	static Interface* _content_type (Bridge <TypeCode>* _b, Interface* _env);
-	static UShort _fixed_digits (Bridge <TypeCode>* _b, Interface* _env);
-	static Short _fixed_scale (Bridge <TypeCode>* _b, Interface* _env);
-	static Visibility _member_visibility (Bridge <TypeCode>* _b, ULong index, Interface* _env);
-	static ValueModifier _type_modifier (Bridge <TypeCode>* _b, Interface* _env);
-	static Interface* _concrete_base_type (Bridge <TypeCode>* _b, Interface* _env);
+	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env);
+	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env);
+	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env);
+	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env);
+	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env);
+	static Type <Any>::ABI_ret _s_member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env);
+	static Interface* _s_discriminator_type (Bridge <TypeCode>* _b, Interface* _env);
+	static Long _s_default_index (Bridge <TypeCode>* _b, Interface* _env);
+	static ULong _s_length (Bridge <TypeCode>* _b, Interface* _env);
+	static Interface* _s_content_type (Bridge <TypeCode>* _b, Interface* _env);
+	static UShort _s_fixed_digits (Bridge <TypeCode>* _b, Interface* _env);
+	static Short _s_fixed_scale (Bridge <TypeCode>* _b, Interface* _env);
+	static Visibility _s_member_visibility (Bridge <TypeCode>* _b, ULong index, Interface* _env);
+	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env);
+	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env);
 
 protected:
 	static I_ptr <TypeCode> dereference_alias (I_ptr <TypeCode> tc);
@@ -192,7 +192,7 @@ public:
 		return TypeCodeBase::equivalent (tk_, other);
 	}
 
-	static Type <TCKind>::ABI_ret _kind (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <TCKind>::ABI_ret _s_kind (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return (ABI_enum)tk_;
 	}
@@ -215,7 +215,7 @@ public:
 		return TypeCodeBase::equivalent (tk, RepositoryType::id, other);
 	}
 
-	static ABI <String> _id (Bridge <TypeCode>* _b, Interface* _env)
+	static ABI <String> _s_id (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return const_string_ret (RepositoryType::id);
 	}
@@ -225,7 +225,7 @@ template <class T>
 class TypeCodeName
 {
 public:
-	static Type <String>::ABI_ret _name (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return const_string_ret (name_);
 	}
@@ -242,12 +242,12 @@ public:
 	typedef typename std::conditional <std::is_same <T, Boolean>::value,
 		Type <Boolean>::ABI, typename Type <T>::Var>::type Var;
 
-	static size_t _n_size (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_size (Bridge <TypeCode>*, Interface*)
 	{
 		return sizeof (Var);
 	}
 
-	static Type <Boolean>::ABI_ret _n_fixed_len (Bridge <TypeCode>*, Interface*)
+	static Type <Boolean>::ABI_ret _s_n_fixed_len (Bridge <TypeCode>*, Interface*)
 	{
 		return Type <T>::fixed_len;
 	}
@@ -313,37 +313,37 @@ class TypeCodeOps <void>
 public:
 	typedef void Valtype;
 
-	static size_t _n_size (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_size (Bridge <TypeCode>*, Interface*)
 	{
 		return 0;
 	}
 
-	static Type <Boolean>::ABI_ret _n_fixed_len (Bridge <TypeCode>*, Interface*)
+	static Type <Boolean>::ABI_ret _s_n_fixed_len (Bridge <TypeCode>*, Interface*)
 	{
 		return true;
 	}
 
-	static void _n_construct (Bridge <TypeCode>*, void*, Interface*)
+	static void _s_n_construct (Bridge <TypeCode>*, void*, Interface*)
 	{}
 
-	static void _n_destruct (Bridge <TypeCode>*, void*, Interface*)
+	static void _s_n_destruct (Bridge <TypeCode>*, void*, Interface*)
 	{}
 
-	static void _n_copy (Bridge <TypeCode>*, void*, const void*, Interface*)
+	static void _s_n_copy (Bridge <TypeCode>*, void*, const void*, Interface*)
 	{}
 
-	static void _n_move (Bridge <TypeCode>*, void*, void*, Interface*)
+	static void _s_n_move (Bridge <TypeCode>*, void*, void*, Interface*)
 	{}
 
-	static void _n_marshal_in (Bridge <TypeCode>*, const void*, size_t,
+	static void _s_n_marshal_in (Bridge <TypeCode>*, const void*, size_t,
 		Interface*, Interface*)
 	{}
 
-	static void _n_marshal_out (Bridge <TypeCode>*, void*, size_t,
+	static void _s_n_marshal_out (Bridge <TypeCode>*, void*, size_t,
 		Interface*, Interface*)
 	{}
 
-	static void _n_unmarshal (Bridge <TypeCode>*, Interface*, size_t,
+	static void _s_n_unmarshal (Bridge <TypeCode>*, Interface*, size_t,
 		void*, Interface*)
 	{}
 };
@@ -353,25 +353,25 @@ class TypeCodeImplBase :
 	public S, public Impl, public Ops
 {
 public:
-	using Impl::_kind;
-	using Impl::_id;
-	using Impl::_name;
-	using Impl::_member_count;
-	using Impl::_member_name;
-	using Impl::_member_type;
-	using Impl::_member_label;
-	using Impl::_discriminator_type;
-	using Impl::_default_index;
-	using Impl::_length;
-	using Impl::_content_type;
-	using Impl::_fixed_digits;
-	using Impl::_fixed_scale;
-	using Impl::_member_visibility;
-	using Impl::_type_modifier;
-	using Impl::_concrete_base_type;
+	using Impl::_s_kind;
+	using Impl::_s_id;
+	using Impl::_s_name;
+	using Impl::_s_member_count;
+	using Impl::_s_member_name;
+	using Impl::_s_member_type;
+	using Impl::_s_member_label;
+	using Impl::_s_discriminator_type;
+	using Impl::_s_default_index;
+	using Impl::_s_length;
+	using Impl::_s_content_type;
+	using Impl::_s_fixed_digits;
+	using Impl::_s_fixed_scale;
+	using Impl::_s_member_visibility;
+	using Impl::_s_type_modifier;
+	using Impl::_s_concrete_base_type;
 
-	using Ops::_n_size;
-	using Ops::_n_fixed_len;
+	using Ops::_s_n_size;
+	using Ops::_s_n_fixed_len;
 
 	// The get_compact_typecode operation strips out all optional name and member
 	// name fields, but it leaves all alias typecodes intact.
@@ -392,13 +392,13 @@ class TypeCodeImpl <S, Impl, TypeCodeOps <void> > :
 	public TypeCodeImplBase <S, Impl, TypeCodeOps <void> >
 {
 public:
-	using TypeCodeOps <void>::_n_construct;
-	using TypeCodeOps <void>::_n_destruct;
-	using TypeCodeOps <void>::_n_copy;
-	using TypeCodeOps <void>::_n_move;
-	using TypeCodeOps <void>::_n_marshal_in;
-	using TypeCodeOps <void>::_n_marshal_out;
-	using TypeCodeOps <void>::_n_unmarshal;
+	using TypeCodeOps <void>::_s_n_construct;
+	using TypeCodeOps <void>::_s_n_destruct;
+	using TypeCodeOps <void>::_s_n_copy;
+	using TypeCodeOps <void>::_s_n_move;
+	using TypeCodeOps <void>::_s_n_marshal_in;
+	using TypeCodeOps <void>::_s_n_marshal_out;
+	using TypeCodeOps <void>::_s_n_unmarshal;
 };
 
 template <class S, class Impl, class Ops>
@@ -411,7 +411,7 @@ template <ULong bound = 0>
 class TypeCodeLength
 {
 public:
-	static ULong _length (Bridge <TypeCode>* _b, Interface* _env)
+	static ULong _s_length (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return bound;
 	}
@@ -422,7 +422,7 @@ template <class Content>
 class TypeCodeContentType
 {
 public:
-	static Interface* _content_type (Bridge <TypeCode>* _b, Interface* _env)
+	static Interface* _s_content_type (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		Interface* tc = &ptr ();
 		return (tc->_epv ().duplicate) (tc, _env);
@@ -442,7 +442,7 @@ class TypeCodeMemberCount
 public:
 	static const ULong member_count_ = member_count;
 
-	static ULong _member_count (Bridge <TypeCode>* _b, Interface* _env)
+	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return member_count_;
 	}

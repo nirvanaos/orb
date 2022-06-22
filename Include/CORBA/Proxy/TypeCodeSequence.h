@@ -42,8 +42,8 @@ class TypeCodeSequence :
 {
 	typedef TypeCodeContentType <T> ContentType;
 public:
-	using TypeCodeLength <bound>::_length;
-	using ContentType::_content_type;
+	using TypeCodeLength <bound>::_s_length;
+	using ContentType::_s_content_type;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{

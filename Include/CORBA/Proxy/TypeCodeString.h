@@ -42,7 +42,7 @@ class TypeCodeStringBase :
 	public TypeCodeLength <bound>
 {
 public:
-	using TypeCodeLength <bound>::_length;
+	using TypeCodeLength <bound>::_s_length;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
