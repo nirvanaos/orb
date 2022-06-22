@@ -36,14 +36,11 @@ template <class T> class allocator;
 namespace CORBA {
 namespace Internal {
 
-template <typename T>
-using Sequence = std::vector <T, std::allocator <T> >;
-
 /// Sequence ABI.
 /// 
 /// \tparam The sequence element type.
 template <class T>
-struct alignas (sizeof (void*)) ABI <Sequence <T> >
+struct alignas (sizeof (void*)) ABI <std::vector <T, std::allocator <T> > >
 {
 	void reset () NIRVANA_NOEXCEPT
 	{

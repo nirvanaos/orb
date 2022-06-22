@@ -43,6 +43,26 @@ struct ArrayTraits
   static const size_t size = 1;
 };
 
+#ifndef LEGACY_CORBA_CPP
+
+template <class I>
+struct ArrayTraits <I_ref <I> >
+{
+	typedef I ElType;
+	static const size_t size = 1;
+};
+
+#else
+
+template <class I>
+struct ArrayTraits <I_var <I> >
+{
+	typedef I ElType;
+	static const size_t size = 1;
+};
+
+#endif
+
 template <class T, size_t bound>
 struct ArrayTraits <std::array <T, bound> >
 {

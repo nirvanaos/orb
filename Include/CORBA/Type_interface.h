@@ -297,7 +297,6 @@ struct TypeItfBase
 	typedef I_ptr <I> C_ptr;
 #ifdef LEGACY_CORBA_CPP
 	typedef I_var <I> Var;
-	typedef I_var <I> C_var;
 	typedef I_ptr <I> VRet;
 #else
 	typedef I_ref <I> Var;
@@ -441,10 +440,6 @@ struct TypeItf <Interface> : TypeItfBase <Interface>
 	typedef Interface** ABI_out;
 	typedef Interface* ABI_ret;
 	typedef Interface* ABI_VT_ret;
-
-#ifdef LEGACY_CORBA_CPP
-	typedef I_var <Interface> C_var;
-#endif
 
 	typedef I_in <Interface> C_in;
 	typedef I_out <Interface> C_out;

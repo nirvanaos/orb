@@ -33,6 +33,7 @@
 #include "String.h"
 #include <Nirvana/basic_string.h>
 //#include "Fixed.h"
+#include "T_var.h"
 
 namespace CORBA {
 
@@ -301,7 +302,7 @@ struct Type <Any> : public TypeVarLen <Any, true>
 }
 
 #ifdef LEGACY_CORBA_CPP
-typedef Internal::Type <Any>::C_var Any_var;
+typedef Internal::T_var <Any> Any_var;
 #endif
 
 void operator <<= (Any&, Short);

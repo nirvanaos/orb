@@ -34,12 +34,76 @@
 namespace CORBA {
 namespace Internal {
 
+/// Sequence type.
+/// \tparam T Element type.
 template <typename T>
-struct Type <Sequence <T> > :
-	public TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check>
+using Sequence = std::vector <T, std::allocator <T> >;
+
+/// Bounded sequence type.
+/// 
+/// \tparam T Element type.
+/// \tparam bound The bound.
+template <typename T, ULong bound>
+class BoundedSequence : public Sequence <T>
 {
-	typedef TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check> Base;
+	typedef Sequence <T> Base;
+public:
+	/// The sequence bound.
+	static const ULong bound_ = bound;
+
+	// Implementations of the mapping are
+	// under no obligation to prevent assignment of a sequence to a bounded sequence type if the sequence exceeds the bound.
+	// Implementations must at run time detect attempts to pass a sequence that exceeds the bound as a parameter across an
+	// interface.
+
+	// Constructors
+
+	BoundedSequence ()
+	{}
+
+	explicit BoundedSequence (size_t count) :
+		Base (count)
+	{}
+
+#ifndef NIRVANA_C11
+	explicit
+#endif
+		BoundedSequence (size_t count, const T& v) :
+		Base (count, v)
+	{}
+
+	BoundedSequence (const Base& src) :
+		Base (src)
+	{}
+
+	BoundedSequence (Base&& src) NIRVANA_NOEXCEPT :
+		Base (std::move (src))
+	{}
+
+	template <class InputIterator
+#ifdef NIRVANA_C11
+		, typename = ::Nirvana::_RequireInputIter <InputIterator>
+#endif
+	>
+		BoundedSequence (InputIterator b, InputIterator e) :
+		Base (b, e)
+	{}
+
+#ifdef NIRVANA_C11
+	BoundedSequence (std::initializer_list <T> ilist) :
+		Base (ilist)
+	{}
+#endif
+};
+
+/// Sequence type traits
+template <typename T>
+struct TypeSequence :
+	public TypeVarLen <std::vector <typename Type <T>::Var>, CHECK_SEQUENCES || Type <T>::has_check>
+{
+	typedef TypeVarLen <std::vector <typename Type <T>::Var>, CHECK_SEQUENCES || Type <T>::has_check> Base;
 	typedef typename Type <T>::ABI T_ABI;
+	typedef typename Type <T>::Var T_Var;
 	typedef typename Base::Var Var;
 	typedef typename Base::ABI ABI;
 	typedef typename Base::ABI_in ABI_in;
@@ -120,11 +184,11 @@ struct Type <Sequence <T> > :
 };
 
 template <typename T>
-void Type <Sequence <T> >::check_ABI (const ABI& v)
+void TypeSequence <T>::check_ABI (const ABI& v)
 {
 	// Do some check
 	if (CHECK_SEQUENCES) {
-		const T* p = v.ptr;
+		const void* p = v.ptr;
 		if (p)
 			check_pointer (p);
 		size_t cnt = v.size;
@@ -134,7 +198,7 @@ void Type <Sequence <T> >::check_ABI (const ABI& v)
 }
 
 template <typename T>
-void Type <Sequence <T> >::check (const ABI& v)
+void TypeSequence <T>::check (const ABI& v)
 {
 	check_ABI (v);
 
@@ -144,65 +208,29 @@ void Type <Sequence <T> >::check (const ABI& v)
 	}
 }
 
-/// Bounded sequence type.
-/// 
-/// \tparam T Element type.
-/// \tparam bound The bound.
-template <typename T, ULong bound>
-class BoundedSequence : public Sequence <T>
-{
-	typedef Sequence <T> Base;
-public:
-	/// The sequence bound.
-	static const ULong bound_ = bound;
+template <typename T>
+struct Type <Sequence <T> > :
+	public TypeSequence <T>
+{};
 
-	// Implementations of the mapping are
-	// under no obligation to prevent assignment of a sequence to a bounded sequence type if the sequence exceeds the bound.
-	// Implementations must at run time detect attempts to pass a sequence that exceeds the bound as a parameter across an
-	// interface.
+#ifndef LEGACY_CORBA_CPP
 
-	// Constructors
+template <class I>
+struct Type <Sequence <I_ref <I> > > :
+	public TypeSequence <I>
+{};
 
-	BoundedSequence ()
-	{}
+#else
 
-	explicit BoundedSequence (size_t count) :
-		Base (count)
-	{}
+template <class I>
+struct Type <Sequence <I_var <I> > > :
+	public TypeSequence <I>
+{};
 
-#ifndef NIRVANA_C11
-	explicit
 #endif
-	BoundedSequence (size_t count, const T& v) :
-		Base (count, v)
-	{}
-
-	BoundedSequence (const Base& src) :
-		Base (src)
-	{}
-
-	BoundedSequence (Base&& src) NIRVANA_NOEXCEPT :
-		Base (std::move (src))
-	{}
-
-	template <class InputIterator
-#ifdef NIRVANA_C11
-		, typename = ::Nirvana::_RequireInputIter <InputIterator>
-#endif
-	>
-	BoundedSequence (InputIterator b, InputIterator e) :
-		Base (b, e)
-	{}
-
-#ifdef NIRVANA_C11
-	BoundedSequence (std::initializer_list <T> ilist) :
-		Base (ilist)
-	{}
-#endif
-};
 
 template <class T, ULong bound>
-struct Type <BoundedSequence <T, bound> > :
+struct TypeBoundedSequence :
 	public Type <Sequence <T> >
 {
 	typedef Type <Sequence <T> > Base;
@@ -228,6 +256,27 @@ struct Type <BoundedSequence <T, bound> > :
 			Nirvana::throw_BAD_PARAM ();
 	}
 };
+
+template <typename T, uint32_t bound>
+struct Type <BoundedSequence <T, bound> > :
+	public TypeBoundedSequence <T, bound>
+{};
+
+#ifndef LEGACY_CORBA_CPP
+
+template <class I, uint32_t bound>
+struct Type <BoundedSequence <I_ref <I>, bound> > :
+	public TypeBoundedSequence <I, bound>
+{};
+
+#else
+
+template <class I, uint32_t bound>
+struct Type <BoundedSequence <I_var <I>, bound> > :
+	public TypeBoundedSequence <I, bound>
+{};
+
+#endif
 
 }
 } // namespace CORBA

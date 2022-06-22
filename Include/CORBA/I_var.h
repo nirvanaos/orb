@@ -63,7 +63,7 @@ public:
 		Base (src)
 	{}
 
-	I_var (const I_var <I>& src) :
+	I_var (const I_var& src) :
 		Base (src)
 	{}
 
@@ -71,7 +71,7 @@ public:
 		Base (std::move (src))
 	{}
 
-	I_var (I_var <I>&& src) NIRVANA_NOEXCEPT :
+	I_var (I_var&& src) NIRVANA_NOEXCEPT :
 		Base (std::move (src))
 	{}
 

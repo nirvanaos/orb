@@ -77,7 +77,6 @@ struct TypeServerless
 #endif
 	typedef const Var& ConstRef;
 	typedef ConstRef C_in;
-	typedef Var C_var;
 	typedef servant_out <T> C_out;
 	typedef Var& C_inout;
 };

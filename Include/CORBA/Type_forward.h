@@ -59,7 +59,6 @@ template <> struct Type <T>
   typedef const ABI* ABI_VT_ret; // Valuetype attributes returned by const reference
 
   // Client-side types
-  class C_var; // This is for T_var backward-compatible types. Not used in modern code.
   class C_in;
   class C_out;
   class C_inout;
