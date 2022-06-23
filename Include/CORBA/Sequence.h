@@ -34,8 +34,8 @@
 namespace CORBA {
 namespace Internal {
 
-// Note that reference types mapped to interface types.
-// So Type <I_ref <I> > is the same as Type <I>.
+// Note that reference types are mapped to interface types.
+// So Type <I_ref <I> > provide the same traits as Type <I>.
 
 template <typename T>
 struct Type <Sequence <T> > :

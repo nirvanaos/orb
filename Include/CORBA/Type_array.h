@@ -33,8 +33,8 @@
 #include "ABI.h"
 #include <Nirvana/array_bool.h>
 
-// Note that reference types mapped to interface types.
-// So Type <I_ref <I> > is the same as Type <I>.
+// Note that reference types are mapped to interface types.
+// So Type <I_ref <I> > provide the same traits as Type <I>.
 
 namespace CORBA {
 namespace Internal {
