@@ -37,7 +37,7 @@ namespace Internal {
 
 template <class T, class I> class Client;
 
-template <class I> struct Definitions;
+template <class I> struct Decls;
 
 template <class I>
 class ClientBridge :

@@ -34,14 +34,14 @@ CORBA::_tc_TCKind = { Nirvana::OLF_IMPORT_INTERFACE,
 
 NIRVANA_OLF_SECTION_N (1)
 const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>
-CORBA::Internal::Definitions <CORBA::TypeCode>::_tc_BadKind = {
+CORBA::Internal::Decls <CORBA::TypeCode>::_tc_BadKind = {
 	Nirvana::OLF_IMPORT_INTERFACE,
-	CORBA::Internal::RepIdOf <CORBA::Internal::Definitions <CORBA::TypeCode>::BadKind>::id,
+	CORBA::Internal::RepIdOf <CORBA::Internal::Decls <CORBA::TypeCode>::BadKind>::id,
 	CORBA::Internal::RepIdOf <CORBA::TypeCode>::id };
 
 NIRVANA_OLF_SECTION_N (2)
 const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>
-CORBA::Internal::Definitions <CORBA::TypeCode>::_tc_Bounds = {
+CORBA::Internal::Decls <CORBA::TypeCode>::_tc_Bounds = {
 	::Nirvana::OLF_IMPORT_INTERFACE,
-	CORBA::Internal::RepIdOf <CORBA::Internal::Definitions <CORBA::TypeCode>::Bounds>::id,
+	CORBA::Internal::RepIdOf <CORBA::Internal::Decls <CORBA::TypeCode>::Bounds>::id,
 	CORBA::Internal::RepIdOf <CORBA::TypeCode>::id };
