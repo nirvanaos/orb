@@ -214,6 +214,13 @@ void destruct (T& v) NIRVANA_NOEXCEPT
 	v.~T ();
 }
 
+/// Used in union constructors
+template <class T> inline
+void construct (T& v) NIRVANA_NOEXCEPT
+{
+	::new (&v) T ();
+}
+
 }
 }
 
