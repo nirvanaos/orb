@@ -207,20 +207,6 @@ TypeVarLen <T, true, TABI>::C_inout::~C_inout () noexcept (false)
 	}
 }
 
-/// Used in union destructors
-template <class T> inline
-void destruct (T& v) NIRVANA_NOEXCEPT
-{
-	v.~T ();
-}
-
-/// Used in union constructors
-template <class T> inline
-void construct (T& v) NIRVANA_NOEXCEPT
-{
-	::new (&v) T ();
-}
-
 }
 }
 

@@ -46,6 +46,7 @@
 #include "AbstractBasePOA.h"
 #include "PseudoBase.h"
 #include "ValueFactoryBase.h"
+#include "Union.h"
 #include "ORB.h"
 #include "InterfaceRepository.h"
 
