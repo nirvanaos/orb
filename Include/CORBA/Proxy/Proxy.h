@@ -38,6 +38,7 @@
 #include "TypeCodeException.h"
 #include "TypeCodeEnum.h"
 #include "TypeCodeStruct.h"
+#include "TypeCodeUnion.h"
 #include "TypeAlias.h"
 #include "TypeCodeTypeDef.h"
 #include "TypeCodeInterface.h"

@@ -305,36 +305,49 @@ struct Type <Any> : public TypeVarLen <Any, true>
 typedef Internal::T_var <Any> Any_var;
 #endif
 
-void operator <<= (Any&, Short);
-void operator <<= (Any&, UShort);
-void operator <<= (Any&, Long);
-void operator <<= (Any&, ULong);
-void operator <<= (Any&, Float);
-void operator <<= (Any&, Double);
-void operator <<= (Any&, LongLong);
-void operator <<= (Any&, ULongLong);
-void operator <<= (Any&, LongDouble);
-void operator <<= (Any&, const std::string&);
-void operator <<= (Any&, std::string&&);
-void operator <<= (Any&, const std::wstring&);
-void operator <<= (Any&, std::wstring&&);
-void operator <<= (Any&, const Any&);
-void operator <<= (Any&, Any&&);
+template <typename T> inline
+void operator <<= (Any& a, const T& v)
+{
+	a.copy_from (Internal::Type <T>::type_code (), &v);
+}
+
+template <typename T> inline
+void operator <<= (Any& a, T&& v)
+{
+	a.move_from (Internal::Type <T>::type_code (), &v);
+}
+
+template <typename T> inline
+Boolean operator >>= (const Any& a, T& v)
+{
+	if (Internal::Type <T>::type_code ()->equal (a.type ())) {
+		v = *(T*)a.data ();
+		return true;
+	}
+	return false;
+}
+
+inline
+void operator <<= (Any& dst, const Any& src)
+{
+	dst = src;
+}
+inline
+void operator <<= (Any& dst, Any&& src)
+{
+	dst = std::move (src);
+}
+
 void operator <<= (Any&, const Exception&);
 void operator <<= (Any&, Exception&&);
 
-Boolean operator >>= (const Any&, Short&);
-Boolean operator >>= (const Any&, UShort&);
-Boolean operator >>= (const Any&, Long&);
-Boolean operator >>= (const Any&, ULong&);
-Boolean operator >>= (const Any&, Float&);
-Boolean operator >>= (const Any&, Double&);
-Boolean operator >>= (const Any&, LongLong&);
-Boolean operator >>= (const Any&, ULongLong&);
-Boolean operator >>= (const Any&, LongDouble&);
-Boolean operator >>= (const Any&, const std::string*&);
-Boolean operator >>= (const Any&, const std::wstring*&);
-Boolean operator >>= (const Any&, const Any*&);
+inline
+Boolean operator >>= (const Any& src, Any& dst)
+{
+	dst = src;
+	return true;
+}
+
 Boolean operator >>= (const Any&, SystemException&);
 
 }
