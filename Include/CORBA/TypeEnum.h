@@ -58,6 +58,11 @@ struct TypeEnum : TypeByVal <T, ABI_enum>
 			::Nirvana::throw_BAD_PARAM (MAKE_OMG_MINOR (25));
 	}
 
+	static void check (T val)
+	{
+		check ((ABI)val);
+	}
+
 	class C_inout
 	{
 	public:
