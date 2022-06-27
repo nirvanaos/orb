@@ -47,14 +47,17 @@ struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t), TypeB
 
 	typedef T C_ret;
 
-	static T ret (T v)
+	static T ret (T v) NIRVANA_NOEXCEPT
 	{
 		return v;
 	}
 
-	static T ret ()
+	static T ret () NIRVANA_NOEXCEPT
 	{
-		return T ();
+		// Skip constructor call for optimization
+		std::aligned_storage_t <sizeof (T), alignof (T)> garbage;
+		void* p = &garbage;
+		return *(T*)p;
 	}
 
 	static void marshal_in (const T& src, IORequest_ptr rq);
