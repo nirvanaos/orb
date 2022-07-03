@@ -71,33 +71,10 @@ struct TypeObject : TypeItfMarshalable <I>
 };
 
 }
-}
-
-#ifndef IDL_DECLARED_CORBA_InterfaceDef
-#define IDL_DECLARED_CORBA_InterfaceDef
-
-namespace CORBA {
 
 class InterfaceDef;
-extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_InterfaceDef;
-
-namespace Internal {
-
-template <>
-struct Type <InterfaceDef> : TypeObject <InterfaceDef>
-{
-
-	static I_ptr <TypeCode> type_code ()
-	{
-		return _tc_InterfaceDef;
-	}
-
-};
 
 }
-}
-
-#endif
 
 namespace CORBA {
 
@@ -163,7 +140,7 @@ public:
 template <class T>
 Internal::I_ref <ImplementationDef> Client <T, Object>::_get_implementation ()
 {
-	return I_ref <ImplementationDef> ();
+	return I_ref <ImplementationDef> (); // Compatibility stub
 }
 
 template <class T>
