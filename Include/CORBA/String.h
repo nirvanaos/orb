@@ -38,9 +38,9 @@ class TypeCode;
 namespace Internal {
 
 template <typename C>
-struct Type <StringT <C> > : TypeVarLen <StringT <C>, true>
+struct Type <StringT <C> > : TypeVarLen <StringT <C> >
 {
-	typedef TypeVarLen <StringT <C>, true> Base;
+	typedef TypeVarLen <StringT <C>> Base;
 	typedef typename Base::Var Var;
 	typedef typename Base::ABI ABI;
 	typedef typename Base::ABI_in ABI_in;

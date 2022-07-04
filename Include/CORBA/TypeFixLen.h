@@ -39,7 +39,6 @@ namespace Internal {
 /// Passed by value if sizeof (T) <= 2 * sizeof (size_t).
 /// 
 /// \tparam T The variable type.
-/// \tparam TABI The ABI type.
 template <typename T>
 struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t), TypeByVal <T, T>, TypeByRef <T, T> >
 {

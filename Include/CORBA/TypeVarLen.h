@@ -36,86 +36,24 @@
 namespace CORBA {
 namespace Internal {
 
-template <class T, class TABI>
-struct TypeVarLenBase :
+/// Base for variable-length data types
+/// 
+/// \tparam T The variable type.
+/// \tparam TABI The ABI type.
+template <class T, class TABI = ABI <T> >
+struct TypeVarLen :
 	TypeByRef <T, TABI>,
 	TypeVarLenHelper <T, typename TypeByRef <T, TABI>::Var>
 {
 	static const bool fixed_len = false;
+	static const bool has_check = true;
 
 	typedef TypeByRef <T, TABI> Base;
 	typedef typename Base::Var Var;
 	typedef typename Base::C_in C_in;
-	typedef typename Base::C_inout C_inout;
 	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_ret ABI_ret;
 	typedef typename Base::ABI ABI;
-
-	// C_out class clears output variable
-	class C_out : public Base::C_out
-	{
-	public:
-		C_out (Var& val) :
-			Base::C_out (val)
-		{
-			val = Var ();	// Clear
-		}
-	};
-
-	class C_ret
-	{
-	public:
-		C_ret (ABI_ret&& val) :
-			val_ (reinterpret_cast <Var&&> (val))
-		{}
-
-		operator Var ()
-		{
-			return std::move (val_);
-		}
-
-	protected:
-		Var val_;
-	};
-
-	// `const` is removed to let servant adopt the unmarshaled input data.
-	static Var& in (ABI_in p)
-	{
-		check_pointer (p);
-		return reinterpret_cast <const Var&> (const_cast <ABI&> (*p));
-	}
-
-	static ABI_ret ret (Var&& v)
-	{
-		ABI_ret abi;
-		new (&abi) Var (std::move (v));
-		return abi;
-	}
-
-	static ABI_ret ret ()
-	{
-		ABI_ret abi;
-		new (&abi) Var ();
-		return abi;
-	}
-};
-
-template <class T, bool with_check, class TABI = ABI <T> > struct TypeVarLen;
-
-template <class T, class TABI>
-struct TypeVarLen <T, false, TABI> : TypeVarLenBase <T, TABI>
-{
-	static const bool has_check = false;
-};
-
-/// Base for variable-length data types
-template <class T, class TABI>
-struct TypeVarLen <T, true, TABI> : TypeVarLenBase <T, TABI>
-{
-	typedef TypeVarLenBase <T, TABI> Base;
-	typedef typename Base::Var Var;
-
-	static const bool has_check = true;
 
 	static void check_or_clear (Var& v);
 
@@ -129,6 +67,7 @@ struct TypeVarLen <T, true, TABI> : TypeVarLenBase <T, TABI>
 		~C_inout () noexcept (false);
 	};
 
+	// C_out class clears output variable
 	class C_out : public C_inout
 	{
 	public:
@@ -139,14 +78,22 @@ struct TypeVarLen <T, true, TABI> : TypeVarLenBase <T, TABI>
 		}
 	};
 
-	class C_ret : public Base::C_ret
+	class C_ret
 	{
 	public:
-		C_ret (typename Base::ABI_ret&& val) :
-			Base::C_ret (std::move (val))
+		C_ret (ABI_ret&& val) :
+			val_ (reinterpret_cast <Var&&> (val))
 		{
 			check_or_clear (this->val_);
 		}
+
+		operator Var () NIRVANA_NOEXCEPT
+		{
+			return std::move (val_);
+		}
+
+	protected:
+		Var val_;
 	};
 
 	class C_VT_ret : public Base::C_VT_ret
@@ -161,11 +108,12 @@ struct TypeVarLen <T, true, TABI> : TypeVarLenBase <T, TABI>
 
 	// Servant-side methods
 
-	static const Var& in (typename Base::ABI_in p)
+	// `const` is removed to let servant adopt the unmarshaled input data.
+	static Var& in (typename Base::ABI_in p)
 	{
 		check_pointer (p);
 		Type <Var>::check (*p);
-		return reinterpret_cast <const Var&> (*p);
+		return const_cast <Var&> (reinterpret_cast <const Var&> (*p));
 	}
 
 	static Var& inout (typename Base::ABI_out p)
@@ -179,11 +127,26 @@ struct TypeVarLen <T, true, TABI> : TypeVarLenBase <T, TABI>
 	{
 		return inout (p);
 	}
+
+	static ABI_ret ret (Var&& v) NIRVANA_NOEXCEPT
+	{
+		ABI_ret abi;
+		new (&abi) Var (std::move (v));
+		return abi;
+	}
+
+	static ABI_ret ret () NIRVANA_NOEXCEPT
+	{
+		ABI_ret abi;
+		new (&abi) Var ();
+		return abi;
+	}
+
 };
 
 /// Outline for compact code
 template <class T, class TABI>
-void TypeVarLen <T, true, TABI>::check_or_clear (Var& v)
+void TypeVarLen <T, TABI>::check_or_clear (Var& v)
 {
 	try {
 		Type <Var>::check (reinterpret_cast <typename Type <Var>::ABI&> (v));
@@ -196,7 +159,7 @@ void TypeVarLen <T, true, TABI>::check_or_clear (Var& v)
 
 /// Outline for compact code
 template <class T, class TABI>
-TypeVarLen <T, true, TABI>::C_inout::~C_inout () noexcept (false)
+TypeVarLen <T, TABI>::C_inout::~C_inout () noexcept (false)
 {
 	bool ex = uncaught_exception ();
 	try {

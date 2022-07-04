@@ -263,9 +263,9 @@ private:
 namespace Internal {
 
 template <>
-struct Type <Any> : public TypeVarLen <Any, true>
+struct Type <Any> : public TypeVarLen <Any>
 {
-	typedef TypeVarLen <Any, true> Base;
+	typedef TypeVarLen <Any> Base;
 	typedef typename Base::ABI ABI;
 
 	static void check (const ABI& any);
