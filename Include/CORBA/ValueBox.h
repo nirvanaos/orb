@@ -222,7 +222,7 @@ protected:
 template <class I>
 struct TypeValueBox :
 	TypeItfCommon <typename I::BoxClient>,
-	TypeVarLenHelper <I, I_ref <typename I::BoxClient> >
+	MarshalHelper <I, I_ref <typename I::BoxClient> >
 {
 	static const TCKind tc_kind = TCKind::tk_value_box;
 

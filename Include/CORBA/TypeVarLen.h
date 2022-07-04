@@ -29,7 +29,7 @@
 #pragma once
 
 #include "TypeByRef.h"
-#include "TypeVarLenHelper.h"
+#include "MarshalHelper.h"
 #include <utility>
 #include <new>
 
@@ -43,7 +43,7 @@ namespace Internal {
 template <class T, class TABI = ABI <T> >
 struct TypeVarLen :
 	TypeByRef <T, TABI>,
-	TypeVarLenHelper <T, typename TypeByRef <T, TABI>::Var>
+	MarshalHelper <T, typename TypeByRef <T, TABI>::Var>
 {
 	static const bool is_CDR = false;
 	static const bool has_check = true;
