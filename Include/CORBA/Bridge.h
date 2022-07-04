@@ -91,8 +91,7 @@ protected:
 #define NIRVANA_BASE_ENTRY(type, name) MyBridge::Wide <type>::Func name;\
 operator const MyBridge::Wide < type>::Func () const { return name; }
 
-#define NIRVANA_BRIDGE_BEGIN(I, repid) template <> const Char RepIdOf <I>::id [] = repid;\
-template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EPV header; struct {
+#define NIRVANA_BRIDGE_BEGIN(I) template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EPV header; struct {
 #define NIRVANA_BRIDGE_EPV } base; struct {
 #define NIRVANA_BRIDGE_END() } epv;};
 

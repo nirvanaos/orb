@@ -56,7 +56,8 @@ template <>
 struct Type <PortableServer::Servant> : Type <PortableServer::ServantBase>
 {};
 
-NIRVANA_BRIDGE_BEGIN (PortableServer::ServantBase, PORTABLESERVER_REPOSITORY_ID ("ServantBase"))
+const Char RepIdOf <PortableServer::ServantBase>::id [] = PORTABLESERVER_REPOSITORY_ID ("ServantBase");
+NIRVANA_BRIDGE_BEGIN (PortableServer::ServantBase)
 Interface* (*default_POA) (Bridge <PortableServer::ServantBase>*, Interface*);
 Interface* (*get_interface) (Bridge <PortableServer::ServantBase>*, Interface*);
 Type <Boolean>::ABI_ret (*is_a) (Bridge <PortableServer::ServantBase>*, Type <String>::ABI_in type_id, Interface*);

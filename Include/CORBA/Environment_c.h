@@ -35,7 +35,8 @@ class Environment;
 
 namespace Internal {
 
-NIRVANA_BRIDGE_BEGIN (::CORBA::Environment, CORBA_REPOSITORY_ID ("Environment"))
+template <> const Char RepIdOf <Environment>::id [] = CORBA_REPOSITORY_ID ("Environment");
+NIRVANA_BRIDGE_BEGIN (::CORBA::Environment)
 void (*exception_set) (Bridge < ::CORBA::Environment>*, Short code, const Char* rep_id, void* param);
 const Char* (*exception_id) (Bridge < ::CORBA::Environment>*);
 const void* (*exception_value) (Bridge < ::CORBA::Environment>*);

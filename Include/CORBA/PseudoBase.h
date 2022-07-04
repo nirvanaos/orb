@@ -49,7 +49,8 @@ template <>
 struct Type <PseudoBase> : TypeItf <PseudoBase>
 {};
 
-NIRVANA_BRIDGE_BEGIN (PseudoBase, CORBA_INTERNAL_REPOSITORY_ID ("PseudoBase"))
+const Char RepIdOf <PseudoBase>::id [] = CORBA_INTERNAL_REPOSITORY_ID ("PseudoBase");
+NIRVANA_BRIDGE_BEGIN (PseudoBase)
 Interface* (*query_interface) (Bridge <PseudoBase>*, Type <String>::ABI_in, Interface*);
 NIRVANA_BRIDGE_END ()
 

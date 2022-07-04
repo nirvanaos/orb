@@ -101,7 +101,8 @@ struct Type <Object> : TypeObject <Object>
 	}
 };
 
-NIRVANA_BRIDGE_BEGIN (CORBA::Object, CORBA_REPOSITORY_ID ("Object"))
+template <> const Char RepIdOf <Object>::id [] = CORBA_REPOSITORY_ID ("Object");
+NIRVANA_BRIDGE_BEGIN (CORBA::Object)
 Interface* (*get_interface) (Bridge <Object>*, Interface*);
 Type <Boolean>::ABI_ret (*is_a) (Bridge <Object>*,  Type <String>::ABI_in type_id, Interface*);
 Type <Boolean>::ABI_ret (*non_existent) (Bridge <Object>*, Interface*);

@@ -48,7 +48,8 @@ template <>
 struct Type <AbstractBase> : TypeItf <AbstractBase>
 {};
 
-NIRVANA_BRIDGE_BEGIN (AbstractBase, CORBA_REPOSITORY_ID ("AbstractBase"))
+template <> const Char RepIdOf <AbstractBase>::id [] = CORBA_REPOSITORY_ID ("AbstractBase");
+NIRVANA_BRIDGE_BEGIN (AbstractBase)
 Interface* (*to_object) (Bridge <AbstractBase>*, Interface*);
 Interface* (*to_value) (Bridge <AbstractBase>*, Interface*);
 NIRVANA_BRIDGE_END ()

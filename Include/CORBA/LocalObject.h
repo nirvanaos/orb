@@ -52,7 +52,8 @@ struct Type <LocalObject> : TypeLocalObject <LocalObject>
 {
 };
 
-NIRVANA_BRIDGE_BEGIN (LocalObject, CORBA_REPOSITORY_ID ("LocalObject"))
+const Char RepIdOf <LocalObject>::id [] = CORBA_REPOSITORY_ID ("LocalObject");
+NIRVANA_BRIDGE_BEGIN (LocalObject)
 NIRVANA_BASE_ENTRY (CORBA::Object, CORBA_Object)
 NIRVANA_BRIDGE_EPV
 Type <Boolean>::ABI_ret (*non_existent) (Bridge <LocalObject>*, Interface*);
