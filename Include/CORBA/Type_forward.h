@@ -46,11 +46,20 @@ template <> struct Type <T>
   typedef const T& ConstRef;
   typedef ABI <T> ABI;
 
-  // Check internal invariants and throw BAD_PARAM or INV_OBJREF exception if data is invalid.
+  /// Check internal invariants and throw BAD_PARAM or INV_OBJREF exception if data is invalid.
   static void check (const ABI&);
 
-  // true if check () method is not empty.
+  /// `true` if check () method is not empty.
+  /// 
+  /// has_check = `true` for:
+  /// - Variable-length data types
+  /// - Enums
   static const bool has_check;
+
+  /// `true` if the data type meets the CORBA Common Data Representation.
+  /// 
+  /// is_CDR = `true` for all fixed-length data types, except for unions.
+  static const bool is_CDR;
 
   // Types for passing parameters via interface ABI
   typedef const ABI* ABI_in;
@@ -78,9 +87,6 @@ template <> struct Type <T>
 
   // Type code
   static I_ptr <TypeCode> type_code ();
-
-  /// Is this data type fixed length?
-  static const bool fixed_len;
 
   /// \brief Copies input data to the marshaling buffer.
   /// \param src Source value.

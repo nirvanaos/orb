@@ -249,7 +249,7 @@ public:
 
 	static Type <Boolean>::ABI_ret _s_n_fixed_len (Bridge <TypeCode>*, Interface*)
 	{
-		return Type <T>::fixed_len;
+		return Type <T>::is_CDR;
 	}
 
 	static void n_construct (void* p)

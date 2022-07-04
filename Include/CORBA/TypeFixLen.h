@@ -42,7 +42,7 @@ namespace Internal {
 template <typename T>
 struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t), TypeByVal <T, T>, TypeByRef <T, T> >
 {
-	static const bool fixed_len = true;
+	static const bool is_CDR = true;
 
 	typedef T C_ret;
 

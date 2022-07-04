@@ -45,7 +45,7 @@ struct TypeVarLen :
 	TypeByRef <T, TABI>,
 	TypeVarLenHelper <T, typename TypeByRef <T, TABI>::Var>
 {
-	static const bool fixed_len = false;
+	static const bool is_CDR = false;
 	static const bool has_check = true;
 
 	typedef TypeByRef <T, TABI> Base;

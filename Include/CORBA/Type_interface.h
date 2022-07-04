@@ -285,7 +285,7 @@ public:
 template <class I>
 struct TypeItfBase
 {
-	static const bool fixed_len = false;
+	static const bool is_CDR = false;
 
 	typedef Interface* ABI;
 

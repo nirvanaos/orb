@@ -115,7 +115,7 @@ TEST_F (TestORB, Array)
 	EXPECT_EQ (ArrayTraits <Arr>::size, 3 * 4);
 
 	EXPECT_EQ (Type <Arr>::total_size, 3 * 4);
-	EXPECT_TRUE (Type <Arr>::fixed_len);
+	EXPECT_TRUE (Type <Arr>::is_CDR);
 }
 
 TEST_F (TestORB, ValueBox)
