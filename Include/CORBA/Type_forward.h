@@ -130,10 +130,6 @@ template <> struct Type <T>
 */
 template <class T> struct Type;
 
-// Constraints check
-const bool CHECK_STRINGS = true;
-const bool CHECK_ENUMS = true;
-
 // Helper functions.
 extern void check_pointer (const void* p);
 extern bool uncaught_exception ();

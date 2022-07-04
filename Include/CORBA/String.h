@@ -38,9 +38,9 @@ class TypeCode;
 namespace Internal {
 
 template <typename C>
-struct Type <StringT <C> > : TypeVarLen <StringT <C>, CHECK_STRINGS>
+struct Type <StringT <C> > : TypeVarLen <StringT <C>, true>
 {
-	typedef TypeVarLen <StringT <C>, CHECK_STRINGS> Base;
+	typedef TypeVarLen <StringT <C>, true> Base;
 	typedef typename Base::Var Var;
 	typedef typename Base::ABI ABI;
 	typedef typename Base::ABI_in ABI_in;
@@ -217,8 +217,6 @@ struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
 	typedef Type <StringT <C> > Base;
 	typedef typename Base::ABI ABI;
 	typedef typename Base::Var Var;
-
-	static const bool has_check = true;
 
 	static void check (const ABI& v)
 	{

@@ -50,11 +50,11 @@ struct TypeEnum : TypeByVal <T, ABI_enum>
 	typedef typename Base::ABI_out ABI_out;
 	typedef typename Base::ABI_ret ABI_ret;
 
-	static const bool has_check = CHECK_ENUMS;
+	static const bool has_check = true;
 
 	static void check (ABI val)
 	{
-		if (has_check && val >= count_)
+		if (val >= count_)
 			::Nirvana::throw_BAD_PARAM (MAKE_OMG_MINOR (25));
 	}
 
