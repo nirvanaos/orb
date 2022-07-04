@@ -37,6 +37,7 @@ namespace Internal {
 template <typename T>
 void Type <Sequence <T> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
+	typedef typename Type <T>::Var T_Var;
 	if (Type <T>::fixed_len)
 		rq->marshal_seq (alignof (T_Var), sizeof (T_Var), src.size (), const_cast <T_Var*> (src.data ()), 0);
 	else {
@@ -48,6 +49,7 @@ void Type <Sequence <T> >::marshal_in (const Var& src, IORequest_ptr rq)
 template <typename T>
 void Type <Sequence <T> >::marshal_out (Var& src, IORequest_ptr rq)
 {
+	typedef typename Type <T>::Var T_Var;
 	if (Type <T>::fixed_len) {
 		rq->marshal_seq (alignof (T_Var), sizeof (T_Var), src.size (), src.data (), static_cast <ABI&> (src).allocated);
 		static_cast <ABI&> (src).reset ();
@@ -60,6 +62,8 @@ void Type <Sequence <T> >::marshal_out (Var& src, IORequest_ptr rq)
 template <typename T>
 void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
+	typedef typename Type <T>::Var T_Var;
+	typedef typename Type <T>::ABI T_ABI;
 	Var tmp;
 	if (Type <T>::fixed_len) {
 		ABI abi;

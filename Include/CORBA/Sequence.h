@@ -39,11 +39,9 @@ namespace Internal {
 
 template <typename T>
 struct Type <Sequence <T> > :
-	public TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check>
+	public TypeVarLen <Sequence <T>, true>
 {
-	typedef TypeVarLen <Sequence <T>, CHECK_SEQUENCES || Type <T>::has_check> Base;
-	typedef typename Type <T>::ABI T_ABI;
-	typedef typename Type <T>::Var T_Var;
+	typedef TypeVarLen <Sequence <T>, true> Base;
 	typedef typename Base::Var Var;
 	typedef typename Base::ABI ABI;
 	typedef typename Base::ABI_in ABI_in;
@@ -127,14 +125,10 @@ template <typename T>
 void Type <Sequence <T> >::check_ABI (const ABI& v)
 {
 	// Do some check
-	if (CHECK_SEQUENCES) {
-		const void* p = v.ptr;
-		if (p)
-			check_pointer (p);
-		size_t cnt = v.size;
-		if (cnt > v.allocated / sizeof (T))
-			::Nirvana::throw_BAD_PARAM ();
-	}
+	if (v.size > v.allocated / sizeof (T))
+		::Nirvana::throw_BAD_PARAM ();
+	if (v.allocated)
+		check_pointer (v.ptr);
 }
 
 template <typename T>
@@ -142,6 +136,7 @@ void Type <Sequence <T> >::check (const ABI& v)
 {
 	check_ABI (v);
 
+	typedef typename Type <T>::ABI T_ABI;
 	if (Type <T>::has_check) {
 		for (const T_ABI* p = (const T_ABI*)v.ptr, *end = p + v.size; p != end; ++p)
 			Type <T>::check (*p);
