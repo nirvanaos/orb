@@ -88,26 +88,34 @@ protected:
 	{}
 };
 
-template <class VB, typename T>
-class ValueBoxImpl :
-	public ValueBoxBridge,
-	public RefCountBase <VB>,
-	public LifeCycleRefCnt <VB>,
-	public Skeleton <VB, ValueBase>,
-	public ValueTraits <VB>
+// Boxed value always follow immediately to ValueBoxBridge
+// (with possible alignment).
+// 
+// Memory layout:
+//
+// +----------------------------+
+// | ValueBoxBridge             |
+// +----------------------------+
+// | Boxed value                |
+// +----------------------------+
+// | Reference counter etc.     |
+// | (implementation dependent) |
+// +----------------------------+
+//
+template <typename T>
+class ValueBoxClient : public ValueBoxBridge
 {
-	typedef ValueBoxImpl <VB, T> ThisClass;
 public:
 	typedef typename Type <T>::Var BoxedType;
 
 	const BoxedType& _value () const NIRVANA_NOEXCEPT
 	{
-		return *reinterpret_cast <const BoxedType*> (this + 1);
+		return *reinterpret_cast <const BoxedType*> (&value_);
 	}
 
 	BoxedType& _value () NIRVANA_NOEXCEPT
 	{
-		return *reinterpret_cast <BoxedType*> (this + 1);
+		return *reinterpret_cast <BoxedType*> (&value_);
 	}
 
 	void _value (const BoxedType& v)
@@ -115,43 +123,60 @@ public:
 		_value () = v;
 	}
 
-	void _value (BoxedType&& v)
+	void _value (BoxedType&& v) NIRVANA_NOEXCEPT
 	{
 		_value () = std::move (v);
 	}
 
-	using ValueTraits <VB>::_copy_value;
-
-	void _marshal (IORequest_ptr rq) const
+protected:
+	ValueBoxClient& operator = (const ValueBoxClient& v)
 	{
-		Type <T>::marshal_in (_value (), rq);
+		_value () = v._value ();
+		return *this;
 	}
 
-	void _unmarshal (IORequest_ptr rq)
+	ValueBoxClient& operator = (ValueBoxClient&& v) NIRVANA_NOEXCEPT
 	{
-		Type <T>::unmarshal (rq, _value ());
+		_value () = std::move (v._value ());
+		return *this;
 	}
 
-	Interface* _query_valuetype (String_in id) NIRVANA_NOEXCEPT
+protected:
+	ValueBoxClient (const EPV& epv) NIRVANA_NOEXCEPT :
+		ValueBoxBridge (epv)
+	{}
+
+	ValueBoxClient (const EPV& epv, const BoxedType& src) NIRVANA_NOEXCEPT :
+		ValueBoxBridge (epv)
 	{
-		if (RepId::compatible (RepIdOf <VB>::id, id))
-			return &static_cast <ValueBoxBridge&> (*this);
-		return nullptr;
+		::new (&value_) BoxedType (src);
 	}
 
-	static ThisClass& _implementation (Bridge <ValueBase>* bridge)
+	ValueBoxClient (const EPV& epv, BoxedType&& src) NIRVANA_NOEXCEPT :
+		ValueBoxBridge (epv)
 	{
-		check_pointer (bridge, Skeleton <VB, ValueBase>::epv_.header);
-		return *reinterpret_cast <ThisClass*>
-			(reinterpret_cast <uint8_t*> (bridge) - (uintptr_t)&(((ThisClass*)0)->base_));
+		::new (&value_) BoxedType (std::move (src));
 	}
 
-	static ThisClass& _implementation (Bridge <VB>* bridge)
-	{
-		check_pointer (bridge, epv_.header);
-		return reinterpret_cast <ThisClass&> (*bridge);
-	}
-	
+protected:
+	std::aligned_storage_t <sizeof (BoxedType), alignof (BoxedType)> value_;
+};
+
+template <class VB, typename T>
+class ValueBoxImpl :
+	public ValueBoxClient <T>,
+	public RefCountBase <VB>,
+	private LifeCycleRefCnt <VB>,
+	public Skeleton <VB, ValueBase>,
+	public ValueTraits <VB>
+{
+	friend class Skeleton <VB, ValueBase>;
+	friend class LifeCycleRefCnt <VB>;
+	friend class LifeCycleDynamic <VB>;
+
+	typedef ValueBoxClient <T> Base;
+	typedef ValueBoxImpl <VB, T> ThisClass;
+public:
 	typedef I_ptr <VB> _ptr_type;
 
 #ifdef LEGACY_CORBA_CPP
@@ -186,25 +211,70 @@ public:
 	}
 
 protected:
-	ValueBoxImpl () :
-		ValueBoxBridge (epv_),
+	ValueBoxImpl () NIRVANA_NOEXCEPT :
+		Base (epv_),
 		base_ (Skeleton <VB, ValueBase>::epv_)
 	{}
 
-	ValueBoxImpl (const ValueBoxImpl&) :
-		ValueBoxImpl ()
+	ValueBoxImpl (const ValueBoxImpl& src) NIRVANA_NOEXCEPT :
+		Base (epv_, src._value ()),
+		base_ (Skeleton <VB, ValueBase>::epv_)
 	{}
 
-	ValueBoxImpl (ValueBoxImpl&&) :
-		ValueBoxImpl ()
+	ValueBoxImpl (ValueBoxImpl&& src) NIRVANA_NOEXCEPT :
+		Base (epv_, std::move (src._value ())),
+		base_ (Skeleton <VB, ValueBase>::epv_)
 	{}
 
+	ValueBoxImpl& operator = (const ValueBoxImpl& src)
+	{
+		Base::operator = (src);
+		return *this;
+	}
+
+	ValueBoxImpl& operator = (ValueBoxImpl&& src) NIRVANA_NOEXCEPT
+	{
+		Base::operator = (std::move (src));
+		return *this;
+	}
+
+private:
 	static Bridge <ValueBase>* _CORBA_ValueBase (ValueBoxBridge* bridge, Type <String>::ABI_in id, Interface* env)
 	{
 		if (!RepId::compatible (RepIdOf <ValueBase>::id, Type <String>::in (id)))
 			::Nirvana::throw_INV_OBJREF ();
 		check_pointer (bridge, epv_.header);
 		return &static_cast <ValueBox <VB, T>&> (*bridge).base_;
+	}
+
+	void _marshal (IORequest_ptr rq) const
+	{
+		Type <T>::marshal_in (this->_value (), rq);
+	}
+
+	void _unmarshal (IORequest_ptr rq)
+	{
+		Type <T>::unmarshal (rq, this->_value ());
+	}
+
+	Interface* _query_valuetype (String_in id) NIRVANA_NOEXCEPT
+	{
+		if (RepId::compatible (RepIdOf <VB>::id, id))
+			return &static_cast <ValueBoxBridge&> (*this);
+		return nullptr;
+	}
+
+	static ThisClass& _implementation (Bridge <ValueBase>* bridge)
+	{
+		check_pointer (bridge, Skeleton <VB, ValueBase>::epv_.header);
+		return *reinterpret_cast <ThisClass*>
+			(reinterpret_cast <uint8_t*> (bridge) - (uintptr_t) & (((ThisClass*)0)->base_));
+	}
+
+	static ThisClass& _implementation (Bridge <VB>* bridge)
+	{
+		check_pointer (bridge, epv_.header);
+		return reinterpret_cast <ThisClass&> (*bridge);
 	}
 
 private:

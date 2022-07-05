@@ -72,6 +72,16 @@ protected:
 		static_assert (offsetof(EPV, header) == 0, "header must be at the beginning of EPV.");
 #endif
 	}
+
+	Bridge& operator = (const Bridge&) NIRVANA_NOEXCEPT
+	{
+		return *this;
+	}
+
+	Bridge& operator = (Bridge&&) NIRVANA_NOEXCEPT
+	{
+		return *this;
+	}
 };
 
 /// The bridge for value types.

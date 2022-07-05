@@ -18,6 +18,12 @@ template <> const Char RepIdOf <StringVal>::id [] = "IDL:StringVal:1.0";
 class StringVal :
 	public CORBA::Internal::ValueBox <StringVal, CORBA::Internal::String>
 {
+public:
+	~StringVal ()
+	{
+		_value ().~BoxedType ();
+	}
+
 #ifdef LEGACY_CORBA_CPP
 public:
 #else
@@ -27,18 +33,19 @@ private:
 #endif
 
 	StringVal ()
-	{}
+	{
+		new (&value_) BoxedType ();
+	}
 
-	StringVal (const BoxedType& v) :
-		value_ (v)
-	{}
+	StringVal (const BoxedType& v)
+	{
+		new (&value_) BoxedType (v);
+	}
 
-	StringVal (BoxedType&& v) :
-		value_ (std::move (v))
-	{}
-
-private:
-	BoxedType value_;
+	StringVal (BoxedType&& v)
+	{
+		new (&value_) BoxedType (std::move (v));
+	}
 };
 
 #endif
