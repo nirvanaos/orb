@@ -44,6 +44,7 @@ template <class I> class I_var;
 template <class I> class I_inout;
 template <class I> class I_ret;
 template <class I> class ClientInterfacePrimary;
+template <class VB, typename T> class ValueBox;
 
 #ifdef _DEBUG
 const uintptr_t UNINITIALIZED_PTR = 1;
@@ -166,6 +167,11 @@ public:
 
 	I_ptr (BridgeVal <I>* p) NIRVANA_NOEXCEPT :
 		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
+	{}
+
+	template <class VB, typename T>
+	I_ptr (ValueBox <VB, T>* p) NIRVANA_NOEXCEPT :
+		I_ptr (static_cast <I_ptr <I> > (*p))
 	{}
 
 	template <class S>

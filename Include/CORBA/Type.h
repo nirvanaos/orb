@@ -38,7 +38,7 @@
 #include "Sequence.inl"
 #include "Object.inl"
 #include "ValueBase.inl"
-#include "ValueBox.inl"
+#include "ValueBox.h"
 #include "AbstractBase.inl"
 #include "Type_array.h"
 
