@@ -31,7 +31,7 @@
 
 namespace CORBA {
 
-#define _tc_null TypeCode::_nil ();
+#define _tc_null TypeCode::_nil ()
 extern const Nirvana::ImportInterfaceT <TypeCode> _tc_void;
 extern const Nirvana::ImportInterfaceT <TypeCode> _tc_short;
 extern const Nirvana::ImportInterfaceT <TypeCode> _tc_long;

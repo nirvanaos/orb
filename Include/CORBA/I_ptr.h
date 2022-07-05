@@ -271,6 +271,13 @@ bool is_nil (const Internal::I_ptr <I>& ptr)
 	return !ptr;
 }
 
+/// CORBA::is_nil()
+template <class I> inline
+bool is_nil (const Internal::I_ref <I>& ptr)
+{
+	return !ptr;
+}
+
 }
 
 #endif
