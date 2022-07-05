@@ -224,8 +224,6 @@ struct TypeValueBox :
 	TypeItfCommon <typename I::BoxClient>,
 	MarshalHelper <I, I_ref <typename I::BoxClient> >
 {
-	static const TCKind tc_kind = TCKind::tk_value_box;
-
 	static void marshal_in (I_ptr <typename I::BoxClient> src, IORequest_ptr rq);
 	static void marshal_out (I_ref <typename I::BoxClient>& src, IORequest_ptr rq);
 	static void unmarshal (IORequest_ptr rq, I_ref <typename I::BoxClient>& dst);

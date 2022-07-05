@@ -116,7 +116,7 @@ public:
 	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env)
 	{
-		if (index >= countof (members_)) {
+		if (index >= member_count ()) {
 			set_Bounds (_env);
 			return Type <String>::ret ();
 		} else
@@ -126,7 +126,7 @@ public:
 	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env)
 	{
-		if (index >= countof (members_)) {
+		if (index >= member_count ()) {
 			set_Bounds (_env);
 			return nullptr;
 		} else {
@@ -138,7 +138,7 @@ public:
 	static Visibility _s_member_visibility (Bridge <TypeCode>*, ULong index,
 		Interface* _env)
 	{
-		if (index >= countof (members_)) {
+		if (index >= member_count ()) {
 			set_Bounds (_env);
 			return 0;
 		} else
