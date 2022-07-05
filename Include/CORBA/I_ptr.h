@@ -182,7 +182,8 @@ public:
 	Interface* operator & () const NIRVANA_NOEXCEPT
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
-		return this->p_;
+		// I may be not completely defined so we use reinterpret_cast
+		return reinterpret_cast <Interface*> (this->p_);
 	}
 
 private:

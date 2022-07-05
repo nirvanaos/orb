@@ -37,20 +37,21 @@ namespace Internal {
 template <class I> inline
 void TypeAbstractInterface <I>::marshal_in (I_ptr <I> src, IORequest_ptr rq)
 {
-	rq->marshal_abstract (src, false);
+	rq->marshal_abstract (&src, false);
 }
 
 template <class I> inline
 void TypeAbstractInterface <I>::marshal_out (I_ref <I>& src, IORequest_ptr rq)
 {
-	rq->marshal_abstract (I_ptr <I> (src), true);
+	rq->marshal_abstract (&I_ptr <I> (src), true);
 	src = nullptr;
 }
 
 template <class I> inline
 void TypeAbstractInterface <I>::unmarshal (IORequest_ptr rq, I_ref <I>& dst)
 {
-	dst = rq->unmarshal_abstract <I> ();
+	// I may be not completely defined so we use reinterpret_cast
+	reinterpret_cast <I_ref <Interface>&> (dst) = rq->unmarshal_abstract (RepIdOf <I>::id);
 }
 
 }

@@ -375,12 +375,12 @@ struct TypeItfCommon : TypeItfBase <I>
 
 	static void check (Interface* p)
 	{
-		I::_check (p);
+		Interface::_check (p, RepIdOf <I>::id);
 	}
 
 	static I_ptr <I> in (ABI_in p)
 	{
-		return I::_check (p);
+		return reinterpret_cast <I*> (Interface::_check (p, RepIdOf <I>::id));
 	}
 
 #ifdef LEGACY_CORBA_CPP

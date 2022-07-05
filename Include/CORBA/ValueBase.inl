@@ -37,20 +37,21 @@ namespace Internal {
 template <class I> inline
 void TypeValue <I>::marshal_in (I_ptr <I> src, IORequest_ptr rq)
 {
-	rq->marshal_value (src, false);
+	rq->marshal_value (&src, false);
 }
 
 template <class I> inline
 void TypeValue <I>::marshal_out (I_ref <I>& src, IORequest_ptr rq)
 {
-	rq->marshal_value (I_ptr <I> (src), true);
+	rq->marshal_value (&I_ptr <I> (src), true);
 	src = nullptr;
 }
 
 template <class I> inline
 void TypeValue <I>::unmarshal (IORequest_ptr rq, I_ref <I>& dst)
 {
-	dst = rq->unmarshal_value <I> ();
+	// I may be not completely defined so we use reinterpret_cast
+	reinterpret_cast <I_ref <Interface>&> (dst) = rq->unmarshal_value (RepIdOf <I>::id);
 }
 
 }
