@@ -35,8 +35,7 @@ namespace Internal {
 
 class ValueBoxBaseBridge : public BridgeVal <ValueBase>
 {
-private:
-	friend class ValueBoxBridge;
+public:
 	ValueBoxBaseBridge (const Bridge <ValueBase>::EPV& epv) NIRVANA_NOEXCEPT :
 		BridgeVal <ValueBase> (epv)
 	{}
@@ -84,19 +83,9 @@ protected:
 	}
 
 protected:
-	ValueBoxBridge (const EPV& epv, const Bridge <ValueBase>::EPV& base_epv) NIRVANA_NOEXCEPT :
-		Interface (epv.header),
-		base_ (base_epv)
+	ValueBoxBridge (const EPV& epv) NIRVANA_NOEXCEPT :
+		Interface (epv.header)
 	{}
-
-protected:
-	ValueBoxBaseBridge base_;
-};
-
-template <class VB, typename T>
-class ValueBoxClientBase
-{
-public:
 };
 
 template <class VB, typename T>
@@ -107,6 +96,7 @@ class ValueBoxImpl :
 	public Skeleton <VB, ValueBase>,
 	public ValueTraits <VB>
 {
+	typedef ValueBoxImpl <VB, T> ThisClass;
 public:
 	typedef typename Type <T>::Var BoxedType;
 
@@ -149,17 +139,17 @@ public:
 		return nullptr;
 	}
 
-	static ValueBoxImpl& _implementation (Bridge <ValueBase>* bridge)
+	static ThisClass& _implementation (Bridge <ValueBase>* bridge)
 	{
 		check_pointer (bridge, Skeleton <VB, ValueBase>::epv_.header);
-		return *reinterpret_cast <ValueBox <VB, T>*>
-			(reinterpret_cast <uint8_t*> (bridge) - offsetof (ValueBoxImpl, base_));
+		return *reinterpret_cast <ThisClass*>
+			(reinterpret_cast <uint8_t*> (bridge) - (uintptr_t)&(((ThisClass*)0)->base_));
 	}
 
-	static ValueBoxImpl& _implementation (Bridge <VB>* bridge)
+	static ThisClass& _implementation (Bridge <VB>* bridge)
 	{
 		check_pointer (bridge, epv_.header);
-		return reinterpret_cast <ValueBoxImpl <VB, T>&> (*bridge);
+		return reinterpret_cast <ThisClass&> (*bridge);
 	}
 	
 	typedef I_ptr <VB> _ptr_type;
@@ -197,15 +187,16 @@ public:
 
 protected:
 	ValueBoxImpl () :
-		ValueBoxBridge (epv_, Skeleton <VB, ValueBase>::epv_)
+		ValueBoxBridge (epv_),
+		base_ (Skeleton <VB, ValueBase>::epv_)
 	{}
 
 	ValueBoxImpl (const ValueBoxImpl&) :
-		ValueBoxBridge (epv_, Skeleton <VB, ValueBase>::epv_)
+		ValueBoxImpl ()
 	{}
 
 	ValueBoxImpl (ValueBoxImpl&&) :
-		ValueBoxBridge (epv_, Skeleton <VB, ValueBase>::epv_)
+		ValueBoxImpl ()
 	{}
 
 	static Bridge <ValueBase>* _CORBA_ValueBase (ValueBoxBridge* bridge, Type <String>::ABI_in id, Interface* env)
@@ -229,6 +220,8 @@ private:
 
 private:
 	static const ValueBoxBridge::EPV epv_;
+
+	ValueBoxBaseBridge base_;
 };
 
 template <class VB, typename T>

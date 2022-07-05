@@ -229,7 +229,7 @@ public:
 
 	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		if (!base)
+		if (base == nullptr)
 			return nullptr;
 		else {
 			I_ptr <TypeCode> tc ((base)());
