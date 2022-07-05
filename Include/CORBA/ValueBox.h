@@ -33,14 +33,7 @@
 namespace CORBA {
 namespace Internal {
 
-class ValueBoxBaseBridge : public BridgeVal <ValueBase>
-{
-public:
-	ValueBoxBaseBridge (const Bridge <ValueBase>::EPV& epv) NIRVANA_NOEXCEPT :
-		BridgeVal <ValueBase> (epv)
-	{}
-};
-
+/// The common bridge for all value boxes.
 class ValueBoxBridge : public Interface
 {
 public:
@@ -88,20 +81,25 @@ protected:
 	{}
 };
 
-// Boxed value always follow immediately to ValueBoxBridge
-// (with possible alignment).
-// 
-// Memory layout:
-//
-// +----------------------------+
-// | ValueBoxBridge             |
-// +----------------------------+
-// | Boxed value                |
-// +----------------------------+
-// | Reference counter etc.     |
-// | (implementation dependent) |
-// +----------------------------+
-//
+/// Value box client part.
+/// 
+/// \tparam T Boxed type.
+/// 
+/// The boxed value always follow immediately to ValueBoxBridge
+/// (with possible alignment).
+/// 
+/// The memory layout:
+///
+/// +----------------------------+
+/// | ValueBoxBridge             |
+/// +----------------------------+
+/// | The boxed value            |
+/// +----------------------------+
+/// | Reference counter etc.     |
+/// | Implementation dependent.  |
+/// | Not accessed directly.     |
+/// +----------------------------+
+///
 template <typename T>
 class ValueBoxClient : public ValueBoxBridge
 {
@@ -162,6 +160,10 @@ protected:
 	std::aligned_storage_t <sizeof (BoxedType), alignof (BoxedType)> value_;
 };
 
+/// Value box implementation
+/// 
+/// \tparam VB Value box type, derived from this class.
+/// \tparam T Boxed type.
 template <class VB, typename T>
 class ValueBoxImpl :
 	public ValueBoxClient <T>,
@@ -291,7 +293,15 @@ private:
 private:
 	static const ValueBoxBridge::EPV epv_;
 
-	ValueBoxBaseBridge base_;
+	class ValueBaseBridge : public BridgeVal <ValueBase>
+	{
+	public:
+		ValueBaseBridge (const Bridge <ValueBase>::EPV& epv) NIRVANA_NOEXCEPT :
+			BridgeVal <ValueBase> (epv)
+		{}
+	};
+
+	ValueBaseBridge base_;
 };
 
 template <class VB, typename T>
@@ -306,6 +316,12 @@ const ValueBoxBridge::EPV ValueBoxImpl <VB, T>::epv_ = {
 	}
 };
 
+/// The value box class.
+/// 
+/// Adds derived ValueBase client API to the value box implementation.
+/// 
+/// \tparam VB Value box type, derived from this class.
+/// \tparam T Boxed type.
 template <class VB, typename T>
 class ValueBox : public Client <ValueBoxImpl <VB, T>, ValueBase>
 {};
