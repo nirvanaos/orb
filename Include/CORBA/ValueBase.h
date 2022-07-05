@@ -64,7 +64,7 @@ struct Type <ValueBase> : TypeValue <ValueBase>
 	}
 };
 
-const Char RepIdOf <ValueBase>::id [] = CORBA_REPOSITORY_ID ("ValueBase");
+template <> const Char RepIdOf <ValueBase>::id [] = CORBA_REPOSITORY_ID ("ValueBase");
 NIRVANA_BRIDGE_BEGIN (ValueBase)
 Interface* (*copy_value) (Bridge <ValueBase>* _b, Interface* _env);
 void (*marshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);

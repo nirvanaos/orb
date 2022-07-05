@@ -52,7 +52,7 @@ template <>
 struct Type <ValueFactory> : Type <ValueFactoryBase>
 {};
 
-const Char RepIdOf <ValueFactoryBase>::id [] = CORBA_REPOSITORY_ID ("ValueFactoryBase");
+template <> const Char RepIdOf <ValueFactoryBase>::id [] = CORBA_REPOSITORY_ID ("ValueFactoryBase");
 NIRVANA_BRIDGE_BEGIN (ValueFactoryBase)
 Interface* (*create_for_unmarshal) (Bridge <ValueFactoryBase>*, Interface*);
 Interface* (*query_factory) (Bridge <ValueFactoryBase>*, Type <String>::ABI_in, Interface*);

@@ -52,7 +52,7 @@ struct Type <LocalObject> : TypeLocalObject <LocalObject>
 {
 };
 
-const Char RepIdOf <LocalObject>::id [] = CORBA_REPOSITORY_ID ("LocalObject");
+template <> const Char RepIdOf <LocalObject>::id [] = CORBA_REPOSITORY_ID ("LocalObject");
 NIRVANA_BRIDGE_BEGIN (LocalObject)
 NIRVANA_BASE_ENTRY (CORBA::Object, CORBA_Object)
 NIRVANA_BRIDGE_EPV

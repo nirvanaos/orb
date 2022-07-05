@@ -56,7 +56,7 @@ template <>
 struct Type <PortableServer::Servant> : Type <PortableServer::ServantBase>
 {};
 
-const Char RepIdOf <PortableServer::ServantBase>::id [] = PORTABLESERVER_REPOSITORY_ID ("ServantBase");
+template <> const Char RepIdOf <PortableServer::ServantBase>::id [] = PORTABLESERVER_REPOSITORY_ID ("ServantBase");
 NIRVANA_BRIDGE_BEGIN (PortableServer::ServantBase)
 Interface* (*default_POA) (Bridge <PortableServer::ServantBase>*, Interface*);
 Interface* (*get_interface) (Bridge <PortableServer::ServantBase>*, Interface*);
