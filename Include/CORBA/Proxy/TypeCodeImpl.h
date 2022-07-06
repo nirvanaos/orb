@@ -247,7 +247,7 @@ public:
 		return sizeof (Var);
 	}
 
-	static Type <Boolean>::ABI_ret _s_n_fixed_len (Bridge <TypeCode>*, Interface*)
+	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>*, Interface*)
 	{
 		return Type <T>::is_CDR;
 	}
@@ -318,7 +318,7 @@ public:
 		return 0;
 	}
 
-	static Type <Boolean>::ABI_ret _s_n_fixed_len (Bridge <TypeCode>*, Interface*)
+	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>*, Interface*)
 	{
 		return true;
 	}
@@ -371,7 +371,7 @@ public:
 	using Impl::_s_concrete_base_type;
 
 	using Ops::_s_n_size;
-	using Ops::_s_n_fixed_len;
+	using Ops::_s_n_is_CDR;
 
 	// The get_compact_typecode operation strips out all optional name and member
 	// name fields, but it leaves all alias typecodes intact.

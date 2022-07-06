@@ -89,8 +89,8 @@ pseudo interface TypeCode
 	/// Size of the object.
 	Nirvana::Size n_size ();
 
-	/// Is fixed-length type
-	boolean n_fixed_len ();
+	/// Is type meets CORBA CDR
+	boolean n_is_CDR ();
 
 	/// Call the default constructor.
 	void n_construct (in Nirvana::Pointer p);

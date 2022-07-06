@@ -69,10 +69,10 @@ public:
 		return (content ()->_epv ().epv.n_size) (_b, _env);
 	}
 
-	static Type <Boolean>::ABI_ret _s_n_fixed_len (Bridge <TypeCode>* _b,
+	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>* _b,
 		Interface* _env)
 	{
-		return (content ()->_epv ().epv.n_fixed_len) (_b, _env);
+		return (content ()->_epv ().epv.n_is_CDR) (_b, _env);
 	}
 
 	static void _s_n_construct (Bridge <TypeCode>* _b, void* p, Interface* _env)

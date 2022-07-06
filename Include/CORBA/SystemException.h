@@ -174,6 +174,8 @@ namespace Internal {
 template <>
 struct Type <SystemException::_Data> : TypeFixLen <SystemException::_Data>
 {
+	static const bool is_CDR = true;
+
 	static void byteswap (Var& v) NIRVANA_NOEXCEPT
 	{
 		v.minor = Nirvana::byteswap (v.minor);

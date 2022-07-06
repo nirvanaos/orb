@@ -107,45 +107,52 @@ template <> struct Type <T>
   static I_ptr <TypeCode> type_code ();
 
   /// \brief Copies input data to the marshaling buffer.
+  /// Must be defined if is_CDR = false.
+  /// 
   /// \param src Source value.
   /// \param rq  IORequest interface.
   static void marshal_in (const Var& src, IORequest_ptr rq);
 
   /// \brief Copies input data array to the marshaling buffer.
+  /// Must be defined if is_CDR = false.
+  ///
   /// \param src   Source values.
   /// \param count Count of source values.
   /// \param rq    IORequest interface.
   static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq);
 
   /// \brief Moves output data to the marshaling buffer.
+  /// Must be defined if is_CDR = false.
+  ///
   /// \param src Source value. After marshalling, the value will be released.
   /// \param rq  IORequest interface.
   static void marshal_out (Var& src, IORequest_ptr rq);
 
   /// \brief Moves output data array to the marshaling buffer.
+  /// Must be defined if is_CDR = false.
+  ///
   /// \param src   Source values. After marshalling, the values will be released.
   /// \param count Count of source values.
   /// \param rq    IORequest interface.
   static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq);
 
   /// \brief Moves data from marshaling buffer to the local variable.
+  /// Must be defined if is_CDR = false.
+  ///
   /// \param rq    IORequest interface.
   /// \param dst   Destination value.
   static void unmarshal (IORequest_ptr rq, Var& dst);
 
   /// \brief Moves data array from marshaling buffer to the local variables.
+  /// Must be defined if is_CDR = false.
+  ///
   /// \param rq    IORequest interface.
   /// \param count Count of values.
   /// \param dst   Destination values buffer.
   static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst);
 
   /// \brief Swap byte order to change endianness.
-  /// Must be defined for:
-  ///   - Integer types
-  ///   - Float types
-  ///   - structures
-  ///   - unions
-  ///   - exceptions
+  /// Must be defined if is_CDR = true.
   /// 
   /// \param val Value.
   static void byteswap (Var&);

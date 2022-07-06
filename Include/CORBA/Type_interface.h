@@ -286,6 +286,7 @@ template <class I>
 struct TypeItfBase
 {
 	static const bool is_CDR = false;
+	static const bool is_var_len = true;
 
 	typedef Interface* ABI;
 
