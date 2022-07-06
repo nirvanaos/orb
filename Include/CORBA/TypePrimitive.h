@@ -97,6 +97,8 @@ template <typename T>
 struct TypePrimitive :
 	public TypeFixLen <T>
 {
+	static const bool is_CDR = true;
+
 	static void byteswap (T& v) NIRVANA_NOEXCEPT
 	{
 		v = Internal::byteswap (v);
@@ -107,6 +109,8 @@ template <>
 struct TypePrimitive <Char> :
 	public TypeByVal <Char>
 {
+	static const bool is_CDR = false;
+
 	static void marshal_in (const Char& src, IORequest_ptr rq);
 	static void marshal_in_a (const Char* src, size_t count, IORequest_ptr rq);
 
@@ -119,6 +123,8 @@ template <>
 struct TypePrimitive <WChar> :
 	public TypeByVal <WChar>
 {
+	static const bool is_CDR = false;
+
 	static void marshal_in (const WChar& src, IORequest_ptr rq);
 	static void marshal_in_a (const WChar* src, size_t count, IORequest_ptr rq);
 
@@ -133,6 +139,8 @@ template <>
 struct TypePrimitive <Boolean> :
 	public TypeByVal <Boolean, Octet>
 {
+	static const bool is_CDR = true;
+
 	class C_inout
 	{
 	public:

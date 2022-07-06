@@ -49,7 +49,10 @@ size_t string_len (const Char* s)
 template <> inline
 size_t string_len (const WChar* s)
 {
-	return wcslen (s);
+	const WChar* p = s;
+	while (*p)
+		++p;
+	return p - s;
 }
 
 template <typename C, ULong bound = 0>

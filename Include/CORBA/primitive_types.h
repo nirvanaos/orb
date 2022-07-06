@@ -39,15 +39,17 @@ namespace CORBA {
 
 typedef bool Boolean;
 typedef char Char;
-typedef wchar_t WChar;
-/* TODO:
+#define NIRVANA_S(s) s
+
 /// On systems with 32-bit or biggest word, WChar is 32 bit.
 /// On 16-bit systems WChar is 16 bit and only UCS-16 encoding is supported.
-typedef std::conditional <sizeof (size_t) >= 4,
-	std::conditional <sizeof (wchar_t) == 4, wchar_t, char32_t>::type,
-	std::conditional <sizeof (wchar_t) == 2, wchar_t, char16_t>::type
->::type	WChar;
-*/
+#if SIZE_MAX < 0xffffffffui32
+typedef char16_t WChar;
+#define NIRVANA_W(s) u ## s
+#else
+typedef char32_t WChar;
+#define NIRVANA_W(s) U ## s
+#endif
 
 typedef uint8_t Octet;
 typedef int16_t Short;

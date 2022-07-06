@@ -54,9 +54,9 @@ struct ArrayTraits <std::array <T, bound> >
 };
 
 template <class T, size_t bound>
-using TypeArrayBase = typename std::conditional <Type <typename ArrayTraits <T>::ElType>::is_CDR,
-	TypeFixLen <std::array <T, bound> >,
-	TypeVarLen <std::array <T, bound>, std::array <T, bound> >
+using TypeArrayBase = typename std::conditional <Type <typename ArrayTraits <T>::ElType>::is_var_len,
+	TypeVarLen <std::array <T, bound>, std::array <T, bound> >,
+	TypeFixLen <std::array <T, bound> >
 >::type;
 
 template <class T, size_t bound>

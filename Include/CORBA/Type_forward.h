@@ -56,9 +56,27 @@ template <> struct Type <T>
   /// - Enums
   static const bool has_check;
 
+  /// `true` for variable-length data types.
+  /// A type is variable-length if it is one of the following types:
+  /// - The type any
+  /// - A bounded or unbounded string or wide string
+  /// - A bounded or unbounded sequence
+  /// - An object reference or reference to a transmissible pseudo-object
+  /// - A valuetype
+  /// - A struct or union that contains a member whose type is variable-length
+  /// - An array with a variable-length element type
+  /// - A typedef to a variable-length type
+  /// 
+  /// Variable-length types have non-trivial constructor and destructor.
+  static const bool is_var_len;
+
   /// `true` if the data type meets the CORBA Common Data Representation.
   /// 
-  /// is_CDR = `true` for all fixed-length data types, except for unions.
+  /// is_CDR = `true` for all fixed-length data types, except for:
+  /// - union
+  /// - char
+  /// - wchar
+  /// - A struct or union that contains a member whose type is not CDR
   static const bool is_CDR;
 
   // Types for passing parameters via interface ABI

@@ -45,6 +45,7 @@ struct TypeVarLen :
 	TypeByRef <T, TABI>,
 	MarshalHelper <T, typename TypeByRef <T, TABI>::Var>
 {
+	static const bool is_var_len = true;
 	static const bool is_CDR = false;
 	static const bool has_check = true;
 

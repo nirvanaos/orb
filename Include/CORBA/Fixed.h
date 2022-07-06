@@ -30,8 +30,22 @@
 #include <Nirvana/basic_string.h>
 #include <iosfwd>
 
+namespace IDL {
+
+/// Fixed point common data representation
+template <uint16_t digits, uint16_t scale>
+struct FixedCDR
+{
+	static_assert (digits <= 31, "digits <= 31");
+
+	uint8_t bcd [digits + 2 / 2];
+};
+
+}
+
 namespace CORBA {
 
+/// Fixed point value
 class Fixed
 {
 public:

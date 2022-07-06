@@ -32,7 +32,7 @@
 #include "ABI_Any.h"
 #include "String.h"
 #include <Nirvana/basic_string.h>
-//#include "Fixed.h"
+#include "Fixed.h"
 #include "T_var.h"
 
 namespace CORBA {

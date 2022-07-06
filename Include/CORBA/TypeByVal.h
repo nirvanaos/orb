@@ -41,7 +41,7 @@ namespace Internal {
 template <typename T, typename TABI = T>
 struct TypeByVal
 {
-	static const bool is_CDR = true;
+	static const bool is_var_len = false;
 
 	typedef T Var;
 	typedef T VRet;
