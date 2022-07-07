@@ -207,10 +207,6 @@ struct TypePrimitive <Boolean> :
 	{}
 };
 
-#ifdef LEGACY_CORBA_CPP
-typedef Boolean& Boolean_out;
-#endif
-
 }
 }
 

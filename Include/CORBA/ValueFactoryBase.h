@@ -38,7 +38,6 @@ typedef Internal::I_ptr <ValueFactoryBase> ValueFactory;
 
 #ifdef LEGACY_CORBA_CPP
 typedef Internal::I_var <ValueFactoryBase> ValueFactoryBase_var;
-typedef ValueFactoryBase_var& ValueFactoryBase_out;
 #endif
 
 namespace Internal {

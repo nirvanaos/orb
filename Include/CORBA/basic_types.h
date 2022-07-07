@@ -32,15 +32,8 @@
 #include "TypePrimitive.h"
 #include "tc_constants.h"
 
-#ifdef LEGACY_CORBA_CPP
-#define NIRVANA_TYPE_OUT(T) typedef T& T##_out;
-#else
-#define NIRVANA_TYPE_OUT(T)
-#endif
-
 #define NIRVANA_BASIC_TYPE(T, tc) namespace Internal { template <> struct Internal::Type <T> : Internal::TypePrimitive <T> {\
-static I_ptr <TypeCode> type_code () { return tc; } }; }\
-NIRVANA_TYPE_OUT(T)
+static I_ptr <TypeCode> type_code () { return tc; } }; }
 
 namespace CORBA {
 

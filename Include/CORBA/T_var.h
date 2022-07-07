@@ -49,7 +49,7 @@ public:
 		T (std::move (v))
 	{}
 
-	NIRVANA_DEPRECATED
+	//NIRVANA_DEPRECATED
 	T_var (T* p) : // MyStruct_var v = new MyStruct();
 		T (*p)
 	{
@@ -88,9 +88,9 @@ public:
 		return *this;
 	}
 
-	T& operator -> ()
+	T* operator -> ()
 	{
-		return *this;
+		return this;
 	}
 
 	const T& operator -> () const

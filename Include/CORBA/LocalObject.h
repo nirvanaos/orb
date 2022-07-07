@@ -36,7 +36,6 @@ class LocalObject;
 #ifdef LEGACY_CORBA_CPP
 typedef Internal::I_ptr <LocalObject> LocalObject_ptr;
 typedef Internal::I_var <LocalObject> LocalObject_var;
-typedef LocalObject_var& LocalObject_out;
 #endif
 
 namespace Internal {

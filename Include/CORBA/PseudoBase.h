@@ -42,7 +42,6 @@ class PseudoBase;
 #ifdef LEGACY_CORBA_CPP
 typedef I_ptr <PseudoBase> PseudoBase_ptr;
 typedef I_var <PseudoBase> PseudoBase_var;
-typedef PseudoBase_var& PseudoBase_out;
 #endif
 
 template <>

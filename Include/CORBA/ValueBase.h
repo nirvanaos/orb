@@ -40,7 +40,6 @@ class ValueBase;
 #ifdef LEGACY_CORBA_CPP
 typedef Internal::I_ptr <ValueBase> ValueBase_ptr; // TODO: Old mapping requires the plain pointer here
 typedef Internal::I_var <ValueBase> ValueBase_var;
-typedef ValueBase_var& ValueBase_out;
 #endif
 
 namespace Internal {

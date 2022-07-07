@@ -37,7 +37,6 @@ class AbstractBase;
 #ifdef LEGACY_CORBA_CPP
 typedef Internal::I_ptr <AbstractBase> AbstractBase_ptr;
 typedef Internal::I_var <AbstractBase> AbstractBase_var;
-typedef AbstractBase_var& AbstractBase_out;
 #endif
 
 namespace Internal {

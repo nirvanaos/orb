@@ -82,7 +82,6 @@ class Object;
 #ifdef LEGACY_CORBA_CPP
 typedef Internal::I_ptr <Object> Object_ptr;
 typedef Internal::I_var <Object> Object_var;
-typedef Object_var& Object_out;
 #endif
 
 typedef Internal::Interface ImplementationDef; // Not defined, unused
