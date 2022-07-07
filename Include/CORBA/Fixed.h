@@ -27,8 +27,16 @@
 #define NIRVANA_ORB_FIXED_H_
 #pragma once
 
+#include "Type_array.h"
 #include <Nirvana/basic_string.h>
+#include <Nirvana/DecCalc.h>
 #include <iosfwd>
+
+namespace Nirvana {
+
+extern const ImportInterfaceT <DecCalc> g_dec_calc;
+
+}
 
 namespace IDL {
 
@@ -56,9 +64,21 @@ public:
 	Fixed (ULongLong val);
 	Fixed (Double val);
 	Fixed (LongDouble val);
-	Fixed (const Fixed& val);
-	Fixed (const char*);
-	~Fixed ();
+	Fixed (const Fixed& val) = default;
+	
+	Fixed (Internal::String_in s)
+	{
+		Nirvana::g_dec_calc->from_string (val_, s);
+	}
+
+	template <UShort digits, UShort scale>
+	Fixed (const IDL::FixedCDR <digits, scale>& cdr)
+	{
+		Nirvana::g_dec_calc->from_BCD (val_, digits, scale, cdr.bcd);
+	}
+
+	~Fixed ()
+	{}
 
 	// Conversions
 	operator LongLong () const;
@@ -82,8 +102,23 @@ public:
 	Boolean operator! () const;
 
 	// Other member functions
-	UShort fixed_digits () const;
-	UShort fixed_scale () const;
+	UShort fixed_digits () const
+	{
+		return val_.digits ();
+	}
+
+	UShort fixed_scale () const
+	{
+		return -val_.exponent ();
+	}
+
+	operator const Nirvana::DecCalc::Number () const
+	{
+		return val_;
+	}
+
+private:
+	Nirvana::DecCalc::Number val_;
 };
 
 std::istream& operator >> (std::istream& is, Fixed& val);
