@@ -39,16 +39,15 @@ namespace CORBA {
 
 typedef bool Boolean;
 typedef char Char;
-#define NIRVANA_S(s) s
 
 /// On systems with 32-bit or biggest word, WChar is 32 bit.
 /// On 16-bit systems WChar is 16 bit and only UCS-16 encoding is supported.
 #if SIZE_MAX < 0xffffffffui32
 typedef char16_t WChar;
-#define NIRVANA_W(s) u ## s
+#define _W(s) u ## s
 #else
 typedef char32_t WChar;
-#define NIRVANA_W(s) U ## s
+#define _W(s) U ## s
 #endif
 
 typedef uint8_t Octet;
