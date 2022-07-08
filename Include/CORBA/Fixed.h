@@ -58,15 +58,24 @@ class Fixed
 {
 public:
 	// Constructors
-	Fixed (Long val = 0);
-	Fixed (ULong val);
+	
+	Fixed (Long val = 0)
+	{
+		Nirvana::g_dec_calc->from_long (val_, val);
+	}
+
+	Fixed (ULong val)
+	{
+		Nirvana::g_dec_calc->from_ulong (val_, val);
+	}
+
 	Fixed (LongLong val);
 	Fixed (ULongLong val);
 	Fixed (Double val);
 	Fixed (LongDouble val);
 	Fixed (const Fixed& val) = default;
 	
-	Fixed (Internal::String_in s)
+	Fixed (const Char* s)
 	{
 		Nirvana::g_dec_calc->from_string (val_, s);
 	}
@@ -83,9 +92,25 @@ public:
 	// Conversions
 	operator LongLong () const;
 	operator LongDouble () const;
-	Fixed round (UShort scale) const;
-	Fixed truncate (UShort scale) const;
-	std::string to_string () const;
+
+	Fixed round (UShort scale) const
+	{
+		Fixed ret = *this;
+		Nirvana::g_dec_calc->round (ret.val_, scale);
+		return ret;
+	}
+
+	Fixed truncate (UShort scale) const
+	{
+		Fixed ret = *this;
+		Nirvana::g_dec_calc->truncate (ret.val_, scale);
+		return ret;
+	}
+	
+	std::string to_string () const
+	{
+		return Nirvana::g_dec_calc->to_string (val_);
+	}
 
 	// Operators
 	Fixed& operator = (const Fixed& val);
