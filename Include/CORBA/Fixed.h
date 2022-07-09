@@ -69,10 +69,21 @@ public:
 		Nirvana::g_dec_calc->from_ulong (val_, val);
 	}
 
-	Fixed (LongLong val);
-	Fixed (ULongLong val);
-	Fixed (Double val);
-	Fixed (LongDouble val);
+	Fixed (LongLong val)
+	{
+		Nirvana::g_dec_calc->from_longlong (val_, val);
+	}
+
+	Fixed (ULongLong val)
+	{
+		Nirvana::g_dec_calc->from_ulonglong (val_, val);
+	}
+
+	// CORBA::Double and CORBA::LongDouble may be emulated, use native types.
+
+	Fixed (double val);
+	Fixed (long double val);
+
 	Fixed (const Fixed& val) = default;
 
 	explicit Fixed (const std::string& s)
@@ -95,8 +106,12 @@ public:
 	{}
 
 	// Conversions
-	operator LongLong () const;
-	operator LongDouble () const;
+	operator LongLong () const
+	{
+		return Nirvana::g_dec_calc->to_longlong (val_);
+	}
+
+	operator long double () const;
 
 	Fixed round (UShort scale) const
 	{
@@ -118,7 +133,7 @@ public:
 	}
 
 	// Operators
-	Fixed& operator = (const Fixed& val);
+	Fixed& operator = (const Fixed& val) = default;
 	Fixed& operator += (const Fixed& val);
 	Fixed& operator -= (const Fixed& val);
 	Fixed& operator *= (const Fixed& val);
