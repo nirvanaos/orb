@@ -74,8 +74,13 @@ public:
 	Fixed (Double val);
 	Fixed (LongDouble val);
 	Fixed (const Fixed& val) = default;
-	
-	Fixed (const Char* s)
+
+	explicit Fixed (const std::string& s)
+	{
+		Nirvana::g_dec_calc->from_string (val_, s.c_str ());
+	}
+
+	Fixed (const char* s) // For compatibility
 	{
 		Nirvana::g_dec_calc->from_string (val_, s);
 	}
