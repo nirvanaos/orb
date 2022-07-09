@@ -42,7 +42,7 @@ namespace Internal {
 /// \tparam TABI The ABI type.
 template <class T, class TABI = ABI <T> >
 struct TypeVarLen :
-	TypeByRef <T, TABI>,
+	TypeByRefCheck <T, TABI>,
 	MarshalHelper <T, typename TypeByRef <T, TABI>::Var>
 {
 	static const bool is_var_len = true;
@@ -56,54 +56,14 @@ struct TypeVarLen :
 	typedef typename Base::ABI_ret ABI_ret;
 	typedef typename Base::ABI ABI;
 
-	static void check_or_clear (Var& v);
-
-	class C_inout : public Base::C_inout
-	{
-	public:
-		C_inout (Var& val) :
-			Base::C_inout (val)
-		{}
-
-		~C_inout () noexcept (false);
-	};
-
 	// C_out class clears output variable
-	class C_out : public C_inout
+	class C_out : public Base::C_out
 	{
 	public:
 		C_out (Var& val) :
-			C_inout (val)
+			Base::C_out (val)
 		{
 			val = Var ();	// Clear
-		}
-	};
-
-	class C_ret
-	{
-	public:
-		C_ret (ABI_ret&& val) :
-			val_ (reinterpret_cast <Var&&> (val))
-		{
-			check_or_clear (this->val_);
-		}
-
-		operator Var () NIRVANA_NOEXCEPT
-		{
-			return std::move (val_);
-		}
-
-	protected:
-		Var val_;
-	};
-
-	class C_VT_ret : public Base::C_VT_ret
-	{
-	public:
-		C_VT_ret (typename Base::ABI_VT_ret p) :
-			Base::C_VT_ret (p)
-		{
-			Type <Var>::check (*p);
 		}
 	};
 
@@ -112,21 +72,7 @@ struct TypeVarLen :
 	// `const` is removed to let servant adopt the unmarshaled input data.
 	static Var& in (typename Base::ABI_in p)
 	{
-		check_pointer (p);
-		Type <Var>::check (*p);
-		return const_cast <Var&> (reinterpret_cast <const Var&> (*p));
-	}
-
-	static Var& inout (typename Base::ABI_out p)
-	{
-		check_pointer (p);
-		Type <Var>::check (*p);
-		return reinterpret_cast <Var&> (*p);
-	}
-
-	static Var& out (typename Base::ABI_out p)
-	{
-		return inout (p);
+		return const_cast <Var&> (Base::in (p));
 	}
 
 	static ABI_ret ret (Var&& v) NIRVANA_NOEXCEPT
@@ -144,32 +90,6 @@ struct TypeVarLen :
 	}
 
 };
-
-/// Outline for compact code
-template <class T, class TABI>
-void TypeVarLen <T, TABI>::check_or_clear (Var& v)
-{
-	try {
-		Type <Var>::check (reinterpret_cast <typename Type <Var>::ABI&> (v));
-	} catch (...) {
-		v.~Var (); // Destructor mustn't throw exceptions
-		new (&v) Var ();
-		throw;
-	}
-}
-
-/// Outline for compact code
-template <class T, class TABI>
-TypeVarLen <T, TABI>::C_inout::~C_inout () noexcept (false)
-{
-	bool ex = uncaught_exception ();
-	try {
-		check_or_clear (this->ref_);
-	} catch (...) {
-		if (!ex)
-			throw;
-	}
-}
 
 }
 }

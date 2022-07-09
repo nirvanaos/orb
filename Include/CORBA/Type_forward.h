@@ -99,7 +99,7 @@ template <> struct Type <T>
   static Var& out (ABI_out p);
   static Var& inout (ABI_out p);
   static ABI_ret ret (Var);
-  static ABI_ret (); // Return default value on error
+  static ABI_ret ret (); // Return default value on error
   static ABI_VT_ret VT_ret (ConstRef);
   static ABI_VT_ret VT_ret (); // Return default value on error
 

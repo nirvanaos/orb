@@ -76,7 +76,7 @@ I_inout <I>::~I_inout () noexcept (false)
 {
 	bool ex = uncaught_exception ();
 	try {
-		I::_check (ref_);
+		Interface::_check (ref_, RepIdOf <I>::id);
 	} catch (...) {
 		interface_release (ref_);
 		ref_ = 0;
@@ -166,67 +166,61 @@ template <class I>
 class I_ret
 {
 public:
-	I_ret (Interface* p)
-	{
-		try {
-			ptr_ = I::_check (p);
-		} catch (...) {
-			ptr_ = I::_nil ();
-			interface_release (p);
-			throw;
-		}
-	}
+	I_ret (Interface* p) :
+		p_ (p)
+	{}
 
 	~I_ret ()
 	{
-		interface_release (&ptr_);
+		interface_release (p_);
 	}
+
+#ifndef LEGACY_CORBA_CPP
 
 	operator I_ref <I> ()
 	{
-		I_ref <I> ret (ptr_.p_);
-		ptr_ = I::_nil ();
+		I_ref <I> ret (static_cast <I*> (Interface::_check (p_, RepIdOf <I>::id))); // No add reference
+		p_ = nullptr;
 		return ret;
 	}
 
-#ifdef LEGACY_CORBA_CPP
+#else
 
 	operator I_ptr <I> ()
 	{
-		I_ptr <I> ret = ptr_;
-		ptr_ = I::_nil ();
+		I_ptr <I> ret (static_cast <I*> (Interface::_check (p_, RepIdOf <I>::id))); // No add reference
+		p_ = nullptr;
 		return ret;
 	}
 
 	operator I_var <I> ()
 	{
-		I_ptr <I> ret = ptr_;
-		ptr_ = I::_nil ();
-		return ret;
+		I_ptr <I> ret (static_cast <I*> (Interface::_check (p_, RepIdOf <I>::id))); // No add reference
+		p_ = nullptr;
+		return I_var (ret);
 	}
 
 #endif
 
 private:
-	I_ptr <I> ptr_;
+	Interface* p_;
 };
 
 template <class I>
 class I_VT_ret
 {
 public:
-	I_VT_ret (Interface* p)
-	{
-		ptr_ = I::_check (p);
-	}
+	I_VT_ret (Interface* p) :
+		p_ (p)
+	{}
 
 	operator I_ptr <I> ()
 	{
-		return ptr_;
+		return I_ptr <I> (static_cast <I*> (Interface::_check (p_, RepIdOf <I>::id)));
 	}
 
 private:
-	I_ptr <I> ptr_;
+	Interface* p_;
 };
 
 //! I_ret helper class for interface
@@ -235,41 +229,43 @@ class I_ret <Interface>
 {
 public:
 	I_ret (Interface* p) :
-		ptr_ (p)
+		p_ (p)
 	{}
 
 	~I_ret ()
 	{
-		interface_release (ptr_);
+		interface_release (p_);
 	}
+
+#ifndef LEGACY_CORBA_CPP
 
 	operator I_ref <Interface> ()
 	{
-		I_ref <Interface> ret (ptr_);
-		ptr_ = nullptr;
+		I_ref <Interface> ret (p_);
+		p_ = nullptr;
 		return ret;
 	}
 
-#ifdef LEGACY_CORBA_CPP
+#else
 
 	operator I_ptr <Interface> ()
 	{
-		I_ptr <Interface> ret = ptr_;
-		ptr_ = nullptr;
+		I_ptr <Interface> ret = p_;
+		p_ = nullptr;
 		return ret;
 	}
 
 	operator I_var <Interface> ()
 	{
-		I_ptr <Interface> ret = ptr_;
-		ptr_ = nullptr;
+		I_var <Interface> ret = p_;
+		p_ = nullptr;
 		return ret;
 	}
 
 #endif
 
 private:
-	Interface* ptr_;
+	Interface* p_;
 };
 
 template <>
@@ -360,6 +356,7 @@ struct TypeItfBase
 
 	// Valuetupe implementation for state members must return I_ptr, not I_ref.
 	// Otherwise compilation error will occur.
+	NIRVANA_DEPRECATED
 	static void VT_ret (I_ref <I>&);
 
 	typedef I_ptr <I> ConstRef;
@@ -374,14 +371,14 @@ struct TypeItfCommon : TypeItfBase <I>
 
 	static const bool has_check = true;
 
-	static void check (Interface* p)
+	static I* check (Interface* p)
 	{
-		Interface::_check (p, RepIdOf <I>::id);
+		return reinterpret_cast <I*> (Interface::_check (p, RepIdOf <I>::id));
 	}
 
 	static I_ptr <I> in (ABI_in p)
 	{
-		return reinterpret_cast <I*> (Interface::_check (p, RepIdOf <I>::id));
+		return check (p);
 	}
 
 #ifdef LEGACY_CORBA_CPP
@@ -389,7 +386,7 @@ struct TypeItfCommon : TypeItfBase <I>
 	static I_var <I>& inout (ABI_out p)
 	{
 		check_pointer (p);
-		I::_check (*p);
+		check (*p);
 		return reinterpret_cast <I_var <I>&> (*p);
 	}
 
@@ -398,7 +395,7 @@ struct TypeItfCommon : TypeItfBase <I>
 	static I_ref <I>& inout (ABI_out p)
 	{
 		check_pointer (p);
-		I::_check (*p);
+		check (*p);
 		return reinterpret_cast <I_ref <I>&> (*p);
 	}
 

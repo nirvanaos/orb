@@ -28,18 +28,17 @@
 #define NIRVANA_ORB_TYPEBYREF_H_
 #pragma once
 
-#include "Type_forward.h"
+#include "TypeBase.h"
 
 namespace CORBA {
 namespace Internal {
 
-/// Data type, passed by reference.
+/// Data type passed by reference.
 /// 
 /// \tparam T The variable type.
 /// \tparam TABI The ABI type.
-/// \tparam TMember The struct member type.
 template <typename T, typename TABI = T>
-struct TypeByRef
+struct TypeByRefBase
 {
 	typedef T Var;
 	typedef T VRet;
@@ -51,9 +50,6 @@ struct TypeByRef
 	typedef ABI* ABI_out;
 	typedef ABI ABI_ret;
 	typedef const ABI* ABI_VT_ret;
-
-	static const bool has_check = false;
-	static void check (const ABI&) {}
 
 	// Client-side types
 
@@ -73,69 +69,91 @@ struct TypeByRef
 		const Var& ref_;
 	};
 
-	class C_inout
-	{
-	public:
-		C_inout (Var& v) :
-			ref_ (v)
-		{}
-
-		ABI_out operator & () const
-		{
-			return &reinterpret_cast <ABI&> (ref_);
-		}
-
-	protected:
-		Var& ref_;
-	};
-
-	typedef C_inout C_out;
-
-	class C_VT_ret
-	{
-	public:
-		C_VT_ret (ABI_VT_ret p) :
-			p_ (reinterpret_cast <const Var*> (p))
-		{}
-
-		operator ConstRef () const
-		{
-			check_pointer (p_);
-			return *p_;
-		}
-
-	protected:
-		const Var* p_;
-	};
-
 	// Servant-side methods
 
 	static ConstRef in (ABI_in p)
 	{
 		check_pointer (p);
+		Type <T>::check (*p);
 		return reinterpret_cast <const Var&> (*p);
 	}
 
-	static Var& out (ABI_out p)
+	static ABI_ret ret (Var&& v)
 	{
-		return inout (p);
+		return (ABI_ret&&)v;
 	}
 
-	static Var& inout (ABI_out p)
+	static ABI_ret ret ()
 	{
-		check_pointer (p);
-		return reinterpret_cast <Var&> (*p);
+		return ABI_ret ();
 	}
 
-	static ABI_VT_ret VT_ret (const Var& v)
+	static ABI_VT_ret VT_ret (const Var& v) NIRVANA_NOEXCEPT
 	{
 		return &reinterpret_cast <const ABI&> (v);
 	}
 
-	static ABI_VT_ret VT_ret ()
+	static ABI_VT_ret VT_ret () NIRVANA_NOEXCEPT
 	{
 		return nullptr;
 	}
+
+};
+
+/// Data type passed by reference, without check.
+/// 
+/// \tparam T The variable type.
+/// \tparam TABI The ABI type.
+template <typename T, typename TABI = T>
+struct TypeByRef : TypeByRefBase <T, TABI>, TypeNoCheck <T, TABI>
+{
+	class C_inout
+	{
+	public:
+		C_inout (T& v) :
+			ref_ (v)
+		{}
+
+		TABI* operator & () const
+		{
+			return &reinterpret_cast <TABI&> (ref_);
+		}
+
+	protected:
+		T& ref_;
+	};
+
+	typedef C_inout C_out;
+	typedef T C_ret;
+
+	typedef const T& C_VT_ret;
+
+};
+
+/// Data type passed by reference, with check.
+/// 
+/// \tparam T The variable type.
+/// \tparam TABI The ABI type.
+template <typename T, typename TABI = T>
+struct TypeByRefCheck : TypeByRefBase <T, TABI>, TypeWithCheck <T, TABI>
+{
+	class C_VT_ret
+	{
+	public:
+		C_VT_ret (const TABI* p) :
+			p_ (p)
+		{}
+
+		operator const T& () NIRVANA_NOEXCEPT
+		{
+			check_pointer (p_);
+			Type <T>::check (*p_);
+			return reinterpret_cast <const T&> (*p_);
+		}
+
+	protected:
+		const TABI* p_;
+	};
 
 };
 

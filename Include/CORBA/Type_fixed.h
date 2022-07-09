@@ -24,55 +24,41 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPE_H_
-#define NIRVANA_ORB_TYPE_H_
+#ifndef NIRVANA_ORB_TYPE_FIXED_H_
+#define NIRVANA_ORB_TYPE_FIXED_H_
 #pragma once
 
-#include "TypeFixLen.inl"
-#include "TypeVarLen.inl"
-#include "TypePrimitive.inl"
-#include "TypeEnum.inl"
-#include "Type_interface.inl"
-#include "Object.inl"
-#include "String.inl"
-#include "Sequence.inl"
-#include "Object.inl"
-#include "ValueBase.inl"
-#include "ValueBox.h"
-#include "AbstractBase.inl"
-#include "Type_array.h"
-#include "Type_fixed.h"
+#include <Nirvana/Decimal.h>
+#include "TypeFixLen.h"
+
+namespace IDL {
+
+template <uint16_t digits, uint16_t scale>
+using Fixed = Nirvana::Decimal <digits, scale>;
+
+}
 
 namespace CORBA {
 namespace Internal {
 
-/// The `void` type.
-template <>
-struct Type <void>
+void check_BCD (const Octet* bcd, UShort digits);
+
+template <uint16_t digits, uint16_t scale>
+struct Type <IDL::Fixed <digits, scale> > :
+	public TypeFixLen <IDL::Fixed <digits, scale>, true, IDL::FixedCDR <digits, scale> >
 {
-	static I_ptr <TypeCode> type_code ()
+	static const bool is_CDR = true;
+	static const bool has_check = true;
+
+	typedef const IDL::FixedCDR <digits, scale>& C_in;
+
+	static void check (const IDL::FixedCDR <digits, scale>& abi)
 	{
-		return _tc_void;
+		check_BCD (abi.bcd, digits);
 	}
 };
 
 }
 }
-
-#ifndef LEGACY_CORBA_CPP
-
-namespace IDL {
-
-// IDL::traits
-template <class I>
-struct traits
-{
-	typedef CORBA::Internal::I_ref <I> ref_type;
-	typedef CORBA::Internal::I_ptr <I> ptr_type;
-};
-
-}
-
-#endif
 
 #endif

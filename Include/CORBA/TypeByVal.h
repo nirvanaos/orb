@@ -28,25 +28,23 @@
 #define NIRVANA_ORB_TYPEBYVAL_H_
 #pragma once
 
-#include "Type_forward.h"
+#include "TypeBase.h"
 
 namespace CORBA {
 namespace Internal {
 
-/// Data type, passed by value.
+/// Data type passed by value.
 /// 
 /// \tparam T The variable type.
 /// \tparam TABI The ABI type.
-/// \tparam TMember The struct member type.
 template <typename T, typename TABI = T>
-struct TypeByVal
+struct TypeByValBase
 {
 	static const bool is_var_len = false;
 
 	typedef T Var;
 	typedef T VRet;
 	typedef Var ConstRef; // By value
-	typedef Var S_in; // By value
 
 	// ABI data types
 	typedef TABI ABI;
@@ -55,20 +53,17 @@ struct TypeByVal
 	typedef ABI ABI_ret;
 	typedef ABI ABI_VT_ret;
 
-	static const bool has_check = false;
-	static void check (const ABI&) {}
-
 	// Client-side types
 
 	// in parameters passed by value
 	class C_in
 	{
 	public:
-		C_in (Var val) :
+		C_in (Var val) NIRVANA_NOEXCEPT :
 			val_ (val)
 		{}
 
-		ABI_in operator & () const
+		ABI_in operator & () const NIRVANA_NOEXCEPT
 		{
 			return (ABI_in)val_;
 		}
@@ -77,49 +72,35 @@ struct TypeByVal
 		Var val_;
 	};
 
-	typedef Var& C_out;
-	typedef Var& C_inout;
-	typedef Var C_ret;
-	typedef Var C_VT_ret;
-
 	// Servant-side methods
 
-	static Var in (ABI_in v)
+	static Var in (ABI abi)
 	{
-		return (Var)v;
+		Type <T>::check (abi);
+		return (Var)abi;
 	}
 
-	static Var& out (ABI_out p)
-	{
-		check_pointer (p);
-		return reinterpret_cast <Var&> (*p);
-	}
-
-	static Var& inout (ABI_out p)
-	{
-		check_pointer (p);
-		return reinterpret_cast <Var&> (*p);
-	}
-
-	static ABI_ret ret (Var v)
+	static ABI_ret ret (Var v) NIRVANA_NOEXCEPT
 	{
 		return (ABI_ret)v;
 	}
 
-	static ABI_ret ret ()
+	static ABI_ret ret () NIRVANA_NOEXCEPT
 	{
 		return ABI_ret ();
 	}
 
-	static ABI_VT_ret VT_ret (Var v)
+	static ABI_ret VT_ret (Var v) NIRVANA_NOEXCEPT
 	{
 		return (ABI_ret)v;
 	}
 
-	static ABI_VT_ret VT_ret ()
+	static ABI_ret VT_ret () NIRVANA_NOEXCEPT
 	{
 		return ABI_ret ();
 	}
+
+	// Marshaling
 
 	static void marshal_out (Var& src, IORequest_ptr rq)
 	{
@@ -130,6 +111,47 @@ struct TypeByVal
 	{
 		Type <T>::marshal_in_a (src, count, rq);
 	}
+
+};
+
+/// Data type passed by value, without check().
+/// 
+/// \tparam T The variable type.
+/// \tparam TABI The ABI type.
+template <typename T, typename TABI = T>
+struct TypeByVal : TypeByValBase <T, TABI>, TypeNoCheck <T, TABI>
+{
+	typedef T& C_out;
+	typedef T& C_inout;
+	typedef T C_ret;
+	typedef T C_VT_ret;
+
+};
+
+/// Data type passed by value, with check.
+/// 
+/// \tparam T The variable type.
+/// \tparam TABI The ABI type.
+template <typename T, typename TABI = T>
+struct TypeByValCheck : TypeByValBase <T, TABI>, TypeWithCheck <T, TABI>
+{
+	class C_VT_ret
+	{
+	public:
+		C_VT_ret (TABI abi) :
+			abi_ (abi)
+		{}
+
+		operator T () NIRVANA_NOEXCEPT
+		{
+			Type <T>::check (abi_);
+			return reinterpret_cast <T> (abi_);
+		}
+
+	protected:
+		TABI abi_;
+	};
+
 };
 
 }

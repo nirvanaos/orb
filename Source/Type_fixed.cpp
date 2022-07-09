@@ -1,4 +1,3 @@
-/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -24,55 +23,31 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPE_H_
-#define NIRVANA_ORB_TYPE_H_
-#pragma once
-
-#include "TypeFixLen.inl"
-#include "TypeVarLen.inl"
-#include "TypePrimitive.inl"
-#include "TypeEnum.inl"
-#include "Type_interface.inl"
-#include "Object.inl"
-#include "String.inl"
-#include "Sequence.inl"
-#include "Object.inl"
-#include "ValueBase.inl"
-#include "ValueBox.h"
-#include "AbstractBase.inl"
-#include "Type_array.h"
-#include "Type_fixed.h"
+#include <CORBA/CORBA.h>
 
 namespace CORBA {
 namespace Internal {
 
-/// The `void` type.
-template <>
-struct Type <void>
+void check_BCD (const Octet* bcd, UShort digits)
 {
-	static I_ptr <TypeCode> type_code ()
-	{
-		return _tc_void;
+	assert (bcd);
+
+	if (digits) {
+		size_t len = digits + 2 / 2;
+		Octet oct = bcd [len - 1];
+		Octet sign = oct & 0x0F;
+		if (sign == 0xC || sign == 0xD) {
+			if ((oct & 0xF0) <= 0x90) {
+				for (const Octet* p = bcd, *end = p + len - 1; p != end; ++p) {
+					oct = *p;
+					if ((oct & 0xF0) > 0x90 || (oct & 0x0F) > 0x09)
+						throw BAD_PARAM ();
+				}
+			}
+		}
 	}
-};
+	throw BAD_PARAM ();
+}
 
 }
 }
-
-#ifndef LEGACY_CORBA_CPP
-
-namespace IDL {
-
-// IDL::traits
-template <class I>
-struct traits
-{
-	typedef CORBA::Internal::I_ref <I> ref_type;
-	typedef CORBA::Internal::I_ptr <I> ptr_type;
-};
-
-}
-
-#endif
-
-#endif

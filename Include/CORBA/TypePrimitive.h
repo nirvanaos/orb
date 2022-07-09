@@ -95,7 +95,7 @@ inline uint8_t byteswap (const uint8_t& v) NIRVANA_NOEXCEPT
 
 template <typename T>
 struct TypePrimitive :
-	public TypeFixLen <T>
+	public TypeFixLen <T, false>
 {
 	static const bool is_CDR = true;
 
@@ -161,8 +161,8 @@ struct TypePrimitive <Boolean> :
 
 	protected:
 		Var& ref_;
-		// The ABI for boolean is Char.
-		// But sizeof(bool) is implementation-dependent and might be > sizeof(Char).
+		// The ABI for boolean is Octet.
+		// But sizeof(bool) is implementation-dependent and might be > sizeof(Octet).
 		// So we reserve size_t (the machine word) as ABI for boolean in assumption that bool implementation can't be wide.
 		size_t abi_;
 	};

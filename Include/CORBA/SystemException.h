@@ -172,7 +172,7 @@ private:
 namespace Internal {
 
 template <>
-struct Type <SystemException::_Data> : TypeFixLen <SystemException::_Data>
+struct Type <SystemException::_Data> : TypeFixLen <SystemException::_Data, false> // Do not check system exception data
 {
 	static const bool is_CDR = true;
 

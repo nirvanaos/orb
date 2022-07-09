@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -39,23 +40,15 @@ namespace Internal {
 /// Passed by value if sizeof (T) <= 2 * sizeof (size_t).
 /// 
 /// \tparam T The variable type.
-template <typename T>
-struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t), TypeByVal <T, T>, TypeByRef <T, T> >
+/// \tparam chk `true` if the variable has check ().
+/// \tparam TABI The ABI type.
+template <typename T, bool chk, typename TABI = T>
+struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t),
+	std::conditional_t <chk, TypeByValCheck <T, TABI>, TypeByVal <T, TABI> >,
+	std::conditional_t <chk, TypeByRefCheck <T, TABI>, TypeByRef <T, TABI> >
+>
 {
-	static const bool is_var_len = false; // Always
-	static const bool has_check = false;  // By default
-
-	typedef T C_ret;
-
-	static T ret (T v) NIRVANA_NOEXCEPT
-	{
-		return v;
-	}
-
-	static T ret () NIRVANA_NOEXCEPT
-	{
-		return T ();
-	}
+	static const bool is_var_len = false;
 
 	static void marshal_in (const T& src, IORequest_ptr rq);
 	static void marshal_in_a (const T* src, size_t count, IORequest_ptr rq);

@@ -36,7 +36,7 @@ namespace Internal {
 
 /// Base for enum data types
 template <class T, T last>
-struct TypeEnum : TypeByVal <T, ABI_enum>
+struct TypeEnum : TypeByValCheck <T, ABI_enum>
 {
 	static_assert (sizeof (T) == sizeof (ABI_enum), "IDL enumerations must be declared as : ABI_enum.");
 
@@ -50,7 +50,6 @@ struct TypeEnum : TypeByVal <T, ABI_enum>
 	typedef typename Base::ABI_out ABI_out;
 	typedef typename Base::ABI_ret ABI_ret;
 
-	static const bool has_check = true;
 	static const bool is_CDR = true;
 
 	static void check (ABI val)
@@ -62,71 +61,6 @@ struct TypeEnum : TypeByVal <T, ABI_enum>
 	static void check (T val)
 	{
 		check ((ABI)val);
-	}
-
-	class C_inout
-	{
-	public:
-		C_inout (Var& val) :
-			ref_ (val),
-			val_ ((ABI)val)
-		{}
-
-		~C_inout () noexcept (false)
-		{
-			if (!uncaught_exception ()) {
-				Type <Var>::check (val_);
-				ref_ = (T*)val_;
-			}
-		}
-
-		ABI* operator & ()
-		{
-			return &val_;
-		}
-
-	private:
-		Var& ref_;
-		ABI val_;
-	};
-
-	typedef C_inout C_out;
-
-	class C_ret
-	{
-	public:
-		C_ret (ABI_ret val) :
-			val_ (val)
-		{
-			check (val_);
-		}
-
-		operator Var ()
-		{
-			return (Var)val_;
-		}
-
-	private:
-		ABI_ret val_;
-	};
-
-	static Var in (ABI_in v)
-	{
-		check (v);
-		return (Var)v;
-	}
-
-	static Var& inout (ABI_out p)
-	{
-		check_pointer (p);
-		check (*p);
-		return (Var&)*p;
-	}
-
-	static Var& out (ABI_out p)
-	{
-		check_pointer (p);
-		return (Var&)*p;
 	}
 
 	static void marshal_in (const T& src, IORequest_ptr rq);

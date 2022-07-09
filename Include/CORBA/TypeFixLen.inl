@@ -34,20 +34,20 @@
 namespace CORBA {
 namespace Internal {
 
-template <typename T> inline
-void TypeFixLen <T>::marshal_in (const T& src, IORequest_ptr rq)
+template <typename T, bool chk, typename TABI> inline
+void TypeFixLen <T, chk, TABI>::marshal_in (const T& src, IORequest_ptr rq)
 {
 	rq->marshal (alignof (T), sizeof (T), &src);
 }
 
-template <typename T> inline
-void TypeFixLen <T>::marshal_in_a (const T* src, size_t count, IORequest_ptr rq)
+template <typename T, bool chk, typename TABI> inline
+void TypeFixLen <T, chk, TABI>::marshal_in_a (const T* src, size_t count, IORequest_ptr rq)
 {
 	rq->marshal (alignof (T), sizeof (T) * count, src);
 }
 
-template <typename T> inline
-void TypeFixLen <T>::unmarshal (IORequest_ptr rq, T& dst)
+template <typename T, bool chk, typename TABI> inline
+void TypeFixLen <T, chk, TABI>::unmarshal (IORequest_ptr rq, T& dst)
 {
 	void* pbuf = nullptr;
 	if (rq->unmarshal (alignof (T), sizeof (T), pbuf))
@@ -57,8 +57,8 @@ void TypeFixLen <T>::unmarshal (IORequest_ptr rq, T& dst)
 	dst = *(T*)pbuf;
 }
 
-template <typename T> inline
-void TypeFixLen <T>::unmarshal_a (IORequest_ptr rq, size_t count, T* dst)
+template <typename T, bool chk, typename TABI> inline
+void TypeFixLen <T, chk, TABI>::unmarshal_a (IORequest_ptr rq, size_t count, T* dst)
 {
 	void* pbuf = nullptr;
 	if (rq->unmarshal (alignof (T), sizeof (T) * count, pbuf) && sizeof (T) > 1) {
