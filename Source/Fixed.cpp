@@ -25,6 +25,8 @@
 */
 #include <CORBA/CORBA.h>
 #include <sstream>
+#include <istream>
+#include <ostream>
 
 using namespace std;
 
@@ -51,6 +53,19 @@ Fixed::operator long double () const
 	long double val;
 	ss >> val;
 	return val;
+}
+
+istream& operator >> (istream& is, Fixed& val)
+{
+	long double ld;
+	is >> ld;
+	val = Fixed (ld);
+	return is;
+}
+
+ostream& operator << (ostream& os, const Fixed& val)
+{
+	return os << val.to_string ();
 }
 
 }

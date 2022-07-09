@@ -134,16 +134,67 @@ public:
 
 	// Operators
 	Fixed& operator = (const Fixed& val) = default;
-	Fixed& operator += (const Fixed& val);
-	Fixed& operator -= (const Fixed& val);
-	Fixed& operator *= (const Fixed& val);
-	Fixed& operator /= (const Fixed& val);
-	Fixed& operator ++ ();
-	Fixed operator ++ (int);
-	Fixed& operator -- ();
-	Fixed operator -- (int);
-	Fixed operator + () const;
-	Fixed operator - () const;
+
+	Fixed& operator += (const Fixed& val)
+	{
+		Nirvana::g_dec_calc->add (val_, val.val_);
+		return *this;
+	}
+
+	Fixed& operator -= (const Fixed& val)
+	{
+		Nirvana::g_dec_calc->subtract (val_, val.val_);
+		return *this;
+	}
+
+	Fixed& operator *= (const Fixed& val)
+	{
+		Nirvana::g_dec_calc->multiply (val_, val.val_);
+		return *this;
+	}
+
+	Fixed& operator /= (const Fixed& val)
+	{
+		Nirvana::g_dec_calc->divide (val_, val.val_);
+		return *this;
+	}
+
+	Fixed& operator ++ ()
+	{
+		return operator += (Fixed (1));
+	}
+
+	Fixed operator ++ (int)
+	{
+		Fixed f (*this);
+		operator ++ ();
+		return f;
+	}
+
+	Fixed& operator -- ()
+	{
+		return operator -= (Fixed (1));
+	}
+
+	Fixed operator -- (int)
+	{
+		Fixed f (*this);
+		operator -- ();
+		return f;
+	}
+
+	Fixed operator + () const
+	{
+		return *this;
+	}
+
+	Fixed operator - () const
+	{
+		Fixed ret = *this;
+		Nirvana::g_dec_calc->minus (ret.val_);
+		return ret;
+	}
+
 	Boolean operator! () const;
 
 	// Other member functions
@@ -168,10 +219,39 @@ private:
 
 std::istream& operator >> (std::istream& is, Fixed& val);
 std::ostream& operator << (std::ostream& os, const Fixed& val);
-Fixed operator + (const Fixed& val1, const Fixed& val2);
-Fixed operator - (const Fixed& val1, const Fixed& val2);
-Fixed operator * (const Fixed& val1, const Fixed& val2);
-Fixed operator / (const Fixed& val1, const Fixed& val2);
+
+inline
+Fixed operator + (const Fixed& val1, const Fixed& val2)
+{
+	Fixed ret (val1);
+	ret += val2;
+	return ret;
+}
+
+inline
+Fixed operator - (const Fixed& val1, const Fixed& val2)
+{
+	Fixed ret (val1);
+	ret -= val2;
+	return ret;
+}
+
+inline
+Fixed operator * (const Fixed& val1, const Fixed& val2)
+{
+	Fixed ret (val1);
+	ret *= val2;
+	return ret;
+}
+
+inline
+Fixed operator / (const Fixed& val1, const Fixed& val2)
+{
+	Fixed ret (val1);
+	ret /= val2;
+	return ret;
+}
+
 Boolean operator > (const Fixed& val1, const Fixed& val2);
 Boolean operator < (const Fixed& val1, const Fixed& val2);
 Boolean operator >= (const Fixed& val1, const Fixed& val2);
