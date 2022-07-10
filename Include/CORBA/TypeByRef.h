@@ -53,11 +53,16 @@ struct TypeByRefBase
 
 	// Client-side types
 
-	class C_in
+	class C_in_ref
 	{
 	public:
-		C_in (const Var& v) :
+		C_in_ref (const Var& v) :
 			ref_ (v)
+		{}
+
+		template <typename T1>
+		C_in_ref (const T1& v) :
+			C_in (static_cast <const Var&> (v))
 		{}
 
 		ABI_in operator & () const
@@ -68,6 +73,8 @@ struct TypeByRefBase
 	protected:
 		const Var& ref_;
 	};
+
+	typedef std::conditional_t <std::is_same <Var, ABI>::value, const Var&, C_in_ref> C_in;
 
 	// Servant-side methods
 
