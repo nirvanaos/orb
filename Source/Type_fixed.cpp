@@ -33,7 +33,7 @@ void check_BCD (const Octet* bcd, UShort digits)
 	assert (bcd);
 
 	if (digits) {
-		size_t len = digits + 2 / 2;
+		size_t len = (digits + 2) / 2;
 		Octet oct = bcd [len - 1];
 		Octet sign = oct & 0x0F;
 		if (sign == 0xC || sign == 0xD) {

@@ -46,7 +46,7 @@ struct FixedCDR
 {
 	static_assert (digits <= 31, "digits <= 31");
 
-	uint8_t bcd [digits + 2 / 2];
+	uint8_t bcd [(digits + 2) / 2];
 };
 
 }
@@ -57,8 +57,11 @@ namespace CORBA {
 class Fixed
 {
 public:
-	// Constructors
-	
+	///@{
+	/// Constructors
+
+	Fixed (const Fixed& val) = default;
+
 	Fixed (Long val = 0)
 	{
 		Nirvana::g_dec_calc->from_long (val_, val);
@@ -79,19 +82,20 @@ public:
 		Nirvana::g_dec_calc->from_ulonglong (val_, val);
 	}
 
-	// CORBA::Double and CORBA::LongDouble may be emulated, use native types.
+	///@{
+	/// CORBA::Double and CORBA::LongDouble may be emulated so we use native floating point types.
 
 	Fixed (double val);
 	Fixed (long double val);
 
-	Fixed (const Fixed& val) = default;
+	///@}
 
 	explicit Fixed (const std::string& s)
 	{
 		Nirvana::g_dec_calc->from_string (val_, s.c_str ());
 	}
 
-	Fixed (const char* s) // For compatibility
+	Fixed (const char* s)
 	{
 		Nirvana::g_dec_calc->from_string (val_, s);
 	}
@@ -102,16 +106,53 @@ public:
 		Nirvana::g_dec_calc->from_BCD (val_, digits, scale, cdr.bcd);
 	}
 
-	~Fixed ()
-	{}
+	///@}
 
-	// Conversions
+	///@{
+	/// Conversions
+
 	operator LongLong () const
 	{
 		return Nirvana::g_dec_calc->to_longlong (val_);
 	}
 
 	operator long double () const;
+
+	operator const Nirvana::DecCalc::Number () const
+	{
+		return val_;
+	}
+
+	/// Converts a fixed value to a string
+	/// 
+	/// Leading zeros are dropped, but trailing fractional zeros are preserved.
+	/// (For example, a fixed<4, 2> with the value 1.1 is converted “1.10”).
+	/// 
+	/// \returns string
+	std::string to_string () const
+	{
+		return Nirvana::g_dec_calc->to_string (val_);
+	}
+
+	///@}
+
+	///@{
+	/** Rounding
+
+	The round and truncate functions convert a fixed value to a new value with the specified scale. If the new scale
+	requires the value to lose precision on the right, the round function will round away from zero values that are halfway or
+	more to the next absolute value for the new fixed precision.The truncate function always truncates the value towards
+	zero.If the value currently has fewer digits on the right than the new scale, roundand truncate return the argument
+	unmodified.For example :
+	~~~~~~~~~~~~~~~~~~~~~~~
+	// C++
+	F f1 (“0.1”);
+	F f2 (“.05”);
+	F f3 (“ - 0.005”);
+	~~~~~~~~~~~~~~~~~~~~~~~
+	In this example, `f1.round (0)` and `f1.truncate (0)` both return 0, `f2.round (1)` returns 0.1, `f2.truncate (1)`
+	returns 0.0, `f3.round (2)` returns - 0.01 and `f3.truncate (2)` returns 0.00.
+	*/
 
 	Fixed round (UShort scale) const
 	{
@@ -126,13 +167,12 @@ public:
 		Nirvana::g_dec_calc->truncate (ret.val_, scale);
 		return ret;
 	}
-	
-	std::string to_string () const
-	{
-		return Nirvana::g_dec_calc->to_string (val_);
-	}
 
-	// Operators
+	///@}
+
+	///@{
+	/// Operators
+
 	Fixed& operator = (const Fixed& val) = default;
 
 	Fixed& operator += (const Fixed& val)
@@ -205,7 +245,12 @@ public:
 		return !Nirvana::g_dec_calc->is_zero (val_);
 	}
 
-	// Other member functions
+	///@}
+
+	///@{
+	/// The fixed_digits and fixed_scale functions
+	/// return the smallest digits and scale value that can hold the complete fixed - point value.
+
 	UShort fixed_digits () const
 	{
 		return val_.digits ();
@@ -216,25 +261,30 @@ public:
 		return -val_.exponent ();
 	}
 
-	operator const Nirvana::DecCalc::Number () const
-	{
-		return val_;
-	}
+	///@}
 
 private:
 	friend std::istream& operator >> (std::istream& is, Fixed& val);
-	friend Boolean operator > (const Fixed& val1, const Fixed& val2);
-	friend Boolean operator < (const Fixed& val1, const Fixed& val2);
-	friend Boolean operator >= (const Fixed& val1, const Fixed& val2);
-	friend Boolean operator <= (const Fixed& val1, const Fixed& val2);
-	friend Boolean operator == (const Fixed& val1, const Fixed& val2);
-	friend Boolean operator != (const Fixed& val1, const Fixed& val2);
 
 	Nirvana::DecCalc::Number val_;
 };
 
+///@{
+/**
+The stream insertion and extraction operators << and >> convert a fixed - point value to / from a stream. These operators
+insertand extract fixed-point values into the stream using the same format as for C++ floating point types. In particular, the
+trailing ‘d’ or ‘D’ from the IDL fixed-point literal representation is not inserted or extracted from the stream. These
+operators use all format controls appropriate to floating point defined by the stream classes except that they never use the
+scientific format.
+*/
+
 std::istream& operator >> (std::istream& is, Fixed& val);
 std::ostream& operator << (std::ostream& os, const Fixed& val);
+
+///@}
+
+///@{
+/// Binary operators
 
 inline
 Fixed operator + (const Fixed& val1, const Fixed& val2)
@@ -271,38 +321,40 @@ Fixed operator / (const Fixed& val1, const Fixed& val2)
 inline
 Boolean operator > (const Fixed& val1, const Fixed& val2)
 {
-	return Nirvana::g_dec_calc->compare (val1.val_, val2.val_) > 0;
+	return Nirvana::g_dec_calc->compare (val1, val2) > 0;
 }
 
 inline
 Boolean operator < (const Fixed& val1, const Fixed& val2)
 {
-	return Nirvana::g_dec_calc->compare (val1.val_, val2.val_) < 0;
+	return Nirvana::g_dec_calc->compare (val1, val2) < 0;
 }
 
 inline
 Boolean operator >= (const Fixed& val1, const Fixed& val2)
 {
-	return Nirvana::g_dec_calc->compare (val1.val_, val2.val_) >= 0;
+	return Nirvana::g_dec_calc->compare (val1, val2) >= 0;
 }
 
 inline
 Boolean operator <= (const Fixed& val1, const Fixed& val2)
 {
-	return Nirvana::g_dec_calc->compare (val1.val_, val2.val_) <= 0;
+	return Nirvana::g_dec_calc->compare (val1, val2) <= 0;
 }
 
 inline
 Boolean operator == (const Fixed& val1, const Fixed& val2)
 {
-	return Nirvana::g_dec_calc->compare (val1.val_, val2.val_) == 0;
+	return Nirvana::g_dec_calc->compare (val1, val2) == 0;
 }
 
 inline
 Boolean operator != (const Fixed& val1, const Fixed& val2)
 {
-	return Nirvana::g_dec_calc->compare (val1.val_, val2.val_) != 0;
+	return Nirvana::g_dec_calc->compare (val1, val2) != 0;
 }
+
+///@}
 
 }
 
