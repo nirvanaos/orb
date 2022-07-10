@@ -195,7 +195,15 @@ public:
 		return ret;
 	}
 
-	Boolean operator! () const;
+	bool operator! () const
+	{
+		return Nirvana::g_dec_calc->is_zero (val_);
+	}
+
+	explicit operator bool () const
+	{
+		return !Nirvana::g_dec_calc->is_zero (val_);
+	}
 
 	// Other member functions
 	UShort fixed_digits () const
@@ -214,6 +222,14 @@ public:
 	}
 
 private:
+	friend std::istream& operator >> (std::istream& is, Fixed& val);
+	friend Boolean operator > (const Fixed& val1, const Fixed& val2);
+	friend Boolean operator < (const Fixed& val1, const Fixed& val2);
+	friend Boolean operator >= (const Fixed& val1, const Fixed& val2);
+	friend Boolean operator <= (const Fixed& val1, const Fixed& val2);
+	friend Boolean operator == (const Fixed& val1, const Fixed& val2);
+	friend Boolean operator != (const Fixed& val1, const Fixed& val2);
+
 	Nirvana::DecCalc::Number val_;
 };
 
@@ -252,12 +268,41 @@ Fixed operator / (const Fixed& val1, const Fixed& val2)
 	return ret;
 }
 
-Boolean operator > (const Fixed& val1, const Fixed& val2);
-Boolean operator < (const Fixed& val1, const Fixed& val2);
-Boolean operator >= (const Fixed& val1, const Fixed& val2);
-Boolean operator <= (const Fixed& val1, const Fixed& val2);
-Boolean operator == (const Fixed& val1, const Fixed& val2);
-Boolean operator != (const Fixed& val1, const Fixed& val2);
+inline
+Boolean operator > (const Fixed& val1, const Fixed& val2)
+{
+	return Nirvana::g_dec_calc->compare (val1.val_, val2.val_) > 0;
+}
+
+inline
+Boolean operator < (const Fixed& val1, const Fixed& val2)
+{
+	return Nirvana::g_dec_calc->compare (val1.val_, val2.val_) < 0;
+}
+
+inline
+Boolean operator >= (const Fixed& val1, const Fixed& val2)
+{
+	return Nirvana::g_dec_calc->compare (val1.val_, val2.val_) >= 0;
+}
+
+inline
+Boolean operator <= (const Fixed& val1, const Fixed& val2)
+{
+	return Nirvana::g_dec_calc->compare (val1.val_, val2.val_) <= 0;
+}
+
+inline
+Boolean operator == (const Fixed& val1, const Fixed& val2)
+{
+	return Nirvana::g_dec_calc->compare (val1.val_, val2.val_) == 0;
+}
+
+inline
+Boolean operator != (const Fixed& val1, const Fixed& val2)
+{
+	return Nirvana::g_dec_calc->compare (val1.val_, val2.val_) != 0;
+}
 
 }
 

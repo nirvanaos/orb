@@ -57,9 +57,43 @@ Fixed::operator long double () const
 
 istream& operator >> (istream& is, Fixed& val)
 {
-	long double ld;
-	is >> ld;
-	val = Fixed (ld);
+	istream::sentry sentry (is);
+	if (sentry) {
+		istream::int_type c = is.peek ();
+		if (!(('0' <= c && c <= '9') || '.' == c || '-' == c || '+' == c))
+			is.setstate (istream::failbit);
+		else {
+			char buf [65];
+			char* pbuf = buf;
+			bool decpt = false;
+			unsigned digits = 0;
+			for (;;) {
+				c = is.get ();
+				if ('.' == c)
+					decpt = true;
+				else if ('0' <= c && c <= '9')
+					++digits;
+				*(pbuf++) = c;
+				if (istream::traits_type::not_eof (c = is.peek ())) {
+					if ('.' == c && decpt)
+						break;
+					else if (!('0' <= c && c <= '9'))
+						break;
+					else if (digits >= 62) {
+						is.setstate (istream::failbit);
+						break;
+					}
+				} else
+					break;
+			}
+			if (!is.fail ()) {
+				*pbuf = '\0';
+				Nirvana::g_dec_calc->from_string (val.val_, buf);
+				return is;
+			}
+		}
+	}
+	Nirvana::g_dec_calc->from_long (val.val_, 0);
 	return is;
 }
 
