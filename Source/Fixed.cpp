@@ -75,9 +75,10 @@ istream& operator >> (istream& is, Fixed& val)
 					++digits;
 				*(pbuf++) = c;
 				if (istream::traits_type::not_eof (c = is.peek ())) {
-					if ('.' == c && decpt)
-						break;
-					else if (!('0' <= c && c <= '9'))
+					if ('.' == c) {
+						if (decpt)
+							break;
+					} else if (!('0' <= c && c <= '9'))
 						break;
 					else if (digits >= 62) {
 						is.setstate (istream::failbit);
