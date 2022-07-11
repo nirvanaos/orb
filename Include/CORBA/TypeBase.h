@@ -96,7 +96,7 @@ struct TypeWithCheck : public TypeBase <T, TABI>
 		TABI& ref_;
 	};
 
-	typedef C_inout C_out_check;
+	typedef C_inout C_out;
 
 	class C_ret
 	{

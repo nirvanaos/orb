@@ -44,7 +44,8 @@ namespace IDL {
 template <uint16_t digits, uint16_t scale>
 struct FixedCDR
 {
-	static_assert (digits <= 31, "digits <= 31");
+	static_assert (0 < digits && digits <= 31, "0 < digits <= 31");
+	static_assert (scale <= digits, "scale <= digits");
 
 	uint8_t bcd [(digits + 2) / 2];
 };

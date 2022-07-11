@@ -1,4 +1,4 @@
-/// \file
+/// \file TypeCodeImpl.h
 /*
 * Nirvana IDL support library.
 *
@@ -24,48 +24,38 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPE_FIXED_H_
-#define NIRVANA_ORB_TYPE_FIXED_H_
+#ifndef NIRVANA_ORB_TYPECODEFIXED_H_
+#define NIRVANA_ORB_TYPECODEFIXED_H_
 #pragma once
 
-#include <Nirvana/Decimal.h>
-#include "TypeFixLen.h"
-
-namespace IDL {
-
-template <uint16_t digits, uint16_t scale>
-using Fixed = Nirvana::Decimal <digits, scale>;
-
-}
+#include "TypeCodeImpl.h"
+#include "../Type_fixed.h"
 
 namespace CORBA {
 namespace Internal {
 
-void check_BCD (const Octet* bcd, UShort digits);
-
-template <uint16_t digits, uint16_t scale>
-struct Type <IDL::Fixed <digits, scale> > :
-	public TypeFixLen <IDL::Fixed <digits, scale>, true, IDL::FixedCDR <digits, scale> >
+template <UShort digits, UShort scale>
+class TypeCodeFixed :
+	public TypeCodeStatic <TypeCodeFixed <digits, scale>,
+		TypeCodeTK <TCKind::tk_fixed>, TypeCodeOps <IDL::Fixed <digits, scale> > >
 {
-	static const bool is_CDR = true;
-	static const bool has_check = true;
-
-	typedef TypeFixLen <IDL::Fixed <digits, scale>, true, IDL::FixedCDR <digits, scale> > Base;
-	typedef typename Base::ABI ABI;
-	typedef typename Base::Var Var;
-
-	typedef const IDL::FixedCDR <digits, scale>& C_in;
-
-	static void check (const ABI& abi)
+public:
+	static UShort _s_fixed_digits (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		check_BCD (abi.bcd, digits);
+		return digits;
 	}
-	
-	static void byteswap (Var&) NIRVANA_NOEXCEPT
-	{}
 
-	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
+	static Short _s_fixed_scale (Bridge <TypeCode>* _b, Interface* _env)
+	{
+		return scale;
+	}
 };
+
+template <uint16_t digits, uint16_t scale> inline
+I_ptr <TypeCode> Type <IDL::Fixed <digits, scale> >::type_code () NIRVANA_NOEXCEPT
+{
+	return TypeCodeFixed <digits, scale>::_get_ptr ();
+}
 
 }
 }

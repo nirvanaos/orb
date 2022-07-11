@@ -46,6 +46,7 @@
 #include "TypeCodeValueBox.h"
 #include "TypeCodeNative.h"
 #include "TypeCodeArray.h"
+#include "TypeCodeFixed.h"
 #include "ValueFactoryImpl.h"
 #include <Nirvana/OLF.h>
 

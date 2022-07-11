@@ -26,6 +26,7 @@
 */
 #ifndef NIRVANA_ORB_TYPECODEIMPL_H_
 #define NIRVANA_ORB_TYPECODEIMPL_H_
+#pragma once
 
 #include "../Server.h"
 #include "../TypeCode_s.h"
