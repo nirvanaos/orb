@@ -33,37 +33,28 @@
 namespace CORBA {
 namespace Internal {
 
-/// Common base for all types (except for interface types).
-/// 
-/// \tparam T The variable type.
-/// \tparam TABI The ABI type.
-template <typename T, typename ABI>
-struct TypeBase
-{
-	// Servant-side methods
-
-	static T& out (ABI* p)
-	{
-		return inout (p);
-	}
-
-	static T& inout (ABI* p)
-	{
-		check_pointer (p);
-		return reinterpret_cast <T&> (*p);
-	}
-
-};
-
 /// Type that does not have check()
 /// 
 /// \tparam T The variable type.
 /// \tparam TABI The ABI type.
 template <typename T, typename TABI>
-struct TypeNoCheck : public TypeBase <T, TABI>
+struct TypeNoCheck
 {
 	static void check (const TABI&) {}
 	static const bool has_check = false;
+
+	// Servant-side methods
+
+	static T& out (TABI* p)
+	{
+		return inout (p);
+	}
+
+	static T& inout (TABI* p)
+	{
+		check_pointer (p);
+		return reinterpret_cast <T&> (*p);
+	}
 
 };
 
@@ -72,7 +63,7 @@ struct TypeNoCheck : public TypeBase <T, TABI>
 /// \tparam T The variable type.
 /// \tparam TABI The ABI type.
 template <typename T, typename TABI>
-struct TypeWithCheck : public TypeBase <T, TABI>
+struct TypeWithCheck
 {
 	static const bool has_check = true;
 
@@ -114,6 +105,20 @@ struct TypeWithCheck : public TypeBase <T, TABI>
 	protected:
 		TABI val_;
 	};
+
+	// Servant-side methods
+
+	static T& out (TABI* p)
+	{
+		return inout (p);
+	}
+
+	static T& inout (TABI* p)
+	{
+		check_pointer (p);
+		Type <T>::check (*p);
+		return reinterpret_cast <T&> (*p);
+	}
 
 };
 

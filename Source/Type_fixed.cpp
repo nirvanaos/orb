@@ -43,6 +43,7 @@ void check_BCD (const Octet* bcd, UShort digits)
 					if ((oct & 0xF0) > 0x90 || (oct & 0x0F) > 0x09)
 						throw BAD_PARAM ();
 				}
+				return; // OK
 			}
 		}
 	}
