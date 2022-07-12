@@ -68,7 +68,7 @@ public:
 
 	static void n_marshal_out (void* src, size_t count, IORequest_ptr rq)
 	{
-		n_marshal_in (src, )
+		n_marshal_in (src, count, rq);
 	}
 
 	static void n_unmarshal (IORequest_ptr rq, size_t count, void* dst)
@@ -103,8 +103,9 @@ void FixedOps <size>::n_marshal_in (const void* src, size_t count, IORequest_ptr
 template <UShort digits, Short scale>
 class TypeCodeFixed :
 	public TypeCodeStatic <TypeCodeFixed <digits, scale>,
-		TypeCodeTK <TCKind::tk_fixed>, FixedOps <sizeof (FixedBCD <digits, scale>)> >
+		TypeCodeTK <TCKind::tk_fixed>, FixedOps <sizeof (IDL::FixedBCD <digits, scale>)> >
 {
+	typedef FixedOps <sizeof (IDL::FixedBCD <digits, scale>)> Ops;
 public:
 	static UShort _s_fixed_digits (Bridge <TypeCode>* _b, Interface* _env)
 	{
@@ -127,6 +128,9 @@ public:
 	{
 		return equal (other);
 	}
+
+	using Ops::_s_n_construct;
+	using Ops::_s_n_destruct;
 };
 
 template <uint16_t digits, int16_t scale> inline
