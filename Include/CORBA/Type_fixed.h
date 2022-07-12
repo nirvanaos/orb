@@ -31,13 +31,6 @@
 #include <Nirvana/Decimal.h>
 #include "TypeFixLen.h"
 
-namespace IDL {
-
-template <uint16_t digits, int16_t scale>
-using Fixed = Nirvana::Decimal <digits, scale>;
-
-}
-
 namespace CORBA {
 namespace Internal {
 

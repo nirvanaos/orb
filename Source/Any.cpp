@@ -238,13 +238,13 @@ Boolean operator >>= (const Any& any, SystemException& se)
 {
 	I_ptr <TypeCode> tc = any.type ();
 	if (tc && tc->kind () == TCKind::tk_except) {
-		const Char* id = tc->id ().c_str ();
+		std::string id = tc->id ();
 		const Char standard_prefix [] = "IDL:omg.org/CORBA/";
 		const Char nirvana_prefix [] = "IDL:CORBA/";
 		if (
-			!strncmp(standard_prefix, id, countof (standard_prefix) - 1)
+			!strncmp(standard_prefix, id.c_str (), countof (standard_prefix) - 1)
 		||
-			!strncmp (nirvana_prefix, id, countof (nirvana_prefix) - 1)
+			!strncmp (nirvana_prefix, id.c_str (), countof (nirvana_prefix) - 1)
 		) {
 			const Internal::ExceptionEntry* ee = SystemException::_get_exception_entry (id, Exception::EC_SYSTEM_EXCEPTION);
 			assert (ee);
@@ -257,6 +257,14 @@ Boolean operator >>= (const Any& any, SystemException& se)
 		}
 	}
 	return false;
+}
+
+void Any::operator <<= (const from_fixed& ff)
+{
+	TypeCode::_ref_type tc = g_ORB->create_fixed_tc (ff.digits, ff.scale);
+	void* p = prepare (tc);
+	Nirvana::g_dec_calc->to_BCD (ff.val, ff.digits, ff.scale, (Octet*)p);
+	set_type (tc);
 }
 
 }

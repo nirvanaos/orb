@@ -154,7 +154,14 @@ public:
 		Boolean nocopy;
 	};
 	*/
-	/*
+
+	void operator <<= (from_boolean);
+	void operator <<= (from_char);
+	void operator <<= (from_wchar);
+	void operator <<= (from_octet);
+	//void operator <<= (from_string);
+	//void operator <<= (from_wstring);
+
 	struct from_fixed
 	{
 		from_fixed (const Fixed& f, UShort d, UShort s)
@@ -163,14 +170,9 @@ public:
 		const Fixed& val;
 		UShort digits;
 		UShort scale;
-	};*/
-	void operator <<= (from_boolean);
-	void operator <<= (from_char);
-	void operator <<= (from_wchar);
-	void operator <<= (from_octet);
-	//void operator <<= (from_string);
-	//void operator <<= (from_wstring);
-	//void operator <<= (from_fixed);
+	};
+
+	void operator <<= (const from_fixed&);
 
 	// special helper types needed for boolean, octet,
 	// char, and bounded string extraction
