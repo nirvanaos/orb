@@ -28,7 +28,7 @@
 namespace CORBA {
 namespace Internal {
 
-void check_BCD (const Octet* bcd, size_t size)
+void BCD_check (const Octet* bcd, size_t size)
 {
 	assert (bcd);
 

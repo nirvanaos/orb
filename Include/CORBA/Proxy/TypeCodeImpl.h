@@ -288,7 +288,7 @@ public:
 	{
 		check_pointer (src);
 		if (Type <T>::has_check)
-			Type <T>::check (*reinterpret_cast <const ABI*> (src));
+			check (src, count);
 		Type <T>::marshal_in_a (reinterpret_cast <const Var*> (src), count, rq);
 	}
 
@@ -296,7 +296,7 @@ public:
 	{
 		check_pointer (src);
 		if (Type <T>::has_check)
-			Type <T>::check (*reinterpret_cast <const ABI*> (src));
+			check (src, count);
 		Type <T>::marshal_out_a (reinterpret_cast <Var*> (src), count, rq);
 	}
 
@@ -306,7 +306,18 @@ public:
 		// Do not call check() here, unmarshal() will check.
 		Type <T>::unmarshal_a (rq, count, reinterpret_cast <Var*> (dst));
 	}
+
+private:
+	static void check (const void* p, size_t count);
 };
+
+template <typename T>
+void TypeCodeOps <T>::check (const void* p, size_t count)
+{
+	for (const ABI* pa = reinterpret_cast <const ABI*> (p), *end = pa + count; pa != end; ++pa) {
+		Type <T>::check (*pa);
+	}
+}
 
 template <>
 class TypeCodeOps <void>

@@ -41,7 +41,7 @@ using Fixed = Nirvana::Decimal <digits, scale>;
 namespace CORBA {
 namespace Internal {
 
-void check_BCD (const Octet* bcd, size_t size);
+void BCD_check (const Octet* bcd, size_t size);
 
 template <uint16_t digits, int16_t scale>
 struct Type <IDL::Fixed <digits, scale> > :
@@ -58,7 +58,7 @@ struct Type <IDL::Fixed <digits, scale> > :
 
 	static void check (const ABI& abi)
 	{
-		check_BCD (abi.bcd, sizeof (abi.bcd));
+		BCD_check (abi.bcd, sizeof (abi.bcd));
 	}
 	
 	static void byteswap (Var&) NIRVANA_NOEXCEPT
