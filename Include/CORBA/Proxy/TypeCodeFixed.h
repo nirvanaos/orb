@@ -34,7 +34,7 @@
 namespace CORBA {
 namespace Internal {
 
-template <UShort digits, UShort scale>
+template <UShort digits, Short scale>
 class TypeCodeFixed :
 	public TypeCodeStatic <TypeCodeFixed <digits, scale>,
 		TypeCodeTK <TCKind::tk_fixed>, TypeCodeOps <IDL::Fixed <digits, scale> > >
@@ -49,9 +49,21 @@ public:
 	{
 		return scale;
 	}
+
+	static Boolean equal (I_ptr <TypeCode> other)
+	{
+		return TypeCodeBase::equal (TCKind::tk_fixed, other)
+			&& digits == other->fixed_digits ()
+			&& scale == other->fixed_scale ();
+	}
+
+	static Boolean equivalent (I_ptr <TypeCode> other)
+	{
+		return equal (other);
+	}
 };
 
-template <uint16_t digits, uint16_t scale> inline
+template <uint16_t digits, int16_t scale> inline
 I_ptr <TypeCode> Type <IDL::Fixed <digits, scale> >::type_code () NIRVANA_NOEXCEPT
 {
 	return TypeCodeFixed <digits, scale>::_get_ptr ();

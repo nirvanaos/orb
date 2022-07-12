@@ -28,17 +28,16 @@
 namespace CORBA {
 namespace Internal {
 
-void check_BCD (const Octet* bcd, UShort digits)
+void check_BCD (const Octet* bcd, size_t size)
 {
 	assert (bcd);
 
-	if (digits) {
-		size_t len = (digits + 2) / 2;
-		Octet oct = bcd [len - 1];
+	if (size) {
+		Octet oct = bcd [size - 1];
 		Octet sign = oct & 0x0F;
 		if (sign == 0xC || sign == 0xD) {
 			if ((oct & 0xF0) <= 0x90) {
-				for (const Octet* p = bcd, *end = p + len - 1; p != end; ++p) {
+				for (const Octet* p = bcd, *end = p + size - 1; p != end; ++p) {
 					oct = *p;
 					if ((oct & 0xF0) > 0x90 || (oct & 0x0F) > 0x09)
 						throw BAD_PARAM ();

@@ -37,6 +37,9 @@
 // So Type <I_ref <I> > provide the same traits as Type <I>.
 
 namespace CORBA {
+
+class TypeCode;
+
 namespace Internal {
 
 template <class T>

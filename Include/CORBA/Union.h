@@ -137,12 +137,6 @@ void construct (ULongLong& v) NIRVANA_NOEXCEPT
 	v = 0;
 }
 
-template <UShort digits, UShort scale> inline
-void construct (Fixed <digits, scale>& v) NIRVANA_NOEXCEPT
-{
-	v = 0;
-}
-
 }
 }
 

@@ -33,7 +33,7 @@
 
 namespace IDL {
 
-template <uint16_t digits, uint16_t scale>
+template <uint16_t digits, int16_t scale>
 using Fixed = Nirvana::Decimal <digits, scale>;
 
 }
@@ -41,24 +41,24 @@ using Fixed = Nirvana::Decimal <digits, scale>;
 namespace CORBA {
 namespace Internal {
 
-void check_BCD (const Octet* bcd, UShort digits);
+void check_BCD (const Octet* bcd, size_t size);
 
-template <uint16_t digits, uint16_t scale>
+template <uint16_t digits, int16_t scale>
 struct Type <IDL::Fixed <digits, scale> > :
-	public TypeFixLen <IDL::Fixed <digits, scale>, true, IDL::FixedCDR <digits, scale> >
+	public TypeFixLen <IDL::Fixed <digits, scale>, true, IDL::FixedBCD <digits, scale> >
 {
 	static const bool is_CDR = true;
 	static const bool has_check = true;
 
-	typedef TypeFixLen <IDL::Fixed <digits, scale>, true, IDL::FixedCDR <digits, scale> > Base;
+	typedef TypeFixLen <IDL::Fixed <digits, scale>, true, IDL::FixedBCD <digits, scale> > Base;
 	typedef typename Base::ABI ABI;
 	typedef typename Base::Var Var;
 
-	typedef const IDL::FixedCDR <digits, scale>& C_in;
+	typedef const IDL::FixedBCD <digits, scale>& C_in;
 
 	static void check (const ABI& abi)
 	{
-		check_BCD (abi.bcd, digits);
+		check_BCD (abi.bcd, sizeof (abi.bcd));
 	}
 	
 	static void byteswap (Var&) NIRVANA_NOEXCEPT

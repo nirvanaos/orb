@@ -77,6 +77,7 @@ pseudo interface ORB
     in unsigned short           digits,
     in short                    scale
   );
+
   TypeCode create_sequence_tc (
     in unsigned long            bound,
     in TypeCode                 element_type
