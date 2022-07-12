@@ -75,9 +75,12 @@ public:
 	{
 		check_pointer (dst);
 		void* data;
-		rq->unmarshal (1, size, data);
-		BCD_check ((const Octet*)data, size);
-		Nirvana::real_copy ((const Octet*)data, (const Octet*)data + size, (Octet*)dst);
+		size_t total = size * count;
+		rq->unmarshal (1, total, data);
+		for (const Octet* p = (const Octet*)data, *end = p + total; p != end; p += size) {
+			BCD_check (p, size);
+		}
+		Nirvana::real_copy ((const Octet*)data, (const Octet*)data + total, (Octet*)dst);
 	}
 };
 
@@ -94,10 +97,11 @@ template <size_t size>
 void FixedOps <size>::n_marshal_in (const void* src, size_t count, IORequest_ptr rq)
 {
 	check_pointer (src);
-	for (const Octet* p = (const Octet*)src; count; p += size, --count) {
+	size_t total = size * count;
+	for (const Octet* p = (const Octet*)src, *end = p + total; p != end; p += size) {
 		BCD_check (p, size);
 	}
-	rq->marshal (1, size, src);
+	rq->marshal (1, total, src);
 }
 
 template <UShort digits, Short scale>
