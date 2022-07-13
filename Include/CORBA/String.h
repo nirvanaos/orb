@@ -50,20 +50,7 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C> >
 
 	typedef const StringBase <C>& C_in;
 
-	class C_inout : public Base::C_inout
-	{
-	public:
-		C_inout (Var& s) :
-			Base::C_inout (s)
-		{}
-
-		ABI* operator & () const
-		{
-			return &static_cast <ABI&> (this->ref_);
-		}
-	};
-
-	class C_out : public C_inout
+	class C_out : public Base::C_inout
 	{
 	public:
 		C_out (Var& s) :

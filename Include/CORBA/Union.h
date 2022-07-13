@@ -33,8 +33,6 @@
 namespace CORBA {
 namespace Internal {
 
-template <UShort, UShort> class Fixed;
-
 template <class T> inline
 void destruct (T& v) NIRVANA_NOEXCEPT
 {
