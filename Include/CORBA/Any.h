@@ -325,7 +325,11 @@ void operator <<= (Any& a, const T& v)
 {
 	a.copy_from (Internal::Type <T>::type_code (), &v);
 }
-
+template <typename T> inline
+void operator <<= (Any& a, T& v)
+{
+	operator <<= (a, (const T&)v);
+}
 template <typename T> inline
 void operator <<= (Any& a, T&& v)
 {
@@ -336,7 +340,7 @@ template <typename T> inline
 Boolean operator >>= (const Any& a, T& v)
 {
 	if (Internal::Type <T>::type_code ()->equivalent (a.type ())) {
-		v = *(T*)a.data ();
+		v = *reinterpret_cast <const T*>(a.data ());
 		return true;
 	}
 	return false;
@@ -348,12 +352,22 @@ void operator <<= (Any& dst, const Any& src)
 	dst = src;
 }
 inline
+void operator <<= (Any& dst, Any& src)
+{
+	operator <<= (dst, (const Any&)src);
+}
+inline
 void operator <<= (Any& dst, Any&& src)
 {
 	dst = std::move (src);
 }
 
 void operator <<= (Any&, const Exception&);
+inline
+void operator <<= (Any& a, Exception& e)
+{
+	operator <<= (a, (const Exception&)e);
+}
 void operator <<= (Any&, Exception&&);
 
 inline
