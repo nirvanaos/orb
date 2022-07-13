@@ -40,6 +40,7 @@ void Any::operator <<= (from_fixed ff)
 	g_dec_calc->to_BCD (ff.val, ff.digits, ff.scale, (Octet*)p);
 	set_type (tc);
 }
+
 Boolean Any::operator >>= (to_fixed tf) const
 {
 	if (type () && type ()->kind () == TCKind::tk_fixed) {
