@@ -259,12 +259,4 @@ Boolean operator >>= (const Any& any, SystemException& se)
 	return false;
 }
 
-void Any::operator <<= (const from_fixed& ff)
-{
-	TypeCode::_ref_type tc = g_ORB->create_fixed_tc (ff.digits, ff.scale);
-	void* p = prepare (tc);
-	Nirvana::g_dec_calc->to_BCD (ff.val, ff.digits, ff.scale, (Octet*)p);
-	set_type (tc);
-}
-
 }
