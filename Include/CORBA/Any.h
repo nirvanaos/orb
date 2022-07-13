@@ -339,12 +339,31 @@ void operator <<= (Any& a, T&& v)
 {
 	a.move_from (Internal::Type <std::remove_reference <T>::type>::type_code (), &v);
 }
+#ifdef LEGACY_CORBA_CPP
+template <typename T> inline
+void operator <<= (Any& a, T* v)
+{
+	a <<= std::move (*v);
+}
+#endif
+
+template <typename T> inline
+Boolean operator >>= (const Any& a, const T*& pv)
+{
+	if (Internal::Type <std::remove_pointer <std::remove_reference <T>::type>
+		::type>::type_code ()->equivalent (a.type ())) {
+		pv = reinterpret_cast <const T*>(a.data ());
+		return true;
+	}
+	return false;
+}
 
 template <typename T> inline
 Boolean operator >>= (const Any& a, T& v)
 {
-	if (Internal::Type <T>::type_code ()->equivalent (a.type ())) {
-		v = *reinterpret_cast <const T*>(a.data ());
+	const T* pv = nullptr;
+	if (a >>= pv) {
+		v = *pv;
 		return true;
 	}
 	return false;
@@ -365,6 +384,13 @@ void operator <<= (Any& dst, Any&& src)
 {
 	dst = std::move (src);
 }
+#ifdef LEGACY_CORBA_CPP
+inline
+void operator <<= (Any& dst, Any* src)
+{
+	dst = std::move (*src);
+}
+#endif
 
 void operator <<= (Any&, const Exception&);
 inline
@@ -373,6 +399,13 @@ void operator <<= (Any& a, Exception& e)
 	operator <<= (a, (const Exception&)e);
 }
 void operator <<= (Any&, Exception&&);
+#ifdef LEGACY_CORBA_CPP
+inline
+void operator <<= (Any& a, Exception* pe)
+{
+	a <<= std::move (*pe);
+}
+#endif
 
 inline
 Boolean operator >>= (const Any& src, Any& dst)
