@@ -54,7 +54,7 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C> >
 	{
 	public:
 		C_out (Var& s) :
-			C_inout (s)
+			Base::C_inout (s)
 		{
 			s.clear ();
 		}
