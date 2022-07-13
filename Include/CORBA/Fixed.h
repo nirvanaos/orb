@@ -27,7 +27,7 @@
 #define NIRVANA_ORB_FIXED_H_
 #pragma once
 
-#include <Nirvana/Fixed.h>
+#include <Nirvana/Decimal.h>
 
 namespace IDL {
 

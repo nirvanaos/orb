@@ -23,16 +23,38 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+
+// Methods that required DecCalc module are moved to CoreImports.
+// These methods can not be called from Core.
+
 #include <CORBA/CORBA.h>
+
+using namespace Nirvana;
 
 namespace CORBA {
 
-void Any::operator <<= (const from_fixed& ff)
+void Any::operator <<= (from_fixed ff)
 {
 	TypeCode::_ref_type tc = g_ORB->create_fixed_tc (ff.digits, ff.scale);
 	void* p = prepare (tc);
-	Nirvana::g_dec_calc->to_BCD (ff.val, ff.digits, ff.scale, (Octet*)p);
+	g_dec_calc->to_BCD (ff.val, ff.digits, ff.scale, (Octet*)p);
 	set_type (tc);
+}
+Boolean Any::operator >>= (to_fixed tf) const
+{
+	if (type () && type ()->kind () == TCKind::tk_fixed) {
+		UShort digits = type ()->fixed_digits ();
+		Short scale = type ()->fixed_scale ();
+		if (digits - scale <= tf.digits - tf.scale) {
+			DecCalc::Number n;
+			g_dec_calc->from_BCD (n, digits, scale, (const Octet*)data ());
+			if (scale > tf.scale)
+				g_dec_calc->round (n, tf.scale);
+			tf.val = reinterpret_cast <const Fixed&> (n);
+			return true;
+		}
+	}
+	return false;
 }
 
 }

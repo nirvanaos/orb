@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_TYPE_FIXED_H_
 #pragma once
 
-#include <Nirvana/Decimal.h>
+#include "Fixed.h"
 #include "TypeFixLen.h"
 
 namespace CORBA {

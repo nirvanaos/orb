@@ -172,7 +172,19 @@ public:
 		UShort scale;
 	};
 
-	void operator <<= (const from_fixed&);
+	void operator <<= (from_fixed);
+
+	struct to_fixed
+	{
+		to_fixed (Fixed& f, UShort d, UShort s)
+			: val (f), digits (d), scale (s)
+		{}
+		Fixed& val;
+		UShort digits;
+		UShort scale;
+	};
+
+	Boolean operator >>= (to_fixed) const;
 
 	// special helper types needed for boolean, octet,
 	// char, and bounded string extraction
@@ -225,25 +237,14 @@ public:
 		{}
 	};
 	*/
-	/*
-	struct to_fixed
-	{
-		to_fixed (Fixed& f, UShort d, UShort s)
-			: val (f), digits (d), scale (s)
-		{}
-		Fixed& val;
-		UShort digits;
-		UShort scale;
-	};*/
+	//Boolean operator >>= (to_string) const;
+	//Boolean operator >>= (to_wstring) const;
 
 	Boolean operator >>= (to_boolean) const;
 	Boolean operator >>= (to_char) const;
 	Boolean operator >>= (to_wchar) const;
 	Boolean operator >>= (to_octet) const;
-	//Boolean operator >>= (to_string) const;
-	//Boolean operator >>= (to_wstring) const;
-	//Boolean operator >>= (to_fixed) const;
-
+	
 	void copy_from (Internal::I_ptr <TypeCode> tc, const void* val);
 	void move_from (Internal::I_ptr <TypeCode> tc, void* val);
 
@@ -322,7 +323,7 @@ void operator <<= (Any& a, T&& v)
 template <typename T> inline
 Boolean operator >>= (const Any& a, T& v)
 {
-	if (Internal::Type <T>::type_code ()->equal (a.type ())) {
+	if (Internal::Type <T>::type_code ()->equivalent (a.type ())) {
 		v = *(T*)a.data ();
 		return true;
 	}
