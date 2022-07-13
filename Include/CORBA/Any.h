@@ -30,8 +30,8 @@
 
 #include "TypeVarLen.h"
 #include "ABI_Any.h"
-#include "String.h"
-#include <Nirvana/basic_string.h>
+//#include "String.h"
+//#include <Nirvana/basic_string.h>
 #include "Fixed.h"
 #include "T_var.h"
 
@@ -96,8 +96,7 @@ public:
 
 	void clear ();
 
-	// special helper types needed for boolean, octet, char,
-	// and bounded string insertion
+	// special helper types needed for boolean, octet, char, wchar
 	
 	struct from_boolean
 	{
@@ -126,41 +125,11 @@ public:
 		{}
 		WChar val;
 	};
-	/*
-	struct from_string
-	{
-		from_string (char* s, ULong b, Boolean n = FALSE) :
-			val (s), bound (b), nocopy (n)
-		{}
-		from_string (const char* s, ULong b) :
-			val (const_cast<char*>(s)), bound (b),
-			nocopy (0)
-		{}
-		char *val;
-		ULong bound;
-		Boolean nocopy;
-	};
-	struct from_wstring
-	{
-		from_wstring (WChar* s, ULong b, Boolean n = FALSE) :
-			val (s), bound (b), nocopy (n)
-		{}
-		from_wstring (const WChar* s, ULong b) :
-			val (const_cast<WChar*>(s)), bound (b),
-			nocopy (0)
-		{}
-		WChar *val;
-		ULong bound;
-		Boolean nocopy;
-	};
-	*/
 
 	void operator <<= (from_boolean);
 	void operator <<= (from_char);
 	void operator <<= (from_wchar);
 	void operator <<= (from_octet);
-	//void operator <<= (from_string);
-	//void operator <<= (from_wstring);
 
 	struct from_fixed
 	{
@@ -186,8 +155,7 @@ public:
 
 	Boolean operator >>= (to_fixed) const;
 
-	// special helper types needed for boolean, octet,
-	// char, and bounded string extraction
+	// special helper types needed for boolean, octet, char, wchar
 	struct to_boolean
 	{
 		to_boolean (Boolean &b) : ref (b)
@@ -212,33 +180,6 @@ public:
 		{}
 		Octet &ref;
 	};
-	/*
-	struct to_string
-	{
-		to_string (const char *&s, ULong b)
-			: val (s), bound (b)
-		{}
-		const char *&val;
-		ULong bound;
-		// the following constructor is deprecated
-		to_string (char *&s, ULong b) : val (s), bound (b)
-		{}
-	};
-	struct to_wstring
-	{
-		to_wstring (const WChar *&s, ULong b)
-			: val (s), bound (b)
-		{}
-		const WChar *&val;
-		ULong bound;
-		// the following constructor is deprecated
-		to_wstring (WChar *&s, ULong b)
-			:val (s), bound (b)
-		{}
-	};
-	*/
-	//Boolean operator >>= (to_string) const;
-	//Boolean operator >>= (to_wstring) const;
 
 	Boolean operator >>= (to_boolean) const;
 	Boolean operator >>= (to_char) const;
@@ -247,6 +188,77 @@ public:
 	
 	void copy_from (Internal::I_ptr <TypeCode> tc, const void* val);
 	void move_from (Internal::I_ptr <TypeCode> tc, void* val);
+
+#ifndef LEGACY_CORBA_CPP
+private:
+	// Bounded string helpers for compatibility wit old C++ mapping
+#endif
+
+	struct from_string
+	{
+		from_string (char* s, ULong b, Boolean n = FALSE) :
+			val (s), bound (b), nocopy (n)
+		{}
+		from_string (const char* s, ULong b) :
+			val (const_cast<char*>(s)), bound (b),
+			nocopy (0)
+		{}
+		char *val;
+		ULong bound;
+		Boolean nocopy;
+	};
+
+	void operator <<= (from_string);
+
+	struct from_wstring
+	{
+		from_wstring (WChar* s, ULong b, Boolean n = FALSE) :
+			val (s), bound (b), nocopy (n)
+		{}
+		from_wstring (const WChar* s, ULong b) :
+			val (const_cast<WChar*>(s)), bound (b),
+			nocopy (0)
+		{}
+		WChar *val;
+		ULong bound;
+		Boolean nocopy;
+	};
+
+	void operator <<= (from_wstring);
+
+	struct to_string
+	{
+		to_string (const char *&s, ULong b) :
+			val (s), bound (b)
+		{}
+		const char *&val;
+		ULong bound;
+
+		// the following constructor is deprecated
+		NIRVANA_DEPRECATED
+		to_string (char *&s, ULong b) :
+			val (const_cast <const char*& > (s)), bound (b)
+		{}
+	};
+	
+	Boolean operator >>= (to_string) const;
+
+	struct to_wstring
+	{
+		to_wstring (const WChar *&s, ULong b)
+			: val (s), bound (b)
+		{}
+		const WChar *&val;
+		ULong bound;
+
+		// the following constructor is deprecated
+		NIRVANA_DEPRECATED
+		to_wstring (WChar *&s, ULong b) :
+			val (const_cast <const WChar*&> (s)), bound (b)
+		{}
+	};
+	
+	Boolean operator >>= (to_wstring) const;
 
 private:
 	friend struct Internal::Type <Any>;
