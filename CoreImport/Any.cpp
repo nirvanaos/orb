@@ -58,4 +58,58 @@ Boolean Any::operator >>= (to_fixed tf) const
 	return false;
 }
 
+void Any::operator <<= (from_string fs)
+{
+	TypeCode::_ref_type tc;
+	if (fs.bound)
+		tc = g_ORB->create_string_tc (fs.bound);
+	else
+		tc = _tc_string;
+	Internal::String_var <Char> sv;
+	if (fs.nocopy)
+		sv = fs.val; // Adopt string
+	else
+		sv = (const Char*)fs.val;
+	move_from (tc, &sv);
+}
+
+void Any::operator <<= (from_wstring fs)
+{
+	TypeCode::_ref_type tc;
+	if (fs.bound)
+		tc = g_ORB->create_wstring_tc (fs.bound);
+	else
+		tc = _tc_wstring;
+	Internal::String_var <WChar> sv;
+	if (fs.nocopy)
+		sv = fs.val; // Adopt string
+	else
+		sv = (const WChar*)fs.val;
+	move_from (tc, &sv);
+}
+
+Boolean Any::operator >>= (to_string ts) const
+{
+	if (type ()->kind () == TCKind::tk_string) {
+		const Internal::String& s = *(const Internal::String*)data ();
+		if (!ts.bound || s.length () <= (size_t)ts.bound) {
+			ts.val = s.c_str ();
+			return true;
+		}
+	}
+	return false;
+}
+
+Boolean Any::operator >>= (to_wstring ts) const
+{
+	if (type ()->kind () == TCKind::tk_wstring) {
+		const Internal::WString& s = *(const Internal::WString*)data ();
+		if (!ts.bound || s.length () <= (size_t)ts.bound) {
+			ts.val = s.c_str ();
+			return true;
+		}
+	}
+	return false;
+}
+
 }

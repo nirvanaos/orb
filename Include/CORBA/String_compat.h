@@ -82,7 +82,7 @@ public:
 
 	String_var& operator = (C* s)
 	{
-		this->release_memory ();
+		this->clear ();
 		adopt (s);
 		return *this;
 	}
@@ -134,7 +134,7 @@ void String_var <C>::adopt (C* s)
 		this->large_pointer (s);
 		this->large_size (cc);
 		size_t au = Nirvana::StdString::memory ()->query (s, Nirvana::Memory::QueryParam::ALLOCATION_UNIT);
-		this->large_allocated (Nirvana::round_up ((cc + 1) * sizeof (C), au));
+		this->allocated (Nirvana::round_up ((cc + 1) * sizeof (C), au));
 	} else
 		this->reset ();
 }
