@@ -28,7 +28,8 @@
 #define NIRVANA_ORB_TYPECODEIMPL_H_
 #pragma once
 
-#include "../Server.h"
+#include "../ImplementationPseudo.h"
+#include "../ImplementationPseudoStatic.h"
 #include "../TypeCode_s.h"
 #include "InterfaceMetadata.h"
 #include <new>

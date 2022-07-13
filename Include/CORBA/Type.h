@@ -34,14 +34,13 @@
 #include "TypeEnum.inl"
 #include "Type_interface.inl"
 #include "Object.inl"
-#include "String.inl"
-#include "Sequence.inl"
-#include "Object.inl"
 #include "ValueBase.inl"
 #include "ValueBox.h"
 #include "AbstractBase.inl"
-#include "Type_array.h"
-#include "Type_fixed.h"
+#include "Proxy/TypeCodeString.h"
+#include "Proxy/TypeCodeSequence.h"
+#include "Proxy/TypeCodeArray.h"
+#include "Proxy/TypeCodeFixed.h"
 
 namespace CORBA {
 namespace Internal {

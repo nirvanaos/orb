@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_TYPECODESEQUENCE_H_
 
 #include "TypeCodeImpl.h"
-#include "../Sequence.h"
+#include "../Sequence.inl"
 
 namespace CORBA {
 namespace Internal {
