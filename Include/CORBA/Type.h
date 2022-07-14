@@ -58,20 +58,4 @@ struct Type <void>
 }
 }
 
-#ifndef LEGACY_CORBA_CPP
-
-namespace IDL {
-
-// IDL::traits
-template <class I>
-struct traits
-{
-	typedef CORBA::Internal::I_ref <I> ref_type;
-	typedef CORBA::Internal::I_ptr <I> ptr_type;
-};
-
-}
-
-#endif
-
 #endif
