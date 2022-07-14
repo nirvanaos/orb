@@ -350,8 +350,7 @@ void operator <<= (Any& a, T* v)
 template <typename T> inline
 Boolean operator >>= (const Any& a, const T*& pv)
 {
-	if (Internal::Type <std::remove_pointer <std::remove_reference <T>::type>
-		::type>::type_code ()->equivalent (a.type ())) {
+	if (Internal::Type <T>::type_code ()->equivalent (a.type ())) {
 		pv = reinterpret_cast <const T*>(a.data ());
 		return true;
 	}
@@ -359,7 +358,8 @@ Boolean operator >>= (const Any& a, const T*& pv)
 }
 
 template <typename T> inline
-Boolean operator >>= (const Any& a, T& v)
+std::enable_if_t <!std::is_pointer <T>::value, Boolean>
+operator >>= (const Any& a, T& v)
 {
 	const T* pv = nullptr;
 	if (a >>= pv) {

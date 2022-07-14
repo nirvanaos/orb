@@ -98,6 +98,7 @@ struct TypePrimitive :
 	public TypeFixLen <T, false>
 {
 	static const bool is_CDR = true;
+	static const bool is_var_len = false;
 
 	static void byteswap (T& v) NIRVANA_NOEXCEPT
 	{
