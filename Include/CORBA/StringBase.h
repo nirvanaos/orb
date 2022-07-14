@@ -210,4 +210,15 @@ typedef StringT <WChar> WString;
 }
 }
 
+namespace IDL {
+
+/// Unbounded string. Equivalent to std::string.
+typedef CORBA::Internal::String String;
+
+/// Unbounded wide string. Equivalent to std::wstring.
+typedef CORBA::Internal::WString WString;
+
+
+}
+
 #endif

@@ -225,19 +225,23 @@ struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
 	}
 };
 
+}
+}
+
+namespace IDL {
+
 /// Bounded string type
 /// 
 /// \tparam bound Maximal string length.
-template <ULong bound>
-using BoundedString = BoundedStringT <Char, bound>;
+template <uint32_t bound>
+using BoundedString = CORBA::Internal::BoundedStringT <CORBA::Char, bound>;
 
 /// Bounded wide string type
 /// 
 /// \tparam bound Maximal string length.
-template <ULong bound>
-using BoundedWString = BoundedStringT <WChar, bound>;
+template <uint32_t bound>
+using BoundedWString = CORBA::Internal::BoundedStringT <CORBA::WChar, bound>;
 
-}
 }
 
 #endif

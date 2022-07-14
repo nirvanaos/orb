@@ -231,4 +231,23 @@ struct Type <BoundedSequence <T, bound> > :
 }
 } // namespace CORBA
 
+namespace IDL {
+
+/// Sequence type.
+/// 
+/// Equivalent to std::vector <T>
+/// 
+/// \tparam T Element type.
+template <typename T>
+using Sequence = CORBA::Internal::Sequence <T>;
+
+/// Bounded sequence type.
+/// 
+/// \tparam T Element type.
+/// \tparam bound The bound.
+template <typename T, uint32_t bound>
+using BoundedSequence = CORBA::Internal::BoundedSequence <T, bound>;
+
+}
+
 #endif
