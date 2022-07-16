@@ -37,14 +37,16 @@ class StringAllocator
 public:
 	static C* allocate (uint32_t len) NIRVANA_NOEXCEPT
 	{
-		return (C*)g_memory->allocate (0, ((size_t)len + 1) * sizeof (C), Memory::EXACTLY);
+		size_t cb = ((size_t)len + 1) * sizeof (C);
+		return (C*)g_memory->allocate (0, cb, Memory::EXACTLY);
 	}
 
 	static C* dup (const C* s) NIRVANA_NOEXCEPT
 	{
-		if (s)
-			return (C*)g_memory->copy (0, (C*)s, (char_traits <C>::length (s) + 1) * sizeof (C), Memory::EXACTLY);
-		else
+		if (s) {
+			size_t cb = (char_traits <C>::length (s) + 1) * sizeof (C);
+			return (C*)g_memory->copy (0, (C*)s, cb, Memory::EXACTLY);
+		} else
 			return nullptr;
 	}
 
