@@ -24,7 +24,7 @@
 *  popov.nirvana@gmail.com
 */
 
-module CORBA{
+module CORBA {
 module Internal {
 
 native InterfacePtr;
