@@ -47,8 +47,6 @@ struct Type <IDL::Fixed <digits, scale> > :
 	typedef typename Base::ABI ABI;
 	typedef typename Base::Var Var;
 
-	typedef const IDL::FixedBCD <digits, scale>& C_in;
-
 	static void check (const ABI& abi)
 	{
 		BCD_check (abi.bcd, sizeof (abi.bcd));
