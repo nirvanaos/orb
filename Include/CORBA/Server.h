@@ -34,8 +34,6 @@
 #include "ImplementationStatic.h"
 #include "ImplementationLocal.h"
 #include "ImplementationLocalStatic.h"
-#include "ImplementationPseudo.h"
-#include "ImplementationPseudoStatic.h"
 #include "ImplementationTied.h"
 #include "PortableServer.h"
 #include "ServantBasePOA.h"
