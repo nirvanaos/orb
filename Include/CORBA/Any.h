@@ -337,7 +337,7 @@ void operator <<= (Any& a, T& v)
 template <typename T> inline
 void operator <<= (Any& a, T&& v)
 {
-	a.move_from (Internal::Type <std::remove_reference <T>::type>::type_code (), &v);
+	a.move_from (Internal::Type <typename std::remove_reference <T>::type>::type_code (), &v);
 }
 #ifdef LEGACY_CORBA_CPP
 template <typename T> inline
