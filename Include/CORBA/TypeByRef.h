@@ -60,11 +60,6 @@ struct TypeByRefBase
 			ref_ (v)
 		{}
 
-		template <typename T1>
-		C_in_ref (const T1& v) :
-			C_in (static_cast <const Var&> (v))
-		{}
-
 		ABI_in operator & () const
 		{
 			return &reinterpret_cast <const ABI&> (ref_);

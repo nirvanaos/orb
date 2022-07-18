@@ -29,7 +29,7 @@
 #pragma once
 
 #include "Fixed.h"
-#include "TypeFixLen.h"
+#include "TypeByRef.h"
 
 namespace CORBA {
 namespace Internal {
@@ -38,20 +38,40 @@ void BCD_check (const Octet* bcd, size_t size);
 
 template <uint16_t digits, int16_t scale>
 struct Type <IDL::Fixed <digits, scale> > :
-	public TypeFixLen <IDL::Fixed <digits, scale>, true, IDL::FixedBCD <digits, scale> >
+	public TypeByRefCheck <IDL::Fixed <digits, scale> >
 {
 	static const bool is_CDR = true;
 	static const bool has_check = true;
+	static const bool is_var_len = false;
 
-	typedef TypeFixLen <IDL::Fixed <digits, scale>, true, IDL::FixedBCD <digits, scale> > Base;
+	typedef TypeByRefCheck <IDL::Fixed <digits, scale> > Base;
 	typedef typename Base::ABI ABI;
 	typedef typename Base::Var Var;
 
-	static void check (const ABI& abi)
+	static void check (const Var& var)
 	{
+		const IDL::FixedBCD <digits, scale>& abi = var;
 		BCD_check (abi.bcd, sizeof (abi.bcd));
 	}
 	
+	// Marshaling
+
+	static void marshal_in (const Var& src, IORequest_ptr rq);
+	static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq);
+
+	static void marshal_out (Var& src, IORequest_ptr rq)
+	{
+		marshal_in (src, rq);
+	}
+
+	static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq)
+	{
+		marshal_in_a (src, count, rq);
+	}
+
+	static void unmarshal (IORequest_ptr rq, Var& dst);
+	static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst);
+
 	static void byteswap (Var&) NIRVANA_NOEXCEPT
 	{}
 

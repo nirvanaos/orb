@@ -59,8 +59,8 @@ struct TypeByValBase
 	class C_in
 	{
 	public:
-		C_in (Var val) NIRVANA_NOEXCEPT :
-			val_ (val)
+		C_in (const Var& v) NIRVANA_NOEXCEPT :
+			val_ (v)
 		{}
 
 		ABI_in operator & () const NIRVANA_NOEXCEPT
