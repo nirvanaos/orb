@@ -69,8 +69,11 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 		ABI abi;
 		bool swap_bytes = rq->unmarshal_seq (alignof (T_Var), sizeof (T_Var), abi.size, (void*&)abi.ptr, abi.allocated);
 		if (abi.size) {
+			assert (abi.allocated);
 
+#ifdef _DEBUG // In the release we trust the IORequest implementation
 			check_ABI (abi);
+#endif
 
 			if (sizeof (T_Var) > 1 && swap_bytes) {
 				T_Var* p = abi.ptr, *end = p + abi.size;
@@ -86,16 +89,12 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 						Type <T>::check (*p);
 					} while (end != ++p);
 				} catch (...) {
-					if (abi.allocated)
-						Nirvana::g_memory->release (abi.ptr, abi.allocated);
+					Nirvana::g_memory->release (abi.ptr, abi.allocated);
 					throw;
 				}
 			}
 
-			if (abi.allocated)
-				static_cast <ABI&> (tmp)= abi;
-			else
-				tmp.assign ((const T*)abi.ptr, (const T*)abi.ptr + abi.size);
+			static_cast <ABI&> (tmp)= abi;
 		}
 
 	} else {
@@ -104,8 +103,6 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 		if (size) {
 			size_t cb = sizeof (T_Var) * size;
 			T_Var* p = (T_Var*)Nirvana::g_memory->allocate (nullptr, cb, 0);
-			size_t au = Nirvana::g_memory->query (p, Nirvana::Memory::QueryParam::ALLOCATION_UNIT);
-			cb = Nirvana::round_up (cb, au);
 			try {
 				Type <T>::unmarshal_a (rq, size, p);
 			} catch (...) {
