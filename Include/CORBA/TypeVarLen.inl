@@ -44,10 +44,7 @@ template <typename MT> inline
 bool unmarshal_members (IORequest_ptr rq, MT* begin, const void* end)
 {
 	size_t size = (const Octet*)&end - (const Octet*)&begin;
-	void* buf;
-	bool swap_bytes = rq->unmarshal (alignof (MT), size, buf);
-	Nirvana::real_copy ((const Octet*)buf, (const Octet*)buf + size, (Octet*)begin);
-	return swap_bytes;
+	return rq->unmarshal (alignof (MT), size, begin);
 }
 
 }

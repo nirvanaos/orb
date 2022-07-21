@@ -98,17 +98,13 @@ void TypePrimitive <Boolean>::marshal_in_a (const ABI* src, size_t count, IORequ
 inline
 void TypePrimitive <Boolean>::unmarshal (IORequest_ptr rq, ABI& dst)
 {
-	void* pbuf = nullptr;
-	rq->unmarshal (1, 1, pbuf);
-	dst = *(const ABI*)pbuf;
+	rq->unmarshal (1, 1, &dst);
 }
 
 inline
 void TypePrimitive <Boolean>::unmarshal_a (IORequest_ptr rq, size_t count, ABI* dst)
 {
-	void* pbuf = nullptr;
-	rq->unmarshal (1, count, pbuf);
-	Nirvana::real_copy ((const ABI*)pbuf, (const ABI*)pbuf + count, dst);
+	rq->unmarshal (1, count, dst);
 }
 
 }

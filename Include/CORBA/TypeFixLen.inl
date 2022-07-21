@@ -49,31 +49,27 @@ void TypeFixLen <T, chk, TABI>::marshal_in_a (const T* src, size_t count, IORequ
 template <typename T, bool chk, typename TABI> inline
 void TypeFixLen <T, chk, TABI>::unmarshal (IORequest_ptr rq, T& dst)
 {
-	void* pbuf = nullptr;
-	if (rq->unmarshal (alignof (T), sizeof (T), pbuf))
-		Type <T>::byteswap (*(T*)pbuf);
+	if (rq->unmarshal (alignof (T), sizeof (T), &dst))
+		Type <T>::byteswap (dst);
 	if (Type <T>::has_check)
-		Type <T>::check (*(const typename Type <T>::ABI*)pbuf);
-	dst = *(T*)pbuf;
+		Type <T>::check ((const typename Type <T>::ABI&)dst);
 }
 
 template <typename T, bool chk, typename TABI> inline
 void TypeFixLen <T, chk, TABI>::unmarshal_a (IORequest_ptr rq, size_t count, T* dst)
 {
-	void* pbuf = nullptr;
-	if (rq->unmarshal (alignof (T), sizeof (T) * count, pbuf) && sizeof (T) > 1) {
-		for (T* src = (T*)pbuf, *end = src + count; src != end; ++src, ++dst) {
-			Type <T>::byteswap (*src);
+	bool byte_swap = rq->unmarshal (alignof (T), sizeof (T) * count, dst);
+	if (sizeof (T) > 1 && byte_swap) {
+		for (T* p = dst, *end = dst + count; p != end; ++p) {
+			Type <T>::byteswap (*p);
 		}
 	}
 
 	if (Type <T>::has_check) {
-		for (T* src = (T*)pbuf, *end = src + count; src != end; ++src, ++dst) {
-			Type <T>::check (*(const typename Type <T>::ABI*)src);
-			*dst = *src;
+		for (T* p = dst, *end = dst + count; p != end; ++p) {
+			Type <T>::check (*(const typename Type <T>::ABI*)p);
 		}
-	} else
-		Nirvana::real_copy ((const T*)pbuf, (const T*)pbuf + count, dst);
+	}
 }
 
 }

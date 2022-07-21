@@ -48,25 +48,21 @@ void TypeEnum <T, last>::marshal_in_a (const T* src, size_t count, IORequest_ptr
 template <class T, T last> inline
 void TypeEnum <T, last>::unmarshal (IORequest_ptr rq, T& dst)
 {
-	void* pbuf;
-	if (rq->unmarshal (alignof (T), sizeof (T), pbuf))
-		byteswap (*(Var*)pbuf);
-	check (*(ABI*)pbuf);
-	dst = (T)*(ABI*)pbuf;
+	if (rq->unmarshal (alignof (T), sizeof (T), &dst))
+		byteswap (dst);
+	check (dst);
 }
 
 template <class T, T last> inline
 void TypeEnum <T, last>::unmarshal_a (IORequest_ptr rq, size_t count, T* dst)
 {
-	void* pbuf = nullptr;
-	if (rq->unmarshal (alignof (T), sizeof (T) * count, pbuf)) {
-		for (Var* src = (Var*)pbuf, *end = src + count; src != end; ++src) {
-			byteswap (*src);
+	if (rq->unmarshal (alignof (T), sizeof (T) * count, dst)) {
+		for (T* p = dst, *end = p + count; p != end; ++p) {
+			byteswap (*p);
 		}
 	}
-	for (ABI* src = (ABI*)pbuf, *end = src + count; src != end; ++src, ++dst) {
-		check (*src);
-		*dst = (T)*src;
+	for (T* p = dst, *end = p + count; p != end; ++p) {
+		check (*p);
 	}
 }
 

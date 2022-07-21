@@ -74,13 +74,11 @@ public:
 	static void n_unmarshal (IORequest_ptr rq, size_t count, void* dst)
 	{
 		check_pointer (dst);
-		void* data;
 		size_t total = size * count;
-		rq->unmarshal (1, total, data);
-		for (const Octet* p = (const Octet*)data, *end = p + total; p != end; p += size) {
+		rq->unmarshal (1, total, dst);
+		for (const Octet* p = (const Octet*)dst, *end = p + total; p != end; p += size) {
 			BCD_check (p, size);
 		}
-		Nirvana::real_copy ((const Octet*)data, (const Octet*)data + total, (Octet*)dst);
 	}
 };
 

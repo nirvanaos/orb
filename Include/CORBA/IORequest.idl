@@ -55,10 +55,10 @@ pseudo interface IORequest
   /// 
   /// \param align Data alignment
   /// \param size  Data size.
-  /// \param [out] data Pointer to the internal data buffer.
+  /// \param data Pointer to the data buffer.
   /// \returns `true` if the byte order must be swapped after unmarshaling.
   boolean unmarshal (in Nirvana::Size align, in Nirvana::Size size,
-    out Nirvana::Pointer data);
+    in Nirvana::Pointer data);
 
   /// Marshal CDR sequence.
   /// 

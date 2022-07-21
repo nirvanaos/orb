@@ -49,20 +49,16 @@ void Type <IDL::Fixed <digits, scale> >::marshal_in_a (const Var* src, size_t co
 template <uint16_t digits, int16_t scale>
 void Type <IDL::Fixed <digits, scale> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
-	void* pbuf = nullptr;
-	rq->unmarshal (1, sizeof (Var), pbuf);
-	check (*(const Var*)pbuf);
-	dst = *(Var*)pbuf;
+	rq->unmarshal (1, sizeof (Var), &dst);
+	check (dst);
 }
 
 template <uint16_t digits, int16_t scale>
 void Type <IDL::Fixed <digits, scale> >::unmarshal_a (IORequest_ptr rq, size_t count, Var* dst)
 {
-	void* pbuf = nullptr;
-	rq->unmarshal (1, sizeof (Var) * count, pbuf);
-	for (Var* src = (Var*)pbuf, *end = src + count; src != end; ++src, ++dst) {
-		check (*(const Var*)src);
-		*dst = *src;
+	rq->unmarshal (1, sizeof (Var) * count, dst);
+	for (Var* p = dst, *end = p + count; p != end; ++p) {
+		check (*p);
 	}
 }
 
