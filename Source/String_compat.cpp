@@ -23,6 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+#include <CORBA/Type.h>
 #include <CORBA/String_compat.h>
 
 using namespace Nirvana;

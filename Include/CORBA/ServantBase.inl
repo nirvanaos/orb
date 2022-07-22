@@ -1,4 +1,5 @@
 /// \file
+/// ServantBase interface.
 /*
 * Nirvana IDL support library.
 *
@@ -24,37 +25,27 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPE_H_
-#define NIRVANA_ORB_TYPE_H_
+#ifndef NIRVANA_ORB_SERVANTBASE_INL_
+#define NIRVANA_ORB_SERVANTBASE_INL_
 #pragma once
 
-#include "ServantBase.inl"
-#include "TypeFixLen.inl"
-#include "TypeVarLen.inl"
-#include "TypePrimitive.inl"
-#include "TypeEnum.inl"
-#include "Type_interface.inl"
-#include "Object.inl"
-#include "ValueBase.inl"
-#include "ValueBox.h"
-#include "AbstractBase.inl"
-#include "Proxy/TypeCodeString.h"
-#include "Proxy/TypeCodeSequence.h"
-#include "Proxy/TypeCodeArray.h"
-#include "Proxy/TypeCodeFixed.h"
+#include "ServantBase.h"
+#include "IORequestClient.h"
 
 namespace CORBA {
 namespace Internal {
 
-/// The `void` type.
-template <>
-struct Type <void>
+inline
+void Type <PortableServer::ServantBase>::marshal_in (I_ptr <PortableServer::ServantBase> src, IORequest_ptr rq)
 {
-	static I_ptr <TypeCode> type_code ()
-	{
-		return _tc_void;
-	}
-};
+	rq->marshal_servant (src);
+}
+
+inline
+void Type <PortableServer::ServantBase>::unmarshal (IORequest_ptr rq, I_ref <PortableServer::ServantBase>& dst)
+{
+	dst = rq->unmarshal_servant ();
+}
 
 }
 }

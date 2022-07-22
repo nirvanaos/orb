@@ -43,12 +43,17 @@ namespace CORBA {
 namespace Internal {
 
 template <>
-struct Type <PortableServer::ServantBase> : TypeItf <PortableServer::ServantBase>
+struct Type <PortableServer::ServantBase> :
+	TypeItfMarshalable <PortableServer::ServantBase>
 {
 	static I_ptr <TypeCode> type_code ()
 	{
 		return PortableServer::_tc_Servant;
 	}
+
+	static void marshal_in (I_ptr <PortableServer::ServantBase> src, IORequest_ptr rq);
+	static void unmarshal (IORequest_ptr rq, I_ref <PortableServer::ServantBase>& dst);
+
 };
 
 // Type for native Servant

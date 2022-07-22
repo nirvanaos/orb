@@ -137,8 +137,7 @@ const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 		S::__hash,
 		// TODO: Other Object operations shall be here...
 		
-		S::__query_interface,
-		S::__get_servant
+		S::__query_interface
 	}
 };
 

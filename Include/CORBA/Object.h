@@ -110,7 +110,6 @@ ULong (*hash) (Bridge <Object>*, ULong maximum, Interface*);
 // TODO: Other Object operations shall be here...
 
 Interface* (*query_interface) (Bridge <Object>*, Type <String>::ABI_in, Interface*);
-Interface* (*get_servant) (Bridge <Object>*, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
