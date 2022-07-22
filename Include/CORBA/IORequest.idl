@@ -26,14 +26,6 @@
 */
 #include "TypeCode.idl"
 
-module PortableServer {
-
-typeprefix PortableServer "omg.org";
-
-native Servant;
-
-};
-
 module CORBA {
 module Internal {
 
@@ -186,16 +178,6 @@ pseudo interface IORequest
   /// 
   /// \returns Interface.
   Interface unmarshal_abstract (in string interface_id);
-
-  /// Marshal servant
-  /// 
-  /// \param servant The servant
-  void marshal_servant (in PortableServer::Servant servant);
-
-  /// Unmarshal servant
-  /// 
-  /// \returns The servant
-  PortableServer::Servant unmarshal_servant ();
 
   ///@}
 

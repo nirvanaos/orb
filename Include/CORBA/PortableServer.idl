@@ -10,14 +10,47 @@ typedef CORBA::OctetSeq ObjectId;
 
 local interface POA
 {
-  exception ServantAlreadyActive {};
-  exception ObjectNotActive {};
-  exception WrongPolicy {};
+  exception AdapterAlreadyExists
+  {};
+  exception AdapterNonExistent
+  {};
+  exception InvalidPolicy
+  { 
+    unsigned short index;
+  };
+  exception NoServant
+  {};
+  exception ObjectAlreadyActive
+  {};
+  exception ObjectNotActive
+  {};
+  exception ServantAlreadyActive
+  {};
+  exception ServantNotActive
+  {};
+  exception WrongAdapter
+  {};
+  exception WrongPolicy
+  {};
 
   ObjectId activate_object (in Servant p_servant)
     raises (ServantAlreadyActive, WrongPolicy);
 
   void deactivate_object (in ObjectId oid)
+    raises (ObjectNotActive, WrongPolicy);
+
+  // Identity mapping operations:
+  ObjectId servant_to_id (in Servant p_servant)
+    raises (ServantNotActive, WrongPolicy);
+  Object servant_to_reference (in Servant p_servant)
+    raises (ServantNotActive, WrongPolicy);
+  Servant reference_to_servant (in Object reference)
+    raises (ObjectNotActive, WrongAdapter, WrongPolicy);
+  ObjectId reference_to_id (in Object reference)
+    raises (WrongAdapter, WrongPolicy);
+  Servant id_to_servant (in ObjectId oid)
+    raises (ObjectNotActive, WrongPolicy);
+  Object id_to_reference (in ObjectId oid)
     raises (ObjectNotActive, WrongPolicy);
 };
 
