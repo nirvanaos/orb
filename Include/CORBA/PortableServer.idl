@@ -33,6 +33,8 @@ local interface POA
   exception WrongPolicy
   {};
 
+  void destroy (in boolean etherealize_objects, in boolean wait_for_completion);
+
   ObjectId activate_object (in Servant p_servant)
     raises (ServantAlreadyActive, WrongPolicy);
 
