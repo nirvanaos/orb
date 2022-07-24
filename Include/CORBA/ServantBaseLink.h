@@ -28,8 +28,11 @@
 #pragma once
 
 #include "servant_core.h"
-#include "PortableServer.h"
 #include "LifeCycleRefCnt.h"
+
+namespace PortableServer {
+class POA;
+}
 
 namespace CORBA {
 
