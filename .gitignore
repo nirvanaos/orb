@@ -20,3 +20,7 @@
 /Source/ORB.cpp
 /Include/CORBA/InterfaceRepository.h
 /Source/InterfaceRepository.cpp
+/Include/CORBA/Current.h
+/Include/CORBA/Policy.h
+/Source/Current.cpp
+/Source/Policy.cpp

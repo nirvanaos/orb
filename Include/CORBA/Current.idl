@@ -1,0 +1,9 @@
+module CORBA {
+
+typeprefix CORBA "omg.org";
+
+// interface for the Current object
+abstract valuetype Current
+{};
+
+};
