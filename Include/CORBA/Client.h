@@ -37,7 +37,11 @@ namespace Internal {
 
 template <class T, class I> class Client;
 
-template <class I> struct Decls;
+template <class I> struct NativeDecls
+{};
+
+template <class I> struct Decls : NativeDecls <I>
+{};
 
 template <class I>
 class ClientBridge :
