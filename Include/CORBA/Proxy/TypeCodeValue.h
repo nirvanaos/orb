@@ -43,16 +43,19 @@ class TypeCodeValueAbstract :
 	typedef TypeCodeStatic <TypeCodeValue <I>,
 		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> > Base;
 public:
+	typedef TypeCodeName <I> Name;
+	using Name::_s_name;
+
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (Base::RepositoryType::id,
-			TypeCodeName <I>::name_, VM_ABSTRACT, nullptr, nullptr, 0);
+		return TypeCodeBase::equal (Base::_bridge (), Base::RepositoryType::id,
+			TypeCodeName <I>::name_, VM_ABSTRACT, nullptr, nullptr, 0, other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (Base::RepositoryType::id,
-			VM_ABSTRACT, nullptr, nullptr, 0);
+		return TypeCodeBase::equivalent (Base::_bridge (), Base::RepositoryType::id,
+			VM_ABSTRACT, nullptr, nullptr, 0, other);
 	}
 
 	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) NIRVANA_NOEXCEPT
