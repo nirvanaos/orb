@@ -40,7 +40,6 @@
 #include "TypeCodeStruct.h"
 #include "TypeCodeUnion.h"
 #include "TypeAlias.h"
-#include "TypeCodeTypeDef.h"
 #include "TypeCodeInterface.h"
 #include "TypeCodeValue.h"
 #include "TypeCodeValueBox.h"
