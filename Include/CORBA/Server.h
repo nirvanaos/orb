@@ -35,7 +35,6 @@
 #include "ImplementationLocal.h"
 #include "ImplementationLocalStatic.h"
 #include "ImplementationTied.h"
-#include "ServantLocator_native.h"
 #include "PortableServer.h"
 #include "ServantBasePOA.h"
 #include "LocalObjectPOA.h"

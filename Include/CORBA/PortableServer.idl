@@ -1,4 +1,9 @@
-// Partial implementation for now
+// File: PortableServer.idl
+// CORBA 3.0, Chapter 11
+
+#ifndef _PORTABLE_SERVER_IDL_
+#define _PORTABLE_SERVER_IDL_
+
 #include "OctetSeq.idl"
 #include "Policy.idl"
 
@@ -168,7 +173,7 @@ local interface ServantActivator : ServantManager
     in boolean cleanup_in_progress,
     in boolean remaining_activations);
 };
-/* Temporary commented
+
 local interface ServantLocator : ServantManager
 {
   native Cookie;
@@ -185,7 +190,7 @@ local interface ServantLocator : ServantManager
     in Cookie the_cookie,
     in Servant the_servant);
 };
-*/
+
 local interface POA
 {
   exception AdapterAlreadyExists
@@ -275,3 +280,6 @@ local interface POA
 };
 
 };
+
+#endif
+

@@ -24,27 +24,13 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_SERVANTLOCATOR_NATIVE_H_
-#define NIRVANA_ORB_SERVANTLOCATOR_NATIVE_H_
-#pragma once
-
-#include <CORBA/Client.h>
-
-namespace PortableServer {
-class ServantLocator;
-}
+#include <Nirvana/native.h>
+#include <CORBA/ServantLocator_native.h>
 
 namespace CORBA {
 namespace Internal {
 
-template <>
-struct NativeDecls <PortableServer::ServantLocator>
-{
-	typedef void* Cookie;
-	static const Nirvana::ImportInterfaceT <TypeCode>& _tc_Cookie;
-};
+const Nirvana::ImportInterfaceT <TypeCode>& NativeDecls <PortableServer::ServantLocator>::_tc_Cookie = Nirvana::_tc_Pointer;
 
 }
 }
-
-#endif

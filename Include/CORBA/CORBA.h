@@ -49,6 +49,7 @@
 #include "Union.h"
 #include "ORB.h"
 #include "InterfaceRepository.h"
+#include "ServantLocator_native.h"
 
 namespace CORBA {
 
