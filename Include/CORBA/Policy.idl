@@ -10,7 +10,7 @@ typeprefix CORBA "omg.org";
 typedef unsigned long PolicyType;
 
 // Basic IDL definition
-abstract valuetype Policy
+interface Policy
 {
   readonly attribute PolicyType policy_type;
   Policy copy ();
@@ -44,7 +44,7 @@ exception InvalidPolicies
   sequence <unsigned short> indicies;
 };
 
-abstract interface PolicyManager
+interface PolicyManager
 {
   PolicyList get_policy_overrides (in PolicyTypeSeq ts);
 
@@ -53,7 +53,7 @@ abstract interface PolicyManager
     raises (InvalidPolicies);
 };
 
-abstract valuetype PolicyCurrent : Current supports PolicyManager
+local interface PolicyCurrent : PolicyManager, Current
 {};
 
 };

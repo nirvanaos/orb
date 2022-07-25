@@ -45,7 +45,7 @@ enum ThreadPolicyValue
   MAIN_THREAD_MODEL
 };
 
-valuetype ThreadPolicy : CORBA::Policy
+local interface ThreadPolicy : CORBA::Policy
 {
   readonly attribute ThreadPolicyValue value;
 };
@@ -56,7 +56,7 @@ enum LifespanPolicyValue
   PERSISTENT
 };
 
-valuetype LifespanPolicy : CORBA::Policy
+local interface LifespanPolicy : CORBA::Policy
 {
   readonly attribute LifespanPolicyValue value;
 };
@@ -67,7 +67,7 @@ enum IdUniquenessPolicyValue
   MULTIPLE_ID
 };
 
-valuetype IdUniquenessPolicy : CORBA::Policy
+local interface IdUniquenessPolicy : CORBA::Policy
 {
   readonly attribute IdUniquenessPolicyValue value;
 };
@@ -78,7 +78,7 @@ enum IdAssignmentPolicyValue
   SYSTEM_ID
 };
 
-valuetype IdAssignmentPolicy : CORBA::Policy
+local interface IdAssignmentPolicy : CORBA::Policy
 {
   readonly attribute IdAssignmentPolicyValue value;
 };
@@ -89,7 +89,7 @@ enum ImplicitActivationPolicyValue
   NO_IMPLICIT_ACTIVATION
 };
 
-valuetype ImplicitActivationPolicy : CORBA::Policy
+local interface ImplicitActivationPolicy : CORBA::Policy
 {
   readonly attribute ImplicitActivationPolicyValue value;
 };
@@ -100,7 +100,7 @@ enum ServantRetentionPolicyValue
   NON_RETAIN
 };
 
-valuetype ServantRetentionPolicy : CORBA::Policy
+local interface ServantRetentionPolicy : CORBA::Policy
 {
   readonly attribute ServantRetentionPolicyValue value;
 };
@@ -112,7 +112,7 @@ enum RequestProcessingPolicyValue
   USE_SERVANT_MANAGER
 };
 
-valuetype RequestProcessingPolicy : CORBA::Policy
+local interface RequestProcessingPolicy : CORBA::Policy
 {
   readonly attribute RequestProcessingPolicyValue value;
 };
