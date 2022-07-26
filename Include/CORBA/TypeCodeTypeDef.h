@@ -27,41 +27,41 @@
 #ifndef NIRVANA_ORB_TYPECODETYPEDEF_H_
 #define NIRVANA_ORB_TYPECODETYPEDEF_H_
 
-#include <Nirvana/OLF.h>
-#include "TypeCodeImpl.h"
+#include "TypeAlias.h"
+#include "Proxy/TypeCodeImpl.h"
 
 namespace CORBA {
 namespace Internal {
 
-template <const ::Nirvana::ExportInterface* ref> class TypeCodeTypeDef;
+template <const Alias* ref> class TypeDef;
 
-template <const ::Nirvana::ExportInterface* ref, class Content>
-class TypeCodeTypeDefImpl :
-	public TypeCodeStatic <TypeCodeTypeDef <ref>, TypeCodeTK <TCKind::tk_alias>,
+template <const Alias* ref, class Content>
+class TypeCodeTypeDef :
+	public TypeCodeStatic <TypeDef <ref>, TypeCodeTK <TCKind::tk_alias>,
 		TypeCodeOps <void> >,
-	public TypeCodeContentType <Content>,
-	public TypeCodeName < TypeCodeTypeDef <ref> >
+	public TypeCodeContentType <Content>
 {
-	typedef TypeCodeStatic <TypeCodeTypeDef <ref>, TypeCodeTK <TCKind::tk_alias>,
-		TypeCodeOps <void> > Base;
 public:
+	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env)
+	{
+		return const_string_ret_p (ref->id);
+	}
+
+	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env)
+	{
+		return const_string_ret_p (ref->name);
+	}
+
 	using TypeCodeContentType <Content>::_s_content_type;
-	typedef TypeCodeName <TypeCodeTypeDef <ref> > Name;
-	using Name::_s_name;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (TCKind::tk_alias, ref->name, Name::name_, content (), other);
+		return TypeCodeBase::equal (TCKind::tk_alias, ref->id, ref->name, content (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
 		return content ()->equivalent (other);
-	}
-
-	static ABI <String> _s_id (Bridge <TypeCode>* _b, Interface* _env)
-	{
-		return const_string_ret_p (ref->name);
 	}
 
 	static size_t _s_n_size (Bridge <TypeCode>* _b, Interface* _env)
@@ -119,6 +119,15 @@ private:
 	static I_ptr <TypeCode> content () NIRVANA_NOEXCEPT
 	{
 		return TypeCodeContentType <Content>::ptr ();
+	}
+};
+
+template <const Alias* alias>
+struct Type <TypeDef <alias> >
+{
+	static I_ptr <TypeCode> type_code ()
+	{
+		return alias->operator I_ptr <TypeCode> ();
 	}
 };
 

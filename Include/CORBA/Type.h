@@ -28,6 +28,7 @@
 #define NIRVANA_ORB_TYPE_H_
 #pragma once
 
+#include "TypeAlias.h"
 #include "TypeFixLen.inl"
 #include "TypeVarLen.inl"
 #include "TypePrimitive.inl"

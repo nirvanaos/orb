@@ -47,6 +47,7 @@
 #include "PseudoBase.h"
 #include "ValueFactoryBase.h"
 #include "Union.h"
+#include "TypeCodeTypeDef.h"
 #include "ORB.h"
 #include "InterfaceRepository.h"
 #include "ServantLocator_native.h"

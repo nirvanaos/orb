@@ -39,7 +39,6 @@
 #include "TypeCodeEnum.h"
 #include "TypeCodeStruct.h"
 #include "TypeCodeUnion.h"
-#include "TypeAlias.h"
 #include "TypeCodeInterface.h"
 #include "TypeCodeValue.h"
 #include "TypeCodeValueBox.h"

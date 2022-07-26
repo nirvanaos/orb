@@ -27,21 +27,30 @@
 #ifndef NIRVANA_ORB_TYPEALIAS_H_
 #define NIRVANA_ORB_TYPEALIAS_H_
 
-#include <Nirvana/ImportInterface.h>
-#include "../TypeCode.h"
+#include "I_ptr.h"
 
 namespace CORBA {
+
+class TypeCode;
+
 namespace Internal {
 
-template <const ::Nirvana::ImportInterfaceT <TypeCode>* ref>
-struct Alias {};
-
-template <const ::Nirvana::ImportInterfaceT <TypeCode>* ref>
-struct Type <Alias <ref> >
+struct Alias
 {
-	static I_ptr <TypeCode> type_code ()
+	const Char* id;
+	const Char* name;
+	Bridge <TypeCode>* ptc;
+
+	operator I_ptr <TypeCode> () const
 	{
-		return *ref;
+		assert (ptc);
+		return reinterpret_cast <TypeCode*> (ptc);
+	}
+
+	TypeCode* operator -> () const
+	{
+		assert (ptc);
+		return reinterpret_cast <TypeCode*> (ptc);
 	}
 };
 
