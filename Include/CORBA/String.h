@@ -91,7 +91,50 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C> >
 	static void marshal_in (const Var& src, IORequest_ptr rq);
 	static void marshal_out (Var& src, IORequest_ptr rq);
 	static void unmarshal (IORequest_ptr rq, Var& dst);
+
+	inline
+	static void check_encoding (const C* p, size_t cc);
 };
+
+template <> inline
+void Type <StringT <Char> >::check_encoding (const Char* p, size_t cc)
+{
+	if (p [cc])
+		Nirvana::throw_BAD_PARAM (); // Not zero-terminated
+
+	// Check for UTF-8
+	for (const Char* end = p + cc; p != end;) {
+		unsigned c = *p;
+		if (!(c & 0x80)) {
+			++p;
+			continue;
+		}
+		size_t ocnt;
+		if ((c & 0xE0) == 0xC0)
+			ocnt = 2;
+		else if ((c & 0xF0) == 0xE0)
+			ocnt = 3;
+		else if ((c & 0xF8) == 0xF0)
+			ocnt = 4;
+		else
+			Nirvana::throw_CODESET_INCOMPATIBLE ();
+		const Char* oend = p + ocnt;
+		if (oend > end)
+			Nirvana::throw_CODESET_INCOMPATIBLE ();
+		++p;
+		do {
+			if ((*p & 0xC0) != 0x80)
+				Nirvana::throw_CODESET_INCOMPATIBLE ();
+		} while (oend != ++p);
+	}
+}
+
+template <> inline
+void Type <StringT <WChar> >::check_encoding (const WChar* p, size_t cc)
+{
+	if (p [cc])
+		Nirvana::throw_BAD_PARAM (); // Not zero-terminated
+}
 
 template <typename C>
 void Type <StringT <C> >::check (const ABI& s)
@@ -111,8 +154,7 @@ void Type <StringT <C> >::check (const ABI& s)
 		if (cc > ABI::SMALL_CAPACITY)
 			Nirvana::throw_BAD_PARAM ();
 	}
-	if (p [cc])
-		Nirvana::throw_BAD_PARAM (); // Not zero-terminated
+	check_encoding (p, cc);
 }
 
 template <typename C, ULong bound>
