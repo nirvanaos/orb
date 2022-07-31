@@ -108,9 +108,15 @@ struct TypePrimitive :
 
 template <>
 struct TypePrimitive <Char> :
-	public TypeByVal <Char>
+	public TypeByValCheck <Char>
 {
 	static const bool is_CDR = false;
+
+	static void check (const Char& c)
+	{
+		if ((unsigned)c > 0x7F)
+			Nirvana::throw_CODESET_INCOMPATIBLE ();
+	}
 
 	static void marshal_in (const Char& src, IORequest_ptr rq);
 	static void marshal_in_a (const Char* src, size_t count, IORequest_ptr rq);

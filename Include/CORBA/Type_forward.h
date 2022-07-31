@@ -53,7 +53,8 @@ template <> struct Type <T>
   /// 
   /// has_check = `true` for:
   /// - Variable-length data types
-  /// - Enums
+  /// - enum
+  /// - char
   static const bool has_check;
 
   /// `true` for variable-length data types.
