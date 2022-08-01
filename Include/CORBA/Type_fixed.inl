@@ -50,16 +50,20 @@ template <uint16_t digits, int16_t scale>
 void Type <IDL::Fixed <digits, scale> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	rq->unmarshal (1, sizeof (Var), &dst);
+#ifdef _DEBUG
 	check (dst);
+#endif
 }
 
 template <uint16_t digits, int16_t scale>
 void Type <IDL::Fixed <digits, scale> >::unmarshal_a (IORequest_ptr rq, size_t count, Var* dst)
 {
 	rq->unmarshal (1, sizeof (Var) * count, dst);
+#ifdef _DEBUG
 	for (Var* p = dst, *end = p + count; p != end; ++p) {
 		check (*p);
 	}
+#endif
 }
 
 }

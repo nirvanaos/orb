@@ -71,7 +71,7 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 		if (abi.size) {
 			assert (abi.allocated);
 
-#ifdef _DEBUG // In the release we trust the IORequest implementation
+#ifdef _DEBUG
 			check_ABI (abi);
 #endif
 
@@ -82,6 +82,7 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 				} while (end != ++p);
 			}
 
+#ifdef _DEBUG
 			if (Type <T>::has_check) {
 				try {
 					T_ABI* p = (T_ABI*)abi.ptr, * end = p + abi.size;
@@ -93,6 +94,7 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 					throw;
 				}
 			}
+#endif
 
 			static_cast <ABI&> (tmp)= abi;
 		}
