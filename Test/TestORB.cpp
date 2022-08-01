@@ -1,5 +1,9 @@
 #include "ValueBox.h"
 #include <gtest/gtest.h>
+#include <Mock/TestMock.h>
+#include <CORBA/Server.h>
+#include <Nirvana/Runnable_s.h>
+#include <functional>
 
 using namespace std;
 using namespace CORBA;
@@ -22,7 +26,7 @@ bool must_not_compile3 (const Test::I3_var p1, const Test::I3_var p2)
 */
 namespace TestORB {
 
-class TestORB : public ::testing::Test
+class TestORB : public Nirvana::Test::TestMock
 {
 public:
 };
@@ -132,6 +136,36 @@ TEST_F (TestORB, ValueBox)
 	EXPECT_TRUE (p);
 
 	CORBA::Internal::Interface::_ptr_type pi (p);
+}
+
+class Functor :
+	public CORBA::Internal::Servant <Functor, ::Nirvana::Legacy::Runnable>,
+	public CORBA::Internal::LifeCycleStatic
+{
+public:
+	Functor (const std::function <void ()>& f) :
+		func_ (f)
+	{}
+
+	void run ()
+	{
+		func_ ();
+	}
+
+private:
+	std::function <void ()> func_;
+};
+
+TEST_F (TestORB, Runnable)
+{
+	using namespace std;
+
+	int a = 1, b = 2, c = 0;
+
+	Functor functor ([a, b, &c]() { c = a + b; });
+	::Nirvana::Legacy::Runnable::_ptr_type r = functor._get_ptr ();
+	r->run ();
+	EXPECT_EQ (c, a + b);
 }
 
 }

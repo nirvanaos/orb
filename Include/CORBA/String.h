@@ -30,6 +30,7 @@
 
 #include "StringBase.h"
 #include "TypeVarLen.h"
+#include <Nirvana/UTF8.h>
 
 namespace CORBA {
 
@@ -102,31 +103,8 @@ void Type <StringT <Char> >::check_encoding (const Char* p, size_t cc)
 	if (p [cc])
 		Nirvana::throw_BAD_PARAM (); // Not zero-terminated
 
-	// Check for UTF-8
-	for (const Char* end = p + cc; p != end;) {
-		unsigned c = *p;
-		if (!(c & 0x80)) {
-			++p;
-			continue;
-		}
-		size_t ocnt;
-		if ((c & 0xE0) == 0xC0)
-			ocnt = 2;
-		else if ((c & 0xF0) == 0xE0)
-			ocnt = 3;
-		else if ((c & 0xF8) == 0xF0)
-			ocnt = 4;
-		else
-			Nirvana::throw_CODESET_INCOMPATIBLE ();
-		const Char* oend = p + ocnt;
-		if (oend > end)
-			Nirvana::throw_CODESET_INCOMPATIBLE ();
-		++p;
-		do {
-			if ((*p & 0xC0) != 0x80)
-				Nirvana::throw_CODESET_INCOMPATIBLE ();
-		} while (oend != ++p);
-	}
+	if (!Nirvana::is_valid_utf8 (p, cc))
+		Nirvana::throw_CODESET_INCOMPATIBLE ();
 }
 
 template <> inline
