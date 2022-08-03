@@ -34,18 +34,6 @@
 #include "basic_types.h"
 #include "TCKind.h"
 
-/// CORBA::Object interface
-
-//! \namespace	IOP
-//!
-//! \brief	Inter-ORB declarations.
-
-namespace IOP {
-
-struct IOR;
-
-}
-
 namespace PortableServer {
 
 class ServantBase;
