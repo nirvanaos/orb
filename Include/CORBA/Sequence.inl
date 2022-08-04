@@ -38,9 +38,10 @@ template <typename T>
 void Type <Sequence <T> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
 	typedef typename Type <T>::Var T_Var;
-	if (Type <T>::is_CDR)
-		rq->marshal_seq (alignof (T_Var), sizeof (T_Var), src.size (), const_cast <T_Var*> (src.data ()), 0);
-	else {
+	if (Type <T>::is_CDR) {
+		size_t zero = 0;
+		rq->marshal_seq (alignof (T_Var), sizeof (T_Var), src.size (), const_cast <T_Var*> (src.data ()), zero);
+	} else {
 		rq->marshal_seq_begin (src.size ());
 		Type <T>::marshal_in_a (src.data (), src.size (), rq);
 	}
@@ -52,7 +53,8 @@ void Type <Sequence <T> >::marshal_out (Var& src, IORequest_ptr rq)
 	typedef typename Type <T>::Var T_Var;
 	if (Type <T>::is_CDR) {
 		rq->marshal_seq (alignof (T_Var), sizeof (T_Var), src.size (), src.data (), static_cast <ABI&> (src).allocated);
-		static_cast <ABI&> (src).reset ();
+		if (!static_cast <ABI&> (src).allocated)
+			static_cast <ABI&> (src).reset ();
 	} else {
 		rq->marshal_seq_begin (src.size ());
 		Type <T>::marshal_out_a (src.data (), src.size (), rq);
