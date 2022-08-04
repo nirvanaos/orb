@@ -68,6 +68,7 @@ pseudo interface IORequest
   /// \param data Pointer to the data with common-data-representation (CDR).
   /// \param allocated_size If this parameter is not zero, the request
   ///        object becomes an owner of the memory block.
+  ///        Object must not throw an exception after releasing this memory block.
   void marshal_seq (in Nirvana::Size align, in Nirvana::Size element_size,
     in Nirvana::Size element_count, in Nirvana::Pointer data,
     in Nirvana::Size allocated_size);
