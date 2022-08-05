@@ -90,7 +90,7 @@ NIRVANA_EXCEPTIONS (M)\
 CORBA_EXCEPTIONS (M)
 
 #define OMGVMCID 0x4f4d0000
-#define MAKE_MINOR(vmcid, c) (vmcid | c)
-#define MAKE_OMG_MINOR(c) (MAKE_MINOR (OMGVMCID, c))
+#define MAKE_MINOR(vmcid, c) ((vmcid) | (c))
+#define MAKE_OMG_MINOR(c) (MAKE_MINOR (OMGVMCID, (c)))
 
 #endif
