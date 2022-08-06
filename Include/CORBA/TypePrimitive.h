@@ -124,6 +124,8 @@ struct TypePrimitive <Char> :
 	static void unmarshal (IORequest_ptr rq, Char& dst);
 	static void unmarshal_a (IORequest_ptr rq, size_t count, Char* dst);
 
+	static void byteswap (Char& v) NIRVANA_NOEXCEPT
+	{}
 };
 
 template <>
@@ -137,6 +139,11 @@ struct TypePrimitive <WChar> :
 
 	static void unmarshal (IORequest_ptr rq, WChar& dst);
 	static void unmarshal_a (IORequest_ptr rq, size_t count, WChar* dst);
+
+	static void byteswap (WChar& v) NIRVANA_NOEXCEPT
+	{
+		v = Internal::byteswap (v);
+	}
 };
 
 /// We can not use `bool' built-in type across the binary boundaries because

@@ -225,6 +225,9 @@ pseudo interface IORequest
   /// \returns `true` if request is completed.
   boolean wait (in unsigned long long timeout);
 
+  /// Cancel the request.
+  void cancel ();
+
   ///@}
 };
 
