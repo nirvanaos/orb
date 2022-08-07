@@ -132,6 +132,13 @@ public:
 		return p_;
 	}
 
+	T& operator * () const
+	{
+		if (!p_)
+			::Nirvana::throw_INV_OBJREF ();
+		return *p_;
+	}
+
 protected:
 	servant_reference (T* p, bool) :
 		p_ (p)

@@ -186,8 +186,9 @@ pseudo interface IORequest
 
   /// End of input data marshaling.
   /// 
+  /// Called by proxy when all input data was successfully unmarshaled.
   /// Marshaling resources may be released.
-  /// This operation is called only if the input data is not empty.
+  /// If not all input data was unmarshalled, may throw the MARSHAL exception.
   void unmarshal_end ();
 
   /// Return exception to caller.
