@@ -234,27 +234,34 @@ void operator <<= (Any& any, Exception&& e)
 	any.move_from (e.__type_code (), e.__data ());
 }
 
-Boolean operator >>= (const Any& any, SystemException& se)
+bool Any::is_system_exception () const NIRVANA_NOEXCEPT
 {
-	I_ptr <TypeCode> tc = any.type ();
+	I_ptr <TypeCode> tc = type ();
 	if (tc && tc->kind () == TCKind::tk_except) {
 		std::string id = tc->id ();
 		const Char standard_prefix [] = "IDL:omg.org/CORBA/";
 		const Char nirvana_prefix [] = "IDL:CORBA/";
-		if (
-			!strncmp(standard_prefix, id.c_str (), countof (standard_prefix) - 1)
-		||
-			!strncmp (nirvana_prefix, id.c_str (), countof (nirvana_prefix) - 1)
-		) {
-			const Internal::ExceptionEntry* ee = SystemException::_get_exception_entry (id, Exception::EC_SYSTEM_EXCEPTION);
-			assert (ee);
-			(ee->construct) (&se);
-			const SystemException::_Data& data = *(const SystemException::_Data*)any.data ();
-			se.completed (data.completed);
-			if (RepId::compatible (ee->rep_id, id))
-				se.minor (data.minor);
-			return true;
-		}
+		return
+			!strncmp (standard_prefix, id.c_str (), countof (standard_prefix) - 1)
+			||
+			!strncmp (nirvana_prefix, id.c_str (), countof (nirvana_prefix) - 1);
+	}
+	return false;
+}
+
+Boolean operator >>= (const Any& any, SystemException& se)
+{
+	if (any.is_system_exception ()) {
+		I_ptr <TypeCode> tc = any.type ();
+		std::string id = tc->id ();
+		const Internal::ExceptionEntry* ee = SystemException::_get_exception_entry (id, Exception::EC_SYSTEM_EXCEPTION);
+		assert (ee);
+		(ee->construct) (&se);
+		const SystemException::_Data& data = *(const SystemException::_Data*)any.data ();
+		se.completed (data.completed);
+		if (RepId::compatible (ee->rep_id, id)) // ee may be UNKNOWN
+			se.minor (data.minor);
+		return true;
 	}
 	return false;
 }

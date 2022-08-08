@@ -189,6 +189,8 @@ public:
 	void copy_from (Internal::I_ptr <TypeCode> tc, const void* val);
 	void move_from (Internal::I_ptr <TypeCode> tc, void* val);
 
+	bool is_system_exception () const NIRVANA_NOEXCEPT;
+
 #ifndef LEGACY_CORBA_CPP
 private:
 	// Bounded string helpers for compatibility wit old C++ mapping
