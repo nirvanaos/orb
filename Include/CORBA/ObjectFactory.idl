@@ -34,7 +34,7 @@ native PtrDiff;
 
 };
 
-module PortableServer{
+module PortableServer {
 
 native Servant;
 

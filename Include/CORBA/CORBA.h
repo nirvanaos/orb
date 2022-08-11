@@ -40,6 +40,7 @@
 #include "UnknownUserException.h"
 #include "CORBA_Environment.h"
 #include "core_objects.h"
+#include "ServantBase.h"
 #include "LocalObject.h"
 #include "ValueBaseImpl.h"
 #include "AbstractBaseImpl.h"
