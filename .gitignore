@@ -24,6 +24,3 @@
 /Include/CORBA/Policy.h
 /Source/Current.cpp
 /Source/Policy.cpp
-/Include/CORBA/TimeBase.h
-/Source/TimeBase.cpp
-/Include/CORBA/TimeBase_s.h
