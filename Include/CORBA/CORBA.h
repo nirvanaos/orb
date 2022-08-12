@@ -34,6 +34,7 @@
 //#define LEGACY_CORBA_CPP
 
 #include <Nirvana/NirvanaBase.h>
+#include <Nirvana/time_defs.h>
 #include "exceptions.h"
 #include "Type.h"
 #include "String_compat.h"
