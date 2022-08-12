@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_ABI_STRING_H_
 #pragma once
 
-#include <Nirvana/NirvanaBase.h>
+#include <Nirvana/bitutils.h>
 #include "ABI.h"
 #include <assert.h>
 #include <stddef.h>
