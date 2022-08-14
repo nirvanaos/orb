@@ -76,4 +76,10 @@ const Char RepIdOf <UnknownUserException>::id [] = CORBA_REPOSITORY_ID ("Unknown
 
 }
 
+namespace Messaging {
+
+typedef CORBA::UnknownUserException UserExceptionBase;
+
+}
+
 #endif

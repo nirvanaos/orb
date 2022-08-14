@@ -1,0 +1,34 @@
+// File: Dynamic.idl
+// CORBA 3.0, Chapter 21
+
+#ifndef _DYNAMIC_IDL_
+#define _DYNAMIC_IDL_
+
+#include "InterfaceRepository.idl"
+
+module CORBA {
+
+typeprefix CORBA "omg.org";
+
+typedef sequence <string> StringSeq;
+
+};
+
+module Dynamic {
+
+typeprefix Dynamic "omg.org";
+
+struct Parameter
+{
+	any argument;
+	CORBA::ParameterMode mode;
+};
+
+typedef sequence <Parameter> ParameterList;
+typedef CORBA::StringSeq ContextList;
+typedef sequence <CORBA::TypeCode> ExceptionList;
+typedef CORBA::StringSeq RequestContext;
+
+}; // module Dynamic
+
+#endif // _DYNAMIC_IDL_

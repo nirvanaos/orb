@@ -30,7 +30,6 @@
 #ifndef _PORTABLE_SERVER_IDL_
 #define _PORTABLE_SERVER_IDL_
 
-#include "OctetSeq.idl"
 #include "Policy.idl"
 
 module CORBA {
@@ -39,6 +38,7 @@ typeprefix CORBA "omg.org";
 
 typedef string RepositoryId;
 typedef string Identifier;
+typedef sequence <octet> OctetSeq;
 
 };
 

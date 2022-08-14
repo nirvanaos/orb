@@ -24,3 +24,12 @@
 /Include/CORBA/Policy.h
 /Source/Current.cpp
 /Source/Policy.cpp
+/Include/CORBA/Dynamic.cpp
+/Include/CORBA/Dynamic.h
+/Include/CORBA/IOP.h
+/Include/CORBA/Messaging.h
+/Include/CORBA/Pollable.h
+/Source/Dynamic.cpp
+/Source/IOP.cpp
+/Source/Messaging.cpp
+/Source/Pollable.cpp
