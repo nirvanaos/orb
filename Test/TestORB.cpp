@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 #include <Mock/TestMock.h>
 #include <CORBA/Server.h>
-#include <Nirvana/Runnable_s.h>
+#include <Nirvana/Legacy/Runnable_s.h>
 #include <functional>
 
 using namespace std;
