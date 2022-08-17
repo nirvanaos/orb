@@ -180,8 +180,7 @@ local interface POAManagerFactory
 // AdapterActivator interface
 local interface AdapterActivator
 {
-  boolean unknown_adapter (in POA parent,
-    in string name);
+  boolean unknown_adapter (in POA parent, in string name);
 };
 
 // ServantManager interface
@@ -281,6 +280,9 @@ local interface POA
 
   // object activation and deactivation
   ObjectId activate_object (in Servant p_servant) raises (ServantAlreadyActive, WrongPolicy);
+  void activate_object_with_id (in ObjectId id, in Servant p_servant)
+    raises (ServantAlreadyActive, ObjectAlreadyActive, WrongPolicy);
+
   void deactivate_object (in ObjectId oid) raises (ObjectNotActive, WrongPolicy);
 
   // reference creation operations
