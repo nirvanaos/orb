@@ -27,20 +27,11 @@
 *  popov.nirvana@gmail.com
 */
 
-#ifndef _PORTABLE_SERVER_IDL_
-#define _PORTABLE_SERVER_IDL_
+#ifndef CORBA_PORTABLE_SERVER_IDL_
+#define CORBA_PORTABLE_SERVER_IDL_
 
 #include "Policy.idl"
-
-module CORBA {
-
-typeprefix CORBA "omg.org";
-
-typedef string RepositoryId;
-typedef string Identifier;
-typedef sequence <octet> OctetSeq;
-
-};
+#include "CORBA_types.idl"
 
 module PortableServer {
 

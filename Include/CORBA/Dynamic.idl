@@ -6,14 +6,6 @@
 
 #include "InterfaceRepository.idl"
 
-module CORBA {
-
-typeprefix CORBA "omg.org";
-
-typedef sequence <string> StringSeq;
-
-};
-
 module Dynamic {
 
 typeprefix Dynamic "omg.org";

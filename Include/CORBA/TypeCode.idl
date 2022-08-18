@@ -27,7 +27,11 @@
 *  popov.nirvana@gmail.com
 */
 
+#ifndef CORBA_TYPECODE_IDL_
+#define CORBA_TYPECODE_IDL_
+
 #include "TCKind.idl"
+#include "CORBA_types.idl"
 
 module Nirvana {
 
@@ -39,14 +43,7 @@ native Size;
 
 module CORBA {
 
-#ifdef _PRE_3_0_COMPILER_ 
-#pragma prefix "omg.org"
-#else
 typeprefix CORBA "omg.org";
-#endif
-
-typedef string RepositoryId;
-typedef string Identifier;
 
 typedef short Visibility;
 const Visibility PRIVATE_MEMBER = 0;
@@ -141,3 +138,4 @@ pseudo interface TypeCode
 
 };
 
+#endif

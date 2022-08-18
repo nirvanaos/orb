@@ -1,0 +1,17 @@
+#ifndef CORBA_CORBA_TYPES_IDL_
+#define CORBA_CORBA_TYPES_IDL_
+
+module CORBA{
+
+typeprefix CORBA "omg.org";
+
+typedef string RepositoryId;
+typedef string Identifier;
+typedef sequence <octet> OctetSeq;
+typedef sequence <string> StringSeq;
+typedef unsigned long Flags;
+native OpaqueValue;
+
+};
+
+#endif

@@ -1,18 +1,45 @@
 /// \file
 /// CORBA 3.0, Chapter 4
-/// Reduced for now
+
+#ifndef CORBA_ORB_IDL_
+#define CORBA_ORB_IDL_
 
 #include "InterfaceRepository.idl"
+#include "Request.idl"
+#include "Context.idl"
+#include "Policy.idl"
 
 module CORBA {
 
-#ifdef _PRE_3_0_COMPILER_
-#pragma prefix "omg.org"
-#else
 typeprefix CORBA "omg.org";
-#endif
+
+typedef sequence <Request> RequestSeq;
+
+typedef unsigned short ServiceType;
+typedef unsigned long  ServiceOption;
+typedef unsigned long  ServiceDetailType;
+typedef CORBA::OctetSeq ServiceDetailData;
+typedef sequence<ServiceOption> ServiceOptionSeq;
+
+const ServiceType Security = 1;
+
+struct ServiceDetail
+{
+  ServiceDetailType service_detail_type;
+  ServiceDetailData service_detail;
+};
+
+typedef sequence<ServiceDetail> ServiceDetailSeq;
+
+struct ServiceInformation
+{
+  ServiceOptionSeq service_options;
+  ServiceDetailSeq  service_details;
+};
 
 native ValueFactory;
+
+typedef string ORBid;
 
 /// ORB
 pseudo interface ORB
@@ -20,9 +47,58 @@ pseudo interface ORB
 	typedef string ObjectId;
 	typedef sequence <ObjectId> ObjectIdList;
 
-	exception InvalidName{};
+	exception InvalidName {};
 
-	/// Resolve initial reference
+  ORBid id();
+
+  string object_to_string (
+    in Object                   obj
+  );
+
+  Object string_to_object (
+    in string                   str
+  );
+
+  // Dynamic Invocation related operations
+
+  void create_list (
+    in long                     count,
+    out NVList                  new_list
+  );
+
+  void create_operation_list (
+    in OperationDef             oper,
+    out NVList                  new_list
+  );
+
+  void get_default_context (
+    out Context                 ctx
+  );
+
+  void send_multiple_requests_oneway (
+    in RequestSeq               req
+  );
+
+  void send_multiple_requests_deferred (
+    in RequestSeq               req
+  );
+
+  boolean poll_next_response ();
+
+  void get_next_response (
+    out Request                 req
+  ) raises (WrongTransaction);
+
+  // Service information operations
+
+  boolean get_service_information (
+    in ServiceType              service_type,
+    out ServiceInformation      service_information
+  );
+
+  ObjectIdList list_initial_services ();
+
+  /// Resolve initial reference
 	Object resolve_initial_references (
 		in ObjectId identifier
 	) raises (InvalidName);
@@ -139,6 +215,37 @@ pseudo interface ORB
     in ValueMemberSeq           members
   );
 
+  ///@{
+  /// Thread related operations
+  
+  /// Does nothing.
+  /// \returns `false`.
+  boolean work_pending ();
+
+  /// Does nothing.
+  void perform_work ();
+
+  /// Does nothing.
+  void run ();
+
+  void shutdown (
+    in boolean                  wait_for_completion
+  );
+
+  /// Does nothing
+  void destroy ();
+
+  ///@}
+
+  /// Create Policy object.
+  Policy create_policy (
+    in PolicyType               type,
+    in any                      val
+  ) raises (PolicyError);
+
+  ///@{
+  /// Value factory operations
+
   /// Not implemented
   ValueFactory register_value_factory (
     in RepositoryId             id,
@@ -154,6 +261,9 @@ pseudo interface ORB
   ValueFactory lookup_value_factory (
     in RepositoryId             id);
 
+  ///@}
 };
 
 };
+
+#endif

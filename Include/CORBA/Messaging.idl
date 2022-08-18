@@ -9,14 +9,6 @@
 #include "Pollable.idl"
 #include <Nirvana/TimeBase.idl>
 
-module CORBA {
-
-typeprefix CORBA "omg.org";
-
-typedef sequence <octet> OctetSeq;
-
-};
-
 module Messaging {
 
 #ifndef _PRE_3_0_COMPILER_ 

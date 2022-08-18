@@ -51,7 +51,6 @@ typedef int32_t Long;
 typedef int64_t LongLong;
 typedef uint32_t ULong;
 typedef uint64_t ULongLong;
-typedef Long Flags;
 
 // Boolean constant
 #ifdef FALSE

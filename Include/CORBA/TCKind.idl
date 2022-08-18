@@ -27,6 +27,9 @@
 *  popov.nirvana@gmail.com
 */
 
+#ifndef CORBA_TCKIND_IDL_
+#define CORBA_TCKIND_IDL_
+
 module CORBA {
 
 #ifdef _PRE_3_0_COMPILER_ 
@@ -53,3 +56,5 @@ enum TCKind
 };
 
 };
+
+#endif

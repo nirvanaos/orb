@@ -32,3 +32,9 @@
 /Source/Pollable.cpp
 /Include/CORBA/BiDirPolicy.h
 /Source/BiDirPolicy.cpp
+/Source/Request.cpp
+/Include/CORBA/Request.h
+/Include/CORBA/Context.h
+/Include/CORBA/CORBA_types.h
+/Include/CORBA/CORBA_types_s.h
+/Include/CORBA/NVList.h
