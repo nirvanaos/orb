@@ -57,14 +57,8 @@ pseudo interface IOReference
 	/// Create oneway request.
 	IORequest create_oneway (in OperationIndex op);
 
-	typedef unsigned long long DeadlineTime;
-
-	/// Send request asynchronously.
-	/// 
-	/// \param request  The request created by create_oneway() or create_async().
-	///                 For the oneway request callee clears request reference.
-	/// \param deadline Asynchronous request deadline. If zero, the request derives current deadline.
-	void send (inout IORequest request, in DeadlineTime deadline);
+	/// Create asynchronous request.
+	IORequest create_async (in OperationIndex op);
 
 };
 
