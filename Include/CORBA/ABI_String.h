@@ -94,6 +94,22 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return small_pointer ();
 	}
 
+	const C* _end_ptr () const NIRVANA_NOEXCEPT
+	{
+		if (is_large ())
+			return large_pointer () + large_size ();
+		else
+			return small_pointer () + small_size ();
+	}
+
+	C* _end_ptr () NIRVANA_NOEXCEPT
+	{
+		if (is_large ())
+			return large_pointer () + large_size ();
+		else
+			return small_pointer () + small_size ();
+	}
+
 	void reset () NIRVANA_NOEXCEPT
 	{
 		size_t* p = data.raw, *end = p + countof (data.raw);
