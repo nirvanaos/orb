@@ -94,7 +94,8 @@ pseudo interface IORequest
   /// Write marshaling sequence size.
   /// 
   /// \param element_count The sequence size.
-  void marshal_seq_begin (in Nirvana::Size element_count);
+  /// \returns `false` to skip marshaling.
+  boolean marshal_seq_begin (in Nirvana::Size element_count);
 
   /// Get unmarshalling sequence size.
   /// 
