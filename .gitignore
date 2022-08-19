@@ -39,3 +39,5 @@
 /Include/CORBA/CORBA_types_s.h
 /Include/CORBA/NVList.h
 /Source/CORBA_types.cpp
+/Include/CORBA/DomainManager.h
+/Source/DomainManager.cpp
