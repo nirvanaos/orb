@@ -31,6 +31,7 @@
 #include "Client.h"
 #include "basic_types.h"
 #include "TypeObject.h"
+#include "Sequence.h"
 
 namespace CORBA {
 
@@ -39,13 +40,22 @@ class Object;
 typedef Internal::Interface ImplementationDef; // Not defined, unused
 
 class InterfaceDef;
+class TypeCode;
+typedef ::IDL::Sequence <Internal::TypeItf <TypeCode>::Var> ExceptionList;
 class Context;
 class NamedValue;
 class NVList;
 class Policy;
+typedef ::IDL::Sequence <Internal::TypeItf <Policy>::Var> PolicyList;
 typedef ULong PolicyType;
+typedef ::IDL::Sequence <PolicyType> PolicyTypeSeq;
 typedef ULong Flags;
 class Request;
+typedef ::IDL::Sequence < ::IDL::String> ContextList;
+class DomainManager;
+typedef ::IDL::Sequence <Internal::TypeItf <DomainManager>::Var> DomainManagersList;
+enum class SetOverrideType : Internal::ABI_enum;
+class ORB;
 
 namespace Internal {
 
@@ -58,8 +68,17 @@ Type <Boolean>::ABI_ret (*is_equivalent) (Bridge <Object>*, Interface*, Interfac
 ULong (*hash) (Bridge <Object>*, ULong maximum, Interface*);
 void (*create_request) (Bridge <Object>*, Interface* ctx, Type <String>::ABI_in operation,
 	Interface* arg_list, Interface* result, Interface** req, uint32_t req_flags, Interface*);
+void (*create_request2) (Bridge <Object>*, Interface* ctx, Type <String>::ABI_in operation,
+	Interface* arg_list, Interface* result, Type <ExceptionList>::ABI_in, Type <ContextList>::ABI_in,
+	Interface** req, uint32_t req_flags, Interface*);
 Interface* (*get_policy) (Bridge <Object>*, uint32_t, Interface*);
-// TODO: Other Object operations shall be here...
+Type <DomainManagersList>::ABI_ret (*get_domain_managers) (Bridge <Object>*, Interface*);
+Interface* (*set_policy_overrides) (Bridge <Object>*, Type <PolicyList>::ABI_in, ABI_enum, Interface*);
+Interface* (*get_client_policy) (Bridge <Object>*, PolicyType, Interface*);
+Type <PolicyList>::ABI_ret (*get_policy_overrides) (Bridge <Object>*, Type <PolicyTypeSeq>::ABI_in, Interface*);
+Type <Boolean>::ABI_ret (*validate_connection) (Bridge <Object>*, Type <PolicyList>::ABI_out, Interface*);
+Type <String>::ABI_ret (*repository_id) (Bridge <Object>*, Interface*);
+Interface* (*get_component) (Bridge <Object>*, Interface*);
 
 Interface* (*query_interface) (Bridge <Object>*, Type <String>::ABI_in, Interface*);
 NIRVANA_BRIDGE_END ()
@@ -77,9 +96,19 @@ public:
 	ULong _hash (ULong maximum);
 	void _create_request (I_ptr <Context> ctx, String_in operation, I_in <NVList> arg_list,
 		I_in <NamedValue> result, I_out <Request> request, Flags req_flags);
+	void _create_request (I_ptr <Context> ctx, String_in operation, I_in <NVList> arg_list,
+		I_in <NamedValue> result, Type <ExceptionList>::C_in exclist, Type <ContextList>::C_in ctxlist,
+		I_out <Request> request, Flags req_flags);
+	I_ref <Request> _request (String_in operation);
 	I_ref <Policy> _get_policy (PolicyType policy_type);
-
-	// TODO: Other Object operations shall be here...
+	DomainManagersList _get_domain_managers ();
+	I_ref <Object> _set_policy_overrides (Type <PolicyList>::C_in policies, SetOverrideType set_or_add);
+	I_ref <Policy> _get_client_policy (PolicyType type);
+	PolicyList _get_policy_overrides (Type <PolicyTypeSeq>::C_in types);
+	Boolean _validate_connection (Type <PolicyList>::C_out inconsistent_policies);
+	String _repository_id ();
+	I_ref <Object> _get_component ();
+	I_ref <ORB> _get_ORB ();
 
 	/// This method does not increment reference counter
 	I_ptr <Interface> _query_interface (String_in type_id);

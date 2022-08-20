@@ -114,6 +114,21 @@ protected:
 		}
 	}
 
+	static void __create_request2 (Bridge <Object>* obj, Interface* ctx, Type <String>::ABI_in operation,
+		Interface* arg_list, Interface* result, Type <ExceptionList>::ABI_in exclist, Type <ContextList>::ABI_in ctxlist,
+		Interface** request, uint32_t req_flags, Interface* env)
+	{
+		try {
+			return S::_implementation (obj)._create_request (Type <Context>::in (ctx), Type <String>::in (operation),
+				Type <NVList>::in (arg_list), Type <NamedValue>::in (result), Type <ExceptionList>::in (exclist),
+				Type <ContextList>::in (ctxlist), Type <Request>::out (request), req_flags);
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+	}
+
 	static Interface* __get_policy (Bridge <Object>* obj, uint32_t policy_type, Interface* env)
 	{
 		try {
@@ -126,7 +141,95 @@ protected:
 		return Type <Policy>::ret ();
 	}
 
-	// TODO: Other Object operations shall be here...
+	static Type <DomainManagersList>::ABI_ret __get_domain_managers (Bridge <Object>* obj, Interface* env)
+	{
+		try {
+			return Type <DomainManagersList>::ret (S::_implementation (obj)._get_domain_managers ());
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return Type <DomainManagersList>::ret ();
+	}
+
+	static Interface* __set_policy_overrides (Bridge <Object>* obj, Type <PolicyList>::ABI_in policies,
+		ABI_enum set_or_add, Interface* env)
+	{
+		try {
+			return Type <Object>::ret (S::_implementation (obj)._set_policy_overrides (
+				Type <PolicyList>::in (policies), Type <SetOverrideType>::in (set_or_add)));
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return Type <Object>::ret ();
+	}
+
+	static Interface* __get_client_policy (Bridge <Object>* obj, PolicyType type, Interface* env)
+	{
+		try {
+			return Type <Policy>::ret (S::_implementation (obj)._get_client_policy (type));
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return Type <Policy>::ret ();
+	}
+
+	static Type <PolicyList>::ABI_ret __get_policy_overrides (Bridge <Object>* obj,
+		Type <PolicyTypeSeq>::ABI_in types, Interface* env)
+	{
+		try {
+			return Type <PolicyList>::ret (S::_implementation (obj)._get_policy_overrides (
+				Type <PolicyTypeSeq>::in (types)));
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return Type <PolicyList>::ret ();
+	}
+
+	static Type <Boolean>::ABI_ret __validate_connection (Bridge <Object>* obj,
+		Type <PolicyList>::ABI_out inconsistent_policies, Interface* env)
+	{
+		try {
+			return Type <Boolean>::ret (S::_implementation (obj)._validate_connection (
+				Type <PolicyList>::out (inconsistent_policies)));
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return Type <Boolean>::ret ();
+	}
+
+	static Type <String>::ABI_ret __repository_id (Bridge <Object>* obj, Interface* env)
+	{
+		try {
+			return Type <String>::ret (S::_implementation (obj)._repository_id ());
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return Type <String>::ret ();
+	}
+
+	static Interface* __get_component (Bridge <Object>* obj, Interface* env)
+	{
+		try {
+			return Type <Object>::ret (S::_implementation (obj)._get_component ());
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return Type <Object>::ret ();
+	}
 
 	// Internals
 	static Interface* __query_interface (Bridge <Object>* base, Type <String>::ABI_in id, Interface* env)
@@ -157,8 +260,15 @@ const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 		S::__is_equivalent,
 		S::__hash,
 		S::__create_request,
+		S::__create_request2,
 		S::__get_policy,
-		// TODO: Other Object operations shall be here...
+		S::__get_domain_managers,
+		S::__set_policy_overrides,
+		S::__get_client_policy,
+		S::__get_policy_overrides,
+		S::__validate_connection,
+		S::__repository_id,
+		S::__get_component,
 		
 		S::__query_interface
 	}
