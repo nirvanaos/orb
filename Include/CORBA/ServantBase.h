@@ -37,6 +37,13 @@ class POA;
 
 extern const Nirvana::ImportInterfaceT <CORBA::TypeCode> _tc_Servant;
 
+class ServantBase;
+typedef CORBA::Internal::I_ptr <ServantBase> Servant;
+
+#ifdef LEGACY_CORBA_CPP
+typedef ::CORBA::Internal::I_var <ServantBase> ServantBase_var;
+#endif
+
 }
 
 namespace CORBA {

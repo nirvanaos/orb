@@ -7,20 +7,27 @@ module CORBA {
 
 typeprefix CORBA "omg.org";
 
+exception Bounds {};
+
+pseudo interface NamedValue
+{
+  readonly attribute Identifier name;
+  readonly attribute any value;
+  readonly attribute Flags flags;
+};
+
 pseudo interface NVList
 {
-  void add_item (
-      in Identifier       item_name,  // name of item
-      in TypeCode         item_type,  // item datatype
-      in OpaqueValue      value,      // item value
-      in long             value_len,  // length of item value
-      in Flags            item_flags  // item flags
+  readonly attribute unsigned long count;
+  NamedValue add (in Flags flags);
+  NamedValue add_item (in Identifier item_name, in Flags flags);
+  NamedValue add_value (
+    in Identifier item_name,
+    in any val,
+    in Flags flags
   );
-  void free ();
-  void free_memory ();
-  void get_count (
-      out long            count       // number of entries in the list
-  );
+  NamedValue item (in unsigned long index) raises (Bounds);
+  void remove (in unsigned long index) raises (Bounds);
 };
 
 };

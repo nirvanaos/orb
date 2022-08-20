@@ -32,24 +32,12 @@
 
 namespace CORBA {
 
-class LocalObject;
 #ifdef LEGACY_CORBA_CPP
 typedef Internal::I_ptr <LocalObject> LocalObject_ptr;
 typedef Internal::I_var <LocalObject> LocalObject_var;
 #endif
 
 namespace Internal {
-
-template <class I>
-struct TypeLocalObject : TypeObject <I>
-{
-	static const TCKind tc_kind = TCKind::tk_local_interface;
-};
-
-template <>
-struct Type <LocalObject> : TypeLocalObject <LocalObject>
-{
-};
 
 template <> const Char RepIdOf <LocalObject>::id [] = CORBA_REPOSITORY_ID ("LocalObject");
 NIRVANA_BRIDGE_BEGIN (LocalObject)

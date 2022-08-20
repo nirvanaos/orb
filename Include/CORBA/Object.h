@@ -28,101 +28,29 @@
 #define NIRVANA_ORB_OBJECT_H_
 #pragma once
 
-#include "Client.h"
-#include "Type_interface.h"
-#include "String.h"
-#include "basic_types.h"
-#include "TCKind.h"
+#include "Object_c.h"
+#include "TypeObject.h"
+#include "TypeAlias.h"
+#include "Sequence.h"
+#include "UserException.h"
+#include "Any.h"
+#include "EnvironmentEx.h"
 
-namespace PortableServer {
-
-class ServantBase;
-typedef CORBA::Internal::I_ptr <ServantBase> Servant;
-
-#ifdef LEGACY_CORBA_CPP
-typedef ::CORBA::Internal::I_var <ServantBase> ServantBase_var;
-#endif
-
-}
-
-namespace CORBA {
-namespace Internal {
-
-template <class I>
-struct TypeObject : TypeItfMarshalable <I>
-{
-	static const TCKind tc_kind = TCKind::tk_objref;
-
-	static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
-	static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
-
-};
-
-}
-
-class InterfaceDef;
-
-}
+// IDL generated headers
+#include "IORequest.h"
+#include "Context.h"
+#include "Request.h"
+#include "Policy.h"
+#include "InterfaceRepository.h"
 
 namespace CORBA {
 
-class Object;
 #ifdef LEGACY_CORBA_CPP
 typedef Internal::I_ptr <Object> Object_ptr;
 typedef Internal::I_var <Object> Object_var;
 #endif
 
-typedef Internal::Interface ImplementationDef; // Not defined, unused
-
 namespace Internal {
-
-template <>
-struct Type <PortableServer::Servant>;
-
-template <>
-struct Type <Object> : TypeObject <Object>
-{
-	static I_ptr <TypeCode> type_code ()
-	{
-		return _tc_Object;
-	}
-};
-
-template <> const Char RepIdOf <Object>::id [] = CORBA_REPOSITORY_ID ("Object");
-NIRVANA_BRIDGE_BEGIN (CORBA::Object)
-Interface* (*get_interface) (Bridge <Object>*, Interface*);
-Type <Boolean>::ABI_ret (*is_a) (Bridge <Object>*,  Type <String>::ABI_in type_id, Interface*);
-Type <Boolean>::ABI_ret (*non_existent) (Bridge <Object>*, Interface*);
-Type <Boolean>::ABI_ret (*is_equivalent) (Bridge <Object>*, Interface*, Interface*);
-ULong (*hash) (Bridge <Object>*, ULong maximum, Interface*);
-// TODO: Other Object operations shall be here...
-
-Interface* (*query_interface) (Bridge <Object>*, Type <String>::ABI_in, Interface*);
-NIRVANA_BRIDGE_END ()
-
-template <class T>
-class Client <T, Object> :
-	public T
-{
-public:
-	Internal::I_ref <ImplementationDef> _get_implementation ();
-	Internal::I_ref <InterfaceDef> _get_interface ();
-	Boolean _is_a (String_in type_id);
-	Boolean _non_existent ();
-	Boolean _is_equivalent (I_in <Object> other_object);
-	ULong _hash (ULong maximum);
-	// TODO: Other Object operations shall be here...
-
-	/// This method does not increment reference counter
-	I_ptr <Interface> _query_interface (String_in type_id);
-
-	/// This method does not increment reference counter
-	template <class I>
-	I_ptr <I> _query_interface ()
-	{
-		return static_cast <I*> (&_query_interface (RepIdOf <I>::id));
-	}
-};
 
 template <class T>
 Internal::I_ref <ImplementationDef> Client <T, Object>::_get_implementation ()
@@ -176,6 +104,26 @@ ULong Client <T, Object>::_hash (ULong maximum)
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
 	ULong _ret = (_b._epv ().epv.hash) (&_b, maximum, &_env);
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
+void Client <T, Object>::_create_request (I_in <Context> ctx, String_in operation, I_in <NVList> arg_list,
+	I_in <NamedValue> result, I_out <Request> request, Flags req_flags)
+{
+	Environment _env;
+	Bridge <Object>& _b (T::_get_bridge (_env));
+	ULong _ret = (_b._epv ().epv.create_request) (&_b, &ctx, &operation, &arg_list, &result, &request, req_flags, &_env);
+	_env.check ();
+}
+
+template <class T>
+I_ref <Policy> Client <T, Object>::_get_policy (PolicyType policy_type)
+{
+	Environment _env;
+	Bridge <Object>& _b (T::_get_bridge (_env));
+	I_ret <Policy> _ret = (_b._epv ().epv.get_policy) (&_b, policy_type, &_env);
 	_env.check ();
 	return _ret;
 }

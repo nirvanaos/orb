@@ -50,7 +50,7 @@ protected:
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return 0;
+		return Type <InterfaceDef>::ret ();
 	}
 
 	static Type <Boolean>::ABI_ret __is_a (Bridge <Object>* obj, Type <String>::ABI_in type_id, Interface* env)
@@ -62,7 +62,7 @@ protected:
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return 0;
+		return false;
 	}
 
 	static Type <Boolean>::ABI_ret __non_existent (Bridge <Object>* obj, Interface* env)
@@ -74,7 +74,7 @@ protected:
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return 0;
+		return false;
 	}
 
 	static Type <Boolean>::ABI_ret __is_equivalent (Bridge <Object>* obj, Interface* other_object, Interface* env)
@@ -86,7 +86,7 @@ protected:
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return 0;
+		return false;
 	}
 
 	static ULong __hash (Bridge <Object>* obj, ULong maximum, Interface* env)
@@ -100,6 +100,32 @@ protected:
 		}
 		return 0;
 	}
+
+	static void __create_request (Bridge <Object>* obj, Interface* ctx, Type <String>::ABI_in operation,
+		Interface* arg_list, Interface* result, Interface** request, Flags req_flags, Interface* env)
+	{
+		try {
+			return S::_implementation (obj)._create_request (Type <Context>::in (ctx), Type <String>::in (operation),
+				Type <NVList>::in (arg_list), Type <NamedValue>::in (result), Type <Request>::out (request), req_flags);
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+	}
+
+	static Interface* __get_policy (Bridge <Object>* obj, uint32_t policy_type, Interface* env)
+	{
+		try {
+			return Type <Policy>::ret (S::_implementation (obj)._get_policy (policy_type));
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return Type <Policy>::ret ();
+	}
+
 	// TODO: Other Object operations shall be here...
 
 	// Internals
@@ -115,11 +141,6 @@ protected:
 		return Type <Interface>::VT_ret ();
 	}
 
-	static Interface* __get_servant (Bridge <Object>* obj, Interface* env)
-	{
-		set_MARSHAL (env);
-		return 0;
-	}
 };
 
 template <class S>
@@ -135,6 +156,8 @@ const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 		S::__non_existent,
 		S::__is_equivalent,
 		S::__hash,
+		S::__create_request,
+		S::__get_policy,
 		// TODO: Other Object operations shall be here...
 		
 		S::__query_interface

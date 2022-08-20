@@ -51,6 +51,12 @@ void construct (T& v, const T& src)
 	::new (&v) T (src);
 }
 
+inline
+void construct (Octet& v, Boolean src)
+{
+	v = src;
+}
+
 template <class T> inline
 void construct (T& v, T&& src) NIRVANA_NOEXCEPT
 {

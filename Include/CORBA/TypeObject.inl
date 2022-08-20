@@ -24,11 +24,11 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_OBJECT_INL_
-#define NIRVANA_ORB_OBJECT_INL_
+#ifndef NIRVANA_ORB_TYPEOBJECT_INL_
+#define NIRVANA_ORB_TYPEOBJECT_INL_
 #pragma once
 
-#include "Object.h"
+#include "TypeObject.h"
 #include "IORequestClient.h"
 
 namespace CORBA {

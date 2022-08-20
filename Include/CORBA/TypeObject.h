@@ -24,37 +24,49 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPE_H_
-#define NIRVANA_ORB_TYPE_H_
+#ifndef NIRVANA_ORB_TYPEOBJECT_H_
+#define NIRVANA_ORB_TYPEOBJECT_H_
 #pragma once
 
-#include "TypeAlias.h"
-#include "TypeFixLen.inl"
-#include "TypeVarLen.inl"
-#include "TypePrimitive.inl"
-#include "TypeEnum.inl"
-#include "Type_interface.inl"
-#include "TypeObject.inl"
-#include "ValueBase.inl"
-#include "ValueBox.h"
-#include "AbstractBase.inl"
-#include "Proxy/TypeCodeString.h"
-#include "Proxy/TypeCodeSequence.h"
-#include "Proxy/TypeCodeArray.h"
-#include "Proxy/TypeCodeFixed.h"
+#include "Type_interface.h"
+#include "TCKind.h"
+#include "tc_constants.h"
 
 namespace CORBA {
+
+class Object;
+class LocalObject;
+
 namespace Internal {
 
-/// The `void` type.
+template <class I>
+struct TypeObject : TypeItfMarshalable <I>
+{
+	static const TCKind tc_kind = TCKind::tk_objref;
+
+	static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
+	static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
+
+};
+
 template <>
-struct Type <void>
+struct Type <Object> : TypeObject <Object>
 {
 	static I_ptr <TypeCode> type_code ()
 	{
-		return _tc_void;
+		return _tc_Object;
 	}
 };
+
+template <class I>
+struct TypeLocalObject : TypeObject <I>
+{
+	static const TCKind tc_kind = TCKind::tk_local_interface;
+};
+
+template <>
+struct Type <LocalObject> : TypeLocalObject <LocalObject>
+{};
 
 }
 }
