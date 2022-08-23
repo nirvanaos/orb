@@ -327,17 +327,20 @@ typedef Internal::T_var <Any> Any_var;
 #endif
 
 template <typename T> inline
-void operator <<= (Any& a, const T& v)
+std::enable_if_t <!std::is_base_of <Exception, T>::value, void>
+operator <<= (Any& a, const T& v)
 {
 	a.copy_from (Internal::Type <T>::type_code (), &v);
 }
 template <typename T> inline
-void operator <<= (Any& a, T& v)
+std::enable_if_t <!std::is_base_of <Exception, T>::value, void>
+operator <<= (Any& a, T& v)
 {
 	operator <<= (a, (const T&)v);
 }
 template <typename T> inline
-void operator <<= (Any& a, T&& v)
+std::enable_if_t <!std::is_base_of <Exception, T>::value, void>
+operator <<= (Any& a, T&& v)
 {
 	a.move_from (Internal::Type <typename std::remove_reference <T>::type>::type_code (), &v);
 }

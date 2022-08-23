@@ -106,7 +106,7 @@ protected:
 	{
 		try {
 			return S::_implementation (obj)._create_request (Type <Context>::in (ctx), Type <String>::in (operation),
-				Type <NVList>::in (arg_list), Type <NamedValue>::in (result), Type <Request>::out (request), req_flags);
+				Type <NVList>::in (arg_list), Type <NamedValue>::in (result), Type <CORBA::Request>::out (request), req_flags);
 		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -121,7 +121,7 @@ protected:
 		try {
 			return S::_implementation (obj)._create_request (Type <Context>::in (ctx), Type <String>::in (operation),
 				Type <NVList>::in (arg_list), Type <NamedValue>::in (result), Type <ExceptionList>::in (exclist),
-				Type <ContextList>::in (ctxlist), Type <Request>::out (request), req_flags);
+				Type <ContextList>::in (ctxlist), Type <CORBA::Request>::out (request), req_flags);
 		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
