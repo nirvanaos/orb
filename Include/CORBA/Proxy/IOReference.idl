@@ -51,14 +51,15 @@ pseudo interface IOReference
 		unsigned short operation_idx;
 	};
 
+	/// Create asynchronouse request.
+	const unsigned short REQUEST_ASYNC = 4;
+
 	/// Create request.
-	IORequest create_request (in OperationIndex op);
-
-	/// Create oneway request.
-	IORequest create_oneway (in OperationIndex op);
-
-	/// Create asynchronous request.
-	IORequest create_async (in OperationIndex op);
+	/// NOTE: This operation may not cause the preemption.
+	/// 
+	/// \param op Index of the operation.
+	/// \param flags The combination of the IORequest response flags and REQUEST_ASYNC.
+	IORequest create_request (in OperationIndex op, in unsigned short flags);
 
 };
 

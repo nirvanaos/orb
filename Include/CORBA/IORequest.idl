@@ -38,6 +38,7 @@ native ConstWCharPtr;
 /// Interoperable Object Request.
 /// 
 /// Interface to the implementation of the some Inter-ORB protocol.
+/// NOTE: Marhsal operations may not cause the preemption.
 pseudo interface IORequest
 {
   ///@{
@@ -181,6 +182,18 @@ pseudo interface IORequest
   Interface unmarshal_abstract (in string interface_id);
 
   ///@}
+
+  /// Response flags.
+  readonly attribute unsigned short response_flags;
+
+  /// Response is expected.
+  const unsigned short RESPONSE_EXPECTED = 1;
+
+  /// Response is expected with output data.
+  /// If this flag is not set, a non exception reply should contain an empty body, i.e.,
+  /// the equivalent of a void operation with no out/inout parameters.
+  /// If this flag is set, RESPONSE_EXPECTED must be set also.
+  const unsigned short RESPONSE_DATA = 2;
 
   ///@{
   /// Callee operations.
