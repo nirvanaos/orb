@@ -82,6 +82,13 @@ struct TypeVarLen :
 		return abi;
 	}
 
+	static ABI_ret ret (const Var& v)
+	{
+		ABI_ret abi;
+		new (&abi) Var (v);
+		return abi;
+	}
+
 	static ABI_ret ret () NIRVANA_NOEXCEPT
 	{
 		ABI_ret abi;
