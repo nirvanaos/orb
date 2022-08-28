@@ -65,11 +65,15 @@ struct Parameter
 /// Operation metadata.
 struct Operation
 {
-	const Char* name;
-	CountedArray <Parameter> input;
-	CountedArray <Parameter> output;
-	GetTypeCode return_type;
-	RequestProc invoke;
+	const Char* name; ///< The operation name.
+	CountedArray <Parameter> input; ///< in and inout parameters.
+	CountedArray <Parameter> output; ///< out and inout parameters.
+	GetTypeCode return_type; ///< Operation return type.
+	RequestProc invoke; ///< Invoke request procedure.
+	uint16_t flags; ///< Operation flags.
+
+	/// Operation returns one or more object references or value types.
+	static const uint16_t FLAG_OUT_OBJECTS = 1;
 };
 
 /// Interface metadata.
@@ -80,6 +84,13 @@ struct InterfaceMetadata
 
 	/// List of all operations for the primary interface.
 	CountedArray <Operation> operations;
+
+	/// The interface flags.
+	uint16_t flags;
+
+	/// Proxy is not implemented.
+	/// create_proxy() will throw NO_IMPLEMENT.
+	static const uint16_t FLAG_NO_PROXY = 1;
 };
 
 // native InterfaceMetadataPtr;
@@ -88,6 +99,12 @@ typedef const InterfaceMetadata* InterfaceMetadataPtr;
 template <>
 struct Type <InterfaceMetadataPtr> : TypeByVal <InterfaceMetadataPtr>
 {};
+
+template <class I>
+struct MetadataOf
+{
+	static const InterfaceMetadata metadata_;
+};
 
 }
 }

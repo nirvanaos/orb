@@ -52,31 +52,37 @@ namespace CORBA {
 namespace Internal {
 
 /// Proxy factory implements PseudoBase, ProxyFactory and TypeCode interfaces.
-template <class I>
-class ProxyFactoryImpl :
+template <class S, class I>
+class ProxyFactoryBase :
 	public TypeCodeInterface <I>,
-	public InterfaceStaticBase <ProxyFactoryImpl <I>, PseudoBase>,
-	public InterfaceStaticBase <ProxyFactoryImpl <I>, ProxyFactory>,
-	public ServantTraitsStatic <ProxyFactoryImpl <I> >
+	public InterfaceStaticBase <S, PseudoBase>,
+	public InterfaceStaticBase <S, ProxyFactory>,
+	public ServantTraitsStatic <S>
 {
 public:
-	using ServantTraitsStatic <ProxyFactoryImpl <I> >::_implementation;
+	using ServantTraitsStatic <S>::_implementation;
 
 	// PseudoBase
 	static Interface* _query_interface (String_in id)
 	{
-		return FindInterface <ProxyFactory, TypeCode>::find (*(ProxyFactoryImpl <I>*)nullptr, id);
+		return FindInterface <ProxyFactory, TypeCode>::find (*(S*)nullptr, id);
 	}
 
 	// ProxyFactory
-	static const InterfaceMetadata metadata_;
 
-	static InterfaceMetadataPtr _s_get_metadata (Bridge <ProxyFactory>* obj, 
+	static InterfaceMetadataPtr _s_get_metadata (Bridge <ProxyFactory>* obj,
 		Interface* env)
 	{
-		return &metadata_;
+		return &MetadataOf <I>::metadata_;
 	}
 
+};
+
+template <class I>
+class ProxyFactoryImpl :
+	public ProxyFactoryBase <ProxyFactoryImpl <I>, I>
+{
+public:
 	Interface* create_proxy (
 		IOReference::_ptr_type proxy_manager, UShort interface_idx,
 		Interface*& deleter)
@@ -101,7 +107,19 @@ public:
 		deleter = proxy->_dynamic_servant ();
 		return proxy->_proxy ();
 	}
+};
 
+template <class I>
+class ProxyFactoryNoProxy :
+	public ProxyFactoryBase <ProxyFactoryNoProxy <I>, I>
+{
+public:
+	static Interface* _s_create_proxy (Bridge <ProxyFactory>* _b, Interface*, Type <UShort>::ABI_in,
+		Type <InterfacePtr>::ABI_out, Interface* _env)
+	{
+		set_NO_IMPLEMENT (_env);
+		return nullptr;
+	}
 };
 
 }
