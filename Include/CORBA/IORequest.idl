@@ -38,7 +38,7 @@ native ConstWCharPtr;
 /// Interoperable Object Request.
 /// 
 /// Interface to the implementation of the some Inter-ORB protocol.
-/// NOTE: Marhsal operations may not cause the preemption.
+/// NOTE: Marhsal/unmarshal operations on the client side may not cause the preemption.
 pseudo interface IORequest
 {
   ///@{
