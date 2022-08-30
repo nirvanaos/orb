@@ -94,9 +94,9 @@ public:
 	Boolean _non_existent ();
 	Boolean _is_equivalent (I_in <Object> other_object);
 	ULong _hash (ULong maximum);
-	void _create_request (I_ptr <Context> ctx, String_in operation, I_in <NVList> arg_list,
+	void _create_request (I_in <Context> ctx, String_in operation, I_in <NVList> arg_list,
 		I_in <NamedValue> result, I_out <Request> request, Flags req_flags);
-	void _create_request (I_ptr <Context> ctx, String_in operation, I_in <NVList> arg_list,
+	void _create_request (I_in <Context> ctx, String_in operation, I_in <NVList> arg_list,
 		I_in <NamedValue> result, Type <ExceptionList>::C_in exclist, Type <ContextList>::C_in ctxlist,
 		I_out <Request> request, Flags req_flags);
 	I_ref <Request> _request (String_in operation);
