@@ -86,9 +86,6 @@ public:
 	I_ref <InterfaceDef> _get_interface ();
 	Boolean _is_a (String_in type_id);
 	Boolean _non_existent ();
-	void _add_ref ();
-	void _remove_ref ();
-	ULong _refcount_value ();
 
 	// Nirvana extensions
 
@@ -105,6 +102,16 @@ public:
 	}
 
 	PortableServer::Servant _core_servant ();
+
+#ifndef LEGACY_CORBA_CPP
+private:
+	friend class ServantBaseLink;
+#endif
+	void _add_ref ();
+	void _remove_ref ();
+
+public:
+	ULong _refcount_value ();
 };
 
 template <class T>

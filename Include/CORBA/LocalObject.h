@@ -57,9 +57,6 @@ class Client <T, LocalObject> :
 {
 public:
 	Boolean _non_existent ();
-	void _add_ref ();
-	void _remove_ref ();
-	ULong _refcount_value ();
 
 	// Nirvana extensions
 	
@@ -75,6 +72,15 @@ public:
 		return _query_interface (RepIdOf <I>::id).template downcast <I> ();
 	}
 
+#ifndef LEGACY_CORBA_CPP
+private:
+	friend class LocalObjectLink;
+#endif
+	void _add_ref ();
+	void _remove_ref ();
+
+public:
+	ULong _refcount_value ();
 };
 
 template <class T>
