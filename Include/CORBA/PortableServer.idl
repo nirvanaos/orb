@@ -298,6 +298,24 @@ local interface POA
   readonly attribute POAManagerFactory the_POAManagerFactory;
 };
 
+// Current interface
+local interface Current : CORBA::Current
+{
+  exception NoContext {};
+
+  POA get_POA ()
+    raises (NoContext);
+
+  ObjectId get_object_id ()
+    raises (NoContext);
+
+  Object get_reference ()
+    raises (NoContext);
+
+  Servant get_servant ()
+    raises (NoContext);
+};
+
 };
 
 #endif
