@@ -23,9 +23,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/SystemException.h>
-#include <CORBA/RepId.h>
-#include <CORBA/Environment_c.h>
+#include <CORBA/CORBA.h>
+#include <stdexcept>
 
 namespace CORBA {
 namespace Internal {
@@ -45,6 +44,17 @@ void set_exception (Interface* environment, Exception& e) NIRVANA_NOEXCEPT
 
 void set_unknown_exception (Interface* environment) NIRVANA_NOEXCEPT
 {
+	std::exception_ptr eptr = std::current_exception ();
+	if (eptr)
+		try {
+			std::rethrow_exception (eptr);
+		} catch (const std::bad_alloc&) {
+			set_exception (environment, SystemException::EC_NO_MEMORY, CORBA_REPOSITORY_ID ("NO_MEMORY"), nullptr);
+			return;
+		} catch (const std::invalid_argument&) {
+			set_exception (environment, SystemException::EC_BAD_PARAM, CORBA_REPOSITORY_ID ("BAD_PARAM"), nullptr);
+			return;
+		} catch (...) {}
 	set_exception (environment, SystemException::EC_UNKNOWN, CORBA_REPOSITORY_ID ("UNKNOWN"), nullptr);
 }
 
