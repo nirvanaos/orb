@@ -27,10 +27,6 @@
 #define NIRVANA_ORB_I_VAR_H_
 #pragma once
 
-#include "I_ref.h"
-
-#ifdef LEGACY_CORBA_CPP
-
 namespace CORBA {
 namespace Internal {
 
@@ -129,7 +125,5 @@ public:
 
 }
 }
-
-#endif
 
 #endif

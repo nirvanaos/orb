@@ -29,7 +29,10 @@
 #pragma once
 
 #include "Type_forward.h"
+#include "I_ref.h"
+#ifdef LEGACY_CORBA_CPP
 #include "I_var.h"
+#endif
 #include "MarshalHelper.h"
 
 namespace CORBA {
