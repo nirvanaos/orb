@@ -53,7 +53,6 @@ public:
 
 	virtual I_ref <PortableServer::POA> _default_POA ()
 	{
-		_check_construct ();
 		return ServantBaseLink::_default_POA ();
 	}
 

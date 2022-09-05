@@ -35,6 +35,8 @@ namespace Internal {
 
 I_ref <Interface> get_proxy (PortableServer::Servant core_object);
 
+I_ref <PortableServer::POA> get_RootPOA ();
+
 }
 }
 

@@ -50,7 +50,7 @@ public:
 
 	static I_ref <PortableServer::POA> _default_POA ()
 	{
-		return servant_base ()->_default_POA ();
+		return get_RootPOA ();
 	}
 
 	static I_ref <InterfaceDef> _get_interface ()

@@ -47,9 +47,9 @@ class ServantBaseLink :
 public:
 	// ServantBase operations
 
-	I_ref <PortableServer::POA> _default_POA () const
+	static I_ref <PortableServer::POA> _default_POA ()
 	{
-		return core_object_->_default_POA ();
+		return get_RootPOA ();
 	}
 
 	I_ref <InterfaceDef> _get_interface () const
