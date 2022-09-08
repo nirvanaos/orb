@@ -30,7 +30,6 @@
 namespace CORBA {
 
 using namespace Internal;
-using namespace std;
 
 #define DEFINE_SYSTEM_EXCEPTION(E)\
 const E* E::_downcast (const Exception* ep) NIRVANA_NOEXCEPT { return (ep && (EC_##E == ep->__code ())) ? static_cast <const E*> (ep) : 0; }\
@@ -67,8 +66,8 @@ const Internal::ExceptionEntry* SystemException::_get_exception_entry (String_in
 		hint = EC_SYSTEM_EXCEPTION;
 	}
 
-	const ExceptionEntry* pe = lower_bound (begin (exception_entries_), end (exception_entries_), rep_id, Pred ());
-	if (pe != end (exception_entries_)) {
+	const ExceptionEntry* pe = std::lower_bound (std::begin (exception_entries_), std::end (exception_entries_), rep_id, Pred ());
+	if (pe != std::end (exception_entries_)) {
 		if (RepId::compatible (pe->ee.rep_id, pe->rep_id_len, rep_id))
 			return &(pe->ee);
 	}

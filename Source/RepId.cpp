@@ -32,8 +32,6 @@
 namespace CORBA {
 namespace Internal {
 
-using namespace std;
-
 const Char RepId::IDL_ [] = "IDL";
 
 RepId::Version::Version (const Char* sver) :
@@ -74,17 +72,17 @@ RepId::CheckResult RepId::check (const Char* cur, size_t cur_l, const Char* req,
 			const Char* req_name = req + IDL_len + 1;
 			const Char* req_end = req + req_l;
 			const Char* req_minor = minor_version (version (req_name, req_end), req_end);
-			if (cur_minor - cur_name == req_minor - req_name && equal (cur_name, cur_minor, req_name))
+			if (cur_minor - cur_name == req_minor - req_name && std::equal (cur_name, cur_minor, req_name))
 				return minor_number (cur_minor) >= minor_number (req_minor) ? COMPATIBLE : INCOMPATIBLE_VERSION;
 		}
 		return OTHER_INTERFACE;
 	}
-	return (cur_l == req_l && equal (cur, cur + cur_l, req)) ? COMPATIBLE : OTHER_INTERFACE;
+	return (cur_l == req_l && std::equal (cur, cur + cur_l, req)) ? COMPATIBLE : OTHER_INTERFACE;
 }
 
 bool RepId::is_type (const Char* id, const Char* prefix, size_t prefix_l)
 {
-	return equal (id, id + prefix_l, prefix) && (id [prefix_l] == ':');
+	return std::equal (id, id + prefix_l, prefix) && (id [prefix_l] == ':');
 }
 
 const Char* RepId::version (const Char* begin, const Char* end)
@@ -103,7 +101,7 @@ const Char* RepId::version (const Char* begin, const Char* end)
 const Char* RepId::minor_version (const Char* ver, const Char* end)
 {
 	if (':' == *ver)
-		return find (ver + 1, end, '.');
+		return std::find (ver + 1, end, '.');
 	return end;
 }
 

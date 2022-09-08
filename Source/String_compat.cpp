@@ -26,7 +26,6 @@
 #include <CORBA/CORBA.h>
 
 using namespace Nirvana;
-using namespace std;
 
 namespace CORBA {
 namespace Internal {
@@ -44,7 +43,7 @@ public:
 	static C* dup (const C* s) NIRVANA_NOEXCEPT
 	{
 		if (s) {
-			size_t cb = (char_traits <C>::length (s) + 1) * sizeof (C);
+			size_t cb = (std::char_traits <C>::length (s) + 1) * sizeof (C);
 			return (C*)g_memory->copy (0, (C*)s, cb, Memory::EXACTLY);
 		} else
 			return nullptr;
@@ -53,7 +52,7 @@ public:
 	static void free (C* s) NIRVANA_NOEXCEPT
 	{
 		if (s)
-			g_memory->release (s, (char_traits <C>::length (s) + 1) * sizeof (C));
+			g_memory->release (s, (std::char_traits <C>::length (s) + 1) * sizeof (C));
 	}
 };
 
