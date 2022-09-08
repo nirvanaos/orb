@@ -72,8 +72,11 @@ struct Operation
 	RequestProc invoke; ///< Invoke request procedure.
 	uint16_t flags; ///< Operation flags.
 
+	/// Operation receives one or more object references or value types.
+	static const uint16_t FLAG_IN_OBJ = 1;
+
 	/// Operation returns one or more object references or value types.
-	static const uint16_t FLAG_OUT_OBJECTS = 1;
+	static const uint16_t FLAG_OUT_OBJ = 2;
 };
 
 /// Interface metadata.
