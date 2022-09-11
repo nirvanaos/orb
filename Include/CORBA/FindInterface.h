@@ -27,7 +27,7 @@
 #define NIRVANA_ORB_FINDINTERFACE_H_
 #pragma once
 
-#include "StringBase.h"
+#include "StringView.h"
 #include "Bridge.h"
 
 namespace CORBA {

@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_STRING_H_
 #pragma once
 
-#include "StringBase.h"
+#include "StringView.h"
 #include "TypeVarLen.h"
 #include <Nirvana/UTF8.h>
 

@@ -30,7 +30,7 @@
 
 #include <Nirvana/NirvanaBase.h>
 #include "primitive_types.h"
-#include "StringBase.h"
+#include "StringView.h"
 
 namespace CORBA {
 namespace Internal {

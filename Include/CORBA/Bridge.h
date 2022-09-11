@@ -30,7 +30,7 @@
 #pragma once
 
 #include "Interface.h"
-#include "StringBase.h"
+#include "StringView.h"
 
 namespace CORBA {
 namespace Internal {

@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_REPID_H_
 #pragma once
 
-#include "StringBase.h"
+#include "StringView.h"
 
 namespace CORBA {
 namespace Internal {
