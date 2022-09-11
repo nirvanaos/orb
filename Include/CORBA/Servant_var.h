@@ -29,8 +29,6 @@
 
 #include "servant_reference.h"
 
-#ifdef LEGACY_CORBA_CPP
-
 namespace PortableServer {
 
 template <typename T>
@@ -62,8 +60,10 @@ public:
 
 	Servant_var& operator = (T* p)
 	{
-		if (Base::p_ != p)
-			reset (p);
+		if (Base::p_ != p) {
+			Base::release ();
+			Base::p_ = p;
+		}
 		return *this;
 	}
 
@@ -101,19 +101,8 @@ public:
 		Base::p_ = nullptr;
 		return retval;
 	}
-
-private:
-	void reset (T* p) NIRVANA_NOEXCEPT
-	{
-		T* tmp = Base::p_;
-		Base::p_ = p;
-		if (tmp)
-			tmp->_remove_ref ();
-	}
 };
 
 }
-
-#endif
 
 #endif

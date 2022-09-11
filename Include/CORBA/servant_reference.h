@@ -112,7 +112,7 @@ public:
 	}
 
 	template <class T1>
-	servant_reference& operator = (servant_reference <T1>&& src)
+	servant_reference& operator = (servant_reference <T1>&& src) NIRVANA_NOEXCEPT
 	{
 		release ();
 		p_ = src.p_;
@@ -127,7 +127,7 @@ public:
 		return p_;
 	}
 
-	operator T* () const
+	operator T* () const NIRVANA_NOEXCEPT
 	{
 		return p_;
 	}
@@ -139,10 +139,23 @@ public:
 		return *p_;
 	}
 
+	void swap (servant_reference& other) NIRVANA_NOEXCEPT
+	{
+		T* tmp = p_;
+		p_ = other.p_;
+		other.p_ = tmp;
+	}
+
 protected:
 	servant_reference (T* p, bool) :
 		p_ (p)
 	{}
+
+	void release () NIRVANA_NOEXCEPT
+	{
+		if (p_)
+			p_->_remove_ref ();
+	}
 
 private:
 	void reset (T* p)
@@ -157,18 +170,12 @@ private:
 		}
 	}
 
-	void reset (nullptr_t)
+	void reset (nullptr_t) NIRVANA_NOEXCEPT
 	{
 		if (p_) {
 			p_->_remove_ref ();
 			p_ = nullptr;
 		}
-	}
-
-	void release ()
-	{
-		if (p_)
-			p_->_remove_ref ();
 	}
 
 	template <class T1, class ... Args> friend

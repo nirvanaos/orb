@@ -112,6 +112,13 @@ public:
 		return p_ != nullptr;
 	}
 
+	void swap (I_ref_base& other) NIRVANA_NOEXCEPT
+	{
+		I* tmp = p_;
+		p_ = other.p_;
+		other.p_ = tmp;
+	}
+
 protected:
 	I_ref_base (I* p) :
 		p_ (p)

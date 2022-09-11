@@ -30,8 +30,10 @@
 
 #include "RefCountBase.h"
 #include "servant_reference.h"
-#include "Servant_var.h"
 #include "Type_forward.h"
+#ifdef LEGACY_CORBA_CPP
+#include "Servant_var.h"
+#endif
 
 namespace CORBA {
 namespace Internal {
