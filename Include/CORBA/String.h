@@ -49,7 +49,7 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C> >
 
 	static void check (const ABI& s);
 
-	typedef const StringBase <C>& C_in;
+	typedef const StringView <C>& C_in;
 
 	class C_out : public Base::C_inout
 	{
@@ -231,7 +231,7 @@ struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
 	}
 
 	// Check in C_in for member assignments
-	typedef const StringBase <C, bound>& C_in;
+	typedef const StringView <C, bound>& C_in;
 
 	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
 

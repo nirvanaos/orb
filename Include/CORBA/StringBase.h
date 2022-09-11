@@ -56,15 +56,15 @@ size_t string_len (const WChar* s)
 }
 
 template <typename C, ULong bound = 0>
-class StringBase
+class StringView
 {
 	typedef ABI <StringT <C> > ABI;
 
 	template <typename C, ULong bound>
-	friend class StringBase;
+	friend class StringView;
 
 public:
-	StringBase (const StringBase& s) NIRVANA_NOEXCEPT
+	StringView (const StringView& s) NIRVANA_NOEXCEPT
 	{
 		size_t size;
 		const C* p;
@@ -81,7 +81,7 @@ public:
 	}
 
 	template <ULong bound1>
-	StringBase (const StringBase <C, bound1>& s)
+	StringView (const StringView <C, bound1>& s)
 	{
 		size_t size;
 		const C* p;
@@ -101,7 +101,7 @@ public:
 
 #ifdef NIRVANA_C11
 	template <size_t cc>
-	StringBase (C const (&s) [cc])
+	StringView (C const (&s) [cc])
 	{
 		if (bound && cc - 1 > bound)
 			Nirvana::throw_BAD_PARAM ();
@@ -111,22 +111,22 @@ public:
 	}
 
 	template <size_t cc>
-	StringBase (C (&s) [cc]) :
-		StringBase ((const C*)s)
+	StringView (C (&s) [cc]) :
+		StringView ((const C*)s)
 	{}
 
 	template <typename S, typename = typename std::enable_if <std::is_convertible <S, const C*>::value && !std::is_array <S>::value>::type>
-	StringBase (S s);
+	StringView (S s);
 #else
-	StringBase (const C* p);
+	StringView (const C* p);
 #endif
 
 	template <class A, typename = std::enable_if_t <!std::is_same <A, std::allocator <C> >::value> >
-	StringBase (const std::basic_string <C, std::char_traits <C>, A>&);
+	StringView (const std::basic_string <C, std::char_traits <C>, A>&);
 
-	StringBase (const C* p, size_t cc);
+	StringView (const C* p, size_t cc);
 
-	StringBase (nullptr_t)
+	StringView (nullptr_t)
 	{
 		abi_.reset ();
 	}
@@ -147,7 +147,7 @@ public:
 	}
 
 protected:
-	StringBase ()
+	StringView ()
 	{}
 
 private:
@@ -164,7 +164,7 @@ private:
 
 template <typename C, ULong bound>
 template <typename S, typename>
-StringBase <C, bound>::StringBase (S s)
+StringView <C, bound>::StringView (S s)
 {
 	const C* p = s;
 	size_t cc;
@@ -182,7 +182,7 @@ StringBase <C, bound>::StringBase (S s)
 
 template <typename C, ULong bound>
 template <typename S, typename>
-StringBase <C, bound>::StringBase (const C* p)
+StringView <C, bound>::StringView (const C* p)
 {
 	size_t cc;
 	if (p && (cc = _length (p))) {
@@ -198,7 +198,7 @@ StringBase <C, bound>::StringBase (const C* p)
 #endif
 
 template <typename C, ULong bound>
-StringBase <C, bound>::StringBase (const C* p, size_t cc)
+StringView <C, bound>::StringView (const C* p, size_t cc)
 {
 	if (p && cc) {
 		if (bound && cc > bound)
@@ -210,8 +210,8 @@ StringBase <C, bound>::StringBase (const C* p, size_t cc)
 		abi_.reset ();
 }
 
-typedef const StringBase <Char>& String_in;
-typedef const StringBase <WChar>& WString_in;
+typedef const StringView <Char>& String_in;
+typedef const StringView <WChar>& WString_in;
 
 /// Unbounded string. Equivalent to std::string.
 typedef StringT <Char> String;

@@ -43,14 +43,14 @@ void set_Bounds (Interface* env) NIRVANA_NOEXCEPT;
 template <size_t cc> inline
 Type <String>::ABI_ret const_string_ret (Char const (&s) [cc]) NIRVANA_NOEXCEPT
 {
-	StringBase <Char> sb (s);
+	StringView <Char> sb (s);
 	return Type <String>::ret (std::move (reinterpret_cast <String&> (sb)));
 }
 
 inline
 Type <String>::ABI_ret const_string_ret_p (const Char* s) NIRVANA_NOEXCEPT
 {
-	StringBase <Char> sb (s);
+	StringView <Char> sb (s);
 	return Type <String>::ret (std::move (reinterpret_cast <String&> (sb)));
 }
 

@@ -62,7 +62,7 @@ public:
 protected:
 	Bridge <ValueBase>* _get_bridge_ptr (EnvironmentBase& env)
 	{
-		Bridge <ValueBase>* ret = (_epv ().base.CORBA_ValueBase) (this, &StringBase <Char> (RepIdOf <ValueBase>::id), &env);
+		Bridge <ValueBase>* ret = (_epv ().base.CORBA_ValueBase) (this, &StringView <Char> (RepIdOf <ValueBase>::id), &env);
 		env.check ();
 		return ret;
 	}
