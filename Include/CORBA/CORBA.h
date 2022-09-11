@@ -37,7 +37,6 @@
 #include <Nirvana/time_defs.h>
 #include "exceptions.h"
 #include "Type.h"
-#include "String_compat.h"
 #include "UnknownUserException.h"
 #include "CORBA_Environment.h"
 #include "ServantBase.h"
@@ -51,6 +50,7 @@
 #include "TypeCodeTypeDef.h"
 #include "ORB.h"
 #include "ServantLocator_native.h"
+#include "String_compat.h"
 
 namespace CORBA {
 

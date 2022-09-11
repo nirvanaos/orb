@@ -38,6 +38,8 @@ namespace Internal {
 template <typename C>
 class String_var : public std::basic_string <C>
 {
+	typedef std::basic_string <C> Base;
+
 public:
 	String_var ()
 	{}
@@ -82,19 +84,19 @@ public:
 
 	String_var& operator = (C* s)
 	{
-		this->clear ();
+		Base::clear ();
 		adopt (s);
 		return *this;
 	}
 
 	operator C* ()
 	{
-		return this->_ptr ();
+		return Base::abi_._ptr ();
 	}
 
 	operator const C* () const
 	{
-		return this->_ptr ();
+		return Base::abi_._ptr ();
 	}
 
 	typedef typename Type <StringT <C> >::C_in C_in;
@@ -122,7 +124,6 @@ public:
 	}
 
 private:
-
 	void adopt (C* s);
 };
 
@@ -131,12 +132,12 @@ void String_var <C>::adopt (C* s)
 {
 	if (s) {
 		size_t cc = std::char_traits <C>::length (s);
-		this->large_pointer (s);
-		this->large_size (cc);
+		Base::abi_.large_pointer (s);
+		Base::abi_.large_size (cc);
 		size_t au = Nirvana::StdString::memory ()->query (s, Nirvana::Memory::QueryParam::ALLOCATION_UNIT);
-		this->allocated (Nirvana::round_up ((cc + 1) * sizeof (C), au));
+		Base::abi_.allocated (Nirvana::round_up ((cc + 1) * sizeof (C), au));
 	} else
-		this->reset ();
+		Base::abi_.reset ();
 }
 
 }

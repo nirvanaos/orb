@@ -56,24 +56,28 @@ size_t string_len (const WChar* s)
 }
 
 template <typename C, ULong bound = 0>
-class StringBase : protected ABI <StringT <C> >
+class StringBase
 {
 	typedef ABI <StringT <C> > ABI;
+
+	template <typename C, ULong bound>
+	friend class StringBase;
+
 public:
 	StringBase (const StringBase& s) NIRVANA_NOEXCEPT
 	{
 		size_t size;
 		const C* p;
-		if (s.is_large ()) {
-			size = s.large_size ();
-			p = s.large_pointer ();
+		if (s.abi_.is_large ()) {
+			size = s.abi_.large_size ();
+			p = s.abi_.large_pointer ();
 		} else {
-			size = s.small_size ();
-			p = s.small_pointer ();
+			size = s.abi_.small_size ();
+			p = s.abi_.small_pointer ();
 		}
-		this->large_pointer (const_cast <C*> (p));
-		this->large_size (size);
-		this->allocated (0);
+		abi_.large_pointer (const_cast <C*> (p));
+		abi_.large_size (size);
+		abi_.allocated (0);
 	}
 
 	template <ULong bound1>
@@ -81,18 +85,18 @@ public:
 	{
 		size_t size;
 		const C* p;
-		if (s.is_large ()) {
-			size = s.large_size ();
-			p = s.large_pointer ();
+		if (s.abi_.is_large ()) {
+			size = s.abi_.large_size ();
+			p = s.abi_.large_pointer ();
 		} else {
-			size = s.small_size ();
-			p = s.small_pointer ();
+			size = s.abi_.small_size ();
+			p = s.abi_.small_pointer ();
 		}
 		if (bound && (!bound1 || bound1 > bound) && size > bound)
 			Nirvana::throw_BAD_PARAM ();
-		this->large_pointer (const_cast <C*> (p));
-		this->large_size (size);
-		this->allocated (0);
+		abi_.large_pointer (const_cast <C*> (p));
+		abi_.large_size (size);
+		abi_.allocated (0);
 	}
 
 #ifdef NIRVANA_C11
@@ -101,9 +105,9 @@ public:
 	{
 		if (bound && cc - 1 > bound)
 			Nirvana::throw_BAD_PARAM ();
-		this->large_pointer (const_cast <C*> (s));
-		this->large_size (cc - 1);
-		this->allocated (0);
+		abi_.large_pointer (const_cast <C*> (s));
+		abi_.large_size (cc - 1);
+		abi_.allocated (0);
 	}
 
 	template <size_t cc>
@@ -117,24 +121,29 @@ public:
 	StringBase (const C* p);
 #endif
 
-	template <class A>
+	template <class A, typename = std::enable_if_t <!std::is_same <A, std::allocator <C> >::value> >
 	StringBase (const std::basic_string <C, std::char_traits <C>, A>&);
 
 	StringBase (const C* p, size_t cc);
 
 	StringBase (nullptr_t)
 	{
-		this->reset ();
+		abi_.reset ();
 	}
 
 	const ABI* operator & () const
 	{
-		return this;
+		return &abi_;
 	}
 
 	bool empty () const
 	{
-		return ABI::empty ();
+		return abi_.empty ();
+	}
+
+	operator const StringT <C>& () const NIRVANA_NOEXCEPT
+	{
+		return reinterpret_cast <const StringT <C>&> (abi_);
 	}
 
 protected:
@@ -146,6 +155,9 @@ private:
 	{
 		return string_len (s);
 	}
+
+private:
+	ABI abi_;
 };
 
 #ifdef NIRVANA_C11
@@ -159,11 +171,11 @@ StringBase <C, bound>::StringBase (S s)
 	if (p && (cc = _length (p))) {
 		if (bound && cc > bound)
 			Nirvana::throw_BAD_PARAM ();
-		this->large_pointer (const_cast <C*> (p));
-		this->large_size (cc);
-		this->allocated (0);
+		abi_.large_pointer (const_cast <C*> (p));
+		abi_.large_size (cc);
+		abi_.allocated (0);
 	} else
-		this->reset ();
+		abi_.reset ();
 }
 
 #else
@@ -176,11 +188,11 @@ StringBase <C, bound>::StringBase (const C* p)
 	if (p && (cc = _length (p))) {
 		if (bound && cc > bound)
 			Nirvana::throw_BAD_PARAM ();
-		this->large_pointer (const_cast <C*> (p));
-		this->large_size (cc);
-		this->allocated (0);
+		abi_.large_pointer (const_cast <C*> (p));
+		abi_.large_size (cc);
+		abi_.allocated (0);
 	} else
-		this->reset ();
+		abi_.reset ();
 }
 
 #endif
@@ -191,11 +203,11 @@ StringBase <C, bound>::StringBase (const C* p, size_t cc)
 	if (p && cc) {
 		if (bound && cc > bound)
 			Nirvana::throw_BAD_PARAM ();
-		this->large_pointer (const_cast <C*> (p));
-		this->large_size (cc);
-		this->allocated (0);
+		abi_.large_pointer (const_cast <C*> (p));
+		abi_.large_size (cc);
+		abi_.allocated (0);
 	} else
-		this->reset ();
+		abi_.reset ();
 }
 
 typedef const StringBase <Char>& String_in;

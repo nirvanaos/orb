@@ -66,21 +66,19 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C> >
 	{
 		Base::in (p);	// Check
 		// Use static_cast to ensure that we are using own basic_string implementation.
-		return static_cast <StringT <C>&> (const_cast <ABI&> (*p));
+		return reinterpret_cast <StringT <C>&> (const_cast <ABI&> (*p));
 	}
 
 	static Var& inout (ABI_out p)
 	{
 		Base::inout (p); // Check
-		// Use static_cast to ensure that we are using own basic_string implementation.
-		return static_cast <Var&> (*p);
+		return reinterpret_cast <Var&> (*p);
 	}
 
 	static Var& out (ABI_out p)
 	{
 		Base::out (p);	// Check
-		// Use static_cast to ensure that we are using own basic_string implementation.
-		Var& val = static_cast <Var&> (*p);
+		Var& val = reinterpret_cast <Var&> (*p);
 		// Must be empty
 		if (!val.empty ())
 			Nirvana::throw_BAD_PARAM ();
@@ -145,10 +143,9 @@ public:
 
 	typedef typename Base::const_iterator const_iterator;
 
-	// Implementations of the mapping are
-	// under no obligation to prevent assignment of a sequence to a bounded sequence type if the sequence exceeds the bound.
-	// Implementations must at run time detect attempts to pass a sequence that exceeds the bound as a parameter across an
-	// interface.
+	// Implementations of the mapping are under no obligation to prevent assignment of a sequence to
+	// a bounded sequence type if the sequence exceeds the bound. Implementations must at run time
+	// detect attempts to pass a sequence that exceeds the bound as a parameter across an interface.
 
 	// Constructors
 
@@ -216,6 +213,7 @@ public:
 	{}
 
 #endif
+
 };
 
 template <typename C, ULong bound>
