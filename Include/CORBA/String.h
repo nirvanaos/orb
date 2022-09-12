@@ -66,19 +66,19 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C> >
 	{
 		Base::in (p);	// Check
 		// Use static_cast to ensure that we are using own basic_string implementation.
-		return reinterpret_cast <StringT <C>&> (const_cast <ABI&> (*p));
+		return static_cast <StringT <C>&> (const_cast <ABI&> (*p));
 	}
 
 	static Var& inout (ABI_out p)
 	{
 		Base::inout (p); // Check
-		return reinterpret_cast <Var&> (*p);
+		return static_cast <Var&> (*p);
 	}
 
 	static Var& out (ABI_out p)
 	{
 		Base::out (p);	// Check
-		Var& val = reinterpret_cast <Var&> (*p);
+		Var& val = static_cast <Var&> (*p);
 		// Must be empty
 		if (!val.empty ())
 			Nirvana::throw_BAD_PARAM ();

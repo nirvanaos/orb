@@ -55,10 +55,14 @@ size_t string_len (const WChar* s)
 	return p - s;
 }
 
+/// Used as input parameter for string types.
+/// 
+/// \typeparam C Character type.
+/// \typeparam bound String bound.
 template <typename C, ULong bound = 0>
-class StringView
+class StringView : private ABI <StringT <C> >
 {
-	typedef ABI <StringT <C> > ABI;
+	typedef CORBA::Internal::ABI <StringT <C> > ABI;
 
 	template <typename C, ULong bound>
 	friend class StringView;
@@ -68,16 +72,16 @@ public:
 	{
 		size_t size;
 		const C* p;
-		if (s.abi_.is_large ()) {
-			size = s.abi_.large_size ();
-			p = s.abi_.large_pointer ();
+		if (s.is_large ()) {
+			size = s.large_size ();
+			p = s.large_pointer ();
 		} else {
-			size = s.abi_.small_size ();
-			p = s.abi_.small_pointer ();
+			size = s.small_size ();
+			p = s.small_pointer ();
 		}
-		abi_.large_pointer (const_cast <C*> (p));
-		abi_.large_size (size);
-		abi_.allocated (0);
+		ABI::large_pointer (const_cast <C*> (p));
+		ABI::large_size (size);
+		ABI::allocated (0);
 	}
 
 	template <ULong bound1>
@@ -85,18 +89,18 @@ public:
 	{
 		size_t size;
 		const C* p;
-		if (s.abi_.is_large ()) {
-			size = s.abi_.large_size ();
-			p = s.abi_.large_pointer ();
+		if (s.is_large ()) {
+			size = s.large_size ();
+			p = s.large_pointer ();
 		} else {
-			size = s.abi_.small_size ();
-			p = s.abi_.small_pointer ();
+			size = s.small_size ();
+			p = s.small_pointer ();
 		}
 		if (bound && (!bound1 || bound1 > bound) && size > bound)
 			Nirvana::throw_BAD_PARAM ();
-		abi_.large_pointer (const_cast <C*> (p));
-		abi_.large_size (size);
-		abi_.allocated (0);
+		ABI::large_pointer (const_cast <C*> (p));
+		ABI::large_size (size);
+		ABI::allocated (0);
 	}
 
 #ifdef NIRVANA_C11
@@ -105,9 +109,9 @@ public:
 	{
 		if (bound && cc - 1 > bound)
 			Nirvana::throw_BAD_PARAM ();
-		abi_.large_pointer (const_cast <C*> (s));
-		abi_.large_size (cc - 1);
-		abi_.allocated (0);
+		ABI::large_pointer (const_cast <C*> (s));
+		ABI::large_size (cc - 1);
+		ABI::allocated (0);
 	}
 
 	template <size_t cc>
@@ -128,22 +132,22 @@ public:
 
 	StringView (nullptr_t)
 	{
-		abi_.reset ();
+		ABI::reset ();
 	}
 
 	const ABI* operator & () const
 	{
-		return &abi_;
+		return this;
 	}
 
 	bool empty () const
 	{
-		return abi_.empty ();
+		return ABI::empty ();
 	}
 
 	operator const StringT <C>& () const NIRVANA_NOEXCEPT
 	{
-		return reinterpret_cast <const StringT <C>&> (abi_);
+		return reinterpret_cast <const StringT <C>&> (*this);
 	}
 
 protected:
@@ -171,11 +175,11 @@ StringView <C, bound>::StringView (S s)
 	if (p && (cc = _length (p))) {
 		if (bound && cc > bound)
 			Nirvana::throw_BAD_PARAM ();
-		abi_.large_pointer (const_cast <C*> (p));
-		abi_.large_size (cc);
-		abi_.allocated (0);
+		ABI::large_pointer (const_cast <C*> (p));
+		ABI::large_size (cc);
+		ABI::allocated (0);
 	} else
-		abi_.reset ();
+		ABI::reset ();
 }
 
 #else
@@ -188,11 +192,11 @@ StringView <C, bound>::StringView (const C* p)
 	if (p && (cc = _length (p))) {
 		if (bound && cc > bound)
 			Nirvana::throw_BAD_PARAM ();
-		abi_.large_pointer (const_cast <C*> (p));
-		abi_.large_size (cc);
-		abi_.allocated (0);
+		ABI::large_pointer (const_cast <C*> (p));
+		ABI::large_size (cc);
+		ABI::allocated (0);
 	} else
-		abi_.reset ();
+		ABI::reset ();
 }
 
 #endif
@@ -203,11 +207,11 @@ StringView <C, bound>::StringView (const C* p, size_t cc)
 	if (p && cc) {
 		if (bound && cc > bound)
 			Nirvana::throw_BAD_PARAM ();
-		abi_.large_pointer (const_cast <C*> (p));
-		abi_.large_size (cc);
-		abi_.allocated (0);
+		ABI::large_pointer (const_cast <C*> (p));
+		ABI::large_size (cc);
+		ABI::allocated (0);
 	} else
-		abi_.reset ();
+		ABI::reset ();
 }
 
 typedef const StringView <Char>& String_in;

@@ -91,12 +91,12 @@ public:
 
 	operator C* ()
 	{
-		return Base::abi_._ptr ();
+		return Base::_ptr ();
 	}
 
 	operator const C* () const
 	{
-		return Base::abi_._ptr ();
+		return Base::_ptr ();
 	}
 
 	typedef typename Type <StringT <C> >::C_in C_in;
@@ -132,12 +132,12 @@ void String_var <C>::adopt (C* s)
 {
 	if (s) {
 		size_t cc = std::char_traits <C>::length (s);
-		Base::abi_.large_pointer (s);
-		Base::abi_.large_size (cc);
+		Base::large_pointer (s);
+		Base::large_size (cc);
 		size_t au = Nirvana::StdString::memory ()->query (s, Nirvana::Memory::QueryParam::ALLOCATION_UNIT);
-		Base::abi_.allocated (Nirvana::round_up ((cc + 1) * sizeof (C), au));
+		Base::allocated (Nirvana::round_up ((cc + 1) * sizeof (C), au));
 	} else
-		Base::abi_.reset ();
+		Base::reset ();
 }
 
 }
