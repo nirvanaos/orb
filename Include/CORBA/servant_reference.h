@@ -45,11 +45,11 @@ class servant_reference
 {
 	template <class> friend class servant_reference;
 public:
-	servant_reference () :
+	servant_reference () NIRVANA_NOEXCEPT :
 		p_ (nullptr)
 	{}
 
-	servant_reference (nullptr_t) :
+	servant_reference (nullptr_t) NIRVANA_NOEXCEPT :
 		p_ (nullptr)
 	{}
 
@@ -75,14 +75,14 @@ public:
 			p_->_add_ref ();
 	}
 
-	servant_reference (servant_reference&& src) :
+	servant_reference (servant_reference&& src) NIRVANA_NOEXCEPT :
 		p_ (src.p_)
 	{
 		src.p_ = nullptr;
 	}
 
 	template <class T1>
-	servant_reference (servant_reference <T1>&& src) :
+	servant_reference (servant_reference <T1>&& src) NIRVANA_NOEXCEPT :
 		p_ (src.p_)
 	{
 		src.p_ = nullptr;
@@ -93,7 +93,7 @@ public:
 		release ();
 	}
 
-	servant_reference& operator = (nullptr_t)
+	servant_reference& operator = (nullptr_t) NIRVANA_NOEXCEPT
 	{
 		reset (nullptr);
 		return *this;
@@ -147,7 +147,7 @@ public:
 	}
 
 protected:
-	servant_reference (T* p, bool) :
+	servant_reference (T* p, bool) NIRVANA_NOEXCEPT :
 		p_ (p)
 	{}
 
@@ -192,31 +192,31 @@ template <typename T>
 class servant_out
 {
 public:
-	servant_out (servant_reference <T>& var) :
+	servant_out (servant_reference <T>& var) NIRVANA_NOEXCEPT :
 		ref_ (var)
 	{
 		var = nullptr;
 	}
 
 #ifdef LEGACY_CORBA_CPP
-	servant_out (T*& p) :
+	servant_out (T*& p) NIRVANA_NOEXCEPT :
 		ref_ (reinterpret_cast <servant_reference <T>&> (p))
 	{
 		p = nullptr;
 	}
 #endif
 
-	servant_out (const servant_out& src) :
+	servant_out (const servant_out& src) NIRVANA_NOEXCEPT :
 		ref_ (src.ref_)
 	{}
 
-	servant_out& operator = (const servant_out& src)
+	servant_out& operator = (const servant_out& src) NIRVANA_NOEXCEPT
 	{
 		ref_ = src.ref_;
 		return *this;
 	}
 
-	servant_out& operator = (const servant_reference <T>& src)
+	servant_out& operator = (const servant_reference <T>& src) NIRVANA_NOEXCEPT
 	{
 		ref_ = src;
 		return *this;
