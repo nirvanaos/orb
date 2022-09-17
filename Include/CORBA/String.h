@@ -243,6 +243,18 @@ struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
 	}
 };
 
+template <typename C, ULong bound>
+template <class A, typename>
+inline StringView <C, bound>::StringView (const std::basic_string <C, std::char_traits <C>, A>& s)
+{
+	size_t size = s.size ();
+	if (bound && size > bound)
+		Nirvana::throw_BAD_PARAM ();
+	ABI::large_pointer (const_cast <C*> (s.data ()));
+	ABI::large_size (size);
+	ABI::allocated (0);
+}
+
 }
 }
 

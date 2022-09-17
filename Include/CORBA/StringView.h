@@ -28,10 +28,10 @@
 #pragma once
 
 #include "ABI_String.h"
-#include "primitive_types.h"
-#include <type_traits>
 #include <string.h>
 #include <wchar.h>
+#include <type_traits>
+#include "primitive_types.h"
 #include <Nirvana/throw_exception.h>
 
 namespace CORBA {
@@ -64,8 +64,7 @@ class StringView : private ABI <StringT <C> >
 {
 	typedef CORBA::Internal::ABI <StringT <C> > ABI;
 
-	template <typename C, ULong bound>
-	friend class StringView;
+	template <typename, ULong> friend class StringView;
 
 public:
 	StringView (const StringView& s) NIRVANA_NOEXCEPT
@@ -150,6 +149,21 @@ public:
 		return reinterpret_cast <const StringT <C>&> (*this);
 	}
 
+	const C* c_str () const NIRVANA_NOEXCEPT
+	{
+		return ABI::_ptr ();
+	}
+
+	const C* data () const NIRVANA_NOEXCEPT
+	{
+		return ABI::_ptr ();
+	}
+
+	size_t size () const NIRVANA_NOEXCEPT
+	{
+		return ABI::size ();
+	}
+
 protected:
 	StringView ()
 	{}
@@ -159,9 +173,6 @@ private:
 	{
 		return string_len (s);
 	}
-
-private:
-	ABI abi_;
 };
 
 #ifdef NIRVANA_C11
