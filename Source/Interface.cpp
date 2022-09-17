@@ -45,7 +45,9 @@ void interface_release (Interface* itf) NIRVANA_NOEXCEPT
 	if (itf) {
 		try {
 			(itf->_epv ().release) (itf);
-		} catch (...) {}
+		} catch (...) {
+			assert (false);
+		}
 	}
 }
 
