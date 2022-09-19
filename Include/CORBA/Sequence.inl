@@ -65,7 +65,6 @@ template <typename T>
 void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	typedef typename Type <T>::Var T_Var;
-	typedef typename Type <T>::ABI T_ABI;
 	Var tmp;
 	if (Type <T>::is_CDR) {
 		ABI abi;
@@ -86,6 +85,7 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 
 #ifdef _DEBUG
 			if (Type <T>::has_check) {
+				typedef typename Type <T>::ABI T_ABI;
 				try {
 					T_ABI* p = (T_ABI*)abi.ptr, * end = p + abi.size;
 					do {
