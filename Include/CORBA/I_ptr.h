@@ -108,6 +108,7 @@ protected:
 
 protected:
 	friend class I_ref_base <I>;
+	friend class I_var <I>;
 	template <class I1> friend class I_ref;
 	friend class I_inout <I>;
 	friend class I_ret <I>;
