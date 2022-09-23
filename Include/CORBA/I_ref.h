@@ -295,12 +295,29 @@ public:
 		Base (src)
 	{}
 
+	template <class I>
+	I_ref (const I_ref <I>& src) :
+		Base (Base::duplicate (src.p_))
+	{}
+
 	I_ref (I_ref&& src) NIRVANA_NOEXCEPT :
 		Base (std::move (src))
 	{}
 
+	template <class I>
+	I_ref (I_ref <I>&& src) NIRVANA_NOEXCEPT :
+		Base (src.p_)
+	{
+		src.p_ = nullptr;
+	}
+
 	I_ref (const I_ptr <Interface>& p) :
 		Base (p)
+	{}
+
+	template <class I>
+	I_ref (const I_ptr <I>& p) :
+		Base (Base::duplicate (&p))
 	{}
 
 	I_ref& operator = (const I_ref& src)
@@ -309,9 +326,25 @@ public:
 		return *this;
 	}
 
+	template <class I>
+	I_ref& operator = (const I_ref <I>& src)
+	{
+		reset (src.p_);
+		return *this;
+	}
+
 	I_ref& operator = (I_ref&& src) NIRVANA_NOEXCEPT
 	{
 		Base::operator = (std::move (src));
+		return *this;
+	}
+
+	template <class I>
+	I_ref& operator = (I_ref <I>&& src) NIRVANA_NOEXCEPT
+	{
+		release (p_);
+		p_ = src.p_;
+		src.p_ = nullptr;
 		return *this;
 	}
 
