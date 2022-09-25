@@ -118,11 +118,11 @@ struct TypePrimitive <Char> :
 			Nirvana::throw_CODESET_INCOMPATIBLE ();
 	}
 
-	static void marshal_in (const Char& src, IORequest_ptr rq);
-	static void marshal_in_a (const Char* src, size_t count, IORequest_ptr rq);
+	inline static void marshal_in (const Char& src, IORequest_ptr rq);
+	inline static void marshal_in_a (const Char* src, size_t count, IORequest_ptr rq);
 
-	static void unmarshal (IORequest_ptr rq, Char& dst);
-	static void unmarshal_a (IORequest_ptr rq, size_t count, Char* dst);
+	inline static void unmarshal (IORequest_ptr rq, Char& dst);
+	inline static void unmarshal_a (IORequest_ptr rq, size_t count, Char* dst);
 
 	static void byteswap (Char& v) NIRVANA_NOEXCEPT
 	{}
@@ -134,11 +134,11 @@ struct TypePrimitive <WChar> :
 {
 	static const bool is_CDR = false;
 
-	static void marshal_in (const WChar& src, IORequest_ptr rq);
-	static void marshal_in_a (const WChar* src, size_t count, IORequest_ptr rq);
+	inline static void marshal_in (const WChar& src, IORequest_ptr rq);
+	inline static void marshal_in_a (const WChar* src, size_t count, IORequest_ptr rq);
 
-	static void unmarshal (IORequest_ptr rq, WChar& dst);
-	static void unmarshal_a (IORequest_ptr rq, size_t count, WChar* dst);
+	inline static void unmarshal (IORequest_ptr rq, WChar& dst);
+	inline static void unmarshal_a (IORequest_ptr rq, size_t count, WChar* dst);
 
 	static void byteswap (WChar& v) NIRVANA_NOEXCEPT
 	{
@@ -183,8 +183,8 @@ struct TypePrimitive <Boolean> :
 
 	typedef C_inout C_out;
 
-	static void marshal_in (const ABI& src, IORequest_ptr rq);
-	static void marshal_in_a (const ABI* src, size_t count, IORequest_ptr rq);
+	inline static void marshal_in (const ABI& src, IORequest_ptr rq);
+	inline static void marshal_in_a (const ABI* src, size_t count, IORequest_ptr rq);
 
 	static void marshal_in (const Boolean src, IORequest_ptr rq)
 	{
@@ -207,8 +207,8 @@ struct TypePrimitive <Boolean> :
 		marshal_in (src, rq);
 	}
 
-	static void unmarshal (IORequest_ptr rq, ABI& dst);
-	static void unmarshal_a (IORequest_ptr rq, size_t count, ABI* dst);
+	inline static void unmarshal (IORequest_ptr rq, ABI& dst);
+	inline static void unmarshal_a (IORequest_ptr rq, size_t count, ABI* dst);
 
 	static void unmarshal (IORequest_ptr rq, Boolean& dst)
 	{

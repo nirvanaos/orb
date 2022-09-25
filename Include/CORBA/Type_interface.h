@@ -425,8 +425,8 @@ struct TypeItfMarshalable :
 template <>
 struct TypeItf <TypeCode> : TypeItfMarshalable <TypeCode>
 {
-	static void marshal_in (I_ptr <TypeCode> src, IORequest_ptr rq);
-	static void unmarshal (IORequest_ptr rq, I_ref <TypeCode>& dst);
+	inline static void marshal_in (I_ptr <TypeCode> src, IORequest_ptr rq);
+	inline static void unmarshal (IORequest_ptr rq, I_ref <TypeCode>& dst);
 };
 
 template <>

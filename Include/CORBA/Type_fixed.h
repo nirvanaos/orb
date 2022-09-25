@@ -56,8 +56,8 @@ struct Type <IDL::Fixed <digits, scale> > :
 	
 	// Marshaling
 
-	static void marshal_in (const Var& src, IORequest_ptr rq);
-	static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq);
+	inline static void marshal_in (const Var& src, IORequest_ptr rq);
+	inline static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq);
 
 	static void marshal_out (Var& src, IORequest_ptr rq)
 	{
@@ -69,8 +69,8 @@ struct Type <IDL::Fixed <digits, scale> > :
 		marshal_in_a (src, count, rq);
 	}
 
-	static void unmarshal (IORequest_ptr rq, Var& dst);
-	static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst);
+	inline static void unmarshal (IORequest_ptr rq, Var& dst);
+	inline static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst);
 
 	static void byteswap (Var&) NIRVANA_NOEXCEPT
 	{}

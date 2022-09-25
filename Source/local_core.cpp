@@ -24,7 +24,7 @@
 *  popov.nirvana@gmail.com
 */
 
-#include <CORBA/local_core.h>
+#include <CORBA/CORBA.h>
 
 namespace CORBA {
 namespace Internal {

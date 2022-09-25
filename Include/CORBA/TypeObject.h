@@ -44,8 +44,8 @@ struct TypeObject : TypeItfMarshalable <I>
 {
 	static const TCKind tc_kind = TCKind::tk_objref;
 
-	static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
-	static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
+	inline static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
+	inline static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
 };
 
 template <>

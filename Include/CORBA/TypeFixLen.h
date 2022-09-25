@@ -50,8 +50,8 @@ struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t),
 {
 	static const bool is_var_len = false;
 
-	static void marshal_in (const T& src, IORequest_ptr rq);
-	static void marshal_in_a (const T* src, size_t count, IORequest_ptr rq);
+	inline static void marshal_in (const T& src, IORequest_ptr rq);
+	inline static void marshal_in_a (const T* src, size_t count, IORequest_ptr rq);
 
 	static void marshal_out (T& src, IORequest_ptr rq)
 	{
@@ -63,8 +63,8 @@ struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t),
 		Type <T>::marshal_in_a (src, count, rq);
 	}
 	
-	static void unmarshal (IORequest_ptr rq, T& dst);
-	static void unmarshal_a (IORequest_ptr rq, size_t count, T* dst);
+	inline static void unmarshal (IORequest_ptr rq, T& dst);
+	inline static void unmarshal_a (IORequest_ptr rq, size_t count, T* dst);
 };
 
 }

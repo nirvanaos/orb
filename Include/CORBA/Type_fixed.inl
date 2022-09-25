@@ -34,19 +34,19 @@
 namespace CORBA {
 namespace Internal {
 
-template <uint16_t digits, int16_t scale>
+template <uint16_t digits, int16_t scale> inline
 void Type <IDL::Fixed <digits, scale> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
 	rq->marshal (1, sizeof (Var), &src);
 }
 
-template <uint16_t digits, int16_t scale>
+template <uint16_t digits, int16_t scale> inline
 void Type <IDL::Fixed <digits, scale> >::marshal_in_a (const Var* src, size_t count, IORequest_ptr rq)
 {
 	rq->marshal (1, sizeof (Var) * count, src);
 }
 
-template <uint16_t digits, int16_t scale>
+template <uint16_t digits, int16_t scale> inline
 void Type <IDL::Fixed <digits, scale> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	rq->unmarshal (1, sizeof (Var), &dst);
@@ -55,7 +55,7 @@ void Type <IDL::Fixed <digits, scale> >::unmarshal (IORequest_ptr rq, Var& dst)
 #endif
 }
 
-template <uint16_t digits, int16_t scale>
+template <uint16_t digits, int16_t scale> inline
 void Type <IDL::Fixed <digits, scale> >::unmarshal_a (IORequest_ptr rq, size_t count, Var* dst)
 {
 	rq->unmarshal (1, sizeof (Var) * count, dst);

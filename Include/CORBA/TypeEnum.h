@@ -63,11 +63,11 @@ struct TypeEnum : TypeByValCheck <T, ABI_enum>
 		check ((ABI)val);
 	}
 
-	static void marshal_in (const T& src, IORequest_ptr rq);
-	static void marshal_in_a (const T* src, size_t count, IORequest_ptr rq);
+	inline static void marshal_in (const T& src, IORequest_ptr rq);
+	inline static void marshal_in_a (const T* src, size_t count, IORequest_ptr rq);
 
-	static void unmarshal (IORequest_ptr rq, T& dst);
-	static void unmarshal_a (IORequest_ptr rq, size_t count, T* dst);
+	inline static void unmarshal (IORequest_ptr rq, T& dst);
+	inline static void unmarshal_a (IORequest_ptr rq, size_t count, T* dst);
 
 	static void byteswap (Var& v) NIRVANA_NOEXCEPT
 	{

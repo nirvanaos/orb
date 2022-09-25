@@ -23,10 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/RepId.h>
-#include <CORBA/String.h>
-#include <Nirvana/basic_string.h>
-#include <Nirvana/throw_exception.h>
+#include <CORBA/CORBA.h>
 #include <algorithm>
 
 namespace CORBA {

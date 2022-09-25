@@ -60,8 +60,7 @@ public:
 	static void n_destruct (void* p)
 	{
 		check_pointer (p);
-		if (p)
-			reinterpret_cast <Var*> (p)->~Var ();
+		reinterpret_cast <Var*> (p)->~Var ();
 	}
 
 	static void n_copy (void* dst, const void* src)
@@ -85,23 +84,18 @@ public:
 	static void n_marshal_in (const void* src, size_t count, IORequest_ptr rq)
 	{
 		check_pointer (src);
-		if (Type <T>::has_check)
-			check (src, count);
 		Type <T>::marshal_in_a (reinterpret_cast <const Var*> (src), count, rq);
 	}
 
 	static void n_marshal_out (void* src, size_t count, IORequest_ptr rq)
 	{
 		check_pointer (src);
-		if (Type <T>::has_check)
-			check (src, count);
 		Type <T>::marshal_out_a (reinterpret_cast <Var*> (src), count, rq);
 	}
 
 	static void n_unmarshal (IORequest_ptr rq, size_t count, void* dst)
 	{
 		check_pointer (dst);
-		// Do not call check() here, unmarshal() will check.
 		Type <T>::unmarshal_a (rq, count, reinterpret_cast <Var*> (dst));
 	}
 
