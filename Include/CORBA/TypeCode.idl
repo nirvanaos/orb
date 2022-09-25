@@ -67,45 +67,52 @@ pseudo interface TypeCode
 	exception Bounds {};
 	exception BadKind {};
 
-	// for all TypeCode kinds
+	///@{ For all TypeCode kinds
 	boolean equal (in TypeCode tc);
 	boolean equivalent (in TypeCode tc);
 	TypeCode get_compact_typecode ();
 	TCKind kind ();
+	///@}
 
-	// for tk_objref, tk_struct,    tk_union,  tk_enum, tk_alias, 
-	//     tk_value,  tk_value_box, tk_native, tk_abstract_interface
-	// and tk_except
+	///@{ For tk_objref, tk_struct,    tk_union,  tk_enum, tk_alias, 
+	/// tk_value,  tk_value_box, tk_native, tk_abstract_interface
+	/// and tk_except
 	RepositoryId id () raises (BadKind);
 	Identifier name () raises (BadKind);
-	
-	// for tk_struct, tk_union, tk_enum, tk_value, 
-	// and tk_except
+	///@}
+
+	///@{ For tk_struct, tk_union, tk_enum, tk_value, and tk_except
 	unsigned long member_count () raises (BadKind);
 	Identifier member_name (in unsigned long index) raises (BadKind, Bounds);
-	
-	// for tk_struct, tk_union, tk_value, and tk_except
+	///@}
+
+	/// for tk_struct, tk_union, tk_value, and tk_except
 	TypeCode member_type (in unsigned long index) raises (BadKind, Bounds);
 	
-	// for tk_union
+	///@{ For tk_union
+	
+	/// Member_label returns the label of the union member identified by index.For the default member,
+	/// the label is the zero octet.
 	any member_label (in unsigned long index) raises (BadKind, Bounds);
 	TypeCode discriminator_type () raises (BadKind);
 	long default_index () raises (BadKind);
+	///@}
 	
-	// for tk_string, tk_wstring, tk_sequence, and tk_array
+	/// For tk_string, tk_wstring, tk_sequence, and tk_array
 	unsigned long length () raises (BadKind);
 
-	// for tk_sequence, tk_array, tk_value_box, and tk_alias
+	/// For tk_sequence, tk_array, tk_value_box, and tk_alias
 	TypeCode content_type () raises (BadKind);
 
-	// for tk_fixed
+	///@{ For tk_fixed
 	unsigned short fixed_digits () raises (BadKind);
 	short fixed_scale () raises (BadKind);
 
-	// for tk_value
+	///@{ For tk_value
 	Visibility member_visibility (in unsigned long index) raises (BadKind, Bounds);
 	ValueModifier type_modifier () raises (BadKind);
 	TypeCode concrete_base_type () raises (BadKind);
+	///@}
 
 	///@{
 	/// Nirvana extensions.
@@ -113,6 +120,9 @@ pseudo interface TypeCode
 
 	/// Size of the object.
 	Nirvana::Size n_size ();
+
+	/// Align of the object.
+	Nirvana::Size n_align ();
 
 	/// Is type meets CORBA CDR
 	boolean n_is_CDR ();

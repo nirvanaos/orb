@@ -69,6 +69,11 @@ public:
 		return (content ()->_epv ().epv.n_size) (_b, _env);
 	}
 
+	static size_t _s_n_align (Bridge <TypeCode>* _b, Interface* _env)
+	{
+		return (content ()->_epv ().epv.n_align) (_b, _env);
+	}
+
 	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>* _b,
 		Interface* _env)
 	{

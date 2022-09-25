@@ -43,6 +43,11 @@ public:
 		return size;
 	}
 
+	static size_t _s_n_align (Bridge <TypeCode>*, Interface*)
+	{
+		return 1;
+	}
+
 	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>*, Interface*)
 	{
 		return true;

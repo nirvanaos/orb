@@ -46,6 +46,11 @@ public:
 		return sizeof (Var);
 	}
 
+	static size_t _s_n_align (Bridge <TypeCode>*, Interface*)
+	{
+		return alignof (Var);
+	}
+
 	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>*, Interface*)
 	{
 		return Type <T>::is_CDR;
@@ -120,6 +125,11 @@ public:
 	static size_t _s_n_size (Bridge <TypeCode>*, Interface*)
 	{
 		return 0;
+	}
+
+	static size_t _s_n_align (Bridge <TypeCode>*, Interface*)
+	{
+		return 1;
 	}
 
 	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>*, Interface*)

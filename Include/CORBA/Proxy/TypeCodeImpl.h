@@ -259,6 +259,7 @@ public:
 	using Impl::_s_concrete_base_type;
 
 	using Ops::_s_n_size;
+	using Ops::_s_n_align;
 	using Ops::_s_n_is_CDR;
 
 	// The get_compact_typecode operation strips out all optional name and member
