@@ -74,8 +74,8 @@ pseudo interface TypeCode
 	TCKind kind ();
 	///@}
 
-	///@{ For tk_objref, tk_struct,    tk_union,  tk_enum, tk_alias, 
-	/// tk_value,  tk_value_box, tk_native, tk_abstract_interface
+	///@{ For tk_objref, tk_struct, tk_union, tk_enum, tk_alias,
+	/// tk_value, tk_value_box, tk_native, tk_abstract_interface
 	/// and tk_except
 	RepositoryId id () raises (BadKind);
 	Identifier name () raises (BadKind);
