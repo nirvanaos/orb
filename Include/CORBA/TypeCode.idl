@@ -142,6 +142,7 @@ pseudo interface TypeCode
 	void n_marshal_in (in Nirvana::ConstPointer src, in Nirvana::Size count, in Internal::IORequest iorq);
 	void n_marshal_out (in Nirvana::Pointer src, in Nirvana::Size count, in Internal::IORequest iorq);
 	void n_unmarshal (in Internal::IORequest iorq, in Nirvana::Size count, in Nirvana::Pointer dst);
+	void n_byteswap (in Nirvana::Pointer src, in Nirvana::Size count);
 
 	///@}
 };

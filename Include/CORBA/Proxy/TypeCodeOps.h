@@ -104,6 +104,15 @@ public:
 		Type <T>::unmarshal_a (rq, count, reinterpret_cast <Var*> (dst));
 	}
 
+	static void n_byteswap (void* p, size_t count)
+	{
+		if (Type <T>::is_CDR) {
+			check_pointer (p);
+			for (Var* pv = (Var*)p, *end = pv + count; pv != end; ++pv)
+				Type <T>::byteswap (*pv);
+		}
+	}
+
 private:
 	static void check (const void* p, size_t count);
 };
@@ -159,6 +168,9 @@ public:
 
 	static void _s_n_unmarshal (Bridge <TypeCode>*, Interface*, size_t,
 		void*, Interface*)
+	{}
+
+	static void _s_n_byteswap (Bridge <TypeCode>*, void*, size_t, Interface*)
 	{}
 };
 

@@ -288,6 +288,7 @@ public:
 	using TypeCodeOps <void>::_s_n_marshal_in;
 	using TypeCodeOps <void>::_s_n_marshal_out;
 	using TypeCodeOps <void>::_s_n_unmarshal;
+	using TypeCodeOps <void>::_s_n_byteswap;
 };
 
 template <class S, class Impl, class Ops>

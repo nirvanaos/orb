@@ -53,7 +53,7 @@ public:
 		return true;
 	}
 
-	static void _s_n_construct (Bridge <TypeCode>*, void* p, Interface*)
+	static void n_construct (void* p)
 	{
 		check_pointer (p);
 		Nirvana::BCD_zero ((Octet*)p, size);
@@ -85,6 +85,9 @@ public:
 			BCD_check (p, size);
 		}
 	}
+
+	static void _s_n_byteswap (Bridge <TypeCode>*, void*, size_t, Interface*)
+	{}
 };
 
 template <size_t size>
@@ -136,8 +139,8 @@ public:
 		return equal (other);
 	}
 
-	using Ops::_s_n_construct;
 	using Ops::_s_n_destruct;
+	using Ops::_s_n_byteswap;
 };
 
 template <uint16_t digits, int16_t scale> inline

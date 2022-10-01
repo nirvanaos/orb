@@ -120,6 +120,11 @@ public:
 		(content ()->_epv ().epv.n_unmarshal) (_b, call, size, dst, _env);
 	}
 
+	static void _s_n_byteswap (Bridge <TypeCode>* _b, void* p, size_t size, Interface* _env)
+	{
+		(content ()->_epv ().epv.n_byteswap) (_b, p, size, _env);
+	}
+
 private:
 	static I_ptr <TypeCode> content () NIRVANA_NOEXCEPT
 	{
