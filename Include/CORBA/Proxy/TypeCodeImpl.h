@@ -92,39 +92,39 @@ protected:
 	static Boolean equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> other);
 
 	// Value box and alias
-	static Boolean equal (TCKind tk, String_in& id, String_in& name, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
+	static Boolean equal (TCKind tk, String_in id, String_in name, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
 
 	// Value box
-	static Boolean equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
+	static Boolean equivalent (TCKind tk, String_in id, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
 
 	// Sequence and array
 	static Boolean equal (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
 	static Boolean equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
 
-	static Boolean equal (TCKind tk, String_in& id, I_ptr <TypeCode> other);
-	static Boolean equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other);
+	static Boolean equal (TCKind tk, String_in id, I_ptr <TypeCode> other);
+	static Boolean equivalent (TCKind tk, String_in id, I_ptr <TypeCode> other);
 
-	static Boolean equal (TCKind tk, String_in& id, String_in& name, I_ptr <TypeCode> other);
+	static Boolean equal (TCKind tk, String_in id, String_in name, I_ptr <TypeCode> other);
 
-	static Boolean equal (TCKind tk, String_in& id, String_in& name,
+	static Boolean equal (TCKind tk, String_in id, String_in name,
 		const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other);
 
-	static Boolean equivalent (TCKind tk, String_in& id, ULong member_cnt,
+	static Boolean equivalent (TCKind tk, String_in id, ULong member_cnt,
 		I_ptr <TypeCode> other);
 
-	static Boolean equal (TCKind tk, String_in& id, String_in& name,
+	static Boolean equal (TCKind tk, String_in id, String_in name,
 		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
 
-	static Boolean equivalent (TCKind tk, String_in& id,
+	static Boolean equivalent (TCKind tk, String_in id,
 		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
 
 	// Value type
 
-	static Boolean equal (Bridge <TypeCode>* bridge, String_in& id, String_in& name,
+	static Boolean equal (Bridge <TypeCode>* bridge, String_in id, String_in name,
 		ValueModifier mod, GetTypeCode base,
 		const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other);
 
-	static Boolean equivalent (Bridge <TypeCode>* bridge, String_in& id,
+	static Boolean equivalent (Bridge <TypeCode>* bridge, String_in id,
 		ValueModifier mod, GetTypeCode base,
 		const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other);
 
@@ -136,7 +136,7 @@ private:
 		UNKNOWN
 	};
 
-	static EqResult equivalent_ (TCKind tk, String_in& id, I_ptr <TypeCode> other);
+	static EqResult equivalent_ (TCKind tk, String_in id, I_ptr <TypeCode> other);
 
 	// To prevent recursion for value types, use simply set implemented over std::vector.
 

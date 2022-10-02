@@ -64,71 +64,86 @@ public:
 		return content ()->equivalent (other);
 	}
 
-	static size_t _s_n_size (Bridge <TypeCode>* _b, Interface* _env)
+	static size_t _s_n_size (Bridge <TypeCode>*, Interface* _env)
 	{
-		return (content ()->_epv ().epv.n_size) (_b, _env);
+		Bridge <TypeCode>* b = content_bridge ();
+		return (b->_epv ().epv.n_size) (b, _env);
 	}
 
-	static size_t _s_n_align (Bridge <TypeCode>* _b, Interface* _env)
+	static size_t _s_n_align (Bridge <TypeCode>*, Interface* _env)
 	{
-		return (content ()->_epv ().epv.n_align) (_b, _env);
+		Bridge <TypeCode>* b = content_bridge ();
+		return (b->_epv ().epv.n_align) (b, _env);
 	}
 
-	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>* _b,
+	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>*, Interface* _env)
+	{
+		Bridge <TypeCode>* b = content_bridge ();
+		return (b->_epv ().epv.n_is_CDR) (b, _env);
+	}
+
+	static void _s_n_construct (Bridge <TypeCode>*, void* p, Interface* _env)
+	{
+		Bridge <TypeCode>* b = content_bridge ();
+		(b->_epv ().epv.n_construct) (b, p, _env);
+	}
+
+	static void _s_n_destruct (Bridge <TypeCode>*, void* p, Interface* _env)
+	{
+		Bridge <TypeCode>* b = content_bridge ();
+		(b->_epv ().epv.n_destruct) (b, p, _env);
+	}
+
+	static void _s_n_copy (Bridge <TypeCode>*, void* dst, const void* src,
 		Interface* _env)
 	{
-		return (content ()->_epv ().epv.n_is_CDR) (_b, _env);
+		Bridge <TypeCode>* b = content_bridge ();
+		(b->_epv ().epv.n_copy) (b, dst, src, _env);
 	}
 
-	static void _s_n_construct (Bridge <TypeCode>* _b, void* p, Interface* _env)
-	{
-		(content ()->_epv ().epv.n_construct) (_b, p, _env);
-	}
-
-	static void _s_n_destruct (Bridge <TypeCode>* _b, void* p, Interface* _env)
-	{
-		(content ()->_epv ().epv.n_destruct) (_b, p, _env);
-	}
-
-	static void _s_n_copy (Bridge <TypeCode>* _b, void* dst, const void* src,
+	static void _s_n_move (Bridge <TypeCode>*, void* dst, void* src,
 		Interface* _env)
 	{
-		(content ()->_epv ().epv.n_copy) (_b, dst, src, _env);
+		Bridge <TypeCode>* b = content_bridge ();
+		(b->_epv ().epv.n_move) (b, dst, src, _env);
 	}
 
-	static void _s_n_move (Bridge <TypeCode>* _b, void* dst, void* src,
-		Interface* _env)
-	{
-		(content ()->_epv ().epv.n_move) (_b, dst, src, _env);
-	}
-
-	static void _s_n_marshal_in (Bridge <TypeCode>* _b, const void* src, size_t size,
+	static void _s_n_marshal_in (Bridge <TypeCode>*, const void* src, size_t size,
 		Interface* call, Interface* _env)
 	{
-		(content ()->_epv ().epv.n_marshal_in) (_b, src, size, call, _env);
+		Bridge <TypeCode>* b = content_bridge ();
+		(b->_epv ().epv.n_marshal_in) (b, src, size, call, _env);
 	}
 
-	static void _s_n_marshal_out (Bridge <TypeCode>* _b, void* src, size_t size,
+	static void _s_n_marshal_out (Bridge <TypeCode>*, void* src, size_t size,
 		Interface* call, Interface* _env)
 	{
-		(content ()->_epv ().epv.n_marshal_out) (_b, src, size, call, _env);
+		Bridge <TypeCode>* b = content_bridge ();
+		(b->_epv ().epv.n_marshal_out) (b, src, size, call, _env);
 	}
 
-	static void _s_n_unmarshal (Bridge <TypeCode>* _b, Interface* call, size_t size,
+	static void _s_n_unmarshal (Bridge <TypeCode>*, Interface* call, size_t size,
 		void* dst, Interface* _env)
 	{
-		(content ()->_epv ().epv.n_unmarshal) (_b, call, size, dst, _env);
+		Bridge <TypeCode>* b = content_bridge ();
+		(b->_epv ().epv.n_unmarshal) (b, call, size, dst, _env);
 	}
 
-	static void _s_n_byteswap (Bridge <TypeCode>* _b, void* p, size_t size, Interface* _env)
+	static void _s_n_byteswap (Bridge <TypeCode>*, void* p, size_t size, Interface* _env)
 	{
-		(content ()->_epv ().epv.n_byteswap) (_b, p, size, _env);
+		Bridge <TypeCode>* b = content_bridge ();
+		(b->_epv ().epv.n_byteswap) (b, p, size, _env);
 	}
 
 private:
 	static I_ptr <TypeCode> content () NIRVANA_NOEXCEPT
 	{
 		return TypeCodeContentType <Content>::ptr ();
+	}
+
+	static Bridge <TypeCode>* content_bridge () NIRVANA_NOEXCEPT
+	{
+		return &static_cast <Bridge <TypeCode>&> (*&content ());
 	}
 };
 

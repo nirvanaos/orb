@@ -77,12 +77,12 @@ Boolean TypeCodeBase::equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> conte
 	return equal (tk, bound, tco) && content->equivalent (tco->content_type ());
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name, I_ptr <TypeCode> content, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equal (TCKind tk, String_in id, String_in name, I_ptr <TypeCode> content, I_ptr <TypeCode> other)
 {
 	return equal (tk, id, name, other) && content->equal (other->content_type ());
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> content, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equivalent (TCKind tk, String_in id, I_ptr <TypeCode> content, I_ptr <TypeCode> other)
 {
 	EqResult eq = equivalent_ (tk, id, other);
 	if (EqResult::UNKNOWN != eq)
@@ -90,18 +90,18 @@ Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> con
 	return content->equal (other->content_type ());
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, String_in& id, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equal (TCKind tk, String_in id, I_ptr <TypeCode> other)
 {
 	return equal (tk, other)
 		&& static_cast <const String&> (id) == other->id ();
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equivalent (TCKind tk, String_in id, I_ptr <TypeCode> other)
 {
 	return equal (tk, id, dereference_alias (other));
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equal (TCKind tk, String_in id, String_in name, I_ptr <TypeCode> other)
 {
 	if (!equal (tk, id, other))
 		return false;
@@ -109,7 +109,7 @@ Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name, I_ptr <T
 	return static_cast <const String&> (name) == other->name ();
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name,
+Boolean TypeCodeBase::equal (TCKind tk, String_in id, String_in name,
 	const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
 	if (!equal (tk, id, name, other))
@@ -125,7 +125,7 @@ Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name,
 	return true;
 }
 
-TypeCodeBase::EqResult TypeCodeBase::equivalent_ (TCKind tk, String_in& id, I_ptr <TypeCode> other)
+TypeCodeBase::EqResult TypeCodeBase::equivalent_ (TCKind tk, String_in id, I_ptr <TypeCode> other)
 {
 	if (!equal (tk, other))
 		return EqResult::NO;
@@ -135,7 +135,7 @@ TypeCodeBase::EqResult TypeCodeBase::equivalent_ (TCKind tk, String_in& id, I_pt
 	return EqResult::UNKNOWN;
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, ULong member_cnt, I_ptr <TypeCode> other)
+Boolean TypeCodeBase::equivalent (TCKind tk, String_in id, ULong member_cnt, I_ptr <TypeCode> other)
 {
 	I_ptr <TypeCode> tco = dereference_alias (other);
 	EqResult eq = equivalent_ (tk, id, tco);
@@ -144,7 +144,7 @@ Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id, ULong member_cnt, I_
 	return member_cnt == tco->member_count ();
 }
 
-Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name,
+Boolean TypeCodeBase::equal (TCKind tk, String_in id, String_in name,
 	const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
 	if (!equal (tk, id, name, other))
@@ -162,7 +162,7 @@ Boolean TypeCodeBase::equal (TCKind tk, String_in& id, String_in& name,
 	return true;
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id,
+Boolean TypeCodeBase::equivalent (TCKind tk, String_in id,
 	const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
 	I_ptr <TypeCode> tco = dereference_alias (other);
@@ -180,7 +180,7 @@ Boolean TypeCodeBase::equivalent (TCKind tk, String_in& id,
 	return true;
 }
 
-Boolean TypeCodeBase::equal (Bridge <TypeCode>* bridge, String_in& id, String_in& name,
+Boolean TypeCodeBase::equal (Bridge <TypeCode>* bridge, String_in id, String_in name,
 	ValueModifier mod, GetTypeCode base,
 	const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
@@ -267,7 +267,7 @@ Boolean TypeCodeBase::equal (CompareSet& cs,
 	return left->equal (right);
 }
 
-Boolean TypeCodeBase::equivalent (Bridge <TypeCode>* bridge, String_in& id,
+Boolean TypeCodeBase::equivalent (Bridge <TypeCode>* bridge, String_in id,
 	ValueModifier mod, GetTypeCode base,
 	const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
