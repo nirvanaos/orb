@@ -88,6 +88,18 @@ protected:
 		return Type <Interface>::VT_ret ();
 	}
 
+	static Interface* __truncatable_base (Bridge <ValueBase>* _b, Interface* _env)
+	{
+		try {
+			return Type <TypeCode>::C_ret (S::_implementation (_b)._truncatable_base ());
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return Type <TypeCode>::C_ret ();
+	}
+
 };
 
 template <class S>

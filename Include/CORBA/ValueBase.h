@@ -69,6 +69,7 @@ Interface* (*copy_value) (Bridge <ValueBase>* _b, Interface* _env);
 void (*marshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 void (*unmarshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 Interface* (*query_valuetype) (Bridge <ValueBase>*, Type <String>::ABI_in, Interface*);
+Interface* (*truncatable_base) (Bridge <ValueBase>*, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
@@ -89,6 +90,8 @@ public:
 	{
 		return _query_valuetype (RepIdOf <I>::id).template downcast <I> ();
 	}
+
+	I_ref <TypeCode> _truncatable_base ();
 };
 
 template <class T>
@@ -125,6 +128,16 @@ I_ptr <Interface> Client <T, ValueBase>::_query_valuetype (String_in type_id)
 	Environment _env;
 	Bridge <ValueBase>& _b (T::_get_bridge (_env));
 	I_VT_ret <Interface> _ret = (_b._epv ().epv.query_valuetype) (&_b, &type_id, &_env);
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
+I_ref <TypeCode> Client <T, ValueBase>::_truncatable_base ()
+{
+	Environment _env;
+	Bridge <ValueBase>& _b (T::_get_bridge (_env));
+	I_ret <TypeCode> _ret = (_b._epv ().epv.truncatable_base) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
