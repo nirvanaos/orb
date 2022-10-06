@@ -113,7 +113,8 @@ const Bridge <ValueBase>::EPV Skeleton <S, ValueBase>::epv_ = {
 		S::__copy_value,
 		S::__marshal,
 		S::__unmarshal,
-		S::__query_valuetype
+		S::__query_valuetype,
+		S::__truncatable_base
 	}
 };
 

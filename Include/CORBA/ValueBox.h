@@ -240,6 +240,11 @@ protected:
 		return *this;
 	}
 
+	static Interface* __truncatable_base (Bridge <ValueBase>* _b, Interface* _env)
+	{
+		return nullptr;
+	}
+
 private:
 	static Bridge <ValueBase>* _CORBA_ValueBase (ValueBoxBridge* bridge, Type <String>::ABI_in id, Interface* env)
 	{
