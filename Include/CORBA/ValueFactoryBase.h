@@ -40,6 +40,12 @@ typedef Internal::I_ptr <ValueFactoryBase> ValueFactory;
 typedef Internal::I_var <ValueFactoryBase> ValueFactoryBase_var;
 #endif
 
+namespace Core {
+
+class RequestGIOP;
+
+}
+
 namespace Internal {
 
 template <>
@@ -74,6 +80,7 @@ public:
 
 private:
 	Type <ValueBase>::Var create_for_unmarshal ();
+	friend class CORBA::Core::RequestGIOP;
 };
 
 template <class T>
