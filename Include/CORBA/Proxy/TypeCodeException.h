@@ -59,7 +59,7 @@ public:
 
 	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
-		return TypeCodeBase::equivalent (TCKind::tk_except, RepIdOf <E>::id, Members::member_count (), other);
+		return TypeCodeBase::equal (TCKind::tk_except, RepIdOf <E>::id, other);
 	}
 };
 

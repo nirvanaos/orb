@@ -83,39 +83,55 @@ public:
 protected:
 	static I_ptr <TypeCode> dereference_alias (I_ptr <TypeCode> tc);
 
+	enum class EqResult
+	{
+		YES,
+		NO,
+		UNKNOWN
+	};
+
 	// Scalar
+
 	static Boolean equal (TCKind tk, I_ptr <TypeCode> other);
 	static Boolean equivalent (TCKind tk, I_ptr <TypeCode> other);
 
 	// String
+
 	static Boolean equal (TCKind tk, ULong bound, I_ptr <TypeCode> other);
 	static Boolean equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> other);
 
 	// Value box and alias
+
 	static Boolean equal (TCKind tk, String_in id, String_in name, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
 
 	// Value box
+
 	static Boolean equivalent (TCKind tk, String_in id, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
 
 	// Sequence and array
+
 	static Boolean equal (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
 	static Boolean equivalent (TCKind tk, ULong bound, I_ptr <TypeCode> content, I_ptr <TypeCode> other);
 
-	static Boolean equal (TCKind tk, String_in id, I_ptr <TypeCode> other);
-	static Boolean equivalent (TCKind tk, String_in id, I_ptr <TypeCode> other);
+	// ID & name: 
 
 	static Boolean equal (TCKind tk, String_in id, String_in name, I_ptr <TypeCode> other);
+	static Boolean equivalent (TCKind tk, String_in id, I_ptr <TypeCode> other);
+	static Boolean equal (TCKind tk, String_in id, I_ptr <TypeCode> other);
+
+	// Enum
 
 	static Boolean equal (TCKind tk, String_in id, String_in name,
 		const Char* const* members, ULong member_cnt, I_ptr <TypeCode> other);
-
-	static Boolean equivalent (TCKind tk, String_in id, ULong member_cnt,
+	static EqResult equivalent_ (TCKind tk, String_in id, ULong member_cnt,
 		I_ptr <TypeCode> other);
+
+	// Struct/union
 
 	static Boolean equal (TCKind tk, String_in id, String_in name,
 		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
 
-	static Boolean equivalent (TCKind tk, String_in id,
+	static EqResult equivalent_ (TCKind tk, String_in id,
 		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
 
 	// Value type
@@ -129,16 +145,9 @@ protected:
 		const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other);
 
 private:
-	enum class EqResult
-	{
-		YES,
-		NO,
-		UNKNOWN
-	};
-
 	static EqResult equivalent_ (TCKind tk, String_in id, I_ptr <TypeCode> other);
 
-	// To prevent recursion for value types, use simply set implemented over std::vector.
+	// To prevent recursion for recursive types, use simply set implemented over std::vector.
 
 	struct CompareEntry
 	{

@@ -33,20 +33,20 @@
 namespace CORBA {
 namespace Internal {
 
-template <class S>
+template <class U>
 class TypeCodeUnion :
-	public TypeCodeStatic <TypeCodeUnion <S>,
-		TypeCodeWithId <TCKind::tk_union, S>, TypeCodeOps <S> >,
-	public TypeCodeMembers <S>,
-	public TypeCodeName <S>
+	public TypeCodeStatic <TypeCodeUnion <U>,
+		TypeCodeWithId <TCKind::tk_union, U>, TypeCodeOps <U> >,
+	public TypeCodeMembers <U>,
+	public TypeCodeName <U>
 {
-	typedef TypeCodeStatic <TypeCodeUnion <S>,
-		TypeCodeWithId <TCKind::tk_union, S>, TypeCodeOps <S> > Base;
-	typedef TypeCodeMembers <S> Members;
+	typedef TypeCodeStatic <TypeCodeUnion <U>,
+		TypeCodeWithId <TCKind::tk_union, U>, TypeCodeOps <U> > Base;
+	typedef TypeCodeMembers <U> Members;
 
-	typedef typename Type <S>::DiscriminatorType DiscriminatorType;
+	typedef typename Type <U>::DiscriminatorType DiscriminatorType;
 public:
-	using TypeCodeName <S>::_s_name;
+	using TypeCodeName <U>::_s_name;
 	using Members::_s_member_count;
 	using Members::_s_member_name;
 	using Members::_s_member_type;
@@ -54,25 +54,32 @@ public:
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
 		return TypeCodeBase::equal (TCKind::tk_union, Base::RepositoryType::id,
-			TypeCodeName <S>::name_,
-			Members::members (), Members::member_count (), other);
+			TypeCodeName <U>::name_,
+			Members::members (), Members::member_count (), other)
+			&& discriminator_tc_ptr ()->equal (other->discriminator_type ())
+			&& labels_equal (other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (TCKind::tk_union, Base::RepositoryType::id,
-			Members::members (), Members::member_count (), other);
+		I_ptr <TypeCode> tco = TypeCodeBase::dereference_alias (other);
+		TypeCodeBase::EqResult eq = TypeCodeBase::equivalent_ (TCKind::tk_union, Base::RepositoryType::id,
+			Members::members (), Members::member_count (), tco);
+		if (eq != TypeCodeBase::EqResult::UNKNOWN)
+			return eq == TypeCodeBase::EqResult::YES;
+		return discriminator_tc_ptr ()->equivalent (tco->discriminator_type ())
+			&& labels_equal (tco);
 	}
 
 	static Type <Any>::ABI_ret _s_member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
-		if (index >= countof (labels_)) {
+		if (index >= std::size (labels_)) {
 			set_Bounds (_env);
 			return Type <Any>::ret ();
 		}
 
 		Any ret;
-		if (index != Type <S>::default_index_)
+		if (index != Type <U>::default_index_)
 			ret <<= labels_ [index];
 		else
 			ret <<= Any::from_octet (0);
@@ -87,18 +94,33 @@ public:
 
 	static Long _s_default_index (Bridge <TypeCode>* _b, Interface* _env)
 	{
-		return Type <S>::default_index_;
+		return Type <U>::default_index_;
 	}
 
 private:
 	static I_ptr <TypeCode> discriminator_tc_ptr () NIRVANA_NOEXCEPT
 	{
-		return Type <typename Type <S>::DiscriminatorType>::type_code ();
+		return Type <typename Type <U>::DiscriminatorType>::type_code ();
 	}
+
+	static bool labels_equal (I_ptr <TypeCode> other);
 
 private:
 	static const DiscriminatorType labels_ [];
 };
+
+template <class U>
+bool TypeCodeUnion <U>::labels_equal (I_ptr <TypeCode> other)
+{
+	for (ULong i = 0; i < std::size (labels_); ++i) {
+		Any label_any = other->member_label (i);
+		DiscriminatorType label;
+		if (!(label_any >>= label) || labels_ [i] != label)
+			return false;
+	}
+	return true;
+}
+
 
 }
 }

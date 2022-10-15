@@ -58,8 +58,8 @@ public:
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (TCKind::tk_struct, Base::RepositoryType::id,
-			Members::members (), Members::member_count (), other);
+		return TypeCodeBase::equivalent_ (TCKind::tk_struct, Base::RepositoryType::id,
+			Members::members (), Members::member_count (), TypeCodeBase::dereference_alias (other)) != TypeCodeBase::EqResult::NO;
 	}
 };
 

@@ -64,8 +64,8 @@ public:
 
 	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
-		return TypeCodeBase::equivalent (TCKind::tk_enum, Base::RepositoryType::id,
-			Type <E>::count_, other);
+		return TypeCodeBase::equivalent_ (TCKind::tk_enum, Base::RepositoryType::id,
+			Type <E>::count_, TypeCodeBase::dereference_alias (other)) != TypeCodeBase::EqResult::NO;
 	}
 
 private:

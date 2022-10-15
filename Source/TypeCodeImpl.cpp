@@ -84,10 +84,11 @@ Boolean TypeCodeBase::equal (TCKind tk, String_in id, String_in name, I_ptr <Typ
 
 Boolean TypeCodeBase::equivalent (TCKind tk, String_in id, I_ptr <TypeCode> content, I_ptr <TypeCode> other)
 {
-	EqResult eq = equivalent_ (tk, id, other);
+	I_ptr <TypeCode> tco = dereference_alias (other);
+	EqResult eq = equivalent_ (tk, id, tco);
 	if (EqResult::UNKNOWN != eq)
 		return EqResult::NO != eq;
-	return content->equal (other->content_type ());
+	return content->equal (tco->content_type ());
 }
 
 Boolean TypeCodeBase::equal (TCKind tk, String_in id, I_ptr <TypeCode> other)
@@ -127,6 +128,7 @@ Boolean TypeCodeBase::equal (TCKind tk, String_in id, String_in name,
 
 TypeCodeBase::EqResult TypeCodeBase::equivalent_ (TCKind tk, String_in id, I_ptr <TypeCode> other)
 {
+	assert (other->kind () != TCKind::tk_alias);
 	if (!equal (tk, other))
 		return EqResult::NO;
 	const String& oid = other->id ();
@@ -135,13 +137,12 @@ TypeCodeBase::EqResult TypeCodeBase::equivalent_ (TCKind tk, String_in id, I_ptr
 	return EqResult::UNKNOWN;
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, String_in id, ULong member_cnt, I_ptr <TypeCode> other)
+TypeCodeBase::EqResult TypeCodeBase::equivalent_ (TCKind tk, String_in id, ULong member_cnt, I_ptr <TypeCode> other)
 {
-	I_ptr <TypeCode> tco = dereference_alias (other);
-	EqResult eq = equivalent_ (tk, id, tco);
-	if (EqResult::UNKNOWN != eq)
-		return EqResult::YES == eq;
-	return member_cnt == tco->member_count ();
+	EqResult eq = equivalent_ (tk, id, other);
+	if (EqResult::UNKNOWN == eq && member_cnt != other->member_count ())
+		eq = EqResult::NO;
+	return eq;
 }
 
 Boolean TypeCodeBase::equal (TCKind tk, String_in id, String_in name,
@@ -162,22 +163,18 @@ Boolean TypeCodeBase::equal (TCKind tk, String_in id, String_in name,
 	return true;
 }
 
-Boolean TypeCodeBase::equivalent (TCKind tk, String_in id,
+TypeCodeBase::EqResult TypeCodeBase::equivalent_ (TCKind tk, String_in id,
 	const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
-	I_ptr <TypeCode> tco = dereference_alias (other);
-	EqResult eq = equivalent_ (tk, id, tco);
+	EqResult eq = equivalent_ (tk, id, member_cnt, other);
 	if (EqResult::UNKNOWN != eq)
-		return EqResult::YES == eq;
-
-	if (other->member_count () != member_cnt)
-		return false;
+		return eq;
 
 	for (ULong i = 0; i < member_cnt; ++i) {
-		if (!tco->member_type (i)->equivalent ((members [i].type) ()))
-			return false;
+		if (!other->member_type (i)->equivalent ((members [i].type) ()))
+			return EqResult::NO;
 	}
-	return true;
+	return EqResult::UNKNOWN;
 }
 
 Boolean TypeCodeBase::equal (Bridge <TypeCode>* bridge, String_in id, String_in name,
