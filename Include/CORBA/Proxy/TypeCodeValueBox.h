@@ -49,12 +49,14 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (TCKind::tk_value_box, Base::RepositoryType::id, Name::name_, content (), other);
+		return Base::_bridge () == &other ||
+			TypeCodeBase::equal (TCKind::tk_value_box, Base::RepositoryType::id, Name::name_, content (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (TCKind::tk_value_box, Base::RepositoryType::id, content (), other);
+		return Base::_bridge () == &other ||
+			TypeCodeBase::equivalent (TCKind::tk_value_box, Base::RepositoryType::id, content (), other);
 	}
 
 private:

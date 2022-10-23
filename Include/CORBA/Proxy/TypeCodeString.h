@@ -41,17 +41,22 @@ class TypeCodeStringBase :
 		TypeCodeOps <Valtype> >,
 	public TypeCodeLength <bound>
 {
+	typedef TypeCodeStatic <TypeCodeString <Valtype, bound>, TypeCodeTK <tk>,
+		TypeCodeOps <Valtype> > Base;
+
 public:
 	using TypeCodeLength <bound>::_s_length;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (tk, bound, other);
+		return Base::_bridge () == &other ||
+			TypeCodeBase::equal (tk, bound, other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (tk, bound, other);
+		return Base::_bridge () == &other ||
+			TypeCodeBase::equivalent (tk, bound, other);
 	}
 };
 

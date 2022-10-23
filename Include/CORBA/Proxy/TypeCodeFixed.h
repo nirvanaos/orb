@@ -115,7 +115,10 @@ class TypeCodeFixed :
 	public TypeCodeStatic <TypeCodeFixed <digits, scale>,
 		TypeCodeTK <TCKind::tk_fixed>, FixedOps <sizeof (IDL::FixedBCD <digits, scale>)> >
 {
+	typedef TypeCodeStatic <TypeCodeFixed <digits, scale>,
+		TypeCodeTK <TCKind::tk_fixed>, FixedOps <sizeof (IDL::FixedBCD <digits, scale>)> > Base;
 	typedef FixedOps <sizeof (IDL::FixedBCD <digits, scale>)> Ops;
+
 public:
 	static UShort _s_fixed_digits (Bridge <TypeCode>* _b, Interface* _env)
 	{
@@ -129,9 +132,10 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (TCKind::tk_fixed, other)
-			&& digits == other->fixed_digits ()
-			&& scale == other->fixed_scale ();
+		return Base::_bridge () == &other ||
+			(TypeCodeBase::equal (TCKind::tk_fixed, other)
+				&& digits == other->fixed_digits ()
+				&& scale == other->fixed_scale ());
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)

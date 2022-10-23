@@ -40,6 +40,8 @@ class TypeCodeArray :
 	public TypeCodeLength <bound>,
 	public TypeCodeContentType <T>
 {
+	typedef TypeCodeStatic <TypeCodeArray <T, bound>, TypeCodeTK <TCKind::tk_array>,
+		TypeCodeOps <std::array <T, bound> > > Base;
 	typedef TypeCodeContentType <T> ContentType;
 public:
 	using TypeCodeLength <bound>::_s_length;
@@ -47,12 +49,14 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (TCKind::tk_array, bound, ContentType::ptr (), other);
+		return Base::_bridge () == &other ||
+			TypeCodeBase::equal (TCKind::tk_array, bound, ContentType::ptr (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (TCKind::tk_array, bound, ContentType::ptr (), other);
+		return Base::_bridge () == &other ||
+			TypeCodeBase::equivalent (TCKind::tk_array, bound, ContentType::ptr (), other);
 	}
 };
 

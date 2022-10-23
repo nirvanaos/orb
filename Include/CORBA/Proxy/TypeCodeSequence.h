@@ -40,19 +40,24 @@ class TypeCodeSequence :
 	public TypeCodeLength <bound>,
 	public TypeCodeContentType <T>
 {
+	typedef TypeCodeStatic <TypeCodeSequence <T, bound>, TypeCodeTK <TCKind::tk_sequence>,
+		TypeCodeOps <Sequence <T> > > Base;
 	typedef TypeCodeContentType <T> ContentType;
+
 public:
 	using TypeCodeLength <bound>::_s_length;
 	using ContentType::_s_content_type;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (TCKind::tk_sequence, bound, ContentType::ptr (), other);
+		return Base::_bridge () == &other ||
+			TypeCodeBase::equal (TCKind::tk_sequence, bound, ContentType::ptr (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (TCKind::tk_sequence, bound, ContentType::ptr (), other);
+		return Base::_bridge () == &other ||
+			TypeCodeBase::equivalent (TCKind::tk_sequence, bound, ContentType::ptr (), other);
 	}
 };
 

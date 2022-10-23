@@ -43,7 +43,14 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (Type <I>::tc_kind, Base::RepositoryType::id, TypeCodeName <I>::name_, other);
+		return Base::_bridge () == &other ||
+			TypeCodeBase::equal (Type <I>::tc_kind, Base::RepositoryType::id, TypeCodeName <I>::name_, other);
+	}
+
+	static Boolean equivalent (I_ptr <TypeCode> other)
+	{
+		return Base::_bridge () == &other ||
+			Base::equivalent (other);
 	}
 };
 
