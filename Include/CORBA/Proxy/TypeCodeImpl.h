@@ -126,12 +126,17 @@ protected:
 	static EqResult equivalent_ (TCKind tk, String_in id, ULong member_cnt,
 		I_ptr <TypeCode> other);
 
-	// Struct/union
+	// Exception
 
-	static Boolean equal (TCKind tk, String_in id, String_in name,
+	static Boolean equal_exception (String_in id, String_in name,
 		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
 
-	static EqResult equivalent_ (TCKind tk, String_in id,
+	// Struct/union
+
+	static Boolean equal (Bridge <TypeCode>* bridge, TCKind tk, String_in id, String_in name,
+		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
+
+	static EqResult equivalent_ (Bridge <TypeCode>* bridge, TCKind tk, String_in id,
 		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
 
 	// Value type
@@ -146,44 +151,6 @@ protected:
 
 private:
 	static EqResult equivalent_ (TCKind tk, String_in id, I_ptr <TypeCode> other);
-
-	// To prevent recursion for recursive types, use simply set implemented over std::vector.
-
-	struct CompareEntry
-	{
-		Interface* first, * second;
-
-		bool operator == (const CompareEntry& rhs) const
-		{
-			return first == rhs.first && second == rhs.second;
-		}
-	};
-
-	class CompareSet :
-		private std::vector <CompareEntry>
-	{
-	public:
-		CompareSet (Interface* first, Interface* second) :
-			std::vector <CompareEntry> (1, { first, second })
-		{}
-
-		bool insert (Interface* first, Interface* second)
-		{
-			CompareEntry ce{ first, second };
-			if (std::find (begin (), end (), ce) == end ()) {
-				push_back (ce);
-				return true;
-			}
-			return false;
-		}
-	};
-
-	// Compare value members
-
-	static Boolean equal (CompareSet& cs,
-		I_ptr <TypeCode> left, I_ptr <TypeCode> right);
-	static Boolean equivalent (CompareSet& cs,
-		I_ptr <TypeCode> left, I_ptr <TypeCode> right);
 };
 
 template <TCKind tk>

@@ -53,7 +53,7 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (TCKind::tk_union, Base::RepositoryType::id,
+		return TypeCodeBase::equal (Base::_bridge (), TCKind::tk_union, Base::RepositoryType::id,
 			TypeCodeName <U>::name_,
 			Members::members (), Members::member_count (), other)
 			&& discriminator_tc_ptr ()->equal (other->discriminator_type ())
@@ -63,7 +63,7 @@ public:
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
 		I_ptr <TypeCode> tco = TypeCodeBase::dereference_alias (other);
-		TypeCodeBase::EqResult eq = TypeCodeBase::equivalent_ (TCKind::tk_union, Base::RepositoryType::id,
+		TypeCodeBase::EqResult eq = TypeCodeBase::equivalent_ (Base::_bridge (), TCKind::tk_union, Base::RepositoryType::id,
 			Members::members (), Members::member_count (), tco);
 		if (eq != TypeCodeBase::EqResult::UNKNOWN)
 			return eq == TypeCodeBase::EqResult::YES;

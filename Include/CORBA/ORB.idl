@@ -262,6 +262,19 @@ pseudo interface ORB
     in RepositoryId             id);
 
   ///@}
+
+  ///@{
+  /// Nirvana extensions
+  
+  struct TypeCodePair
+  {
+    Nirvana::Pointer left, right, next;
+  };
+
+  boolean type_code_pair_push (inout TypeCodePair pair);
+  void type_code_pair_pop ();
+
+  ///@}
 };
 
 };
