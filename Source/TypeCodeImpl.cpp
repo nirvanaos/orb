@@ -148,12 +148,6 @@ TypeCodeBase::EqResult TypeCodeBase::equivalent_ (TCKind tk, String_in id, ULong
 Boolean TypeCodeBase::equal_exception (String_in id, String_in name,
 	const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other)
 {
-	// Disable optimization in Debug configuration for testing purposes.
-#ifndef _DEBUG
-	if (bridge == &other)
-		return true;
-#endif
-
 	if (!equal (TCKind::tk_except, id, name, other))
 		return false;
 
