@@ -100,22 +100,11 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 
 			static_cast <ABI&> (tmp)= abi;
 		}
-
 	} else {
-
 		size_t size = rq->unmarshal_seq_begin ();
 		if (size) {
-			size_t cb = sizeof (T_Var) * size;
-			T_Var* p = (T_Var*)Nirvana::g_memory->allocate (nullptr, cb, 0);
-			try {
-				Type <T>::unmarshal_a (rq, size, p);
-			} catch (...) {
-				Nirvana::g_memory->release (p, cb);
-				throw;
-			}
-			static_cast <ABI&> (tmp).ptr = p;
-			static_cast <ABI&> (tmp).size = size;
-			static_cast <ABI&> (tmp).allocated = cb;
+			tmp.resize (size);
+			Type <T>::unmarshal_a (rq, size, tmp.data ());
 		}
 	}
 	dst = std::move (tmp);
