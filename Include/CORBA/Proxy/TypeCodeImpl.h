@@ -90,6 +90,8 @@ protected:
 		UNKNOWN
 	};
 
+	static EqResult equivalent_ (TCKind tk, String_in id, I_ptr <TypeCode> other);
+
 	// Scalar
 
 	static Boolean equal (TCKind tk, I_ptr <TypeCode> other);
@@ -148,9 +150,6 @@ protected:
 	static Boolean equivalent (Bridge <TypeCode>* bridge, String_in id,
 		ValueModifier mod, GetTypeCode base,
 		const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other);
-
-private:
-	static EqResult equivalent_ (TCKind tk, String_in id, I_ptr <TypeCode> other);
 };
 
 template <TCKind tk>

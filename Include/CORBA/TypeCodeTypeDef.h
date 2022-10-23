@@ -41,6 +41,9 @@ class TypeCodeTypeDef :
 		TypeCodeOps <void> >,
 	public TypeCodeContentType <Content>
 {
+	typedef TypeCodeStatic <TypeDef <ref>, TypeCodeTK <TCKind::tk_alias>,
+		TypeCodeOps <void> > Base;
+
 public:
 	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env)
 	{
@@ -56,12 +59,14 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (TCKind::tk_alias, ref->id, ref->name, content (), other);
+		return Base::_bridge () == &other ||
+			TypeCodeBase::equal (TCKind::tk_alias, ref->id, ref->name, content (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return content ()->equivalent (other);
+		return Base::_bridge () == &other ||
+			content ()->equivalent (other);
 	}
 
 	static size_t _s_n_size (Bridge <TypeCode>*, Interface* _env)

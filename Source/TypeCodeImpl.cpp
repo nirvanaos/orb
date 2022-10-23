@@ -188,19 +188,22 @@ Boolean TypeCodeBase::equal (Bridge <TypeCode>* bridge, TCKind tk, String_in id,
 	if (!g_ORB->type_code_pair_push (tcp))
 		return true;
 
+	bool ret = true;
 	try {
 		for (ULong i = 0; i < member_cnt; ++i) {
-			if (other->member_name (i) != members [i].name)
-				return false;
-			if (!other->member_type (i)->equal ((members [i].type) ()))
-				return false;
+			if (other->member_name (i) != members [i].name
+				|| !other->member_type (i)->equal ((members [i].type) ())
+				) {
+				ret = false;
+				break;
+			}
 		}
 	} catch (...) {
 		g_ORB->type_code_pair_pop ();
 		throw;
 	}
 	g_ORB->type_code_pair_pop ();
-	return true;
+	return ret;
 }
 
 TypeCodeBase::EqResult TypeCodeBase::equivalent_ (Bridge <TypeCode>* bridge, TCKind tk, String_in id,
@@ -222,15 +225,17 @@ TypeCodeBase::EqResult TypeCodeBase::equivalent_ (Bridge <TypeCode>* bridge, TCK
 
 	try {
 		for (ULong i = 0; i < member_cnt; ++i) {
-			if (!other->member_type (i)->equivalent ((members [i].type) ()))
-				return EqResult::NO;
+			if (!other->member_type (i)->equivalent ((members [i].type) ())) {
+				eq = EqResult::NO;
+				break;
+			}
 		}
 	} catch (...) {
 		g_ORB->type_code_pair_pop ();
 		throw;
 	}
 	g_ORB->type_code_pair_pop ();
-	return EqResult::UNKNOWN;
+	return eq;
 }
 
 Boolean TypeCodeBase::equal (Bridge <TypeCode>* bridge, String_in id, String_in name,
@@ -256,29 +261,32 @@ Boolean TypeCodeBase::equal (Bridge <TypeCode>* bridge, String_in id, String_in 
 	if (!g_ORB->type_code_pair_push (tcp))
 		return true;
 
+	bool ret = true;
 	try {
 		I_ptr <TypeCode> other_base = other->concrete_base_type ();
 		if (base) {
 			I_ptr <TypeCode> tc_base ((base)());
 			if (!other_base || !tc_base->equal (other_base))
-				return false;
+				ret = false;
 		} else if (other_base)
-			return false;
+			ret = false;
 
-		for (ULong i = 0; i < member_cnt; ++i) {
-			if (other->member_name (i) != members [i].name)
-				return false;
-			if (!other->member_type (i)->equal ((members [i].type) ()))
-				return false;
-			if (other->member_visibility (i) != members [i].visibility)
-				return false;
+		if (ret) {
+			for (ULong i = 0; i < member_cnt; ++i) {
+				if (other->member_name (i) != members [i].name
+					|| !other->member_type (i)->equal ((members [i].type) ())
+					|| other->member_visibility (i) != members [i].visibility) {
+					ret = false;
+					break;
+				}
+			}
 		}
 	} catch (...) {
 		g_ORB->type_code_pair_pop ();
 		throw;
 	}
 	g_ORB->type_code_pair_pop ();
-	return true;
+	return ret;
 }
 
 Boolean TypeCodeBase::equivalent (Bridge <TypeCode>* bridge, String_in id,
@@ -304,27 +312,31 @@ Boolean TypeCodeBase::equivalent (Bridge <TypeCode>* bridge, String_in id,
 	if (!g_ORB->type_code_pair_push (tcp))
 		return true;
 
+	bool ret = true;
 	try {
 		I_ptr <TypeCode> other_base = tco->concrete_base_type ();
 		if (base) {
 			I_ptr <TypeCode> tc_base ((base)());
 			if (!other_base || !tc_base->equivalent (other_base))
-				return false;
+				ret = false;
 		} else if (other_base)
-			return false;
+			ret = false;
 
-		for (ULong i = 0; i < member_cnt; ++i) {
-			if (!other->member_type (i)->equal ((members [i].type) ()))
-				return false;
-			if (tco->member_visibility (i) != members [i].visibility)
-				return false;
+		if (ret) {
+			for (ULong i = 0; i < member_cnt; ++i) {
+				if (!other->member_type (i)->equal ((members [i].type) ())
+					|| tco->member_visibility (i) != members [i].visibility) {
+					ret = false;
+					break;
+				}
+			}
 		}
 	} catch (...) {
 		g_ORB->type_code_pair_pop ();
 		throw;
 	}
 	g_ORB->type_code_pair_pop ();
-	return true;
+	return ret;
 }
 
 Type <String>::ABI_ret TypeCodeBase::_s_id (Bridge <TypeCode>* _b, Interface* _env)
