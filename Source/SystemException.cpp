@@ -99,7 +99,7 @@ void SystemException::_raise_by_code (Code ec, unsigned minor)
 
 void* SystemException::__data () NIRVANA_NOEXCEPT
 {
-	return &_data;
+	return &data_;
 }
 
 }

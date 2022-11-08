@@ -72,22 +72,22 @@ public:
 
 	uint32_t minor () const
 	{
-		return _data.minor;
+		return data_.minor;
 	}
 
 	void minor (uint32_t minor)
 	{
-		_data.minor = minor;
+		data_.minor = minor;
 	}
 
 	CompletionStatus completed () const
 	{
-		return _data.completed;
+		return data_.completed;
 	}
 
 	void completed (CompletionStatus status)
 	{
-		_data.completed = status;
+		data_.completed = status;
 	}
 
 	static const SystemException* _downcast (const Exception* ep)
@@ -108,6 +108,11 @@ public:
 	static SystemException* _narrow (Exception* ep)
 	{
 		return _downcast (ep);
+	}
+
+	const _Data& _data () const NIRVANA_NOEXCEPT
+	{
+		return data_;
 	}
 
 	static const Internal::ExceptionEntry* _get_exception_entry (Internal::String_in rep_id, Code hint = Exception::EC_USER_EXCEPTION);
@@ -137,28 +142,28 @@ public:
 protected:
 	SystemException ()
 	{
-		_data.minor = 0;
-		_data.completed = COMPLETED_NO;
+		data_.minor = 0;
+		data_.completed = COMPLETED_NO;
 	}
 
 	SystemException (const SystemException& src) :
-		_data (src._data)
+		data_ (src.data_)
 	{}
 
 	SystemException (ULong minor, CompletionStatus status = COMPLETED_NO)
 	{
-		_data.minor = minor;
-		_data.completed = status;
+		data_.minor = minor;
+		data_.completed = status;
 	}
 
 	SystemException& operator = (const SystemException& src)
 	{
-		_data = src._data;
+		data_ = src.data_;
 		return *this;
 	}
 
 private:
-	_Data _data;
+	_Data data_;
 
 	struct ExceptionEntry
 	{
