@@ -54,15 +54,14 @@ void ProxyRoot::check_request (IORequest::_ptr_type rq)
 		Any ex;
 		try {
 			Type <Any>::unmarshal (rq, ex);
-
-			std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type se;
-			if (ex >>= reinterpret_cast <SystemException&> (se))
-				reinterpret_cast <SystemException&> (se)._raise ();
-			else
-				throw UnknownUserException (std::move (ex));
 		} catch (...) {
 			throw UNKNOWN ();
 		}
+		std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type se;
+		if (ex >>= reinterpret_cast <SystemException&> (se))
+			reinterpret_cast <SystemException&> (se)._raise ();
+		else
+			throw UnknownUserException (std::move (ex));
 	}
 }
 
