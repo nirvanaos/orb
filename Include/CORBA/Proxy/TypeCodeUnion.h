@@ -73,7 +73,7 @@ public:
 
 	static Type <Any>::ABI_ret _s_member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env)
 	{
-		if (index >= std::size (labels_)) {
+		if (index >= countof (labels_)) {
 			set_Bounds (_env);
 			return Type <Any>::ret ();
 		}
@@ -112,7 +112,7 @@ private:
 template <class U>
 bool TypeCodeUnion <U>::labels_equal (I_ptr <TypeCode> other)
 {
-	for (ULong i = 0; i < std::size (labels_); ++i) {
+	for (ULong i = 0; i < countof (labels_); ++i) {
 		Any label_any = other->member_label (i);
 		DiscriminatorType label;
 		if (!(label_any >>= label) || labels_ [i] != label)
