@@ -62,21 +62,26 @@ struct Parameter
 	const GetTypeCode type;
 };
 
+typedef Nirvana::ImportInterfaceT <TypeCode> TypeCodeImport;
+
 /// Operation metadata.
 struct Operation
 {
 	const Char* name; ///< The operation name.
 	CountedArray <Parameter> input; ///< in and inout parameters.
 	CountedArray <Parameter> output; ///< out and inout parameters.
+	CountedArray <const TypeCodeImport*> user_exceptions; ///< User exception type codes
 	GetTypeCode return_type; ///< Operation return type.
 	RequestProc invoke; ///< Invoke request procedure.
 	uint16_t flags; ///< Operation flags.
 
-	/// Operation receives one or more object references or value types.
-	static const uint16_t FLAG_IN_OBJ = 1;
+	/// Operation receives one or more parameters with complex unmarshaling:
+	/// object refrence, value type, type code or any.
+	static const uint16_t FLAG_IN_CPLX = 1;
 
-	/// Operation returns one or more object references or value types.
-	static const uint16_t FLAG_OUT_OBJ = 2;
+	/// Operation returns one or more parameters with complex unmarshaling:
+	/// object refrence, value type, type code or any.
+	static const uint16_t FLAG_OUT_CPLX = 2;
 };
 
 /// Interface metadata.
