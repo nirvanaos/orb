@@ -71,7 +71,7 @@ struct Operation
 	CountedArray <Parameter> input; ///< in and inout parameters.
 	CountedArray <Parameter> output; ///< out and inout parameters.
 	CountedArray <const TypeCodeImport*> user_exceptions; ///< User exception type codes
-	GetTypeCode return_type; ///< Operation return type.
+	GetTypeCode return_type; ///< Operation return type. `nullptr` for `void` operations.
 	RequestProc invoke; ///< Invoke request procedure.
 	uint16_t flags; ///< Operation flags.
 
