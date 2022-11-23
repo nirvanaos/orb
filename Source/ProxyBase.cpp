@@ -50,19 +50,18 @@ bool ProxyRoot::call_request_proc (RqProcInternal proc, Interface* servant, Inte
 
 void ProxyRoot::check_request (IORequest::_ptr_type rq)
 {
-	if (rq->is_exception ()) {
-		Any ex;
-		try {
-			Type <Any>::unmarshal (rq, ex);
-		} catch (...) {
-			throw UNKNOWN ();
-		}
-		std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type se;
-		if (ex >>= reinterpret_cast <SystemException&> (se))
-			reinterpret_cast <SystemException&> (se)._raise ();
-		else
-			throw UnknownUserException (std::move (ex));
+	Any ex;
+	try {
+		if (!rq->get_exception (ex))
+			return;
+	} catch (...) {
+		throw UNKNOWN ();
 	}
+	std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type se;
+	if (ex >>= reinterpret_cast <SystemException&> (se))
+		reinterpret_cast <SystemException&> (se)._raise ();
+	else
+		throw UnknownUserException (std::move (ex));
 }
 
 }

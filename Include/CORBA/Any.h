@@ -318,6 +318,7 @@ struct Type <Any> : public TypeVarLen <Any>
 	static void marshal_in (const Any& src, IORequest_ptr rq);
 	static void marshal_out (Any& src, IORequest_ptr rq);
 	static void unmarshal (IORequest_ptr rq, Any& dst);
+	static void unmarshal (Internal::I_ptr <TypeCode> tc, IORequest_ptr rq, Any& dst);
 };
 
 }

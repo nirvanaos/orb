@@ -220,8 +220,11 @@ pseudo interface IORequest
   /// Invoke request.
   void invoke ();
 
-  /// Check if the request is completed with an exception.
-  readonly attribute boolean is_exception;
+  /// Unmarshal exception.
+  /// \param [out] e If request completed with exception, receives the exception.
+  ///                Otherwise unchanged.
+  /// \returns `true` if e contains an exception.
+  boolean get_exception (out any e);
 
   ///@}
 

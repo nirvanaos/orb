@@ -57,10 +57,15 @@ void Type <Any>::marshal_out (Any& src, IORequest_ptr rq)
 void Type <Any>::unmarshal (IORequest_ptr rq, Any& dst)
 {
 	I_ref <TypeCode> tc = rq->unmarshal_type_code ();
+	unmarshal (tc, rq, dst);
+}
+
+void Type <Any>::unmarshal (I_ptr <TypeCode> tc, IORequest_ptr rq, Any& dst)
+{
 	if (tc && tc->kind () != TCKind::tk_void) {
 		void* p = dst.prepare (tc);
 		tc->n_unmarshal (rq, 1, p);
-		dst.set_type (std::move (tc));
+		dst.set_type (tc);
 	}
 }
 
