@@ -43,8 +43,7 @@ void marshal_members (const MT* begin, const void* end, IORequest_ptr rq)
 template <typename MT> inline
 bool unmarshal_members (IORequest_ptr rq, MT* begin, const void* end)
 {
-	size_t size = (const Octet*)&end - (const Octet*)&begin;
-	return rq->unmarshal (alignof (MT), size, begin);
+	return rq->unmarshal (alignof (MT), (const Octet*)end - (const Octet*)begin, begin);
 }
 
 }
