@@ -93,7 +93,7 @@ public:
 		release ();
 	}
 
-	servant_reference& operator = (nullptr_t) NIRVANA_NOEXCEPT
+	servant_reference& operator = (nullptr_t)
 	{
 		reset (nullptr);
 		return *this;
@@ -153,8 +153,13 @@ protected:
 
 	void release () NIRVANA_NOEXCEPT
 	{
-		if (p_)
-			p_->_remove_ref ();
+		if (p_) {
+			try {
+				p_->_remove_ref ();
+			} catch (...) {
+				assert (false);
+			}
+		}
 	}
 
 private:
@@ -170,7 +175,7 @@ private:
 		}
 	}
 
-	void reset (nullptr_t) NIRVANA_NOEXCEPT
+	void reset (nullptr_t)
 	{
 		if (p_) {
 			p_->_remove_ref ();
