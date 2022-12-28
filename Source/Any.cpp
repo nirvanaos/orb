@@ -64,6 +64,7 @@ void Type <Any>::unmarshal (I_ptr <TypeCode> tc, IORequest_ptr rq, Any& dst)
 {
 	if (tc && tc->kind () != TCKind::tk_void) {
 		void* p = dst.prepare (tc);
+		tc->n_construct (p);
 		tc->n_unmarshal (rq, 1, p);
 		dst.set_type (tc);
 	}
@@ -97,8 +98,6 @@ void* Any::prepare (I_ptr <TypeCode> tc)
 	void* dst = nullptr;
 	if (tc) {
 		size_t size = tc->n_size ();
-		if (!size)
-			::Nirvana::throw_BAD_TYPECODE ();
 		if (size <= SMALL_CAPACITY)
 			dst = small_pointer ();
 		else
