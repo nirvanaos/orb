@@ -44,16 +44,16 @@ class TypeCode;
 namespace Internal {
 
 template <>
-struct alignas (sizeof (uintptr_t)) ABI <Any>
+struct ABI <Any>
 {
 	/// Pointer to TypeCode and large data flag in the least significant bit.
 	uintptr_t type_code;
 
-	struct alignas (sizeof (void*))
+	struct alignas (sizeof (void*) > 8 ? sizeof (void*) : 8)
 	{
-		void* p;	//< Pointer to large data
-		size_t size;	//< Large data allocated size
-		size_t padding; //< Padding to make small data size enough
+		void* p; //< Pointer to large data
+		size_t size; //< Large data allocated size
+		size_t padding; //< Padding to make small data size enough for string and sequence
 	} data;
 
 	static const size_t SMALL_CAPACITY = sizeof (data);

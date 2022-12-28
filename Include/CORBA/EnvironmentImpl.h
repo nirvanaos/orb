@@ -36,7 +36,7 @@ namespace CORBA {
 namespace Internal {
 
 class EnvironmentBase :
-	public Bridge < ::CORBA::Environment>
+	public Bridge <CORBA::Environment>
 {
 public:
 	void exception_set (Short code, String_in rep_id, void* param,
@@ -89,7 +89,7 @@ private:
 private:
 	union Data
 	{
-		int small [(sizeof (SystemException) + sizeof (int) - 1) / sizeof (int)];
+		uintptr_t small [(sizeof (SystemException) + sizeof (uintptr_t) - 1) / sizeof (uintptr_t)];
 		struct
 		{
 			// If small data contains Exception object, the first word of it
