@@ -5,7 +5,6 @@
 #include <Nirvana/Legacy/Runnable_s.h>
 #include <functional>
 
-using namespace std;
 using namespace CORBA;
 
 /*
@@ -42,7 +41,7 @@ TEST_F (TestORB, RepositoryId)
 	const char rep_id1 [] = "IDL:Test/I1:1.0";
 	const char rep_id3 [] = "IDL:Test/I3:1.0";
 
-	EXPECT_LT (CORBA::Internal::RepId::compare (rep_id1, size (rep_id1) - 1, rep_id3, size (rep_id3) - 1), 0);
+	EXPECT_LT (CORBA::Internal::RepId::compare (rep_id1, std::size (rep_id1) - 1, rep_id3, std::size (rep_id3) - 1), 0);
 }
 
 TEST_F (TestORB, CORBA_Environment)
@@ -78,7 +77,7 @@ TEST_F (TestORB, Environment)
 	const CORBA::Exception* ex = ne.exception ();
 	ASSERT_TRUE (ex);
 	EXPECT_STREQ (ex->_name (), "NO_MEMORY");
-	CORBA::Internal::Environment ne1 (move (ne));
+	CORBA::Internal::Environment ne1 (std::move (ne));
 	EXPECT_FALSE (ne.exception ());
 	ex = ne1.exception ();
 	ASSERT_TRUE (ex);
