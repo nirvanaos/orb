@@ -37,7 +37,9 @@ namespace std {
 template <class T> class allocator;
 template <class C, class T, class A> class basic_string;
 template <class C> struct char_traits;
-template <typename C, class T> class basic_string <C, T, allocator <C> >;
+#ifdef NIRVANA_C17
+template <typename C, class T> class basic_string_view;
+#endif
 }
 
 namespace CORBA {
