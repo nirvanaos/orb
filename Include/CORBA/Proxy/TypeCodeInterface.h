@@ -57,11 +57,11 @@ public:
 	{
 		switch (Type <I>::tc_kind) {
 			case TCKind::tk_abstract_interface:
-				return g_ORB->create_abstract_interface_tc (Base::RepositoryType::id, nullptr);
+				return g_ORB->create_abstract_interface_tc (Base::RepositoryType::id, IDL::String ());
 			case TCKind::tk_local_interface:
-				return g_ORB->create_local_interface_tc (Base::RepositoryType::id, nullptr);
+				return g_ORB->create_local_interface_tc (Base::RepositoryType::id, IDL::String ());
 			default:
-				return g_ORB->create_interface_tc (Base::RepositoryType::id, nullptr);
+				return g_ORB->create_interface_tc (Base::RepositoryType::id, IDL::String ());
 		}
 	}
 };

@@ -55,7 +55,7 @@ public:
 
 	static I_ref <TypeCode> get_compact_typecode ()
 	{
-		return g_ORB->create_native_tc (Base::RepositoryType::id, nullptr);
+		return g_ORB->create_native_tc (Base::RepositoryType::id, IDL::String ());
 	}
 };
 

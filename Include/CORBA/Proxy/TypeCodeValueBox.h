@@ -61,7 +61,7 @@ public:
 
 	static I_ref <TypeCode> get_compact_typecode ()
 	{
-		return g_ORB->create_value_box_tc (Base::RepositoryType::id, nullptr, content ());
+		return g_ORB->create_value_box_tc (Base::RepositoryType::id, IDL::String (), content ());
 	}
 
 private:
