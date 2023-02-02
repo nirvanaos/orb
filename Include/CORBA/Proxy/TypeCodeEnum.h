@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_TYPECODEENUM_H_
 #define NIRVANA_ORB_TYPECODEENUM_H_
 
-#include "TypeCodeImpl.h"
+#include "../TypeCodeImpl.h"
 #include "../TypeEnum.h"
 
 namespace CORBA {
@@ -68,6 +68,11 @@ public:
 		return Base::_bridge () == &other ||
 			TypeCodeBase::equivalent_ (TCKind::tk_enum, Base::RepositoryType::id,
 				Type <E>::count_, TypeCodeBase::dereference_alias (other)) != TypeCodeBase::EqResult::NO;
+	}
+
+	static I_ref <TypeCode> get_compact_typecode ()
+	{
+		return g_ORB->create_enum_tc (RepIdOf <E>::id, nullptr, EnumMemberSeq (Type <E>::count_));
 	}
 
 private:

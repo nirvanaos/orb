@@ -48,7 +48,10 @@
 #include "ValueFactoryBase.h"
 #include "Union.h"
 #include "TypeCodeTypeDef.h"
-#include "ORB.h"
+#include "TypeCodeString.h"
+#include "TypeCodeArray.h"
+#include "TypeCodeSequence.h"
+#include "TypeCodeFixed.h"
 #include "ServantLocator_native.h"
 #include "String_compat.h"
 

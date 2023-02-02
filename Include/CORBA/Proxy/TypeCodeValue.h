@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_TYPECODEVALUE_H_
 #define NIRVANA_ORB_TYPECODEVALUE_H_
 
-#include "TypeCodeImpl.h"
+#include "../TypeCodeImpl.h"
 
 namespace CORBA {
 namespace Internal {
@@ -56,6 +56,11 @@ public:
 	{
 		return TypeCodeBase::equivalent (Base::_bridge (), Base::RepositoryType::id,
 			VM_ABSTRACT, nullptr, nullptr, 0, other);
+	}
+
+	static I_ref <TypeCode> get_compact_typecode ()
+	{
+		return g_ORB->get_compact_typecode (Base::_get_ptr ());
 	}
 
 	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) NIRVANA_NOEXCEPT
@@ -223,6 +228,11 @@ public:
 	{
 		return TypeCodeBase::equivalent (Base::_bridge (), Base::RepositoryType::id,
 			vm, base, Members::members (), Members::member_count (), other);
+	}
+
+	static I_ref <TypeCode> get_compact_typecode ()
+	{
+		return g_ORB->get_compact_typecode (Base::_get_ptr ());
 	}
 
 	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env)

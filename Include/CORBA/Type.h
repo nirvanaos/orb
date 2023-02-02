@@ -38,10 +38,6 @@
 #include "ValueBase.inl"
 #include "ValueBox.h"
 #include "AbstractBase.inl"
-#include "Proxy/TypeCodeString.h"
-#include "Proxy/TypeCodeSequence.h"
-#include "Proxy/TypeCodeArray.h"
-#include "Proxy/TypeCodeFixed.h"
 
 namespace CORBA {
 namespace Internal {

@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_TYPECODETYPEDEF_H_
 
 #include "TypeAlias.h"
-#include "Proxy/TypeCodeImpl.h"
+#include "TypeCodeImpl.h"
 
 namespace CORBA {
 namespace Internal {

@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_TYPECODENATIVE_H_
 #define NIRVANA_ORB_TYPECODENATIVE_H_
 
-#include "TypeCodeImpl.h"
+#include "../TypeCodeImpl.h"
 
 namespace CORBA {
 namespace Internal {
@@ -51,6 +51,11 @@ public:
 	{
 		return Base::_bridge () == &other ||
 			Base::equivalent (other);
+	}
+
+	static I_ref <TypeCode> get_compact_typecode ()
+	{
+		return g_ORB->create_native_tc (Base::RepositoryType::id, nullptr);
 	}
 };
 

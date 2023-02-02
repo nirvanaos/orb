@@ -33,8 +33,6 @@
 #include "IOReference.h"
 #include "../IORequestClient.h"
 #include "ProxyBase.h"
-#include "TypeCodeString.h"
-#include "TypeCodeSequence.h"
 #include "TypeCodeException.h"
 #include "TypeCodeEnum.h"
 #include "TypeCodeStruct.h"
@@ -43,8 +41,6 @@
 #include "TypeCodeValue.h"
 #include "TypeCodeValueBox.h"
 #include "TypeCodeNative.h"
-#include "TypeCodeArray.h"
-#include "TypeCodeFixed.h"
 #include "ValueFactoryImpl.h"
 #include <Nirvana/OLF.h>
 

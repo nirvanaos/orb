@@ -52,9 +52,6 @@ struct CountedArray
 	size_t size;
 };
 
-/// Function to return TypeCode
-typedef I_ptr <TypeCode> (*GetTypeCode) ();
-
 /// Parameter metadata.
 struct Parameter
 {

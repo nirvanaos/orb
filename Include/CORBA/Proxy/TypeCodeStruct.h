@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_TYPECODESTRUCT_H_
 #define NIRVANA_ORB_TYPECODESTRUCT_H_
 
-#include "TypeCodeImpl.h"
+#include "../TypeCodeImpl.h"
 #include "TypeCodeMembers.h"
 
 namespace CORBA {
@@ -61,6 +61,12 @@ public:
 		return TypeCodeBase::equivalent_ (Base::_bridge (), TCKind::tk_struct, Base::RepositoryType::id,
 			Members::members (), Members::member_count (), TypeCodeBase::dereference_alias (other)) != TypeCodeBase::EqResult::NO;
 	}
+
+	static I_ref <TypeCode> get_compact_typecode ()
+	{
+		return g_ORB->get_compact_typecode (Base::_get_ptr ());
+	}
+
 };
 
 }

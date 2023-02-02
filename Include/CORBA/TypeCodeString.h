@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_TYPECODESTRING_H_
 
 #include "TypeCodeImpl.h"
-#include "../String.inl"
+#include "String.inl"
 
 namespace CORBA {
 namespace Internal {

@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_TYPECODEEXCEPTION_H_
 #define NIRVANA_ORB_TYPECODEEXCEPTION_H_
 
-#include "TypeCodeImpl.h"
+#include "../TypeCodeImpl.h"
 #include "TypeCodeMembers.h"
 
 namespace CORBA {
@@ -62,6 +62,11 @@ public:
 	{
 		return Base::_bridge () == &other ||
 			TypeCodeBase::equal (TCKind::tk_except, RepIdOf <E>::id, other);
+	}
+
+	static I_ref <TypeCode> get_compact_typecode ()
+	{
+		return g_ORB->get_compact_typecode (Base::_get_ptr ());
 	}
 };
 

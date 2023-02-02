@@ -29,7 +29,7 @@
 #pragma once
 
 #include "TypeCodeImpl.h"
-#include "../Type_fixed.inl"
+#include "Type_fixed.inl"
 
 namespace CORBA {
 namespace Internal {

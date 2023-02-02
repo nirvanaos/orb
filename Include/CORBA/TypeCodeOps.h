@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_TYPECODEOPS_H_
 #define NIRVANA_ORB_TYPECODEOPS_H_
 
-#include "../Type.h"
+#include "Type.h"
 #include <new>
 
 namespace CORBA {

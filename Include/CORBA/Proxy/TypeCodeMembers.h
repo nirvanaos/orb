@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_TYPECODEMEMBERS_H_
 #define NIRVANA_ORB_TYPECODEMEMBERS_H_
 
-#include "TypeCodeImpl.h"
+#include "../TypeCodeImpl.h"
 #include "InterfaceMetadata.h"
 #include <type_traits>
 

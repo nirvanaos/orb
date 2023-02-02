@@ -24,6 +24,7 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/CORBA.h>
+#include <CORBA/Proxy/InterfaceMetadata.h>
 
 namespace CORBA {
 namespace Internal {

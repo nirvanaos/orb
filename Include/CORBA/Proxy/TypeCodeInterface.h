@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_TYPECODEINTERFACE_H_
 #define NIRVANA_ORB_TYPECODEINTERFACE_H_
 
-#include "TypeCodeImpl.h"
+#include "../TypeCodeImpl.h"
 
 namespace CORBA {
 namespace Internal {
@@ -51,6 +51,18 @@ public:
 	{
 		return Base::_bridge () == &other ||
 			Base::equivalent (other);
+	}
+
+	static I_ref <TypeCode> get_compact_typecode ()
+	{
+		switch (Type <I>::tc_kind) {
+			case TCKind::tk_abstract_interface:
+				return g_ORB->create_abstract_interface_tc (Base::RepositoryType::id, nullptr);
+			case TCKind::tk_local_interface:
+				return g_ORB->create_local_interface_tc (Base::RepositoryType::id, nullptr);
+			default:
+				return g_ORB->create_interface_tc (Base::RepositoryType::id, nullptr);
+		}
 	}
 };
 

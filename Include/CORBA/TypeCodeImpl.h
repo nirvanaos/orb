@@ -28,14 +28,16 @@
 #define NIRVANA_ORB_TYPECODEIMPL_H_
 #pragma once
 
-#include "../ImplementationPseudo.h"
-#include "../ImplementationPseudoStatic.h"
-#include "../TypeCode_s.h"
-#include "InterfaceMetadata.h"
+#include "ImplementationPseudo.h"
+#include "ImplementationPseudoStatic.h"
+#include "TypeCode_s.h"
 #include "TypeCodeOps.h"
 
 namespace CORBA {
 namespace Internal {
+
+/// Function to return TypeCode
+typedef I_ptr <TypeCode> (*GetTypeCode) ();
 
 void set_BadKind (Interface* env) NIRVANA_NOEXCEPT;
 void set_Bounds (Interface* env) NIRVANA_NOEXCEPT;
@@ -53,6 +55,8 @@ Type <String>::ABI_ret const_string_ret_p (const Char* s) NIRVANA_NOEXCEPT
 	StringView <Char> sb (s);
 	return Type <String>::ret (std::move (reinterpret_cast <String&> (sb)));
 }
+
+struct Parameter;
 
 struct StateMember
 {
@@ -241,7 +245,7 @@ public:
 	// name fields, but it leaves all alias typecodes intact.
 	I_ref <TypeCode> get_compact_typecode () NIRVANA_NOEXCEPT
 	{
-		// Currently, we don't strip names, just return this type code.
+		// By default, we don't strip names, just return this type code.
 		return I_ptr <TypeCode> (&static_cast <TypeCode&> (static_cast <Bridge <TypeCode>&> (static_cast <S&> (*this))));
 	}
 };
