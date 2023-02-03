@@ -51,15 +51,12 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (Base::_bridge (), TCKind::tk_struct, Base::RepositoryType::id,
-			TypeCodeName <S>::name_,
-			Members::members (), Members::member_count (), other);
+		return g_ORB->tc_equal (Base::_get_ptr (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent_ (Base::_bridge (), TCKind::tk_struct, Base::RepositoryType::id,
-			Members::members (), Members::member_count (), TypeCodeBase::dereference_alias (other)) != TypeCodeBase::EqResult::NO;
+		return g_ORB->tc_equivalent (Base::_get_ptr (), other);
 	}
 
 	static I_ref <TypeCode> get_compact_typecode ()

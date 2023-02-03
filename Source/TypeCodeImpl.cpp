@@ -42,6 +42,8 @@ void set_Bounds (Interface* env) NIRVANA_NOEXCEPT
 I_ptr <TypeCode> TypeCodeBase::dereference_alias (I_ptr <TypeCode> tc)
 {
 	while (tc && TCKind::tk_alias == tc->kind ()) {
+		// tc->content_type () returns _ref_type
+		// but we can safely release it because it is always held.
 		tc = tc->content_type ();
 	}
 	return tc;

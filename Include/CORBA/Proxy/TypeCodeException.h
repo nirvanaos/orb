@@ -54,14 +54,12 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
-		return Base::_bridge () == &other ||
-			TypeCodeBase::equal_exception (RepIdOf <E>::id, E::__name (), Members::members (), Members::member_count (), other);
+		return g_ORB->tc_equal (Base::_get_ptr (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
 	{
-		return Base::_bridge () == &other ||
-			TypeCodeBase::equal (TCKind::tk_except, RepIdOf <E>::id, other);
+		return g_ORB->tc_equivalent (Base::_get_ptr (), other);
 	}
 
 	static I_ref <TypeCode> get_compact_typecode ()

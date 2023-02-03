@@ -48,14 +48,12 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (Base::_bridge (), Base::RepositoryType::id,
-			TypeCodeName <I>::name_, VM_ABSTRACT, nullptr, nullptr, 0, other);
+		return g_ORB->tc_equal (Base::_get_ptr (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (Base::_bridge (), Base::RepositoryType::id,
-			VM_ABSTRACT, nullptr, nullptr, 0, other);
+		return g_ORB->tc_equivalent (Base::_get_ptr (), other);
 	}
 
 	static I_ref <TypeCode> get_compact_typecode ()
@@ -220,14 +218,12 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equal (Base::_bridge (), Base::RepositoryType::id, Name::name_,
-			vm, base, Members::members (), Members::member_count (), other);
+		return g_ORB->tc_equal (Base::_get_ptr (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return TypeCodeBase::equivalent (Base::_bridge (), Base::RepositoryType::id,
-			vm, base, Members::members (), Members::member_count (), other);
+		return g_ORB->tc_equivalent (Base::_get_ptr (), other);
 	}
 
 	static I_ref <TypeCode> get_compact_typecode ()

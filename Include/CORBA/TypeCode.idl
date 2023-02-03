@@ -66,7 +66,7 @@ pseudo interface TypeCode
 	
 	///@{ For tk_union
 	
-	/// Member_label returns the label of the union member identified by index.For the default member,
+	/// Member_label returns the label of the union member identified by index. For the default member,
 	/// the label is the zero octet.
 	any member_label (in unsigned long index) raises (BadKind, Bounds);
 	TypeCode discriminator_type () raises (BadKind);

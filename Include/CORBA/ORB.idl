@@ -276,6 +276,9 @@ pseudo interface ORB
 
   TypeCode get_compact_typecode (in TypeCode tc);
 
+  boolean tc_equal (in TypeCode left, in TypeCode right);
+  boolean tc_equivalent (in TypeCode left, in TypeCode right);
+
   ///@}
 };
 

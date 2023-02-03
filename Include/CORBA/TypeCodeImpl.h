@@ -84,9 +84,9 @@ public:
 	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env);
 	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env);
 
-protected:
 	static I_ptr <TypeCode> dereference_alias (I_ptr <TypeCode> tc);
 
+protected:
 	enum class EqResult
 	{
 		YES,
