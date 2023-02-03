@@ -132,28 +132,6 @@ protected:
 	static EqResult equivalent_ (TCKind tk, String_in id, ULong member_cnt,
 		I_ptr <TypeCode> other);
 
-	// Exception
-
-	static Boolean equal_exception (String_in id, String_in name,
-		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
-
-	// Struct/union
-
-	static Boolean equal (Bridge <TypeCode>* bridge, TCKind tk, String_in id, String_in name,
-		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
-
-	static EqResult equivalent_ (Bridge <TypeCode>* bridge, TCKind tk, String_in id,
-		const Parameter* members, ULong member_cnt, I_ptr <TypeCode> other);
-
-	// Value type
-
-	static Boolean equal (Bridge <TypeCode>* bridge, String_in id, String_in name,
-		ValueModifier mod, GetTypeCode base,
-		const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other);
-
-	static Boolean equivalent (Bridge <TypeCode>* bridge, String_in id,
-		ValueModifier mod, GetTypeCode base,
-		const StateMember* members, ULong member_cnt, I_ptr <TypeCode> other);
 };
 
 template <TCKind tk>
