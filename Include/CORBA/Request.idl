@@ -1,5 +1,7 @@
 /// \file
 /// CORBA 3.0, Chapter 7
+#ifndef CORBA_REQUEST_IDL_
+#define CORBA_REQUEST_IDL_
 
 #include "TypeCode.idl"
 
@@ -13,21 +15,21 @@ pseudo interface Request
  {
 
   void add_arg (
-      in Identifier   name,       // argument name
-      in TypeCode     arg_type,   // argument datatype
-      in OpaqueValue  value,      // argument value to be added
-      in long         len,        // length/count of argument value
-      in Flags        arg_flags   // argument flags
+    in Identifier   name,       // argument name
+    in TypeCode     arg_type,   // argument datatype
+    in OpaqueValue  value,      // argument value to be added
+    in long         len,        // length/count of argument value
+    in Flags        arg_flags   // argument flags
   );
 
   void invoke (
-      in Flags        invoke_flags    // invocation flags
+    in Flags        invoke_flags    // invocation flags
   );
 
   void delete ();
 
   void send (
-      in Flags        invoke_flags    // invocation flags 
+    in Flags        invoke_flags    // invocation flags 
   );
 
   void get_response () raises (WrongTransaction);
@@ -43,3 +45,4 @@ pseudo interface Request
 
 };
 
+#endif // CORBA_REQUEST_IDL_

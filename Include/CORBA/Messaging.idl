@@ -1,13 +1,13 @@
 // File: Messaging.idl
 // CORBA 3.0, Chapter 22
 
-#ifndef _MESSAGING_IDL_
-#define _MESSAGING_IDL_
+#ifndef MESSAGING_IDL_
+#define MESSAGING_IDL_
 
 #include "Dynamic.idl"
 #include "Policy.idl"
 #include "Pollable.idl"
-#include <Nirvana/TimeBase.idl>
+#include "TimeBase.idl"
 
 module Messaging {
 
@@ -188,4 +188,4 @@ abstract valuetype Poller : CORBA::Pollable
 
 }; // module Messaging
 
-#endif // _MESSAGING_IDL_
+#endif // MESSAGING_IDL_

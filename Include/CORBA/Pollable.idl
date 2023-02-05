@@ -1,7 +1,9 @@
 // File: CORBA_Pollable.idl
 // CORBA 3.0, Chapter 7
-
 // interface for the Pollable sets of invocations
+#ifndef CORBA_POLLABLE_IDL_
+#define CORBA_POLLABLE_IDL_
+
 module CORBA {
 
 typeprefix CORBA "omg.org";
@@ -34,3 +36,5 @@ local interface PollableSet
 };
 
 };
+
+#endif // CORBA_POLLABLE_IDL_

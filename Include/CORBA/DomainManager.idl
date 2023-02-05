@@ -1,6 +1,9 @@
 // File: CORBA_DomainManager.idl
 // CORBA 3.0, Chapter 4
 
+#ifndef CORBA_DOMAINMANAGER_IDL_
+#define CORBA_DOMAINMANAGER_IDL_
+
 #include "InterfaceRepository.idl"
 #include "Policy.idl"
 
@@ -28,3 +31,5 @@ interface ConstructionPolicy : Policy
 typedef sequence <DomainManager> DomainManagersList;
 
 };
+
+#endif // CORBA_DOMAINMANAGER_IDL_

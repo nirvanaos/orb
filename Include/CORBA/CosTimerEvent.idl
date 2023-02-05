@@ -1,0 +1,49 @@
+// CORBA Timer Event Service
+#ifndef COSTIMEREVENT_IDL_
+#define COSTIMEREVENT_IDL_
+
+#include "CosTime.idl"
+#include "CosEventComm.idl"
+
+module CosTimerEvent {
+
+enum TimeType
+{
+	TTAbsolute,
+	TTRelative,
+	TTPeriodic
+};
+
+enum EventStatus
+{
+	ESTimeSet,
+	ESTimeCleared,
+	ESTriggered,
+	ESFailedTrigger
+};
+
+struct TimerEventT
+{
+	TimeBase::UtcT utc;
+	any event_data;
+};
+
+local interface TimerEventHandler
+{
+	readonly attribute EventStatus status;
+	boolean time_set (out CosTime::UTO uto);
+	void SetTimer (in TimeType time_type, in CosTime::UTO trigger_time);
+	boolean cancel_timer ();
+	void set_data (in any event_data);
+};
+
+local interface TimerEventService
+{
+	TimerEventHandler register (in CosEventComm::PushConsumer event_interface, in any data);
+	void unregister (in TimerEventHandler timer_event_handler);
+	CosTime::UTO event_time (in TimerEventT timer_event);
+};
+
+};
+
+#endif // COSTIMEREVENT_IDL_

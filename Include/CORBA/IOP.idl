@@ -1,7 +1,7 @@
 // File: IOP.idl
 // From CORBA 3.0: Chapter 13, ORB Interoperability Achitecture
-#ifndef _IOP_IDL_
-#define _IOP_IDL_
+#ifndef IOP_IDL_
+#define IOP_IDL_
 
 #include "TypeCode.idl"
 
@@ -76,6 +76,7 @@ const ComponentId           TAG_SCCP_CONTACT_INFO       = 24;
 const ComponentId           TAG_JAVA_CODEBASE           = 25;
 
 const ComponentId           TAG_TRANSACTION_POLICY      = 26;
+const ComponentId           TAG_FT_HEARTBEAT_ENABLED    = 29;
 const ComponentId           TAG_MESSAGE_ROUTER          = 30;
 const ComponentId           TAG_OTS_POLICY              = 31;
 const ComponentId           TAG_INV_POLICY              = 32;
@@ -168,5 +169,5 @@ local interface CodecFactory {
 
 };
 
-#endif  // _IOP_IDL_
+#endif  // IOP_IDL_
 

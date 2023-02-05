@@ -1,0 +1,46 @@
+//
+// File: FT.idl
+// CORBA 3.0 Chapter 23
+
+// Reduced. Only heartbeat feature is supported.
+
+#ifndef FT_IDL_
+#define FT_IDL_
+
+#pragma prefix "omg.org"
+#include "TimeBase.idl"
+#include "IOP.idl"
+#include "Policy.idl"
+
+module FT {
+
+#ifndef _PRE_3_0_COMPILER_
+	typeprefix FT "omg.org";
+#endif // _PRE_3_0_COMPILER_
+
+	// Specification for Transport Heartbeats
+	const CORBA::PolicyType HEARTBEAT_POLICY = 48;
+	const CORBA::PolicyType HEARTBEAT_ENABLED_POLICY =  49;
+
+  struct TagFTHeartbeatEnabledTaggedComponent { 
+		// tag = TAG_FT_HEARTBEAT_ENABLED;
+		boolean heartbeat_enabled;
+	};
+
+	struct HeartbeatPolicyValue {
+		boolean heartbeat;
+		TimeBase::TimeT heartbeat_interval;
+		TimeBase::TimeT heartbeat_timeout;
+	};
+
+	interface HeartbeatPolicy : CORBA::Policy {
+		readonly attribute HeartbeatPolicyValue heartbeat_policy_value;
+	};
+
+	interface HeartbeatEnabledPolicy : CORBA::Policy {
+		readonly attribute boolean heartbeat_enabled_policy_value;
+	};
+
+};
+
+#endif // FT_IDL_

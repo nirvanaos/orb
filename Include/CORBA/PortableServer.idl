@@ -294,4 +294,3 @@ local interface Current : CORBA::Current
 };
 
 #endif
-

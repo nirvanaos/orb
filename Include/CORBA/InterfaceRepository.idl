@@ -1,6 +1,8 @@
 /// \file
 /// Interface Repository
 /// CORBA 3.0, Chapter 10
+#ifndef CORBA_INTERFACEREPOSITORY_IDL_
+#define CORBA_INTERFACEREPOSITORY_IDL_
 
 #include "TypeCode.idl"
 
@@ -879,3 +881,5 @@ struct HomeDescription
 #endif // _COMPONENT_REPOSITORY_
 
 };
+
+#endif // CORBA_INTERFACEREPOSITORY_IDL_

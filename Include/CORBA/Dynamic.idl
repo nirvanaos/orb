@@ -1,8 +1,8 @@
 // File: Dynamic.idl
 // CORBA 3.0, Chapter 21
 
-#ifndef _DYNAMIC_IDL_
-#define _DYNAMIC_IDL_
+#ifndef DYNAMIC_IDL_
+#define DYNAMIC_IDL_
 
 #include "InterfaceRepository.idl"
 
@@ -23,4 +23,4 @@ typedef CORBA::StringSeq RequestContext;
 
 }; // module Dynamic
 
-#endif // _DYNAMIC_IDL_
+#endif // CORBA_DYNAMIC_IDL_

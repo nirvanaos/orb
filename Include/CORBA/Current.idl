@@ -2,6 +2,9 @@
 /// Current
 /// CORBA 3.0, Chapter 4
 
+#ifndef CORBA_CURRENT_IDL_
+#define CORBA_CURRENT_IDL_
+
 module CORBA {
 
 typeprefix CORBA "omg.org";
@@ -11,3 +14,5 @@ local interface Current
 {};
 
 };
+
+#endif // CORBA_CURRENT_IDL_

@@ -1,6 +1,9 @@
 // File: CORBA_Context.idl
 // From CORBA 3.0, Chapter 4
 
+#ifndef CORBA_CONTEXT_IDL_
+#define CORBA_CONTEXT_IDL_
+
 #include "NVList.idl"
 
 module CORBA {
@@ -10,7 +13,7 @@ typeprefix CORBA "omg.org";
 pseudo interface Context
 {
   void set_one_value (
-    in Identifier 	prop_name,	// property name to add
+    in Identifier  prop_name,	// property name to add
     in string	        value		// property value to add
   );
   void set_values (
@@ -36,3 +39,4 @@ pseudo interface Context
 
 };
 
+#endif

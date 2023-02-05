@@ -1,0 +1,26 @@
+/// \file
+/// Part of the Event Service
+ 
+#ifndef COSEVENTCOMM_IDL_
+#define COSEVENTCOMM_IDL_
+
+#pragma prefix "omg.org"
+
+module CosEventComm 
+{
+exception Disconnected {};
+
+interface PushConsumer 
+{
+	void push (in any data) raises (Disconnected);
+	void disconnect_push_consumer (); 
+};
+
+interface PushSupplier 
+{
+	void disconnect_push_supplier ();
+};
+
+};
+
+#endif // COS_EVENT_COMM_IDL_

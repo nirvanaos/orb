@@ -1,6 +1,8 @@
 /// \file
 /// Policy
 /// CORBA 3.0, Chapter 4
+#ifndef CORBA_POLICY_IDL_
+#define CORBA_POLICY_IDL_
 
 #include "Current.idl"
 
@@ -58,3 +60,5 @@ local interface PolicyCurrent : PolicyManager, Current
 {};
 
 };
+
+#endif // CORBA_POLICY_IDL_

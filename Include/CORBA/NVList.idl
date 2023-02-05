@@ -1,5 +1,7 @@
 // File: CORBA_NVList.idl
 // CORBA 3.0, Chapter 7
+#ifndef CORBA_NVLIST_IDL_
+#define CORBA_NVLIST_IDL_
 
 #include "TypeCode.idl"
 
@@ -31,3 +33,5 @@ pseudo interface NVList
 };
 
 };
+
+#endif // CORBA_NVLIST_IDL_
