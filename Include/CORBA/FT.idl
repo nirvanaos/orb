@@ -15,31 +15,31 @@
 module FT {
 
 #ifndef _PRE_3_0_COMPILER_
-	typeprefix FT "omg.org";
+typeprefix FT "omg.org";
 #endif // _PRE_3_0_COMPILER_
 
-	// Specification for Transport Heartbeats
-	const CORBA::PolicyType HEARTBEAT_POLICY = 48;
-	const CORBA::PolicyType HEARTBEAT_ENABLED_POLICY =  49;
+// Specification for Transport Heartbeats
+const CORBA::PolicyType HEARTBEAT_POLICY = 48;
+const CORBA::PolicyType HEARTBEAT_ENABLED_POLICY =  49;
 
-  struct TagFTHeartbeatEnabledTaggedComponent { 
-		// tag = TAG_FT_HEARTBEAT_ENABLED;
-		boolean heartbeat_enabled;
-	};
+struct TagFTHeartbeatEnabledTaggedComponent { 
+	// tag = TAG_FT_HEARTBEAT_ENABLED;
+	boolean heartbeat_enabled;
+};
 
-	struct HeartbeatPolicyValue {
-		boolean heartbeat;
-		TimeBase::TimeT heartbeat_interval;
-		TimeBase::TimeT heartbeat_timeout;
-	};
+struct HeartbeatPolicyValue {
+	boolean heartbeat;
+	TimeBase::TimeT heartbeat_interval;
+	TimeBase::TimeT heartbeat_timeout;
+};
 
-	interface HeartbeatPolicy : CORBA::Policy {
-		readonly attribute HeartbeatPolicyValue heartbeat_policy_value;
-	};
+interface HeartbeatPolicy : CORBA::Policy {
+	readonly attribute HeartbeatPolicyValue heartbeat_policy_value;
+};
 
-	interface HeartbeatEnabledPolicy : CORBA::Policy {
-		readonly attribute boolean heartbeat_enabled_policy_value;
-	};
+interface HeartbeatEnabledPolicy : CORBA::Policy {
+	readonly attribute boolean heartbeat_enabled_policy_value;
+};
 
 };
 

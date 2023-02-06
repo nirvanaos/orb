@@ -23,8 +23,8 @@ const PolicyType SecConstruction = 11;
 interface ConstructionPolicy : Policy
 {
   void make_domain_manager (
-      in CORBA::InterfaceDef  object_type,
-      in boolean              constr_policy
+    in CORBA::InterfaceDef  object_type,
+    in boolean              constr_policy
   );
 };
 

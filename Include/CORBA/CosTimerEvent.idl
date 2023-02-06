@@ -32,7 +32,7 @@ local interface TimerEventHandler
 {
 	readonly attribute EventStatus status;
 	boolean time_set (out CosTime::UTO uto);
-	void SetTimer (in TimeType time_type, in CosTime::UTO trigger_time);
+	void set_timer (in TimeType time_type, in CosTime::UTO trigger_time);
 	boolean cancel_timer ();
 	void set_data (in any event_data);
 };

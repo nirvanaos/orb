@@ -12,7 +12,7 @@ typeprefix CORBA "omg.org";
 exception WrongTransaction {};
 
 pseudo interface Request
- {
+{
 
   void add_arg (
     in Identifier   name,       // argument name
