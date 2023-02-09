@@ -105,6 +105,8 @@ public:
 
 	static void check_request (IORequest::_ptr_type rq);
 
+	static void set_marshal_local (Interface* env);
+
 protected:
 	ProxyRoot (IOReference::_ptr_type proxy_manager, UShort interface_idx) :
 		proxy_manager_ (proxy_manager),

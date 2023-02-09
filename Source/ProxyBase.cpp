@@ -64,5 +64,12 @@ void ProxyRoot::check_request (IORequest::_ptr_type rq)
 		throw UnknownUserException (std::move (ex));
 }
 
+void ProxyRoot::set_marshal_local (Interface* env)
+{
+	// Attempt to marshal Local object.
+	MARSHAL ex (MAKE_OMG_MINOR (4));
+	set_exception (env, ex);
+}
+
 }
 }

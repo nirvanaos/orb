@@ -113,7 +113,8 @@ public:
 	static Interface* _s_create_proxy (Bridge <ProxyFactory>* _b, Interface*, Type <UShort>::ABI_in,
 		Type <InterfacePtr>::ABI_out, Interface* _env)
 	{
-		set_NO_IMPLEMENT (_env);
+		// Attempt to marshal Local object.
+		ProxyRoot::set_marshal_local (_env);
 		return nullptr;
 	}
 };
