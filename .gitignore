@@ -30,13 +30,14 @@
 /Include/CORBA/Dynamic_s.h
 /Source/Dynamic.cpp
 /Include/CORBA/IOP.h
+/Include/CORBA/IOP_s.h
+/Source/IOP.cpp
 /Include/CORBA/Messaging.h
 /Include/CORBA/Messaging_s.h
 /Source/Messaging.cpp
 /Include/CORBA/Pollable.h
 /Include/CORBA/Pollable_s.h
 /Source/Pollable.cpp
-/Source/IOP.cpp
 /Include/CORBA/BiDirPolicy.h
 /Source/BiDirPolicy.cpp
 /Include/CORBA/Request.h
@@ -68,4 +69,5 @@
 /Include/CORBA/CosTimerEvent_s.h
 /Source/CosTimerEvent.cpp
 /Include/CORBA/FT.h
+/Include/CORBA/FT_s.h
 /Source/FT.cpp
