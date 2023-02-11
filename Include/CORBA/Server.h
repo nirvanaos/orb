@@ -43,6 +43,7 @@
 #include "make_stateless.h"
 #include "make_pseudo.h"
 #include "ValueCreator.h"
+#include "FT.h"
 
 namespace CORBA {
 
