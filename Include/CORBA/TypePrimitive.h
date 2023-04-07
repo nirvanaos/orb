@@ -217,6 +217,9 @@ struct TypePrimitive <Boolean> :
 		dst = abi != 0;
 	}
 
+	static void byteswap (Boolean&) NIRVANA_NOEXCEPT
+	{}
+
 	static void byteswap (ABI&) NIRVANA_NOEXCEPT
 	{}
 };
