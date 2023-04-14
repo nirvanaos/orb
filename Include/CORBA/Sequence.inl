@@ -65,13 +65,14 @@ template <typename T>
 void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	typedef typename Type <T>::Var T_Var;
-	Var tmp;
 	if (Type <T>::is_CDR) {
-		ABI abi;
+		ABI& abi = (ABI&)dst;
 		bool swap_bytes = rq->unmarshal_seq (alignof (T_Var), sizeof (T_Var), abi.size, (void*&)abi.ptr, abi.allocated);
 		if (abi.size) {
 			assert (abi.allocated);
 
+			// We assume that IORequest implementation provide consistent output.
+			// So we check it in the debug configuration only.
 #ifdef _DEBUG
 			check_ABI (abi);
 #endif
@@ -98,16 +99,15 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 			}
 #endif
 
-			static_cast <ABI&> (tmp)= abi;
 		}
 	} else {
+		dst.clear ();
 		size_t size = rq->unmarshal_seq_begin ();
 		if (size) {
-			tmp.resize (size);
-			Type <T>::unmarshal_a (rq, size, tmp.data ());
+			dst.resize (size);
+			Type <T>::unmarshal_a (rq, size, dst.data ());
 		}
 	}
-	dst = std::move (tmp);
 }
 
 template <> inline

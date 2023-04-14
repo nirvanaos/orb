@@ -78,14 +78,14 @@ pseudo interface IORequest
   /// \param align Data alignment
   /// \param element_size Element size.
   /// \param [out] element_count Count of elements.
-  /// \param [out] data Pointer to the allocated memory block with common-data-representation (CDR).
+  /// \param [inout] data Pointer to the allocated memory block with common-data-representation (CDR).
   ///                   The caller becomes an owner of this memory block.
-  /// \param [out] allocated_size Size of the allocated memory block.
+  /// \param [inout] allocated_size Size of the allocated memory block.
   ///              
   /// \returns `true` if the byte order must be swapped after unmarshaling.
   boolean unmarshal_seq (in Nirvana::Size align, in Nirvana::Size element_size,
-    out Nirvana::Size element_count, out Nirvana::Pointer data,
-    out Nirvana::Size allocated_size);
+    out Nirvana::Size element_count, inout Nirvana::Pointer data,
+    inout Nirvana::Size allocated_size);
 
   ///@}
 
@@ -112,21 +112,21 @@ pseudo interface IORequest
   void unmarshal_char (in Nirvana::Size count, in CharPtr data);
 
   void marshal_string (inout string s, in boolean move);
-  void unmarshal_string (out string s);
+  void unmarshal_string (inout string s);
 
   typedef sequence <char> CharSeq;
   void marshal_char_seq (inout CharSeq s, in boolean move);
-  void unmarshal_char_seq (out CharSeq s);
+  void unmarshal_char_seq (inout CharSeq s);
 
   void marshal_wchar (in Nirvana::Size count, in ConstWCharPtr data);
   void unmarshal_wchar (in Nirvana::Size count, in WCharPtr data);
 
   void marshal_wstring (inout wstring s, in boolean move);
-  void unmarshal_wstring (out wstring s);
+  void unmarshal_wstring (inout wstring s);
 
   typedef sequence <wchar> WCharSeq;
   void marshal_wchar_seq (inout WCharSeq s, in boolean move);
-  void unmarshal_wchar_seq (out WCharSeq s);
+  void unmarshal_wchar_seq (inout WCharSeq s);
 
   ///@}
 
