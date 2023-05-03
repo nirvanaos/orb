@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/Server.h>
+#include <CORBA/CORBA.h>
 
 namespace CORBA {
 namespace Internal {
@@ -34,12 +34,6 @@ I_ref <Interface> get_proxy (PortableServer::Servant core_object)
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
 	return proxy; // Duplicate
-}
-
-I_ref <PortableServer::POA> get_RootPOA ()
-{
-	// TODO: Use binding for performance?
-	return PortableServer::POA::_narrow (g_ORB->resolve_initial_references ("RootPOA"));
 }
 
 }
