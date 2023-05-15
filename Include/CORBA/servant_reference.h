@@ -69,7 +69,7 @@ public:
 
 	template <class T1>
 	servant_reference (const servant_reference <T1>& src) :
-		p_ (src.p_)
+		p_ (static_cast <T*> (src.p_))
 	{
 		if (p_)
 			p_->_add_ref ();
@@ -83,7 +83,7 @@ public:
 
 	template <class T1>
 	servant_reference (servant_reference <T1>&& src) NIRVANA_NOEXCEPT :
-		p_ (src.p_)
+	p_ (static_cast <T*> (src.p_))
 	{
 		src.p_ = nullptr;
 	}
@@ -115,7 +115,7 @@ public:
 	servant_reference& operator = (servant_reference <T1>&& src) NIRVANA_NOEXCEPT
 	{
 		release ();
-		p_ = src.p_;
+		p_ = static_cast <T*> (src.p_);
 		src.p_ = nullptr;
 		return *this;
 	}
