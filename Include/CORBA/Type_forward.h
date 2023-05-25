@@ -30,6 +30,14 @@
 #include "ABI.h"
 #include "I_ptr.h"
 
+namespace std {
+#ifdef NIRVANA_C17
+  int uncaught_exceptions () NIRVANA_NOEXCEPT;
+#else
+  bool uncaught_exception () NIRVANA_NOEXCEPT;
+#endif
+}
+
 namespace CORBA {
 namespace Internal {
 
@@ -50,7 +58,7 @@ template <> struct Type <T>
   static void check (const ABI&);
 
   /// `true` if check () method is not empty.
-  /// 
+  ///
   /// has_check = `true` for:
   /// - Variable-length data types
   /// - enum
@@ -67,12 +75,12 @@ template <> struct Type <T>
   /// - A struct or union that contains a member whose type is variable-length
   /// - An array with a variable-length element type
   /// - A typedef to a variable-length type
-  /// 
+  ///
   /// Variable-length types have non-trivial constructor and destructor.
   static const bool is_var_len;
 
   /// `true` if the data type meets the CORBA Common Data Representation.
-  /// 
+  ///
   /// is_CDR = `true` for all fixed-length data types, except for:
   /// - union
   /// - char
@@ -109,7 +117,7 @@ template <> struct Type <T>
 
   /// \brief Copies input data to the marshaling buffer.
   /// Must be defined if is_CDR = false.
-  /// 
+  ///
   /// \param src Source value.
   /// \param rq  IORequest interface.
   static void marshal_in (const Var& src, IORequest_ptr rq);
@@ -154,7 +162,7 @@ template <> struct Type <T>
 
   /// \brief Swap byte order to change endianness.
   /// Must be defined if is_CDR = true.
-  /// 
+  ///
   /// \param val Value.
   static void byteswap (Var&);
 };
@@ -164,7 +172,15 @@ template <class T> struct Type;
 
 // Helper functions.
 extern void check_pointer (const void* p);
-extern bool uncaught_exception ();
+
+inline bool uncaught_exception () NIRVANA_NOEXCEPT
+{
+#ifdef NIRVANA_C17
+  return std::uncaught_exceptions () != 0;
+#else
+  return std::uncaught_exception ();
+#endif
+}
 
 }
 }
