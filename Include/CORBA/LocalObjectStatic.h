@@ -54,7 +54,7 @@ public:
 
 	// Object operations
 
-	static Boolean _non_existent ()
+	static Boolean _non_existent () NIRVANA_NOEXCEPT
 	{
 		return false;
 	}
