@@ -37,6 +37,34 @@
 namespace CORBA {
 namespace Internal {
 
+class LocalObjectStaticDummy
+{
+public:
+	static void __add_ref (Bridge <LocalObject>* obj, Interface* env);
+	static void __remove_ref (Bridge <LocalObject>* obj, Interface* env);
+	static ULong __refcount_value (Bridge <LocalObject>* obj, Interface* env);
+	static void __delete_object (Bridge <LocalObject>* _b, Interface* _env);
+
+	static void _add_ref () NIRVANA_NOEXCEPT
+	{
+	}
+
+	static void _remove_ref () NIRVANA_NOEXCEPT
+	{
+	}
+
+	static ULong _refcount_value () NIRVANA_NOEXCEPT
+	{
+		return 1;
+	}
+
+	static Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
+		Interface* env) NIRVANA_NOEXCEPT
+	{
+		return nullptr;
+	}
+};
+
 //! Static implementation of LocalObject
 //! \tparam S Servant class.
 //! \tparam Primary Primary interface.
@@ -44,7 +72,8 @@ template <class S>
 class InterfaceStatic <S, LocalObject> :
 	public InterfaceStaticBase <S, LocalObject>,
 	public ServantTraitsStatic <S>,
-	public LifeCycleStatic
+	public LifeCycleStatic,
+	public LocalObjectStaticDummy
 {
 public:
 	static Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) NIRVANA_NOEXCEPT
@@ -59,27 +88,10 @@ public:
 		return false;
 	}
 
-	static void _add_ref () NIRVANA_NOEXCEPT
-	{}
-
-	static void _remove_ref () NIRVANA_NOEXCEPT
-	{}
-
-	static ULong _refcount_value () NIRVANA_NOEXCEPT
-	{
-		return 1;
-	}
-
-	static void _delete_object () NIRVANA_NOEXCEPT
-	{
-		Nirvana::throw_NO_IMPLEMENT ();
-	}
-
-	static Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
-		Interface* env) NIRVANA_NOEXCEPT
-	{
-		return nullptr;
-	}
+	using LocalObjectStaticDummy::__add_ref;
+	using LocalObjectStaticDummy::__remove_ref;
+	using LocalObjectStaticDummy::__refcount_value;
+	using LocalObjectStaticDummy::__delete_object;
 
 protected:
 	static Interface* _get_proxy ()
@@ -88,7 +100,7 @@ protected:
 	}
 
 private:
-	static LocalObject::_ptr_type core_object ()
+	static LocalObject::_ptr_type core_object () NIRVANA_NOEXCEPT
 	{
 		return static_cast <LocalObject*> (export_struct_.core_object);
 	}

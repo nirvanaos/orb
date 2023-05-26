@@ -183,8 +183,8 @@ struct TypePrimitive <Boolean> :
 
 	typedef C_inout C_out;
 
-	inline static void marshal_in (const ABI& src, IORequest_ptr rq);
-	inline static void marshal_in_a (const ABI* src, size_t count, IORequest_ptr rq);
+	static void marshal_in (const ABI& src, IORequest_ptr rq);
+	static void marshal_in_a (const ABI* src, size_t count, IORequest_ptr rq);
 
 	static void marshal_in (const Boolean src, IORequest_ptr rq)
 	{
@@ -207,8 +207,8 @@ struct TypePrimitive <Boolean> :
 		marshal_in (src, rq);
 	}
 
-	inline static void unmarshal (IORequest_ptr rq, ABI& dst);
-	inline static void unmarshal_a (IORequest_ptr rq, size_t count, ABI* dst);
+	static void unmarshal (IORequest_ptr rq, ABI& dst);
+	static void unmarshal_a (IORequest_ptr rq, size_t count, ABI* dst);
 
 	static void unmarshal (IORequest_ptr rq, Boolean& dst)
 	{

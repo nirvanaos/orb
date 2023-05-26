@@ -37,13 +37,42 @@
 namespace CORBA {
 namespace Internal {
 
+class ServantBaseStaticDummy
+{
+public:
+	static void __add_ref (Bridge <PortableServer::ServantBase>* obj, Interface* env);
+	static void __remove_ref (Bridge <PortableServer::ServantBase>* obj, Interface* env);
+	static ULong __refcount_value (Bridge <PortableServer::ServantBase>* obj, Interface* env);
+	static void __delete_object (Bridge <PortableServer::ServantBase>* _b, Interface* _env);
+
+	static void _add_ref () NIRVANA_NOEXCEPT
+	{
+	}
+
+	static void _remove_ref () NIRVANA_NOEXCEPT
+	{
+	}
+
+	static ULong _refcount_value () NIRVANA_NOEXCEPT
+	{
+		return 1;
+	}
+
+	static Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
+		Interface* env) NIRVANA_NOEXCEPT
+	{
+		return nullptr;
+	}
+};
+
 //! Static implementation of PortableServer::ServantBase.
 //! \tparam S Servant class implementing operations.
 template <class S>
 class InterfaceStatic <S, PortableServer::ServantBase> :
 	public InterfaceStaticBase <S, PortableServer::ServantBase>,
 	public ServantTraitsStatic <S>,
-	public LifeCycleStatic
+	public LifeCycleStatic,
+	public ServantBaseStaticDummy
 {
 public:
 	// ServantBase operations
@@ -68,31 +97,14 @@ public:
 		return false;
 	}
 
-	static void _add_ref () NIRVANA_NOEXCEPT
-	{}
-
-	static void _remove_ref () NIRVANA_NOEXCEPT
-	{}
-
-	static ULong _refcount_value () NIRVANA_NOEXCEPT
-	{
-		return 1;
-	}
-
-	static void _delete_object () NIRVANA_NOEXCEPT
-	{
-		Nirvana::throw_NO_IMPLEMENT ();
-	}
+	using ServantBaseStaticDummy::__add_ref;
+	using ServantBaseStaticDummy::__remove_ref;
+	using ServantBaseStaticDummy::__refcount_value;
+	using ServantBaseStaticDummy::__delete_object;
 
 	static PortableServer::Servant _core_servant ()
 	{
 		return servant_base ();
-	}
-
-	static Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
-		Interface* env) NIRVANA_NOEXCEPT
-	{
-		return nullptr;
 	}
 
 protected:
@@ -102,7 +114,7 @@ protected:
 	}
 
 private:
-	static PortableServer::Servant servant_base ()
+	static PortableServer::Servant servant_base () NIRVANA_NOEXCEPT
 	{
 		return static_cast <PortableServer::ServantBase*> (export_struct_.core_object);
 	}
