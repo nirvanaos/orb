@@ -37,32 +37,13 @@
 namespace CORBA {
 namespace Internal {
 
-class ServantBaseStaticDummy
+class ServantBaseStaticDummy : public ServantStaticDummy
 {
 public:
 	static void __add_ref (Bridge <PortableServer::ServantBase>* obj, Interface* env);
 	static void __remove_ref (Bridge <PortableServer::ServantBase>* obj, Interface* env);
 	static ULong __refcount_value (Bridge <PortableServer::ServantBase>* obj, Interface* env);
 	static void __delete_object (Bridge <PortableServer::ServantBase>* _b, Interface* _env);
-
-	static void _add_ref () NIRVANA_NOEXCEPT
-	{
-	}
-
-	static void _remove_ref () NIRVANA_NOEXCEPT
-	{
-	}
-
-	static ULong _refcount_value () NIRVANA_NOEXCEPT
-	{
-		return 1;
-	}
-
-	static Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
-		Interface* env) NIRVANA_NOEXCEPT
-	{
-		return nullptr;
-	}
 };
 
 //! Static implementation of PortableServer::ServantBase.
@@ -90,11 +71,6 @@ public:
 	static Boolean _is_a (const String& type_id)
 	{
 		return servant_base ()->_is_a (type_id);
-	}
-
-	static Boolean _non_existent () NIRVANA_NOEXCEPT
-	{
-		return false;
 	}
 
 	using ServantBaseStaticDummy::__add_ref;
