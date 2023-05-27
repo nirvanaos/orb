@@ -68,7 +68,7 @@ public:
 	using LocalObjectStaticDummy::__delete_object;
 
 protected:
-	static Interface* _get_proxy ()
+	static I_ref <Interface> _get_proxy ()
 	{
 		return get_proxy (core_object ());
 	}

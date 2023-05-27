@@ -84,7 +84,7 @@ public:
 	}
 
 protected:
-	static Interface* _get_proxy ()
+	static I_ref <Interface> _get_proxy ()
 	{
 		return get_proxy (servant_base ());
 	}

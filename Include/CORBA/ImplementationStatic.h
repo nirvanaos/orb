@@ -35,8 +35,6 @@
 namespace CORBA {
 namespace Internal {
 
-//! \class ImplementationStatic
-//!
 //! \brief Static implementation of an interface.
 //!
 //! \tparam S Servant class implementing operations.
