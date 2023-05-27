@@ -151,22 +151,22 @@ public:
 
 	const C* c_str () const NIRVANA_NOEXCEPT
 	{
-		return ABI::large_pointer ();
+		return ABI::_ptr ();
 	}
 
 	const C* data () const NIRVANA_NOEXCEPT
 	{
-		return ABI::large_pointer ();
+		return ABI::_ptr ();
 	}
 
 	size_t size () const NIRVANA_NOEXCEPT
 	{
-		return ABI::large_size ();
+		return ABI::size ();
 	}
 
 	size_t length () const NIRVANA_NOEXCEPT
 	{
-		return ABI::large_size ();
+		return ABI::size ();
 	}
 
 protected:
