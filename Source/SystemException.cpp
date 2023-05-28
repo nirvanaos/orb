@@ -32,7 +32,7 @@ namespace CORBA {
 using namespace Internal;
 
 #define DEFINE_SYSTEM_EXCEPTION(E)\
-const E* E::_downcast (const Exception* ep) NIRVANA_NOEXCEPT { return (ep && (EC_##E == ep->__code ())) ? static_cast <const E*> (ep) : 0; }\
+const E* E::_downcast (const Exception* ep) NIRVANA_NOEXCEPT { return (ep && (EC_##E == ep->__code ())) ? static_cast <const E*> (ep) : nullptr; }\
 const char* E::_rep_id () const NIRVANA_NOEXCEPT { return RepIdOf <E>::id; }\
 GNU_OPTNONE ::CORBA::I_ptr <TypeCode> E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
 

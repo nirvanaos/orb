@@ -92,7 +92,7 @@ public:
 
 	static const SystemException* _downcast (const Exception* ep)
 	{
-		return (ep && (ep->__code () >= 0)) ? static_cast <const SystemException*> (ep) : 0;
+		return (ep && (ep->__code () >= 0)) ? static_cast <const SystemException*> (ep) : nullptr;
 	}
 
 	static SystemException* _downcast (Exception* ep)
