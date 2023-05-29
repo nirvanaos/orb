@@ -30,7 +30,14 @@ module Internal {
 
 native InterfacePtr;
 
-/// /// Interoperable Object Reference.
+/// Request callback
+pseudo interface RequestCallback
+{
+	/// Called on request completion
+	void completed (in IORequest rq);
+};
+
+/// Interoperable Object Reference.
 /// 
 /// Interface to the implementation of the some Inter-ORB protocol.
 pseudo interface IOReference
@@ -51,15 +58,21 @@ pseudo interface IOReference
 		unsigned short operation_idx;
 	};
 
-	/// Create asynchronouse request.
-	const unsigned short REQUEST_ASYNC = 4;
-
-	/// Create request.
-	/// NOTE: This operation may not cause the preemption.
+	/// \brief Create request.
+	/// 
+	/// Implementation note: this operation may not cause the preemption.
+	/// 
+	/// flags & IORequest::RESPONSE_EXPECTED | callback | Request type
+	/// -------------------------------------|----------|-------------
+	/// true                                 | nil      | Synchronous
+	/// true                                 | not nil  | Asynchronous
+	/// false                                | nil      | Oneway
+	/// false                                | not nil  | N/A
 	/// 
 	/// \param op Index of the operation.
-	/// \param flags The combination of the IORequest response flags and REQUEST_ASYNC.
-	IORequest create_request (in OperationIndex op, in unsigned short flags);
+	/// \param flags The combination of the IORequest response flags.
+	/// \param cb Asynchronous request callback.
+	IORequest create_request (in OperationIndex op, in unsigned short flags, in RequestCallback callback);
 
 };
 

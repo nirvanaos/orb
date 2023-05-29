@@ -231,18 +231,6 @@ pseudo interface IORequest
   ///@{
   /// Asynchronous caller operations.
 
-  /// Non-blocking check for the request completion.
-  /// 
-  /// \returns `true` if request is completed.
-  readonly attribute boolean completed;
-
-  /// Blocking check for the request completion.
-  /// 
-  /// \param timeout The wait timeout.
-  /// 
-  /// \returns `true` if request is completed.
-  boolean wait (in unsigned long long timeout);
-
   /// Cancel the request.
   void cancel ();
 
