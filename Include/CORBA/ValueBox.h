@@ -266,7 +266,7 @@ private:
 
 	Interface* _query_valuetype (String_in id) NIRVANA_NOEXCEPT
 	{
-		if (RepId::compatible (RepIdOf <VB>::id, id))
+		if (id.empty () || RepId::compatible (RepIdOf <VB>::id, id))
 			return &static_cast <ValueBoxBridge&> (*this);
 		return nullptr;
 	}
