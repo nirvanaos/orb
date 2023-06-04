@@ -242,10 +242,17 @@ class Object :
 	public Internal::ClientInterfacePrimary <Object>
 {
 public:
-	static Internal::I_ref <Object> _narrow (Object::_ptr_type obj) NIRVANA_NOEXCEPT
+#ifndef LEGACY_CORBA_CPP
+	static Internal::I_ref <Object> _narrow (Object::_ptr_type obj)
 	{
 		return obj;
 	}
+#else
+	NIRVANA_NODISCARD static Object::_ptr_type _narrow (Object::_ptr_type obj)
+	{
+		return ClientInterfacePrimary <Object>::_duplicate (obj);
+	}
+#endif
 };
 
 namespace Internal {
@@ -255,13 +262,21 @@ class ClientInterfaceBase <Primary, Object> :
 	public Client <ClientBase <Primary, Object>, Object>
 {
 public:
+#ifndef LEGACY_CORBA_CPP
 	static I_ref <Primary> _narrow (Object::_ptr_type obj)
 	{
 		if (obj)
 			return obj->_query_interface <Primary> ();
 		return nullptr;
 	}
-
+#else
+	NIRVANA_NODISCARD static I_ptr <Primary> _narrow (Object::_ptr_type obj)
+	{
+		if (obj)
+			return ClientInterfacePrimary <Primary>::_duplicate (obj->_query_interface <Primary> ());
+		return nullptr;
+	}
+#endif
 };
 
 }

@@ -195,14 +195,14 @@ public:
 		p_ = nullptr;
 		return ret;
 	}
-
+/* TODO: Remove
 	operator I_var <I> ()
 	{
 		I_ptr <I> ret (static_cast <I*> (Interface::_check (p_, RepIdOf <I>::id))); // No add reference
 		p_ = nullptr;
 		return I_var <I> (ret);
 	}
-
+*/
 #endif
 
 private:
@@ -357,9 +357,7 @@ struct TypeItfBase
 		return nullptr;
 	}
 
-	// Valuetupe implementation for state members must return I_ptr, not I_ref.
-	// Otherwise compilation error will occur.
-	NIRVANA_DEPRECATED
+	NIRVANA_DEPRECATED ("Valuetupe implementation for state members must return I_ptr, not I_ref")
 	static void VT_ret (I_ref <I>&);
 
 	typedef I_ptr <I> ConstRef;

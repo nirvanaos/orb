@@ -55,30 +55,47 @@ public:
 		Base (p.p_)
 	{}
 
+	template <class I1>
+	I_var (const I_ptr <I1>& p) :
+		Base (Base::wide (p.p_))
+	{}
+
 	I_var (const I_ref <I>& src) :
 		Base (src)
 	{}
+
+	template <class I1>
+	I_var (const I_ref <I1>& src) = delete;
 
 	I_var (const I_var& src) :
 		Base (src)
 	{}
 
+	template <class I1>
+	I_var (const I_var <I1>& src) = delete;
+
 	I_var (I_ref <I>&& src) NIRVANA_NOEXCEPT :
 		Base (std::move (src))
 	{}
+
+	template <class I1>
+	I_var (const I_ref <I1>&& src) = delete;
 
 	I_var (I_var&& src) NIRVANA_NOEXCEPT :
 		Base (std::move (src))
 	{}
 
+	template <class I1>
+	I_var (const I_var <I1>&& src) = delete;
+
 	// No add reference
 	I_var& operator = (I* p) NIRVANA_NOEXCEPT
 	{
-		if (p != Base::p_) {
-			I* tmp = Base::p_;
-			Base::p_ = p;
-			interface_release (tmp);
-		}
+		// Even if p == p_ we must release p_.
+		// So we don't compare pointers.
+		I* tmp = Base::p_;
+		Base::p_ = p;
+		interface_release (tmp);
 		return *this;
 	}
 
@@ -86,6 +103,13 @@ public:
 	I_var& operator = (const I_ptr <I>& p) NIRVANA_NOEXCEPT
 	{
 		return operator = (p.p_);
+	}
+
+	// No add reference
+	template <class I1>
+	I_var& operator = (const I_ptr <I1>& p)
+	{
+		return operator = (Base::wide (p.p_));
 	}
 
 	// No add reference
@@ -104,6 +128,12 @@ public:
 	I_var& operator = (I_var&& src) NIRVANA_NOEXCEPT
 	{
 		Base::operator = (std::move (src));
+		return *this;
+	}
+
+	I_var& operator = (nullptr_t) NIRVANA_NOEXCEPT
+	{
+		Base::operator = (nullptr);
 		return *this;
 	}
 

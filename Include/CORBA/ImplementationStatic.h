@@ -55,7 +55,7 @@ public:
 		return FindInterface <Primary, Bases...>::find (*(S*)0, id);
 	}
 
-	static I_ref <Primary> _this ()
+	static typename Type <Primary>::VRet _this ()
 	{
 		return InterfaceStatic <S, PortableServer::ServantBase>::_get_proxy ().template downcast <Primary> ();
 	}

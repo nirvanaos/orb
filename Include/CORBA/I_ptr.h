@@ -108,7 +108,7 @@ protected:
 
 protected:
 	friend class I_ref_base <I>;
-	friend class I_var <I>;
+	template <class I1> friend class I_var;
 	template <class I1> friend class I_ref;
 	friend class I_inout <I>;
 	friend class I_ret <I>;
@@ -159,6 +159,7 @@ public:
 	/// Move constructor in case returned I_ref assigned to I_ptr:
 	///    I_ref <Object> func ();
 	///    Object_ptr obj = func ();
+	NIRVANA_DEPRECATED ("Potentially unsafe conversion from reference to pointer")
 	I_ptr (I_ref <I>&& src) NIRVANA_NOEXCEPT
 	{
 		this->move_from (src);

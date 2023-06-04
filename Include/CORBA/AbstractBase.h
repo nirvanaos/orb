@@ -58,12 +58,12 @@ class Client <T, AbstractBase> :
 	public T
 {
 public:
-	I_ref <Object> _to_object ();
-	I_ref <ValueBase> _to_value ();
+	Type <Object>::VRet _to_object ();
+	Type <ValueBase>::VRet _to_value ();
 };
 
 template <class T>
-I_ref <Object> Client <T, AbstractBase>::_to_object ()
+Type <Object>::VRet Client <T, AbstractBase>::_to_object ()
 {
 	Environment _env;
 	Bridge <AbstractBase>& _b (T::_get_bridge (_env));
@@ -73,7 +73,7 @@ I_ref <Object> Client <T, AbstractBase>::_to_object ()
 }
 
 template <class T>
-I_ref <ValueBase> Client <T, AbstractBase>::_to_value ()
+Type <ValueBase>::VRet Client <T, AbstractBase>::_to_value ()
 {
 	Environment _env;
 	Bridge <AbstractBase>& _b (T::_get_bridge (_env));
@@ -88,11 +88,17 @@ class AbstractBase :
 	public Internal::ClientInterfacePrimary <AbstractBase>
 {
 public:
+#ifndef LEGACY_CORBA_CPP
 	static Internal::I_ref <AbstractBase> _narrow (AbstractBase::_ptr_type obj)
 	{
 		return obj;
 	}
-
+#else
+	NIRVANA_NODISCARD static AbstractBase::_ptr_type _narrow (AbstractBase::_ptr_type obj)
+	{
+		return ClientInterfacePrimary <AbstractBase>::_duplicate (obj);
+	}
+#endif
 };
 
 namespace Internal {
@@ -102,6 +108,7 @@ class ClientInterfaceBase <Primary, AbstractBase> :
 	public Client <ClientBase <Primary, AbstractBase>, AbstractBase>
 {
 public:
+#ifndef LEGACY_CORBA_CPP
 	static I_ref <Primary> _narrow (I_ptr <AbstractBase> ab)
 	{
 		if (ab) {
@@ -117,7 +124,25 @@ public:
 	{
 		return _narrow (I_ptr <AbstractBase> (ab));
 	}
+#else
+	static I_ptr <Primary> _narrow (I_ptr <AbstractBase> ab)
+	{
+		if (ab) {
+			I_var <Object> obj = ab->_to_object ();
+			if (obj)
+				return _narrow (obj);
+			return _narrow (ab->_to_value ());
+		}
+		return nullptr;
+	}
 
+	static I_ptr <Primary> _narrow (const I_var <AbstractBase>& ab)
+	{
+		return _narrow (I_ptr <AbstractBase> (ab));
+	}
+#endif
+
+#ifndef LEGACY_CORBA_CPP
 	static I_ref <Primary> _narrow (I_ptr <Object> obj)
 	{
 		if (obj)
@@ -129,7 +154,21 @@ public:
 	{
 		return _narrow (I_ptr <Object> (obj));
 	}
+#else
+	static I_ptr <Primary> _narrow (I_ptr <Object> obj)
+	{
+		if (obj)
+			return Primary::_duplicate (obj->_query_interface <Primary> ());
+		return nullptr;
+	}
 
+	static I_ptr <Primary> _narrow (const I_var <Object>& obj)
+	{
+		return _narrow (I_ptr <Object> (obj));
+	}
+#endif
+
+#ifndef LEGACY_CORBA_CPP
 	static I_ref <Primary> _narrow (I_ptr <ValueBase> obj)
 	{
 		if (obj)
@@ -141,6 +180,19 @@ public:
 	{
 		return _narrow (I_ptr <ValueBase> (obj));
 	}
+#else
+	static I_ptr <Primary> _narrow (I_ptr <ValueBase> obj)
+	{
+		if (obj)
+			return Primary::_duplicate (obj->_query_valuetype <Primary> ());
+		return nullptr;
+	}
+
+	static I_ptr <Primary> _narrow (const I_var <ValueBase>& obj)
+	{
+		return _narrow (I_ptr <ValueBase> (obj));
+	}
+#endif
 };
 
 template <class I>

@@ -66,7 +66,6 @@ public:
 	typedef I_var <I> _var_type;
 	typedef _var_type& _out_type;
 
-	// TODO: Change return type to I_var?
 	NIRVANA_NODISCARD static _ptr_type _duplicate (_ptr_type obj)
 	{
 		return _unsafe_cast (interface_duplicate (&obj));

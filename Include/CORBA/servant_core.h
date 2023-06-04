@@ -33,7 +33,7 @@
 namespace CORBA {
 namespace Internal {
 
-I_ref <Interface> get_proxy (PortableServer::Servant core_object);
+Interface::_ptr_type get_proxy (PortableServer::Servant core_object);
 
 }
 }

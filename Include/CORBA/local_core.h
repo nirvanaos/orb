@@ -36,7 +36,7 @@ namespace Internal {
 Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object,
 	Type <String>::ABI_in iid, Interface* env) NIRVANA_NOEXCEPT;
 
-I_ref <Interface> get_proxy (LocalObject::_ptr_type core_object);
+Interface::_ptr_type get_proxy (LocalObject::_ptr_type core_object);
 
 }
 }

@@ -38,11 +38,5 @@ I_ref <InterfaceDef> ServantPOA <PortableServer::ServantBase>::_get_interface ()
 	return ServantBaseLink::_get_interface ();
 }
 
-I_ref <Interface> ServantPOA <PortableServer::ServantBase>::_get_proxy ()
-{
-	_check_construct ();
-	return ServantBaseLink::_get_proxy ();
-}
-
 }
 }

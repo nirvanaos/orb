@@ -77,7 +77,7 @@ class Client <T, ValueBase> :
 	public T
 {
 public:
-	Type <ValueBase>::Var _copy_value ();
+	Type <ValueBase>::VRet _copy_value ();
 	void _marshal (I_ptr <IORequest> rq);
 	void _unmarshal (I_ptr <IORequest> rq);
 
@@ -95,7 +95,7 @@ public:
 };
 
 template <class T>
-Type <ValueBase>::Var Client <T, ValueBase>::_copy_value ()
+Type <ValueBase>::VRet Client <T, ValueBase>::_copy_value ()
 {
 	Environment _env;
 	Bridge <ValueBase>& _b (T::_get_bridge (_env));

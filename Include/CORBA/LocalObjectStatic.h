@@ -68,9 +68,13 @@ public:
 	using LocalObjectStaticDummy::__delete_object;
 
 protected:
-	static I_ref <Interface> _get_proxy ()
+	static Type <Interface>::VRet _get_proxy ()
 	{
+#ifdef LEGACY_CORBA_CPP
+		return interface_duplicate (&get_proxy (core_object ()));
+#else
 		return get_proxy (core_object ());
+#endif
 	}
 
 private:

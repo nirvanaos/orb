@@ -84,9 +84,13 @@ public:
 	}
 
 protected:
-	static I_ref <Interface> _get_proxy ()
+	static Type <Interface>::VRet _get_proxy ()
 	{
+#ifdef LEGACY_CORBA_CPP
+		return interface_duplicate (&get_proxy (servant_base ()));
+#else
 		return get_proxy (servant_base ());
+#endif
 	}
 
 private:

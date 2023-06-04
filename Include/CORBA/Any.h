@@ -238,8 +238,7 @@ private:
 		const char *&val;
 		ULong bound;
 
-		// the following constructor is deprecated
-		NIRVANA_DEPRECATED
+		NIRVANA_DEPRECATED ("This constructor is deprecated")
 		to_string (char *&s, ULong b) :
 			val (const_cast <const char*& > (s)), bound (b)
 		{}
@@ -257,7 +256,7 @@ private:
 		ULong bound;
 
 		// the following constructor is deprecated
-		NIRVANA_DEPRECATED
+		NIRVANA_DEPRECATED ("This constructor is deprecated")
 		to_wstring (WChar *&s, ULong b) :
 			val (const_cast <const WChar*&> (s)), bound (b)
 		{}

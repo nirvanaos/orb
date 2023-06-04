@@ -35,12 +35,12 @@ Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object,
 	return (core_object->_epv ().base.CORBA_Object) (static_cast <Bridge <LocalObject>*> (&core_object), iid, env);
 }
 
-I_ref <Interface> get_proxy (LocalObject::_ptr_type core_object)
+Interface::_ptr_type get_proxy (LocalObject::_ptr_type core_object)
 {
 	Interface::_ptr_type proxy = Object::_ptr_type (core_object)->_query_interface (nullptr);
 	if (!proxy)
 		::Nirvana::throw_MARSHAL ();
-	return proxy; // Duplicate
+	return proxy;
 }
 
 }

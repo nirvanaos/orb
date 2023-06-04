@@ -46,7 +46,7 @@ public:
 	typedef I ItfType;
 
 	I_ref_base () NIRVANA_NOEXCEPT :
-	p_ (nullptr)
+		p_ (nullptr)
 	{}
 
 	I_ref_base (nullptr_t) NIRVANA_NOEXCEPT :
@@ -271,7 +271,6 @@ protected:
 		Base (p)
 	{}
 
-private:
 	template <class I1>
 	static I* wide (I1* p)
 	{
@@ -371,7 +370,7 @@ protected:
 
 template <class I> inline
 I_ptr_base <I>::I_ptr_base (const I_ref <I>& src) NIRVANA_NOEXCEPT :
-p_ (src.p_)
+	p_ (src.p_)
 {}
 
 template <class I> inline

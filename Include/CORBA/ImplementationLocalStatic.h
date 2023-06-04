@@ -52,7 +52,7 @@ public:
 		return FindInterface <Primary, Bases...>::find (*(S*)0, id);
 	}
 
-	static I_ref <Primary> _this ()
+	static typename Type <Primary>::VRet _this ()
 	{
 		return InterfaceStatic <S, LocalObject>::_get_proxy ().downcast <Primary> ();
 	}

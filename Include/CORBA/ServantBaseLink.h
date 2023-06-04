@@ -112,9 +112,13 @@ protected:
 
 	void _construct ();
 
-	I_ref <Interface> _get_proxy () const
+	Type <Interface>::VRet _get_proxy () const
 	{
+#ifdef LEGACY_CORBA_CPP
+		return interface_duplicate (&get_proxy (PortableServer::Servant (core_object_)));
+#else
 		return get_proxy (PortableServer::Servant (core_object_));
+#endif
 	}
 
 protected:
