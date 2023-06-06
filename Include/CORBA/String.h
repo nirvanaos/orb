@@ -41,7 +41,7 @@ namespace Internal {
 template <typename C>
 struct Type <StringT <C> > : TypeVarLen <StringT <C> >
 {
-	typedef TypeVarLen <StringT <C>> Base;
+	typedef TypeVarLen <StringT <C> > Base;
 	typedef typename Base::Var Var;
 	typedef typename Base::ABI ABI;
 	typedef typename Base::ABI_in ABI_in;
@@ -222,16 +222,46 @@ struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
 	typedef Type <StringT <C> > Base;
 	typedef typename Base::ABI ABI;
 	typedef typename Base::Var Var;
+	typedef typename Base::ABI_in ABI_in;
+	typedef typename Base::ABI_out ABI_out;
 
 	static void check (const ABI& v)
 	{
 		Base::check (v);
-		if (v.size > bound)
+		if (v.size () > bound)
 			Nirvana::throw_BAD_PARAM ();
 	}
 
 	// Check in C_in for member assignments
 	typedef const StringView <C, bound>& C_in;
+
+	class C_inout : public Base::C_inout
+	{
+	public:
+		C_inout (Var& s) :
+			Base::C_inout (s)
+		{
+			if (bound && s.size () > bound)
+				Nirvana::throw_BAD_PARAM ();
+		}
+	};
+
+	// `const` is removed to let servant adopt the unmarshaled input data.
+	static Var& in (ABI_in p)
+	{
+		Var& v = Base::in (p);	// Check
+		if (bound && v.size () > bound)
+			Nirvana::throw_BAD_PARAM ();
+		return v;
+	}
+
+	static Var& inout (ABI_out p)
+	{
+		Var& v = Base::inout (p); // Check
+		if (bound && v.size () > bound)
+			Nirvana::throw_BAD_PARAM ();
+		return v;
+	}
 
 	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
 

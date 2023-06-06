@@ -207,6 +207,8 @@ struct Type <BoundedSequence <T, bound> > :
 	typedef Type <Sequence <T> > Base;
 	typedef typename Base::ABI ABI;
 	typedef typename Base::Var Var;
+	typedef typename Base::ABI_in ABI_in;
+	typedef typename Base::ABI_out ABI_out;
 
 	static const bool has_check = true;
 
@@ -216,6 +218,45 @@ struct Type <BoundedSequence <T, bound> > :
 			Base::check (v);
 		if (v.size > bound)
 			Nirvana::throw_BAD_PARAM ();
+	}
+
+	class C_in : public Base::C_in
+	{
+	public:
+		C_in (const Var& v) :
+			Base::C_in (v)
+		{
+			if (bound && v.size () > bound)
+				Nirvana::throw_BAD_PARAM ();
+		}
+	};
+
+	class C_inout : public Base::C_inout
+	{
+	public:
+		C_inout (Var& v) :
+			Base::C_inout (v)
+		{
+			if (bound && v.size () > bound)
+				Nirvana::throw_BAD_PARAM ();
+		}
+	};
+
+	// `const` is removed to let servant adopt the unmarshaled input data.
+	static Var& in (ABI_in p)
+	{
+		Var& v = Base::in (p);	// Check
+		if (bound && v.size () > bound)
+			Nirvana::throw_BAD_PARAM ();
+		return v;
+	}
+
+	static Var& inout (ABI_out p)
+	{
+		Var& v = Base::inout (p); // Check
+		if (bound && v.size () > bound)
+			Nirvana::throw_BAD_PARAM ();
+		return v;
 	}
 
 	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
