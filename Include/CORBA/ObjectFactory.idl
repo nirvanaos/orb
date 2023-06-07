@@ -57,6 +57,7 @@ pseudo interface ObjectFactory
 	/// This operation is not called for stateless servants.
 	///
 	/// \param size Amount of memory in bytes.
+	/// \returns The allocated memory pointer.
 	Nirvana::Pointer memory_allocate (in Nirvana::Size size);
 
 	/// \brief Releases servant memory.
@@ -66,10 +67,21 @@ pseudo interface ObjectFactory
 	/// \param size Amount of memory in bytes.
 	void memory_release (in Nirvana::Pointer p, in Nirvana::Size size);
 
-	/// \brief `TRUE` if stateless object creation is available.
-	readonly attribute boolean stateless_available;
+	/// \brief Create core ServantBase object.
+	/// 
+	/// \param impl The servant ServantBase implementation pointer.
+	/// 
+	/// \returns The core ServantBase reference.
+	PortableServer::Servant create_servant (in PortableServer::Servant impl);
 
-	/// Stateless object creation frame.
+	/// \brief Create core LocalObject object.
+	/// 
+	/// \param impl The servant LocalObject implementation pointer.
+	/// 
+	/// \returns The core LocalObject reference.
+	LocalObject create_local_object (in LocalObject impl);
+
+	/// \brief Stateless servant creation frame.
 	struct StatelessCreationFrame
 	{
 		Nirvana::ConstPointer tmp; ///< Pointer to the temporary object storage in stack.
@@ -78,20 +90,40 @@ pseudo interface ObjectFactory
 		Nirvana::Pointer next;
 	};
 
-	/// Start creation of a stateless object.
+	/// \brief Start creation of a stateless servant.
+	/// 
+	/// \param scf Stateless servant creation frame.
 	/// 
 	/// \throws BAD_OPERATION if stateless creation is not available.
 	void stateless_begin (inout StatelessCreationFrame scf);
 
-	/// Finish creation of stateless object.
+	/// \brief Finish creation of stateless servant.
 	/// 
-	/// \param success `TRUE` if temporary object successfully constructed.
+	/// \param success `true` if temporary object successfully constructed.
+	///   If the object constructor failed, stateless_end must be called with `false`
+	///   for the frame cleanup.
 	/// 
 	/// \returns Pointer to stateless object created.
 	Nirvana::Pointer stateless_end (in boolean success);
 
-	PortableServer::Servant create_servant (in PortableServer::Servant impl);
-	LocalObject create_local_object (in LocalObject impl);
+	/// \brief Copy memory block to stateless heap.
+	/// 
+	/// May be used in complex stateless servant implementation.
+	/// 
+	/// \param src  Memory block pointer.
+	/// \param size Memory block size.
+	/// 
+	/// \returns Pointer to the read-only memory block in the stateless heap.
+	///   The caller is responsible for releasing this block by memory_release call.
+	Nirvana::ConstPointer stateless_copy (in Nirvana::ConstPointer src, in Nirvana::Size size);
+
+	/// \brief `true` if current sync context is free.
+	///
+	/// If a programmer wants to create stateless sync free servant,
+	/// he has to call make_stateless from the free sync context.
+	/// This attribute is intended for debugging purposes to let
+	/// a programmer be ensure that the sync context is free.
+	readonly attribute boolean is_free_sync_context;
 };
 
 };

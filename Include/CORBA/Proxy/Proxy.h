@@ -86,20 +86,17 @@ public:
 		typedef Proxy <I> ProxyClass;
 		ProxyClass* proxy;
 
-		if (g_object_factory->stateless_available ()) {
-			typename std::aligned_storage <sizeof (ProxyClass), 
-				alignof (ProxyClass)>::type tmp;
-			ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (ProxyClass), 0, nullptr);
-			g_object_factory->stateless_begin (scb);
-			try {
-				new (&tmp) ProxyClass (proxy_manager, interface_idx);
-				proxy = (ProxyClass*)g_object_factory->stateless_end (true);
-			} catch (...) {
-				g_object_factory->stateless_end (false);
-				throw;
-			}
-		} else
-			proxy = new ProxyClass (proxy_manager, interface_idx);
+		typename std::aligned_storage <sizeof (ProxyClass), 
+			alignof (ProxyClass)>::type tmp;
+		ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (ProxyClass), 0, nullptr);
+		g_object_factory->stateless_begin (scb);
+		try {
+			new (&tmp) ProxyClass (proxy_manager, interface_idx);
+			proxy = (ProxyClass*)g_object_factory->stateless_end (true);
+		} catch (...) {
+			g_object_factory->stateless_end (false);
+			throw;
+		}
 		deleter = proxy->_dynamic_servant ();
 		return proxy->_proxy ();
 	}

@@ -37,6 +37,11 @@
 
 namespace CORBA {
 
+inline bool is_free_sync_context ()
+{
+	return Internal::g_object_factory->is_free_sync_context ();
+}
+
 template <class T, class ... Args>
 servant_reference <T> make_stateless (Args ... args)
 {
