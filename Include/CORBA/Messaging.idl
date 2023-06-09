@@ -156,7 +156,7 @@ struct PolicyValue
 	PolicyData pvalue;
 };
 
-typedef sequence<PolicyValue> PolicyValueSeq;
+typedef sequence <PolicyValue> PolicyValueSeq;
 
 typedef CORBA::OctetSeq MarshaledException;
 
