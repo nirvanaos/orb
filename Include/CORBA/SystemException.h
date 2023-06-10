@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -125,7 +126,7 @@ public:
 		return &exception_entries_ [code].ee;
 	}
 
-	static void _raise_by_code (Code ec, unsigned minor = 0);
+	static void _raise_by_code (Code ec, unsigned minor = 0, CompletionStatus completed = COMPLETED_NO);
 
 #define EXCEPTION_CODE(e) EC_##e,
 

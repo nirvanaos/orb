@@ -86,12 +86,13 @@ const Internal::ExceptionEntry* SystemException::_get_exception_entry (I_ptr <Ty
 		return nullptr;
 }
 
-void SystemException::_raise_by_code (Code ec, unsigned minor)
+void SystemException::_raise_by_code (Code ec, unsigned minor, CompletionStatus completed)
 {
 	if (ec >= 0 && ec < KNOWN_SYSTEM_EXCEPTIONS) {
 		std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type buf;
 		(exception_entries_ [ec].ee.construct) (&buf);
 		((SystemException*)&buf)->minor (minor);
+		((SystemException*)&buf)->completed (completed);
 		((SystemException*)&buf)->_raise ();
 	} else
 		throw UNKNOWN ();
