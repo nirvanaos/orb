@@ -88,7 +88,7 @@ struct Type <std::array <T, bound> > :
 		}
 	}
 
-	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
+	static I_ptr <TypeCode> type_code () noexcept;
 
 	static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq)
 	{

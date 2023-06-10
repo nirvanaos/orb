@@ -69,7 +69,7 @@ public:
 		CompletionStatus completed;
 	};
 
-	virtual void* __data () NIRVANA_NOEXCEPT;
+	virtual void* __data () noexcept;
 
 	uint32_t minor () const
 	{
@@ -111,7 +111,7 @@ public:
 		return _downcast (ep);
 	}
 
-	const _Data& _data () const NIRVANA_NOEXCEPT
+	const _Data& _data () const noexcept
 	{
 		return data_;
 	}
@@ -182,7 +182,7 @@ struct Type <SystemException::_Data> : TypeFixLen <SystemException::_Data, false
 {
 	static const bool is_CDR = true;
 
-	static void byteswap (Var& v) NIRVANA_NOEXCEPT
+	static void byteswap (Var& v) noexcept
 	{
 		v.minor = Nirvana::byteswap (v.minor);
 		v.completed = (CompletionStatus)Nirvana::byteswap ((ABI_enum)v.completed);

@@ -54,12 +54,12 @@ using StringT = std::basic_string <C, std::char_traits <C>, std::allocator <C> >
 template <typename C>
 struct alignas (sizeof (void*)) ABI <StringT <C> >
 {
-	static size_t max_size () NIRVANA_NOEXCEPT
+	static size_t max_size () noexcept
 	{
 		return (SIZE_MAX / 2 + 1) / sizeof (C) - 1;
 	}
 
-	size_t size () const NIRVANA_NOEXCEPT
+	size_t size () const noexcept
 	{
 		if (is_large ())
 			return large_size ();
@@ -67,7 +67,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return small_size ();
 	}
 
-	size_t capacity () const NIRVANA_NOEXCEPT
+	size_t capacity () const noexcept
 	{
 		if (is_large ())
 			return large_capacity ();
@@ -75,12 +75,12 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return SMALL_CAPACITY;
 	}
 
-	bool empty () const NIRVANA_NOEXCEPT
+	bool empty () const noexcept
 	{
 		return size () == 0;
 	}
 
-	const C* _ptr () const NIRVANA_NOEXCEPT
+	const C* _ptr () const noexcept
 	{
 		if (is_large ())
 			return large_pointer ();
@@ -88,7 +88,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return small_pointer ();
 	}
 
-	C* _ptr () NIRVANA_NOEXCEPT
+	C* _ptr () noexcept
 	{
 		if (is_large ())
 			return large_pointer ();
@@ -96,7 +96,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return small_pointer ();
 	}
 
-	const C* _end_ptr () const NIRVANA_NOEXCEPT
+	const C* _end_ptr () const noexcept
 	{
 		if (is_large ())
 			return large_pointer () + large_size ();
@@ -104,7 +104,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return small_pointer () + small_size ();
 	}
 
-	C* _end_ptr () NIRVANA_NOEXCEPT
+	C* _end_ptr () noexcept
 	{
 		if (is_large ())
 			return large_pointer () + large_size ();
@@ -112,7 +112,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return small_pointer () + small_size ();
 	}
 
-	void reset () NIRVANA_NOEXCEPT
+	void reset () noexcept
 	{
 		size_t* p = data.raw, *end = p + countof (data.raw);
 		do {
@@ -120,12 +120,12 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 		} while (end != ++p);
 	}
 
-	bool is_large () const NIRVANA_NOEXCEPT
+	bool is_large () const noexcept
 	{
 		return (data.small.size & SMALL_MASK) != 0;
 	}
 
-	void small_size (size_t s) NIRVANA_NOEXCEPT
+	void small_size (size_t s) noexcept
 	{
 		assert (s <= SMALL_CAPACITY);
 		if (::Nirvana::endian::native == ::Nirvana::endian::big)
@@ -135,7 +135,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 		assert (!is_large ());
 	}
 
-	size_t small_size () const NIRVANA_NOEXCEPT
+	size_t small_size () const noexcept
 	{
 		assert (!is_large ());
 		if (::Nirvana::endian::native == ::Nirvana::endian::big)
@@ -144,18 +144,18 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return data.small.size;
 	}
 
-	void large_size (size_t s) NIRVANA_NOEXCEPT
+	void large_size (size_t s) noexcept
 	{
 		data.large.size = s;
 	}
 
-	size_t large_size () const NIRVANA_NOEXCEPT
+	size_t large_size () const noexcept
 	{
 		assert (is_large ());
 		return data.large.size;
 	}
 
-	void allocated (size_t cb) NIRVANA_NOEXCEPT
+	void allocated (size_t cb) noexcept
 	{
 		assert (!(cb & 2));
 		if (::Nirvana::endian::native == ::Nirvana::endian::big)
@@ -165,7 +165,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 		assert (is_large ());
 	}
 
-	size_t allocated () const NIRVANA_NOEXCEPT
+	size_t allocated () const noexcept
 	{
 		size_t space = data.large.allocated;
 		if (space & LARGE_MASK) {
@@ -177,7 +177,7 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return 0;
 	}
 
-	size_t large_capacity () const NIRVANA_NOEXCEPT
+	size_t large_capacity () const noexcept
 	{
 		assert (is_large ());
 		size_t space = allocated ();
@@ -187,27 +187,27 @@ struct alignas (sizeof (void*)) ABI <StringT <C> >
 			return large_size ();
 	}
 
-	void large_pointer (C* p) NIRVANA_NOEXCEPT
+	void large_pointer (C* p) noexcept
 	{
 		data.large.data = p;
 	}
 
-	const C* large_pointer () const NIRVANA_NOEXCEPT
+	const C* large_pointer () const noexcept
 	{
 		return data.large.data;
 	}
 
-	C* large_pointer () NIRVANA_NOEXCEPT
+	C* large_pointer () noexcept
 	{
 		return data.large.data;
 	}
 
-	const C* small_pointer () const NIRVANA_NOEXCEPT
+	const C* small_pointer () const noexcept
 	{
 		return data.small.data;
 	}
 
-	C* small_pointer () NIRVANA_NOEXCEPT
+	C* small_pointer () noexcept
 	{
 		return data.small.data;
 	}

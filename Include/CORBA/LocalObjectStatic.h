@@ -57,7 +57,7 @@ class InterfaceStatic <S, LocalObject> :
 	public LocalObjectStaticDummy
 {
 public:
-	static Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) NIRVANA_NOEXCEPT
+	static Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) noexcept
 	{
 		return get_object_from_core (core_object (), iid, env);
 	}
@@ -78,7 +78,7 @@ protected:
 	}
 
 private:
-	static LocalObject::_ptr_type core_object () NIRVANA_NOEXCEPT
+	static LocalObject::_ptr_type core_object () noexcept
 	{
 		return static_cast <LocalObject*> (export_struct_.core_object);
 	}

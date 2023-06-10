@@ -40,7 +40,7 @@ Interface* interface_duplicate (Interface* itf)
 	return itf;
 }
 
-void interface_release (Interface* itf) NIRVANA_NOEXCEPT
+void interface_release (Interface* itf) noexcept
 {
 	if (itf) {
 		try {

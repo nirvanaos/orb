@@ -65,7 +65,7 @@ public:
 	}
 
 private:
-	static I_ptr <TypeCode> content () NIRVANA_NOEXCEPT
+	static I_ptr <TypeCode> content () noexcept
 	{
 		return Content::ptr ();
 	}

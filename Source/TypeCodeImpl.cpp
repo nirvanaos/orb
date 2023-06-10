@@ -29,12 +29,12 @@
 namespace CORBA {
 namespace Internal {
 
-void set_BadKind (Interface* env) NIRVANA_NOEXCEPT
+void set_BadKind (Interface* env) noexcept
 {
 	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::BadKind>::id, nullptr);
 }
 
-void set_Bounds (Interface* env) NIRVANA_NOEXCEPT
+void set_Bounds (Interface* env) noexcept
 {
 	set_exception (env, Exception::EC_USER_EXCEPTION, RepIdOf <TypeCode::Bounds>::id, nullptr);
 }

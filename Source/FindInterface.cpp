@@ -30,7 +30,7 @@ namespace CORBA {
 namespace Internal {
 
 Interface* InterfaceEntry::find (const InterfaceEntry* begin, const InterfaceEntry* end,
-	void* servant, String_in id) NIRVANA_NOEXCEPT
+	void* servant, String_in id) noexcept
 {
 	const InterfaceEntry* ie = 0;
 	if (id.empty ()) // On NULL id return primary interface

@@ -45,7 +45,7 @@ using Sequence = std::vector <T, std::allocator <T> >;
 template <class T>
 struct alignas (sizeof (void*)) ABI <Sequence <T> >
 {
-	void reset () NIRVANA_NOEXCEPT
+	void reset () noexcept
 	{
 		ptr = nullptr;
 		size = 0;

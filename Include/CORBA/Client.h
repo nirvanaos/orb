@@ -48,7 +48,7 @@ class ClientBridge :
 	public Bridge <I>
 {
 protected:
-	Bridge <I>& _get_bridge (EnvironmentBase&) NIRVANA_NOEXCEPT
+	Bridge <I>& _get_bridge (EnvironmentBase&) noexcept
 	{
 		return *this;
 	}
@@ -74,7 +74,7 @@ public:
 	typedef I_ref <I> _ref_type;
 #endif
 
-	static _ptr_type _nil () NIRVANA_NOEXCEPT
+	static _ptr_type _nil () noexcept
 	{
 		return _ptr_type (nullptr);
 	}
@@ -89,7 +89,7 @@ private:
 	friend class I_ref <Interface>;
 	friend class I_ref_base <I>;
 
-	static I* _unsafe_cast (Interface* itf) NIRVANA_NOEXCEPT
+	static I* _unsafe_cast (Interface* itf) noexcept
 	{
 		assert (!itf || RepId::compatible (itf->_epv ().interface_id, RepIdOf <I>::id));
 		return static_cast <I*> (itf);

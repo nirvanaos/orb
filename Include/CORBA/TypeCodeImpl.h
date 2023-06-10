@@ -39,18 +39,18 @@ namespace Internal {
 /// Function to return TypeCode
 typedef I_ptr <TypeCode> (*GetTypeCode) ();
 
-void set_BadKind (Interface* env) NIRVANA_NOEXCEPT;
-void set_Bounds (Interface* env) NIRVANA_NOEXCEPT;
+void set_BadKind (Interface* env) noexcept;
+void set_Bounds (Interface* env) noexcept;
 
 template <size_t cc> inline
-Type <String>::ABI_ret const_string_ret (Char const (&s) [cc]) NIRVANA_NOEXCEPT
+Type <String>::ABI_ret const_string_ret (Char const (&s) [cc]) noexcept
 {
 	StringView <Char> sb (s);
 	return Type <String>::ret (std::move (reinterpret_cast <String&> (sb)));
 }
 
 inline
-Type <String>::ABI_ret const_string_ret_p (const Char* s) NIRVANA_NOEXCEPT
+Type <String>::ABI_ret const_string_ret_p (const Char* s) noexcept
 {
 	StringView <Char> sb (s);
 	return Type <String>::ret (std::move (reinterpret_cast <String&> (sb)));
@@ -164,12 +164,12 @@ class TypeCodeWithId :
 public:
 	typedef RepIdOf <T> RepositoryType;
 
-	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equal (I_ptr <TypeCode> other) noexcept
 	{
 		return TypeCodeBase::equal (tk, RepositoryType::id, other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equivalent (I_ptr <TypeCode> other) noexcept
 	{
 		return TypeCodeBase::equivalent (tk, RepositoryType::id, other);
 	}
@@ -221,7 +221,7 @@ public:
 
 	// The get_compact_typecode operation strips out all optional name and member
 	// name fields, but it leaves all alias typecodes intact.
-	I_ref <TypeCode> get_compact_typecode () NIRVANA_NOEXCEPT
+	I_ref <TypeCode> get_compact_typecode () noexcept
 	{
 		// By default, we don't strip names, just return this type code.
 		return I_ptr <TypeCode> (&static_cast <TypeCode&> (static_cast <Bridge <TypeCode>&> (static_cast <S&> (*this))));
@@ -276,7 +276,7 @@ public:
 	}
 
 protected:
-	static I_ptr <TypeCode> ptr () NIRVANA_NOEXCEPT
+	static I_ptr <TypeCode> ptr () noexcept
 	{
 		return Type <Content>::type_code ();
 	}

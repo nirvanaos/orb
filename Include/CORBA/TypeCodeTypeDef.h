@@ -141,12 +141,12 @@ public:
 	}
 
 private:
-	static I_ptr <TypeCode> content () NIRVANA_NOEXCEPT
+	static I_ptr <TypeCode> content () noexcept
 	{
 		return TypeCodeContentType <Content>::ptr ();
 	}
 
-	static Bridge <TypeCode>* content_bridge () NIRVANA_NOEXCEPT
+	static Bridge <TypeCode>* content_bridge () noexcept
 	{
 		return &static_cast <Bridge <TypeCode>&> (*&content ());
 	}

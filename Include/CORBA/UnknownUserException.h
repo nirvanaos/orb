@@ -36,7 +36,7 @@ extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_UnknownUserExce
 
 class UnknownUserException : public UserException
 {
-	virtual Code __code () const NIRVANA_NOEXCEPT
+	virtual Code __code () const noexcept
 	{
 		return EC_UNKNOWN_USER_EXCEPTION;
 	}
@@ -59,7 +59,7 @@ public:
 	{}
 
 private:
-	virtual void* __data () NIRVANA_NOEXCEPT
+	virtual void* __data () noexcept
 	{
 		return &_exception;
 	}

@@ -110,7 +110,7 @@ class ValueFactoryBase :
 {
 public:
 	static ValueFactoryBase::_ptr_type _downcast (ValueFactoryBase::_ptr_type f)
-		NIRVANA_NOEXCEPT
+		noexcept
 	{
 		return f;
 	}

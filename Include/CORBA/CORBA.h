@@ -58,7 +58,7 @@
 namespace CORBA {
 
 inline
-ORB::_ptr_type ORB_init (int&, char**, Internal::String_in) NIRVANA_NOEXCEPT
+ORB::_ptr_type ORB_init (int&, char**, Internal::String_in) noexcept
 {
 	return g_ORB;
 }

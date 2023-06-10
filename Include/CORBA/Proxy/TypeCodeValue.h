@@ -61,40 +61,40 @@ public:
 		return g_ORB->get_compact_typecode (Base::_get_ptr ());
 	}
 
-	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) NIRVANA_NOEXCEPT
+	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return 0;
 	}
 
 	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env) NIRVANA_NOEXCEPT
+		Interface* _env) noexcept
 	{
 		set_Bounds (_env);
 		return Type <String>::ret ();
 	}
 
 	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env) NIRVANA_NOEXCEPT
+		Interface* _env) noexcept
 	{
 		set_Bounds (_env);
 		return nullptr;
 	}
 
 	static Visibility _s_member_visibility (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env) NIRVANA_NOEXCEPT
+		Interface* _env) noexcept
 	{
 		set_Bounds (_env);
 		return 0;
 	}
 
 	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env)
-		NIRVANA_NOEXCEPT
+		noexcept
 	{
 		return VM_ABSTRACT;
 	}
 
 	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
-		NIRVANA_NOEXCEPT
+		noexcept
 	{
 		return nullptr;
 	}
@@ -104,12 +104,12 @@ template <class T>
 class TypeCodeStateMembers
 {
 public:
-	static const StateMember* members () NIRVANA_NOEXCEPT
+	static const StateMember* members () noexcept
 	{
 		return members_;
 	}
 
-	static ULong member_count () NIRVANA_NOEXCEPT
+	static ULong member_count () noexcept
 	{
 		return countof (members_);
 	}
@@ -161,12 +161,12 @@ class TypeCodeStateMembersEmpty :
 public:
 	using TypeCodeMemberCount <0>::_s_member_count;
 
-	static const StateMember* members () NIRVANA_NOEXCEPT
+	static const StateMember* members () noexcept
 	{
 		return nullptr;
 	}
 
-	static ULong member_count () NIRVANA_NOEXCEPT
+	static ULong member_count () noexcept
 	{
 		return 0;
 	}

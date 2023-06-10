@@ -72,10 +72,10 @@ struct Type <IDL::Fixed <digits, scale> > :
 	inline static void unmarshal (IORequest_ptr rq, Var& dst);
 	inline static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst);
 
-	static void byteswap (Var&) NIRVANA_NOEXCEPT
+	static void byteswap (Var&) noexcept
 	{}
 
-	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
+	static I_ptr <TypeCode> type_code () noexcept;
 };
 
 }

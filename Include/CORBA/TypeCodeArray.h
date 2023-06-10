@@ -72,7 +72,7 @@ public:
 };
 
 template <typename T, size_t bound> inline
-I_ptr <TypeCode> Type <std::array <T, bound> >::type_code () NIRVANA_NOEXCEPT
+I_ptr <TypeCode> Type <std::array <T, bound> >::type_code () noexcept
 {
 	return TypeCodeArray <T, bound>::_get_ptr ();
 }

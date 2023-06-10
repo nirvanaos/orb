@@ -62,7 +62,7 @@ protected:
 	virtual ULong _refcount_value () = 0;
 
 protected:
-	virtual void _delete_object () NIRVANA_NOEXCEPT
+	virtual void _delete_object () noexcept
 	{
 		delete this;
 	}

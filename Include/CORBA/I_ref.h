@@ -45,11 +45,11 @@ class I_ref_base
 public:
 	typedef I ItfType;
 
-	I_ref_base () NIRVANA_NOEXCEPT :
+	I_ref_base () noexcept :
 		p_ (nullptr)
 	{}
 
-	I_ref_base (nullptr_t) NIRVANA_NOEXCEPT :
+	I_ref_base (nullptr_t) noexcept :
 		p_ (nullptr)
 	{}
 
@@ -57,7 +57,7 @@ public:
 		p_ (duplicate (src.p_))
 	{}
 
-	I_ref_base (I_ref_base&& src) NIRVANA_NOEXCEPT :
+	I_ref_base (I_ref_base&& src) noexcept :
 		p_ (src.p_)
 	{
 		src.p_ = nullptr;
@@ -67,7 +67,7 @@ public:
 		p_ (duplicate (p.p_))
 	{}
 
-	~I_ref_base () NIRVANA_NOEXCEPT
+	~I_ref_base () noexcept
 	{
 		release (p_);
 	}
@@ -78,7 +78,7 @@ public:
 		return *this;
 	}
 
-	I_ref_base& operator = (I_ref_base&& src) NIRVANA_NOEXCEPT
+	I_ref_base& operator = (I_ref_base&& src) noexcept
 	{
 		if (&src != this) {
 			release (p_);
@@ -88,7 +88,7 @@ public:
 		return *this;
 	}
 
-	I_ref_base& operator = (nullptr_t) NIRVANA_NOEXCEPT
+	I_ref_base& operator = (nullptr_t) noexcept
 	{
 		release (p_);
 		p_ = nullptr;
@@ -102,17 +102,17 @@ public:
 		return p_;
 	}
 
-	explicit operator bool () const NIRVANA_NOEXCEPT
+	explicit operator bool () const noexcept
 	{
 		return p_ != nullptr;
 	}
 
-	explicit operator bool () NIRVANA_NOEXCEPT
+	explicit operator bool () noexcept
 	{
 		return p_ != nullptr;
 	}
 
-	void swap (I_ref_base& other) NIRVANA_NOEXCEPT
+	void swap (I_ref_base& other) noexcept
 	{
 		I* tmp = p_;
 		p_ = other.p_;
@@ -138,7 +138,7 @@ protected:
 		return reinterpret_cast <I*> (interface_duplicate (reinterpret_cast <Interface*> (p)));
 	}
 
-	static void release (I* p) NIRVANA_NOEXCEPT
+	static void release (I* p) noexcept
 	{
 		// Interface may be not completely defined, so use reinterpret_cast.
 		interface_release (reinterpret_cast <Interface*> (p));
@@ -167,10 +167,10 @@ class I_ref : public I_ref_base <I>
 {
 	typedef I_ref_base <I> Base;
 public:
-	I_ref () NIRVANA_NOEXCEPT
+	I_ref () noexcept
 	{}
 
-	I_ref (nullptr_t) NIRVANA_NOEXCEPT :
+	I_ref (nullptr_t) noexcept :
 		Base (nullptr)
 	{}
 
@@ -183,12 +183,12 @@ public:
 		Base (Base::duplicate (wide (src.p_)))
 	{}
 
-	I_ref (I_ref&& src) NIRVANA_NOEXCEPT :
+	I_ref (I_ref&& src) noexcept :
 		Base (std::move (src))
 	{}
 
 	template <class I1>
-	I_ref (I_ref <I1>&& src) NIRVANA_NOEXCEPT :
+	I_ref (I_ref <I1>&& src) noexcept :
 		Base (Base::duplicate (wide (src.p_)))
 	{
 		src = nullptr;
@@ -208,7 +208,7 @@ public:
 	{}
 
 	template <class S>
-	I_ref (const servant_reference <S>& sr) NIRVANA_NOEXCEPT :
+	I_ref (const servant_reference <S>& sr) noexcept :
 		Base (I_ptr <I> (static_cast <S*> (sr)))
 	{}
 
@@ -225,7 +225,7 @@ public:
 		return *this;
 	}
 
-	I_ref& operator = (I_ref&& src) NIRVANA_NOEXCEPT
+	I_ref& operator = (I_ref&& src) noexcept
 	{
 		Base::operator = (std::move (src));
 		return *this;
@@ -254,7 +254,7 @@ public:
 		return *this;
 	}
 
-	I_ref& operator = (nullptr_t) NIRVANA_NOEXCEPT
+	I_ref& operator = (nullptr_t) noexcept
 	{
 		Base::operator = (nullptr);
 		return *this;
@@ -283,10 +283,10 @@ class I_ref <Interface> : public I_ref_base <Interface>
 {
 	typedef I_ref_base <Interface> Base;
 public:
-	I_ref () NIRVANA_NOEXCEPT
+	I_ref () noexcept
 	{}
 
-	I_ref (nullptr_t) NIRVANA_NOEXCEPT :
+	I_ref (nullptr_t) noexcept :
 		Base (nullptr)
 	{}
 
@@ -299,12 +299,12 @@ public:
 		Base (Base::duplicate (src.p_))
 	{}
 
-	I_ref (I_ref&& src) NIRVANA_NOEXCEPT :
+	I_ref (I_ref&& src) noexcept :
 		Base (std::move (src))
 	{}
 
 	template <class I>
-	I_ref (I_ref <I>&& src) NIRVANA_NOEXCEPT :
+	I_ref (I_ref <I>&& src) noexcept :
 		Base (src.p_)
 	{
 		src.p_ = nullptr;
@@ -332,14 +332,14 @@ public:
 		return *this;
 	}
 
-	I_ref& operator = (I_ref&& src) NIRVANA_NOEXCEPT
+	I_ref& operator = (I_ref&& src) noexcept
 	{
 		Base::operator = (std::move (src));
 		return *this;
 	}
 
 	template <class I>
-	I_ref& operator = (I_ref <I>&& src) NIRVANA_NOEXCEPT
+	I_ref& operator = (I_ref <I>&& src) noexcept
 	{
 		release (p_);
 		p_ = src.p_;
@@ -347,14 +347,14 @@ public:
 		return *this;
 	}
 
-	I_ref& operator = (nullptr_t) NIRVANA_NOEXCEPT
+	I_ref& operator = (nullptr_t) noexcept
 	{
 		Base::operator = (nullptr);
 		return *this;
 	}
 
 	template <class I>
-	I_ref <I> downcast () NIRVANA_NOEXCEPT
+	I_ref <I> downcast () noexcept
 	{
 		I_ref <I> ret (I::_unsafe_cast (p_));
 		p_ = nullptr;
@@ -369,12 +369,12 @@ protected:
 };
 
 template <class I> inline
-I_ptr_base <I>::I_ptr_base (const I_ref <I>& src) NIRVANA_NOEXCEPT :
+I_ptr_base <I>::I_ptr_base (const I_ref <I>& src) noexcept :
 	p_ (src.p_)
 {}
 
 template <class I> inline
-void I_ptr_base <I>::move_from (I_ref <I>& src) NIRVANA_NOEXCEPT
+void I_ptr_base <I>::move_from (I_ref <I>& src) noexcept
 {
 	p_ = src.p_;
 	src.p_ = nullptr;

@@ -45,11 +45,11 @@ class servant_reference
 {
 	template <class> friend class servant_reference;
 public:
-	servant_reference () NIRVANA_NOEXCEPT :
+	servant_reference () noexcept :
 		p_ (nullptr)
 	{}
 
-	servant_reference (nullptr_t) NIRVANA_NOEXCEPT :
+	servant_reference (nullptr_t) noexcept :
 		p_ (nullptr)
 	{}
 
@@ -75,14 +75,14 @@ public:
 			p_->_add_ref ();
 	}
 
-	servant_reference (servant_reference&& src) NIRVANA_NOEXCEPT :
+	servant_reference (servant_reference&& src) noexcept :
 		p_ (src.p_)
 	{
 		src.p_ = nullptr;
 	}
 
 	template <class T1>
-	servant_reference (servant_reference <T1>&& src) NIRVANA_NOEXCEPT :
+	servant_reference (servant_reference <T1>&& src) noexcept :
 	p_ (static_cast <T*> (src.p_))
 	{
 		src.p_ = nullptr;
@@ -112,7 +112,7 @@ public:
 	}
 
 	template <class T1>
-	servant_reference& operator = (servant_reference <T1>&& src) NIRVANA_NOEXCEPT
+	servant_reference& operator = (servant_reference <T1>&& src) noexcept
 	{
 		release ();
 		p_ = static_cast <T*> (src.p_);
@@ -127,7 +127,7 @@ public:
 		return p_;
 	}
 
-	operator T* () const NIRVANA_NOEXCEPT
+	operator T* () const noexcept
 	{
 		return p_;
 	}
@@ -139,7 +139,7 @@ public:
 		return *p_;
 	}
 
-	void swap (servant_reference& other) NIRVANA_NOEXCEPT
+	void swap (servant_reference& other) noexcept
 	{
 		T* tmp = p_;
 		p_ = other.p_;
@@ -147,11 +147,11 @@ public:
 	}
 
 protected:
-	servant_reference (T* p, bool) NIRVANA_NOEXCEPT :
+	servant_reference (T* p, bool) noexcept :
 		p_ (p)
 	{}
 
-	void release () NIRVANA_NOEXCEPT
+	void release () noexcept
 	{
 		if (p_) {
 			try {
@@ -197,31 +197,31 @@ template <typename T>
 class servant_out
 {
 public:
-	servant_out (servant_reference <T>& var) NIRVANA_NOEXCEPT :
+	servant_out (servant_reference <T>& var) noexcept :
 		ref_ (var)
 	{
 		var = nullptr;
 	}
 
 #ifdef LEGACY_CORBA_CPP
-	servant_out (T*& p) NIRVANA_NOEXCEPT :
+	servant_out (T*& p) noexcept :
 		ref_ (reinterpret_cast <servant_reference <T>&> (p))
 	{
 		p = nullptr;
 	}
 #endif
 
-	servant_out (const servant_out& src) NIRVANA_NOEXCEPT :
+	servant_out (const servant_out& src) noexcept :
 		ref_ (src.ref_)
 	{}
 
-	servant_out& operator = (const servant_out& src) NIRVANA_NOEXCEPT
+	servant_out& operator = (const servant_out& src) noexcept
 	{
 		ref_ = src.ref_;
 		return *this;
 	}
 
-	servant_out& operator = (const servant_reference <T>& src) NIRVANA_NOEXCEPT
+	servant_out& operator = (const servant_reference <T>& src) noexcept
 	{
 		ref_ = src;
 		return *this;

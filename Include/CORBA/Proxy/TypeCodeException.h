@@ -52,12 +52,12 @@ public:
 		return const_string_ret_p (E::__name ());
 	}
 
-	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equal (I_ptr <TypeCode> other) noexcept
 	{
 		return g_ORB->tc_equal (Base::_get_ptr (), other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equivalent (I_ptr <TypeCode> other) noexcept
 	{
 		return g_ORB->tc_equivalent (Base::_get_ptr (), other);
 	}

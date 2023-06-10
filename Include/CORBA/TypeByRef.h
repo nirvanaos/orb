@@ -90,12 +90,12 @@ struct TypeByRefBase
 		return ABI_ret ();
 	}
 
-	static ABI_VT_ret VT_ret (const Var& v) NIRVANA_NOEXCEPT
+	static ABI_VT_ret VT_ret (const Var& v) noexcept
 	{
 		return &reinterpret_cast <const ABI&> (v);
 	}
 
-	static ABI_VT_ret VT_ret () NIRVANA_NOEXCEPT
+	static ABI_VT_ret VT_ret () noexcept
 	{
 		return nullptr;
 	}
@@ -146,7 +146,7 @@ struct TypeByRefCheck : TypeByRefBase <T, TABI>, TypeWithCheck <T, TABI>
 			p_ (p)
 		{}
 
-		operator const T& () NIRVANA_NOEXCEPT
+		operator const T& () noexcept
 		{
 			check_pointer (p_);
 			Type <T>::check (*p_);

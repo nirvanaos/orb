@@ -59,16 +59,16 @@ public:
 		void (*release) (Interface*);
 	};
 
-	Interface (const EPV& epv) NIRVANA_NOEXCEPT :
+	Interface (const EPV& epv) noexcept :
 		_epv_ref (epv)
 	{}
 
-	const EPV& _epv () const NIRVANA_NOEXCEPT
+	const EPV& _epv () const noexcept
 	{
 		return _epv_ref;
 	}
 
-	Interface& operator = (const Interface&) NIRVANA_NOEXCEPT
+	Interface& operator = (const Interface&) noexcept
 	{
 		return *this;	// Do nothing
 	}
@@ -81,9 +81,9 @@ public:
 #else
 	typedef I_ref <Interface> _ref_type;
 #endif
-	static I_ptr <Interface> _nil () NIRVANA_NOEXCEPT;
+	static I_ptr <Interface> _nil () noexcept;
 
-	static Interface* _unsafe_cast (Interface* p) NIRVANA_NOEXCEPT
+	static Interface* _unsafe_cast (Interface* p) noexcept
 	{
 		return p;
 	}
@@ -93,7 +93,7 @@ private:
 };
 
 Interface* interface_duplicate (Interface* obj);
-void interface_release (Interface* itf) NIRVANA_NOEXCEPT;
+void interface_release (Interface* itf) noexcept;
 
 }
 

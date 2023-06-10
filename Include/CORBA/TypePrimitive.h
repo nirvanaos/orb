@@ -37,58 +37,58 @@ namespace Internal {
 
 // Byte order swap
 
-inline UShort byteswap (UShort& v) NIRVANA_NOEXCEPT
+inline UShort byteswap (UShort& v) noexcept
 {
 	return Nirvana::byteswap (v);
 }
 
-inline Short byteswap (const Short& v) NIRVANA_NOEXCEPT
+inline Short byteswap (const Short& v) noexcept
 {
 	return Nirvana::byteswap ((const uint16_t&)v);
 }
 
-inline ULong byteswap (const ULong& v) NIRVANA_NOEXCEPT
+inline ULong byteswap (const ULong& v) noexcept
 {
 	return Nirvana::byteswap (v);
 }
 
-inline Long byteswap (const Long& v) NIRVANA_NOEXCEPT
+inline Long byteswap (const Long& v) noexcept
 {
 	return Nirvana::byteswap ((const uint32_t&)v);
 }
 
-inline LongLong byteswap (const ULongLong& v) NIRVANA_NOEXCEPT
+inline LongLong byteswap (const ULongLong& v) noexcept
 {
 	return Nirvana::byteswap (v);
 }
 
-inline LongLong byteswap (const LongLong& v) NIRVANA_NOEXCEPT
+inline LongLong byteswap (const LongLong& v) noexcept
 {
 	return Nirvana::byteswap ((const uint64_t&)v);
 }
 
-inline Float byteswap (const Float& v) NIRVANA_NOEXCEPT
+inline Float byteswap (const Float& v) noexcept
 {
 	Float ret;
 	reinterpret_cast <uint32_t&> (ret) = Nirvana::byteswap ((const uint32_t&)v);
 	return ret;
 }
 
-inline Double byteswap (const Double& v) NIRVANA_NOEXCEPT
+inline Double byteswap (const Double& v) noexcept
 {
 	Double ret;
 	reinterpret_cast <uint64_t&> (ret) = Nirvana::byteswap ((const uint64_t&)v);
 	return ret;
 }
 
-inline LongDouble byteswap (const LongDouble& v) NIRVANA_NOEXCEPT
+inline LongDouble byteswap (const LongDouble& v) noexcept
 {
 	const uint64_t* src = &reinterpret_cast <const uint64_t&> (v);
 	uint64_t dst [2] = { Nirvana::byteswap (src [1]), Nirvana::byteswap (src [0]) };
 	return *(const LongDouble*)dst;
 }
 
-inline uint8_t byteswap (const uint8_t& v) NIRVANA_NOEXCEPT
+inline uint8_t byteswap (const uint8_t& v) noexcept
 {
 	return v;
 }
@@ -100,7 +100,7 @@ struct TypePrimitive :
 	static const bool is_CDR = true;
 	static const bool is_var_len = false;
 
-	static void byteswap (T& v) NIRVANA_NOEXCEPT
+	static void byteswap (T& v) noexcept
 	{
 		v = Internal::byteswap (v);
 	}
@@ -124,7 +124,7 @@ struct TypePrimitive <Char> :
 	inline static void unmarshal (IORequest_ptr rq, Char& dst);
 	inline static void unmarshal_a (IORequest_ptr rq, size_t count, Char* dst);
 
-	static void byteswap (Char& v) NIRVANA_NOEXCEPT
+	static void byteswap (Char& v) noexcept
 	{}
 };
 
@@ -140,7 +140,7 @@ struct TypePrimitive <WChar> :
 	inline static void unmarshal (IORequest_ptr rq, WChar& dst);
 	inline static void unmarshal_a (IORequest_ptr rq, size_t count, WChar* dst);
 
-	static void byteswap (WChar& v) NIRVANA_NOEXCEPT
+	static void byteswap (WChar& v) noexcept
 	{
 		v = Internal::byteswap (v);
 	}
@@ -217,10 +217,10 @@ struct TypePrimitive <Boolean> :
 		dst = abi != 0;
 	}
 
-	static void byteswap (Boolean&) NIRVANA_NOEXCEPT
+	static void byteswap (Boolean&) noexcept
 	{}
 
-	static void byteswap (ABI&) NIRVANA_NOEXCEPT
+	static void byteswap (ABI&) noexcept
 	{}
 };
 

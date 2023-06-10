@@ -66,7 +66,7 @@ public:
 
 	template <class Base, class Derived>
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id,
-		Interface* env) NIRVANA_NOEXCEPT
+		Interface* env) noexcept
 	{
 		// It really needed only for value types.
 		assert (false);
@@ -75,7 +75,7 @@ public:
 
 	template <class Base, class Derived>
 	static Bridge <Base>* _wide_val (Bridge <Derived>* derived, Type <String>::ABI_in id,
-		Interface* env) NIRVANA_NOEXCEPT
+		Interface* env) noexcept
 	{
 		try {
 			if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))

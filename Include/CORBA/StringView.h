@@ -67,7 +67,7 @@ class StringView : private ABI <StringT <C> >
 	template <typename, ULong> friend class StringView;
 
 public:
-	StringView (const StringView& s) NIRVANA_NOEXCEPT
+	StringView (const StringView& s) noexcept
 	{
 		size_t size;
 		const C* p;
@@ -144,27 +144,27 @@ public:
 		return ABI::empty ();
 	}
 
-	operator const StringT <C>& () const NIRVANA_NOEXCEPT
+	operator const StringT <C>& () const noexcept
 	{
 		return reinterpret_cast <const StringT <C>&> (*this);
 	}
 
-	const C* c_str () const NIRVANA_NOEXCEPT
+	const C* c_str () const noexcept
 	{
 		return ABI::_ptr ();
 	}
 
-	const C* data () const NIRVANA_NOEXCEPT
+	const C* data () const noexcept
 	{
 		return ABI::_ptr ();
 	}
 
-	size_t size () const NIRVANA_NOEXCEPT
+	size_t size () const noexcept
 	{
 		return ABI::size ();
 	}
 
-	size_t length () const NIRVANA_NOEXCEPT
+	size_t length () const noexcept
 	{
 		return ABI::size ();
 	}

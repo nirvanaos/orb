@@ -53,7 +53,7 @@ public:
 #endif
 
 #ifdef LEGACY_CORBA_CPP
-	static T* _duplicate (T* obj) NIRVANA_NOEXCEPT
+	static T* _duplicate (T* obj) noexcept
 	{
 		if (obj)
 			obj->_add_ref ();
@@ -61,7 +61,7 @@ public:
 	}
 #endif
 
-	static T* _nil () NIRVANA_NOEXCEPT
+	static T* _nil () noexcept
 	{
 		return 0;
 	}

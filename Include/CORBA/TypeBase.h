@@ -72,13 +72,13 @@ struct TypeWithCheck
 	class C_inout
 	{
 	public:
-		C_inout (T& val) NIRVANA_NOEXCEPT :
+		C_inout (T& val) noexcept :
 			ref_ (reinterpret_cast <TABI&> (val))
 		{}
 
 		~C_inout () noexcept (false);
 
-		TABI* operator & () const NIRVANA_NOEXCEPT
+		TABI* operator & () const noexcept
 		{
 			return &ref_;
 		}
@@ -96,7 +96,7 @@ struct TypeWithCheck
 			val_ (val)
 		{}
 
-		operator T () NIRVANA_NOEXCEPT
+		operator T () noexcept
 		{
 			check_or_clear (val_);
 			return std::move (reinterpret_cast <T&> (val_));

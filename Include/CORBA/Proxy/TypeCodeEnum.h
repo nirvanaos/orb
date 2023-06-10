@@ -56,14 +56,14 @@ public:
 			return const_string_ret_p (members_ [index]);
 	}
 
-	static Boolean equal (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equal (I_ptr <TypeCode> other) noexcept
 	{
 		return Base::_bridge () == &other ||
 			TypeCodeBase::equal (TCKind::tk_enum, Base::RepositoryType::id,
 				TypeCodeName <E>::name_, members_, Type <E>::count_, other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other) NIRVANA_NOEXCEPT
+	static Boolean equivalent (I_ptr <TypeCode> other) noexcept
 	{
 		return Base::_bridge () == &other ||
 			TypeCodeBase::equivalent_ (TCKind::tk_enum, Base::RepositoryType::id,

@@ -59,12 +59,12 @@ private:
 		return Nirvana::g_memory->allocate (nullptr, size, 0);
 	}
 
-	void _add_ref () NIRVANA_NOEXCEPT
+	void _add_ref () noexcept
 	{
 		++ref_cnt_;
 	}
 
-	void _remove_ref () NIRVANA_NOEXCEPT
+	void _remove_ref () noexcept
 	{
 		assert (ref_cnt_);
 		if (!--ref_cnt_)
@@ -72,21 +72,21 @@ private:
 	}
 
 public:
-	ULong _refcount_value () const NIRVANA_NOEXCEPT
+	ULong _refcount_value () const noexcept
 	{
 		return ref_cnt_;
 	}
 
 protected:
-	RefCountBase () NIRVANA_NOEXCEPT :
+	RefCountBase () noexcept :
 		ref_cnt_ (1)
 	{}
 
-	RefCountBase (const RefCountBase&) NIRVANA_NOEXCEPT :
+	RefCountBase (const RefCountBase&) noexcept :
 		ref_cnt_ (1)
 	{}
 
-	RefCountBase& operator = (const RefCountBase&) NIRVANA_NOEXCEPT
+	RefCountBase& operator = (const RefCountBase&) noexcept
 	{
 		return *this;
 	}

@@ -52,7 +52,7 @@ public:
 	/// Entry-point vector
 	struct EPV;
 
-	const EPV& _epv () const NIRVANA_NOEXCEPT
+	const EPV& _epv () const noexcept
 	{
 		return (const EPV&)Interface::_epv ();
 	}
@@ -65,7 +65,7 @@ public:
 	};
 
 protected:
-	Bridge (const EPV& epv) NIRVANA_NOEXCEPT :
+	Bridge (const EPV& epv) noexcept :
 		Interface (epv.header)
 	{
 #ifdef NIRVANA_C11
@@ -73,12 +73,12 @@ protected:
 #endif
 	}
 
-	Bridge& operator = (const Bridge&) NIRVANA_NOEXCEPT
+	Bridge& operator = (const Bridge&) noexcept
 	{
 		return *this;
 	}
 
-	Bridge& operator = (Bridge&&) NIRVANA_NOEXCEPT
+	Bridge& operator = (Bridge&&) noexcept
 	{
 		return *this;
 	}
@@ -90,7 +90,7 @@ class BridgeVal :
 	public Bridge <I>
 {
 protected:
-	BridgeVal (const typename Bridge <I>::EPV& epv) NIRVANA_NOEXCEPT :
+	BridgeVal (const typename Bridge <I>::EPV& epv) noexcept :
 		Bridge <I> (epv)
 	{}
 };

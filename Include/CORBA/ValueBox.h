@@ -48,7 +48,7 @@ public:
 		base;
 	};
 
-	const EPV& _epv () const NIRVANA_NOEXCEPT
+	const EPV& _epv () const noexcept
 	{
 		return (const EPV&)Interface::_epv ();
 	}
@@ -76,7 +76,7 @@ protected:
 	}
 
 protected:
-	ValueBoxBridge (const EPV& epv) NIRVANA_NOEXCEPT :
+	ValueBoxBridge (const EPV& epv) noexcept :
 		Interface (epv.header)
 	{}
 };
@@ -106,12 +106,12 @@ class ValueBoxClient : public ValueBoxBridge
 public:
 	typedef typename Type <T>::Var BoxedType;
 
-	const BoxedType& _value () const NIRVANA_NOEXCEPT
+	const BoxedType& _value () const noexcept
 	{
 		return *reinterpret_cast <const BoxedType*> (&value_);
 	}
 
-	BoxedType& _value () NIRVANA_NOEXCEPT
+	BoxedType& _value () noexcept
 	{
 		return *reinterpret_cast <BoxedType*> (&value_);
 	}
@@ -121,7 +121,7 @@ public:
 		_value () = v;
 	}
 
-	void _value (BoxedType&& v) NIRVANA_NOEXCEPT
+	void _value (BoxedType&& v) noexcept
 	{
 		_value () = std::move (v);
 	}
@@ -133,24 +133,24 @@ protected:
 		return *this;
 	}
 
-	ValueBoxClient& operator = (ValueBoxClient&& v) NIRVANA_NOEXCEPT
+	ValueBoxClient& operator = (ValueBoxClient&& v) noexcept
 	{
 		_value () = std::move (v._value ());
 		return *this;
 	}
 
 protected:
-	ValueBoxClient (const EPV& epv) NIRVANA_NOEXCEPT :
+	ValueBoxClient (const EPV& epv) noexcept :
 		ValueBoxBridge (epv)
 	{}
 
-	ValueBoxClient (const EPV& epv, const BoxedType& src) NIRVANA_NOEXCEPT :
+	ValueBoxClient (const EPV& epv, const BoxedType& src) noexcept :
 		ValueBoxBridge (epv)
 	{
 		::new (&value_) BoxedType (src);
 	}
 
-	ValueBoxClient (const EPV& epv, BoxedType&& src) NIRVANA_NOEXCEPT :
+	ValueBoxClient (const EPV& epv, BoxedType&& src) noexcept :
 		ValueBoxBridge (epv)
 	{
 		::new (&value_) BoxedType (std::move (src));
@@ -207,23 +207,23 @@ public:
 		return nullptr;
 	}
 
-	static _ptr_type _nil () NIRVANA_NOEXCEPT
+	static _ptr_type _nil () noexcept
 	{
 		return _ptr_type (nullptr);
 	}
 
 protected:
-	ValueBoxImpl () NIRVANA_NOEXCEPT :
+	ValueBoxImpl () noexcept :
 		Base (epv_),
 		base_ (Skeleton <VB, ValueBase>::epv_)
 	{}
 
-	ValueBoxImpl (const ValueBoxImpl& src) NIRVANA_NOEXCEPT :
+	ValueBoxImpl (const ValueBoxImpl& src) noexcept :
 		Base (epv_, src._value ()),
 		base_ (Skeleton <VB, ValueBase>::epv_)
 	{}
 
-	ValueBoxImpl (ValueBoxImpl&& src) NIRVANA_NOEXCEPT :
+	ValueBoxImpl (ValueBoxImpl&& src) noexcept :
 		Base (epv_, std::move (src._value ())),
 		base_ (Skeleton <VB, ValueBase>::epv_)
 	{}
@@ -234,7 +234,7 @@ protected:
 		return *this;
 	}
 
-	ValueBoxImpl& operator = (ValueBoxImpl&& src) NIRVANA_NOEXCEPT
+	ValueBoxImpl& operator = (ValueBoxImpl&& src) noexcept
 	{
 		Base::operator = (std::move (src));
 		return *this;
@@ -264,7 +264,7 @@ private:
 		Type <T>::unmarshal (rq, this->_value ());
 	}
 
-	Interface* _query_valuetype (String_in id) NIRVANA_NOEXCEPT
+	Interface* _query_valuetype (String_in id) noexcept
 	{
 		if (id.empty () || RepId::compatible (RepIdOf <VB>::id, id))
 			return &static_cast <ValueBoxBridge&> (*this);
@@ -289,7 +289,7 @@ private:
 	friend class I_ref <Interface>;
 	friend class I_ref_base <VB>;
 
-	static VB* _unsafe_cast (Interface* itf) NIRVANA_NOEXCEPT
+	static VB* _unsafe_cast (Interface* itf) noexcept
 	{
 		assert (!itf || RepId::compatible (itf->_epv ().interface_id, RepIdOf <VB>::id));
 		return static_cast <VB*> (itf);
@@ -301,7 +301,7 @@ private:
 	class ValueBaseBridge : public BridgeVal <ValueBase>
 	{
 	public:
-		ValueBaseBridge (const Bridge <ValueBase>::EPV& epv) NIRVANA_NOEXCEPT :
+		ValueBaseBridge (const Bridge <ValueBase>::EPV& epv) noexcept :
 			BridgeVal <ValueBase> (epv)
 		{}
 	};

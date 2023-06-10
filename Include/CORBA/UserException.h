@@ -33,28 +33,28 @@ namespace CORBA {
 
 class UserException : public Exception
 {
-	virtual Code __code () const NIRVANA_NOEXCEPT
+	virtual Code __code () const noexcept
 	{
 		return EC_USER_EXCEPTION;
 	}
 
 public:
-	static const UserException* _downcast (const Exception* ep) NIRVANA_NOEXCEPT
+	static const UserException* _downcast (const Exception* ep) noexcept
 	{
 		return (ep && (ep->__code () < 0)) ? static_cast <const UserException*> (ep) : 0;
 	}
 
-	static UserException* _downcast (Exception* ep) NIRVANA_NOEXCEPT
+	static UserException* _downcast (Exception* ep) noexcept
 	{
 		return const_cast <UserException*> (_downcast ((const Exception*)ep));
 	}
 
-	static const UserException* _narrow (const Exception* ep) NIRVANA_NOEXCEPT
+	static const UserException* _narrow (const Exception* ep) noexcept
 	{
 		return _downcast (ep);
 	}
 
-	static UserException* _narrow (Exception* ep) NIRVANA_NOEXCEPT
+	static UserException* _narrow (Exception* ep) noexcept
 	{
 		return _downcast (ep);
 	}
@@ -66,10 +66,10 @@ protected:
 
 }
 
-#define NIRVANA_EXCEPTION_DEF(Parent, E) const Parent E* Parent E::_downcast (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT {\
+#define NIRVANA_EXCEPTION_DEF(Parent, E) const Parent E* Parent E::_downcast (const ::CORBA::Exception* ep) noexcept {\
 return (ep && ::CORBA::Internal::RepId::compatible (ep->_rep_id (), ::CORBA::Internal::RepIdOf <Parent E>::id))\
 ? &static_cast <const Parent E&> (*ep) : nullptr; }\
-const char* Parent E::_rep_id () const NIRVANA_NOEXCEPT { return ::CORBA::Internal::RepIdOf <Parent E>::id; }\
-GNU_OPTNONE ::CORBA::Internal::I_ptr <::CORBA::TypeCode> Parent E::__type_code () const NIRVANA_NOEXCEPT { return Parent _tc_##E; }
+const char* Parent E::_rep_id () const noexcept { return ::CORBA::Internal::RepIdOf <Parent E>::id; }\
+GNU_OPTNONE ::CORBA::Internal::I_ptr <::CORBA::TypeCode> Parent E::__type_code () const noexcept { return Parent _tc_##E; }
 
 #endif

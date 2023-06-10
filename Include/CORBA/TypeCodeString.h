@@ -69,7 +69,7 @@ class TypeCodeString <StringT <WChar>, bound> :
 	public TypeCodeStringBase <WString, TCKind::tk_wstring, bound> {};
 
 template <typename C, ULong bound> inline
-I_ptr <TypeCode> Type <BoundedStringT <C, bound> >::type_code () NIRVANA_NOEXCEPT
+I_ptr <TypeCode> Type <BoundedStringT <C, bound> >::type_code () noexcept
 {
 	if (!bound)
 		return Type <StringT <C> >::type_code ();

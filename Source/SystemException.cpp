@@ -32,9 +32,9 @@ namespace CORBA {
 using namespace Internal;
 
 #define DEFINE_SYSTEM_EXCEPTION(E)\
-const E* E::_downcast (const Exception* ep) NIRVANA_NOEXCEPT { return (ep && (EC_##E == ep->__code ())) ? static_cast <const E*> (ep) : nullptr; }\
-const char* E::_rep_id () const NIRVANA_NOEXCEPT { return RepIdOf <E>::id; }\
-GNU_OPTNONE ::CORBA::I_ptr <TypeCode> E::__type_code () const NIRVANA_NOEXCEPT { return _tc_##E; }
+const E* E::_downcast (const Exception* ep) noexcept { return (ep && (EC_##E == ep->__code ())) ? static_cast <const E*> (ep) : nullptr; }\
+const char* E::_rep_id () const noexcept { return RepIdOf <E>::id; }\
+GNU_OPTNONE ::CORBA::I_ptr <TypeCode> E::__type_code () const noexcept { return _tc_##E; }
 
 #define EXCEPTION_ENTRY(E) { { RepIdOf <E>::id, sizeof (E), construct <E> }, countof (RepIdOf <E>::id) - 1 },
 
@@ -98,7 +98,7 @@ void SystemException::_raise_by_code (Code ec, unsigned minor, CompletionStatus 
 		throw UNKNOWN ();
 }
 
-void* SystemException::__data () NIRVANA_NOEXCEPT
+void* SystemException::__data () noexcept
 {
 	return &data_;
 }

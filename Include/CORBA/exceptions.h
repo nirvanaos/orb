@@ -36,7 +36,7 @@ class E : public SystemException {\
 NIRVANA_EXCEPTION_DCL(E)\
 E () {}\
 E (ULong minor, CompletionStatus status = COMPLETED_NO) : SystemException (minor, status) {}\
-virtual Code __code () const NIRVANA_NOEXCEPT { return EC_##E; }};
+virtual Code __code () const noexcept { return EC_##E; }};
 
 #define DECLARE_CORBA_EXCEPTION(E) DECLARE_SYSTEM_EXCEPTION(E)\
 namespace Internal { template <> const Char RepIdOf <E>::id [] = "IDL:omg.org/CORBA/" #E ":1.0"; }

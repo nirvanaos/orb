@@ -53,7 +53,7 @@ void Type <StringT <Char> >::unmarshal (IORequest_ptr rq, Var& dst)
 }
 
 template <> inline
-I_ptr <TypeCode> Type <StringT <Char> >::type_code () NIRVANA_NOEXCEPT
+I_ptr <TypeCode> Type <StringT <Char> >::type_code () noexcept
 {
 	return _tc_string;
 }
@@ -77,7 +77,7 @@ void Type <StringT <WChar> >::unmarshal (IORequest_ptr rq, Var& dst)
 }
 
 template <> inline
-I_ptr <TypeCode> Type <StringT <WChar> >::type_code () NIRVANA_NOEXCEPT
+I_ptr <TypeCode> Type <StringT <WChar> >::type_code () noexcept
 {
 	return _tc_wstring;
 }

@@ -50,7 +50,7 @@ class ImplementationStatic :
 public:
 	typedef Primary PrimaryInterface;
 
-	Interface* _query_interface (const String& id) NIRVANA_NOEXCEPT
+	Interface* _query_interface (const String& id) noexcept
 	{
 		return FindInterface <Primary, Bases...>::find (*(S*)0, id);
 	}

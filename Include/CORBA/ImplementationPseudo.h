@@ -56,13 +56,13 @@ class ImplementationPseudo :
 public:
 	typedef Primary PrimaryInterface;
 
-	I_ptr <Primary> _get_ptr () NIRVANA_NOEXCEPT
+	I_ptr <Primary> _get_ptr () noexcept
 	{
 		return I_ptr <Primary> (&static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this)));
 	}
 
 protected:
-	ImplementationPseudo () NIRVANA_NOEXCEPT
+	ImplementationPseudo () noexcept
 	{}
 };
 

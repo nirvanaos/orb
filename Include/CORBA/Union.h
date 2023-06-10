@@ -34,13 +34,13 @@ namespace CORBA {
 namespace Internal {
 
 template <class T> inline
-void destruct (T& v) NIRVANA_NOEXCEPT
+void destruct (T& v) noexcept
 {
 	v.~T ();
 }
 
 template <class T> inline
-void construct (T& v) NIRVANA_NOEXCEPT
+void construct (T& v) noexcept
 {
 	::new (&v) T ();
 }
@@ -58,7 +58,7 @@ void construct (Octet& v, Boolean src)
 }
 
 template <class T> inline
-void construct (T& v, T&& src) NIRVANA_NOEXCEPT
+void construct (T& v, T&& src) noexcept
 {
 	::new (&v) T (std::move (src));
 }
@@ -82,61 +82,61 @@ void construct (I_var <I> v, I_ptr <I> src)
 #endif
 
 template <> inline
-void construct (Boolean& v) NIRVANA_NOEXCEPT
+void construct (Boolean& v) noexcept
 {
 	v = false;
 }
 
 template <> inline
-void construct (Char& v) NIRVANA_NOEXCEPT
+void construct (Char& v) noexcept
 {
 	v = 0;
 }
 
 template <> inline
-void construct (WChar& v) NIRVANA_NOEXCEPT
+void construct (WChar& v) noexcept
 {
 	v = 0;
 }
 
 template <> inline
-void construct (Octet& v) NIRVANA_NOEXCEPT
+void construct (Octet& v) noexcept
 {
 	v = 0;
 }
 
 template <> inline
-void construct (Short& v) NIRVANA_NOEXCEPT
+void construct (Short& v) noexcept
 {
 	v = 0;
 }
 
 template <> inline
-void construct (UShort& v) NIRVANA_NOEXCEPT
+void construct (UShort& v) noexcept
 {
 	v = 0;
 }
 
 template <> inline
-void construct (Long& v) NIRVANA_NOEXCEPT
+void construct (Long& v) noexcept
 {
 	v = 0;
 }
 
 template <> inline
-void construct (ULong& v) NIRVANA_NOEXCEPT
+void construct (ULong& v) noexcept
 {
 	v = 0;
 }
 
 template <> inline
-void construct (LongLong& v) NIRVANA_NOEXCEPT
+void construct (LongLong& v) noexcept
 {
 	v = 0;
 }
 
 template <> inline
-void construct (ULongLong& v) NIRVANA_NOEXCEPT
+void construct (ULongLong& v) noexcept
 {
 	v = 0;
 }

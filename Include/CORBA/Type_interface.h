@@ -335,24 +335,24 @@ struct TypeItfBase
 
 #endif
 
-	static Interface* ret (I_ref <I>&& var) NIRVANA_NOEXCEPT
+	static Interface* ret (I_ref <I>&& var) noexcept
 	{
 		Interface* p = var.p_;
 		var.p_ = nullptr;
 		return p;
 	}
 
-	static Interface* ret () NIRVANA_NOEXCEPT
+	static Interface* ret () noexcept
 	{
 		return nullptr;
 	}
 
-	static Interface* VT_ret (const I_ptr <I>& ptr) NIRVANA_NOEXCEPT
+	static Interface* VT_ret (const I_ptr <I>& ptr) noexcept
 	{
 		return &ptr;
 	}
 
-	static Interface* VT_ret () NIRVANA_NOEXCEPT
+	static Interface* VT_ret () noexcept
 	{
 		return nullptr;
 	}

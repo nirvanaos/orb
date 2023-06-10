@@ -96,7 +96,7 @@ protected:
 	}
 
 protected:
-	virtual void _delete_object () NIRVANA_NOEXCEPT
+	virtual void _delete_object () noexcept
 	{
 		delete this;
 	}

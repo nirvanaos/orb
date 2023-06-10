@@ -38,12 +38,12 @@ template <class T>
 class TypeCodeMembers
 {
 public:
-	static const Parameter* members () NIRVANA_NOEXCEPT
+	static const Parameter* members () noexcept
 	{
 		return members_;
 	}
 
-	static ULong member_count () NIRVANA_NOEXCEPT
+	static ULong member_count () noexcept
 	{
 		return countof (members_);
 	}
@@ -85,12 +85,12 @@ class TypeCodeMembersEmpty :
 public:
 	using TypeCodeMemberCount <0>::_s_member_count;
 
-	static const Parameter* members () NIRVANA_NOEXCEPT
+	static const Parameter* members () noexcept
 	{
 		return nullptr;
 	}
 
-	static ULong member_count () NIRVANA_NOEXCEPT
+	static ULong member_count () noexcept
 	{
 		return 0;
 	}

@@ -57,27 +57,27 @@ public:
 	typedef I ItfType;
 
 	/// Zero init skipped for performance
-	I_ptr_base () NIRVANA_NOEXCEPT
+	I_ptr_base () noexcept
 #ifdef _DEBUG
 		: p_ ((I*)UNINITIALIZED_PTR)
 #endif
 	{}
 
-	I_ptr_base (I* p) NIRVANA_NOEXCEPT :
+	I_ptr_base (I* p) noexcept :
 		p_ (p)
 	{}
 
-	I_ptr_base (nullptr_t) NIRVANA_NOEXCEPT :
+	I_ptr_base (nullptr_t) noexcept :
 		p_ (nullptr)
 	{}
 
-	I_ptr_base (const I_ptr_base& src) NIRVANA_NOEXCEPT :
+	I_ptr_base (const I_ptr_base& src) noexcept :
 		p_ (src.p_)
 	{}
 
-	I_ptr_base (const I_ref <I>& src) NIRVANA_NOEXCEPT;
+	I_ptr_base (const I_ref <I>& src) noexcept;
 
-	I_ptr_base& operator = (const I_ptr_base& src) NIRVANA_NOEXCEPT
+	I_ptr_base& operator = (const I_ptr_base& src) noexcept
 	{
 		p_ = src.p_;
 		return *this;
@@ -91,20 +91,20 @@ public:
 		return p_;
 	}
 
-	explicit operator bool () const NIRVANA_NOEXCEPT
+	explicit operator bool () const noexcept
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)p_);
 		return p_ != 0;
 	}
 
-	explicit operator bool () NIRVANA_NOEXCEPT
+	explicit operator bool () noexcept
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)p_);
 		return p_ != 0;
 	}
 
 protected:
-	void move_from (I_ref <I>& src) NIRVANA_NOEXCEPT;
+	void move_from (I_ref <I>& src) noexcept;
 
 protected:
 	friend class I_ref_base <I>;
@@ -127,18 +127,18 @@ class I_ptr : public I_ptr_base <I>
 {
 	typedef I_ptr_base <I> Base;
 public:
-	I_ptr () NIRVANA_NOEXCEPT
+	I_ptr () noexcept
 	{}
 
-	I_ptr (I* p) NIRVANA_NOEXCEPT :
+	I_ptr (I* p) noexcept :
 		Base (p)
 	{}
 
-	I_ptr (nullptr_t) NIRVANA_NOEXCEPT :
+	I_ptr (nullptr_t) noexcept :
 		Base (nullptr)
 	{}
 
-	I_ptr (const I_ptr& src) NIRVANA_NOEXCEPT :
+	I_ptr (const I_ptr& src) noexcept :
 		Base (src)
 	{}
 
@@ -147,7 +147,7 @@ public:
 		Base (wide (src.p_))
 	{}
 
-	I_ptr (const I_ref <I>& src) NIRVANA_NOEXCEPT :
+	I_ptr (const I_ref <I>& src) noexcept :
 		Base (src)
 	{}
 
@@ -160,34 +160,34 @@ public:
 	///    I_ref <Object> func ();
 	///    Object_ptr obj = func ();
 	NIRVANA_DEPRECATED ("Potentially unsafe conversion from reference to pointer")
-	I_ptr (I_ref <I>&& src) NIRVANA_NOEXCEPT
+	I_ptr (I_ref <I>&& src) noexcept
 	{
 		this->move_from (src);
 	}
 
 #endif
 
-	I_ptr (BridgeVal <I>* p) NIRVANA_NOEXCEPT :
+	I_ptr (BridgeVal <I>* p) noexcept :
 		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
 	{}
 
 	template <class VB, typename T>
-	I_ptr (ValueBox <VB, T>* p) NIRVANA_NOEXCEPT :
+	I_ptr (ValueBox <VB, T>* p) noexcept :
 		I_ptr (static_cast <I_ptr <I> > (*p))
 	{}
 
 	template <class S>
-	I_ptr (const servant_reference <S>& sr) NIRVANA_NOEXCEPT :
+	I_ptr (const servant_reference <S>& sr) noexcept :
 		I_ptr (static_cast <S*> (sr))
 	{}
 
-	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
+	I_ptr& operator = (const I_ptr& src) noexcept
 	{
 		Base::operator = (src);
 		return *this;
 	}
 
-	Interface* operator & () const NIRVANA_NOEXCEPT
+	Interface* operator & () const noexcept
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
 		// I may be not completely defined so we use reinterpret_cast
@@ -210,18 +210,18 @@ class I_ptr <Interface> : public I_ptr_base <Interface>
 {
 	typedef I_ptr_base <Interface> Base;
 public:
-	I_ptr () NIRVANA_NOEXCEPT
+	I_ptr () noexcept
 	{}
 
-	I_ptr (Interface* p) NIRVANA_NOEXCEPT :
+	I_ptr (Interface* p) noexcept :
 		Base (p)
 	{}
 
-	I_ptr (nullptr_t) NIRVANA_NOEXCEPT :
+	I_ptr (nullptr_t) noexcept :
 		Base (nullptr)
 	{}
 
-	I_ptr (const I_ptr& src) NIRVANA_NOEXCEPT :
+	I_ptr (const I_ptr& src) noexcept :
 		Base (src)
 	{}
 
@@ -230,31 +230,31 @@ public:
 		Base (src.p_)
 	{}
 
-	I_ptr (const I_ref <Interface>& src) NIRVANA_NOEXCEPT :
+	I_ptr (const I_ref <Interface>& src) noexcept :
 		Base (src)
 	{}
 
-	I_ptr& operator = (const I_ptr& src) NIRVANA_NOEXCEPT
+	I_ptr& operator = (const I_ptr& src) noexcept
 	{
 		Base::operator = (src);
 		return *this;
 	}
 
-	Interface* operator & () const NIRVANA_NOEXCEPT
+	Interface* operator & () const noexcept
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
 		return this->p_;
 	}
 
 	template <class I>
-	I_ptr <I> downcast () NIRVANA_NOEXCEPT
+	I_ptr <I> downcast () noexcept
 	{
 		return I::_unsafe_cast (p_);
 	}
 
 };
 
-inline I_ptr <Interface> Interface::_nil () NIRVANA_NOEXCEPT
+inline I_ptr <Interface> Interface::_nil () noexcept
 {
 	return I_ptr <Interface> ((Interface*)nullptr);
 }

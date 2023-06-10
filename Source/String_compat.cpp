@@ -34,13 +34,13 @@ template <typename C>
 class StringAllocator
 {
 public:
-	static C* allocate (uint32_t len) NIRVANA_NOEXCEPT
+	static C* allocate (uint32_t len) noexcept
 	{
 		size_t cb = ((size_t)len + 1) * sizeof (C);
 		return (C*)g_memory->allocate (0, cb, Memory::EXACTLY);
 	}
 
-	static C* dup (const C* s) NIRVANA_NOEXCEPT
+	static C* dup (const C* s) noexcept
 	{
 		if (s) {
 			size_t cb = (std::char_traits <C>::length (s) + 1) * sizeof (C);
@@ -49,7 +49,7 @@ public:
 			return nullptr;
 	}
 
-	static void free (C* s) NIRVANA_NOEXCEPT
+	static void free (C* s) noexcept
 	{
 		if (s)
 			g_memory->release (s, (std::char_traits <C>::length (s) + 1) * sizeof (C));

@@ -238,7 +238,7 @@ void operator <<= (Any& any, Exception&& e)
 	any.move_from (e.__type_code (), e.__data ());
 }
 
-bool Any::is_system_exception () const NIRVANA_NOEXCEPT
+bool Any::is_system_exception () const noexcept
 {
 	I_ptr <TypeCode> tc = type ();
 	if (tc && tc->kind () == TCKind::tk_except) {

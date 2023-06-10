@@ -111,32 +111,32 @@ public:
 	}
 
 	static ServantTied <T, I>& _implementation (Bridge <AbstractBase>* itf)
-		NIRVANA_NOEXCEPT
+		noexcept
 	{
 		return BaseImpl::_implementation (itf);
 	}
 
 	static ServantTied <T, I>& _implementation (Bridge <PortableServer::ServantBase>* itf)
-		NIRVANA_NOEXCEPT
+		noexcept
 	{
 		return BaseImpl::_implementation (itf);
 	}
 
 	static ServantTied <T, I>& _implementation (Bridge <LocalObject>* itf)
-		NIRVANA_NOEXCEPT
+		noexcept
 	{
 		return BaseImpl::_implementation (itf);
 	}
 
 	template <class I1>
-	static T& _implementation (Bridge <I1>* bridge) NIRVANA_NOEXCEPT
+	static T& _implementation (Bridge <I1>* bridge) noexcept
 	{
 		return *(BaseImpl::_implementation (bridge).ptr_);
 	}
 
 	template <class Base, class Derived>
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id,
-		Interface* env) NIRVANA_NOEXCEPT
+		Interface* env) noexcept
 	{
 		// TODO: It really needed only for value types!
 		try {
@@ -153,7 +153,7 @@ public:
 
 	template <class Derived>
 	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, Type <String>::ABI_in id,
-		Interface* env) NIRVANA_NOEXCEPT
+		Interface* env) noexcept
 	{
 		assert (false);
 		return nullptr;
@@ -161,14 +161,14 @@ public:
 
 	template <>
 	static Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, Type <String>::ABI_in id,
-		Interface* env) NIRVANA_NOEXCEPT
+		Interface* env) noexcept
 	{
 		return BaseImpl::_implementation (derived)._get_object (id, env);
 	}
 
 	template <class Derived>
 	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, Type <String>::ABI_in id,
-		Interface* env) NIRVANA_NOEXCEPT
+		Interface* env) noexcept
 	{
 		// Tied implementation hardly ever will be used for value types.
 		// For objects this function is never called.

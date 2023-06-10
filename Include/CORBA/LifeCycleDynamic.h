@@ -39,7 +39,7 @@ class LifeCycleDynamic
 {
 public:
 	template <class I>
-	static Interface* __duplicate (Interface* itf, Interface* env) NIRVANA_NOEXCEPT
+	static Interface* __duplicate (Interface* itf, Interface* env) noexcept
 	{
 		try {
 			return S::_duplicate (static_cast <Bridge <I>*> (itf));
@@ -52,7 +52,7 @@ public:
 	}
 
 	template <class I>
-	static void __release (Interface* itf) NIRVANA_NOEXCEPT
+	static void __release (Interface* itf) noexcept
 	{
 		try {
 			S::_release (static_cast <Bridge <I>*> (itf));

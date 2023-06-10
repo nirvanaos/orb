@@ -75,7 +75,7 @@ struct TypeVarLen :
 		return const_cast <Var&> (Base::in (p));
 	}
 
-	static ABI_ret ret (Var&& v) NIRVANA_NOEXCEPT
+	static ABI_ret ret (Var&& v) noexcept
 	{
 		ABI_ret abi;
 		new (&abi) Var (std::move (v));
@@ -89,7 +89,7 @@ struct TypeVarLen :
 		return abi;
 	}
 
-	static ABI_ret ret () NIRVANA_NOEXCEPT
+	static ABI_ret ret () noexcept
 	{
 		ABI_ret abi;
 		new (&abi) Var ();

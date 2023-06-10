@@ -94,7 +94,7 @@ protected:
 	}
 
 private:
-	static PortableServer::Servant servant_base () NIRVANA_NOEXCEPT
+	static PortableServer::Servant servant_base () noexcept
 	{
 		return static_cast <PortableServer::ServantBase*> (export_struct_.core_object);
 	}

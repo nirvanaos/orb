@@ -93,7 +93,7 @@ public:
 	}
 
 private:
-	static I_ptr <TypeCode> discriminator_tc_ptr () NIRVANA_NOEXCEPT
+	static I_ptr <TypeCode> discriminator_tc_ptr () noexcept
 	{
 		return Type <typename Type <U>::DiscriminatorType>::type_code ();
 	}

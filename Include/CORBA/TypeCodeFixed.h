@@ -148,7 +148,7 @@ public:
 };
 
 template <uint16_t digits, int16_t scale> inline
-I_ptr <TypeCode> Type <IDL::Fixed <digits, scale> >::type_code () NIRVANA_NOEXCEPT
+I_ptr <TypeCode> Type <IDL::Fixed <digits, scale> >::type_code () noexcept
 {
 	return TypeCodeFixed <digits, scale>::_get_ptr ();
 }

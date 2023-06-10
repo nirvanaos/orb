@@ -148,7 +148,7 @@ class ValueBase :
 	public Internal::ClientInterfacePrimary <ValueBase>
 {
 public:
-	static ValueBase::_ptr_type _downcast (ValueBase::_ptr_type val) NIRVANA_NOEXCEPT
+	static ValueBase::_ptr_type _downcast (ValueBase::_ptr_type val) noexcept
 	{
 		return val;
 	}

@@ -61,14 +61,14 @@ public:
 	{}
 
 	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) const
-		NIRVANA_NOEXCEPT
+		noexcept
 	{
 		return static_cast <Bridge <Object>*> (
 			(proxy_manager_->_epv ().epv.get_object) (static_cast <Bridge <IOReference>*> (&proxy_manager_), iid, env));
 	}
 
 	Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid, Interface* env) const
-		NIRVANA_NOEXCEPT
+		noexcept
 	{
 		return static_cast <Bridge <AbstractBase>*> (
 			(proxy_manager_->_epv ().epv.get_abstract_base) (static_cast <Bridge <IOReference>*> (&proxy_manager_), iid, env));
@@ -79,7 +79,7 @@ public:
 		interface_duplicate (&proxy_manager_);
 	}
 
-	void _remove_ref () NIRVANA_NOEXCEPT
+	void _remove_ref () noexcept
 	{
 		interface_release (&proxy_manager_);
 	}
@@ -129,7 +129,7 @@ public:
 			throw OBJ_ADAPTER ();
 	}
 
-	Bridge <I>* get () const NIRVANA_NOEXCEPT
+	Bridge <I>* get () const noexcept
 	{
 		return proxy_;
 	}

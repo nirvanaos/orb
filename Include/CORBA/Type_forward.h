@@ -32,9 +32,9 @@
 
 namespace std {
 #ifdef NIRVANA_C17
-  int uncaught_exceptions () NIRVANA_NOEXCEPT;
+  int uncaught_exceptions () noexcept;
 #else
-  bool uncaught_exception () NIRVANA_NOEXCEPT;
+  bool uncaught_exception () noexcept;
 #endif
 }
 
@@ -173,7 +173,7 @@ template <class T> struct Type;
 // Helper functions.
 extern void check_pointer (const void* p);
 
-inline bool uncaught_exception () NIRVANA_NOEXCEPT
+inline bool uncaught_exception () noexcept
 {
 #ifdef NIRVANA_C17
   return std::uncaught_exceptions () != 0;

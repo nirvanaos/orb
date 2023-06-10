@@ -50,23 +50,23 @@ public:
 
 	Environment () {}
 
-	Environment (Environment&& src) NIRVANA_NOEXCEPT
+	Environment (Environment&& src) noexcept
 	{
 		move_from (src);
 	}
 
-	Environment (Internal::EnvironmentBase&& src) NIRVANA_NOEXCEPT
+	Environment (Internal::EnvironmentBase&& src) noexcept
 	{
 		move_from (src);
 	}
 
-	Environment& operator = (Environment&& src) NIRVANA_NOEXCEPT
+	Environment& operator = (Environment&& src) noexcept
 	{
 		move_from (src);
 		return *this;
 	}
 
-	Environment& operator = (Internal::EnvironmentBase&& src) NIRVANA_NOEXCEPT
+	Environment& operator = (Internal::EnvironmentBase&& src) noexcept
 	{
 		move_from (src);
 		return *this;

@@ -45,13 +45,13 @@ class ValueImpl <S, PortableServer::ServantBase> :
 	public ServantMemory
 {
 public:
-	void _delete_object () NIRVANA_NOEXCEPT
+	void _delete_object () noexcept
 	{
 		delete& static_cast <S&> (*this);
 	}
 
 	static Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
-		Interface* env) NIRVANA_NOEXCEPT
+		Interface* env) noexcept
 	{
 		assert (false);
 		return nullptr;
@@ -68,7 +68,7 @@ protected:
 		ValueImpl ()
 	{}
 
-	ValueImpl& operator = (const ValueImpl&) NIRVANA_NOEXCEPT
+	ValueImpl& operator = (const ValueImpl&) noexcept
 	{
 		return *this; // Do nothing
 	}

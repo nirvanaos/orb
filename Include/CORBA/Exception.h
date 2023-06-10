@@ -51,19 +51,19 @@ public:
 	virtual ~Exception ()
 	{}
 	virtual void _raise () const = 0;
-	virtual const Char* _name () const NIRVANA_NOEXCEPT = 0;
-	virtual const Char* _rep_id () const NIRVANA_NOEXCEPT = 0;
+	virtual const Char* _name () const noexcept = 0;
+	virtual const Char* _rep_id () const noexcept = 0;
 
 	// Nirvana specific
-	virtual Code __code () const NIRVANA_NOEXCEPT = 0;
-	virtual Internal::I_ptr <TypeCode> __type_code () const NIRVANA_NOEXCEPT = 0;
+	virtual Code __code () const noexcept = 0;
+	virtual Internal::I_ptr <TypeCode> __type_code () const noexcept = 0;
 
-	virtual void* __data () NIRVANA_NOEXCEPT
+	virtual void* __data () noexcept
 	{
 		return nullptr;
 	}
 
-	const void* __data () const NIRVANA_NOEXCEPT
+	const void* __data () const noexcept
 	{
 		return const_cast <Exception&> (*this).__data ();
 	}
@@ -91,23 +91,23 @@ void construct (void* p)
 	new (p) E ();
 }
 
-extern void set_exception (Interface* environment, Exception::Code code, const Char* rep_id, void* param) NIRVANA_NOEXCEPT;
-extern void set_exception (Interface* environment, Exception& e) NIRVANA_NOEXCEPT;
-extern void set_unknown_exception (Interface* environment) NIRVANA_NOEXCEPT;
+extern void set_exception (Interface* environment, Exception::Code code, const Char* rep_id, void* param) noexcept;
+extern void set_exception (Interface* environment, Exception& e) noexcept;
+extern void set_unknown_exception (Interface* environment) noexcept;
 
 }
 } // namespace CORBA
 
 #define NIRVANA_EXCEPTION_DCL(E) public:\
 virtual void _raise () const { throw *this; }\
-virtual const char* _rep_id () const NIRVANA_NOEXCEPT;\
-virtual const char* _name () const NIRVANA_NOEXCEPT { return __name (); }\
-static constexpr const char* __name () NIRVANA_NOEXCEPT { return #E; }\
-virtual ::CORBA::Internal::I_ptr <::CORBA::TypeCode> __type_code () const NIRVANA_NOEXCEPT;\
-static const E* _downcast (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT;\
-static E* _downcast (::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return const_cast <E*> (_downcast ((const ::CORBA::Exception*)ep)); }\
-static const E* _narrow (const ::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return _downcast (ep); }\
-static E* _narrow (::CORBA::Exception* ep) NIRVANA_NOEXCEPT { return _downcast (ep); }\
-virtual const char* what () const NIRVANA_NOEXCEPT { return __name (); }
+virtual const char* _rep_id () const noexcept;\
+virtual const char* _name () const noexcept { return __name (); }\
+static constexpr const char* __name () noexcept { return #E; }\
+virtual ::CORBA::Internal::I_ptr <::CORBA::TypeCode> __type_code () const noexcept;\
+static const E* _downcast (const ::CORBA::Exception* ep) noexcept;\
+static E* _downcast (::CORBA::Exception* ep) noexcept { return const_cast <E*> (_downcast ((const ::CORBA::Exception*)ep)); }\
+static const E* _narrow (const ::CORBA::Exception* ep) noexcept { return _downcast (ep); }\
+static E* _narrow (::CORBA::Exception* ep) noexcept { return _downcast (ep); }\
+virtual const char* what () const noexcept { return __name (); }
 
 #endif

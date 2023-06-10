@@ -50,7 +50,7 @@ public:
 		copy_from (src);
 	}
 
-	Any (Any&& src) NIRVANA_NOEXCEPT :
+	Any (Any&& src) noexcept :
 		ABI (src)
 	{
 		src.reset ();
@@ -68,7 +68,7 @@ public:
 		return *this;
 	}
 
-	Any& operator = (Any&& src) NIRVANA_NOEXCEPT
+	Any& operator = (Any&& src) noexcept
 	{
 		if (this != &src) {
 			clear ();
@@ -189,7 +189,7 @@ public:
 	void copy_from (Internal::I_ptr <TypeCode> tc, const void* val);
 	void move_from (Internal::I_ptr <TypeCode> tc, void* val);
 
-	bool is_system_exception () const NIRVANA_NOEXCEPT;
+	bool is_system_exception () const noexcept;
 
 #ifndef LEGACY_CORBA_CPP
 private:

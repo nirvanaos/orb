@@ -38,18 +38,18 @@ class InterfaceImpl <S, AbstractBase> :
 	public InterfaceImplBase <S, AbstractBase>
 {
 public:
-	static I_ref <Object> _to_object () NIRVANA_NOEXCEPT
+	static I_ref <Object> _to_object () noexcept
 	{
 		return nullptr;
 	}
 
-	I_ref <ValueBase> _to_value () NIRVANA_NOEXCEPT
+	I_ref <ValueBase> _to_value () noexcept
 	{
 		return I_ptr <ValueBase> (&static_cast <ValueBase&> (static_cast <Bridge <ValueBase>&> (static_cast <S&> (*this))));
 	}
 
 	Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
-		Interface* env) NIRVANA_NOEXCEPT
+		Interface* env) noexcept
 	{
 		if (!RepId::compatible (RepIdOf <AbstractBase>::id, Type <String>::in (iid)))
 			::Nirvana::throw_INV_OBJREF ();

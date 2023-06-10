@@ -38,23 +38,23 @@ class Environment :
 public:
 	Environment () {}
 	
-	Environment (Environment&& src) NIRVANA_NOEXCEPT
+	Environment (Environment&& src) noexcept
 	{
 		move_from (src);
 	}
 
-	Environment (EnvironmentBase&& src) NIRVANA_NOEXCEPT
+	Environment (EnvironmentBase&& src) noexcept
 	{
 		move_from (src);
 	}
 
-	Environment& operator = (Environment&& src) NIRVANA_NOEXCEPT
+	Environment& operator = (Environment&& src) noexcept
 	{
 		move_from (src);
 		return *this;
 	}
 
-	Environment& operator = (EnvironmentBase&& src) NIRVANA_NOEXCEPT
+	Environment& operator = (EnvironmentBase&& src) noexcept
 	{
 		move_from (src);
 		return *this;

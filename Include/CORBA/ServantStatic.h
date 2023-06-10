@@ -43,7 +43,7 @@ class ServantTraitsStatic :
 {
 public:
 	template <class I>
-	static S& _implementation (Bridge <I>* bridge) NIRVANA_NOEXCEPT
+	static S& _implementation (Bridge <I>* bridge) noexcept
 	{
 		return *(S*)nullptr;
 	}
@@ -66,12 +66,12 @@ class InterfaceStaticBase :
 	public Skeleton <S, I>
 {
 public:
-	operator Bridge <I>& () const NIRVANA_NOEXCEPT
+	operator Bridge <I>& () const noexcept
 	{
 		return *_bridge ();
 	}
 
-	static Bridge <I>* _bridge () NIRVANA_NOEXCEPT
+	static Bridge <I>* _bridge () noexcept
 	{
 		return reinterpret_cast <Bridge <I>*> (&bridge_);
 	}
@@ -92,26 +92,26 @@ class InterfaceStatic :
 class ServantStaticDummy
 {
 public:
-	static void _add_ref () NIRVANA_NOEXCEPT
+	static void _add_ref () noexcept
 	{
 	}
 
-	static void _remove_ref () NIRVANA_NOEXCEPT
+	static void _remove_ref () noexcept
 	{
 	}
 
-	static ULong _refcount_value () NIRVANA_NOEXCEPT
+	static ULong _refcount_value () noexcept
 	{
 		return 1;
 	}
 
-	static Boolean _non_existent () NIRVANA_NOEXCEPT
+	static Boolean _non_existent () noexcept
 	{
 		return false;
 	}
 
 	static Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
-		Interface* env) NIRVANA_NOEXCEPT
+		Interface* env) noexcept
 	{
 		return nullptr;
 	}

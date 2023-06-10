@@ -29,7 +29,7 @@
 namespace CORBA {
 namespace Internal {
 
-void set_exception (Interface* environment, Exception::Code code, const Char* rep_id, void* param) NIRVANA_NOEXCEPT
+void set_exception (Interface* environment, Exception::Code code, const Char* rep_id, void* param) noexcept
 {
 	if (environment && RepId::compatible (environment->_epv ().interface_id, RepIdOf < ::CORBA::Environment>::id)) {
 		Bridge < ::CORBA::Environment>* b = &static_cast <Bridge < ::CORBA::Environment>&> (*environment);
@@ -37,12 +37,12 @@ void set_exception (Interface* environment, Exception::Code code, const Char* re
 	}
 }
 
-void set_exception (Interface* environment, Exception& e) NIRVANA_NOEXCEPT
+void set_exception (Interface* environment, Exception& e) noexcept
 {
 	set_exception (environment, e.__code (), e._rep_id (), e.__data ());
 }
 
-void set_unknown_exception (Interface* environment) NIRVANA_NOEXCEPT
+void set_unknown_exception (Interface* environment) noexcept
 {
 	std::exception_ptr eptr = std::current_exception ();
 	if (eptr)

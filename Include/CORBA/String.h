@@ -85,7 +85,7 @@ struct Type <StringT <C> > : TypeVarLen <StringT <C> >
 		return val;
 	}
 
-	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
+	static I_ptr <TypeCode> type_code () noexcept;
 
 	static void marshal_in (const Var& src, IORequest_ptr rq);
 	static void marshal_out (Var& src, IORequest_ptr rq);
@@ -156,7 +156,7 @@ public:
 		Base (s)
 	{}
 
-	BoundedStringT (Base&& s) NIRVANA_NOEXCEPT :
+	BoundedStringT (Base&& s) noexcept :
 		Base (std::move (s))
 	{}
 
@@ -263,7 +263,7 @@ struct Type <BoundedStringT <C, bound> > : Type <StringT <C> >
 		return v;
 	}
 
-	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
+	static I_ptr <TypeCode> type_code () noexcept;
 
 	static void unmarshal (IORequest_ptr rq, Var& dst)
 	{

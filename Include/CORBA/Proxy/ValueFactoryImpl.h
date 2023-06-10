@@ -70,7 +70,7 @@ public:
 	}
 
 	// ValueFactoryBase
-	static Interface* _query_factory (String_in id) NIRVANA_NOEXCEPT
+	static Interface* _query_factory (String_in id) noexcept
 	{
 		return nullptr;
 	}

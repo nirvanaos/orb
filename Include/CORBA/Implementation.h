@@ -53,7 +53,7 @@ class Implementation :
 public:
 	typedef Primary PrimaryInterface;
 
-	Interface* _query_interface (String_in id) NIRVANA_NOEXCEPT
+	Interface* _query_interface (String_in id) noexcept
 	{
 		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);
 	}

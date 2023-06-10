@@ -38,12 +38,12 @@ class I_var : public I_ref <I>
 {
 	typedef I_ref <I> Base;
 public:
-	I_var () NIRVANA_NOEXCEPT
+	I_var () noexcept
 	{}
 
 	// No add reference on construct
 
-	I_var (I* p) NIRVANA_NOEXCEPT :
+	I_var (I* p) noexcept :
 		Base (p)
 	{}
 
@@ -51,7 +51,7 @@ public:
 		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
 	{}
 
-	I_var (const I_ptr <I>& p) NIRVANA_NOEXCEPT :
+	I_var (const I_ptr <I>& p) noexcept :
 		Base (p.p_)
 	{}
 
@@ -74,14 +74,14 @@ public:
 	template <class I1>
 	I_var (const I_var <I1>& src) = delete;
 
-	I_var (I_ref <I>&& src) NIRVANA_NOEXCEPT :
+	I_var (I_ref <I>&& src) noexcept :
 		Base (std::move (src))
 	{}
 
 	template <class I1>
 	I_var (const I_ref <I1>&& src) = delete;
 
-	I_var (I_var&& src) NIRVANA_NOEXCEPT :
+	I_var (I_var&& src) noexcept :
 		Base (std::move (src))
 	{}
 
@@ -89,7 +89,7 @@ public:
 	I_var (const I_var <I1>&& src) = delete;
 
 	// No add reference
-	I_var& operator = (I* p) NIRVANA_NOEXCEPT
+	I_var& operator = (I* p) noexcept
 	{
 		// Even if p == p_ we must release p_.
 		// So we don't compare pointers.
@@ -100,7 +100,7 @@ public:
 	}
 
 	// No add reference
-	I_var& operator = (const I_ptr <I>& p) NIRVANA_NOEXCEPT
+	I_var& operator = (const I_ptr <I>& p) noexcept
 	{
 		return operator = (p.p_);
 	}
@@ -113,7 +113,7 @@ public:
 	}
 
 	// No add reference
-	I_var& operator = (BridgeVal <I>* p) NIRVANA_NOEXCEPT
+	I_var& operator = (BridgeVal <I>* p) noexcept
 	{
 		return operator = (static_cast <I*> (static_cast <Bridge <I>*> (p)));
 	}
@@ -125,13 +125,13 @@ public:
 		return *this;
 	}
 
-	I_var& operator = (I_var&& src) NIRVANA_NOEXCEPT
+	I_var& operator = (I_var&& src) noexcept
 	{
 		Base::operator = (std::move (src));
 		return *this;
 	}
 
-	I_var& operator = (nullptr_t) NIRVANA_NOEXCEPT
+	I_var& operator = (nullptr_t) noexcept
 	{
 		Base::operator = (nullptr);
 		return *this;
@@ -145,7 +145,7 @@ public:
 		return Base::p_;
 	}
 
-	I_ptr <I> _retn () NIRVANA_NOEXCEPT
+	I_ptr <I> _retn () noexcept
 	{
 		I_ptr <I> p (Base::p_);
 		Base::p_ = nullptr;

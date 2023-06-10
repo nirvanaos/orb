@@ -30,7 +30,7 @@ namespace CORBA {
 namespace Internal {
 
 Bridge <Object>* get_object_from_core (LocalObject::_ptr_type core_object, 
-	Type <String>::ABI_in iid, Interface* env) NIRVANA_NOEXCEPT
+	Type <String>::ABI_in iid, Interface* env) noexcept
 {
 	return (core_object->_epv ().base.CORBA_Object) (static_cast <Bridge <LocalObject>*> (&core_object), iid, env);
 }

@@ -59,11 +59,11 @@ struct TypeByValBase
 	class C_in
 	{
 	public:
-		C_in (const Var& v) NIRVANA_NOEXCEPT :
+		C_in (const Var& v) noexcept :
 			val_ (v)
 		{}
 
-		ABI_in operator & () const NIRVANA_NOEXCEPT
+		ABI_in operator & () const noexcept
 		{
 			return (ABI_in)val_;
 		}
@@ -80,22 +80,22 @@ struct TypeByValBase
 		return (Var)abi;
 	}
 
-	static ABI_ret ret (Var v) NIRVANA_NOEXCEPT
+	static ABI_ret ret (Var v) noexcept
 	{
 		return (ABI_ret)v;
 	}
 
-	static ABI_ret ret () NIRVANA_NOEXCEPT
+	static ABI_ret ret () noexcept
 	{
 		return ABI_ret ();
 	}
 
-	static ABI_ret VT_ret (Var v) NIRVANA_NOEXCEPT
+	static ABI_ret VT_ret (Var v) noexcept
 	{
 		return (ABI_ret)v;
 	}
 
-	static ABI_ret VT_ret () NIRVANA_NOEXCEPT
+	static ABI_ret VT_ret () noexcept
 	{
 		return ABI_ret ();
 	}
@@ -142,7 +142,7 @@ struct TypeByValCheck : TypeByValBase <T, TABI>, TypeWithCheck <T, TABI>
 			abi_ (abi)
 		{}
 
-		operator T () NIRVANA_NOEXCEPT
+		operator T () noexcept
 		{
 			Type <T>::check (abi_);
 			return reinterpret_cast <T> (abi_);

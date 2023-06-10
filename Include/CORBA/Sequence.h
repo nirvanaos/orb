@@ -114,7 +114,7 @@ struct Type <Sequence <T> > :
 		return val;
 	}
 
-	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
+	static I_ptr <TypeCode> type_code () noexcept;
 
 	static void marshal_in (const Var& src, IORequest_ptr rq);
 	static void marshal_out (Var& src, IORequest_ptr rq);
@@ -180,7 +180,7 @@ public:
 		Base (src)
 	{}
 
-	BoundedSequence (Base&& src) NIRVANA_NOEXCEPT :
+	BoundedSequence (Base&& src) noexcept :
 		Base (std::move (src))
 	{}
 
@@ -259,7 +259,7 @@ struct Type <BoundedSequence <T, bound> > :
 		return v;
 	}
 
-	static I_ptr <TypeCode> type_code () NIRVANA_NOEXCEPT;
+	static I_ptr <TypeCode> type_code () noexcept;
 
 	static void unmarshal (IORequest_ptr rq, Var& dst)
 	{

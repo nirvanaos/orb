@@ -28,7 +28,7 @@
 namespace CORBA {
 namespace Internal {
 
-void EnvironmentBase::exception_free () NIRVANA_NOEXCEPT
+void EnvironmentBase::exception_free () noexcept
 {
 	if (data_.is_small) {
 		((Exception*)&data_)->~Exception ();
@@ -47,7 +47,7 @@ void EnvironmentBase::check () const
 		ex->_raise ();
 }
 
-const Char* EnvironmentBase::exception_id () const NIRVANA_NOEXCEPT
+const Char* EnvironmentBase::exception_id () const noexcept
 {
 	const Exception* ex = exception ();
 	if (ex)
@@ -56,7 +56,7 @@ const Char* EnvironmentBase::exception_id () const NIRVANA_NOEXCEPT
 		return nullptr;
 }
 
-const void* EnvironmentBase::exception_value () const NIRVANA_NOEXCEPT
+const void* EnvironmentBase::exception_value () const noexcept
 {
 	const Exception* ex = exception ();
 	if (ex)
@@ -65,14 +65,14 @@ const void* EnvironmentBase::exception_value () const NIRVANA_NOEXCEPT
 		return nullptr;
 }
 
-void EnvironmentBase::exception (Exception* ex) NIRVANA_NOEXCEPT
+void EnvironmentBase::exception (Exception* ex) noexcept
 {
 	exception_free ();
 	data_.ptr = ex;
 }
 
 void EnvironmentBase::exception_set (Short code, String_in rep_id, void* param,
-	const ExceptionEntry* user_exceptions) NIRVANA_NOEXCEPT
+	const ExceptionEntry* user_exceptions) noexcept
 {
 	exception_free ();
 	if (code > Exception::EC_NO_EXCEPTION) {
@@ -109,7 +109,7 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, void* param,
 }
 
 bool EnvironmentBase::set_user (String_in rep_id, void* param,
-	const ExceptionEntry* user_exceptions) NIRVANA_NOEXCEPT
+	const ExceptionEntry* user_exceptions) noexcept
 {
 	for (const ExceptionEntry* p = user_exceptions; p->rep_id; ++p) {
 		if (RepId::compatible (p->rep_id, rep_id)) {
@@ -120,7 +120,7 @@ bool EnvironmentBase::set_user (String_in rep_id, void* param,
 	return false;
 }
 
-bool EnvironmentBase::set (const ExceptionEntry& ee) NIRVANA_NOEXCEPT
+bool EnvironmentBase::set (const ExceptionEntry& ee) noexcept
 {
 	size_t size = ee.size;
 	try {
@@ -144,7 +144,7 @@ bool EnvironmentBase::set (const ExceptionEntry& ee) NIRVANA_NOEXCEPT
 	}
 }
 
-void EnvironmentBase::set_user (const ExceptionEntry& ee, void* data) NIRVANA_NOEXCEPT
+void EnvironmentBase::set_user (const ExceptionEntry& ee, void* data) noexcept
 {
 	if (set (ee) && data && ee.size > sizeof (UserException)) {
 		try {
@@ -157,7 +157,7 @@ void EnvironmentBase::set_user (const ExceptionEntry& ee, void* data) NIRVANA_NO
 	}
 }
 
-void EnvironmentBase::set_system (const ExceptionEntry& ee, const void* data) NIRVANA_NOEXCEPT
+void EnvironmentBase::set_system (const ExceptionEntry& ee, const void* data) noexcept
 {
 	if (set (ee) && data) {
 		SystemException& e = static_cast <SystemException&> (*exception ());
@@ -166,7 +166,7 @@ void EnvironmentBase::set_system (const ExceptionEntry& ee, const void* data) NI
 	}
 }
 
-void EnvironmentBase::move_from (EnvironmentBase& src) NIRVANA_NOEXCEPT
+void EnvironmentBase::move_from (EnvironmentBase& src) noexcept
 {
 	exception_free ();
 	data_ = src.data_;
