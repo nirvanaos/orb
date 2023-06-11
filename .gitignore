@@ -71,3 +71,6 @@
 /Include/CORBA/FT.h
 /Include/CORBA/FT_s.h
 /Source/FT.cpp
+/Include/CORBA/NirvanaDGC_s.h
+/Include/CORBA/NirvanaDGC.h
+/Source/NirvanaDGC.cpp

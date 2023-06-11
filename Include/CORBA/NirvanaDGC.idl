@@ -1,0 +1,82 @@
+/// \file
+/*
+* Nirvana runtime library.
+*
+* This is a part of the Nirvana project.
+*
+* Author: Igor Popov
+*
+* Copyright (c) 2021 Igor Popov.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+*
+* Send comments and/or bug reports to:
+*  popov.nirvana@gmail.com
+*/
+#ifndef NIRVANADGC_IDL_
+#define NIRVANADGC_IDL_
+
+#include "Policy.idl"
+
+module Nirvana {
+
+/// \brief Nirvana Vendor PolicyType Valueset ID
+/// TODO: Obtain from OMG.
+const unsigned long VPVID = 0xfffff;
+
+const CORBA::PolicyType DGC_POLICY_TYPE = (VPVID << 12) | 1;
+
+/// \brief Distributed garbage collection policy.
+/// 
+/// If DGC policy applied on the POA creation, it explicitly
+/// enable or disable DGC for all references of this adapter.
+/// 
+/// If DGC policy is not explicitly specified, it applied by default
+/// in the following way.
+/// 
+/// 1. Implicitly activated objects are DGC-enabled.
+/// 
+/// 2. If adapter was created with RETAIN and USE_SERVANT_MANAGER policies,
+///    all references created by this adapter are DGC-enabled.
+/// 
+/// 3. For all other cases DGC is disabled.
+interface DGC_Policy : CORBA::Policy {
+	readonly attribute boolean enabled;
+};
+
+};
+
+/** Definition of the DGC service.
+~~~
+typedef sequence <IOP::ObjectKey> ObjectKeySeq;
+
+/// Distributed Garbage Collector interface.
+///
+/// Every server that participates in the distributed garbage collection
+/// needs to export DGC object with empty object key.
+interface DGC
+{
+	/// \brief Ping server.
+	///
+	/// \param add New object references received by a client for the first time.
+	/// \param del Old references released by a client.
+	///
+	void ping (in ObjectKeySeq add, in ObjectKeySeq del);
+
+	// void FT_HB (); - implicitly supported
+};
+~~~
+*/
+
+#endif
