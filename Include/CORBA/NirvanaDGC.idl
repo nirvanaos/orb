@@ -59,22 +59,27 @@ interface DGC_Policy : CORBA::Policy {
 
 /** Definition of the DGC service.
 ~~~
+/// The sequence of object keys.
 typedef sequence <IOP::ObjectKey> ObjectKeySeq;
 
 /// Distributed Garbage Collector interface.
 ///
 /// Every server that participates in the distributed garbage collection
 /// needs to export DGC object with empty object key.
+///
+/// This interface also implicitly supports operation void FT_HB ();
+/// See Fault Tolerant CORBA Transport Heartbeats https://www.omg.org/spec/FT/1.0/
+///
 interface DGC
 {
 	/// \brief Ping server.
 	///
 	/// \param add New object references received by a client for the first time.
+	///            The server must hold them.
 	/// \param del Old references released by a client.
+	///            The server may release them.
 	///
 	void ping (in ObjectKeySeq add, in ObjectKeySeq del);
-
-	// void FT_HB (); - implicitly supported
 };
 ~~~
 */
