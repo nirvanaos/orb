@@ -83,7 +83,7 @@ public:
 
 	template <class T1>
 	servant_reference (servant_reference <T1>&& src) noexcept :
-	p_ (static_cast <T*> (src.p_))
+		p_ (static_cast <T*> (src.p_))
 	{
 		src.p_ = nullptr;
 	}

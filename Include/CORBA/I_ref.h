@@ -234,10 +234,8 @@ public:
 	template <class I1>
 	I_ref& operator = (I_ref <I1>&& src)
 	{
-		if (&src != this) {
-			Base::reset (wide (src.p_));
-			src = nullptr;
-		}
+		Base::reset (wide (src.p_));
+		src = nullptr;
 		return *this;
 	}
 
