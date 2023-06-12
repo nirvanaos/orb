@@ -108,7 +108,7 @@ public:
 	Boolean _validate_connection (Type <PolicyList>::C_out inconsistent_policies);
 	String _repository_id ();
 	I_ref <Object> _get_component ();
-	I_ref <ORB> _get_ORB ();
+	I_ref <ORB> _get_ORB () noexcept;
 
 	/// This method does not increment reference counter
 	I_ptr <Interface> _query_interface (String_in type_id);

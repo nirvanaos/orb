@@ -221,9 +221,9 @@ I_ref <Object> Client <T, Object>::_get_component ()
 }
 
 template <class T>
-I_ref <ORB> Client <T, Object>::_get_ORB ()
+I_ref <ORB> Client <T, Object>::_get_ORB () noexcept
 {
-	return g_ORB;
+	return I_ptr <ORB> (g_ORB);
 }
 
 template <class T>
