@@ -100,6 +100,8 @@ struct TypeByRefBase
 		return nullptr;
 	}
 
+	static const size_t CDR_size = sizeof (TABI);
+	static const size_t CDR_align = alignof (TABI);
 };
 
 /// Data type passed by reference, without check.

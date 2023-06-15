@@ -34,16 +34,16 @@
 namespace CORBA {
 namespace Internal {
 
-template <typename MT> inline
-void marshal_members (const MT* begin, const void* end, IORequest_ptr rq)
+template <typename First, typename Last> inline
+void marshal_members (const First* first, const Last* last, IORequest_ptr rq)
 {
-	rq->marshal (alignof (MT), (const Octet*)end - (const Octet*)begin, begin);
+	rq->marshal (alignof (First), (const Octet*)(last + 1) - (const Octet*)first, first);
 }
 
-template <typename MT> inline
-bool unmarshal_members (IORequest_ptr rq, MT* begin, const void* end)
+template <typename First, typename Last> inline
+bool unmarshal_members (IORequest_ptr rq, First* first, const Last* last)
 {
-	return rq->unmarshal (alignof (MT), (const Octet*)end - (const Octet*)begin, begin);
+	return rq->unmarshal (alignof (First), (const Octet*)(last + 1) - (const Octet*)first, first);
 }
 
 }

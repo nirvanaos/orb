@@ -50,6 +50,9 @@ struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t),
 {
 	static const bool is_var_len = false;
 
+	static const size_t CDR_align = alignof (TABI);
+	static const size_t CDR_size = sizeof (TABI);
+
 	inline static void marshal_in (const T& src, IORequest_ptr rq);
 	inline static void marshal_in_a (const T* src, size_t count, IORequest_ptr rq);
 

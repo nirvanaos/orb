@@ -77,6 +77,8 @@ struct Type <std::array <T, bound> > :
 	static const size_t total_size = ArrayTraits <Var>::size;
 	static const bool is_CDR = Type <ET>::is_CDR;
 	static const bool has_check = Type <ET>::has_check;
+	static const size_t CDR_align = Type <ET>::CDR_align;
+	static const size_t CDR_size = (total_size - 1) * sizeof (ET_ABI) + Type <ET>::CDR_size;
 
 	static void check (const ABI& abi)
 	{

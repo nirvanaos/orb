@@ -112,6 +112,8 @@ struct TypeByValBase
 		Type <T>::marshal_in_a (src, count, rq);
 	}
 
+	static const size_t CDR_size = sizeof (TABI);
+	static const size_t CDR_align = alignof (TABI);
 };
 
 /// Data type passed by value, without check().

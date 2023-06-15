@@ -37,19 +37,20 @@ namespace Internal {
 template <typename T, bool chk, typename TABI> inline
 void TypeFixLen <T, chk, TABI>::marshal_in (const T& src, IORequest_ptr rq)
 {
-	rq->marshal (alignof (T), sizeof (T), &src);
+	rq->marshal (CDR_align, CDR_size, &src);
 }
 
 template <typename T, bool chk, typename TABI> inline
 void TypeFixLen <T, chk, TABI>::marshal_in_a (const T* src, size_t count, IORequest_ptr rq)
 {
-	rq->marshal (alignof (T), sizeof (T) * count, src);
+	assert (count);
+	rq->marshal (CDR_align, (count - 1) * sizeof (T) + CDR_size, src);
 }
 
 template <typename T, bool chk, typename TABI> inline
 void TypeFixLen <T, chk, TABI>::unmarshal (IORequest_ptr rq, T& dst)
 {
-	if (rq->unmarshal (alignof (T), sizeof (T), &dst))
+	if (rq->unmarshal (CDR_align, CDR_size, &dst))
 		Type <T>::byteswap (dst);
 	if (Type <T>::has_check)
 		Type <T>::check ((const typename Type <T>::ABI&)dst);
@@ -58,7 +59,8 @@ void TypeFixLen <T, chk, TABI>::unmarshal (IORequest_ptr rq, T& dst)
 template <typename T, bool chk, typename TABI> inline
 void TypeFixLen <T, chk, TABI>::unmarshal_a (IORequest_ptr rq, size_t count, T* dst)
 {
-	bool byte_swap = rq->unmarshal (alignof (T), sizeof (T) * count, dst);
+	assert (count);
+	bool byte_swap = rq->unmarshal (CDR_align, (count - 1) * sizeof (T) + CDR_size, dst);
 	if (sizeof (T) > 1 && byte_swap) {
 		for (T* p = dst, *end = dst + count; p != end; ++p) {
 			Type <T>::byteswap (*p);
