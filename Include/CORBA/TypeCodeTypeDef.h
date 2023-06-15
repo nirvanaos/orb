@@ -69,10 +69,16 @@ public:
 			content ()->equivalent (other);
 	}
 
-	static size_t _s_n_size (Bridge <TypeCode>*, Interface* _env)
+	static size_t _s_n_CDR_size (Bridge <TypeCode>*, Interface* _env)
 	{
 		Bridge <TypeCode>* b = content_bridge ();
-		return (b->_epv ().epv.n_size) (b, _env);
+		return (b->_epv ().epv.n_CDR_size) (b, _env);
+	}
+
+	static size_t _s_n_aligned_size (Bridge <TypeCode>*, Interface* _env)
+	{
+		Bridge <TypeCode>* b = content_bridge ();
+		return (b->_epv ().epv.n_aligned_size) (b, _env);
 	}
 
 	static size_t _s_n_align (Bridge <TypeCode>*, Interface* _env)

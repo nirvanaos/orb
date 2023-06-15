@@ -44,7 +44,12 @@ template <typename T, bool chk, typename TABI> inline
 void TypeFixLen <T, chk, TABI>::marshal_in_a (const T* src, size_t count, IORequest_ptr rq)
 {
 	assert (count);
-	rq->marshal (CDR_align, (count - 1) * sizeof (T) + CDR_size, src);
+	if (sizeof (T) == CDR_size)
+		rq->marshal (CDR_align, count * CDR_size, src);
+	else {
+		size_t zero = 0;
+		rq->marshal_seq (CDR_align, sizeof (T), CDR_size, count, const_cast <T*> (src), zero);
+	}
 }
 
 template <typename T, bool chk, typename TABI> inline
@@ -60,7 +65,15 @@ template <typename T, bool chk, typename TABI> inline
 void TypeFixLen <T, chk, TABI>::unmarshal_a (IORequest_ptr rq, size_t count, T* dst)
 {
 	assert (count);
-	bool byte_swap = rq->unmarshal (CDR_align, (count - 1) * sizeof (T) + CDR_size, dst);
+	bool byte_swap;
+	if (sizeof (T) == CDR_size)
+		byte_swap = rq->unmarshal (CDR_align, count * CDR_size, dst);
+	else {
+		size_t size = sizeof (T) * count;
+		void* p = dst;
+		byte_swap = rq->unmarshal_seq (CDR_align, sizeof (T), CDR_size, count, p, size);
+		assert (p == dst); // Pointer must not be allocated by request
+	}
 	if (sizeof (T) > 1 && byte_swap) {
 		for (T* p = dst, *end = dst + count; p != end; ++p) {
 			Type <T>::byteswap (*p);

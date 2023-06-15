@@ -38,7 +38,12 @@ template <size_t size>
 class FixedOps
 {
 public:
-	static size_t _s_n_size (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_aligned_size (Bridge <TypeCode>*, Interface*)
+	{
+		return size;
+	}
+
+	static size_t _s_n_CDR_size (Bridge <TypeCode>*, Interface*)
 	{
 		return size;
 	}

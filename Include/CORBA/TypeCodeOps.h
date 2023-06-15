@@ -41,14 +41,19 @@ public:
 	typedef typename std::conditional <std::is_same <T, Boolean>::value,
 		Type <Boolean>::ABI, typename Type <T>::Var>::type Var;
 
-	static size_t _s_n_size (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_aligned_size (Bridge <TypeCode>*, Interface*)
 	{
 		return sizeof (Var);
 	}
 
+	static size_t _s_n_CDR_size (Bridge <TypeCode>*, Interface*)
+	{
+		return Type <T>::CDR_size;
+	}
+
 	static size_t _s_n_align (Bridge <TypeCode>*, Interface*)
 	{
-		return alignof (Var);
+		return Type <T>::CDR_align;
 	}
 
 	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>*, Interface*)
@@ -131,7 +136,12 @@ class TypeCodeOps <void>
 public:
 	typedef void Valtype;
 
-	static size_t _s_n_size (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_aligned_size (Bridge <TypeCode>*, Interface*)
+	{
+		return 0;
+	}
+
+	static size_t _s_n_CDR_size (Bridge <TypeCode>*, Interface*)
 	{
 		return 0;
 	}

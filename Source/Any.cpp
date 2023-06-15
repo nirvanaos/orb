@@ -97,7 +97,7 @@ void* Any::prepare (I_ptr <TypeCode> tc)
 	clear ();
 	void* dst = nullptr;
 	if (tc) {
-		size_t size = tc->n_size ();
+		size_t size = tc->n_aligned_size ();
 		if (size <= SMALL_CAPACITY)
 			dst = small_pointer ();
 		else

@@ -215,7 +215,8 @@ public:
 	using Impl::_s_type_modifier;
 	using Impl::_s_concrete_base_type;
 
-	using Ops::_s_n_size;
+	using Ops::_s_n_aligned_size;
+	using Ops::_s_n_CDR_size;
 	using Ops::_s_n_align;
 	using Ops::_s_n_is_CDR;
 

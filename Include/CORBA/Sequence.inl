@@ -40,7 +40,8 @@ void Type <Sequence <T> >::marshal_in (const Var& src, IORequest_ptr rq)
 	typedef typename Type <T>::Var T_Var;
 	if (Type <T>::is_CDR) {
 		size_t zero = 0;
-		rq->marshal_seq (alignof (T_Var), sizeof (T_Var), src.size (), const_cast <T_Var*> (src.data ()), zero);
+		rq->marshal_seq (Type <T>::CDR_align, sizeof (T_Var), Type <T>::CDR_size, src.size (),
+			const_cast <T_Var*> (src.data ()), zero);
 	} else {
 		if (rq->marshal_seq_begin (src.size ()))
 			Type <T>::marshal_in_a (src.data (), src.size (), rq);
@@ -52,7 +53,8 @@ void Type <Sequence <T> >::marshal_out (Var& src, IORequest_ptr rq)
 {
 	typedef typename Type <T>::Var T_Var;
 	if (Type <T>::is_CDR) {
-		rq->marshal_seq (alignof (T_Var), sizeof (T_Var), src.size (), src.data (), static_cast <ABI&> (src).allocated);
+		rq->marshal_seq (Type <T>::CDR_align, sizeof (T_Var), Type <T>::CDR_size, src.size (),
+			src.data (), static_cast <ABI&> (src).allocated);
 		if (!static_cast <ABI&> (src).allocated)
 			static_cast <ABI&> (src).reset ();
 	} else {
@@ -67,7 +69,8 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 	typedef typename Type <T>::Var T_Var;
 	if (Type <T>::is_CDR) {
 		ABI& abi = (ABI&)dst;
-		bool swap_bytes = rq->unmarshal_seq (alignof (T_Var), sizeof (T_Var), abi.size, (void*&)abi.ptr, abi.allocated);
+		bool swap_bytes = rq->unmarshal_seq (Type <T>::CDR_align, sizeof (T_Var), Type <T>::CDR_size,
+			abi.size, (void*&)abi.ptr, abi.allocated);
 		if (abi.size) {
 			assert (abi.allocated);
 

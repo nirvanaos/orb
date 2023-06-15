@@ -37,13 +37,13 @@ namespace Internal {
 template <typename First, typename Last> inline
 void marshal_members (const First* first, const Last* last, IORequest_ptr rq)
 {
-	rq->marshal (alignof (First), (const Octet*)(last + 1) - (const Octet*)first, first);
+	rq->marshal (Type <First>::CDR_align, ((const Octet*)last) + Type <Last>::CDR_size - (const Octet*)first, first);
 }
 
 template <typename First, typename Last> inline
 bool unmarshal_members (IORequest_ptr rq, First* first, const Last* last)
 {
-	return rq->unmarshal (alignof (First), (const Octet*)(last + 1) - (const Octet*)first, first);
+	return rq->unmarshal (Type <First>::CDR_align, ((Octet*)last) + Type <Last>::CDR_size - (Octet*)first, first);
 }
 
 }
