@@ -13,7 +13,7 @@ struct NameComponent {
 	Istring kind;
 };
 
-typedef sequence<NameComponent> Name;
+typedef sequence <NameComponent> Name;
 
 enum BindingType { nobject, ncontext };
 
@@ -45,11 +45,11 @@ interface NamingContext
 		Name rest_of_name;
 	};
 
-	exception InvalidName{};
+	exception InvalidName {};
 
 	exception AlreadyBound {};
 
-	exception NotEmpty{};
+	exception NotEmpty {};
 
 	void bind (in Name n, in Object obj)
 		raises (
