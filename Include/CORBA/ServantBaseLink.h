@@ -45,6 +45,11 @@ class ServantBaseLink :
 	public BridgeVal <PortableServer::ServantBase>
 {
 public:
+	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) const noexcept
+	{
+		return get_object_from_core (I_ptr <PortableServer::ServantBase> (core_object_), iid, env);
+	}
+
 	// ServantBase operations
 
 	I_ref <PortableServer::POA> _default_POA ()
