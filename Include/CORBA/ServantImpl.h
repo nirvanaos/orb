@@ -68,13 +68,6 @@ public:
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id,
 		Interface* env) noexcept
 	{
-		return _wide_val <Base, Derived> (derived, id, env);
-	}
-
-	template <class Base, class Derived>
-	static Bridge <Base>* _wide_val (Bridge <Derived>* derived, Type <String>::ABI_in id,
-		Interface* env) noexcept
-	{
 		try {
 			if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))
 				::Nirvana::throw_INV_OBJREF ();
