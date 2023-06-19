@@ -80,7 +80,7 @@ class ProxyFactoryImpl :
 {
 public:
 	Interface* create_proxy (
-		IOReference::_ptr_type proxy_manager, UShort interface_idx,
+		IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant,
 		Interface*& deleter)
 	{
 		typedef Proxy <I> ProxyClass;
@@ -91,7 +91,7 @@ public:
 		ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (ProxyClass), 0, nullptr);
 		g_object_factory->stateless_begin (scb);
 		try {
-			new (&tmp) ProxyClass (proxy_manager, interface_idx);
+			new (&tmp) ProxyClass (proxy_manager, interface_idx, servant);
 			proxy = (ProxyClass*)g_object_factory->stateless_end (true);
 		} catch (...) {
 			g_object_factory->stateless_end (false);
@@ -99,20 +99,6 @@ public:
 		}
 		deleter = proxy->_dynamic_servant ();
 		return proxy->_proxy ();
-	}
-};
-
-template <class I>
-class ProxyFactoryNoProxy :
-	public ProxyFactoryBase <ProxyFactoryNoProxy <I>, I>
-{
-public:
-	static Interface* _s_create_proxy (Bridge <ProxyFactory>* _b, Interface*, Type <UShort>::ABI_in,
-		Type <InterfacePtr>::ABI_out, Interface* _env)
-	{
-		// Attempt to marshal Local object.
-		ProxyRoot::set_marshal_local (_env);
-		return nullptr;
 	}
 };
 

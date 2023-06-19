@@ -204,10 +204,29 @@ public:
 	}
 
 protected:
-	ProxyBase (IOReference::_ptr_type proxy_manager, UShort interface_idx) :
+	ProxyBase (IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant) :
 		ProxyRoot (proxy_manager, interface_idx)
 	{}
 };
+
+template <class I>
+class ProxyBaseStateless : public ProxyBase <I>
+{
+protected:
+	ProxyBaseStateless (IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant) :
+		ProxyBase <I> (proxy_manager, interface_idx, servant),
+		servant_ (reinterpret_cast <I*&> (servant))
+	{}
+
+	I* servant () const noexcept
+	{
+		return servant_;
+	}
+
+private:
+	I*& servant_;
+};
+
 
 }
 }

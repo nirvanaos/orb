@@ -94,12 +94,11 @@ struct InterfaceMetadata
 	/// The interface flags.
 	uint16_t flags;
 
-	/// Proxy is not implemented.
-	/// create_proxy() will throw NO_IMPLEMENT.
-	static const uint16_t FLAG_NO_PROXY = 1;
+	/// Local interface with stateless servant.
+	static const uint16_t FLAG_LOCAL_STATELESS = 1;
 };
 
-// native InterfaceMetadataPtr;
+/// native InterfaceMetadataPtr;
 typedef const InterfaceMetadata* InterfaceMetadataPtr;
 
 template <>
