@@ -56,11 +56,6 @@ class InterfaceStatic <S, PortableServer::ServantBase> :
 	public ServantBaseStaticDummy
 {
 public:
-	static Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) noexcept
-	{
-		return get_object_from_core (_core_servant (), iid, env);
-	}
-
 	// ServantBase operations
 
 	static I_ref <PortableServer::POA> _default_POA ()

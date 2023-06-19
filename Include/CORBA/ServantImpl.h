@@ -68,6 +68,15 @@ public:
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id,
 		Interface* env) noexcept
 	{
+		// It really needed only for value types.
+		assert (false);
+		return nullptr;
+	}
+
+	template <class Base, class Derived>
+	static Bridge <Base>* _wide_val (Bridge <Derived>* derived, Type <String>::ABI_in id,
+		Interface* env) noexcept
+	{
 		try {
 			if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))
 				::Nirvana::throw_INV_OBJREF ();
@@ -83,9 +92,16 @@ public:
 	template <class Derived>
 	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
 	{
+		assert (false);
+		return nullptr;
+	}
+
+	template <>
+	static Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, Type <String>::ABI_in id, Interface* env)
+	{
 		return S::_implementation (derived)._get_object (id, env);
 	}
-	
+
 	template <class Derived>
 	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
 	{

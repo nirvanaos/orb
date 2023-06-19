@@ -28,14 +28,6 @@
 namespace CORBA {
 namespace Internal {
 
-Bridge <Object>* get_object_from_core (PortableServer::Servant core_object,
-	Type <String>::ABI_in iid, Interface* env) noexcept
-{
-	return (Bridge <Object>*)
-		(core_object->_epv ().epv.query_interface) (
-		static_cast <Bridge <PortableServer::ServantBase>*> (&core_object), iid, env);
-}
-
 Interface::_ptr_type get_proxy (PortableServer::Servant core_object)
 {
 	Interface::_ptr_type proxy = core_object->_query_interface (nullptr);

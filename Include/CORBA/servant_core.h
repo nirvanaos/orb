@@ -33,9 +33,6 @@
 namespace CORBA {
 namespace Internal {
 
-Bridge <Object>* get_object_from_core (PortableServer::Servant core_object,
-	Type <String>::ABI_in iid, Interface* env) noexcept;
-
 Interface::_ptr_type get_proxy (PortableServer::Servant core_object);
 
 }

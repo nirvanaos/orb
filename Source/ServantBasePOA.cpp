@@ -38,11 +38,5 @@ I_ref <InterfaceDef> ServantPOA <PortableServer::ServantBase>::_get_interface ()
 	return ServantBaseLink::_get_interface ();
 }
 
-Bridge <Object>* ServantPOA <PortableServer::ServantBase>::_get_object (Type <String>::ABI_in iid, Interface* env)
-{
-	_check_construct ();
-	return ServantBaseLink::_get_object (iid, env);
-}
-
 }
 }

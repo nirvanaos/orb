@@ -47,8 +47,6 @@ class NIRVANA_NOVTABLE ServantPOA <PortableServer::ServantBase> :
 	public ServantMemory
 {
 public:
-	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env);
-
 	virtual Interface* _query_interface (const String& id) = 0;
 
 	// ServantBase operations
