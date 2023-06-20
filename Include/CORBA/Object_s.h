@@ -244,6 +244,18 @@ protected:
 		return Type <Interface>::VT_ret ();
 	}
 
+	static Interface* __get_servant (Bridge <Object>* base, Interface* env)
+	{
+		try {
+			return Type <PortableServer::ServantBase>::ret (S::_implementation (base)._get_servant ());
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return Type <PortableServer::ServantBase>::ret ();
+	}
+
 };
 
 template <class S>
@@ -270,7 +282,8 @@ const Bridge <Object>::EPV Skeleton <S, Object>::epv_ = {
 		S::__repository_id,
 		S::__get_component,
 		
-		S::__query_interface
+		S::__query_interface,
+		S::__get_servant
 	}
 };
 

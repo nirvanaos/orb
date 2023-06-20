@@ -150,18 +150,24 @@ local interface AdapterActivator
   boolean unknown_adapter (in POA parent, in string name);
 };
 
-// ServantManager interface
+/// ServantManager interface
 local interface ServantManager {};
 
+/// ServantActivator interface
 local interface ServantActivator : ServantManager
 {
   Servant incarnate (in ObjectId oid,
     in POA adapter)
     raises (ForwardRequest);
 
+  /// \brief Etherealize object.
+  /// 
+  /// This operation violates the CORBA specification due to the synchronization reasons.
+  /// It passes Object instead of Servant. If a programmer need the servant reference,
+  /// he can call Object::_get_servant operation.
   void etherealize (in ObjectId oid,
     in POA adapter,
-    in Servant serv,
+    in Object serv,
     in boolean cleanup_in_progress,
     in boolean remaining_activations);
 };
@@ -175,12 +181,17 @@ local interface ServantLocator : ServantManager
     in CORBA::Identifier operation,
     out Cookie the_cookie)
     raises (ForwardRequest);
-
+  /// \brief This operation is invoked whenever a servant completes a request, assuming the POA
+  /// has the *USE_SERVANT_MANAGER* and *NON_RETAIN* policies.
+  /// 
+  /// This operation violates the CORBA specification due to the synchronization reasons.
+  /// It passes Object instead of Servant. If a programmer need the servant reference,
+  /// he can call Object::_get_servant operation.
   void postinvoke (in ObjectId oid,
     in POA adapter,
     in CORBA::Identifier operation,
     in Cookie the_cookie,
-    in Servant the_servant);
+    in Object the_servant);
 };
 
 local interface POA

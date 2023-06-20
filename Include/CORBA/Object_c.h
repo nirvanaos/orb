@@ -33,6 +33,10 @@
 #include "TypeObject.h"
 #include "Sequence.h"
 
+namespace PortableServer {
+class ServantBase;
+}
+
 namespace CORBA {
 
 class Object;
@@ -81,6 +85,7 @@ Type <String>::ABI_ret (*repository_id) (Bridge <Object>*, Interface*);
 Interface* (*get_component) (Bridge <Object>*, Interface*);
 
 Interface* (*query_interface) (Bridge <Object>*, Type <String>::ABI_in, Interface*);
+Interface* (*get_servant) (Bridge <Object>*, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
@@ -119,6 +124,18 @@ public:
 	{
 		return static_cast <I*> (&_query_interface (RepIdOf <I>::id));
 	}
+
+	/// Obtain servant from object.
+	/// 
+	/// Nirvana extension. This operation may be called on the server side for active object.
+	/// May be called only from the synchronization context where the servant was created.
+	/// Otherwise an exception will thrown.
+	/// 
+	/// \returns ServantBase reference.
+	/// \throws OBJ_ADAPTER(0)      Called in wrong synchronization context.
+	/// \throws NO_IMPLEMENT(0)     Wrong object.
+	/// \throws OBJECT_NOT_EXIST(1) Object is not active.
+	I_ref <PortableServer::ServantBase> _get_servant ();
 };
 
 }

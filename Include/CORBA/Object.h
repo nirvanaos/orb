@@ -43,6 +43,7 @@
 #include "Policy.h"
 #include "InterfaceRepository.h"
 #include "Dynamic.h"
+#include "ServantBase.h"
 
 namespace CORBA {
 
@@ -231,7 +232,17 @@ I_ptr <Interface> Client <T, Object>::_query_interface (String_in type_id)
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	I_VT_ret <Interface> _ret = (_b._epv ().epv.query_interface) (&_b, &type_id, &_env);
+	I_VT_ret <Interface> _ret ((_b._epv ().epv.query_interface) (&_b, &type_id, &_env));
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
+I_ref <PortableServer::ServantBase> Client <T, Object>::_get_servant ()
+{
+	Environment _env;
+	Bridge <Object>& _b (T::_get_bridge (_env));
+	I_ret <PortableServer::ServantBase> _ret ((_b._epv ().epv.get_servant) (&_b, &_env));
 	_env.check ();
 	return _ret;
 }
