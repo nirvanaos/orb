@@ -77,11 +77,12 @@ public:
 	// Reference counter
 
 #ifndef LEGACY_CORBA_CPP
-protected:
+private:
 	template <class> friend class LifeCycleRefCnt;
 	template <class> friend class CORBA::servant_reference;
-	template <class, class> friend class Skeleton;
 #endif
+	template <class, class> friend class Skeleton;
+	template <class> friend class ServantPOA;
 
 	void _add_ref () const
 	{
