@@ -119,7 +119,7 @@ public:
 		return *this;
 	}
 
-	servant_reference& operator = (servant_reference&& src)
+	servant_reference& operator = (servant_reference&& src) noexcept
 	{
 		if (&src != this) {
 			release ();
