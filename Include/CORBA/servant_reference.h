@@ -69,7 +69,7 @@ public:
 
 	template <class T1>
 	servant_reference (const servant_reference <T1>& src) :
-		p_ (static_cast <T*> (src.p_))
+		p_ (src.p_)
 	{
 		if (p_)
 			p_->_add_ref ();
@@ -83,7 +83,7 @@ public:
 
 	template <class T1>
 	servant_reference (servant_reference <T1>&& src) noexcept :
-		p_ (static_cast <T*> (src.p_))
+		p_ (src.p_)
 	{
 		src.p_ = nullptr;
 	}
@@ -107,7 +107,25 @@ public:
 
 	servant_reference& operator = (const servant_reference& src)
 	{
+		if (&src != this)
+			reset (src.p_);
+		return *this;
+	}
+
+	template <class T1>
+	servant_reference& operator = (const servant_reference <T1>& src)
+	{
 		reset (src.p_);
+		return *this;
+	}
+
+	servant_reference& operator = (servant_reference&& src)
+	{
+		if (&src != this) {
+			release ();
+			p_ = src.p_;
+			src.p_ = nullptr;
+		}
 		return *this;
 	}
 
@@ -115,7 +133,7 @@ public:
 	servant_reference& operator = (servant_reference <T1>&& src) noexcept
 	{
 		release ();
-		p_ = static_cast <T*> (src.p_);
+		p_ = src.p_;
 		src.p_ = nullptr;
 		return *this;
 	}
@@ -144,6 +162,37 @@ public:
 		T* tmp = p_;
 		p_ = other.p_;
 		other.p_ = tmp;
+	}
+
+	template <class T1>
+	static servant_reference cast (T1* p) noexcept
+	{
+		return servant_reference (static_cast <T*> (p));
+	}
+
+	template <class T1>
+	static servant_reference cast (const servant_reference <T1>& src) noexcept
+	{
+		return servant_reference (static_cast <T*> (src.p_));
+	}
+
+	template <class T1>
+	static servant_reference cast (servant_reference <T1>&& src) noexcept
+	{
+		servant_reference <T> v;
+		v.p_ = static_cast <T*> (src.p_);
+		src.p_ = nullptr;
+		return v;
+	}
+
+	/// Creates an object.
+	/// \tparam Impl Object implementation class.
+	template <class Impl, class ... Args>
+	static servant_reference create (Args ... args)
+	{
+		servant_reference <T> v;
+		v.p_ = new Impl (std::forward <Args> (args)...);
+		return v;
 	}
 
 protected:
