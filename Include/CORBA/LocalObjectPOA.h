@@ -65,7 +65,7 @@ public:
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__query_interface;
 
 #ifndef LEGACY_CORBA_CPP
-private:
+protected:
 	template <class> friend class LifeCycleRefCnt;
 	template <class> friend class CORBA::servant_reference;
 #endif
