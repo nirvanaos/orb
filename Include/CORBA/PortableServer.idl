@@ -6,7 +6,7 @@
 #define CORBA_PORTABLE_SERVER_IDL_
 
 #include "Policy.idl"
-#include "CORBA_types.idl"
+#include <CORBA/CORBA_types.idl>
 
 module PortableServer {
 

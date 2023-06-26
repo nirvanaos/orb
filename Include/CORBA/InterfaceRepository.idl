@@ -4,7 +4,7 @@
 #ifndef CORBA_INTERFACEREPOSITORY_IDL_
 #define CORBA_INTERFACEREPOSITORY_IDL_
 
-#include "TypeCode.idl"
+#include <CORBA/TypeCode.idl>
 
 module CORBA {
 

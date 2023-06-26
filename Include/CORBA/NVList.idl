@@ -3,7 +3,7 @@
 #ifndef CORBA_NVLIST_IDL_
 #define CORBA_NVLIST_IDL_
 
-#include "TypeCode.idl"
+#include <CORBA/TypeCode.idl>
 
 module CORBA {
 
