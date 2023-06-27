@@ -40,10 +40,25 @@ namespace Internal {
 class LocalObjectStaticDummy : public ServantStaticDummy
 {
 public:
-	static void __add_ref (Bridge <LocalObject>* obj, Interface* env);
-	static void __remove_ref (Bridge <LocalObject>* obj, Interface* env);
-	static ULong __refcount_value (Bridge <LocalObject>* obj, Interface* env);
-	static void __delete_object (Bridge <LocalObject>* _b, Interface* _env);
+	static void __add_ref (Bridge <LocalObject>* obj, Interface* env) noexcept
+	{
+		ServantStaticDummy::__add_ref (obj, env);
+	}
+
+	static void __remove_ref (Bridge <LocalObject>* obj, Interface* env) noexcept
+	{
+		ServantStaticDummy::__remove_ref (obj, env);
+	}
+
+	static ULong __refcount_value (Bridge <LocalObject>* obj, Interface* env) noexcept
+	{
+		return ServantStaticDummy::__refcount_value (obj, env);
+	}
+
+	static void __delete_object (Bridge <LocalObject>* obj, Interface* env) noexcept
+	{
+		ServantStaticDummy::__delete_object (obj, env);
+	}
 };
 
 //! Static implementation of LocalObject
@@ -57,15 +72,15 @@ class InterfaceStatic <S, LocalObject> :
 	public LocalObjectStaticDummy
 {
 public:
-	static Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) noexcept
-	{
-		return get_object_from_core (core_object (), iid, env);
-	}
-
 	using LocalObjectStaticDummy::__add_ref;
 	using LocalObjectStaticDummy::__remove_ref;
 	using LocalObjectStaticDummy::__refcount_value;
 	using LocalObjectStaticDummy::__delete_object;
+
+	static Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) noexcept
+	{
+		return get_object_from_core (core_object (), iid, env);
+	}
 
 protected:
 	static Type <Interface>::VRet _get_proxy ()

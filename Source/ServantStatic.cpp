@@ -29,41 +29,19 @@
 namespace CORBA {
 namespace Internal {
 
-void ServantBaseStaticDummy::__add_ref (Bridge <PortableServer::ServantBase>* obj, Interface* env)
-{
-}
+void ServantStaticDummy::__add_ref (Interface*, Interface*) noexcept
+{}
 
-void ServantBaseStaticDummy::__remove_ref (Bridge <PortableServer::ServantBase>* obj, Interface* env)
-{
-}
+void ServantStaticDummy::__remove_ref (Interface*, Interface*) noexcept
+{}
 
-ULong ServantBaseStaticDummy::__refcount_value (Bridge <PortableServer::ServantBase>* obj, Interface* env)
+ULong ServantStaticDummy::__refcount_value (Interface*, Interface*) noexcept
 {
 	return 1;
 }
 
-void ServantBaseStaticDummy::__delete_object (Bridge <PortableServer::ServantBase>* _b, Interface* _env)
-{
-	set_NO_IMPLEMENT (_env);
-}
-
-void LocalObjectStaticDummy::__add_ref (Bridge <LocalObject>* obj, Interface* env)
-{
-}
-
-void LocalObjectStaticDummy::__remove_ref (Bridge <LocalObject>* obj, Interface* env)
-{
-}
-
-ULong LocalObjectStaticDummy::__refcount_value (Bridge <LocalObject>* obj, Interface* env)
-{
-	return 1;
-}
-
-void LocalObjectStaticDummy::__delete_object (Bridge <LocalObject>* _b, Interface* _env)
-{
-	set_NO_IMPLEMENT (_env);
-}
+void ServantStaticDummy::__delete_object (Interface*, Interface*) noexcept
+{}
 
 }
 }

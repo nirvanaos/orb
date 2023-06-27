@@ -40,10 +40,25 @@ namespace Internal {
 class ServantBaseStaticDummy : public ServantStaticDummy
 {
 public:
-	static void __add_ref (Bridge <PortableServer::ServantBase>* obj, Interface* env);
-	static void __remove_ref (Bridge <PortableServer::ServantBase>* obj, Interface* env);
-	static ULong __refcount_value (Bridge <PortableServer::ServantBase>* obj, Interface* env);
-	static void __delete_object (Bridge <PortableServer::ServantBase>* _b, Interface* _env);
+	static void __add_ref (Bridge <PortableServer::ServantBase>* obj, Interface* env) noexcept
+	{
+		ServantStaticDummy::__add_ref (obj, env);
+	}
+
+	static void __remove_ref (Bridge <PortableServer::ServantBase>* obj, Interface* env) noexcept
+	{
+		ServantStaticDummy::__remove_ref (obj, env);
+	}
+
+	static ULong __refcount_value (Bridge <PortableServer::ServantBase>* obj, Interface* env) noexcept
+	{
+		return ServantStaticDummy::__refcount_value (obj, env);
+	}
+
+	static void __delete_object (Bridge <PortableServer::ServantBase>* obj, Interface* env) noexcept
+	{
+		ServantStaticDummy::__delete_object (obj, env);
+	}
 };
 
 //! Static implementation of PortableServer::ServantBase.
@@ -56,6 +71,11 @@ class InterfaceStatic <S, PortableServer::ServantBase> :
 	public ServantBaseStaticDummy
 {
 public:
+	using ServantBaseStaticDummy::__add_ref;
+	using ServantBaseStaticDummy::__remove_ref;
+	using ServantBaseStaticDummy::__refcount_value;
+	using ServantBaseStaticDummy::__delete_object;
+
 	// ServantBase operations
 
 	static I_ref <PortableServer::POA> _default_POA ()
@@ -72,11 +92,6 @@ public:
 	{
 		return servant_base ()->_is_a (type_id);
 	}
-
-	using ServantBaseStaticDummy::__add_ref;
-	using ServantBaseStaticDummy::__remove_ref;
-	using ServantBaseStaticDummy::__refcount_value;
-	using ServantBaseStaticDummy::__delete_object;
 
 	static PortableServer::Servant _core_servant ()
 	{

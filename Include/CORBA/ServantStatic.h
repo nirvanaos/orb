@@ -115,6 +115,11 @@ public:
 	{
 		return nullptr;
 	}
+
+	static void __add_ref (Interface* obj, Interface* env) noexcept;
+	static void __remove_ref (Interface* obj, Interface* env) noexcept;
+	static ULong __refcount_value (Interface* obj, Interface* env) noexcept;
+	static void __delete_object (Interface* _b, Interface* _env) noexcept;
 };
 
 }
