@@ -72,7 +72,7 @@ pseudo interface ORB
   );
 
   void get_default_context (
-    out Context                 ctx
+    out _Context                 ctx
   );
 
   void send_multiple_requests_oneway (

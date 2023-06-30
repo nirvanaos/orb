@@ -29,7 +29,7 @@
 module CORBA {
 module Internal {
 
-native Interface;
+native _Interface;
 native CharPtr;
 native ConstCharPtr;
 native WCharPtr;
@@ -158,14 +158,14 @@ pseudo interface IORequest
   /// Marshal interface.
   /// 
   /// \param itf The interface derived from Object or LocalObject.
-  void marshal_interface (in Interface itf);
+  void marshal_interface (in _Interface itf);
 
   /// Unmarshal interface.
   /// 
   /// \param rep_id The interface repository id.
   /// 
   /// \returns Interface.
-  Interface unmarshal_interface (in string interface_id);
+  _Interface unmarshal_interface (in string interface_id);
 
   /// Marshal TypeCode.
   /// 
@@ -181,27 +181,27 @@ pseudo interface IORequest
   /// 
   /// \param val    ValueBase.
   /// \param output Output parameter marshaling. Haven't to perform deep copy.
-  void marshal_value (in Interface val, in boolean output);
+  void marshal_value (in _Interface val, in boolean output);
 
   /// Unmarshal value type.
   /// 
   /// \param rep_id The value type repository id.
   /// 
   /// \returns Value type interface.
-  Interface unmarshal_value (in string interface_id);
+  _Interface unmarshal_value (in string interface_id);
 
   /// Marshal abstract interface.
   /// 
   /// \param itf The interface derived from AbstractBase.
   /// \param output Output parameter marshaling. Haven't to perform deep copy.
-  void marshal_abstract (in Interface itf, in boolean output);
+  void marshal_abstract (in _Interface itf, in boolean output);
 
   /// Unmarshal abstract interface.
   /// 
   /// \param rep_id The interface repository id.
   /// 
   /// \returns Interface.
-  Interface unmarshal_abstract (in string interface_id);
+  _Interface unmarshal_abstract (in string interface_id);
 
   ///@}
 

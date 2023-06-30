@@ -10,7 +10,7 @@ module CORBA {
 
 typeprefix CORBA "omg.org";
 
-pseudo interface Context
+pseudo interface _Context
 {
   void set_one_value (
     in Identifier  prop_name,	// property name to add
@@ -30,7 +30,7 @@ pseudo interface Context
   );
   void create_child (
     in Identifier	ctx_name,	 // name of context object
-    out Context 	child_ctx	 // newly created context object
+    out _Context 	child_ctx	 // newly created context object
   );
   void delete (
     in Flags	        del_flags	 // flags controlling deletion
