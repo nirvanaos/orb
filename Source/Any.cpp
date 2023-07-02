@@ -100,8 +100,10 @@ void* Any::prepare (I_ptr <TypeCode> tc)
 		size_t size = tc->n_aligned_size ();
 		if (size <= SMALL_CAPACITY)
 			dst = small_pointer ();
-		else
-			large_pointer (dst = ::Nirvana::g_memory->allocate (0, size, 0), size);
+		else {
+			dst = ::Nirvana::g_memory->allocate (0, size, 0);
+			large_pointer (dst, size);
+		}
 	}
 	return dst;
 }
