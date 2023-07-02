@@ -55,6 +55,27 @@
 #include "ServantLocator_native.h"
 #include "String_compat.h"
 
+namespace Nirvana {
+
+/// Vendor Minor Codeset ID.
+const uint32_t VMCID = 0xFFFFF;
+
+inline uint32_t make_minor_errno (int err)
+{
+	assert (err <= 0xFFF);
+	return (VMCID << 12) | err;
+}
+
+inline int get_minor_errno (uint32_t minor)
+{
+	if (minor >> 12 == VMCID)
+		return minor & 0xFFF;
+	else
+		return 0;
+}
+
+}
+
 namespace CORBA {
 
 inline
