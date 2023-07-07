@@ -60,15 +60,15 @@ namespace Nirvana {
 /// Vendor Minor Codeset ID.
 const uint32_t VMCID = 0xFFFFF;
 
-inline uint32_t make_minor_errno (int_fast16_t err)
+inline uint32_t make_minor_errno (int_fast16_t err) noexcept
 {
 	assert (err <= 0xFFF);
 	return (VMCID << 12) | err;
 }
 
-inline int_fast16_t get_minor_errno (uint32_t minor)
+inline int_fast16_t get_minor_errno (uint32_t minor) noexcept
 {
-	if (minor >> 12 == VMCID)
+	if ((minor & 0xFFFFF000)  == (VMCID << 12))
 		return minor & 0xFFF;
 	else
 		return 0;
