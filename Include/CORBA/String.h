@@ -101,8 +101,10 @@ void Type <StringT <Char> >::check_encoding (const Char* p, size_t cc)
 	if (p [cc])
 		Nirvana::throw_BAD_PARAM (); // Not zero-terminated
 
-	if (!Nirvana::is_valid_utf8 (p, cc))
+	if (!Nirvana::is_valid_utf8 (p, cc)) {
+		assert (false);
 		Nirvana::throw_CODESET_INCOMPATIBLE ();
+	}
 }
 
 template <> inline
