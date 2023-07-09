@@ -51,12 +51,23 @@ public:
 
 	// ServantBase operations
 
-	virtual I_ref <PortableServer::POA> _default_POA ()
+	virtual 
+#ifdef LEGACY_CORBA_CPP
+		I_ptr
+#else
+		I_ref
+#endif
+		<PortableServer::POA> _default_POA ()
 	{
+		_check_construct ();
 		return ServantBaseLink::_default_POA ();
 	}
 
-	virtual I_ref <InterfaceDef> _get_interface ();
+	virtual Type <InterfaceDef>::VRet _get_interface ()
+	{
+		_check_construct ();
+		return ServantBaseLink::_get_interface ();
+	}
 
 	virtual Boolean _is_a (String_in type_id)
 	{

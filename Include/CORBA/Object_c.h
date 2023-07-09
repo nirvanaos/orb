@@ -93,8 +93,15 @@ class Client <T, Object> :
 	public T
 {
 public:
-	I_ref <ImplementationDef> _get_implementation ();
-	I_ref <InterfaceDef> _get_interface ();
+	I_ptr <ImplementationDef> _get_implementation ();
+
+#ifdef LEGACY_CORBA_CPP
+	I_ptr
+#else
+	I_ref
+#endif
+		<InterfaceDef> _get_interface ();
+
 	Boolean _is_a (String_in type_id);
 	Boolean _non_existent ();
 	Boolean _is_equivalent (I_in <Object> other_object);

@@ -32,11 +32,5 @@ ServantPOA <PortableServer::ServantBase>::ServantPOA () :
 	ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_)
 {}
 
-I_ref <InterfaceDef> ServantPOA <PortableServer::ServantBase>::_get_interface ()
-{
-	_check_construct ();
-	return ServantBaseLink::_get_interface ();
-}
-
 }
 }

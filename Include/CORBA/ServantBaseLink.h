@@ -47,12 +47,17 @@ class ServantBaseLink :
 public:
 	// ServantBase operations
 
-	I_ref <PortableServer::POA> _default_POA ()
+#ifdef LEGACY_CORBA_CPP
+	I_ptr
+#else
+	I_ref
+#endif
+		<PortableServer::POA> _default_POA () const
 	{
 		return core_object_->_default_POA ();
 	}
 
-	I_ref <InterfaceDef> _get_interface () const
+	Type <InterfaceDef>::VRet _get_interface () const
 	{
 		return core_object_->_get_interface ();
 	}
@@ -62,14 +67,14 @@ public:
 		return core_object_->_is_a (type_id);
 	}
 
-	Boolean _non_existent () const
+	Boolean _non_existent () const noexcept
 	{
 		return false;
 	}
 
 	// Our extensions
 
-	PortableServer::Servant _core_servant () const
+	PortableServer::Servant _core_servant () const noexcept
 	{
 		return core_object_;
 	}

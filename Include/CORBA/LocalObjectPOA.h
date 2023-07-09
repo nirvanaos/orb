@@ -52,8 +52,23 @@ public:
 
 	// Object operations
 
-	virtual I_ref <PortableServer::POA> _default_POA ();
-	virtual I_ref <InterfaceDef> _get_interface ();
+	virtual
+#ifdef LEGACY_CORBA_CPP
+		I_ptr
+#else
+		I_ref
+#endif
+		<PortableServer::POA> _default_POA () const
+	{
+		return nullptr;
+	}
+
+	virtual Type <InterfaceDef>::VRet _get_interface ()
+	{
+		_check_construct ();
+		return LocalObjectLink::core_object_->_get_interface ();
+	}
+
 	virtual Boolean _is_a (String_in type_id);
 	virtual Boolean _non_existent ();
 

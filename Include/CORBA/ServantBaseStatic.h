@@ -78,12 +78,18 @@ public:
 
 	// ServantBase operations
 
-	static I_ref <PortableServer::POA> _default_POA ()
+	static
+#ifdef LEGACY_CORBA_CPP
+		I_ptr
+#else
+		I_ref
+#endif
+		<PortableServer::POA> _default_POA ()
 	{
 		return servant_base ()->_default_POA ();
 	}
 
-	static I_ref <InterfaceDef> _get_interface ()
+	static Type <InterfaceDef>::VRet _get_interface ()
 	{
 		return servant_base ()->_get_interface ();
 	}

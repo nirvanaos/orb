@@ -55,13 +55,13 @@ typedef Internal::I_var <Object> Object_var;
 namespace Internal {
 
 template <class T>
-Internal::I_ref <ImplementationDef> Client <T, Object>::_get_implementation ()
+Internal::I_ptr <ImplementationDef> Client <T, Object>::_get_implementation ()
 {
-	return I_ref <ImplementationDef> (); // Compatibility stub
+	return nullptr; // Compatibility stub
 }
 
 template <class T>
-Internal::I_ref <InterfaceDef> Client <T, Object>::_get_interface ()
+Internal::Type <InterfaceDef>::VRet Client <T, Object>::_get_interface ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));

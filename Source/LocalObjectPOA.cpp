@@ -28,17 +28,6 @@
 namespace CORBA {
 namespace Internal {
 
-I_ref <PortableServer::POA> ServantPOA <LocalObject>::_default_POA ()
-{
-	return PortableServer::POA::_nil ();
-}
-
-I_ref <InterfaceDef> ServantPOA <LocalObject>::_get_interface ()
-{
-	_check_construct ();
-	return LocalObjectLink::core_object_->_get_interface ();
-}
-
 Boolean ServantPOA <LocalObject>::_is_a (String_in type_id)
 {
 	_check_construct ();

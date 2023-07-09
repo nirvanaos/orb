@@ -97,7 +97,12 @@ public:
 		rel_ = b;
 	}
 
-	I_ref <PortableServer::POA> _defauilt_POA ()
+#ifdef LEGACY_CORBA_CPP
+	I_ptr
+#else
+	I_ref
+#endif
+		<PortableServer::POA> _defauilt_POA ()
 	{
 		if (poa_)
 			return poa_;

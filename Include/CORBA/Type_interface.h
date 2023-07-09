@@ -195,14 +195,7 @@ public:
 		p_ = nullptr;
 		return ret;
 	}
-/* TODO: Remove
-	operator I_var <I> ()
-	{
-		I_ptr <I> ret (static_cast <I*> (Interface::_check (p_, RepIdOf <I>::id))); // No add reference
-		p_ = nullptr;
-		return I_var <I> (ret);
-	}
-*/
+
 #endif
 
 private:
