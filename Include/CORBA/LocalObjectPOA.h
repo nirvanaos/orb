@@ -58,19 +58,19 @@ public:
 #else
 		I_ref
 #endif
-		<PortableServer::POA> _default_POA () const
+		<PortableServer::POA> _default_POA () override
 	{
 		return nullptr;
 	}
 
-	virtual Type <InterfaceDef>::VRet _get_interface ()
+	virtual Type <InterfaceDef>::VRet _get_interface () override
 	{
 		_check_construct ();
 		return LocalObjectLink::core_object_->_get_interface ();
 	}
 
-	virtual Boolean _is_a (String_in type_id);
-	virtual Boolean _non_existent ();
+	virtual Boolean _is_a (String_in type_id) override;
+	virtual Boolean _non_existent () override;
 
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__non_existent;
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__add_ref;
@@ -86,20 +86,20 @@ protected:
 #endif
 	friend class Skeleton <ServantPOA <LocalObject>, LocalObject>;
 
-	virtual void _add_ref ()
+	virtual void _add_ref () override
 	{
 		_check_construct ();
 		LocalObjectLink::_add_ref ();
 	}
 
-	virtual void _remove_ref ()
+	virtual void _remove_ref () override
 	{
 		_check_construct ();
 		LocalObjectLink::_remove_ref ();
 	}
 
 public:
-	virtual ULong _refcount_value ()
+	virtual ULong _refcount_value () override
 	{
 		_check_construct ();
 		return LocalObjectLink::_refcount_value ();
@@ -110,7 +110,7 @@ protected:
 		LocalObjectLink (Skeleton <ServantPOA <LocalObject>, LocalObject>::epv_)
 	{}
 
-	virtual Type <Interface>::VRet _get_proxy ()
+	virtual Type <Interface>::VRet _get_proxy () override
 	{
 		_check_construct ();
 		return LocalObjectLink::_get_proxy ();
