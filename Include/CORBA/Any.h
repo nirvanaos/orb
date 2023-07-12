@@ -339,7 +339,8 @@ operator <<= (Any& a, T& v)
 	operator <<= (a, (const T&)v);
 }
 template <typename T> inline
-std::enable_if_t <!std::is_base_of <Exception, T>::value, void>
+std::enable_if_t <!std::is_base_of <Exception,
+	typename std::remove_reference <T>::type>::value, void>
 operator <<= (Any& a, T&& v)
 {
 	a.move_from (Internal::Type <typename std::remove_reference <T>::type>::type_code (), &v);
