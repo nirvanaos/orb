@@ -81,6 +81,29 @@ interface NamingContext
 
 	void destroy () raises (NotEmpty);
 
+	/// The list operation allows a client to iterate through a set of bindings in a naming context.
+	/// 
+	/// \param how_many The \p how_many parameter determines the maximum number of bindings to return
+	///   in the parameter \p bl, with any remaining bindings to be accessed through the returned
+	///   BindingIterator \p bi.
+	/// 
+	///   A non-zero value of \p how_many guarantees that \p bl contains at most \p how_many elements.
+	///   The implementation is free to return fewer than the number of bindings requested by how_many.
+	///   However, for a non-zero value of how_many, it may not return a \p bl sequence with zero
+	///   elements unless the context contains no bindings.
+	/// 
+	///   If \p how_many is set to zero, the client is requesting to use only the BindingIterator \p bi
+	///   to access the bindings and list returns a zero length sequence in \p bl.
+	/// 
+	/// \param bl The \p bl parameter is a sequence where each element is a Binding containing a Name
+	///   of length 1 representing a single NameComponent.
+	/// 
+	/// \param bi The parameter \p bi returns a reference to an iterator object.
+	/// 
+	///   If the \p bi parameter returns a non-nil reference, this indicates that the call to list() may not
+	///   have returned all of the bindings in the context and that the remaining bindings (if any) must be
+	///   retrieved using the iterator. This applies for all values of \p how_many.
+	/// 
 	void list (
 		in unsigned long how_many,
 		out BindingList bl,
