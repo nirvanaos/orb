@@ -254,9 +254,14 @@ private:
 		return &static_cast <ValueBox <VB, T>&> (*bridge).base_;
 	}
 
-	void _marshal (IORequest_ptr rq) const
+	void _marshal_in (IORequest_ptr rq) const
 	{
 		Type <T>::marshal_in (this->_value (), rq);
+	}
+
+	void _marshal_out (IORequest_ptr rq)
+	{
+		Type <T>::marshal_out (this->_value (), rq);
 	}
 
 	void _unmarshal (IORequest_ptr rq)
