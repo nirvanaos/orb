@@ -170,7 +170,8 @@ class ValueBoxImpl :
 	public RefCountBase <VB>,
 	private LifeCycleRefCnt <VB>,
 	public Skeleton <VB, ValueBase>,
-	public ValueTraits <VB>
+	public ValueTraits <VB>,
+	public ValueNonTruncatable
 {
 	friend class Skeleton <VB, ValueBase>;
 	friend class LifeCycleRefCnt <VB>;
@@ -212,6 +213,13 @@ public:
 		return _ptr_type (nullptr);
 	}
 
+	static const Nirvana::ImportInterfaceT <ValueFactoryBase> _factory;
+
+	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env) noexcept
+	{
+		return interface_duplicate (&ValueFactoryBase::_ptr_type (_factory));
+	}
+
 protected:
 	ValueBoxImpl () noexcept :
 		Base (epv_),
@@ -238,11 +246,6 @@ protected:
 	{
 		Base::operator = (std::move (src));
 		return *this;
-	}
-
-	static Interface* __truncatable_base (Bridge <ValueBase>* _b, Interface* _env)
-	{
-		return nullptr;
 	}
 
 private:
@@ -313,6 +316,11 @@ private:
 
 	ValueBaseBridge base_;
 };
+
+template <class VB, typename T>
+NIRVANA_OLF_SECTION_N (1) const Nirvana::ImportInterfaceT <ValueFactoryBase>
+ValueBoxImpl <VB, T>::_factory = { Nirvana::OLF_IMPORT_INTERFACE,
+	CORBA::Internal::RepIdOf <VB>::id, CORBA::Internal::RepIdOf <ValueFactoryBase>::id };
 
 template <class VB, typename T>
 const ValueBoxBridge::EPV ValueBoxImpl <VB, T>::epv_ = {

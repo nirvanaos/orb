@@ -1,4 +1,3 @@
-/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -24,39 +23,20 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_VALUEBASEIMPL_H_
-#define NIRVANA_ORB_VALUEBASEIMPL_H_
-#pragma once
-
-#include "ValueImpl.h"
-#include "LifeCycleRefCnt.h"
-#include "RefCountBase.h"
-#include "ValueBase_s.h"
+#include <CORBA/ValueImpl.h>
 
 namespace CORBA {
 namespace Internal {
 
-//! Implementation of ValueBase.
-//! \tparam S Servant class implementing operations.
-template <class S>
-class ValueImpl <S, ValueBase> :
-	public LifeCycleRefCnt <S>,
-	public ServantTraits <S>,
-	public ValueImplBase <S, ValueBase>,
-	public RefCountBase <S>
-{};
-
-template <class S>
-class ValueTraits
+Interface* ValueNonTruncatable::__truncatable_base (Bridge <ValueBase>*, Interface*)
 {
-public:
-	I_ref <ValueBase> _copy_value () const
-	{
-		return make_reference <S> (std::ref (static_cast <const S&> (*this)));
-	}
-};
+	return nullptr;
+}
+
+Interface* ValueBaseNoFactory::__factory (Bridge <ValueBase>*, Interface*)
+{
+	return nullptr;
+}
 
 }
 }
-
-#endif

@@ -99,18 +99,6 @@ protected:
 		return Type <Interface>::VT_ret ();
 	}
 
-	static Interface* __truncatable_base (Bridge <ValueBase>* _b, Interface* _env)
-	{
-		try {
-			return Type <TypeCode>::C_ret (S::_implementation (_b)._truncatable_base ());
-		} catch (Exception& e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
-		return Type <TypeCode>::C_ret ();
-	}
-
 };
 
 template <class S>
@@ -126,7 +114,8 @@ const Bridge <ValueBase>::EPV Skeleton <S, ValueBase>::epv_ = {
 		S::__marshal_out,
 		S::__unmarshal,
 		S::__query_valuetype,
-		S::__truncatable_base
+		S::__truncatable_base,
+		S::__factory
 	}
 };
 

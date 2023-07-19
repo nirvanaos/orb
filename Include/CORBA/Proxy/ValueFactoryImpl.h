@@ -24,12 +24,14 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_VALUEFACTORY_H_
-#define NIRVANA_ORB_VALUEFACTORY_H_
+#ifndef NIRVANA_ORB_VALUEFACTORYIMPL_H_
+#define NIRVANA_ORB_VALUEFACTORYIMPL_H_
 #pragma once
 
+#include "../ServantStatic.h"
 #include "../ValueFactoryBase_s.h"
 #include "TypeCodeValue.h"
+#include "TypeCodeValueBox.h"
 
 namespace CORBA {
 namespace Internal {
@@ -51,6 +53,13 @@ public:
 			itf = InterfaceStaticBase <TypeCodeValue <I>, TypeCode>::_bridge ();
 		return itf;
 	}
+
+	// ValueFactoryBase
+	static Interface* factory_base () noexcept
+	{
+		return interface_duplicate (query_creator_interface <I> (RepIdOf <ValueFactoryBase>::id));
+	}
+
 };
 
 template <class I>
@@ -70,15 +79,32 @@ public:
 	}
 
 	// ValueFactoryBase
+	static Interface* factory_base () noexcept
+	{
+		return interface_duplicate (InterfaceStaticBase <ValueBoxFactory <I>, ValueFactoryBase>::_bridge ());
+	}
+
 	static Interface* _query_factory (String_in id) noexcept
 	{
 		return nullptr;
 	}
 
+#ifdef LEGACY_CORBA_CPP
+
+	static ValueBase_ptr create_for_unmarshal ()
+	{
+		return new I;
+	}
+
+#else
+
 	static ValueBase::_ref_type create_for_unmarshal ()
 	{
 		return make_reference <I> ();
 	}
+
+#endif
+
 };
 
 }

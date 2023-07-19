@@ -10,7 +10,18 @@ extern const ::Nirvana::ImportInterfaceT < ::CORBA::TypeCode> _tc_StringVal;
 namespace CORBA {
 namespace Internal {
 
-template <> const Char RepIdOf <StringVal>::id [] = "IDL:StringVal:1.0";
+template <> const Char RepIdOf < ::StringVal>::id [] = "IDL:StringVal:1.0";
+
+template <>
+struct Type < ::StringVal> : TypeValueBox < ::StringVal>
+{
+
+	static I_ptr <TypeCode> type_code ()
+	{
+		return ::_tc_StringVal;
+	}
+
+};
 
 }
 }

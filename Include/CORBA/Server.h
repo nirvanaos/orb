@@ -42,8 +42,8 @@
 #include "ValueFactoryBase_s.h"
 #include "make_stateless.h"
 #include "make_pseudo.h"
+#include "ValueImpl.h"
 #include "ValueCreator.h"
-#include "FT.h"
 
 namespace CORBA {
 
@@ -57,7 +57,7 @@ struct servant_traits
 	typedef Internal::ServantPOA <I> base_type;
 
 	/// \brief Servant reference.
-	typedef servant_reference <Internal::ServantPOA <I>> ref_type;
+	typedef servant_reference <Internal::ServantPOA <I> > ref_type;
 
 	/// \brief Tied servant.
 	/// 

@@ -42,6 +42,8 @@ typedef Internal::I_ptr <ValueBase> ValueBase_ptr; // TODO: Old mapping requires
 typedef Internal::I_var <ValueBase> ValueBase_var;
 #endif
 
+class ValueFactoryBase;
+
 namespace Internal {
 
 // ValueBase
@@ -71,6 +73,7 @@ void (*marshal_out) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 void (*unmarshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 Interface* (*query_valuetype) (Bridge <ValueBase>*, Type <String>::ABI_in, Interface*);
 Interface* (*truncatable_base) (Bridge <ValueBase>*, Interface*);
+Interface* (*factory) (Bridge <ValueBase>*, Interface*);
 NIRVANA_BRIDGE_END ()
 
 template <class T>
@@ -93,7 +96,13 @@ public:
 		return _query_valuetype (RepIdOf <I>::id).template downcast <I> ();
 	}
 
+	/// If the value is truncatable, returns the type code of the truncatable base.
+	/// Otherwise returns nil reference.
 	I_ref <TypeCode> _truncatable_base ();
+
+	/// Returns factory interface for concrete value.
+	/// For abstract vaalue returns nil reference.
+	I_ref <ValueFactoryBase> _factory ();
 };
 
 template <class T>
@@ -149,6 +158,16 @@ I_ref <TypeCode> Client <T, ValueBase>::_truncatable_base ()
 	Environment _env;
 	Bridge <ValueBase>& _b (T::_get_bridge (_env));
 	I_ret <TypeCode> _ret = (_b._epv ().epv.truncatable_base) (&_b, &_env);
+	_env.check ();
+	return _ret;
+}
+
+template <class T>
+I_ref <ValueFactoryBase> Client <T, ValueBase>::_factory ()
+{
+	Environment _env;
+	Bridge <ValueBase>& _b (T::_get_bridge (_env));
+	I_ret <ValueFactoryBase> _ret = (_b._epv ().epv.factory) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
