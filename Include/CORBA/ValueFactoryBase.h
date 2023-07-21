@@ -43,6 +43,7 @@ typedef Internal::I_var <ValueFactoryBase> ValueFactoryBase_var;
 namespace Core {
 
 class RequestGIOP;
+class RequestLocalBase;
 
 }
 
@@ -81,6 +82,7 @@ public:
 private:
 	Type <ValueBase>::Var create_for_unmarshal ();
 	friend class CORBA::Core::RequestGIOP;
+	friend class CORBA::Core::RequestLocalBase;
 };
 
 template <class T>
