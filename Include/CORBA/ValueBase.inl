@@ -37,14 +37,7 @@ namespace Internal {
 template <class I> inline
 void TypeValue <I>::marshal_in (I_ptr <I> src, IORequest_ptr rq)
 {
-	rq->marshal_value (&src, false);
-}
-
-template <class I> inline
-void TypeValue <I>::marshal_out (I_ref <I>& src, IORequest_ptr rq)
-{
-	rq->marshal_value (&I_ptr <I> (src), true);
-	src = nullptr;
+	rq->marshal_value (&src);
 }
 
 template <class I> inline

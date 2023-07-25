@@ -54,21 +54,10 @@ protected:
 		return Type <ValueBase>::ret ();
 	}
 
-	static void __marshal_in (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
+	static void __marshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
 	{
 		try {
-			S::_implementation (_b)._marshal_in (Type <IORequest>::in (rq));
-		} catch (Exception& e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
-	}
-
-	static void __marshal_out (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
-	{
-		try {
-			S::_implementation (_b)._marshal_out (Type <IORequest>::in (rq));
+			S::_implementation (_b)._marshal (Type <IORequest>::in (rq));
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -110,8 +99,7 @@ const Bridge <ValueBase>::EPV Skeleton <S, ValueBase>::epv_ = {
 	},
 	{ // epv
 		S::__copy_value,
-		S::__marshal_in,
-		S::__marshal_out,
+		S::__marshal,
 		S::__unmarshal,
 		S::__query_valuetype,
 		S::__truncatable_base,

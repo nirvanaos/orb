@@ -52,7 +52,6 @@ template <class I>
 struct TypeValue : TypeItfMarshalable <I>
 {
 	inline static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
-	inline static void marshal_out (I_ref <I>& src, IORequest_ptr rq);
 	inline static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
 };
 
@@ -68,8 +67,7 @@ struct Type <ValueBase> : TypeValue <ValueBase>
 template <> const Char RepIdOf <ValueBase>::id [] = CORBA_REPOSITORY_ID ("ValueBase");
 NIRVANA_BRIDGE_BEGIN (ValueBase)
 Interface* (*copy_value) (Bridge <ValueBase>* _b, Interface* _env);
-void (*marshal_in) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
-void (*marshal_out) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
+void (*marshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 void (*unmarshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 Interface* (*query_valuetype) (Bridge <ValueBase>*, Type <String>::ABI_in, Interface*);
 Interface* (*truncatable_base) (Bridge <ValueBase>*, Interface*);
@@ -82,8 +80,7 @@ class Client <T, ValueBase> :
 {
 public:
 	Type <ValueBase>::VRet _copy_value ();
-	void _marshal_in (I_ptr <IORequest> rq);
-	void _marshal_out (I_ptr <IORequest> rq);
+	void _marshal (I_ptr <IORequest> rq);
 	void _unmarshal (I_ptr <IORequest> rq);
 
 	/// This method does not increment reference counter
@@ -116,20 +113,11 @@ Type <ValueBase>::VRet Client <T, ValueBase>::_copy_value ()
 }
 
 template <class T>
-void Client <T, ValueBase>::_marshal_in (I_ptr <IORequest> rq)
+void Client <T, ValueBase>::_marshal (I_ptr <IORequest> rq)
 {
 	Environment _env;
 	Bridge <ValueBase>& _b (T::_get_bridge (_env));
-	(_b._epv ().epv.marshal_in) (&_b, &rq, &_env);
-	_env.check ();
-}
-
-template <class T>
-void Client <T, ValueBase>::_marshal_out (I_ptr <IORequest> rq)
-{
-	Environment _env;
-	Bridge <ValueBase>& _b (T::_get_bridge (_env));
-	(_b._epv ().epv.marshal_out) (&_b, &rq, &_env);
+	(_b._epv ().epv.marshal) (&_b, &rq, &_env);
 	_env.check ();
 }
 

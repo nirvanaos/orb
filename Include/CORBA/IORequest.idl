@@ -179,9 +179,8 @@ pseudo interface IORequest
 
   /// Marshal value type.
   /// 
-  /// \param val    ValueBase.
-  /// \param output Output parameter marshaling. Haven't to perform deep copy.
-  void marshal_value (in _Interface val, in boolean output);
+  /// \param val    Value type interface.
+  void marshal_value (in _Interface val);
 
   /// Unmarshal value type.
   /// 
@@ -193,8 +192,7 @@ pseudo interface IORequest
   /// Marshal abstract interface.
   /// 
   /// \param itf The interface derived from AbstractBase.
-  /// \param output Output parameter marshaling. Haven't to perform deep copy.
-  void marshal_abstract (in _Interface itf, in boolean output);
+  void marshal_abstract (in _Interface itf);
 
   /// Unmarshal abstract interface.
   /// 
