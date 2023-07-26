@@ -213,11 +213,12 @@ public:
 		return _ptr_type (nullptr);
 	}
 
-	static const Nirvana::ImportInterfaceT <ValueFactoryBase> _factory;
+	// We can't use `static const` here, because it causes the redundant optimization in CLang.
+	NIRVANA_OLF_SECTION static NIRVANA_STATIC_IMPORT ::Nirvana::ImportInterfaceT <ValueFactoryBase> _factory;
 
 	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env) noexcept
 	{
-		return interface_duplicate (&ValueFactoryBase::_ptr_type (_factory));
+		return interface_duplicate (_factory.imp.itf);
 	}
 
 protected:
@@ -313,9 +314,9 @@ private:
 };
 
 template <class VB, typename T>
-NIRVANA_OLF_SECTION_N (1) const Nirvana::ImportInterfaceT <ValueFactoryBase>
-ValueBoxImpl <VB, T>::_factory = { Nirvana::OLF_IMPORT_INTERFACE,
-	CORBA::Internal::RepIdOf <VB>::id, CORBA::Internal::RepIdOf <ValueFactoryBase>::id };
+NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT ::Nirvana::ImportInterfaceT <ValueFactoryBase>
+ValueBoxImpl <VB, T>::_factory{ ::Nirvana::OLF_IMPORT_INTERFACE,
+RepIdOf <VB>::id, RepIdOf <ValueFactoryBase>::id };
 
 template <class VB, typename T>
 const ValueBoxBridge::EPV ValueBoxImpl <VB, T>::epv_ = {
