@@ -37,6 +37,7 @@ template <class I>
 class I_var : public I_ref <I>
 {
 	typedef I_ref <I> Base;
+
 public:
 	I_var () noexcept
 	{}
@@ -48,6 +49,11 @@ public:
 	{}
 
 	I_var (BridgeVal <I>* p) :
+		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
+	{}
+
+	template <class VB, typename T>
+	I_var (ValueBox <VB, T>* p) noexcept :
 		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
 	{}
 
@@ -115,7 +121,14 @@ public:
 	// No add reference
 	I_var& operator = (BridgeVal <I>* p) noexcept
 	{
-		return operator = (static_cast <I*> (static_cast <Bridge <I>*> (p)));
+		return operator = (Base (static_cast <I*> (static_cast <Bridge <I>*> (p))));
+	}
+
+	// No add reference
+	template <class VB, typename T>
+	I_var& operator = (ValueBox <VB, T>* p) noexcept
+	{
+		return operator = (Base (static_cast <I*> (static_cast <Bridge <I>*> (p))));
 	}
 
 	// Add reference

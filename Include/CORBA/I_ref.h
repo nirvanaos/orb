@@ -166,6 +166,7 @@ template <class I>
 class I_ref : public I_ref_base <I>
 {
 	typedef I_ref_base <I> Base;
+
 public:
 	I_ref () noexcept
 	{}
@@ -204,13 +205,25 @@ public:
 	{}
 
 	I_ref (BridgeVal <I>* p) :
-		Base (I_ptr <I> (p))
+		I_ref (I_ptr <I> (p))
+	{}
+
+	template <class VB, typename T>
+	I_ref (ValueBox <VB, T>* p) noexcept :
+		I_ref (I_ptr <I> (*p))
 	{}
 
 	template <class S>
 	I_ref (const servant_reference <S>& sr) noexcept :
-		Base (I_ptr <I> (static_cast <S*> (sr)))
+		Base (I_ptr <I> (sr))
 	{}
+
+	template <class S>
+	I_ref (servant_reference <S>&& sr) noexcept :
+		Base (static_cast <I*> (&I_ptr <I> (sr)))
+	{
+		sr.p_ = nullptr;
+	}
 
 	I_ref& operator = (const I_ref& src)
 	{
@@ -258,6 +271,29 @@ public:
 		return *this;
 	}
 
+	I_ref& operator = (BridgeVal <I>* p) noexcept
+	{
+		return operator = (I_ptr <I> (p));
+	}
+
+	template <class VB, typename T>
+	I_ref& operator = (ValueBox <VB, T>* p) noexcept
+	{
+		return operator = (I_ptr <I> (p));
+	}
+
+	template <class S>
+	I_ref& operator = (const servant_reference <S>& sr) noexcept
+	{
+		return operator = (I_ptr <I> (sr));
+	}
+
+	template <class S>
+	I_ref& operator = (servant_reference <S>&& sr) noexcept
+	{
+		return operator = (I_ref (sr));
+	}
+
 protected:
 	friend class I_ref <Interface>;
 	friend class I_ret <I>;
@@ -265,6 +301,7 @@ protected:
 	template <class S, class ... Args> friend
 	I_ref <typename S::PrimaryInterface> CORBA::make_pseudo (Args ... args);
 
+	// No add reference
 	I_ref (I* p) :
 		Base (p)
 	{}
@@ -280,6 +317,7 @@ template <>
 class I_ref <Interface> : public I_ref_base <Interface>
 {
 	typedef I_ref_base <Interface> Base;
+
 public:
 	I_ref () noexcept
 	{}
@@ -361,6 +399,8 @@ public:
 
 protected:
 	friend class I_ret <Interface>;
+
+	// No add reference
 	I_ref (Interface* p) :
 		Base (p)
 	{}

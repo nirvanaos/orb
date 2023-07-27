@@ -31,6 +31,10 @@
 
 namespace CORBA {
 
+namespace Internal {
+template <class> class I_ref;
+}
+
 template <class T>
 class servant_reference;
 
@@ -44,6 +48,8 @@ template <class T>
 class servant_reference
 {
 	template <class> friend class servant_reference;
+	template <class> friend class Internal::I_ref;
+
 public:
 	servant_reference () noexcept :
 		p_ (nullptr)

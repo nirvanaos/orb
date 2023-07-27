@@ -126,6 +126,7 @@ template <class I>
 class I_ptr : public I_ptr_base <I>
 {
 	typedef I_ptr_base <I> Base;
+
 public:
 	I_ptr () noexcept
 	{}
@@ -187,6 +188,36 @@ public:
 		return *this;
 	}
 
+	I_ptr& operator = (nullptr_t) noexcept
+	{
+		Base::operator = (nullptr);
+		return *this;
+	}
+
+	template <class I1>
+	I_ptr& operator = (const I_ptr <I1>& src)
+	{
+		Base::operator = (wide (src.p_));
+		return *this;
+	}
+
+	I_ptr& operator = (BridgeVal <I>* p) noexcept
+	{
+		return operator = (I_ptr (p));
+	}
+
+	template <class VB, typename T>
+	I_ptr& operator = (ValueBox <VB, T>* p) noexcept
+	{
+		return operator = (I_ptr (p));
+	}
+
+	template <class S>
+	I_ptr& operator = (const servant_reference <S>& sr) noexcept
+	{
+		return operator = (static_cast <BridgeVal <I>*> (static_cast <S*> (sr)));
+	}
+
 	Interface* operator & () const noexcept
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
@@ -209,6 +240,7 @@ template <>
 class I_ptr <Interface> : public I_ptr_base <Interface>
 {
 	typedef I_ptr_base <Interface> Base;
+
 public:
 	I_ptr () noexcept
 	{}
