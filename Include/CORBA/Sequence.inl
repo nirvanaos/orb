@@ -37,11 +37,11 @@ namespace Internal {
 template <typename T>
 void Type <Sequence <T> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
-	typedef typename Type <T>::Var T_Var;
+	typedef typename Type <T>::ABI T_ABI;
 	if (Type <T>::is_CDR) {
 		size_t zero = 0;
-		rq->marshal_seq (Type <T>::CDR_align, sizeof (T_Var), Type <T>::CDR_size, src.size (),
-			const_cast <T_Var*> (src.data ()), zero);
+		rq->marshal_seq (Type <T>::CDR_align, sizeof (T_ABI), Type <T>::CDR_size, src.size (),
+			(void*)src.data (), zero);
 	} else {
 		if (rq->marshal_seq_begin (src.size ()))
 			Type <T>::marshal_in_a (src.data (), src.size (), rq);
@@ -51,9 +51,9 @@ void Type <Sequence <T> >::marshal_in (const Var& src, IORequest_ptr rq)
 template <typename T>
 void Type <Sequence <T> >::marshal_out (Var& src, IORequest_ptr rq)
 {
-	typedef typename Type <T>::Var T_Var;
+	typedef typename Type <T>::ABI T_ABI;
 	if (Type <T>::is_CDR) {
-		rq->marshal_seq (Type <T>::CDR_align, sizeof (T_Var), Type <T>::CDR_size, src.size (),
+		rq->marshal_seq (Type <T>::CDR_align, sizeof (T_ABI), Type <T>::CDR_size, src.size (),
 			src.data (), static_cast <ABI&> (src).allocated);
 		if (!static_cast <ABI&> (src).allocated)
 			static_cast <ABI&> (src).reset ();
@@ -66,10 +66,10 @@ void Type <Sequence <T> >::marshal_out (Var& src, IORequest_ptr rq)
 template <typename T>
 void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
-	typedef typename Type <T>::Var T_Var;
+	typedef typename Type <T>::ABI T_ABI;
 	if (Type <T>::is_CDR) {
 		ABI& abi = (ABI&)dst;
-		bool swap_bytes = rq->unmarshal_seq (Type <T>::CDR_align, sizeof (T_Var), Type <T>::CDR_size,
+		bool swap_bytes = rq->unmarshal_seq (Type <T>::CDR_align, sizeof (T_ABI), Type <T>::CDR_size,
 			abi.size, (void*&)abi.ptr, abi.allocated);
 		if (abi.size) {
 			assert (abi.allocated);
@@ -80,8 +80,8 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 			check_ABI (abi);
 #endif
 
-			if (sizeof (T_Var) > 1 && swap_bytes) {
-				T_Var* p = abi.ptr, *end = p + abi.size;
+			if (sizeof (T_ABI) > 1 && swap_bytes) {
+				typename Sequence <T>::pointer p = abi.ptr, end = p + abi.size;
 				do {
 					Type <T>::byteswap (*p);
 				} while (end != ++p);
@@ -89,7 +89,6 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 
 #ifdef _DEBUG
 			if (Type <T>::has_check) {
-				typedef typename Type <T>::ABI T_ABI;
 				try {
 					T_ABI* p = (T_ABI*)abi.ptr, * end = p + abi.size;
 					do {
