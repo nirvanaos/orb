@@ -42,8 +42,11 @@ template <class T, class ... Args>
 servant_reference <T> make_reference (Args ...);
 
 template <class T, class ... Args>
-Internal::I_ref <typename T::PrimaryInterface> make_stateless (Args ...);
+servant_reference <T> make_stateless (Args ...);
 
+/// Servant reference.
+/// 
+/// \tparam T Servant class.
 template <class T>
 class servant_reference
 {
@@ -242,7 +245,7 @@ private:
 	servant_reference <T1> make_reference (Args ... args);
 
 	template <class T1, class ... Args> friend
-	Internal::I_ref <typename T1::PrimaryInterface> make_stateless (Args ... args);
+	servant_reference <T1> make_stateless (Args ... args);
 
 protected:
 	T* p_;
@@ -286,6 +289,12 @@ private:
 	servant_reference <T>& ref_;
 };
 
+/// Create servant.
+/// 
+/// \tparam T Servant class.
+/// \tparam ...Args Servant constructor parameter types.
+/// \param ...args Servant constructor parameters.
+/// \returns Servant reference.
 template <class T, class ... Args> inline
 servant_reference <T> make_reference (Args ... args)
 {

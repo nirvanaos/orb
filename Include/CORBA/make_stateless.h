@@ -47,9 +47,9 @@ inline bool is_free_sync_context ()
 /// 
 /// \tparam T A servant type.
 /// \param args Servant constructor parameters.
-/// \returns Reference to servant primary interface.
+/// \returns Servant reference.
 template <class T, class ... Args>
-Internal::I_ref <typename T::PrimaryInterface> make_stateless (Args ... args)
+servant_reference <T> make_stateless (Args ... args)
 {
 	// Allocate temporary space for servant in stack
 	typename std::aligned_storage <sizeof (T), alignof (T)>::type tmp;
@@ -65,8 +65,8 @@ Internal::I_ref <typename T::PrimaryInterface> make_stateless (Args ... args)
 		// Create proxy
 		tmp_serv->_create_proxy ();
 
-		// Move servant to the stateless memory and return reference
-		return servant_reference <T> ((T*)Internal::g_object_factory->stateless_end (true), false)->_this ();
+		// Move servant to the stateless memory and return reference to it.
+		return servant_reference <T> ((T*)Internal::g_object_factory->stateless_end (true), false);
 	} catch (...) {
 		// Inform ObjectFactory that servant creation was failed
 		Internal::g_object_factory->stateless_end (false);
