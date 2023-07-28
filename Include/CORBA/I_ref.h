@@ -291,7 +291,7 @@ public:
 	template <class S>
 	I_ref& operator = (servant_reference <S>&& sr) noexcept
 	{
-		return operator = (I_ref (sr));
+		return operator = (I_ref (std::move (sr)));
 	}
 
 protected:
