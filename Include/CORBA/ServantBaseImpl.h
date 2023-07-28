@@ -60,9 +60,7 @@ public:
 protected:
 	ValueImpl () :
 		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_)
-	{
-		_construct ();
-	}
+	{}
 
 	ValueImpl (const ValueImpl&) :
 		ValueImpl ()

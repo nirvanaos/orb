@@ -42,7 +42,7 @@ template <class T, class ... Args>
 servant_reference <T> make_reference (Args ...);
 
 template <class T, class ... Args>
-servant_reference <T> make_stateless (Args ...);
+Internal::I_ref <typename T::PrimaryInterface> make_stateless (Args ...);
 
 template <class T>
 class servant_reference
@@ -242,7 +242,7 @@ private:
 	servant_reference <T1> make_reference (Args ... args);
 
 	template <class T1, class ... Args> friend
-	servant_reference <T1> make_stateless (Args ... args);
+	Internal::I_ref <typename T1::PrimaryInterface> make_stateless (Args ... args);
 
 protected:
 	T* p_;

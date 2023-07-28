@@ -60,9 +60,7 @@ public:
 protected:
 	ValueImpl () :
 		LocalObjectLink (Skeleton <S, LocalObject>::epv_)
-	{
-		_construct ();
-	}
+	{}
 
 	ValueImpl (const ValueImpl&) :
 		ValueImpl ()

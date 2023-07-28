@@ -30,19 +30,7 @@ namespace Internal {
 
 Boolean ServantPOA <LocalObject>::_is_a (String_in type_id)
 {
-	_check_construct ();
 	return LocalObjectLink::core_object_->_is_a (type_id);
-}
-
-Boolean ServantPOA <LocalObject>::_non_existent ()
-{
-	return LocalObjectLink::_non_existent ();
-}
-
-Bridge <Object>* ServantPOA <LocalObject>::_get_object (Type <String>::ABI_in iid, Interface* env)
-{
-	_check_construct ();
-	return LocalObjectLink::_get_object (iid, env);
 }
 
 }

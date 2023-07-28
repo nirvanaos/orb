@@ -48,8 +48,6 @@ class NIRVANA_NOVTABLE ServantPOA <LocalObject> :
 	public virtual ServantPOA <PortableServer::ServantBase>
 {
 public:
-	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env);
-
 	// Object operations
 
 	virtual
@@ -65,12 +63,15 @@ public:
 
 	virtual Type <InterfaceDef>::VRet _get_interface () override
 	{
-		_check_construct ();
 		return LocalObjectLink::core_object_->_get_interface ();
 	}
 
 	virtual Boolean _is_a (String_in type_id) override;
-	virtual Boolean _non_existent () override;
+	
+	virtual Boolean _non_existent () override
+	{
+		return false;
+	}
 
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__non_existent;
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__add_ref;
@@ -88,20 +89,17 @@ protected:
 
 	virtual void _add_ref () override
 	{
-		_check_construct ();
 		LocalObjectLink::_add_ref ();
 	}
 
 	virtual void _remove_ref () override
 	{
-		_check_construct ();
 		LocalObjectLink::_remove_ref ();
 	}
 
 public:
 	virtual ULong _refcount_value () override
 	{
-		_check_construct ();
 		return LocalObjectLink::_refcount_value ();
 	}
 
@@ -112,16 +110,9 @@ protected:
 
 	virtual Type <Interface>::VRet _get_proxy () override
 	{
-		_check_construct ();
 		return LocalObjectLink::_get_proxy ();
 	}
 
-private:
-	void _check_construct ()
-	{
-		if (!LocalObjectLink::core_object_)
-			LocalObjectLink::_construct ();
-	}
 };
 
 }

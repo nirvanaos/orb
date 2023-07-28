@@ -59,19 +59,16 @@ public:
 #endif
 		<PortableServer::POA> _default_POA ()
 	{
-		_check_construct ();
 		return ServantBaseLink::_default_POA ();
 	}
 
 	virtual Type <InterfaceDef>::VRet _get_interface ()
 	{
-		_check_construct ();
 		return ServantBaseLink::_get_interface ();
 	}
 
 	virtual Boolean _is_a (String_in type_id)
 	{
-		_check_construct ();
 		return ServantBaseLink::_is_a (type_id);
 	}
 
@@ -90,20 +87,17 @@ protected:
 
 	virtual void _add_ref ()
 	{
-		_check_construct ();
 		ServantBaseLink::_add_ref ();
 	}
 
 	virtual void _remove_ref ()
 	{
-		_check_construct ();
 		ServantBaseLink::_remove_ref ();
 	}
 
 public:
 	virtual ULong _refcount_value ()
 	{
-		_check_construct ();
 		return ServantBaseLink::_refcount_value ();
 	}
 
@@ -121,16 +115,9 @@ protected:
 
 	virtual Type <Interface>::VRet _get_proxy ()
 	{
-		_check_construct ();
 		return ServantBaseLink::_get_proxy ();
 	}
 
-private:
-	void _check_construct ()
-	{
-		if (!ServantBaseLink::core_object_)
-			_construct ();
-	}
 };
 
 }

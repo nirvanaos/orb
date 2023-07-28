@@ -56,7 +56,7 @@ public:
 		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);
 	}
 
-	typename Type <Primary>::VRet _this () const
+	typename Type <Primary>::VRet _this ()
 	{
 		return LocalObjectLink::_get_proxy ().template downcast <Primary> ();
 	}

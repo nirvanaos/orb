@@ -40,8 +40,9 @@ class LocalObjectLink :
 	public BridgeVal <LocalObject>
 {
 public:
-	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) const noexcept
+	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) noexcept
 	{
+		_create_proxy ();
 		return get_object_from_core (I_ptr <LocalObject> (core_object_), iid, env);
 	}
 
@@ -62,21 +63,26 @@ protected:
 	template <class, class> friend class Skeleton;
 	template <class> friend class ServantPOA;
 
-	void _add_ref () const
+	void _add_ref ()
 	{
+		_create_proxy ();
 		core_object_->_add_ref ();
 	}
 
-	void _remove_ref () const
+	void _remove_ref ()
 	{
+		_create_proxy ();
 		core_object_->_remove_ref ();
 	}
 
 public:
-	ULong _refcount_value () const
+	ULong _refcount_value ()
 	{
+		_create_proxy ();
 		return core_object_->_refcount_value ();
 	}
+
+	void _create_proxy ();
 
 protected:
 	LocalObjectLink (const Bridge <LocalObject>::EPV& epv) :
@@ -89,10 +95,9 @@ protected:
 		return *this; // Do nothing
 	}
 
-	void _construct ();
-
-	Type <Interface>::VRet _get_proxy () const
+	Type <Interface>::VRet _get_proxy ()
 	{
+		_create_proxy ();
 #ifdef LEGACY_CORBA_CPP
 		return interface_duplicate (&get_proxy (I_ptr <LocalObject> (core_object_)));
 #else

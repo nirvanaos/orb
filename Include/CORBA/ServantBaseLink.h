@@ -52,18 +52,21 @@ public:
 #else
 	I_ref
 #endif
-		<PortableServer::POA> _default_POA () const
+		<PortableServer::POA> _default_POA ()
 	{
+		_create_proxy ();
 		return core_object_->_default_POA ();
 	}
 
-	Type <InterfaceDef>::VRet _get_interface () const
+	Type <InterfaceDef>::VRet _get_interface ()
 	{
+		_create_proxy ();
 		return core_object_->_get_interface ();
 	}
 
-	Boolean _is_a (String_in type_id) const
+	Boolean _is_a (String_in type_id)
 	{
+		_create_proxy ();
 		return core_object_->_is_a (type_id);
 	}
 
@@ -74,8 +77,9 @@ public:
 
 	// Our extensions
 
-	PortableServer::Servant _core_servant () const noexcept
+	PortableServer::Servant _core_servant ()
 	{
+		_create_proxy ();
 		return core_object_;
 	}
 
@@ -89,21 +93,26 @@ protected:
 	template <class, class> friend class Skeleton;
 	template <class> friend class ServantPOA;
 
-	void _add_ref () const
+	void _add_ref ()
 	{
+		_create_proxy ();
 		core_object_->_add_ref ();
 	}
 
-	void _remove_ref () const
+	void _remove_ref ()
 	{
+		_create_proxy ();
 		core_object_->_remove_ref ();
 	}
 
 public:
-	ULong _refcount_value () const
+	ULong _refcount_value ()
 	{
+		_create_proxy ();
 		return core_object_->_refcount_value ();
 	}
+
+	void _create_proxy ();
 
 protected:
 	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv) :
@@ -116,10 +125,9 @@ protected:
 		return *this; // Do nothing
 	}
 
-	void _construct ();
-
-	Type <Interface>::VRet _get_proxy () const
+	Type <Interface>::VRet _get_proxy ()
 	{
+		_create_proxy ();
 #ifdef LEGACY_CORBA_CPP
 		return interface_duplicate (&get_proxy (PortableServer::Servant (core_object_)));
 #else
