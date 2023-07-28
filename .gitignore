@@ -54,3 +54,15 @@
 /Source/FT.cpp
 /Include/CORBA/NirvanaDGC.h
 /Source/NirvanaDGC.cpp
+/Include/CORBA/CORBA_Stream.h
+/Include/CORBA/CosLwLogAdministrator.h
+/Include/CORBA/CosLwLogConsumer.h
+/Include/CORBA/CosLwLogProducer.h
+/Include/CORBA/CosLwLogService.h
+/Include/CORBA/CosLwLogStatus.h
+/Source/CORBA_Stream.cpp
+/Source/CosLwLogAdministrator.cpp
+/Source/CosLwLogConsumer.cpp
+/Source/CosLwLogProducer.cpp
+/Source/CosLwLogService.cpp
+/Source/CosLwLogStatus.cpp
