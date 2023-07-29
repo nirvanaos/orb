@@ -18,7 +18,7 @@ struct Parameter
 
 typedef sequence <Parameter> ParameterList;
 typedef CORBA::StringSeq ContextList;
-typedef sequence <CORBA::TypeCode> ExceptionList;
+//typedef sequence <CORBA::TypeCode> ExceptionList;
 typedef CORBA::StringSeq RequestContext;
 
 }; // module Dynamic

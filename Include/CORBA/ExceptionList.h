@@ -23,31 +23,25 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_ENVIRONMENTEX_H_
-#define NIRVANA_ORB_ENVIRONMENTEX_H_
+#ifndef NIRVANA_ORB_EXCEPTIONLIST_H_
+#define NIRVANA_ORB_EXCEPTIONLIST_H_
 #pragma once
 
-#include "EnvironmentImpl.h"
-#include "ExceptionSet.h"
+#include "Exception.h"
+#include "Sequence.h"
 
-namespace CORBA {
-namespace Internal {
+namespace Dynamic {
 
-template <class ... Exceptions>
-class EnvironmentEx :
-	public EnvironmentImpl <EnvironmentEx <Exceptions...> >
+class ExceptionList : public IDL::Sequence <CORBA::Internal::ExceptionEntry>
 {
 public:
-	EnvironmentEx () {}
-
-	void exception_set (Short code, const char* rep_id, void* param)
+	template <class Ex>
+	void add ()
 	{
-		EnvironmentBase::exception_set (code, rep_id, param, ExceptionSet <Exceptions...>::exceptions_,
-			ExceptionSet <Exceptions...>::count ());
+		push_back ({ CORBA::Internal::RepIdOf <Ex>::id, sizeof (Ex), ::CORBA::Internal::construct <Ex> });
 	}
 };
 
-}
 }
 
 #endif

@@ -23,28 +23,29 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_ENVIRONMENTEX_H_
-#define NIRVANA_ORB_ENVIRONMENTEX_H_
+#ifndef NIRVANA_ORB_EXCEPTIONSET_H_
+#define NIRVANA_ORB_EXCEPTIONSET_H_
 #pragma once
 
-#include "EnvironmentImpl.h"
-#include "ExceptionSet.h"
+#include "Exception.h"
 
 namespace CORBA {
 namespace Internal {
 
 template <class ... Exceptions>
-class EnvironmentEx :
-	public EnvironmentImpl <EnvironmentEx <Exceptions...> >
+struct ExceptionSet
 {
-public:
-	EnvironmentEx () {}
+	static const ExceptionEntry exceptions_ [];
 
-	void exception_set (Short code, const char* rep_id, void* param)
+	static constexpr size_t count () noexcept
 	{
-		EnvironmentBase::exception_set (code, rep_id, param, ExceptionSet <Exceptions...>::exceptions_,
-			ExceptionSet <Exceptions...>::count ());
+		return sizeof... (Exceptions);
 	}
+};
+
+template <class ... Exceptions>
+const ExceptionEntry ExceptionSet <Exceptions...>::exceptions_ [] = {
+	{ RepIdOf <Exceptions>::id, sizeof (Exceptions), ::CORBA::Internal::construct <Exceptions> }...,
 };
 
 }

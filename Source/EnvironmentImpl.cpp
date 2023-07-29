@@ -72,7 +72,7 @@ void EnvironmentBase::exception (Exception* ex) noexcept
 }
 
 void EnvironmentBase::exception_set (Short code, String_in rep_id, void* param,
-	const ExceptionEntry* user_exceptions) noexcept
+	const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt) noexcept
 {
 	exception_free ();
 	if (code > Exception::EC_NO_EXCEPTION) {
@@ -91,13 +91,13 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, void* param,
 					if (tc) {
 						try {
 							assert (tc->kind () == TCKind::tk_except);
-							if (tc->kind () == TCKind::tk_except && set_user (tc->id (), pa->data (), user_exceptions))
+							if (tc->kind () == TCKind::tk_except && set_user (tc->id (), pa->data (), user_exceptions, user_exceptions_cnt))
 								return;
 						} catch (...) {
 						}
 					}
 				}
-				if (set_user (rep_id, param, user_exceptions))
+				if (set_user (rep_id, param, user_exceptions, user_exceptions_cnt))
 					return;
 			}
 			ee = SystemException::_get_exception_entry (rep_id, Exception::EC_SYSTEM_EXCEPTION);
@@ -109,9 +109,9 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, void* param,
 }
 
 bool EnvironmentBase::set_user (String_in rep_id, void* param,
-	const ExceptionEntry* user_exceptions) noexcept
+	const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt) noexcept
 {
-	for (const ExceptionEntry* p = user_exceptions; p->rep_id; ++p) {
+	for (const ExceptionEntry* p = user_exceptions, *end = p + user_exceptions_cnt; p != end; ++p) {
 		if (RepId::compatible (p->rep_id, rep_id)) {
 			set_user (*p, param);
 			return true;

@@ -40,7 +40,7 @@ class EnvironmentBase :
 {
 public:
 	void exception_set (Short code, String_in rep_id, void* param,
-		const ExceptionEntry* user_exceptions = 0) noexcept;
+		const ExceptionEntry* user_exceptions = nullptr, size_t user_exceptions_cnt = 0) noexcept;
 
 	const Char* exception_id () const noexcept;
 
@@ -84,7 +84,7 @@ private:
 	bool set (const ExceptionEntry& ee) noexcept;
 	void set_system (const ExceptionEntry& ee, const void* data) noexcept;
 	void set_user (const ExceptionEntry& ee, void* data) noexcept;
-	bool set_user (String_in rep_id, void* param, const ExceptionEntry* user_exceptions) noexcept;
+	bool set_user (String_in rep_id, void* param, const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt) noexcept;
 
 private:
 	union Data
