@@ -82,7 +82,7 @@ protected:
 
 private:
 	bool set (const ExceptionEntry& ee) noexcept;
-	void set_system (const ExceptionEntry& ee, const void* data) noexcept;
+	void set_unknown (uint32_t minor) noexcept;
 	void set_user (const ExceptionEntry& ee, void* data) noexcept;
 	bool set_user (String_in rep_id, void* param, const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt) noexcept;
 

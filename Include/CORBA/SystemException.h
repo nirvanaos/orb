@@ -122,7 +122,7 @@ public:
 	static const Internal::ExceptionEntry* _get_exception_entry (Code code)
 	{
 		if (code < 0 || code >= KNOWN_SYSTEM_EXCEPTIONS)
-			code = EC_UNKNOWN;
+			return nullptr;
 		return &exception_entries_ [code].ee;
 	}
 

@@ -72,10 +72,7 @@ const Internal::ExceptionEntry* SystemException::_get_exception_entry (String_in
 			return &(pe->ee);
 	}
 
-	if (Exception::EC_SYSTEM_EXCEPTION == hint)
-		return &exception_entries_ [EC_UNKNOWN].ee;
-	else
-		return nullptr;
+	return nullptr;
 }
 
 const Internal::ExceptionEntry* SystemException::_get_exception_entry (I_ptr <TypeCode> tc)

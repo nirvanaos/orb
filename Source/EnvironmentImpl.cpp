@@ -76,36 +76,50 @@ void EnvironmentBase::exception_set (Short code, String_in rep_id, void* param,
 {
 	exception_free ();
 	if (code > Exception::EC_NO_EXCEPTION) {
-		const ExceptionEntry* ee;
+		const ExceptionEntry* ee = nullptr;
 		if (!static_cast <const String&> (rep_id).empty ()) {
-			if (code < Exception::EC_SYSTEM_EXCEPTION && user_exceptions) {
-				if (
-					Exception::EC_UNKNOWN_USER_EXCEPTION == code
-					&&
-					RepId::compatible (RepIdOf <UnknownUserException>::id, rep_id)
-					&& 
-					param
-				) {
-					Any* pa = (Any*)param;
-					I_ptr <TypeCode> tc = pa->type ();
-					if (tc) {
-						try {
+			if (code < Exception::EC_SYSTEM_EXCEPTION) {
+				// User exception
+				if (user_exceptions_cnt) {
+					if (
+						Exception::EC_UNKNOWN_USER_EXCEPTION == code
+						&&
+						RepId::compatible (RepIdOf <UnknownUserException>::id, rep_id)
+						&&
+						param
+						) {
+						Any* pa = (Any*)param;
+						I_ptr <TypeCode> tc = pa->type ();
+						if (tc) {
 							assert (tc->kind () == TCKind::tk_except);
 							if (tc->kind () == TCKind::tk_except && set_user (tc->id (), pa->data (), user_exceptions, user_exceptions_cnt))
 								return;
-						} catch (...) {
 						}
 					}
+					if (set_user (rep_id, param, user_exceptions, user_exceptions_cnt))
+						return;
 				}
-				if (set_user (rep_id, param, user_exceptions, user_exceptions_cnt))
-					return;
-			}
-			ee = SystemException::_get_exception_entry (rep_id, Exception::EC_SYSTEM_EXCEPTION);
+				set_unknown (MAKE_OMG_MINOR (1)); // Unlisted user exception received by client.
+				return;
+			} else
+				ee = SystemException::_get_exception_entry (rep_id, code);
 		} else
 			ee = SystemException::_get_exception_entry (code);
-		assert (ee && ee->size <= sizeof (data_));
-		set_system (*ee, param);
+		if (ee) {
+			assert (ee->size <= sizeof (data_));
+			if (set (*ee) && param) {
+				SystemException& e = static_cast <SystemException&> (*exception ());
+				e.minor (((SystemException::_Data*)param)->minor);
+				e.completed (((SystemException::_Data*)param)->completed);
+			}
+		} else
+			set_unknown (MAKE_OMG_MINOR (2)); // Non-standard System Exception not supported.
 	}
+}
+
+void EnvironmentBase::set_unknown (uint32_t minor) noexcept
+{
+	new (&data_) UNKNOWN (minor);
 }
 
 bool EnvironmentBase::set_user (String_in rep_id, void* param,
@@ -154,15 +168,6 @@ void EnvironmentBase::set_user (const ExceptionEntry& ee, void* data) noexcept
 		} catch (...) {
 			new (&data_) NO_MEMORY ();
 		}
-	}
-}
-
-void EnvironmentBase::set_system (const ExceptionEntry& ee, const void* data) noexcept
-{
-	if (set (ee) && data) {
-		SystemException& e = static_cast <SystemException&> (*exception ());
-		e.minor (((SystemException::_Data*)data)->minor);
-		e.completed (((SystemException::_Data*)data)->completed);
 	}
 }
 

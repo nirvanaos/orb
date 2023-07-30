@@ -261,12 +261,13 @@ Boolean operator >>= (const Any& any, SystemException& se)
 		I_ptr <TypeCode> tc = any.type ();
 		std::string id = tc->id ();
 		const Internal::ExceptionEntry* ee = SystemException::_get_exception_entry (id, Exception::EC_SYSTEM_EXCEPTION);
-		assert (ee);
-		(ee->construct) (&se);
-		const SystemException::_Data& data = *(const SystemException::_Data*)any.data ();
-		se.completed (data.completed);
-		if (RepId::compatible (ee->rep_id, id)) // ee may be UNKNOWN
+		if (ee) {
+			(ee->construct) (&se);
+			const SystemException::_Data& data = *(const SystemException::_Data*)any.data ();
+			se.completed (data.completed);
 			se.minor (data.minor);
+		} else
+			new (&se) UNKNOWN (MAKE_OMG_MINOR (2)); // Non-standard System Exception not supported.
 		return true;
 	}
 	return false;
