@@ -220,7 +220,7 @@ public:
 
 	template <class S>
 	I_ref (servant_reference <S>&& sr) noexcept :
-		Base (static_cast <I*> (&I_ptr <I> (sr)))
+		Base (I_ptr <I> (sr).p_)
 	{
 		sr.p_ = nullptr;
 	}
