@@ -50,9 +50,13 @@ template <class S>
 class ValueTraits
 {
 public:
-	I_ref <ValueBase> _copy_value () const
+	Type <ValueBase>::VRet _copy_value () const
 	{
+#ifndef LEGACY_CORBA_CPP
 		return make_reference <S> (std::ref (static_cast <const S&> (*this)));
+#else
+		return new S (static_cast <const S&> (*this));
+#endif
 	}
 };
 

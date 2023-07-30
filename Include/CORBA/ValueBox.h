@@ -179,6 +179,7 @@ class ValueBoxImpl :
 
 	typedef ValueBoxClient <T> Base;
 	typedef ValueBoxImpl <VB, T> ThisClass;
+
 public:
 	typedef I_ptr <VB> _ptr_type;
 

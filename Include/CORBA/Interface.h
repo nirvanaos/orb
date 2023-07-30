@@ -48,8 +48,6 @@ template <> class I_ref <Interface>;
 /// Provides life-cycle management and interface identification.
 class Interface
 {
-	Interface (const Interface&) = delete;
-
 public:
 	/// Entry point vector
 	struct EPV
