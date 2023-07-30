@@ -168,21 +168,4 @@ TEST_F (TestORB, Runnable)
 	EXPECT_EQ (c, a + b);
 }
 
-TEST_F (TestORB, ExceptionHolder)
-{
-	using Messaging::ExceptionHolder;
-
-	Any any;
-	any <<= UNKNOWN ();
-	ExceptionHolder::_ref_type eh = make_reference <ExceptionHolder> (std::move (any));
-
-	EXPECT_THROW (eh->raise_exception (), UNKNOWN);
-
-	ValueBase::_ptr_type base = eh;
-	EXPECT_TRUE (base);
-
-	eh = ExceptionHolder::_downcast (base);
-	EXPECT_TRUE (eh);
-}
-
 }

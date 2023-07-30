@@ -29,68 +29,50 @@
 namespace CORBA {
 namespace Internal {
 
-const Bridge <Messaging::ExceptionHolder>::EPV Bridge <Messaging::ExceptionHolder>::epv_ = {
+const Bridge <Messaging::ExceptionHolder>::EPV ExceptionHolderImpl::epv_ = {
 	{ // header
 		RepIdOf <Messaging::ExceptionHolder>::id,
-		Messaging::ExceptionHolder::template __duplicate <Messaging::ExceptionHolder>,
-		Messaging::ExceptionHolder::template __release <Messaging::ExceptionHolder>
+		ExceptionHolderImpl::template __duplicate <Messaging::ExceptionHolder>,
+		ExceptionHolderImpl::template __release <Messaging::ExceptionHolder>
 	},
 	{ // base
-		Messaging::ExceptionHolder::_CORBA_ValueBase
+		_CORBA_ValueBase
 	}
 };
 
-
-}
-}
-
-using namespace CORBA;
-
-namespace Messaging {
-
-Internal::Bridge <ValueBase>* ExceptionHolder::_CORBA_ValueBase (Internal::Bridge <ExceptionHolder>* bridge,
-	Internal::Type <IDL::String>::ABI_in id, Interface* env)
+Bridge <ValueBase>* ExceptionHolderImpl::_CORBA_ValueBase (Bridge <Messaging::ExceptionHolder>* bridge,
+	Type <IDL::String>::ABI_in id, Interface* env)
 {
-	if (!Internal::RepId::compatible (Internal::RepIdOf <ValueBase>::id, Internal::Type <IDL::String>::in (id)))
-		Internal::set_INV_OBJREF (env);
-	check_pointer (bridge, Internal::Bridge <ExceptionHolder>::epv_.header);
-	return &static_cast <ExceptionHolder&> (*bridge);
+	if (!RepId::compatible (RepIdOf <ValueBase>::id, Type <IDL::String>::in (id)))
+		set_INV_OBJREF (env);
+	check_pointer (bridge, epv_.header);
+	return &static_cast <ExceptionHolderImpl&> (*bridge);
 }
 
-void ExceptionHolder::__marshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
+void ExceptionHolderImpl::__marshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
 	Internal::Interface* _env)
 {
 	Internal::set_NO_IMPLEMENT (_env);
 }
 
-void ExceptionHolder::__unmarshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
+void ExceptionHolderImpl::__unmarshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
 	Internal::Interface* _env)
 {
 	Internal::set_NO_IMPLEMENT (_env);
 }
 
-ValueBase::_ref_type ExceptionHolder::_copy_value ()
-{
-	return make_reference <ExceptionHolder> (std::ref (*this));
-}
-
-void ExceptionHolder::raise_exception ()
-{
-	raise_exception (nullptr, 0);
-}
-
-void ExceptionHolder::raise_exception (const Internal::ExceptionEntry* user_exceptions,
+void ExceptionHolderImpl::raise_exception (const ExceptionEntry* user_exceptions,
 	size_t user_exceptions_cnt) const
 {
 	std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type se;
 	if (exception_ >>= reinterpret_cast <SystemException&> (se))
 		reinterpret_cast <SystemException&> (se)._raise ();
-	else {
+	else if (user_exceptions_cnt) {
 		try {
 			TypeCode::_ref_type tc = exception_.type ();
 			const IDL::String rep_id = tc->id ();
-			for (const Internal::ExceptionEntry* p = user_exceptions, *end = p + user_exceptions_cnt; p != end; ++p) {
-				if (Internal::RepId::compatible (p->rep_id, rep_id)) {
+			for (const ExceptionEntry* p = user_exceptions, *end = p + user_exceptions_cnt; p != end; ++p) {
+				if (RepId::compatible (p->rep_id, rep_id)) {
 					OctetSeq buf (p->size);
 					p->construct (buf.data ());
 					Exception& ex = *(Exception*)buf.data ();
@@ -99,8 +81,10 @@ void ExceptionHolder::raise_exception (const Internal::ExceptionEntry* user_exce
 				}
 			}
 		} catch (...) {}
-		Nirvana::throw_UNKNOWN ();
 	}
+	Nirvana::throw_UNKNOWN (MAKE_OMG_MINOR (1)); // Unlisted user exception received by client.
 }
 
 }
+}
+

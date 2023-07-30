@@ -35,11 +35,30 @@ namespace Internal {
 template <class ... Exceptions>
 struct ExceptionSet
 {
-	static const ExceptionEntry exceptions_ [];
-
 	static constexpr size_t count () noexcept
 	{
 		return sizeof... (Exceptions);
+	}
+
+	static constexpr ExceptionEntry* entries ()
+	{
+		return exceptions_;
+	}
+
+	static const ExceptionEntry exceptions_ [];
+};
+
+template <>
+struct ExceptionSet <>
+{
+	static constexpr size_t count () noexcept
+	{
+		return 0;
+	}
+
+	static constexpr ExceptionEntry* entries ()
+	{
+		return nullptr;
 	}
 };
 
