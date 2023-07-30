@@ -30,6 +30,38 @@ using namespace CORBA;
 
 namespace Messaging {
 
+Internal::Bridge <ValueBase>* ExceptionHolder::_CORBA_ValueBase (Internal::Bridge <ExceptionHolder>* bridge,
+	Internal::Type <IDL::String>::ABI_in id, Interface* env)
+{
+	if (!Internal::RepId::compatible (Internal::RepIdOf <ValueBase>::id, Internal::Type <IDL::String>::in (id)))
+		Internal::set_INV_OBJREF (env);
+	check_pointer (bridge, epv_.header);
+	return &static_cast <ExceptionHolder&> (*bridge);
+}
+
+const Internal::Bridge <ExceptionHolder>::EPV ExceptionHolder::epv_ = {
+	{ // header
+		Internal::RepIdOf <ExceptionHolder>::id,
+		ExceptionHolder::template __duplicate <ExceptionHolder>,
+		ExceptionHolder::template __release <ExceptionHolder>
+	},
+	{ // base
+		_CORBA_ValueBase
+	}
+};
+
+void ExceptionHolder::__marshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
+	Internal::Interface* _env)
+{
+	Internal::set_NO_IMPLEMENT (_env);
+}
+
+void ExceptionHolder::__unmarshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
+	Internal::Interface* _env)
+{
+	Internal::set_NO_IMPLEMENT (_env);
+}
+
 void ExceptionHolder::raise_exception ()
 {
 	raise_exception (nullptr, 0);

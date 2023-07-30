@@ -186,12 +186,13 @@ public:
 	typedef I_var <VB> _var_type;
 	typedef _var_type& _out_type;
 
-	// TODO: Change return type to I_var?
 	NIRVANA_NODISCARD static _ptr_type _duplicate (_ptr_type obj)
 	{
 		return _unsafe_cast (interface_duplicate (&obj));
 	}
+
 	using LifeCycleRefCnt <VB>::_duplicate;
+
 #else
 	typedef I_ref <VB> _ref_type;
 #endif
@@ -253,7 +254,7 @@ private:
 	static Bridge <ValueBase>* _CORBA_ValueBase (ValueBoxBridge* bridge, Type <String>::ABI_in id, Interface* env)
 	{
 		if (!RepId::compatible (RepIdOf <ValueBase>::id, Type <String>::in (id)))
-			::Nirvana::throw_INV_OBJREF ();
+			set_INV_OBJREF (env);
 		check_pointer (bridge, epv_.header);
 		return &static_cast <ValueBox <VB, T>&> (*bridge).base_;
 	}
