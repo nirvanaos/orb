@@ -59,9 +59,16 @@ public:
 	};
 
 protected:
-	Bridge <Messaging::ExceptionHolder> (const EPV& epv) noexcept :
-		Interface (epv.header)
+	Bridge <Messaging::ExceptionHolder> () noexcept :
+		Interface (epv_.header)
 	{}
+
+	Bridge <Messaging::ExceptionHolder> (const Bridge <Messaging::ExceptionHolder>&) noexcept :
+		Interface (epv_.header)
+	{}
+
+protected:
+	static const Bridge <Messaging::ExceptionHolder>::EPV epv_;
 };
 
 }
@@ -101,7 +108,6 @@ public:
 #endif
 
 	ExceptionHolder (CORBA::Any&& exc) :
-		CORBA::Internal::Bridge <ExceptionHolder> (epv_),
 		exception_ (std::move (exc))
 	{}
 
@@ -120,7 +126,7 @@ public:
 
 	static ExceptionHolder& _implementation (CORBA::Internal::Bridge <ExceptionHolder>* bridge)
 	{
-		CORBA::Internal::check_pointer (bridge, epv_.header);
+		CORBA::Internal::check_pointer (bridge, CORBA::Internal::Bridge <ExceptionHolder>::epv_.header);
 		return reinterpret_cast <ExceptionHolder&> (*bridge);
 	}
 
@@ -129,7 +135,29 @@ public:
 	static void __unmarshal (CORBA::Internal::Bridge <CORBA::ValueBase>*, CORBA::Internal::Interface*,
 		CORBA::Internal::Interface* _env);
 
-	virtual CORBA::Internal::Type <CORBA::ValueBase>::VRet _copy_value ();
+	static CORBA::Internal::Bridge <CORBA::ValueBase>* _CORBA_ValueBase (
+		CORBA::Internal::Bridge <ExceptionHolder>* bridge,
+		CORBA::Internal::Type <IDL::String>::ABI_in id, Interface* env);
+
+	static _ptr_type _check (CORBA::Internal::Interface* bridge)
+	{
+		return _unsafe_cast (CORBA::Internal::Interface::_check (bridge, CORBA::Internal::RepIdOf <ExceptionHolder>::id));
+	}
+
+	static _ptr_type _downcast (CORBA::ValueBase::_ptr_type val)
+	{
+		if (val)
+			return val->_query_valuetype (CORBA::Internal::RepIdOf <ExceptionHolder>::id)
+			.template downcast <ExceptionHolder> ();
+		return nullptr;
+	}
+
+	static _ptr_type _nil () noexcept
+	{
+		return _ptr_type (nullptr);
+	}
+
+	virtual CORBA::ValueBase::_ref_type _copy_value ();
 
 	virtual void raise_exception ();
 
@@ -143,24 +171,35 @@ protected:
 		size_t user_exceptions_cnt) const;
 
 private:
-	static CORBA::Internal::Bridge <CORBA::ValueBase>* _CORBA_ValueBase (
-		CORBA::Internal::Bridge <ExceptionHolder>* bridge,
-		CORBA::Internal::Type <IDL::String>::ABI_in id, Interface* env);
+	friend class CORBA::Internal::I_ptr <CORBA::Internal::Interface>;
+	friend class CORBA::Internal::I_ref <CORBA::Internal::Interface>;
+	friend class CORBA::Internal::I_ref_base <ExceptionHolder>;
+
+	static ExceptionHolder* _unsafe_cast (CORBA::Internal::Interface* itf) noexcept
+	{
+		assert (!itf || CORBA::Internal::RepId::compatible (itf->_epv ().interface_id, CORBA::Internal::RepIdOf <ExceptionHolder>::id));
+		return static_cast <ExceptionHolder*> (static_cast <CORBA::Internal::Bridge <ExceptionHolder>*> (itf));
+	}
 
 private:
 	CORBA::Any exception_;
-
-	static const CORBA::Internal::Bridge <ExceptionHolder>::EPV epv_;
 };
 
 template <class ... Exceptions>
 class ExceptionHolderEx : public ExceptionHolder
 {
+	typedef ExceptionHolderEx <Exceptions...> ThisClass;
+
 public:
 	virtual void raise_exception () override
 	{
 		raise_exception (CORBA::Internal::ExceptionSet <Exceptions...>::exceptions_,
 			CORBA::Internal::ExceptionSet <Exceptions...>::count ());
+	}
+
+	virtual CORBA::ValueBase::_ref_type _copy_value ()
+	{
+		return CORBA::make_reference <ThisClass> (std::ref (*this));
 	}
 };
 

@@ -123,23 +123,24 @@ TEST_F (TestORB, Array)
 
 TEST_F (TestORB, ValueBox)
 {
-	servant_reference <StringVal> s = CORBA::make_reference <StringVal> ("test");
+	servant_reference <StringVal> s = make_reference <StringVal> ("test");
 	StringVal::_ref_type vb = s;
 
 	StringVal::_ptr_type p = vb;
 	EXPECT_EQ (p->_value (), "test");
 
-	CORBA::ValueBase::_ptr_type base = vb;
+	ValueBase::_ptr_type base = vb;
+	EXPECT_TRUE (base);
 
 	p = StringVal::_downcast (base);
 	EXPECT_TRUE (p);
 
-	CORBA::Internal::Interface::_ptr_type pi (p);
+	Internal::Interface::_ptr_type pi (p);
 }
 
 class Functor :
-	public CORBA::Internal::Servant <Functor, ::Nirvana::Legacy::Runnable>,
-	public CORBA::Internal::LifeCycleStatic
+	public Internal::Servant <Functor, ::Nirvana::Legacy::Runnable>,
+	public Internal::LifeCycleStatic
 {
 public:
 	Functor (const std::function <void ()>& f) :
@@ -165,6 +166,23 @@ TEST_F (TestORB, Runnable)
 	::Nirvana::Legacy::Runnable::_ptr_type r = functor._get_ptr ();
 	r->run ();
 	EXPECT_EQ (c, a + b);
+}
+
+TEST_F (TestORB, ExceptionHolder)
+{
+	using Messaging::ExceptionHolder;
+
+	Any any;
+	any <<= UNKNOWN ();
+	ExceptionHolder::_ref_type eh = make_reference <ExceptionHolder> (std::move (any));
+
+	EXPECT_THROW (eh->raise_exception (), UNKNOWN);
+
+	ValueBase::_ptr_type base = eh;
+	EXPECT_TRUE (base);
+
+	eh = ExceptionHolder::_downcast (base);
+	EXPECT_TRUE (eh);
 }
 
 }

@@ -26,6 +26,24 @@
 #include <CORBA/ExceptionHolder.h>
 #include <CORBA/CORBA.h>
 
+namespace CORBA {
+namespace Internal {
+
+const Bridge <Messaging::ExceptionHolder>::EPV Bridge <Messaging::ExceptionHolder>::epv_ = {
+	{ // header
+		RepIdOf <Messaging::ExceptionHolder>::id,
+		Messaging::ExceptionHolder::template __duplicate <Messaging::ExceptionHolder>,
+		Messaging::ExceptionHolder::template __release <Messaging::ExceptionHolder>
+	},
+	{ // base
+		Messaging::ExceptionHolder::_CORBA_ValueBase
+	}
+};
+
+
+}
+}
+
 using namespace CORBA;
 
 namespace Messaging {
@@ -35,20 +53,9 @@ Internal::Bridge <ValueBase>* ExceptionHolder::_CORBA_ValueBase (Internal::Bridg
 {
 	if (!Internal::RepId::compatible (Internal::RepIdOf <ValueBase>::id, Internal::Type <IDL::String>::in (id)))
 		Internal::set_INV_OBJREF (env);
-	check_pointer (bridge, epv_.header);
+	check_pointer (bridge, Internal::Bridge <ExceptionHolder>::epv_.header);
 	return &static_cast <ExceptionHolder&> (*bridge);
 }
-
-const Internal::Bridge <ExceptionHolder>::EPV ExceptionHolder::epv_ = {
-	{ // header
-		Internal::RepIdOf <ExceptionHolder>::id,
-		ExceptionHolder::template __duplicate <ExceptionHolder>,
-		ExceptionHolder::template __release <ExceptionHolder>
-	},
-	{ // base
-		_CORBA_ValueBase
-	}
-};
 
 void ExceptionHolder::__marshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
 	Internal::Interface* _env)
@@ -60,6 +67,11 @@ void ExceptionHolder::__unmarshal (Internal::Bridge <ValueBase>*, Internal::Inte
 	Internal::Interface* _env)
 {
 	Internal::set_NO_IMPLEMENT (_env);
+}
+
+ValueBase::_ref_type ExceptionHolder::_copy_value ()
+{
+	return make_reference <ExceptionHolder> (std::ref (*this));
 }
 
 void ExceptionHolder::raise_exception ()
