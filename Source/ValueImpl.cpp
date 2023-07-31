@@ -38,5 +38,17 @@ Interface* ValueBaseNoFactory::__factory (Bridge <ValueBase>*, Interface*)
 	return nullptr;
 }
 
+void ValueBaseNoFactory::__marshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
+	Internal::Interface* _env)
+{
+	Internal::set_NO_IMPLEMENT (_env);
+}
+
+void ValueBaseNoFactory::__unmarshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
+	Internal::Interface* _env)
+{
+	Internal::set_NO_IMPLEMENT (_env);
+}
+
 }
 }

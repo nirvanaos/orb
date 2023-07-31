@@ -107,19 +107,8 @@ class ExceptionHolderImpl :
 	public ValueBaseNoFactory
 {
 public:
-	ExceptionHolderImpl (Any&& exc) :
-		BridgeVal <Messaging::ExceptionHolder> (epv_),
-		exception_ (std::move (exc)),
-		user_exceptions_ (nullptr),
-		user_exceptions_cnt_ (0)
-	{}
-
-	Interface* _query_valuetype (String_in id) noexcept
-	{
-		if (id.empty () || RepId::compatible (RepIdOf <Messaging::ExceptionHolder>::id, id))
-			return &static_cast <Bridge <Messaging::ExceptionHolder>&> (*this);
-		return nullptr;
-	}
+	using ValueBaseNoFactory::__marshal;
+	using ValueBaseNoFactory::__unmarshal;
 
 	static ExceptionHolderImpl& _implementation (Bridge <ValueBase>* bridge)
 	{
@@ -133,11 +122,22 @@ public:
 		return static_cast <ExceptionHolderImpl&> (*bridge);
 	}
 
-	static void __marshal (Bridge <ValueBase>*, Interface*, Interface* _env);
-	static void __unmarshal (Bridge <ValueBase>*, Interface*, Interface* _env);
-
 	static Bridge <ValueBase>* _CORBA_ValueBase (Bridge <Messaging::ExceptionHolder>* bridge,
 		Type <String>::ABI_in id, Interface* env);
+
+	ExceptionHolderImpl (Any&& exc) :
+		BridgeVal <Messaging::ExceptionHolder> (epv_),
+		exception_ (std::move (exc)),
+		user_exceptions_ (nullptr),
+		user_exceptions_cnt_ (0)
+	{}
+
+	Interface* _query_valuetype (String_in id) noexcept
+	{
+		if (id.empty () || RepId::compatible (RepIdOf <Messaging::ExceptionHolder>::id, id))
+			return &static_cast <Bridge <Messaging::ExceptionHolder>&> (*this);
+		return nullptr;
+	}
 
 	void raise_exception ()
 	{

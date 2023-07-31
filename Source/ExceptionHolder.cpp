@@ -49,18 +49,6 @@ Bridge <ValueBase>* ExceptionHolderImpl::_CORBA_ValueBase (Bridge <Messaging::Ex
 	return &static_cast <ExceptionHolderImpl&> (*bridge);
 }
 
-void ExceptionHolderImpl::__marshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
-	Internal::Interface* _env)
-{
-	Internal::set_NO_IMPLEMENT (_env);
-}
-
-void ExceptionHolderImpl::__unmarshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
-	Internal::Interface* _env)
-{
-	Internal::set_NO_IMPLEMENT (_env);
-}
-
 void ExceptionHolderImpl::raise_exception (const ExceptionEntry* user_exceptions,
 	size_t user_exceptions_cnt) const
 {

@@ -91,6 +91,8 @@ class ValueBaseNoFactory
 {
 public:
 	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env);
+	static void __marshal (Bridge <ValueBase>*, Interface*, Interface* _env);
+	static void __unmarshal (Bridge <ValueBase>*, Interface*, Interface* _env);
 };
 
 /// Concrete value with factory.

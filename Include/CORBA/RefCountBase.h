@@ -52,7 +52,7 @@ private:
 	template <class T1, class ... Args>
 	friend CORBA::servant_reference <T1> CORBA::make_reference (Args ... args);
 	template <class> friend class CORBA::servant_reference;
-	friend class LifeCycleRefCnt <T>;
+	template <class> friend class LifeCycleRefCnt;
 #endif
 	void* operator new (size_t size)
 	{
