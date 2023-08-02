@@ -1,7 +1,6 @@
-#include "ValueBox.h"
+#include <CORBA/CORBA.h>
 #include <gtest/gtest.h>
 #include <Mock/TestMock.h>
-#include <CORBA/Server.h>
 #include <Nirvana/Legacy/Runnable_s.h>
 #include <functional>
 
@@ -119,23 +118,6 @@ TEST_F (TestORB, Array)
 
 	EXPECT_EQ (Type <Arr>::total_size, 3 * 4);
 	EXPECT_TRUE (Type <Arr>::is_CDR);
-}
-
-TEST_F (TestORB, ValueBox)
-{
-	servant_reference <StringVal> s = make_reference <StringVal> ("test");
-	StringVal::_ref_type vb = s;
-
-	StringVal::_ptr_type p = vb;
-	EXPECT_EQ (p->_value (), "test");
-
-	ValueBase::_ptr_type base = vb;
-	EXPECT_TRUE (base);
-
-	p = StringVal::_downcast (base);
-	EXPECT_TRUE (p);
-
-	Internal::Interface::_ptr_type pi (p);
 }
 
 class Functor :
