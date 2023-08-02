@@ -24,9 +24,19 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/TypeCode.idl>
+
+module Nirvana {
+
+native Pointer;
+native ConstPointer;
+native Size;
+
+};
 
 module CORBA {
+
+pseudo interface TypeCode;
+
 module Internal {
 
 typeprefix CORBA::Internal "";
