@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/RefCountBase.h>
+#include <CORBA/RefCountLink.h>
 #include <CORBA/CORBA.h>
 
 namespace CORBA {
