@@ -31,7 +31,6 @@
 #pragma once
 
 #include "LocalObject.h"
-#include "DynamicServant.h"
 
 namespace PortableServer {
 class POA;

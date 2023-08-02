@@ -23,19 +23,31 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-module CORBA {
+#include <CORBA/RefCountBase.h>
+#include <CORBA/CORBA.h>
 
-module Internal {
+namespace CORBA {
+namespace Internal {
 
-typeprefix CORBA::Internal "";
-
-/// \interface DynamicServant
-/// \brief The interface for dynamically allocated servant garbage collection.
-pseudo interface DynamicServant
+RefCountLink::RefCountLink (const Bridge <DynamicServant>::EPV& epv) :
+	deleter_ (epv)
 {
-	/// \brief Called by the garbage collector.
-	void delete_object ();
-};
+	core_object_ = g_ORB->create_ref_cnt (&deleter_);
+}
 
-};
-};
+RefCountLink::RefCountLink (const RefCountLink& src) :
+	deleter_ (src.deleter_)
+{
+	core_object_ = g_ORB->create_ref_cnt (&deleter_);
+}
+
+Interface* RefCountLink::__dup (Interface* itf, Interface*) noexcept
+{
+	return itf;
+}
+
+void RefCountLink::__rel (Interface*) noexcept
+{}
+
+}
+}

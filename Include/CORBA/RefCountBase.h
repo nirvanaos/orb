@@ -29,6 +29,8 @@
 #pragma once
 
 #include <Nirvana/Memory_forward.h>
+#include "DynamicServant_s.h"
+#include "RefCnt.h"
 
 namespace CORBA {
 
@@ -42,13 +44,12 @@ namespace Internal {
 template <class S>
 class LifeCycleRefCnt;
 
-template <class T>
-class RefCountBase
+class RefCountLink
 {
 #ifdef LEGACY_CORBA_CPP
 public:
 #else
-private:
+protected:
 	template <class T1, class ... Args>
 	friend CORBA::servant_reference <T1> CORBA::make_reference (Args ... args);
 	template <class> friend class CORBA::servant_reference;
@@ -59,50 +60,89 @@ private:
 		return Nirvana::g_memory->allocate (nullptr, size, 0);
 	}
 
-	void _add_ref () noexcept
-	{
-		++ref_cnt_;
-	}
-
-	void _remove_ref () noexcept
-	{
-		assert (ref_cnt_);
-		if (!--ref_cnt_)
-			delete& static_cast <T&> (*this);
-	}
-
-public:
-	ULong _refcount_value () const noexcept
-	{
-		return ref_cnt_;
-	}
-
-protected:
-	RefCountBase () noexcept :
-		ref_cnt_ (1)
-	{}
-
-	RefCountBase (const RefCountBase&) noexcept :
-		ref_cnt_ (1)
-	{}
-
-	RefCountBase& operator = (const RefCountBase&) noexcept
-	{
-		return *this;
-	}
-
-#ifdef LEGACY_CORBA_CPP
-public:
-#else
-private:
-#endif
 	void operator delete (void* p, size_t size)
 	{
 		Nirvana::g_memory->release (p, size);
 	}
 
+	void _add_ref () noexcept
+	{
+		core_object_->add_ref ();
+	}
+
+	void _remove_ref () noexcept
+	{
+		core_object_->remove_ref ();
+	}
+
+public:
+	ULong _refcount_value () const noexcept
+	{
+		return core_object_->refcount_value ();
+	}
+
 protected:
-	ULong ref_cnt_;
+	RefCountLink (const Bridge <DynamicServant>::EPV& epv);
+	RefCountLink (const RefCountLink& src);
+
+	RefCountLink& operator = (const RefCountLink&) noexcept
+	{
+		return *this;
+	}
+
+	static Interface* __dup (Interface* itf, Interface*) noexcept;
+	static void __rel (Interface*) noexcept;
+
+private:
+	class DeleterBridge : public BridgeVal <DynamicServant>
+	{
+	public:
+		DeleterBridge (const Bridge <DynamicServant>::EPV& epv) noexcept :
+			BridgeVal <DynamicServant> (epv)
+		{}
+	};
+
+	DeleterBridge deleter_;
+	RefCnt::_ref_type core_object_;
+};
+
+template <class T>
+class RefCountBase :
+	public RefCountLink
+{
+private:
+	static void _s_delete_object (Bridge <DynamicServant>* _b, Interface* _env)
+	{
+		try {
+			check_pointer (_b, epv_.header);
+			T* p = &static_cast <T&> (reinterpret_cast <RefCountBase <T>&> (*_b));
+			delete p;
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+	}
+
+protected:
+	RefCountBase () :
+		RefCountLink (epv_)
+	{}
+
+private:
+	static const Bridge <DynamicServant>::EPV epv_;
+};
+
+template <class T>
+const Bridge <DynamicServant>::EPV RefCountBase <T>::epv_ = {
+	{ // header
+		RepIdOf <DynamicServant>::id,
+		RefCountLink::__dup,
+		RefCountLink::__rel
+	},
+	{ // EPV
+		_s_delete_object
+	}
 };
 
 }

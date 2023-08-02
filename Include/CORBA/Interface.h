@@ -61,12 +61,19 @@ public:
 		_epv_ref (epv)
 	{}
 
+	Interface (const Interface&) = default;
+
 	const EPV& _epv () const noexcept
 	{
 		return _epv_ref;
 	}
 
 	Interface& operator = (const Interface&) noexcept
+	{
+		return *this;	// Do nothing
+	}
+
+	Interface& operator = (const Interface&&) noexcept
 	{
 		return *this;	// Do nothing
 	}

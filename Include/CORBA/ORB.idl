@@ -8,6 +8,8 @@
 #include "Request.idl"
 #include "Context.idl"
 #include "Policy.idl"
+#include "DynamicServant.idl"
+#include "RefCnt.idl"
 
 module CORBA {
 
@@ -19,7 +21,7 @@ typedef unsigned short ServiceType;
 typedef unsigned long  ServiceOption;
 typedef unsigned long  ServiceDetailType;
 typedef CORBA::OctetSeq ServiceDetailData;
-typedef sequence<ServiceOption> ServiceOptionSeq;
+typedef sequence <ServiceOption> ServiceOptionSeq;
 
 const ServiceType Security = 1;
 
@@ -29,7 +31,7 @@ struct ServiceDetail
   ServiceDetailData service_detail;
 };
 
-typedef sequence<ServiceDetail> ServiceDetailSeq;
+typedef sequence <ServiceDetail> ServiceDetailSeq;
 
 struct ServiceInformation
 {
@@ -270,6 +272,8 @@ pseudo interface ORB
 
   boolean tc_equal (in TypeCode left, in TypeCode right);
   boolean tc_equivalent (in TypeCode left, in TypeCode right);
+
+  Internal::RefCnt create_ref_cnt (in Internal::DynamicServant deleter);
 
   ///@}
 };

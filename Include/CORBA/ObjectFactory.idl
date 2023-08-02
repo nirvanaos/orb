@@ -47,6 +47,8 @@ native AbstractBase;
 
 module Internal {
 
+typeprefix CORBA::Internal "";
+
 /// ObjectFactory Interface to the core object functionality.
 pseudo interface ObjectFactory
 {

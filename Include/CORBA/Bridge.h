@@ -73,15 +73,6 @@ protected:
 #endif
 	}
 
-	Bridge& operator = (const Bridge&) noexcept
-	{
-		return *this;
-	}
-
-	Bridge& operator = (Bridge&&) noexcept
-	{
-		return *this;
-	}
 };
 
 /// The bridge for value types.

@@ -1,0 +1,14 @@
+module CORBA {
+module Internal {
+
+typeprefix CORBA::Internal "";
+
+pseudo interface RefCnt
+{
+	void add_ref ();
+	void remove_ref ();
+	unsigned long refcount_value ();
+};
+
+};
+};

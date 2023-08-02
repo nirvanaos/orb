@@ -29,6 +29,8 @@
 module CORBA {
 module Internal {
 
+typeprefix CORBA::Internal "";
+
 native _Interface;
 native CharPtr;
 native ConstCharPtr;
