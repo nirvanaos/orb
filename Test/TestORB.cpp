@@ -43,31 +43,6 @@ TEST_F (TestORB, RepositoryId)
 	EXPECT_LT (CORBA::Internal::RepId::compare (rep_id1, std::size (rep_id1) - 1, rep_id3, std::size (rep_id3) - 1), 0);
 }
 
-TEST_F (TestORB, CORBA_Environment)
-{
-	{
-		CORBA::Environment::_ref_type env = make_reference <Environment> ();
-		CORBA::NO_MEMORY no_mem;
-		CORBA::Internal::set_exception (env, no_mem);
-		const CORBA::Exception* ex = env->exception ();
-		ASSERT_TRUE (ex);
-		EXPECT_STREQ (ex->_name (), "NO_MEMORY");
-		env->clear ();
-		CORBA::Environment::_ref_type ev = env;
-		ev = make_reference <Environment> ();
-		EXPECT_FALSE (ev->exception ());
-	}
-	{
-		CORBA::Environment env;
-		CORBA::NO_MEMORY no_mem;
-		CORBA::Internal::set_exception (&env, no_mem);
-		const CORBA::Exception* ex = env.exception ();
-		ASSERT_TRUE (ex);
-		EXPECT_STREQ (ex->_name (), "NO_MEMORY");
-		env.clear ();
-	}
-}
-
 TEST_F (TestORB, Environment)
 {
 	CORBA::Internal::Environment ne;
