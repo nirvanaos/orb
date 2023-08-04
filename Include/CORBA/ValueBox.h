@@ -29,6 +29,7 @@
 #pragma once
 
 #include "ValueBaseImpl.h"
+#include "RefCountBase.h"
 
 namespace CORBA {
 namespace Internal {

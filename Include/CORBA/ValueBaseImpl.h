@@ -30,8 +30,8 @@
 
 #include "ValueImpl.h"
 #include "LifeCycleRefCnt.h"
-#include "RefCountBase.h"
 #include "ValueBase_s.h"
+#include "servant_reference.h"
 
 namespace CORBA {
 namespace Internal {
@@ -42,8 +42,7 @@ template <class S>
 class ValueImpl <S, ValueBase> :
 	public LifeCycleRefCnt <S>,
 	public ServantTraits <S>,
-	public ValueImplBase <S, ValueBase>,
-	public RefCountBase <S>
+	public ValueImplBase <S, ValueBase>
 {};
 
 template <class S>

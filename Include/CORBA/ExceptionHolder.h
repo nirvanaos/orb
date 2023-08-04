@@ -32,6 +32,7 @@
 #include "ExceptionList.h"
 #include "ExceptionSet.h"
 #include "Any.h"
+#include "RefCountBase.h"
 
 namespace Messaging {
 
