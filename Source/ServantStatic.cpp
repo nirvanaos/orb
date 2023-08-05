@@ -23,8 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/ServantBaseStatic.h>
-#include <CORBA/LocalObjectStatic.h>
+#include <CORBA/CORBA.h>
 
 namespace CORBA {
 namespace Internal {

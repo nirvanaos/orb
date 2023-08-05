@@ -158,10 +158,10 @@ struct PolicyValue
 
 typedef sequence <PolicyValue> PolicyValueSeq;
 
-typedef CORBA::OctetSeq MarshaledException;
-
-native UserExceptionBase;
+native ExceptionHolder;
 /*
+typedef CORBA::OctetSeq MarshaledException;
+native UserExceptionBase;
 valuetype ExceptionHolder
 {
 	void raise_exception () raises (UserExceptionBase);
@@ -172,6 +172,7 @@ valuetype ExceptionHolder
 	private MarshaledException marshaled_exception;
 };
 */
+
 // For handling Routing
 interface ReplyHandler {};
 
