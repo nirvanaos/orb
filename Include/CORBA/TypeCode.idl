@@ -6,7 +6,6 @@
 #define CORBA_TYPECODE_IDL_
 
 #include "TCKind.idl"
-#include "CORBA_types.idl"
 
 module Nirvana {
 
@@ -36,6 +35,9 @@ typeprefix CORBA::Internal "";
 
 pseudo interface IORequest;
 };
+
+typedef string RepositoryId;
+typedef string Identifier;
 
 pseudo interface TypeCode
 {

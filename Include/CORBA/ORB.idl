@@ -20,7 +20,8 @@ typedef sequence <Request> RequestSeq;
 typedef unsigned short ServiceType;
 typedef unsigned long  ServiceOption;
 typedef unsigned long  ServiceDetailType;
-typedef CORBA::OctetSeq ServiceDetailData;
+typedef sequence <octet> OctetSeq;
+typedef OctetSeq ServiceDetailData;
 typedef sequence <ServiceOption> ServiceOptionSeq;
 
 const ServiceType Security = 1;

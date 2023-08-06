@@ -6,7 +6,14 @@
 #define CORBA_PORTABLE_SERVER_IDL_
 
 #include "Policy.idl"
-#include <CORBA/CORBA_types.idl>
+
+module CORBA {
+
+typedef sequence <octet> OctetSeq;
+typedef string RepositoryId;
+typedef string Identifier;
+
+};
 
 module PortableServer {
 

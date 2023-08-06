@@ -5,11 +5,24 @@
 
 #include <CORBA/TypeCode.idl>
 
+// Forward definition
+module Messaging
+{
+typeprefix Messaging "omg.org";
+abstract valuetype Poller;
+};
+
 module CORBA {
 
 typeprefix CORBA "omg.org";
 
+// Forward definition
+abstract valuetype Pollable;
+
 exception WrongTransaction {};
+
+native OpaqueValue;
+typedef unsigned long Flags;
 
 pseudo interface Request
 {

@@ -11,6 +11,8 @@ typeprefix CORBA "omg.org";
 
 exception Bounds {};
 
+typedef unsigned long Flags;
+
 pseudo interface NamedValue
 {
   readonly attribute Identifier name;

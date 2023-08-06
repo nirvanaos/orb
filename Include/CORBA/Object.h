@@ -41,7 +41,6 @@
 #include "Context.h"
 #include "Request.h"
 #include "Policy.h"
-#include "InterfaceRepository.h"
 #include "Dynamic.h"
 
 // ServantBase

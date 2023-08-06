@@ -3,7 +3,13 @@
 #ifndef IOP_IDL_
 #define IOP_IDL_
 
-#include <CORBA/TypeCode.idl>
+module CORBA {
+
+typeprefix CORBA "omg.org";
+typedef sequence <octet> OctetSeq;
+pseudo interface TypeCode;
+
+};
 
 module IOP {
 

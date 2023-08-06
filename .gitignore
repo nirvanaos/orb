@@ -35,9 +35,6 @@
 /Source/Request.cpp
 /Include/CORBA/Context.h
 /Include/CORBA/NVList.h
-/Include/CORBA/CORBA_types.h
-/Include/CORBA/CORBA_types_s.h
-/Source/CORBA_types.cpp
 /Include/CORBA/DomainManager.h
 /Source/DomainManager.cpp
 /Include/CORBA/TimeBase.h

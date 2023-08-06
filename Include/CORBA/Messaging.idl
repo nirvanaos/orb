@@ -4,10 +4,16 @@
 #ifndef MESSAGING_IDL_
 #define MESSAGING_IDL_
 
-#include "Dynamic.idl"
 #include "Policy.idl"
 #include "Pollable.idl"
 #include "TimeBase.idl"
+
+module CORBA {
+
+typeprefix CORBA "omg.org";
+typedef sequence <octet> OctetSeq;
+
+};
 
 module Messaging {
 

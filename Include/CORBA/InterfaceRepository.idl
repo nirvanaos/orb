@@ -4,12 +4,11 @@
 #ifndef CORBA_INTERFACEREPOSITORY_IDL_
 #define CORBA_INTERFACEREPOSITORY_IDL_
 
-#include <CORBA/TypeCode.idl>
-
 module CORBA {
 
 typeprefix CORBA "omg.org";
 
+pseudo interface TypeCode;
 interface ArrayDef;
 interface Container;
 interface FixedDef;
@@ -19,7 +18,11 @@ interface SequenceDef;
 interface StringDef;
 interface WstringDef;
 
+typedef short Visibility;
+typedef string RepositoryId;
+typedef string Identifier;
 typedef string ScopedName;
+typedef sequence <string> StringSeq;
 
 enum DefinitionKind
 {

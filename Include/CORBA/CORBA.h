@@ -55,6 +55,7 @@
 #include "ServantLocator_native.h"
 #include "String_compat.h"
 #include "ExceptionHolder.h"
+#include "Messaging.h"
 
 namespace Nirvana {
 
