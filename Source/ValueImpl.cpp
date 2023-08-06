@@ -28,6 +28,11 @@
 namespace CORBA {
 namespace Internal {
 
+Interface* ValueBaseNoCopy::__copy_value (Bridge <ValueBase>*, Interface*)
+{
+	return nullptr;
+}
+
 Interface* ValueNonTruncatable::__truncatable_base (Bridge <ValueBase>*, Interface*)
 {
 	return nullptr;

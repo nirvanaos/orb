@@ -31,7 +31,6 @@
 #include "ValueImpl.h"
 #include "LifeCycleRefCnt.h"
 #include "ValueBase_s.h"
-#include "servant_reference.h"
 
 namespace CORBA {
 namespace Internal {
@@ -44,20 +43,6 @@ class ValueImpl <S, ValueBase> :
 	public ServantTraits <S>,
 	public ValueImplBase <S, ValueBase>
 {};
-
-template <class S>
-class ValueTraits
-{
-public:
-	Type <ValueBase>::VRet _copy_value () const
-	{
-#ifndef LEGACY_CORBA_CPP
-		return make_reference <S> (std::ref (static_cast <const S&> (*this)));
-#else
-		return new S (static_cast <const S&> (*this));
-#endif
-	}
-};
 
 }
 }

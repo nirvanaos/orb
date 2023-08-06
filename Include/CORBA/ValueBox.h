@@ -29,6 +29,7 @@
 #pragma once
 
 #include "ValueBaseImpl.h"
+#include "ValueImpl.h"
 #include "RefCountBase.h"
 
 namespace CORBA {
@@ -169,15 +170,12 @@ template <class VB, typename T>
 class ValueBoxImpl :
 	public ValueBoxClient <T>,
 	public RefCountBase <VB>,
-	private LifeCycleRefCnt <VB>,
+	public LifeCycleRefCnt <VB>,
 	public Skeleton <VB, ValueBase>,
-	public ValueTraits <VB>,
+	public ValueBaseCopy <VB>,
+	public ValueBaseMarshal <VB>,
 	public ValueNonTruncatable
 {
-	friend class Skeleton <VB, ValueBase>;
-	friend class LifeCycleRefCnt <VB>;
-	friend class LifeCycleDynamic <VB>;
-
 	typedef ValueBoxClient <T> Base;
 	typedef ValueBoxImpl <VB, T> ThisClass;
 
@@ -224,6 +222,36 @@ public:
 		return interface_duplicate (_factory.imp.itf);
 	}
 
+	void _marshal (IORequest_ptr rq) const
+	{
+		Type <T>::marshal_in (this->_value (), rq);
+	}
+
+	void _unmarshal (IORequest_ptr rq)
+	{
+		Type <T>::unmarshal (rq, this->_value ());
+	}
+
+	Interface* _query_valuetype (String_in id) noexcept
+	{
+		if (id.empty () || RepId::compatible (RepIdOf <VB>::id, id))
+			return &static_cast <ValueBoxBridge&> (*this);
+		return nullptr;
+	}
+
+	static ThisClass& _implementation (Bridge <ValueBase>* bridge)
+	{
+		check_pointer (bridge, Skeleton <VB, ValueBase>::epv_.header);
+		return *reinterpret_cast <ThisClass*>
+			(reinterpret_cast <uint8_t*> (bridge) - (uintptr_t) & (((ThisClass*)0)->base_));
+	}
+
+	static ThisClass& _implementation (Bridge <VB>* bridge)
+	{
+		check_pointer (bridge, epv_.header);
+		return reinterpret_cast <ThisClass&> (*bridge);
+	}
+
 protected:
 	ValueBoxImpl () noexcept :
 		Base (epv_),
@@ -259,36 +287,6 @@ private:
 			set_INV_OBJREF (env);
 		check_pointer (bridge, epv_.header);
 		return &static_cast <ValueBox <VB, T>&> (*bridge).base_;
-	}
-
-	void _marshal (IORequest_ptr rq) const
-	{
-		Type <T>::marshal_in (this->_value (), rq);
-	}
-
-	void _unmarshal (IORequest_ptr rq)
-	{
-		Type <T>::unmarshal (rq, this->_value ());
-	}
-
-	Interface* _query_valuetype (String_in id) noexcept
-	{
-		if (id.empty () || RepId::compatible (RepIdOf <VB>::id, id))
-			return &static_cast <ValueBoxBridge&> (*this);
-		return nullptr;
-	}
-
-	static ThisClass& _implementation (Bridge <ValueBase>* bridge)
-	{
-		check_pointer (bridge, Skeleton <VB, ValueBase>::epv_.header);
-		return *reinterpret_cast <ThisClass*>
-			(reinterpret_cast <uint8_t*> (bridge) - (uintptr_t) & (((ThisClass*)0)->base_));
-	}
-
-	static ThisClass& _implementation (Bridge <VB>* bridge)
-	{
-		check_pointer (bridge, epv_.header);
-		return reinterpret_cast <ThisClass&> (*bridge);
 	}
 
 private:

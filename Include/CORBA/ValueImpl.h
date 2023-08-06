@@ -29,7 +29,7 @@
 
 #include "ServantImpl.h"
 #include "ValueBase.h"
-#include <Nirvana/ImportInterface.h>
+#include "servant_reference.h"
 
 namespace CORBA {
 namespace Internal {
@@ -66,6 +66,38 @@ class ValueImpl :
 /// \tparam I Value interface.
 template <class I> class ValueData;
 
+class ValueBaseNoCopy
+{
+public:
+	static Interface* __copy_value (Bridge <ValueBase>*, Interface*);
+};
+
+template <class S>
+class ValueBaseCopy
+{
+public:
+	static Interface* __copy_value (Bridge <ValueBase>* _b, Interface* _env)
+	{
+		try {
+			return Type <ValueBase>::ret (S::_implementation (_b)._copy_value ());
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return Type <ValueBase>::ret ();
+	}
+
+	Type <ValueBase>::VRet _copy_value () const
+	{
+#ifndef LEGACY_CORBA_CPP
+		return make_reference <S> (std::ref (static_cast <const S&> (*this)));
+#else
+		return new S (static_cast <const S&> (*this));
+#endif
+	}
+};
+
 /// Non truncatable value
 class ValueNonTruncatable
 {
@@ -97,12 +129,42 @@ public:
 
 /// Concrete value with factory.
 /// 
-/// \typeparam I Value interface.
+/// \tparam I Value interface.
 template <class I>
 class ValueBaseFactory
 {
 public:
 	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env);
+};
+
+/// Concrete value with marshaling.
+/// 
+/// \tparam S Servant class implementing operations. Must derive from this mix-in.
+template <class S>
+class ValueBaseMarshal
+{
+public:
+	static void __marshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
+	{
+		try {
+			S::_implementation (_b)._marshal (Type <IORequest>::in (rq));
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+	}
+
+	static void __unmarshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
+	{
+		try {
+			S::_implementation (_b)._unmarshal (Type <IORequest>::in (rq));
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+	}
 };
 
 }

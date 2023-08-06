@@ -42,40 +42,6 @@ public:
 	static const typename Bridge <ValueBase>::EPV epv_;
 
 protected:
-	static Interface* __copy_value (Bridge <ValueBase>* _b, Interface* _env)
-	{
-		try {
-			return Type <ValueBase>::ret (S::_implementation (_b)._copy_value ());
-		} catch (Exception& e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
-		return Type <ValueBase>::ret ();
-	}
-
-	static void __marshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
-	{
-		try {
-			S::_implementation (_b)._marshal (Type <IORequest>::in (rq));
-		} catch (Exception& e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
-	}
-
-	static void __unmarshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
-	{
-		try {
-			S::_implementation (_b)._unmarshal (Type <IORequest>::in (rq));
-		} catch (Exception& e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
-	}
-
 	static Interface* __query_valuetype (Bridge <ValueBase>* _b, Type <String>::ABI_in id, Interface* _env)
 	{
 		try {

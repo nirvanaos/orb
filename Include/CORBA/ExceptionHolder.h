@@ -103,14 +103,11 @@ class ExceptionHolderImpl :
 	public RefCountBase <ExceptionHolderImpl>,
 	public LifeCycleRefCnt <ExceptionHolderImpl>,
 	public ValueImplBase <ExceptionHolderImpl, ValueBase>,
-	public ValueTraits <ExceptionHolderImpl>,
+	public ValueBaseCopy <ExceptionHolderImpl>,
 	public ValueNonTruncatable,
 	public ValueBaseNoFactory
 {
 public:
-	using ValueBaseNoFactory::__marshal;
-	using ValueBaseNoFactory::__unmarshal;
-
 	static ExceptionHolderImpl& _implementation (Bridge <ValueBase>* bridge)
 	{
 		check_pointer (bridge, Skeleton <ExceptionHolderImpl, ValueBase>::epv_.header);
