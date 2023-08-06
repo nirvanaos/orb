@@ -57,7 +57,7 @@ public:
 	// ValueFactoryBase
 	static Interface* factory_base () noexcept
 	{
-		return interface_duplicate (query_creator_interface <I> (RepIdOf <ValueFactoryBase>::id));
+		return ValueBaseFactory <I>::_factory_base ();
 	}
 
 };

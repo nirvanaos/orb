@@ -134,7 +134,15 @@ template <class I>
 class ValueBaseFactory
 {
 public:
-	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env);
+	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env) noexcept
+	{
+		return _factory_base ();
+	}
+
+	static Interface* _factory_base () noexcept
+	{
+		return interface_duplicate (query_creator_interface <I> (RepIdOf <ValueFactoryBase>::id));
+	}
 };
 
 /// Concrete value with marshaling.
