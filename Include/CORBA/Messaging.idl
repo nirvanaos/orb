@@ -17,9 +17,7 @@ typedef sequence <octet> OctetSeq;
 
 module Messaging {
 
-#ifndef _PRE_3_0_COMPILER_ 
 typeprefix Messaging "omg.org";
-#endif // _PRE_3_0_COMPILER_
 
 typedef short RebindMode;
 const RebindMode TRANSPARENT = 0;

@@ -26,7 +26,10 @@
 #include "../IORequest.idl"
 
 module Messaging {
+
+typeprefix Messaging "omg.org";
 abstract valuetype Poller;
+
 };
 
 module CORBA {
