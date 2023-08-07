@@ -25,6 +25,10 @@
 */
 #include "../IORequest.idl"
 
+module Messaging {
+abstract valuetype Poller;
+};
+
 module CORBA {
 module Internal {
 
@@ -74,6 +78,7 @@ pseudo interface IOReference
 	/// \param cb Asynchronous request callback.
 	IORequest create_request (in OperationIndex op, in unsigned short flags, in RequestCallback callback);
 
+	Messaging::Poller create_poller (in OperationIndex op);
 };
 
 };

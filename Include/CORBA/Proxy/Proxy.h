@@ -100,6 +100,11 @@ public:
 		deleter = proxy->_dynamic_servant ();
 		return proxy->_proxy ();
 	}
+
+	Interface* create_poller (::Messaging::Poller::_ptr_type aggregate, Interface*& deleter)
+	{
+		throw NO_IMPLEMENT ();
+	}
 };
 
 }
