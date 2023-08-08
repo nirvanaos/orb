@@ -61,6 +61,11 @@ protected:
 		return Nirvana::g_memory->allocate (nullptr, size, 0);
 	}
 
+	void operator delete (void* p, size_t size)
+	{
+		Nirvana::g_memory->release (p, size);
+	}
+
 	void _add_ref () noexcept
 	{
 		core_object_->add_ref ();
@@ -84,12 +89,6 @@ protected:
 	RefCountLink& operator = (const RefCountLink&) noexcept
 	{
 		return *this;
-	}
-
-protected:
-	void operator delete (void* p, size_t size)
-	{
-		Nirvana::g_memory->release (p, size);
 	}
 
 private:

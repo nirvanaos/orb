@@ -54,7 +54,6 @@ protected:
 		return g_object_factory->memory_allocate (size);
 	}
 
-protected:
 	void operator delete (void* p, size_t size)
 	{
 		g_object_factory->memory_release (p, size);
