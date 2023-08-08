@@ -23,23 +23,19 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/RefCountLink.h>
+#include <CORBA/LifeCycleNone.h>
 #include <CORBA/CORBA.h>
 
 namespace CORBA {
 namespace Internal {
 
-RefCountLink::RefCountLink (const Bridge <DynamicServant>::EPV& epv) :
-	DynamicServantBridge (epv)
+Interface* LifeCycleNone::__dup (Interface* itf, Interface*) noexcept
 {
-	core_object_ = g_ORB->create_ref_cnt (_dynamic_servant ());
+	return itf;
 }
 
-RefCountLink::RefCountLink (const RefCountLink& src) :
-	DynamicServantBridge (src)
-{
-	core_object_ = g_ORB->create_ref_cnt (_dynamic_servant ());
-}
+void LifeCycleNone::__rel (Interface*) noexcept
+{}
 
 }
 }

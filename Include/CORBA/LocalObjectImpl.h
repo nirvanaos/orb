@@ -44,12 +44,14 @@ class ValueImpl <S, LocalObject> :
 	public ServantTraits <S>,
 	public ServantMemory
 {
-public:
+	friend class Skeleton <S, LocalObject>;
+
 	void _delete_object () noexcept
 	{
 		delete& static_cast <S&> (*this);
 	}
 
+public:
 	static Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
 		Interface* env) noexcept
 	{

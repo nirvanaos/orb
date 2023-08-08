@@ -97,7 +97,7 @@ public:
 			g_object_factory->stateless_end (false);
 			throw;
 		}
-		deleter = proxy->_dynamic_servant ();
+		deleter = &proxy->_dynamic_servant ();
 		return proxy->_proxy ();
 	}
 

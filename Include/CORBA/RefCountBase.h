@@ -35,41 +35,20 @@ namespace Internal {
 
 template <class T>
 class RefCountBase :
-	public RefCountLink
+	public RefCountLink,
+	public DynamicServantSkel <T>
 {
-private:
-	static void _s_delete_object (Bridge <DynamicServant>* _b, Interface* _env)
+	friend class DynamicServantSkel <T>;
+
+	void _delete_object () noexcept
 	{
-		try {
-			check_pointer (_b, epv_.header);
-			T* p = &static_cast <T&> (reinterpret_cast <RefCountBase <T>&> (*_b));
-			delete p;
-		} catch (Exception& e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
+		delete& static_cast <T&> (*this);
 	}
 
 protected:
 	RefCountBase () :
-		RefCountLink (epv_)
+		RefCountLink (DynamicServantSkel <T>::epv_)
 	{}
-
-private:
-	static const Bridge <DynamicServant>::EPV epv_;
-};
-
-template <class T>
-const Bridge <DynamicServant>::EPV RefCountBase <T>::epv_ = {
-	{ // header
-		RepIdOf <DynamicServant>::id,
-		RefCountLink::__dup,
-		RefCountLink::__rel
-	},
-	{ // EPV
-		_s_delete_object
-	}
 };
 
 }

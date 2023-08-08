@@ -23,23 +23,23 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/RefCountLink.h>
-#include <CORBA/CORBA.h>
+#ifndef NIRVANA_ORB_LIFECYCLENONE_H_
+#define NIRVANA_ORB_LIFECYCLENONE_H_
+#pragma once
 
 namespace CORBA {
 namespace Internal {
 
-RefCountLink::RefCountLink (const Bridge <DynamicServant>::EPV& epv) :
-	DynamicServantBridge (epv)
-{
-	core_object_ = g_ORB->create_ref_cnt (_dynamic_servant ());
-}
+class Interface;
 
-RefCountLink::RefCountLink (const RefCountLink& src) :
-	DynamicServantBridge (src)
+class LifeCycleNone
 {
-	core_object_ = g_ORB->create_ref_cnt (_dynamic_servant ());
-}
+public:
+	static Interface* __dup (Interface* itf, Interface* env) noexcept;
+	static void __rel (Interface*) noexcept;
+};
 
 }
 }
+
+#endif

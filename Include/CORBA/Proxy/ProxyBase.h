@@ -29,8 +29,8 @@
 
 #include "../CORBA.h"
 #include "../ServantImpl.h"
-#include "../ServantMemory.h"
-#include "../DynamicServant_s.h"
+#include "../ObjectFactoryInc.h"
+#include "../DynamicServantImpl.h"
 #include "../LifeCycleRefCnt.h"
 #include "IOReference.h"
 
@@ -41,23 +41,20 @@ template <class I> class Proxy;
 
 class ProxyRoot
 {
-public:
-	void* operator new (size_t size)
-	{
-		return Nirvana::g_memory->allocate (nullptr, size, 0);
-	}
+	void* operator new (size_t size) = delete;
 
+public:
 	void operator delete (void* p, size_t size)
 	{
 		g_object_factory->memory_release (p, size);
 	}
 
-	void* operator new (size_t, void* p)
+	void* operator new (size_t, void* p) noexcept
 	{
 		return p;
 	}
 
-	void operator delete (void*, void*)
+	void operator delete (void*, void*) noexcept
 	{}
 
 	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) const
@@ -140,19 +137,14 @@ private:
 
 template <class S>
 class ProxyLifeCycle :
-	public InterfaceImplBase <S, DynamicServant>,
+	public InterfaceImpl <S, DynamicServant>,
 	public ServantTraits <S>,
 	public LifeCycleRefCnt <S>
 {
 public:
-	void delete_object ()
+	void _delete_object () noexcept
 	{
 		delete& static_cast <S&> (*this);
-	}
-
-	DynamicServant* _dynamic_servant ()
-	{
-		return &static_cast <DynamicServant&> (static_cast <Bridge <DynamicServant>&> (*this));
 	}
 
 	// Wide interface

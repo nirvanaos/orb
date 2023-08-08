@@ -29,7 +29,7 @@
 #pragma once
 
 #include <Nirvana/Memory_forward.h>
-#include "DynamicServant_s.h"
+#include "DynamicServantImpl.h"
 #include "RefCnt.h"
 
 namespace CORBA {
@@ -44,7 +44,7 @@ namespace Internal {
 template <class S>
 class LifeCycleRefCnt;
 
-class RefCountLink
+class RefCountLink : public DynamicServantBridge
 {
 #ifdef LEGACY_CORBA_CPP
 public:
@@ -55,14 +55,10 @@ protected:
 	template <class> friend class CORBA::servant_reference;
 	template <class> friend class LifeCycleRefCnt;
 #endif
+
 	void* operator new (size_t size)
 	{
 		return Nirvana::g_memory->allocate (nullptr, size, 0);
-	}
-
-	void operator delete (void* p, size_t size)
-	{
-		Nirvana::g_memory->release (p, size);
 	}
 
 	void _add_ref () noexcept
@@ -90,19 +86,13 @@ protected:
 		return *this;
 	}
 
-	static Interface* __dup (Interface* itf, Interface*) noexcept;
-	static void __rel (Interface*) noexcept;
+protected:
+	void operator delete (void* p, size_t size)
+	{
+		Nirvana::g_memory->release (p, size);
+	}
 
 private:
-	class DeleterBridge : public BridgeVal <DynamicServant>
-	{
-	public:
-		DeleterBridge (const Bridge <DynamicServant>::EPV& epv) noexcept :
-			BridgeVal <DynamicServant> (epv)
-		{}
-	};
-
-	DeleterBridge deleter_;
 	I_ref <RefCnt> core_object_;
 };
 
