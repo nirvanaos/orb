@@ -3,8 +3,6 @@
 #ifndef CORBA_REQUEST_IDL_
 #define CORBA_REQUEST_IDL_
 
-#include <CORBA/TypeCode.idl>
-
 // Forward definition
 module Messaging
 {
@@ -23,6 +21,9 @@ exception WrongTransaction {};
 
 native OpaqueValue;
 typedef unsigned long Flags;
+typedef string Identifier;
+
+pseudo interface TypeCode;
 
 pseudo interface Request
 {

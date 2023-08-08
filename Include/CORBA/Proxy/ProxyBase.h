@@ -39,7 +39,8 @@ namespace Internal {
 
 template <class I> class Proxy;
 
-class ProxyRoot
+class ProxyRoot :
+	public InterfaceImpl <ProxyRoot, DynamicServant>
 {
 	void* operator new (size_t size) = delete;
 
@@ -56,6 +57,11 @@ public:
 
 	void operator delete (void*, void*) noexcept
 	{}
+
+	void _delete_object () noexcept
+	{
+		delete this;
+	}
 
 	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) const
 		noexcept
@@ -119,7 +125,7 @@ template <class I>
 class ProxyBaseInterface
 {
 public:
-	void init (I_ptr <Object> obj)
+	void init (Object::_ptr_type obj)
 	{
 		proxy_ = static_cast <Bridge <I>*> (&obj->_query_interface (RepIdOf <I>::id));
 		if (!proxy_)
@@ -135,53 +141,12 @@ private:
 	Bridge <I>* proxy_;
 };
 
-template <class S>
-class ProxyLifeCycle :
-	public InterfaceImpl <S, DynamicServant>,
-	public ServantTraits <S>,
-	public LifeCycleRefCnt <S>
-{
-public:
-	void _delete_object () noexcept
-	{
-		delete& static_cast <S&> (*this);
-	}
-
-	// Wide interface
-
-	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
-	{
-		try {
-			if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))
-				::Nirvana::throw_INV_OBJREF ();
-			return static_cast <ProxyBaseInterface <Base>&> (S::_implementation (derived)).get ();
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
-	}
-
-	template <class Derived>
-	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
-	{
-		return S::_implementation (derived)._get_object (id, env);
-	}
-
-	template <class Derived>
-	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
-	{
-		return S::_implementation (derived)._get_abstract_base (id, env);
-	}
-};
-
 template <class I>
 class ProxyBase :
 	public InterfaceImplBase <Proxy <I>, I>,
 	public ProxyRoot,
-	public ProxyLifeCycle <Proxy <I> >
+	public ServantTraits <Proxy <I> >,
+	public LifeCycleRefCnt <Proxy <I> >
 {
 public:
 	Interface* _proxy ()
@@ -193,6 +158,35 @@ public:
 	static bool RqProcWrapper (Interface* servant, Interface* call)
 	{
 		return call_request_proc ((RqProcInternal)proc, servant, call);
+	}
+
+	// Wide interface
+
+	template <class Base, class Derived>
+	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
+	{
+		try {
+			if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))
+				::Nirvana::throw_INV_OBJREF ();
+			return static_cast <ProxyBaseInterface <Base>&> (Proxy <I>::_implementation (derived)).get ();
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return nullptr;
+	}
+
+	template <class Derived>
+	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
+	{
+		return Proxy <I>::_implementation (derived)._get_object (id, env);
+	}
+
+	template <class Derived>
+	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
+	{
+		return Proxy <I>::_implementation (derived)._get_abstract_base (id, env);
 	}
 
 protected:
@@ -218,7 +212,6 @@ protected:
 private:
 	I*& servant_;
 };
-
 
 }
 }

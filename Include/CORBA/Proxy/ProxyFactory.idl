@@ -46,7 +46,8 @@ pseudo interface ProxyFactory
 	InterfacePtr create_proxy (in IOReference target, in unsigned short interface_idx,
 		inout InterfacePtr servant, out InterfacePtr deleter);
 
-	InterfacePtr create_poller (in Messaging::Poller aggregate, out InterfacePtr deleter);
+	InterfacePtr create_poller (in Messaging::Poller aggregate, in unsigned short interface_idx,
+		out InterfacePtr deleter);
 };
 
 };

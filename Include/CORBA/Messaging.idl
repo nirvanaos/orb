@@ -7,6 +7,7 @@
 #include "Policy.idl"
 #include "Pollable.idl"
 #include "TimeBase.idl"
+#include "Request.idl"
 
 module CORBA {
 
@@ -189,6 +190,9 @@ abstract valuetype Poller : CORBA::Pollable
 	readonly attribute string operation_name;
 	attribute ReplyHandler associated_handler;
 	readonly attribute boolean is_from_poller;
+
+	CORBA::Internal::IORequest get_reply (in unsigned long timeout,
+		in CORBA::Internal::IOReference::OperationIndex op) raises (CORBA::WrongTransaction);
 };
 
 }; // module Messaging

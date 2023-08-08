@@ -101,7 +101,8 @@ public:
 		return proxy->_proxy ();
 	}
 
-	Interface* create_poller (::Messaging::Poller::_ptr_type aggregate, Interface*& deleter)
+	Interface* create_poller (::Messaging::Poller::_ptr_type aggregate, UShort interface_idx,
+		Interface*& deleter)
 	{
 		throw NO_IMPLEMENT ();
 	}
