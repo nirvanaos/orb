@@ -102,38 +102,12 @@ public:
 		return value_base_;
 	}
 
-	// Wide interface
-	template <class Base, class Derived>
-	static Bridge <Base>* _wide_val (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
+	template <class ... Ex>
+	IORequest::_ref_type get_reply (uint32_t timeout, UShort op_idx) const
 	{
-		try {
-			if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))
-				::Nirvana::throw_INV_OBJREF ();
-			return static_cast <PollerBaseValue <Base>&> (Poller <Derived>::_implementation (derived)).get ();
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
-	}
-
-	template <class Derived>
-	static Bridge <::Messaging::Poller>* _wide_val (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
-	{
-		return static_cast <PollerRoot&> (Poller <Derived>::_implementation (derived)).messaging_poller ();
-	}
-
-	template <class Derived>
-	static Bridge <::CORBA::Pollable>* _wide_val (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
-	{
-		return static_cast <PollerRoot&> (Poller <Derived>::_implementation (derived)).pollable ();
-	}
-
-	template <class Derived>
-	static Bridge <::CORBA::ValueBase>* _wide_val (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
-	{
-		return static_cast <PollerRoot&> (Poller <Derived>::_implementation (derived)).value_base ();
+		IORequest::_ref_type rq = aggregate_->get_reply (timeout, _make_op_idx (op_idx));
+		check_request (rq, ExceptionSet <Ex...>::entries (), ExceptionSet <Ex...>::count ());
+		return rq;
 	}
 
 protected:
@@ -144,6 +118,9 @@ protected:
 		pollable_ (static_cast <Bridge <Pollable>*> (&Pollable::_ptr_type (aggregate))),
 		interface_idx_ (interface_idx)
 	{}
+
+private:
+	static void check_request (IORequest::_ptr_type rq, const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt);
 
 private:
 	::Messaging::Poller::_ptr_type aggregate_;
@@ -161,7 +138,43 @@ class PollerBase :
 	public LifeCycleRefCnt <Poller <I> >
 {
 public:
-	using PollerRoot::_wide_val;
+	// Wide interface
+	template <class Base, class Derived>
+	static Bridge <Base>* _wide_val (Bridge <I>* derived, Type <String>::ABI_in id,
+		Interface* env) noexcept
+	{
+		try {
+			if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))
+				::Nirvana::throw_INV_OBJREF ();
+			return static_cast <PollerBaseValue <Base>&> (ServantTraits <Poller <I> >::_implementation (derived)).get ();
+		} catch (Exception& e) {
+			set_exception (env, e);
+		} catch (...) {
+			set_unknown_exception (env);
+		}
+		return nullptr;
+	}
+
+	template <>
+	static Bridge <::Messaging::Poller>* _wide_val <::Messaging::Poller, I> (Bridge <I>* derived, Type <String>::ABI_in id,
+		Interface* env) noexcept
+	{
+		return static_cast <PollerRoot&> (ServantTraits <Poller <I> >::_implementation (derived)).messaging_poller ();
+	}
+
+	template <>
+	static Bridge <::CORBA::Pollable>* _wide_val <::CORBA::Pollable, I> (Bridge <I>* derived, Type <String>::ABI_in id,
+		Interface* env) noexcept
+	{
+		return static_cast <PollerRoot&> (ServantTraits <Poller <I> >::_implementation (derived)).pollable ();
+	}
+
+	template <>
+	static Bridge <::CORBA::ValueBase>* _wide_val <::CORBA::ValueBase, I> (Bridge <I>* derived, Type <String>::ABI_in id,
+		Interface* env) noexcept
+	{
+		return static_cast <PollerRoot&> (ServantTraits <Poller <I> >::_implementation (derived)).value_base ();
+	}
 
 protected:
 	PollerBase (ValueBase::_ptr_type vb, Messaging::Poller::_ptr_type aggregate, UShort interface_idx) :

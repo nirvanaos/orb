@@ -40,7 +40,7 @@ struct ExceptionSet
 		return sizeof... (Exceptions);
 	}
 
-	static constexpr ExceptionEntry* entries ()
+	static constexpr const ExceptionEntry* entries () noexcept
 	{
 		return exceptions_;
 	}
@@ -56,7 +56,7 @@ struct ExceptionSet <>
 		return 0;
 	}
 
-	static constexpr ExceptionEntry* entries ()
+	static constexpr const ExceptionEntry* entries () noexcept
 	{
 		return nullptr;
 	}
