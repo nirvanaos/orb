@@ -43,7 +43,6 @@ native Servant;
 module CORBA {
 
 native LocalObject;
-native AbstractBase;
 
 module Internal {
 

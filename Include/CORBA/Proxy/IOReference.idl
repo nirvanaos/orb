@@ -49,12 +49,6 @@ pseudo interface RequestCallback
 /// Interface to the implementation of the some Inter-ORB protocol.
 pseudo interface IOReference
 {
-	/// Returns Object pointer.
-	InterfacePtr get_object (in string id);
-
-	/// Returns AbstractBase pointer.
-	InterfacePtr get_abstract_base (in string id);
-
 	/// Operation index
 	struct OperationIndex
 	{

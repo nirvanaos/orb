@@ -32,6 +32,9 @@ abstract valuetype Poller;
 };
 
 module CORBA {
+
+native AbstractBase;
+
 module Internal {
 
 native InterfacePtr;
@@ -43,8 +46,8 @@ pseudo interface ProxyFactory
 {
 	readonly attribute InterfaceMetadataPtr metadata;
 
-	InterfacePtr create_proxy (in IOReference target, in unsigned short interface_idx,
-		inout InterfacePtr servant, out InterfacePtr deleter);
+	InterfacePtr create_proxy (in Object obj, in AbstractBase ab, in IOReference target,
+		in unsigned short interface_idx, inout InterfacePtr servant, out InterfacePtr deleter);
 
 	InterfacePtr create_poller (in Messaging::Poller aggregate, in unsigned short interface_idx,
 		out InterfacePtr deleter);

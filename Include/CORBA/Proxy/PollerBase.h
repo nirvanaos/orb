@@ -26,7 +26,7 @@
 #ifndef NIRVANA_ORB_POLLERBASE_H_
 #define NIRVANA_ORB_POLLERBASE_H_
 
-#include "../CORBA.h"
+#include "ProxyBaseInterface.h"
 #include "../ServantImpl.h"
 #include "../ObjectFactoryInc.h"
 #include "../DynamicServantImpl.h"
@@ -37,27 +37,6 @@ namespace CORBA {
 namespace Internal {
 
 template <class I> class Poller;
-
-template <class I>
-class PollerBaseValue
-{
-public:
-	Bridge <I>* get () const noexcept
-	{
-		return val_;
-	}
-
-protected:
-	PollerBaseValue (ValueBase::_ptr_type vb)
-	{
-		val_ = static_cast <Bridge <I>*> (&vb->_query_valuetype (RepIdOf <I>::id));
-		if (!val_)
-			throw OBJ_ADAPTER ();
-	}
-
-private:
-	Bridge <I>* val_;
-};
 
 class PollerRoot
 {
@@ -82,28 +61,28 @@ public:
 		interface_release (&aggregate_);
 	}
 
-	IOReference::OperationIndex _make_op_idx (UShort op_idx) const
+	IOReference::OperationIndex _make_op_idx (UShort op_idx) const noexcept
 	{
 		return IOReference::OperationIndex (interface_idx_, op_idx);
 	}
 
-	Bridge <Messaging::Poller>* messaging_poller () noexcept
+	Bridge <Messaging::Poller>* messaging_poller (Type <String>::ABI_in id, Interface* env) const noexcept
 	{
-		return &static_cast <Bridge <Messaging::Poller>&> (*&aggregate_);
+		return aggregate_.get_bridge (id, env);
 	}
 
-	Bridge <Pollable>* pollable () const noexcept
+	Bridge <Pollable>* pollable (Type <String>::ABI_in id, Interface* env) const noexcept
 	{
-		return pollable_;
+		return pollable_.get_bridge (id, env);
 	}
 
-	Bridge <ValueBase>* value_base () const noexcept
+	Bridge <ValueBase>* value_base (Type <String>::ABI_in id, Interface* env) const noexcept
 	{
-		return value_base_;
+		return value_base_.get_bridge (id, env);
 	}
 
 	template <class ... Ex>
-	IORequest::_ref_type get_reply (uint32_t timeout, UShort op_idx) const
+	IORequest::_ref_type _get_reply (uint32_t timeout, UShort op_idx) const
 	{
 		IORequest::_ref_type rq = aggregate_->get_reply (timeout, _make_op_idx (op_idx));
 		check_request (rq, ExceptionSet <Ex...>::entries (), ExceptionSet <Ex...>::count ());
@@ -113,9 +92,9 @@ public:
 protected:
 	PollerRoot (ValueBase::_ptr_type vb, Messaging::Poller::_ptr_type aggregate,
 		UShort interface_idx) :
+		value_base_ (vb),
 		aggregate_ (aggregate),
-		value_base_ (static_cast <Bridge <ValueBase>*> (&vb)),
-		pollable_ (static_cast <Bridge <Pollable>*> (&Pollable::_ptr_type (aggregate))),
+		pollable_ (aggregate),
 		interface_idx_ (interface_idx)
 	{}
 
@@ -123,9 +102,9 @@ private:
 	static void check_request (IORequest::_ptr_type rq, const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt);
 
 private:
-	::Messaging::Poller::_ptr_type aggregate_;
-	Bridge <ValueBase>* value_base_;
-	Bridge <Pollable>* pollable_;
+	ProxyLink <ValueBase> value_base_;
+	ProxyLink < ::Messaging::Poller> aggregate_;
+	ProxyLink <Pollable> pollable_;
 	UShort interface_idx_;
 };
 
@@ -133,7 +112,7 @@ template <class I, class ... Bases>
 class PollerBase :
 	public InterfaceImplBase <Poller <I>, I>,
 	public PollerRoot,
-	public PollerBaseValue <Bases>...,
+	public ProxyBaseInterface <Bases>...,
 	public ServantTraits <Poller <I> >,
 	public LifeCycleRefCnt <Poller <I> >
 {
@@ -143,43 +122,38 @@ public:
 	static Bridge <Base>* _wide_val (Bridge <I>* derived, Type <String>::ABI_in id,
 		Interface* env) noexcept
 	{
-		try {
-			if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))
-				::Nirvana::throw_INV_OBJREF ();
-			return static_cast <PollerBaseValue <Base>&> (ServantTraits <Poller <I> >::_implementation (derived)).get ();
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
+		return static_cast <ProxyBaseInterface <Base>&> (
+			Poller <I>::_implementation (derived)).get_bridge (id, env);
 	}
 
 	template <>
-	static Bridge <::Messaging::Poller>* _wide_val <::Messaging::Poller, I> (Bridge <I>* derived, Type <String>::ABI_in id,
-		Interface* env) noexcept
+	static Bridge <::Messaging::Poller>* _wide_val <::Messaging::Poller, I> (Bridge <I>* derived,
+		Type <String>::ABI_in id, Interface* env) noexcept
 	{
-		return static_cast <PollerRoot&> (ServantTraits <Poller <I> >::_implementation (derived)).messaging_poller ();
+		return static_cast <PollerRoot&> (
+			Poller <I>::_implementation (derived)).messaging_poller (id, env);
 	}
 
 	template <>
-	static Bridge <::CORBA::Pollable>* _wide_val <::CORBA::Pollable, I> (Bridge <I>* derived, Type <String>::ABI_in id,
-		Interface* env) noexcept
+	static Bridge <::CORBA::Pollable>* _wide_val <::CORBA::Pollable, I> (Bridge <I>* derived,
+		Type <String>::ABI_in id, Interface* env) noexcept
 	{
-		return static_cast <PollerRoot&> (ServantTraits <Poller <I> >::_implementation (derived)).pollable ();
+		return static_cast <PollerRoot&> (
+			ServantTraits <Poller <I> >::_implementation (derived)).pollable (id, env);
 	}
 
 	template <>
 	static Bridge <::CORBA::ValueBase>* _wide_val <::CORBA::ValueBase, I> (Bridge <I>* derived, Type <String>::ABI_in id,
 		Interface* env) noexcept
 	{
-		return static_cast <PollerRoot&> (ServantTraits <Poller <I> >::_implementation (derived)).value_base ();
+		return static_cast <PollerRoot&> (
+			ServantTraits <Poller <I> >::_implementation (derived)).value_base (id, env);
 	}
 
 protected:
 	PollerBase (ValueBase::_ptr_type vb, Messaging::Poller::_ptr_type aggregate, UShort interface_idx) :
 		PollerRoot (vb, aggregate, interface_idx),
-		PollerBaseValue <Bases> (vb)...
+		ProxyBaseInterface <Bases> (vb)...
 	{}
 };
 

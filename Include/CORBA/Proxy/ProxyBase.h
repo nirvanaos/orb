@@ -1,4 +1,3 @@
-/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -27,7 +26,7 @@
 #ifndef NIRVANA_ORB_PROXYBASE_H_
 #define NIRVANA_ORB_PROXYBASE_H_
 
-#include "../CORBA.h"
+#include "ProxyBaseInterface.h"
 #include "../ServantImpl.h"
 #include "../ObjectFactoryInc.h"
 #include "../DynamicServantImpl.h"
@@ -63,18 +62,14 @@ public:
 		delete this;
 	}
 
-	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) const
-		noexcept
+	Bridge <Object>* _get_object (Type <String>::ABI_in id, Interface* env) const noexcept
 	{
-		return static_cast <Bridge <Object>*> (
-			(proxy_manager_->_epv ().epv.get_object) (static_cast <Bridge <IOReference>*> (&proxy_manager_), iid, env));
+		return object_.get_bridge (id, env);
 	}
 
-	Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid, Interface* env) const
-		noexcept
+	Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in id, Interface* env) const noexcept
 	{
-		return static_cast <Bridge <AbstractBase>*> (
-			(proxy_manager_->_epv ().epv.get_abstract_base) (static_cast <Bridge <IOReference>*> (&proxy_manager_), iid, env));
+		return abstract_base_.get_bridge (id, env);
 	}
 
 	void _add_ref ()
@@ -97,7 +92,7 @@ public:
 		return interface_idx_;
 	}
 
-	IOReference::OperationIndex _make_op_idx (UShort op_idx) const
+	IOReference::OperationIndex _make_op_idx (UShort op_idx) const noexcept
 	{
 		return IOReference::OperationIndex (interface_idx_, op_idx);
 	}
@@ -111,44 +106,30 @@ public:
 	static void set_marshal_local (Interface* env);
 
 protected:
-	ProxyRoot (IOReference::_ptr_type proxy_manager, UShort interface_idx) :
+	ProxyRoot (Object::_ptr_type obj, AbstractBase::_ptr_type ab, IOReference::_ptr_type proxy_manager, UShort interface_idx) :
+		object_ (obj),
+		abstract_base_ (ab),
 		proxy_manager_ (proxy_manager),
 		interface_idx_ (interface_idx)
 	{}
 
 private:
+	ProxyLink <Object> object_;
+	ProxyLink <AbstractBase> abstract_base_;
 	IOReference::_ptr_type proxy_manager_;
 	UShort interface_idx_;
 };
 
-template <class I>
-class ProxyBaseInterface
-{
-public:
-	void init (Object::_ptr_type obj)
-	{
-		proxy_ = static_cast <Bridge <I>*> (&obj->_query_interface (RepIdOf <I>::id));
-		if (!proxy_)
-			throw OBJ_ADAPTER ();
-	}
-
-	Bridge <I>* get () const noexcept
-	{
-		return proxy_;
-	}
-
-private:
-	Bridge <I>* proxy_;
-};
-
-template <class I>
+template <class I, class ... Bases>
 class ProxyBase :
 	public InterfaceImplBase <Proxy <I>, I>,
 	public ProxyRoot,
+	public ProxyBaseInterface <Bases>...,
 	public ServantTraits <Proxy <I> >,
 	public LifeCycleRefCnt <Proxy <I> >
 {
 public:
+	// Request procedure wrapper
 	template <void (*proc) (I_ptr <I>, IORequest::_ptr_type)>
 	static bool RqProcWrapper (Interface* servant, Interface* call)
 	{
@@ -156,46 +137,36 @@ public:
 	}
 
 	// Wide interface
-
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
+	static Bridge <Base>* _wide (Bridge <I>* derived, Type <String>::ABI_in id, Interface* env)
 	{
-		try {
-			if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))
-				::Nirvana::throw_INV_OBJREF ();
-			return static_cast <ProxyBaseInterface <Base>&> (Proxy <I>::_implementation (derived)).get ();
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
+		return static_cast <ProxyBaseInterface <Base>&> (Proxy <I>::_implementation (derived)).get_bridge (id, env);
 	}
 
+	// Override dummy implementation of ServantTraits::_wide_object.
 	template <class Derived>
 	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
 	{
 		return Proxy <I>::_implementation (derived)._get_object (id, env);
 	}
 
-	template <class Derived>
-	static Bridge <AbstractBase>* _wide_abstract (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
-	{
-		return Proxy <I>::_implementation (derived)._get_abstract_base (id, env);
-	}
-
 protected:
-	ProxyBase (IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant) :
-		ProxyRoot (proxy_manager, interface_idx)
+	ProxyBase (Object::_ptr_type obj, AbstractBase::_ptr_type ab,
+		IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant) :
+		ProxyRoot (obj, ab, proxy_manager, interface_idx),
+		ProxyBaseInterface <Bases> (obj)...
 	{}
 };
 
-template <class I>
-class ProxyBaseStateless : public ProxyBase <I>
+template <class I, class ... Bases>
+class ProxyBaseStateless : public ProxyBase <I, Bases...>
 {
+	typedef ProxyBase <I, Bases...> Base;
+
 protected:
-	ProxyBaseStateless (IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant) :
-		ProxyBase <I> (proxy_manager, interface_idx, servant),
+	ProxyBaseStateless (Object::_ptr_type obj, AbstractBase::_ptr_type ab,
+		IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant) :
+		Base (obj, ab, proxy_manager, interface_idx, servant),
 		servant_ (reinterpret_cast <I*&> (servant))
 	{}
 

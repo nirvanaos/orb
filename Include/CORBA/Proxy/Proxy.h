@@ -90,7 +90,7 @@ class ProxyFactoryImpl :
 	public ProxyFactoryBase <ProxyFactoryImpl <I>, I>
 {
 public:
-	static Interface* create_proxy (
+	static Interface* create_proxy (Object::_ptr_type obj, AbstractBase::_ptr_type ab,
 		IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant,
 		Interface*& deleter)
 	{
@@ -102,7 +102,7 @@ public:
 		ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (ProxyClass), 0, nullptr);
 		g_object_factory->stateless_begin (scb);
 		try {
-			new (&tmp) ProxyClass (proxy_manager, interface_idx, servant);
+			new (&tmp) ProxyClass (obj, ab, proxy_manager, interface_idx, servant);
 			proxy = (ProxyClass*)g_object_factory->stateless_end (true);
 		} catch (...) {
 			g_object_factory->stateless_end (false);
