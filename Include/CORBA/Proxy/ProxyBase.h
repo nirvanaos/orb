@@ -149,11 +149,6 @@ class ProxyBase :
 	public LifeCycleRefCnt <Proxy <I> >
 {
 public:
-	Interface* _proxy ()
-	{
-		return &static_cast <Bridge <I>&> (*this);
-	}
-
 	template <void (*proc) (I_ptr <I>, IORequest::_ptr_type)>
 	static bool RqProcWrapper (Interface* servant, Interface* call)
 	{

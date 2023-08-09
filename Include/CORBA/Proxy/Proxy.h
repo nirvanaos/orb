@@ -28,6 +28,7 @@
 #define NIRVANA_ORB_PROXY_H_
 
 #include "../Server.h"
+#include <Nirvana/OLF.h>
 #include "InterfaceMetadata.h"
 #include "ProxyFactory_s.h"
 #include "IOReference.h"
@@ -42,7 +43,7 @@
 #include "TypeCodeValueBox.h"
 #include "TypeCodeNative.h"
 #include "ValueFactoryImpl.h"
-#include <Nirvana/OLF.h>
+#include "PollerBase.h"
 
 namespace CORBA {
 namespace Internal {
@@ -74,12 +75,22 @@ public:
 
 };
 
-template <class I>
+class PollerCreatorDummy
+{
+public:
+	static Interface* create_poller (::Messaging::Poller::_ptr_type aggregate, UShort interface_idx,
+		Interface*& deleter)
+	{
+		throw NO_IMPLEMENT ();
+	}
+};
+
+template <class I, class PollerI = void>
 class ProxyFactoryImpl :
 	public ProxyFactoryBase <ProxyFactoryImpl <I>, I>
 {
 public:
-	Interface* create_proxy (
+	static Interface* create_proxy (
 		IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant,
 		Interface*& deleter)
 	{
@@ -98,13 +109,24 @@ public:
 			throw;
 		}
 		deleter = &proxy->_dynamic_servant ();
-		return proxy->_proxy ();
+		return proxy;
 	}
 
-	Interface* create_poller (::Messaging::Poller::_ptr_type aggregate, UShort interface_idx,
+	class PollerCreator
+	{
+	public:
+		static Interface* create_poller (::Messaging::Poller::_ptr_type aggregate, UShort interface_idx,
+			Interface*& deleter)
+		{
+			return new Poller <PollerI> (aggregate, aggregate, interface_idx);
+		}
+	};
+
+	static Interface* create_poller (::Messaging::Poller::_ptr_type aggregate, UShort interface_idx,
 		Interface*& deleter)
 	{
-		throw NO_IMPLEMENT ();
+		return std::conditional_t <std::is_void <PollerI>::value, PollerCreatorDummy, PollerCreator>
+			::create_poller (aggregate, interface_idx, deleter);
 	}
 };
 
