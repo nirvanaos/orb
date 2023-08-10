@@ -47,7 +47,7 @@ template <class S, class Primary, class ... I>
 class InterfaceFinder
 {
 	template <class Itf>
-	static Interface* cast (void* servant)
+	static constexpr Interface* cast (void* servant)
 	{
 		return &static_cast <Bridge <Itf>&> (*reinterpret_cast <S*> (servant));
 	}

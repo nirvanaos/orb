@@ -47,7 +47,7 @@ exception InvalidPolicies
   sequence <unsigned short> indicies;
 };
 
-interface PolicyManager
+local interface PolicyManager
 {
   PolicyList get_policy_overrides (in PolicyTypeSeq ts);
 

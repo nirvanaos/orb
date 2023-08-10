@@ -59,7 +59,7 @@ public:
 			TypeCodeBase::equivalent (TCKind::tk_value_box, Base::RepositoryType::id, content (), other);
 	}
 
-	static I_ref <TypeCode> get_compact_typecode ()
+	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
 	{
 		return g_ORB->create_value_box_tc (Base::RepositoryType::id, IDL::String (), content ());
 	}

@@ -98,37 +98,36 @@ protected:
 	}
 };
 
-class ExceptionHolderImpl :
+class ExceptionHolder :
 	public BridgeVal <Messaging::ExceptionHolder>,
-	public RefCountBase <ExceptionHolderImpl>,
-	public LifeCycleRefCnt <ExceptionHolderImpl>,
-	public ValueImplBase <ExceptionHolderImpl, ValueBase>,
-	public ValueBaseCopy <ExceptionHolderImpl>,
+	public RefCountBase <ExceptionHolder>,
+	public LifeCycleRefCnt <ExceptionHolder>,
+	public ValueImplBase <ExceptionHolder, ValueBase>,
+	public ValueBaseCopy <ExceptionHolder>,
 	public ValueNonTruncatable,
 	public ValueBaseNoFactory
 {
 public:
-	static ExceptionHolderImpl& _implementation (Bridge <ValueBase>* bridge)
+	template <class ... Exceptions>
+	static I_ref <Messaging::ExceptionHolder> make (Any&& exc)
 	{
-		check_pointer (bridge, Skeleton <ExceptionHolderImpl, ValueBase>::epv_.header);
-		return static_cast <ExceptionHolderImpl&> (*bridge);
+		return make (std::move (exc), ExceptionSet <Exceptions...>::entries (), sizeof... (Exceptions));
 	}
 
-	static ExceptionHolderImpl& _implementation (Bridge <Messaging::ExceptionHolder>* bridge)
+	static ExceptionHolder& _implementation (Bridge <ValueBase>* bridge)
+	{
+		check_pointer (bridge, Skeleton <ExceptionHolder, ValueBase>::epv_.header);
+		return static_cast <ExceptionHolder&> (*bridge);
+	}
+
+	static ExceptionHolder& _implementation (Bridge <Messaging::ExceptionHolder>* bridge)
 	{
 		check_pointer (bridge, epv_.header);
-		return static_cast <ExceptionHolderImpl&> (*bridge);
+		return static_cast <ExceptionHolder&> (*bridge);
 	}
 
 	static Bridge <ValueBase>* _CORBA_ValueBase (Bridge <Messaging::ExceptionHolder>* bridge,
 		Type <String>::ABI_in id, Interface* env);
-
-	ExceptionHolderImpl (Any&& exc) :
-		BridgeVal <Messaging::ExceptionHolder> (epv_),
-		exception_ (std::move (exc)),
-		user_exceptions_ (nullptr),
-		user_exceptions_cnt_ (0)
-	{}
 
 	Interface* _query_valuetype (String_in id) noexcept
 	{
@@ -147,13 +146,19 @@ public:
 		raise_exception (exc_list.data (), exc_list.size ());
 	}
 
-protected:
-	ExceptionHolderImpl (Any&& exc, const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt) :
+private:
+	template <class S, class ... Args> friend
+		CORBA::servant_reference <S> CORBA::make_reference (Args ... args);
+
+	ExceptionHolder (Any&& exc, const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt) :
 		BridgeVal <Messaging::ExceptionHolder> (epv_),
 		exception_ (std::move (exc)),
 		user_exceptions_ (user_exceptions),
 		user_exceptions_cnt_ (user_exceptions_cnt)
 	{}
+
+	static I_ref <Messaging::ExceptionHolder> make (Any&& exc,
+		const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt);
 
 	void raise_exception (const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt) const;
 
@@ -165,22 +170,12 @@ private:
 	static const Bridge <Messaging::ExceptionHolder>::EPV epv_;
 };
 
-template <class ... Exceptions>
-class ExceptionHolder : public ExceptionHolderImpl
-{
-public:
-	ExceptionHolder (Any&& exc) :
-		ExceptionHolderImpl (std::move (exc), ExceptionSet <Exceptions...>::entries (),
-			sizeof... (Exceptions))
-	{}
-};
-
 }
 }
 
 namespace Messaging {
 
-class ExceptionHolder : public CORBA::Internal::Client <CORBA::Internal::ExceptionHolderImpl, CORBA::ValueBase>
+class ExceptionHolder : public CORBA::Internal::Client <CORBA::Internal::ExceptionHolder, CORBA::ValueBase>
 {
 public:
 	typedef CORBA::Internal::I_ptr <ExceptionHolder> _ptr_type;

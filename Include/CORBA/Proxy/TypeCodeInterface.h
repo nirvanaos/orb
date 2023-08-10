@@ -53,7 +53,7 @@ public:
 			Base::equivalent (other);
 	}
 
-	static I_ref <TypeCode> get_compact_typecode ()
+	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
 	{
 		switch (Type <I>::tc_kind) {
 			case TCKind::tk_abstract_interface:

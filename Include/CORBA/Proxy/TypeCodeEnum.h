@@ -70,7 +70,7 @@ public:
 				Type <E>::count_, TypeCodeBase::dereference_alias (other)) != TypeCodeBase::EqResult::NO;
 	}
 
-	static I_ref <TypeCode> get_compact_typecode ()
+	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
 	{
 		return g_ORB->create_enum_tc (RepIdOf <E>::id, IDL::String (), EnumMemberSeq (Type <E>::count_));
 	}

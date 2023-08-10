@@ -29,27 +29,33 @@
 namespace CORBA {
 namespace Internal {
 
-const Bridge <Messaging::ExceptionHolder>::EPV ExceptionHolderImpl::epv_ = {
+const Bridge <Messaging::ExceptionHolder>::EPV ExceptionHolder::epv_ = {
 	{ // header
 		RepIdOf <Messaging::ExceptionHolder>::id,
-		ExceptionHolderImpl::template __duplicate <Messaging::ExceptionHolder>,
-		ExceptionHolderImpl::template __release <Messaging::ExceptionHolder>
+		ExceptionHolder::template __duplicate <Messaging::ExceptionHolder>,
+		ExceptionHolder::template __release <Messaging::ExceptionHolder>
 	},
 	{ // base
 		_CORBA_ValueBase
 	}
 };
 
-Bridge <ValueBase>* ExceptionHolderImpl::_CORBA_ValueBase (Bridge <Messaging::ExceptionHolder>* bridge,
+I_ref <Messaging::ExceptionHolder> ExceptionHolder::make (Any&& exc,
+	const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt)
+{
+	return make_reference <ExceptionHolder> (std::move (exc), user_exceptions, user_exceptions_cnt);
+}
+
+Bridge <ValueBase>* ExceptionHolder::_CORBA_ValueBase (Bridge <Messaging::ExceptionHolder>* bridge,
 	Type <IDL::String>::ABI_in id, Interface* env)
 {
 	if (!RepId::compatible (RepIdOf <ValueBase>::id, Type <IDL::String>::in (id)))
 		set_INV_OBJREF (env);
 	check_pointer (bridge, epv_.header);
-	return &static_cast <ExceptionHolderImpl&> (*bridge);
+	return &static_cast <ExceptionHolder&> (*bridge);
 }
 
-void ExceptionHolderImpl::raise_exception (const ExceptionEntry* user_exceptions,
+void ExceptionHolder::raise_exception (const ExceptionEntry* user_exceptions,
 	size_t user_exceptions_cnt) const
 {
 	std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type se;

@@ -35,6 +35,8 @@ native Size;
 
 module CORBA {
 
+typeprefix CORBA "omg.org";
+
 pseudo interface TypeCode;
 
 module Internal {

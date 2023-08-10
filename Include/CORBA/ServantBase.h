@@ -83,12 +83,12 @@ class Client <T, PortableServer::ServantBase> :
 {
 public:
 #ifdef LEGACY_CORBA_CPP
-	I_ptr <PortableServer::POA>
+	I_ptr <PortableServer::POA> _default_POA ();
+	I_ptr <InterfaceDef> _get_interface ();
 #else
-	I_ref <PortableServer::POA>
+	I_ref <PortableServer::POA> _default_POA ();
+	I_ref <InterfaceDef> _get_interface ();
 #endif
-		_default_POA ();
-	Type <InterfaceDef>::VRet _get_interface ();
 	Boolean _is_a (String_in type_id);
 	Boolean _non_existent ();
 
@@ -121,11 +121,11 @@ public:
 
 template <class T>
 #ifdef LEGACY_CORBA_CPP
-I_ptr <PortableServer::POA>
+I_ptr
 #else
-I_ref <PortableServer::POA>
+I_ref
 #endif
-Client <T, PortableServer::ServantBase>::_default_POA ()
+<PortableServer::POA> Client <T, PortableServer::ServantBase>::_default_POA ()
 {
 	Environment _env;
 	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));
@@ -135,7 +135,12 @@ Client <T, PortableServer::ServantBase>::_default_POA ()
 }
 
 template <class T>
-Type <InterfaceDef>::VRet Client <T, PortableServer::ServantBase>::_get_interface ()
+#ifdef LEGACY_CORBA_CPP
+I_ptr
+#else
+I_ref
+#endif
+<InterfaceDef> Client <T, PortableServer::ServantBase>::_get_interface ()
 {
 	Environment _env;
 	Bridge <PortableServer::ServantBase>& _b (T::_get_bridge (_env));

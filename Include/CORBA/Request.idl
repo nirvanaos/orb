@@ -3,19 +3,9 @@
 #ifndef CORBA_REQUEST_IDL_
 #define CORBA_REQUEST_IDL_
 
-// Forward definition
-module Messaging
-{
-typeprefix Messaging "omg.org";
-abstract valuetype Poller;
-};
-
 module CORBA {
 
 typeprefix CORBA "omg.org";
-
-// Forward definition
-abstract valuetype Pollable;
 
 exception WrongTransaction {};
 
@@ -27,7 +17,6 @@ pseudo interface TypeCode;
 
 pseudo interface Request
 {
-
   void add_arg (
     in Identifier   name,       // argument name
     in TypeCode     arg_type,   // argument datatype

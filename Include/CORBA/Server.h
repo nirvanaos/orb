@@ -45,6 +45,10 @@
 #include "ValueImpl.h"
 #include "ValueCreator.h"
 
+#ifdef LEGACY_CORBA_CPP
+#include "Servant_var.h"
+#endif
+
 namespace CORBA {
 
 /// Servant traits.

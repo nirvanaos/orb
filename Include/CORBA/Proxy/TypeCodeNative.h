@@ -53,7 +53,7 @@ public:
 			Base::equivalent (other);
 	}
 
-	static I_ref <TypeCode> get_compact_typecode ()
+	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
 	{
 		return g_ORB->create_native_tc (Base::RepositoryType::id, IDL::String ());
 	}

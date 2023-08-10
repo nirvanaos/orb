@@ -60,12 +60,12 @@ public:
 			TypeCodeBase::equivalent (TCKind::tk_array, bound, ContentType::ptr (), other);
 	}
 
-	I_ref <TypeCode> get_compact_typecode ()
+	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
 	{
 		I_ptr <TypeCode> content = ContentType::ptr ();
 		I_ref <TypeCode> compact = content->get_compact_typecode ();
 		if (&content == &I_ptr <TypeCode> (compact))
-			return Base::get_compact_typecode ();
+			return I_ptr <TypeCode> (Base::_get_ptr ());
 		else
 			return g_ORB->create_array_tc (bound, compact);
 	}

@@ -41,7 +41,6 @@
 #include "Context.h"
 #include "Request.h"
 #include "Policy.h"
-#include "Dynamic.h"
 
 // ServantBase
 #include "ServantBase.h"
@@ -62,7 +61,12 @@ Internal::I_ptr <ImplementationDef> Client <T, Object>::_get_implementation ()
 }
 
 template <class T>
-Internal::Type <InterfaceDef>::VRet Client <T, Object>::_get_interface ()
+#ifdef LEGACY_CORBA_CPP
+I_ptr
+#else
+I_ref
+#endif
+<InterfaceDef> Client <T, Object>::_get_interface ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
