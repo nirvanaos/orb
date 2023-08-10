@@ -42,10 +42,10 @@ struct ExceptionSet
 
 	static constexpr const ExceptionEntry* entries () noexcept
 	{
-		return exceptions_;
+		return exceptions;
 	}
 
-	static const ExceptionEntry exceptions_ [];
+	static const ExceptionEntry exceptions [];
 };
 
 template <>
@@ -63,7 +63,7 @@ struct ExceptionSet <>
 };
 
 template <class ... Exceptions>
-const ExceptionEntry ExceptionSet <Exceptions...>::exceptions_ [] = {
+const ExceptionEntry ExceptionSet <Exceptions...>::exceptions [] = {
 	{ RepIdOf <Exceptions>::id, sizeof (Exceptions), ::CORBA::Internal::construct <Exceptions> }...,
 };
 

@@ -48,7 +48,7 @@ class ClientBridge :
 	public Bridge <I>
 {
 protected:
-	Bridge <I>& _get_bridge (EnvironmentBase&) noexcept
+	Bridge <I>& _get_bridge (Environment&) noexcept
 	{
 		return *this;
 	}
@@ -102,7 +102,7 @@ template <class Primary, class Base>
 class ClientBaseNoPtr
 {
 protected:
-	Bridge <Base>* _get_bridge_ptr (EnvironmentBase& env)
+	Bridge <Base>* _get_bridge_ptr (Environment& env)
 	{
 		Primary& t = static_cast <Primary&> (*this);
 		typename Bridge <Primary>:: template Wide <Base>::Func func = t._epv ().base;
@@ -111,7 +111,7 @@ protected:
 		return ret;
 	}
 
-	Bridge <Base>& _get_bridge (EnvironmentBase& env)
+	Bridge <Base>& _get_bridge (Environment& env)
 	{
 		Bridge <Base>* ret = _get_bridge_ptr (env);
 		if (!ret)

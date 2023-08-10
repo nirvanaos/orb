@@ -28,6 +28,7 @@
 #pragma once
 
 #include "EnvironmentImpl.h"
+#include "set_exception.h"
 
 namespace CORBA {
 namespace Internal {
@@ -36,29 +37,36 @@ class Environment :
 	public EnvironmentImpl <Environment>
 {
 public:
-	Environment () {}
-	
-	Environment (Environment&& src) noexcept
+	template <class I>
+	static Interface* __duplicate (Interface*, Interface* env) noexcept
 	{
-		move_from (src);
+		set_NO_IMPLEMENT (env);
+		return 0;
 	}
 
-	Environment (EnvironmentBase&& src) noexcept
+	template <class I>
+	static void __release (Interface*) noexcept
+	{}
+
+	Environment () noexcept :
+		user_exceptions_ (nullptr),
+		user_exceptions_cnt_ (0)
+	{}
+
+	void exception_set (Short code, const char* rep_id, void* param) noexcept
 	{
-		move_from (src);
+		EnvironmentBase::exception_set (code, rep_id, param, user_exceptions_, user_exceptions_cnt_);
 	}
 
-	Environment& operator = (Environment&& src) noexcept
-	{
-		move_from (src);
-		return *this;
-	}
+protected:
+	Environment (const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt) noexcept :
+		user_exceptions_ (user_exceptions),
+		user_exceptions_cnt_ (user_exceptions_cnt)
+	{}
 
-	Environment& operator = (EnvironmentBase&& src) noexcept
-	{
-		move_from (src);
-		return *this;
-	}
+private:
+	const ExceptionEntry* user_exceptions_;
+	size_t user_exceptions_cnt_;
 };
 
 }

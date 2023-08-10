@@ -82,14 +82,14 @@ protected:
 		Interface (epv.header)
 	{}
 
-	Bridge <ValueBase>* _get_bridge_ptr (EnvironmentBase& env)
+	Bridge <ValueBase>* _get_bridge_ptr (Environment& env)
 	{
 		Bridge <ValueBase>* ret = (_epv ().base.CORBA_ValueBase) (this, &StringView <Char> (RepIdOf <ValueBase>::id), &env);
 		env.check ();
 		return ret;
 	}
 
-	Bridge <ValueBase>& _get_bridge (EnvironmentBase& env)
+	Bridge <ValueBase>& _get_bridge (Environment& env)
 	{
 		Bridge <ValueBase>* ret = _get_bridge_ptr (env);
 		if (!ret)
@@ -166,12 +166,12 @@ private:
 };
 
 template <class ... Exceptions>
-class ExceptionHolderEx : public ExceptionHolderImpl
+class ExceptionHolder : public ExceptionHolderImpl
 {
 public:
-	ExceptionHolderEx (Any&& exc) :
+	ExceptionHolder (Any&& exc) :
 		ExceptionHolderImpl (std::move (exc), ExceptionSet <Exceptions...>::entries (),
-			ExceptionSet <Exceptions...>::count ())
+			sizeof... (Exceptions))
 	{}
 };
 

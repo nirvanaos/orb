@@ -27,7 +27,7 @@
 #define NIRVANA_ORB_ENVIRONMENTEX_H_
 #pragma once
 
-#include "EnvironmentImpl.h"
+#include "Environment.h"
 #include "ExceptionSet.h"
 
 namespace CORBA {
@@ -35,16 +35,12 @@ namespace Internal {
 
 template <class ... Exceptions>
 class EnvironmentEx :
-	public EnvironmentImpl <EnvironmentEx <Exceptions...> >
+	public Environment
 {
 public:
-	EnvironmentEx () {}
-
-	void exception_set (Short code, const char* rep_id, void* param)
-	{
-		EnvironmentBase::exception_set (code, rep_id, param, ExceptionSet <Exceptions...>::exceptions_,
-			ExceptionSet <Exceptions...>::count ());
-	}
+	EnvironmentEx () :
+		Environment (ExceptionSet <Exceptions...>::entries (), sizeof... (Exceptions))
+	{}
 };
 
 }

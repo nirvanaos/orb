@@ -30,13 +30,11 @@
 #include "ServantImpl.h"
 #include "Environment_s.h"
 #include "SystemException.h"
-#include "set_exception.h"
 
 namespace CORBA {
 namespace Internal {
 
-class EnvironmentBase :
-	public Bridge <CORBA::Environment>
+class EnvironmentBase
 {
 public:
 	void exception_set (Short code, String_in rep_id, void* param,
@@ -65,9 +63,10 @@ public:
 
 	void check () const;
 
+	EnvironmentBase& operator = (EnvironmentBase&& src) noexcept;
+
 protected:
-	EnvironmentBase (const EPV& epv) noexcept :
-		Bridge < ::CORBA::Environment> (epv)
+	EnvironmentBase () noexcept
 	{
 		data_.reset ();
 	}
@@ -78,7 +77,11 @@ protected:
 			exception_free ();
 	}
 
-	void move_from (EnvironmentBase& src) noexcept;
+	EnvironmentBase (EnvironmentBase&& src) noexcept :
+		data_ (src.data_)
+	{
+		src.data_.reset ();
+	}
 
 private:
 	bool set (const ExceptionEntry& ee) noexcept;
@@ -109,25 +112,12 @@ private:
 
 template <class S>
 class EnvironmentImpl :
-	public EnvironmentBase,
-	public Skeleton <S, ::CORBA::Environment>,
-	public ServantTraits <S>
+	public InterfaceImplBase <S, ::CORBA::Environment>,
+	public ServantTraits <S>,
+	public EnvironmentBase
 {
-public:
-	template <class I>
-	static Interface* __duplicate (Interface*, Interface* env)
-	{
-		set_NO_IMPLEMENT (env);
-		return 0;
-	}
-
-	template <class I>
-	static void __release (Interface*)
-	{}
-
 protected:
-	EnvironmentImpl () :
-		EnvironmentBase (Skeleton <S, ::CORBA::Environment>::epv_)
+	EnvironmentImpl ()
 	{}
 };
 

@@ -31,6 +31,7 @@
 #include "../ObjectFactoryInc.h"
 #include "../DynamicServantImpl.h"
 #include "../LifeCycleRefCnt.h"
+#include "../ExceptionSet.h"
 #include "IOReference.h"
 
 namespace CORBA {
@@ -85,7 +86,7 @@ public:
 	IORequest::_ref_type _get_reply (uint32_t timeout, UShort op_idx) const
 	{
 		IORequest::_ref_type rq = aggregate_->get_reply (timeout, _make_op_idx (op_idx));
-		check_request (rq, ExceptionSet <Ex...>::entries (), ExceptionSet <Ex...>::count ());
+		check_request (rq, ExceptionSet <Ex...>::entries (), sizeof... (Ex));
 		return rq;
 	}
 

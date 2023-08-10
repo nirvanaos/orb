@@ -171,11 +171,12 @@ void EnvironmentBase::set_user (const ExceptionEntry& ee, void* data) noexcept
 	}
 }
 
-void EnvironmentBase::move_from (EnvironmentBase& src) noexcept
+EnvironmentBase& EnvironmentBase::operator = (EnvironmentBase&& src) noexcept
 {
 	exception_free ();
 	data_ = src.data_;
 	src.data_.reset ();
+	return *this;
 }
 
 }
