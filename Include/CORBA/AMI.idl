@@ -27,6 +27,10 @@
 #ifndef CORBA_AMI_IDL_
 #define CORBA_AMI_IDL_
 
+module Nirvana {
+native Size;
+};
+
 module CORBA {
 
 module Internal {
@@ -39,6 +43,8 @@ pseudo interface RequestCallback
 	/// Called on request completion
 	void completed (in IORequest rq);
 };
+
+native ExceptionEntryPtr;
 
 };
 
@@ -79,6 +85,10 @@ valuetype ExceptionHolder
 {
 	void raise_exception () raises (UserExceptionBase);
 	void raise_exception_with_list (in Dynamic::ExceptionList exc_list) raises (UserExceptionBase);
+
+	void set_user_exceptions (in CORBA::Internal::ExceptionEntryPtr exc_list, in Nirvana::Size exc_cnt);
+	CORBA::Internal::IORequest get_exception (out boolean is_system_exception,
+		out CORBA::Internal::ExceptionEntryPtr exc_list, out Nirvana::Size exc_cnt);
 
 	private boolean is_system_exception;
 	private boolean byte_order;

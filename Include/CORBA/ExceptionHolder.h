@@ -28,201 +28,51 @@
 #define NIRVANA_ORB_EXCEPTIONHOLDER_H_
 #pragma once
 
-#include "ValueBaseImpl.h"
+#include "AMI.h"
 #include "ExceptionSet.h"
 #include "ExceptionList.h"
-#include "Any.h"
-#include "RefCountBase.h"
-
-namespace Messaging {
-
-class ExceptionHolder;
-
-#ifdef LEGACY_CORBA_CPP
-typedef CORBA::Internal::I_ptr <ExceptionHolder> ExceptionHolder_ptr;
-typedef CORBA::Internal::I_var <ExceptionHolder> ExceptionHolder_var;
-#endif
-
-}
 
 namespace CORBA {
 namespace Internal {
 
-template <>
-const Char RepIdOf <Messaging::ExceptionHolder>::id [] = "IDL:omg.org/Messaging/ExceptionHolder:1.0";
-
-template <>
-class Bridge <Messaging::ExceptionHolder> : public Interface
+template <class ... Exceptions>
+inline void set_user_exceptions (::Messaging::ExceptionHolder::_ptr_type eh)
 {
-public:
-	/// Entry-point vector
-	struct EPV
-	{
-		Interface::EPV header;
-		struct
-		{
-			Bridge <ValueBase>* (*CORBA_ValueBase) (Bridge <Messaging::ExceptionHolder>*, Type <String>::ABI_in, Interface*);
-		}
-		base;
-	};
-
-	const EPV& _epv () const noexcept
-	{
-		return (const EPV&)Interface::_epv ();
-	}
-
-	operator I_ptr <ValueBase> ()
-	{
-		Environment env;
-		return static_cast <ValueBase*> (this->_get_bridge_ptr (env));
-	}
-
-protected:
-	Bridge (const EPV& epv) noexcept :
-		Interface (epv.header)
-	{}
-
-	Bridge <ValueBase>* _get_bridge_ptr (Environment& env)
-	{
-		Bridge <ValueBase>* ret = (_epv ().base.CORBA_ValueBase) (this, &StringView <Char> (RepIdOf <ValueBase>::id), &env);
-		env.check ();
-		return ret;
-	}
-
-	Bridge <ValueBase>& _get_bridge (Environment& env)
-	{
-		Bridge <ValueBase>* ret = _get_bridge_ptr (env);
-		if (!ret)
-			::Nirvana::throw_INV_OBJREF ();
-		return *ret;
-	}
-};
-
-class ExceptionHolder :
-	public BridgeVal <Messaging::ExceptionHolder>,
-	public RefCountBase <ExceptionHolder>,
-	public LifeCycleRefCnt <ExceptionHolder>,
-	public ValueImplBase <ExceptionHolder, ValueBase>,
-	public ValueBaseCopy <ExceptionHolder>,
-	public ValueNonTruncatable,
-	public ValueBaseNoFactory
-{
-public:
-	template <class ... Exceptions>
-	static I_ref <Messaging::ExceptionHolder> make (Any&& exc)
-	{
-		return make (std::move (exc), ExceptionSet <Exceptions...>::entries (), sizeof... (Exceptions));
-	}
-
-	static ExceptionHolder& _implementation (Bridge <ValueBase>* bridge)
-	{
-		check_pointer (bridge, Skeleton <ExceptionHolder, ValueBase>::epv_.header);
-		return static_cast <ExceptionHolder&> (*bridge);
-	}
-
-	static ExceptionHolder& _implementation (Bridge <Messaging::ExceptionHolder>* bridge)
-	{
-		check_pointer (bridge, epv_.header);
-		return static_cast <ExceptionHolder&> (*bridge);
-	}
-
-	static Bridge <ValueBase>* _CORBA_ValueBase (Bridge <Messaging::ExceptionHolder>* bridge,
-		Type <String>::ABI_in id, Interface* env);
-
-	Interface* _query_valuetype (String_in id) noexcept
-	{
-		if (id.empty () || RepId::compatible (RepIdOf <Messaging::ExceptionHolder>::id, id))
-			return &static_cast <Bridge <Messaging::ExceptionHolder>&> (*this);
-		return nullptr;
-	}
-
-	void raise_exception ()
-	{
-		raise_exception (user_exceptions_, user_exceptions_cnt_);
-	}
-
-	void raise_exception_with_list (const Dynamic::ExceptionList& exc_list)
-	{
-		raise_exception (exc_list.data (), exc_list.size ());
-	}
-
-private:
-	template <class S, class ... Args> friend
-		CORBA::servant_reference <S> CORBA::make_reference (Args ... args);
-
-	ExceptionHolder (Any&& exc, const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt) :
-		BridgeVal <Messaging::ExceptionHolder> (epv_),
-		exception_ (std::move (exc)),
-		user_exceptions_ (user_exceptions),
-		user_exceptions_cnt_ (user_exceptions_cnt)
-	{}
-
-	static I_ref <Messaging::ExceptionHolder> make (Any&& exc,
-		const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt);
-
-	void raise_exception (const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt) const;
-
-private:
-	Any exception_;
-	const ExceptionEntry* user_exceptions_;
-	size_t user_exceptions_cnt_;
-
-	static const Bridge <Messaging::ExceptionHolder>::EPV epv_;
-};
-
-}
+	eh->set_user_exceptions (ExceptionSet <Exceptions...>::entries (), sizeof... (Exceptions));
 }
 
-namespace Messaging {
+void raise_exception (IORequest::_ptr_type rq, bool is_system_exception,
+	const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt);
 
-class ExceptionHolder : public CORBA::Internal::Client <CORBA::Internal::ExceptionHolder, CORBA::ValueBase>
+template <class T>
+void Client <T, ::Messaging::ExceptionHolder>::raise_exception ()
 {
-public:
-	typedef CORBA::Internal::I_ptr <ExceptionHolder> _ptr_type;
+	Environment _env;
+	Bridge < ::Messaging::ExceptionHolder>& _b (T::_get_bridge (_env));
+	bool is_system_exception;
+	const ExceptionEntry* user_exceptions;
+	size_t user_exceptions_cnt;
+	Type <IORequest>::C_ret rq ((_b._epv ().epv.get_exception) (&_b, &is_system_exception,
+		&user_exceptions, &user_exceptions_cnt, &_env));
+	_env.check ();
+	raise_exception (rq, is_system_exception, user_exceptions, user_exceptions_cnt);
+}
 
-#ifdef LEGACY_CORBA_CPP
-	typedef CORBA::Internal::I_var <ExceptionHolder> _var_type;
-	typedef _var_type& _out_type;
+template <class T>
+void Client <T, ::Messaging::ExceptionHolder>::raise_exception_with_list (
+	Type < ::Dynamic::ExceptionList>::C_in exc_list)
+{
+	Environment _env;
+	Bridge < ::Messaging::ExceptionHolder>& _b (T::_get_bridge (_env));
+	const ExceptionEntry* user_exceptions;
+	size_t user_exceptions_cnt;
+	Type <Any>::C_ret exc ((_b._epv ().epv.get_exception) (&_b, &user_exceptions, &user_exceptions_cnt, &_env));
+	_env.check ();
+	const ::Dynamic::ExceptionList& excl = Type < ::Dynamic::ExceptionList>::in (&exc_list);
+	raise_exception (std::move (exc), excl.data (), excl.size ());
+}
 
-	NIRVANA_NODISCARD static _ptr_type _duplicate (_ptr_type obj)
-	{
-		return _unsafe_cast (interface_duplicate (&obj));
-	}
-
-#else
-	typedef CORBA::Internal::I_ref <ExceptionHolder> _ref_type;
-#endif
-
-	static _ptr_type _check (CORBA::Internal::Interface* bridge)
-	{
-		return _unsafe_cast (CORBA::Internal::Interface::_check (bridge, CORBA::Internal::RepIdOf <ExceptionHolder>::id));
-	}
-
-	static _ptr_type _downcast (CORBA::ValueBase::_ptr_type val)
-	{
-		if (val)
-			return val->_query_valuetype (CORBA::Internal::RepIdOf <ExceptionHolder>::id)
-			.template downcast <ExceptionHolder> ();
-		return nullptr;
-	}
-
-	static _ptr_type _nil () noexcept
-	{
-		return _ptr_type (nullptr);
-	}
-
-private:
-	friend class CORBA::Internal::I_ptr <CORBA::Internal::Interface>;
-	friend class CORBA::Internal::I_ref <CORBA::Internal::Interface>;
-	friend class CORBA::Internal::I_ref_base <ExceptionHolder>;
-
-	static ExceptionHolder* _unsafe_cast (CORBA::Internal::Interface* itf) noexcept
-	{
-		assert (!itf || CORBA::Internal::RepId::compatible (itf->_epv ().interface_id, CORBA::Internal::RepIdOf <ExceptionHolder>::id));
-		return static_cast <ExceptionHolder*> (static_cast <CORBA::Internal::Bridge <ExceptionHolder>*> (itf));
-	}
-};
-
+}
 }
 
 #endif

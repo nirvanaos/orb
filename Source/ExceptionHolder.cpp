@@ -23,60 +23,48 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+#include <CORBA/Server.h>
 #include <CORBA/ExceptionHolder.h>
-#include <CORBA/CORBA.h>
 
 namespace CORBA {
 namespace Internal {
 
-const Bridge <Messaging::ExceptionHolder>::EPV ExceptionHolder::epv_ = {
-	{ // header
-		RepIdOf <Messaging::ExceptionHolder>::id,
-		ExceptionHolder::template __duplicate <Messaging::ExceptionHolder>,
-		ExceptionHolder::template __release <Messaging::ExceptionHolder>
-	},
-	{ // base
-		_CORBA_ValueBase
-	}
-};
-
-I_ref <Messaging::ExceptionHolder> ExceptionHolder::make (Any&& exc,
+void raise_exception (IORequest::_ptr_type rq, bool is_system_exception,
 	const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt)
 {
-	return make_reference <ExceptionHolder> (std::move (exc), user_exceptions, user_exceptions_cnt);
-}
+	IDL::String id;
+	Type <IDL::String>::unmarshal (rq, id);
+	
+	std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type small;
+	OctetSeq large;
 
-Bridge <ValueBase>* ExceptionHolder::_CORBA_ValueBase (Bridge <Messaging::ExceptionHolder>* bridge,
-	Type <IDL::String>::ABI_in id, Interface* env)
-{
-	if (!RepId::compatible (RepIdOf <ValueBase>::id, Type <IDL::String>::in (id)))
-		set_INV_OBJREF (env);
-	check_pointer (bridge, epv_.header);
-	return &static_cast <ExceptionHolder&> (*bridge);
-}
-
-void ExceptionHolder::raise_exception (const ExceptionEntry* user_exceptions,
-	size_t user_exceptions_cnt) const
-{
-	std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type se;
-	if (exception_ >>= reinterpret_cast <SystemException&> (se))
-		reinterpret_cast <SystemException&> (se)._raise ();
-	else if (user_exceptions_cnt) {
-		try {
-			TypeCode::_ref_type tc = exception_.type ();
-			const IDL::String rep_id = tc->id ();
-			for (const ExceptionEntry* p = user_exceptions, *end = p + user_exceptions_cnt; p != end; ++p) {
-				if (RepId::compatible (p->rep_id, rep_id)) {
-					OctetSeq buf (p->size);
-					p->construct (buf.data ());
-					Exception& ex = *(Exception*)buf.data ();
-					tc->n_copy (ex.__data (), exception_.data ());
-					ex._raise ();
+	Exception* ex = nullptr;
+	if (is_system_exception) {
+		const ExceptionEntry* ee = SystemException::_get_exception_entry (id, SystemException::EC_SYSTEM_EXCEPTION);
+		if (!ee)
+			throw UNKNOWN (MAKE_OMG_MINOR (2));  // Non-standard System Exception not supported.
+		(ee->construct) (&small);
+		ex = reinterpret_cast <Exception*> (&small);
+	} else {
+		for (const ExceptionEntry* ee = user_exceptions, *end = ee + user_exceptions_cnt; ee != end; ++ee) {
+			if (RepId::compatible (ee->rep_id, id)) {
+				if (ee->size <= sizeof (small)) {
+					(ee->construct) (&small);
+					ex = reinterpret_cast <Exception*> (&small);
+				} else {
+					large.resize (ee->size);
+					ee->construct (large.data ());
+					ex = reinterpret_cast <Exception*> (large.data ());
 				}
+				break;
 			}
-		} catch (...) {}
+		}
+		if (!ex)
+			throw UNKNOWN (MAKE_OMG_MINOR (1)); // Unlisted user exception received by client.
 	}
-	Nirvana::throw_UNKNOWN (MAKE_OMG_MINOR (1)); // Unlisted user exception received by client.
+	assert (ex);
+	ex->__type_code ()->n_unmarshal (rq, 1, ex->__data ());
+	ex->_raise ();
 }
 
 }

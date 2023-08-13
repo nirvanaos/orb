@@ -56,6 +56,8 @@ template <>
 struct Type <Dynamic::ExceptionList> : Type <Sequence <ExceptionEntry> >
 {};
 
+typedef const ExceptionEntry* ExceptionEntryPtr;
+
 }
 }
 
