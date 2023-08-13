@@ -32,6 +32,7 @@
 #include "../DynamicServantImpl.h"
 #include "../LifeCycleRefCnt.h"
 #include "IOReference.h"
+#include "OperationIndex.h"
 
 namespace CORBA {
 namespace Internal {
@@ -92,9 +93,9 @@ public:
 		return interface_idx_;
 	}
 
-	IOReference::OperationIndex _make_op_idx (UShort op_idx) const noexcept
+	OperationIndex _make_op_idx (UShort op_idx) const noexcept
 	{
-		return IOReference::OperationIndex (interface_idx_, op_idx);
+		return make_op_idx (interface_idx_, op_idx);
 	}
 
 	typedef void (*RqProcInternal) (Interface::_ptr_type servant, IORequest::_ptr_type call);

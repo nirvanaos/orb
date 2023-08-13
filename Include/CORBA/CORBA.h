@@ -40,12 +40,6 @@
 #include "UnknownUserException.h"
 #include "ServantBase.h"
 #include "LocalObject.h"
-
-// AMI definitions used in compiled IDL
-// Must be included immediately after the Object.h
-#include "ExceptionHolder.h"
-#include "Messaging.h"
-
 #include "ValueBaseImpl.h"
 #include "AbstractBaseImpl.h"
 #include "AbstractBasePOA.h"
@@ -59,6 +53,7 @@
 #include "TypeCodeFixed.h"
 #include "ServantLocator_native.h"
 #include "String_compat.h"
+#include "Messaging.h"
 
 namespace Nirvana {
 

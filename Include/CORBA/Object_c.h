@@ -32,6 +32,7 @@
 #include "basic_types.h"
 #include "TypeObject.h"
 #include "Sequence.h"
+#include "ExceptionList.h"
 
 namespace PortableServer {
 class ServantBase;
@@ -44,8 +45,6 @@ class Object;
 typedef Internal::Interface ImplementationDef; // Not defined, unused
 
 class InterfaceDef;
-class TypeCode;
-typedef ::IDL::Sequence <Internal::TypeItf <TypeCode>::Var> ExceptionList;
 class Context;
 class NamedValue;
 class NVList;
@@ -73,7 +72,7 @@ ULong (*hash) (Bridge <Object>*, ULong maximum, Interface*);
 void (*create_request) (Bridge <Object>*, Interface* ctx, Type <String>::ABI_in operation,
 	Interface* arg_list, Interface* result, Interface** req, uint32_t req_flags, Interface*);
 void (*create_request2) (Bridge <Object>*, Interface* ctx, Type <String>::ABI_in operation,
-	Interface* arg_list, Interface* result, Type <ExceptionList>::ABI_in, Type <ContextList>::ABI_in,
+	Interface* arg_list, Interface* result, Type <Dynamic::ExceptionList>::ABI_in, Type <ContextList>::ABI_in,
 	Interface** req, uint32_t req_flags, Interface*);
 Interface* (*get_policy) (Bridge <Object>*, uint32_t, Interface*);
 Type <DomainManagersList>::ABI_ret (*get_domain_managers) (Bridge <Object>*, Interface*);
@@ -109,7 +108,7 @@ public:
 	void _create_request (I_in <Context> ctx, String_in operation, I_in <NVList> arg_list,
 		I_in <NamedValue> result, I_out <Request> request, Flags req_flags);
 	void _create_request (I_in <Context> ctx, String_in operation, I_in <NVList> arg_list,
-		I_in <NamedValue> result, Type <ExceptionList>::C_in exclist, Type <ContextList>::C_in ctxlist,
+		I_in <NamedValue> result, Type <Dynamic::ExceptionList>::C_in exclist, Type <ContextList>::C_in ctxlist,
 		I_out <Request> request, Flags req_flags);
 	I_ref <Request> _request (String_in operation);
 	I_ref <Policy> _get_policy (PolicyType policy_type);

@@ -37,6 +37,7 @@
 #include "core_objects.h"
 
 // IDL generated headers
+#include "AMI.h"
 #include "IORequest.h"
 #include "Context.h"
 #include "Request.h"
@@ -127,7 +128,7 @@ void Client <T, Object>::_create_request (I_in <Context> ctx, String_in operatio
 
 template <class T>
 void Client <T, Object>::_create_request (I_in <Context> ctx, String_in operation,
-	I_in <NVList> arg_list, I_in <NamedValue> result, Type <ExceptionList>::C_in exclist,
+	I_in <NVList> arg_list, I_in <NamedValue> result, Type <Dynamic::ExceptionList>::C_in exclist,
 	Type <ContextList>::C_in ctxlist, I_out <Request> request, Flags req_flags)
 {
 	Environment _env;

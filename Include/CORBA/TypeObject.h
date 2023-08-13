@@ -29,6 +29,7 @@
 #pragma once
 
 #include "Type_interface.h"
+#include "IORequest.h"
 #include "TCKind.h"
 #include "tc_constants.h"
 

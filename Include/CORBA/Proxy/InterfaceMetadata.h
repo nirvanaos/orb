@@ -1,4 +1,4 @@
-/// \file InterfaceMetadata.h
+/// \file
 /*
 * Nirvana IDL support library.
 *

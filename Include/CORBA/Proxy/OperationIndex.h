@@ -1,7 +1,10 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
 * This is a part of the Nirvana project.
+*
+* Author: Igor Popov
 *
 * Author: Igor Popov
 *
@@ -23,38 +26,30 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_EXCEPTIONLIST_H_
-#define NIRVANA_ORB_EXCEPTIONLIST_H_
-#pragma once
+#ifndef NIRVANA_ORB_OPERATIONINDEX_H_
+#define NIRVANA_ORB_OPERATIONINDEX_H_
 
-#include "Exception.h"
-#include "Sequence.h"
-#include "TypeFixLen.h"
-
-namespace Dynamic {
-
-class ExceptionList : public IDL::Sequence <CORBA::Internal::ExceptionEntry>
-{
-public:
-	template <class Ex>
-	void add ()
-	{
-		push_back ({ CORBA::Internal::RepIdOf <Ex>::id, sizeof (Ex), ::CORBA::Internal::construct <Ex> });
-	}
-};
-
-}
+#include "../primitive_types.h"
 
 namespace CORBA {
 namespace Internal {
 
-template <>
-struct Type <ExceptionEntry> : TypeFixLen <ExceptionEntry, false>
-{};
+typedef ULong OperationIndex;
 
-template <>
-struct Type <Dynamic::ExceptionList> : Type <Sequence <ExceptionEntry> >
-{};
+inline OperationIndex make_op_idx (UShort interface_idx, UShort op_idx) noexcept
+{
+	return ((ULong)interface_idx << 16) | op_idx;
+}
+
+inline UShort interface_idx (OperationIndex oi) noexcept
+{
+	return oi >> 16;
+}
+
+inline UShort operation_idx (OperationIndex oi) noexcept
+{
+	return (UShort)oi;
+}
 
 }
 }

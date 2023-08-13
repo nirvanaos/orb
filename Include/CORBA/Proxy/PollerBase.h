@@ -33,6 +33,7 @@
 #include "../LifeCycleRefCnt.h"
 #include "../ExceptionSet.h"
 #include "IOReference.h"
+#include "OperationIndex.h"
 
 namespace CORBA {
 namespace Internal {
@@ -62,9 +63,9 @@ public:
 		interface_release (&aggregate_);
 	}
 
-	IOReference::OperationIndex _make_op_idx (UShort op_idx) const noexcept
+	OperationIndex _make_op_idx (UShort op_idx) const noexcept
 	{
-		return IOReference::OperationIndex (interface_idx_, op_idx);
+		return make_op_idx (interface_idx_, op_idx);
 	}
 
 	Bridge <Messaging::Poller>* messaging_poller (Type <String>::ABI_in id, Interface* env) const noexcept

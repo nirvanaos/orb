@@ -44,6 +44,8 @@ native ValueFactory;
 
 typedef string ORBid;
 
+typedef short ValueModifier;
+
 /// ORB
 pseudo interface ORB
 {

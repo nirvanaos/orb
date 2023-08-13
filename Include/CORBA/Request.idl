@@ -7,8 +7,6 @@ module CORBA {
 
 typeprefix CORBA "omg.org";
 
-exception WrongTransaction {};
-
 native OpaqueValue;
 typedef unsigned long Flags;
 typedef string Identifier;

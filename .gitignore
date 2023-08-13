@@ -64,3 +64,6 @@
 /Source/CosLwLogService.cpp
 /Source/CosLwLogStatus.cpp
 /Include/CORBA/RefCnt.h
+/Include/CORBA/AMI_s.h
+/Include/CORBA/AMI.h
+/Source/AMI.cpp

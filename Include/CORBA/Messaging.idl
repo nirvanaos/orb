@@ -163,38 +163,6 @@ struct PolicyValue
 
 typedef sequence <PolicyValue> PolicyValueSeq;
 
-native ExceptionHolder;
-/*
-typedef CORBA::OctetSeq MarshaledException;
-native UserExceptionBase;
-valuetype ExceptionHolder
-{
-	void raise_exception () raises (UserExceptionBase);
-	void raise_exception_with_list (in Dynamic::ExceptionList exc_list) raises (UserExceptionBase);
-
-	private boolean is_system_exception;
-	private boolean byte_order;
-	private MarshaledException marshaled_exception;
-};
-*/
-
-// For handling Routing
-interface ReplyHandler {};
-
-// Generic Poller Valuetype
-
-abstract valuetype Poller : CORBA::Pollable
-{
-	typeid::Messaging::Poller "IDL:omg.org/Messaging/Poller:3.1";
-	readonly attribute Object operation_target;
-	readonly attribute string operation_name;
-	attribute ReplyHandler associated_handler;
-	readonly attribute boolean is_from_poller;
-
-	CORBA::Internal::IORequest get_reply (in unsigned long timeout,
-		in CORBA::Internal::IOReference::OperationIndex op) raises (CORBA::WrongTransaction);
-};
-
 }; // module Messaging
 
 #endif // MESSAGING_IDL_

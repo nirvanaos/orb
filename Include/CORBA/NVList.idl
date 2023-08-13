@@ -3,8 +3,6 @@
 #ifndef CORBA_NVLIST_IDL_
 #define CORBA_NVLIST_IDL_
 
-#include <CORBA/TypeCode.idl>
-
 module CORBA {
 
 typeprefix CORBA "omg.org";
@@ -12,6 +10,8 @@ typeprefix CORBA "omg.org";
 exception Bounds {};
 
 typedef unsigned long Flags;
+
+typedef string Identifier;
 
 pseudo interface NamedValue
 {

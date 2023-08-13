@@ -4,20 +4,9 @@
 #ifndef CORBA_POLLABLE_IDL_
 #define CORBA_POLLABLE_IDL_
 
-#include "Proxy/IOReference.idl"
-
 module CORBA {
 
 typeprefix CORBA "omg.org";
-
-local interface PollableSet;
-
-abstract valuetype Pollable supports Internal::RequestCallback
-{
-  boolean is_ready (in unsigned long timeout);
-
-  PollableSet create_pollable_set ();
-};
 
 abstract valuetype DIIPollable : Pollable {};
 

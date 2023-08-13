@@ -115,12 +115,12 @@ protected:
 	}
 
 	static void __create_request2 (Bridge <Object>* obj, Interface* ctx, Type <String>::ABI_in operation,
-		Interface* arg_list, Interface* result, Type <ExceptionList>::ABI_in exclist, Type <ContextList>::ABI_in ctxlist,
+		Interface* arg_list, Interface* result, Type <Dynamic::ExceptionList>::ABI_in exclist, Type <ContextList>::ABI_in ctxlist,
 		Interface** request, uint32_t req_flags, Interface* env)
 	{
 		try {
 			return S::_implementation (obj)._create_request (Type <Context>::in (ctx), Type <String>::in (operation),
-				Type <NVList>::in (arg_list), Type <NamedValue>::in (result), Type <ExceptionList>::in (exclist),
+				Type <NVList>::in (arg_list), Type <NamedValue>::in (result), Type <Dynamic::ExceptionList>::in (exclist),
 				Type <ContextList>::in (ctxlist), Type <CORBA::Request>::out (request), req_flags);
 		} catch (Exception& e) {
 			set_exception (env, e);

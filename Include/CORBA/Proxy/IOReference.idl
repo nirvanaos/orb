@@ -23,42 +23,21 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+#ifndef CORBA_IOREFERENCE_IDL_
+#define CORBA_IOREFERENCE_IDL_
+
 #include "../IORequest.idl"
 
-module Messaging {
-
-typeprefix Messaging "omg.org";
-abstract valuetype Poller;
-
-};
-
-module CORBA {
+module CORBA{
 module Internal {
 
-native InterfacePtr;
-
-/// Request callback
-pseudo interface RequestCallback
-{
-	/// Called on request completion
-	void completed (in IORequest rq);
-};
+typedef unsigned long OperationIndex;
 
 /// Interoperable Object Reference.
 /// 
 /// Interface to the implementation of the some Inter-ORB protocol.
 pseudo interface IOReference
 {
-	/// Operation index
-	struct OperationIndex
-	{
-		/// Index of interface
-		unsigned short interface_idx;
-
-		/// Index of operation within the interface
-		unsigned short operation_idx;
-	};
-
 	/// \brief Create request.
 	/// 
 	/// Implementation note: this operation may not cause the preemption.
@@ -80,3 +59,5 @@ pseudo interface IOReference
 
 };
 };
+
+#endif
