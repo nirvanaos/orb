@@ -87,7 +87,7 @@ public:
 
 template <class I, class PollerI = void>
 class ProxyFactoryImpl :
-	public ProxyFactoryBase <ProxyFactoryImpl <I>, I>
+	public ProxyFactoryBase <ProxyFactoryImpl <I, PollerI>, I>
 {
 public:
 	static Interface* create_proxy (Object::_ptr_type obj, AbstractBase::_ptr_type ab,

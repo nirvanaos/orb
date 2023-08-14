@@ -59,5 +59,20 @@ void PollerRoot::check_request (IORequest::_ptr_type rq, const ExceptionEntry* u
 	}
 }
 
+Bridge <Messaging::Poller>* PollerRoot::messaging_poller (Type <String>::ABI_in id, Interface* env) const noexcept
+{
+	return aggregate_.get_bridge (id, env);
+}
+
+Bridge <Pollable>* PollerRoot::pollable (Type <String>::ABI_in id, Interface* env) const noexcept
+{
+	return pollable_.get_bridge (id, env);
+}
+
+Bridge <ValueBase>* PollerRoot::value_base (Type <String>::ABI_in id, Interface* env) const noexcept
+{
+	return value_base_.get_bridge (id, env);
+}
+
 }
 }

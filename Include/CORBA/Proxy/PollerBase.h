@@ -68,20 +68,10 @@ public:
 		return make_op_idx (interface_idx_, op_idx);
 	}
 
-	Bridge <Messaging::Poller>* messaging_poller (Type <String>::ABI_in id, Interface* env) const noexcept
-	{
-		return aggregate_.get_bridge (id, env);
-	}
-
-	Bridge <Pollable>* pollable (Type <String>::ABI_in id, Interface* env) const noexcept
-	{
-		return pollable_.get_bridge (id, env);
-	}
-
-	Bridge <ValueBase>* value_base (Type <String>::ABI_in id, Interface* env) const noexcept
-	{
-		return value_base_.get_bridge (id, env);
-	}
+	Bridge <Messaging::Poller>* messaging_poller (Type <String>::ABI_in id, Interface* env) const noexcept;
+	Bridge <Pollable>* pollable (Type <String>::ABI_in id, Interface* env) const noexcept;
+	Bridge <RequestCallback>* request_callback (Type <String>::ABI_in id, Interface* env) const noexcept;
+	Bridge <ValueBase>* value_base (Type <String>::ABI_in id, Interface* env) const noexcept;
 
 	template <class ... Ex>
 	IORequest::_ref_type _get_reply (uint32_t timeout, UShort op_idx) const
@@ -150,6 +140,13 @@ public:
 	{
 		return static_cast <PollerRoot&> (
 			ServantTraits <Poller <I> >::_implementation (derived)).value_base (id, env);
+	}
+
+	template <>
+	static Bridge <RequestCallback>* _wide_val <RequestCallback, I> (Bridge <I>* derived,
+		Type <String>::ABI_in id, Interface* env) noexcept
+	{
+		return nullptr; // Must not be called
 	}
 
 protected:
