@@ -67,6 +67,17 @@ public:
 
 	void operator delete (void*, void*)
 	{}
+
+protected:
+	ServantMemory ()
+	{
+		interface_duplicate (Nirvana::g_module.imp.itf);
+	}
+
+	~ServantMemory ()
+	{
+		interface_release (Nirvana::g_module.imp.itf);
+	}
 };
 
 }

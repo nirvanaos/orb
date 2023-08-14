@@ -33,12 +33,14 @@ RefCountLink::RefCountLink (const Bridge <DynamicServant>::EPV& epv) :
 	DynamicServantBridge (epv)
 {
 	core_object_ = g_ORB->create_ref_cnt (_dynamic_servant ());
+	interface_duplicate (Nirvana::g_module.imp.itf);
 }
 
 RefCountLink::RefCountLink (const RefCountLink& src) :
 	DynamicServantBridge (src)
 {
 	core_object_ = g_ORB->create_ref_cnt (_dynamic_servant ());
+	interface_duplicate (Nirvana::g_module.imp.itf);
 }
 
 }

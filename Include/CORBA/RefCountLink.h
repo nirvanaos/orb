@@ -86,6 +86,11 @@ protected:
 	RefCountLink (const Bridge <DynamicServant>::EPV& epv);
 	RefCountLink (const RefCountLink& src);
 
+	~RefCountLink ()
+	{
+		interface_release (Nirvana::g_module.imp.itf);
+	}
+
 	RefCountLink& operator = (const RefCountLink&) noexcept
 	{
 		return *this;

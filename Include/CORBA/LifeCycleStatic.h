@@ -27,8 +27,6 @@
 #define NIRVANA_ORB_LIFECYCLESTATIC_H_
 #pragma once
 
-#include "Client.h"
-#include <Nirvana/Module.h>
 #include <Nirvana/core_objects.h>
 
 namespace CORBA {
