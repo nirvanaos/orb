@@ -33,25 +33,31 @@ namespace Internal {
 
 // Link to interface in other proxy object
 template <class I>
-class ProxyLink : public I_ptr <I>
+class ProxyLink
 {
 public:
 	ProxyLink (I_ptr <I> p) :
-		I_ptr <I> (p)
+		itf_ (p)
 	{
-		if (!I_ptr <I>::p_)
+		if (!p)
 			::Nirvana::throw_INV_OBJREF ();
-		id_len_ = strlen (I_ptr <I>::p_->_epv ().header.interface_id);
+		id_len_ = strlen (itf_->_epv ().header.interface_id);
 	}
 
 	Bridge <I>* get_bridge (Type <String>::ABI_in id, Interface* env) const noexcept
 	{
-		if (!RepId::compatible (I_ptr <I>::p_->_epv ().header.interface_id, id_len_, Type <String>::in (id)))
+		if (!RepId::compatible (itf_->_epv ().header.interface_id, id_len_, Type <String>::in (id)))
 			set_INV_OBJREF (env);
-		return I_ptr <I>::p_;
+		return static_cast <Bridge <I>*> (&itf_);
+	}
+
+	I_ptr <I> itf () const noexcept
+	{
+		return itf_;
 	}
 
 private:
+	I_ptr <I> itf_;
 	size_t id_len_;
 };
 

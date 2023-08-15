@@ -30,6 +30,7 @@
 #include "core_objects.h"
 #include "Client.h"
 #include "ObjectFactoryInc.h"
+#include "DynamicExport.h"
 
 namespace CORBA {
 
@@ -39,7 +40,8 @@ servant_reference <T> make_reference (Args ... args);
 
 namespace Internal {
 
-class ServantMemory
+/// \brief Memory management base for object servants.
+class ServantMemory : public DynamicExport
 {
 #ifdef LEGACY_CORBA_CPP
 public:
@@ -70,14 +72,10 @@ public:
 
 protected:
 	ServantMemory ()
-	{
-		interface_duplicate (Nirvana::g_module.imp.itf);
-	}
+	{}
 
 	~ServantMemory ()
-	{
-		interface_release (Nirvana::g_module.imp.itf);
-	}
+	{}
 };
 
 }

@@ -26,10 +26,10 @@
 #ifndef NIRVANA_ORB_PROXYBASE_H_
 #define NIRVANA_ORB_PROXYBASE_H_
 
+#include "ProxyHolder.h"
 #include "ProxyBaseInterface.h"
 #include "../ServantImpl.h"
 #include "../ObjectFactoryInc.h"
-#include "../DynamicServantImpl.h"
 #include "../LifeCycleRefCnt.h"
 #include "IOReference.h"
 #include "OperationIndex.h"
@@ -39,8 +39,7 @@ namespace Internal {
 
 template <class I> class Proxy;
 
-class ProxyRoot :
-	public InterfaceImpl <ProxyRoot, DynamicServant>
+class ProxyRoot : public DynamicExport
 {
 	void* operator new (size_t size) = delete;
 
@@ -58,10 +57,9 @@ public:
 	void operator delete (void*, void*) noexcept
 	{}
 
-	void _delete_object () noexcept
-	{
-		delete this;
-	}
+	// For make_stateless()
+	static void _create_proxy () noexcept
+	{}
 
 	Bridge <Object>* _get_object (Type <String>::ABI_in id, Interface* env) const noexcept
 	{
@@ -124,6 +122,7 @@ private:
 template <class I, class ... Bases>
 class ProxyBase :
 	public InterfaceImplBase <Proxy <I>, I>,
+	public ProxyHolderImpl <Proxy <I> >,
 	public ProxyRoot,
 	public ProxyBaseInterface <Bases>...,
 	public ServantTraits <Proxy <I> >,

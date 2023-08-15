@@ -28,23 +28,19 @@
 #define NIRVANA_ORB_REFCOUNTLINK_H_
 #pragma once
 
-#include <Nirvana/Memory_forward.h>
+#include "ValueMemory.h"
 #include "DynamicServantImpl.h"
 #include "RefCnt.h"
 
 namespace CORBA {
-
-template <class> class servant_reference;
-
-template <class T, class ... Args>
-servant_reference <T> make_reference (Args ... args);
-
 namespace Internal {
 
 template <class S>
 class LifeCycleRefCnt;
 
-class RefCountLink : public DynamicServantBridge
+class RefCountLink :
+	public DynamicServantBridge,
+	public ValueMemory
 {
 #ifdef LEGACY_CORBA_CPP
 public:
@@ -55,16 +51,6 @@ protected:
 	template <class> friend class CORBA::servant_reference;
 	template <class> friend class LifeCycleRefCnt;
 #endif
-
-	void* operator new (size_t size)
-	{
-		return Nirvana::g_memory->allocate (nullptr, size, 0);
-	}
-
-	void operator delete (void* p, size_t size)
-	{
-		Nirvana::g_memory->release (p, size);
-	}
 
 	void _add_ref () noexcept
 	{
@@ -87,9 +73,7 @@ protected:
 	RefCountLink (const RefCountLink& src);
 
 	~RefCountLink ()
-	{
-		interface_release (Nirvana::g_module.imp.itf);
-	}
+	{}
 
 	RefCountLink& operator = (const RefCountLink&) noexcept
 	{

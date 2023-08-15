@@ -23,23 +23,53 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/RefCountLink.h>
-#include <CORBA/CORBA.h>
+#ifndef NIRVANA_ORB_VALUEMEMORY_H_
+#define NIRVANA_ORB_VALUEMEMORY_H_
+#pragma once
+
+#include <Nirvana/Memory_forward.h>
+#include "DynamicExport.h"
 
 namespace CORBA {
+
+template <class> class servant_reference;
+template <class T, class ... Args>
+servant_reference <T> make_reference (Args ... args);
+
 namespace Internal {
 
-RefCountLink::RefCountLink (const Bridge <DynamicServant>::EPV& epv) :
-	DynamicServantBridge (epv)
+/// \brief Memory management base for value types.
+class ValueMemory : public DynamicExport
 {
-	core_object_ = g_ORB->create_ref_cnt (_dynamic_servant ());
+#ifdef LEGACY_CORBA_CPP
+public:
+#else
+protected:
+	template <class T1, class ... Args>
+	friend CORBA::servant_reference <T1> CORBA::make_reference (Args ... args);
+#endif
+
+	void* operator new (size_t size)
+	{
+		return Nirvana::g_memory->allocate (nullptr, size, 0);
+	}
+
+public:
+	void operator delete (void* p, size_t size)
+	{
+		Nirvana::g_memory->release (p, size);
+	}
+
+protected:
+	ValueMemory ()
+	{}
+
+	~ValueMemory ()
+	{}
+};
+
 }
 
-RefCountLink::RefCountLink (const RefCountLink& src) :
-	DynamicServantBridge (src)
-{
-	core_object_ = g_ORB->create_ref_cnt (_dynamic_servant ());
 }
 
-}
-}
+#endif

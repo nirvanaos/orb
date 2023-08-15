@@ -26,10 +26,9 @@
 #ifndef NIRVANA_ORB_POLLERBASE_H_
 #define NIRVANA_ORB_POLLERBASE_H_
 
+#include "ProxyHolder.h"
 #include "ProxyBaseInterface.h"
 #include "../ServantImpl.h"
-#include "../ObjectFactoryInc.h"
-#include "../DynamicServantImpl.h"
 #include "../LifeCycleRefCnt.h"
 #include "../ExceptionSet.h"
 #include "IOReference.h"
@@ -40,27 +39,17 @@ namespace Internal {
 
 template <class I> class Poller;
 
-class PollerRoot
+class PollerRoot : public ValueMemory
 {
 public:
-	void* operator new (size_t size)
-	{
-		return Nirvana::g_memory->allocate (nullptr, size, 0);
-	}
-
-	void operator delete (void* p, size_t size)
-	{
-		Nirvana::g_memory->release (p, size);
-	}
-
 	void _add_ref ()
 	{
-		interface_duplicate (&aggregate_);
+		interface_duplicate (&aggregate_.itf ());
 	}
 
 	void _remove_ref () noexcept
 	{
-		interface_release (&aggregate_);
+		interface_release (&aggregate_.itf ());
 	}
 
 	OperationIndex _make_op_idx (UShort op_idx) const noexcept
@@ -76,7 +65,7 @@ public:
 	template <class ... Ex>
 	IORequest::_ref_type _get_reply (uint32_t timeout, UShort op_idx) const
 	{
-		IORequest::_ref_type rq = aggregate_->get_reply (timeout, _make_op_idx (op_idx));
+		IORequest::_ref_type rq = aggregate_.itf ()->get_reply (timeout, _make_op_idx (op_idx));
 		check_request (rq, ExceptionSet <Ex...>::entries (), sizeof... (Ex));
 		return rq;
 	}
@@ -103,6 +92,7 @@ private:
 template <class I, class ... Bases>
 class PollerBase :
 	public InterfaceImplBase <Poller <I>, I>,
+	public ProxyHolderImpl <Poller <I> >,
 	public PollerRoot,
 	public ProxyBaseInterface <Bases>...,
 	public ServantTraits <Poller <I> >,

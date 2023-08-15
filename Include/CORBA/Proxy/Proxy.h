@@ -79,7 +79,7 @@ class PollerCreatorDummy
 {
 public:
 	static Interface* create_poller (::Messaging::Poller::_ptr_type aggregate, UShort interface_idx,
-		Interface*& deleter)
+		Interface::_ref_type& holder)
 	{
 		throw NO_IMPLEMENT ();
 	}
@@ -92,41 +92,35 @@ class ProxyFactoryImpl :
 public:
 	static Interface* create_proxy (Object::_ptr_type obj, AbstractBase::_ptr_type ab,
 		IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant,
-		Interface*& deleter)
+		Interface::_ref_type& holder)
 	{
 		typedef Proxy <I> ProxyClass;
-		ProxyClass* proxy;
-
-		typename std::aligned_storage <sizeof (ProxyClass), 
-			alignof (ProxyClass)>::type tmp;
-		ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (ProxyClass), 0, nullptr);
-		g_object_factory->stateless_begin (scb);
-		try {
-			new (&tmp) ProxyClass (obj, ab, proxy_manager, interface_idx, servant);
-			proxy = (ProxyClass*)g_object_factory->stateless_end (true);
-		} catch (...) {
-			g_object_factory->stateless_end (false);
-			throw;
-		}
-		deleter = &proxy->_dynamic_servant ();
-		return proxy;
+		servant_reference <ProxyClass> proxy = make_stateless <ProxyClass> (obj, ab, proxy_manager,
+			interface_idx, std::ref (servant));
+		Bridge <I>* ret = proxy;
+		reinterpret_cast <I_ref <ProxyHolder>&> (holder) = std::move (proxy);
+		return ret;
 	}
 
 	class PollerCreator
 	{
 	public:
 		static Interface* create_poller (::Messaging::Poller::_ptr_type aggregate, UShort interface_idx,
-			Interface*& deleter)
+			Interface::_ref_type& holder)
 		{
-			return new Poller <PollerI> (aggregate, aggregate, interface_idx);
+			typedef Poller <PollerI> PollerClass;
+			servant_reference <PollerClass> poller = make_reference <PollerClass> (aggregate, aggregate, interface_idx);
+			Bridge <PollerI>* ret = poller;
+			reinterpret_cast <I_ref <ProxyHolder>&> (holder) = std::move (poller);
+			return ret;
 		}
 	};
 
 	static Interface* create_poller (::Messaging::Poller::_ptr_type aggregate, UShort interface_idx,
-		Interface*& deleter)
+		Interface::_ref_type& holder)
 	{
 		return std::conditional_t <std::is_void <PollerI>::value, PollerCreatorDummy, PollerCreator>
-			::create_poller (aggregate, interface_idx, deleter);
+			::create_poller (aggregate, interface_idx, holder);
 	}
 };
 

@@ -1,5 +1,5 @@
 /*
-* Nirvana runtime library.
+* Nirvana IDL support library.
 *
 * This is a part of the Nirvana project.
 *
@@ -23,36 +23,46 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+#ifndef NIRVANA_ORB_PROXYHOLDER_H_
+#define NIRVANA_ORB_PROXYHOLDER_H_
 
-module Messaging {
+#include "../CORBA.h"
+#include "../LifeCycleNoCopy.h"
 
-typeprefix Messaging "omg.org";
-abstract valuetype Poller;
+namespace CORBA {
+namespace Internal {
 
-};
+class ProxyHolder;
 
-module CORBA {
-
-native AbstractBase;
-
-module Internal {
-
-native _Interface;
-native InterfacePtr;
-native InterfaceMetadataPtr;
-pseudo interface IOReference;
-
-/// The proxy factory
-pseudo interface ProxyFactory
+template <>
+struct Bridge <ProxyHolder>::EPV
 {
-	readonly attribute InterfaceMetadataPtr metadata;
-
-	InterfacePtr create_proxy (in Object obj, in AbstractBase ab, in IOReference target,
-		in unsigned short interface_idx, inout InterfacePtr servant, out _Interface holder);
-
-	InterfacePtr create_poller (in Messaging::Poller aggregate, in unsigned short interface_idx,
-		out _Interface holder);
+	Interface::EPV header;
 };
 
+template <class S>
+class Skeleton <S, ProxyHolder>
+{
+public:
+	static const Bridge <ProxyHolder>::EPV epv_;
 };
+
+template <class S>
+const Bridge <ProxyHolder>::EPV Skeleton <S, ProxyHolder>::epv_ = {
+	{
+		"",
+		LifeCycleNoCopy <S>::template __duplicate <ProxyHolder>,
+		LifeCycleNoCopy <S>::template __release <ProxyHolder>
+	}
 };
+
+template <class S>
+using ProxyHolderImpl = ValueImplBase <S, ProxyHolder>;
+
+class ProxyHolder : public Bridge <ProxyHolder>
+{};
+
+}
+}
+
+#endif

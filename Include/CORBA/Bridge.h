@@ -36,14 +36,18 @@ namespace CORBA {
 namespace Internal {
 
 /// Bind repository id to a type.
+/// \tparam T Type
 template <typename T>
 struct RepIdOf
 {
+	/// The repository id of type T.
 	static const Char id [];
 };
 
-/// The ABI for a particular interface I.
+/// The ABI for a particular interface.
 /// A "bridge" between the client and servant sides.
+/// 
+/// \tparam I An interface.
 template <class I>
 class Bridge :
 	public Interface
@@ -72,7 +76,6 @@ protected:
 		static_assert (offsetof(EPV, header) == 0, "header must be at the beginning of EPV.");
 #endif
 	}
-
 };
 
 /// The bridge for value types.
@@ -84,6 +87,29 @@ protected:
 	BridgeVal (const typename Bridge <I>::EPV& epv) noexcept :
 		Bridge <I> (epv)
 	{}
+};
+
+/// The bridge for AMI
+/// \tparam I Interface class.
+template <class I>
+class BridgeAMI
+{
+public:
+	/// Entry-point vector
+	struct EPV;
+
+	const EPV& _epv () const noexcept
+	{
+		return _epv_ref;
+	}
+
+protected:
+	BridgeAMI (const EPV& epv) noexcept :
+		_epv_ref (epv)
+	{}
+
+private:
+	const EPV& _epv_ref;
 };
 
 }

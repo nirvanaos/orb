@@ -1,5 +1,5 @@
 /*
-* Nirvana runtime library.
+* Nirvana IDL support library.
 *
 * This is a part of the Nirvana project.
 *
@@ -23,36 +23,38 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+#ifndef NIRVANA_ORB_LIFECYCLENOCOPY_H_
+#define NIRVANA_ORB_LIFECYCLENOCOPY_H_
+#pragma once
 
-module Messaging {
+#include "set_exception.h"
 
-typeprefix Messaging "omg.org";
-abstract valuetype Poller;
+namespace CORBA {
+namespace Internal {
 
-};
-
-module CORBA {
-
-native AbstractBase;
-
-module Internal {
-
-native _Interface;
-native InterfacePtr;
-native InterfaceMetadataPtr;
-pseudo interface IOReference;
-
-/// The proxy factory
-pseudo interface ProxyFactory
+template <class S>
+class LifeCycleNoCopy
 {
-	readonly attribute InterfaceMetadataPtr metadata;
+public:
+	// Reference duplication is not allowed
+	template <class I>
+	static Interface* __duplicate (Interface* itf, Interface* env)
+	{
+		set_NO_IMPLEMENT (env);
+		return nullptr;
+	}
 
-	InterfacePtr create_proxy (in Object obj, in AbstractBase ab, in IOReference target,
-		in unsigned short interface_idx, inout InterfacePtr servant, out _Interface holder);
+	// Called from the servant destructor for dynamic objects.
+	template <class I>
+	static void __release (Interface* itf)
+	{
+		S& srv = S::_implementation (static_cast <Bridge <I>*> (itf));
+		delete& srv;
+	}
 
-	InterfacePtr create_poller (in Messaging::Poller aggregate, in unsigned short interface_idx,
-		out _Interface holder);
 };
 
-};
-};
+}
+}
+
+#endif

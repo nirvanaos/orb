@@ -1,5 +1,5 @@
 /*
-* Nirvana runtime library.
+* Nirvana IDL support library.
 *
 * This is a part of the Nirvana project.
 *
@@ -23,36 +23,31 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+#ifndef NIRVANA_ORB_DYNAMICEXPORT_H_
+#define NIRVANA_ORB_DYNAMICEXPORT_H_
+#pragma once
 
-module Messaging {
+#include <Nirvana/core_objects.h>
 
-typeprefix Messaging "omg.org";
-abstract valuetype Poller;
+namespace CORBA {
+namespace Internal {
 
-};
-
-module CORBA {
-
-native AbstractBase;
-
-module Internal {
-
-native _Interface;
-native InterfacePtr;
-native InterfaceMetadataPtr;
-pseudo interface IOReference;
-
-/// The proxy factory
-pseudo interface ProxyFactory
+/// \brief Dynamically allocated object that exports some interfaces out of the module.
+class DynamicExport
 {
-	readonly attribute InterfaceMetadataPtr metadata;
+protected:
+	DynamicExport ()
+	{
+		interface_duplicate (Nirvana::g_module.imp.itf);
+	}
 
-	InterfacePtr create_proxy (in Object obj, in AbstractBase ab, in IOReference target,
-		in unsigned short interface_idx, inout InterfacePtr servant, out _Interface holder);
-
-	InterfacePtr create_poller (in Messaging::Poller aggregate, in unsigned short interface_idx,
-		out _Interface holder);
+	~DynamicExport ()
+	{
+		interface_release (Nirvana::g_module.imp.itf);
+	}
 };
 
-};
-};
+}
+}
+
+#endif
