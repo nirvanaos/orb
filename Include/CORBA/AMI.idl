@@ -36,14 +36,7 @@ module CORBA {
 module Internal {
 
 pseudo interface IORequest;
-
-/// Request callback
-pseudo interface RequestCallback
-{
-	/// Called on request completion
-	void completed (in IORequest rq);
-};
-
+native _Interface;
 native ExceptionEntryPtr;
 
 };
@@ -52,7 +45,7 @@ typeprefix CORBA "omg.org";
 
 local interface PollableSet;
 
-abstract valuetype Pollable supports Internal::RequestCallback
+abstract valuetype Pollable
 {
   boolean is_ready (in unsigned long timeout);
 

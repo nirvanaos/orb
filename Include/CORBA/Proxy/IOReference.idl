@@ -26,12 +26,12 @@
 #ifndef CORBA_IOREFERENCE_IDL_
 #define CORBA_IOREFERENCE_IDL_
 
-#include "../IORequest.idl"
-
-module CORBA{
+module CORBA {
 module Internal {
 
+pseudo interface IORequest;
 typedef unsigned long OperationIndex;
+native _Interface;
 
 /// Interoperable Object Reference.
 /// 
@@ -42,7 +42,7 @@ pseudo interface IOReference
 	/// 
 	/// Implementation note: this operation may not cause the preemption.
 	/// 
-	/// flags & IORequest::RESPONSE_EXPECTED | callback | Request type
+	/// flags & IORequest::RESPONSE_EXPECTED | cb       | Request type
 	/// -------------------------------------|----------|-------------
 	/// true                                 | nil      | Synchronous
 	/// true                                 | not nil  | Asynchronous
@@ -52,7 +52,7 @@ pseudo interface IOReference
 	/// \param op Index of the operation.
 	/// \param flags The combination of the IORequest response flags.
 	/// \param cb Asynchronous request callback.
-	IORequest create_request (in OperationIndex op, in unsigned short flags, in RequestCallback callback);
+	IORequest create_request (in OperationIndex op, in unsigned short flags, in _Interface cb);
 
 	Messaging::Poller create_poller (in OperationIndex op);
 };

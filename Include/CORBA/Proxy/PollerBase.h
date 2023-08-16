@@ -59,7 +59,6 @@ public:
 
 	Bridge <Messaging::Poller>* messaging_poller (Type <String>::ABI_in id, Interface* env) const noexcept;
 	Bridge <Pollable>* pollable (Type <String>::ABI_in id, Interface* env) const noexcept;
-	Bridge <RequestCallback>* request_callback (Type <String>::ABI_in id, Interface* env) const noexcept;
 	Bridge <ValueBase>* value_base (Type <String>::ABI_in id, Interface* env) const noexcept;
 
 	template <class ... Ex>
@@ -130,13 +129,6 @@ public:
 	{
 		return static_cast <PollerRoot&> (
 			ServantTraits <Poller <I> >::_implementation (derived)).value_base (id, env);
-	}
-
-	template <>
-	static Bridge <RequestCallback>* _wide_val <RequestCallback, I> (Bridge <I>* derived,
-		Type <String>::ABI_in id, Interface* env) noexcept
-	{
-		return nullptr; // Must not be called
 	}
 
 protected:
