@@ -98,6 +98,7 @@ struct InterfaceMetadata
 	static const uint16_t FLAG_LOCAL_STATELESS = 1;
 
 	const Char* poller_id;
+	const Char* handler_id;
 };
 
 /// native InterfaceMetadataPtr;
