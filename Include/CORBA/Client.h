@@ -157,6 +157,12 @@ class ClientSupports :
 	public ClientInterfaceSupport <Primary, Intfs>...
 {};
 
+template <class I> inline
+const AMI_EPV <I>& ami_epv (Bridge <I>& bridge)
+{
+	return *bridge._epv ().ami.epv;
+}
+
 }
 }
 

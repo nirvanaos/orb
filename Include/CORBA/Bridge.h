@@ -93,6 +93,28 @@ protected:
 /// \tparam I Interface class.
 template <class I> struct AMI_EPV;
 
+template <class S, class I> class AMI_Skeleton;
+
+template <class S, class I>
+class AMI_Servant
+{
+public:
+	static const AMI_EPV <I>* const ami_epv_;
+};
+
+template <class S, class I>
+const AMI_EPV <I>* const AMI_Servant <S, I>::ami_epv_ = nullptr;
+
+template <class S, class I>
+class AMI_ServantImpl
+{
+public:
+	static const AMI_EPV <I>* const ami_epv_;
+};
+
+template <class S, class I>
+const AMI_EPV <I>* const AMI_ServantImpl <S, I>::ami_epv_ = &AMI_Skeleton <S, I>::epv_;
+
 }
 }
 
@@ -112,5 +134,8 @@ operator const MyBridge::Wide < type>::Func () const { return name; }
 #define NIRVANA_AMI_END() };
 
 #define NIRVANA_BRIDGE_AMI_EPV(I) } base; struct { const AMI_EPV <I>* epv; } ami; struct {
+#define NIRVANA_BRIDGE_AMI_INIT(S, I) AMI_Servant <S, I>::ami_epv_
+
+#define NIRVANA_IMPLEMENT_AMI(S, I) template <> class AMI_Servant <S, I> : public AMI_ServantImpl <S, I> {}
 
 #endif
