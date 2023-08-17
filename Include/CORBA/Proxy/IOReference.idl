@@ -54,7 +54,7 @@ pseudo interface IOReference
 	/// \param cb Asynchronous request callback.
 	IORequest create_request (in OperationIndex op, in unsigned short flags, in _Interface cb);
 
-	Messaging::Poller create_poller (in OperationIndex op);
+	Pollable create_poller (in OperationIndex op);
 };
 
 };
