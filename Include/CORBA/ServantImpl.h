@@ -45,6 +45,7 @@ extern void check_pointer (const void* p);
 extern void check_pointer (const Interface* obj, const Interface::EPV& epv);
 
 template <class S, class I> class Skeleton;
+template <class S, class I> class SkeletonAMI;
 
 //! Standard servant mix-in.
 //! \tparam S Servant class implementing operations. Must derive from this mix-in.

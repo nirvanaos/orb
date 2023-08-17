@@ -89,28 +89,9 @@ protected:
 	{}
 };
 
-/// The bridge for AMI
+/// The entry-point vector for AMI
 /// \tparam I Interface class.
-template <class I>
-class BridgeAMI
-{
-public:
-	/// Entry-point vector
-	struct EPV;
-
-	const EPV& _epv () const noexcept
-	{
-		return _epv_ref;
-	}
-
-protected:
-	BridgeAMI (const EPV& epv) noexcept :
-		_epv_ref (epv)
-	{}
-
-private:
-	const EPV& _epv_ref;
-};
+template <class I> struct AMI_EPV;
 
 }
 }
@@ -126,5 +107,8 @@ operator const MyBridge::Wide < type>::Func () const { return name; }
 #define NIRVANA_REPOSITORY_ID(t) "IDL:Nirvana/" t ":1.0"
 #define CORBA_INTERNAL_REPOSITORY_ID(t) "IDL:CORBA/Internal/" t ":1.0"
 #define PORTABLESERVER_REPOSITORY_ID(t) "IDL:omg.org/PortableServer/" t ":1.0"
+
+#define NIRVANA_AMI_BEGIN(I) template <> struct AMI_EPV < I> {
+#define NIRVANA_AMI_END() };
 
 #endif
