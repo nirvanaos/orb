@@ -111,4 +111,6 @@ operator const MyBridge::Wide < type>::Func () const { return name; }
 #define NIRVANA_AMI_BEGIN(I) template <> struct AMI_EPV < I> {
 #define NIRVANA_AMI_END() };
 
+#define NIRVANA_BRIDGE_AMI_EPV(I) } base; struct { const AMI_EPV <I>* epv; } ami; struct {
+
 #endif
