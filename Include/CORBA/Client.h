@@ -158,8 +158,9 @@ class ClientSupports :
 {};
 
 template <class I> inline
-const AMI_EPV <I>& ami_epv (Bridge <I>& bridge)
+const AMI_EPV <I>& AMI_epv (Bridge <I>& bridge)
 {
+	assert (bridge._epv ().ami.epv);
 	return *bridge._epv ().ami.epv;
 }
 
