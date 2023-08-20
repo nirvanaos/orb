@@ -6,8 +6,8 @@
 
 #pragma prefix "omg.org"
 
-module CosEventComm 
-{
+module CosEventComm {
+
 exception Disconnected {};
 
 interface PushConsumer 
@@ -19,6 +19,18 @@ interface PushConsumer
 interface PushSupplier 
 {
 	void disconnect_push_supplier ();
+};
+
+interface PullSupplier
+{
+	any pull () raises (Disconnected);
+	any try_pull (out boolean has_event) raises (Disconnected);
+	void disconnect_pull_supplier ();
+};
+
+interface PullConsumer
+{
+	void disconnect_pull_consumer ();
 };
 
 };

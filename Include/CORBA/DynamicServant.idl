@@ -24,7 +24,6 @@
 *  popov.nirvana@gmail.com
 */
 module CORBA {
-
 module Internal {
 
 typeprefix CORBA::Internal "";

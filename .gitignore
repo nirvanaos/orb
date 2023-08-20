@@ -67,3 +67,5 @@
 /Include/CORBA/AMI_s.h
 /Include/CORBA/AMI.h
 /Source/AMI.cpp
+/Source/CosEventChannelAdmin.cpp
+/Include/CORBA/CosEventChannelAdmin.h
