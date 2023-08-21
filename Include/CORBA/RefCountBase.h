@@ -33,21 +33,21 @@
 namespace CORBA {
 namespace Internal {
 
-template <class T>
+template <class S>
 class RefCountBase :
 	public RefCountLink,
-	public DynamicServantSkel <T>
+	public DynamicServantSkel <S>
 {
-	friend class DynamicServantSkel <T>;
+	friend class DynamicServantSkel <S>;
 
 	void _delete_object () noexcept
 	{
-		delete& static_cast <T&> (*this);
+		delete& static_cast <S&> (*this);
 	}
 
 protected:
 	RefCountBase () :
-		RefCountLink (DynamicServantSkel <T>::epv_)
+		RefCountLink (DynamicServantSkel <S>::epv_)
 	{}
 };
 

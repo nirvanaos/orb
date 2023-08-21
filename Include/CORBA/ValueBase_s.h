@@ -54,6 +54,18 @@ protected:
 		return Type <Interface>::VT_ret ();
 	}
 
+	static ULong _v_refcount_value (Bridge <ValueBase>* _b, Interface* _env)
+	{
+		try {
+			return S::_implementation (_b)._refcount_value ();
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return 0;
+	}
+
 };
 
 template <class S>
@@ -65,6 +77,7 @@ const Bridge <ValueBase>::EPV Skeleton <S, ValueBase>::epv_ = {
 	},
 	{ // epv
 		S::__copy_value,
+		S::_v_refcount_value,
 		S::__marshal,
 		S::__unmarshal,
 		S::__query_valuetype,

@@ -67,6 +67,7 @@ struct Type <ValueBase> : TypeValue <ValueBase>
 template <> const Char RepIdOf <ValueBase>::id [] = CORBA_REPOSITORY_ID ("ValueBase");
 NIRVANA_BRIDGE_BEGIN (ValueBase)
 Interface* (*copy_value) (Bridge <ValueBase>* _b, Interface* _env);
+ULong (*refcount_value) (Bridge <ValueBase>*, Interface*);
 void (*marshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 void (*unmarshal) (Bridge <ValueBase>* _b, Interface* rq, Interface* _env);
 Interface* (*query_valuetype) (Bridge <ValueBase>*, Type <String>::ABI_in, Interface*);
@@ -79,7 +80,13 @@ class Client <T, ValueBase> :
 	public T
 {
 public:
+#ifdef LEGACY_CORBA_CPP
+	void _add_ref ();
+	void _remove_ref ();
+#endif
+
 	Type <ValueBase>::VRet _copy_value ();
+	ULong _refcount_value ();
 	void _marshal (I_ptr <IORequest> rq);
 	void _unmarshal (I_ptr <IORequest> rq);
 
@@ -156,6 +163,38 @@ I_ref <ValueFactoryBase> Client <T, ValueBase>::_factory ()
 	Environment _env;
 	Bridge <ValueBase>& _b (T::_get_bridge (_env));
 	I_ret <ValueFactoryBase> _ret = (_b._epv ().epv.factory) (&_b, &_env);
+	_env.check ();
+	return _ret;
+}
+
+#ifdef LEGACY_CORBA_CPP
+
+template <class T>
+void Client <T, ValueBase>::_add_ref ()
+{
+	Environment _env;
+	Bridge <ValueBase>& _b (T::_get_bridge (_env));
+	(_b._epv ().header.duplicate) (&_b, &_env);
+	_env.check ();
+}
+
+template <class T>
+void Client <T, ValueBase>::_remove_ref ()
+{
+	Environment _env;
+	Bridge <ValueBase>& _b (T::_get_bridge (_env));
+	(_b._epv ().header.release) (&_b, &_env);
+	_env.check ();
+}
+
+#endif
+
+template <class T>
+ULong Client <T, ValueBase>::_refcount_value ()
+{
+	Environment _env;
+	Bridge <ValueBase>& _b (T::_get_bridge (_env));
+	ULong _ret = (_b._epv ().epv.refcount_value) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }

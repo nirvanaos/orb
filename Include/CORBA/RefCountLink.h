@@ -50,6 +50,7 @@ protected:
 	friend CORBA::servant_reference <T1> CORBA::make_reference (Args ... args);
 	template <class> friend class CORBA::servant_reference;
 	template <class> friend class LifeCycleRefCnt;
+	template <class, class> friend class Skeleton;
 #endif
 
 	void _add_ref () noexcept
