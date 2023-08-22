@@ -31,7 +31,7 @@
 #include "RepId.h"
 #include "Bridge.h"
 #include "String.h"
-#include <Nirvana/throw_exception.h>
+#include "set_exception.h"
 
 namespace CORBA {
 
@@ -43,6 +43,8 @@ namespace Internal {
 
 extern void check_pointer (const void* p);
 extern void check_pointer (const Interface* obj, const Interface::EPV& epv);
+extern void check_pointer_noexcept (const Interface* obj, const Interface::EPV& epv,
+	Interface* env) noexcept;
 
 template <class S, class I> class Skeleton;
 
@@ -80,16 +82,9 @@ public:
 	static Bridge <Base>* _wide_val (Bridge <Derived>* derived, Type <String>::ABI_in id,
 		Interface* env) noexcept
 	{
-		try {
-			if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))
-				::Nirvana::throw_INV_OBJREF ();
-			return &static_cast <Bridge <Base>&> (S::_implementation (derived));
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
+		if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))
+			set_INV_OBJREF (env);
+		return &static_cast <Bridge <Base>&> (S::_implementation (derived));
 	}
 
 	template <class Derived>

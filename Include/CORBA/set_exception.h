@@ -32,7 +32,7 @@
 #include "Bridge.h"
 #include "system_exceptions.h"
 
-#define DECLARE_FUNCTION(e) void set_##e (Interface* env);
+#define DECLARE_FUNCTION(e) void set_##e (Interface* env) noexcept;
 
 namespace CORBA {
 namespace Internal {

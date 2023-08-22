@@ -285,7 +285,8 @@ private:
 	{
 		if (!RepId::compatible (RepIdOf <ValueBase>::id, Type <String>::in (id)))
 			set_INV_OBJREF (env);
-		check_pointer (bridge, epv_.header);
+
+		check_pointer_noexcept (bridge, epv_.header, env);
 		return &static_cast <ValueBox <VB, T>&> (*bridge).base_;
 	}
 

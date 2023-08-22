@@ -24,7 +24,6 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/Server.h>
-#include <Nirvana/throw_exception.h>
 
 namespace CORBA {
 namespace Internal {
@@ -32,14 +31,23 @@ namespace Internal {
 void check_pointer (const void* p)
 {
 	if (!p)
-		::Nirvana::throw_BAD_PARAM ();	// Invalid pointer
+		throw BAD_PARAM ();	// Invalid pointer
 }
 
 void check_pointer (const Interface* obj, const Interface::EPV& epv)
 {
 	check_pointer (obj);
 	if (&obj->_epv () != &epv)
-		::Nirvana::throw_INV_OBJREF ();	// Invalid object pointer
+		throw INV_OBJREF ();	// Invalid object pointer
+}
+
+void check_pointer_noexcept (const Interface* obj, const Interface::EPV& epv,
+	Interface* env) noexcept
+{
+	if (!obj)
+		set_BAD_PARAM (env);	// Invalid pointer
+	else if (&obj->_epv () != &epv)
+		set_INV_OBJREF (env);
 }
 
 }

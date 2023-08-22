@@ -52,7 +52,7 @@ public:
 		Interface* env) noexcept
 	{
 		if (!RepId::compatible (RepIdOf <AbstractBase>::id, Type <String>::in (iid)))
-			::Nirvana::throw_INV_OBJREF ();
+			set_INV_OBJREF (env);
 		return this;
 	}
 

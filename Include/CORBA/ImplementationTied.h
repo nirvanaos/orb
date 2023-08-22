@@ -143,16 +143,9 @@ public:
 		Interface* env) noexcept
 	{
 		// TODO: It really needed only for value types!
-		try {
-			if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))
-				::Nirvana::throw_MARSHAL ();
-			return &static_cast <Bridge <Base>&> (BaseImpl::_implementation (derived));
-		} catch (Exception& e) {
-			set_exception (env, e);
-		} catch (...) {
-			set_unknown_exception (env);
-		}
-		return nullptr;
+		if (!RepId::compatible (RepIdOf <Base>::id, Type <String>::in (id)))
+			set_INV_OBJREF (env);
+		return &static_cast <Bridge <Base>&> (BaseImpl::_implementation (derived));
 	}
 
 	template <class Derived>
