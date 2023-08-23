@@ -34,13 +34,6 @@ void check_pointer (const void* p)
 		throw BAD_PARAM ();	// Invalid pointer
 }
 
-void check_pointer (const Interface* obj, const Interface::EPV& epv)
-{
-	check_pointer (obj);
-	if (&obj->_epv () != &epv)
-		throw INV_OBJREF ();	// Invalid object pointer
-}
-
 void check_pointer_noexcept (const Interface* obj, const Interface::EPV& epv,
 	Interface* env) noexcept
 {
@@ -48,6 +41,20 @@ void check_pointer_noexcept (const Interface* obj, const Interface::EPV& epv,
 		set_BAD_PARAM (env);	// Invalid pointer
 	else if (&obj->_epv () != &epv)
 		set_INV_OBJREF (env);
+}
+
+// Compiler optimization omits exception handling in the entry-point vector static functions.
+// This causes crash on signal exceptions.
+// To fix it, disable check_pointer inline.
+// See test: TestORB_I2.Signal
+// Without this fix, in x64 Release build with MS Visual C, TestORB_I2.Signal causes the system crash.
+
+NIRVANA_NOINLINE
+void check_pointer (const Interface* obj, const Interface::EPV& epv)
+{
+	check_pointer (obj);
+	if (&obj->_epv () != &epv)
+		throw INV_OBJREF ();	// Invalid object pointer
 }
 
 }
