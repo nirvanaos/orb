@@ -4,9 +4,8 @@
 #ifndef COSEVENTCOMM_IDL_
 #define COSEVENTCOMM_IDL_
 
-#pragma prefix "omg.org"
-
 module CosEventComm {
+typeprefix CosEventComm "omg.org";
 
 exception Disconnected {};
 

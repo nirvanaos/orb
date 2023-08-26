@@ -11,6 +11,12 @@
 #include "DynamicServant.idl"
 #include "RefCnt.idl"
 
+module CosEventChannelAdmin {
+typeprefix CosEventChannelAdmin "omg.org";
+
+interface EventChannel;
+};
+
 module CORBA {
 
 typeprefix CORBA "omg.org";
@@ -277,6 +283,8 @@ pseudo interface ORB
   boolean tc_equivalent (in TypeCode left, in TypeCode right);
 
   Internal::RefCnt create_ref_cnt (in Internal::DynamicServant deleter);
+
+  CosEventChannelAdmin::EventChannel create_event_channel ();
 
   ///@}
 };
