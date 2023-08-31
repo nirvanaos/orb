@@ -1,0 +1,21 @@
+/// \file
+/// Part of the Event Service
+
+#ifndef COSTYPEDEVENTCOMM_IDL_
+#define COSTYPEDEVENTCOMM_IDL_
+
+#include "CosEventComm.idl"
+
+#pragma prefix "omg.org"
+
+module CosTypedEventComm {
+  interface TypedPushConsumer : CosEventComm::PushConsumer {
+    Object get_typed_consumer();
+  };
+
+  interface TypedPullSupplier : CosEventComm::PullSupplier {
+    Object get_typed_supplier();
+  };
+};
+
+#endif

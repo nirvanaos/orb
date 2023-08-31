@@ -69,3 +69,7 @@
 /Source/AMI.cpp
 /Source/CosEventChannelAdmin.cpp
 /Include/CORBA/CosEventChannelAdmin.h
+/Include/CORBA/CosTypedEventChannelAdmin.h
+/Include/CORBA/CosTypedEventComm.h
+/Source/CosTypedEventChannelAdmin.cpp
+/Source/CosTypedEventComm.cpp
