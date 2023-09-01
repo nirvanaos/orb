@@ -40,9 +40,9 @@ namespace Internal {
 
 template <class S, class Primary, class ... Bases>
 class ImplementationLocalStatic :
-	public InterfaceStatic <S, Primary>,
+	public InterfaceStatic <S, LocalObject>,
 	public InterfaceStatic <S, Bases>...,
-	public InterfaceStatic <S, LocalObject>
+	public InterfaceStatic <S, Primary>
 {
 public:
 	typedef Primary PrimaryInterface;

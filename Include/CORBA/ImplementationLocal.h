@@ -44,9 +44,9 @@ namespace Internal {
 
 template <class S, class Primary, class ... Bases>
 class ImplementationLocal :
-	public InterfaceImpl <S, Primary>,
+	public ValueImpl <S, LocalObject>,
 	public InterfaceImpl <S, Bases>...,
-	public ValueImpl <S, LocalObject> // LocalObject implementation must be constructed after all interfaces.
+	public InterfaceImpl <S, Primary>
 {
 public:
 	typedef Primary PrimaryInterface;

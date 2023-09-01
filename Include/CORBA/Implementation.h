@@ -46,9 +46,9 @@ namespace Internal {
 
 template <class S, class Primary, class ... Bases>
 class Implementation :
-	public InterfaceImpl <S, Primary>,
+	public ValueImpl <S, PortableServer::ServantBase>,
 	public InterfaceImpl <S, Bases>...,
-	public ValueImpl <S, PortableServer::ServantBase> // ServantBase implementation must be constructed after all interfaces.
+	public InterfaceImpl <S, Primary>
 {
 public:
 	typedef Primary PrimaryInterface;

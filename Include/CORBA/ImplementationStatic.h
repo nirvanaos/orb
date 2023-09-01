@@ -43,9 +43,9 @@ namespace Internal {
 
 template <class S, class Primary, class ... Bases>
 class ImplementationStatic :
-	public InterfaceStatic <S, Primary>,
+	public InterfaceStatic <S, PortableServer::ServantBase>,
 	public InterfaceStatic <S, Bases>...,
-	public InterfaceStatic <S, PortableServer::ServantBase>
+	public InterfaceStatic <S, Primary>
 {
 public:
 	typedef Primary PrimaryInterface;
