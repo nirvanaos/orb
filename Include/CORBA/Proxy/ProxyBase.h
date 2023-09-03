@@ -96,7 +96,7 @@ public:
 		return make_op_idx (interface_idx_, op_idx);
 	}
 
-	typedef void (*RqProcInternal) (Interface::_ptr_type servant, IORequest::_ptr_type call);
+	typedef void (*RqProcInternal) (Interface* servant, IORequest::_ptr_type call);
 
 	static bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call);
 
@@ -130,7 +130,7 @@ class ProxyBase :
 {
 public:
 	// Request procedure wrapper
-	template <void (*proc) (I_ptr <I>, IORequest::_ptr_type)>
+	template <void (*proc) (I*, IORequest::_ptr_type)>
 	static bool RqProcWrapper (Interface* servant, Interface* call)
 	{
 		return call_request_proc ((RqProcInternal)proc, servant, call);
