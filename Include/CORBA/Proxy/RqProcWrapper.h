@@ -23,30 +23,34 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+#ifndef NIRVANA_ORB_RQPROCWRAPPER_H_
+#define NIRVANA_ORB_RQPROCWRAPPER_H_
 
-#include <CORBA/Proxy/ProxyBase.h>
+#include "../I_ptr.h"
 
 namespace CORBA {
 namespace Internal {
 
-void ProxyRoot::check_request (IORequest::_ptr_type rq)
+class Interface;
+class IORequest;
+
+typedef void (*RqProcInternal) (Interface* servant, I_ptr <IORequest> call);
+
+bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call) noexcept;
+
+// Request procedure wrapper
+template <class Param>
+class RqProcWrapper
 {
-	Any ex;
-	if (!rq->get_exception (ex))
-		return;
-	std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type se;
-	if (ex >>= reinterpret_cast <SystemException&> (se))
-		reinterpret_cast <SystemException&> (se)._raise ();
-	else
-		throw UnknownUserException (std::move (ex));
+public:
+	template <void (*proc) (Param*, I_ptr <IORequest>)>
+	static bool call (Interface* servant, Interface* call) noexcept
+	{
+		return call_request_proc ((RqProcInternal)proc, servant, call);
+	}
+};
+
+}
 }
 
-void ProxyRoot::set_marshal_local (Interface* env)
-{
-	// Attempt to marshal Local object.
-	MARSHAL ex (MAKE_OMG_MINOR (4));
-	set_exception (env, ex);
-}
-
-}
-}
+#endif

@@ -33,6 +33,7 @@
 #include "../LifeCycleRefCnt.h"
 #include "IOReference.h"
 #include "OperationIndex.h"
+#include "RqProcWrapper.h"
 
 namespace CORBA {
 namespace Internal {
@@ -96,10 +97,6 @@ public:
 		return make_op_idx (interface_idx_, op_idx);
 	}
 
-	typedef void (*RqProcInternal) (Interface* servant, IORequest::_ptr_type call);
-
-	static bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call) noexcept;
-
 	static void check_request (IORequest::_ptr_type rq);
 
 	static void set_marshal_local (Interface* env);
@@ -126,16 +123,10 @@ class ProxyBase :
 	public ProxyRoot,
 	public ProxyBaseInterface <Bases>...,
 	public ServantTraits <Proxy <I> >,
-	public LifeCycleRefCnt <Proxy <I> >
+	public LifeCycleRefCnt <Proxy <I> >,
+	public RqProcWrapper <I>
 {
 public:
-	// Request procedure wrapper
-	template <void (*proc) (I*, IORequest::_ptr_type)>
-	static bool RqProcWrapper (Interface* servant, Interface* call) noexcept
-	{
-		return call_request_proc ((RqProcInternal)proc, servant, call);
-	}
-
 	// Wide interface
 	template <class Base, class Derived>
 	static Bridge <Base>* _wide (Bridge <I>* derived, Type <String>::ABI_in id, Interface* env)

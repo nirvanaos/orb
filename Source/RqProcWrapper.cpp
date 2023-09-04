@@ -23,29 +23,32 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-
-#include <CORBA/Proxy/ProxyBase.h>
+#include <CORBA/Proxy/RqProcWrapper.h>
+#include <CORBA/CORBA.h>
 
 namespace CORBA {
 namespace Internal {
 
-void ProxyRoot::check_request (IORequest::_ptr_type rq)
+bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call) noexcept
 {
-	Any ex;
-	if (!rq->get_exception (ex))
-		return;
-	std::aligned_storage <sizeof (SystemException), alignof (SystemException)>::type se;
-	if (ex >>= reinterpret_cast <SystemException&> (se))
-		reinterpret_cast <SystemException&> (se)._raise ();
-	else
-		throw UnknownUserException (std::move (ex));
-}
+	IORequest::_ptr_type rq = IORequest::_nil ();
+	try {
+		try {
+			rq = IORequest::_check (call);
+			proc (servant, rq);
+			rq->success ();
+		} catch (Exception& e) {
+			if (!rq)
+				return false;
 
-void ProxyRoot::set_marshal_local (Interface* env)
-{
-	// Attempt to marshal Local object.
-	MARSHAL ex (MAKE_OMG_MINOR (4));
-	set_exception (env, ex);
+			Any any;
+			any <<= std::move (e);
+			rq->set_exception (any);
+		}
+	} catch (...) {
+		return false;
+	}
+	return true;
 }
 
 }
