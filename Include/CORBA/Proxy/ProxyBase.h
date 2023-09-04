@@ -98,7 +98,7 @@ public:
 
 	typedef void (*RqProcInternal) (Interface* servant, IORequest::_ptr_type call);
 
-	static bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call);
+	static bool call_request_proc (RqProcInternal proc, Interface* servant, Interface* call) noexcept;
 
 	static void check_request (IORequest::_ptr_type rq);
 
@@ -131,7 +131,7 @@ class ProxyBase :
 public:
 	// Request procedure wrapper
 	template <void (*proc) (I*, IORequest::_ptr_type)>
-	static bool RqProcWrapper (Interface* servant, Interface* call)
+	static bool RqProcWrapper (Interface* servant, Interface* call) noexcept
 	{
 		return call_request_proc ((RqProcInternal)proc, servant, call);
 	}
