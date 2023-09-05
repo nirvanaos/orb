@@ -94,6 +94,8 @@ public:
 
 	void clear ();
 
+	void construct (Internal::I_ptr <TypeCode> tc);
+
 	// special helper types needed for boolean, octet, char, wchar
 	
 	struct from_boolean

@@ -273,4 +273,9 @@ Boolean operator >>= (const Any& any, SystemException& se)
 	return false;
 }
 
+void Any::construct (Internal::I_ptr <TypeCode> tc)
+{
+	tc->n_construct (prepare (tc));
+}
+
 }
