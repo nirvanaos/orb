@@ -9,7 +9,7 @@
 
 #pragma prefix "omg.org"
 
-module CosTypedEventChannelAdmin{
+module CosTypedEventChannelAdmin {
 
 	exception InterfaceNotSupported {};
 	exception NoSuchImplementation {};
