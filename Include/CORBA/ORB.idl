@@ -17,6 +17,12 @@ typeprefix CosEventChannelAdmin "omg.org";
 interface EventChannel;
 };
 
+module CosTypedEventChannelAdmin {
+typeprefix CosTypedEventChannelAdmin "omg.org";
+
+interface TypedEventChannel;
+};
+
 module CORBA {
 
 typeprefix CORBA "omg.org";
@@ -285,6 +291,7 @@ pseudo interface ORB
   Internal::RefCnt create_ref_cnt (in Internal::DynamicServant deleter);
 
   CosEventChannelAdmin::EventChannel create_event_channel ();
+  CosTypedEventChannelAdmin::TypedEventChannel create_typed_channel ();
 
   ///@}
 };
