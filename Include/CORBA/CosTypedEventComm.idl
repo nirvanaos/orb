@@ -9,13 +9,15 @@
 #pragma prefix "omg.org"
 
 module CosTypedEventComm {
-  interface TypedPushConsumer : CosEventComm::PushConsumer {
-    Object get_typed_consumer();
-  };
 
-  interface TypedPullSupplier : CosEventComm::PullSupplier {
-    Object get_typed_supplier();
-  };
+interface TypedPushConsumer : CosEventComm::PushConsumer {
+	Object get_typed_consumer ();
+};
+
+interface TypedPullSupplier : CosEventComm::PullSupplier {
+	Object get_typed_supplier ();
+};
+
 };
 
 #endif
