@@ -49,13 +49,13 @@ void Client <T, ::Messaging::ExceptionHolder>::raise_exception ()
 {
 	Environment _env;
 	Bridge < ::Messaging::ExceptionHolder>& _b (T::_get_bridge (_env));
-	bool is_system_exception;
+	Type <bool>::ABI is_system_exception;
 	const ExceptionEntry* user_exceptions;
 	size_t user_exceptions_cnt;
 	Type <IORequest>::C_ret rq ((_b._epv ().epv.get_exception) (&_b, &is_system_exception,
 		&user_exceptions, &user_exceptions_cnt, &_env));
 	_env.check ();
-	raise_exception (rq, is_system_exception, user_exceptions, user_exceptions_cnt);
+	Internal::raise_exception (Type <IORequest>::VRet (rq), is_system_exception, user_exceptions, user_exceptions_cnt);
 }
 
 template <class T>
