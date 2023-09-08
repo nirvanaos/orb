@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/ValueImpl.h>
+#include "pch.h"
 
 namespace CORBA {
 namespace Internal {

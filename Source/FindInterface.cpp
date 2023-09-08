@@ -23,8 +23,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+#include "pch.h"
 #include <CORBA/FindInterface.h>
-#include <CORBA/RepId.h>
 
 namespace CORBA {
 namespace Internal {

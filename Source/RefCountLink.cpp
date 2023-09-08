@@ -23,8 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include <CORBA/RefCountLink.h>
-#include <CORBA/CORBA.h>
+#include "pch.h"
 
 namespace CORBA {
 namespace Internal {
