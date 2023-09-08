@@ -41,21 +41,15 @@ inline void set_user_exceptions (::Messaging::ExceptionHolder::_ptr_type eh)
 	eh->set_user_exceptions (ExceptionSet <Exceptions...>::entries (), sizeof... (Exceptions));
 }
 
-void raise_exception (IORequest::_ptr_type rq, bool is_system_exception,
-	const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt);
+void raise_holder_exception (Bridge < ::Messaging::ExceptionHolder>& _b, Environment& _env,
+	const Dynamic::ExceptionList* exc_list = nullptr);
 
 template <class T>
 void Client <T, ::Messaging::ExceptionHolder>::raise_exception ()
 {
 	Environment _env;
 	Bridge < ::Messaging::ExceptionHolder>& _b (T::_get_bridge (_env));
-	Type <bool>::ABI is_system_exception;
-	const ExceptionEntry* user_exceptions;
-	size_t user_exceptions_cnt;
-	Type <IORequest>::C_ret rq ((_b._epv ().epv.get_exception) (&_b, &is_system_exception,
-		&user_exceptions, &user_exceptions_cnt, &_env));
-	_env.check ();
-	Internal::raise_exception (Type <IORequest>::VRet (rq), is_system_exception, user_exceptions, user_exceptions_cnt);
+	raise_holder_exception (_b, _env);
 }
 
 template <class T>
@@ -64,12 +58,7 @@ void Client <T, ::Messaging::ExceptionHolder>::raise_exception_with_list (
 {
 	Environment _env;
 	Bridge < ::Messaging::ExceptionHolder>& _b (T::_get_bridge (_env));
-	const ExceptionEntry* user_exceptions;
-	size_t user_exceptions_cnt;
-	Type <Any>::C_ret exc ((_b._epv ().epv.get_exception) (&_b, &user_exceptions, &user_exceptions_cnt, &_env));
-	_env.check ();
-	const ::Dynamic::ExceptionList& excl = Type < ::Dynamic::ExceptionList>::in (&exc_list);
-	raise_exception (std::move (exc), excl.data (), excl.size ());
+	raise_holder_exception (_b, _env, &Type < ::Dynamic::ExceptionList>::in (&exc_list));
 }
 
 }

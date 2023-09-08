@@ -29,9 +29,18 @@
 namespace CORBA {
 namespace Internal {
 
-void raise_exception (IORequest::_ptr_type rq, bool is_system_exception,
-	const ExceptionEntry* user_exceptions, size_t user_exceptions_cnt)
+void raise_holder_exception (Bridge < ::Messaging::ExceptionHolder>& _b, Environment& _env,
+	const Dynamic::ExceptionList* exc_list)
 {
+	Type <bool>::ABI is_system_exception;
+	const ExceptionEntry* user_exceptions;
+	size_t user_exceptions_cnt;
+	Type <IORequest>::C_ret exc ((_b._epv ().epv.get_exception) (&_b, &is_system_exception,
+		&user_exceptions, &user_exceptions_cnt, &_env));
+	_env.check ();
+
+	IORequest::_ref_type rq (exc);
+
 	IDL::String id;
 	Type <IDL::String>::unmarshal (rq, id);
 	
@@ -46,6 +55,10 @@ void raise_exception (IORequest::_ptr_type rq, bool is_system_exception,
 		(ee->construct) (&small);
 		ex = reinterpret_cast <Exception*> (&small);
 	} else {
+		if (exc_list) {
+			user_exceptions = exc_list->data ();
+			user_exceptions_cnt = exc_list->size ();
+		}
 		for (const ExceptionEntry* ee = user_exceptions, *end = ee + user_exceptions_cnt; ee != end; ++ee) {
 			if (RepId::compatible (ee->rep_id, id)) {
 				if (ee->size <= sizeof (small)) {
