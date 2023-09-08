@@ -29,7 +29,7 @@ namespace CORBA {
 namespace Internal {
 
 void raise_holder_exception (Bridge < ::Messaging::ExceptionHolder>& _b, Environment& _env,
-	const Dynamic::ExceptionList* exc_list)
+	const IDL::Sequence <CORBA::Internal::ExceptionEntry>* exc_list)
 {
 	Type <bool>::ABI is_system_exception;
 	const ExceptionEntry* user_exceptions;

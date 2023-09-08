@@ -42,7 +42,7 @@ inline void set_user_exceptions (::Messaging::ExceptionHolder::_ptr_type eh)
 }
 
 void raise_holder_exception (Bridge < ::Messaging::ExceptionHolder>& _b, Environment& _env,
-	const ::Dynamic::ExceptionList* exc_list = nullptr);
+	const IDL::Sequence <CORBA::Internal::ExceptionEntry>* exc_list = nullptr);
 
 template <class T>
 void Client <T, ::Messaging::ExceptionHolder>::raise_exception ()
