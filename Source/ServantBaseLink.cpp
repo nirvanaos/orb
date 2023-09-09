@@ -34,8 +34,7 @@ namespace Internal {
 void ServantBaseLink::_create_proxy ()
 {
 	if (!core_object_)
-		core_object_ = g_object_factory->create_servant (
-			&static_cast <ServantBase&> (static_cast <Bridge <ServantBase>&> (*this)));
+		g_object_factory->create_servant (this, &core_object_);
 }
 
 }

@@ -71,16 +71,14 @@ pseudo interface ObjectFactory
 	/// \brief Create core ServantBase object.
 	/// 
 	/// \param impl The servant ServantBase implementation pointer.
-	/// 
-	/// \returns The core ServantBase reference.
-	PortableServer::Servant create_servant (in PortableServer::Servant impl);
+	/// \param ref Pointer to core ServantBase reference.
+	void create_servant (in PortableServer::Servant impl, in Nirvana::Pointer ref);
 
 	/// \brief Create core LocalObject object.
 	/// 
 	/// \param impl The servant LocalObject implementation pointer.
-	/// 
-	/// \returns The core LocalObject reference.
-	LocalObject create_local_object (in LocalObject impl);
+	/// \param ref Pointer to core LocalObject reference.
+	void create_local_object (in LocalObject impl, in Nirvana::Pointer ref);
 
 	/// \brief Stateless servant creation frame.
 	struct StatelessCreationFrame

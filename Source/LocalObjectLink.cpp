@@ -32,8 +32,7 @@ namespace Internal {
 void LocalObjectLink::_create_proxy ()
 {
 	if (!core_object_)
-		core_object_ = g_object_factory->create_local_object (
-			&static_cast <LocalObject&> (static_cast <Bridge <LocalObject>&> (*this)));
+		g_object_factory->create_local_object (this, &core_object_);
 }
 
 }
