@@ -113,13 +113,6 @@ void Any::set_type (I_ptr <TypeCode> tc)
 	ABI::type (interface_duplicate (&tc));
 }
 
-void Any::set_type (I_ref <TypeCode>&& tc)
-{
-	I_ptr <TypeCode> tcp (nullptr);
-	reinterpret_cast <I_ref <TypeCode>&> (tcp) = std::move (tc);
-	ABI::type (&tcp);
-}
-
 void Any::copy_from (I_ptr <TypeCode> tc, const void* val)
 {
 	void* dst = prepare (tc);

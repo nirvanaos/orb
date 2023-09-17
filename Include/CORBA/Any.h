@@ -273,7 +273,6 @@ private:
 	void copy_from (const Any& src);
 	void* prepare (Internal::I_ptr <TypeCode> tc);
 	void set_type (Internal::I_ptr <TypeCode> tc);
-	void set_type (Internal::I_ref <TypeCode>&& tc);
 
 	// these functions are private and not implemented
 	// hiding these causes compile-time errors for
