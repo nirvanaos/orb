@@ -139,7 +139,12 @@ void Client <T, Object>::_create_request (I_in <Context> ctx, String_in operatio
 }
 
 template <class T>
-I_ref <Request> Client <T, Object>::_request (String_in operation)
+#ifdef LEGACY_CORBA_CPP
+I_ptr
+#else
+I_ref
+#endif
+<Request> Client <T, Object>::_request (String_in operation)
 {
 	I_ref <Request> rq;
 	_create_request (Context::_nil (), operation, NVList::_nil (), NamedValue::_nil (), rq, 0);
@@ -147,7 +152,12 @@ I_ref <Request> Client <T, Object>::_request (String_in operation)
 }
 
 template <class T>
-I_ref <Policy> Client <T, Object>::_get_policy (PolicyType policy_type)
+#ifdef LEGACY_CORBA_CPP
+I_ptr
+#else
+I_ref
+#endif
+<Policy> Client <T, Object>::_get_policy (PolicyType policy_type)
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
@@ -167,7 +177,12 @@ DomainManagersList Client <T, Object>::_get_domain_managers ()
 }
 
 template <class T>
-I_ref <Object> Client <T, Object>::_set_policy_overrides (Type <PolicyList>::C_in policies,
+#ifdef LEGACY_CORBA_CPP
+I_ptr
+#else
+I_ref
+#endif
+<Object> Client <T, Object>::_set_policy_overrides (Type <PolicyList>::C_in policies,
 	SetOverrideType set_or_add)
 {
 	Environment _env;
@@ -178,7 +193,12 @@ I_ref <Object> Client <T, Object>::_set_policy_overrides (Type <PolicyList>::C_i
 }
 
 template <class T>
-I_ref <Policy> Client <T, Object>::_get_client_policy (PolicyType type)
+#ifdef LEGACY_CORBA_CPP
+I_ptr
+#else
+I_ref
+#endif
+<Policy> Client <T, Object>::_get_client_policy (PolicyType type)
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
@@ -218,7 +238,12 @@ String Client <T, Object>::_repository_id ()
 }
 
 template <class T>
-I_ref <Object> Client <T, Object>::_get_component ()
+#ifdef LEGACY_CORBA_CPP
+I_ptr
+#else
+I_ref
+#endif
+<Object> Client <T, Object>::_get_component ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
@@ -228,9 +253,14 @@ I_ref <Object> Client <T, Object>::_get_component ()
 }
 
 template <class T>
-I_ref <ORB> Client <T, Object>::_get_ORB () noexcept
+#ifdef LEGACY_CORBA_CPP
+I_ptr
+#else
+I_ref
+#endif
+<ORB> Client <T, Object>::_get_ORB () noexcept
 {
-	return g_ORB;
+	return I_ptr <ORB> (g_ORB);
 }
 
 template <class T>
@@ -244,7 +274,12 @@ I_ptr <Interface> Client <T, Object>::_query_interface (String_in type_id)
 }
 
 template <class T>
-I_ref <PortableServer::ServantBase> Client <T, Object>::_get_servant ()
+#ifdef LEGACY_CORBA_CPP
+I_ptr
+#else
+I_ref
+#endif
+<PortableServer::ServantBase> Client <T, Object>::_get_servant ()
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));

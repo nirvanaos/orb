@@ -110,16 +110,54 @@ public:
 	void _create_request (I_in <Context> ctx, String_in operation, I_in <NVList> arg_list,
 		I_in <NamedValue> result, Type <Dynamic::ExceptionList>::C_in exclist, Type <ContextList>::C_in ctxlist,
 		I_out <Request> request, Flags req_flags);
-	I_ref <Request> _request (String_in operation);
-	I_ref <Policy> _get_policy (PolicyType policy_type);
+
+#ifdef LEGACY_CORBA_CPP
+	I_ptr
+#else
+	I_ref
+#endif
+		<Request> _request (String_in operation);
+
+#ifdef LEGACY_CORBA_CPP
+	I_ptr
+#else
+	I_ref
+#endif
+		<Policy> _get_policy (PolicyType policy_type);
+
 	DomainManagersList _get_domain_managers ();
-	I_ref <Object> _set_policy_overrides (Type <PolicyList>::C_in policies, SetOverrideType set_or_add);
-	I_ref <Policy> _get_client_policy (PolicyType type);
+	
+#ifdef LEGACY_CORBA_CPP
+	I_ptr
+#else
+	I_ref
+#endif
+		<Object> _set_policy_overrides (Type <PolicyList>::C_in policies, SetOverrideType set_or_add);
+
+#ifdef LEGACY_CORBA_CPP
+	I_ptr
+#else
+	I_ref
+#endif
+		<Policy> _get_client_policy (PolicyType type);
+
 	PolicyList _get_policy_overrides (Type <PolicyTypeSeq>::C_in types);
 	Boolean _validate_connection (Type <PolicyList>::C_out inconsistent_policies);
 	String _repository_id ();
-	I_ref <Object> _get_component ();
-	I_ref <ORB> _get_ORB () noexcept;
+
+#ifdef LEGACY_CORBA_CPP
+	I_ptr
+#else
+	I_ref
+#endif
+		<Object> _get_component ();
+
+#ifdef LEGACY_CORBA_CPP
+	I_ptr
+#else
+	I_ref
+#endif
+		<ORB> _get_ORB () noexcept;
 
 	/// This method does not increment reference counter
 	I_ptr <Interface> _query_interface (String_in type_id);
@@ -141,7 +179,12 @@ public:
 	/// \throws OBJ_ADAPTER(0)      Called in wrong synchronization context.
 	/// \throws NO_IMPLEMENT(0)     Wrong object.
 	/// \throws OBJECT_NOT_EXIST(1) Object is not active.
-	I_ref <PortableServer::ServantBase> _get_servant ();
+#ifdef LEGACY_CORBA_CPP
+	I_ptr
+#else
+	I_ref
+#endif
+		<PortableServer::ServantBase> _get_servant ();
 };
 
 }
