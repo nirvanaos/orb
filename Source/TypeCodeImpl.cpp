@@ -133,7 +133,7 @@ TypeCodeBase::EqResult TypeCodeBase::equivalent_ (TCKind tk, String_in id, I_ptr
 	assert (other->kind () != TCKind::tk_alias);
 	if (!equal (tk, other))
 		return EqResult::NO;
-	const String& oid = other->id ();
+	const String oid = other->id ();
 	if (!id.empty () && !oid.empty ())
 		return static_cast <const String&> (id) == oid ? EqResult::YES : EqResult::NO;
 	return EqResult::UNKNOWN;
