@@ -29,6 +29,7 @@
 #pragma once
 
 #include "I_ptr.h"
+#include <utility>
 
 namespace CORBA {
 namespace Internal {

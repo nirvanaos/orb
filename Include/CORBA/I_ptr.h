@@ -46,7 +46,7 @@ template <class I> class I_ret;
 template <class I> class ClientInterfacePrimary;
 template <class VB, typename T> class ValueBox;
 
-#ifdef _DEBUG
+#ifndef NDEBUG
 const uintptr_t UNINITIALIZED_PTR = 1;
 #endif
 
