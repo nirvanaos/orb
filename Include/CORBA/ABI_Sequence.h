@@ -28,10 +28,10 @@
 #define NIRVANA_ORB_ABI_SEQUENCE_H_
 #pragma once
 
-namespace std {
+NIRVANA_STD_BEGIN
 template <class T, class A> class vector;
 template <class T> class allocator;
-}
+NIRVANA_STD_END
 
 namespace CORBA {
 namespace Internal {

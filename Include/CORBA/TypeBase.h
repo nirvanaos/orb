@@ -29,6 +29,7 @@
 #pragma once
 
 #include "Type_forward.h"
+#include <utility>
 
 namespace CORBA {
 namespace Internal {

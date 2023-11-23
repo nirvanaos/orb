@@ -33,14 +33,16 @@
 #include <assert.h>
 #include <stddef.h>
 
-namespace std {
+NIRVANA_STD_BEGIN
+
 template <class T> class allocator;
 template <class C, class T, class A> class basic_string;
 template <class C> struct char_traits;
 #ifdef NIRVANA_C17
 template <typename C, class T> class basic_string_view;
 #endif
-}
+
+NIRVANA_STD_END
 
 namespace CORBA {
 namespace Internal {

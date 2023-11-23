@@ -1,6 +1,6 @@
-orb_sources += idl.process('AMI.idl', extra_args: '-no_ami')
+lib_sources += idl.process('AMI.idl', extra_args: '-no_ami')
 
-orb_sources += idl.process(
+lib_sources += idl.process(
 	'Context.idl',
 	'CORBA_Stream.idl',
 	'CosEventChannelAdmin.idl',
@@ -37,6 +37,6 @@ orb_sources += idl.process(
 	'TypeCode.idl'
 	)
 
-orb_sources += idl.process(
+lib_sources += idl.process(
 	'ObjectFactory.idl',
 	extra_args: '-client')
