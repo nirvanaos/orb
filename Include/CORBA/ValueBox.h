@@ -215,7 +215,7 @@ public:
 	}
 
 	// We can't use `static const` here, because it causes the redundant optimization in CLang.
-	NIRVANA_OLF_SECTION static NIRVANA_STATIC_IMPORT ::Nirvana::ImportInterfaceT <ValueFactoryBase> _factory;
+	static NIRVANA_STATIC_IMPORT ::Nirvana::ImportInterfaceT <ValueFactoryBase> NIRVANA_OLF_SECTION (_factory);
 
 	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env) noexcept
 	{
@@ -316,8 +316,8 @@ private:
 };
 
 template <class VB, typename T>
-NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT ::Nirvana::ImportInterfaceT <ValueFactoryBase>
-ValueBoxImpl <VB, T>::_factory{ ::Nirvana::OLF_IMPORT_INTERFACE,
+NIRVANA_STATIC_IMPORT ::Nirvana::ImportInterfaceT <ValueFactoryBase>
+NIRVANA_OLF_SECTION (ValueBoxImpl <VB, T>::_factory){ ::Nirvana::OLF_IMPORT_INTERFACE,
 RepIdOf <VB>::id, RepIdOf <ValueFactoryBase>::id };
 
 template <class VB, typename T>

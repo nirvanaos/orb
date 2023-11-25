@@ -26,22 +26,19 @@
 #include <CORBA/CORBA.h>
 #include <Nirvana/OLF.h>
 
-NIRVANA_OLF_SECTION_N (0)
 const Nirvana::ImportInterfaceT <CORBA::TypeCode>
-CORBA::_tc_TCKind = { Nirvana::OLF_IMPORT_INTERFACE,
+NIRVANA_OLF_SECTION_N (0, CORBA::_tc_TCKind) = { Nirvana::OLF_IMPORT_INTERFACE,
 	CORBA::Internal::RepIdOf <CORBA::TCKind>::id,
 	CORBA::Internal::RepIdOf <CORBA::TypeCode>::id };
 
-NIRVANA_OLF_SECTION_N (1)
 const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>
-CORBA::Internal::Decls <CORBA::TypeCode>::_tc_BadKind = {
+NIRVANA_OLF_SECTION_N (1, CORBA::Internal::Decls <CORBA::TypeCode>::_tc_BadKind) = {
 	Nirvana::OLF_IMPORT_INTERFACE,
 	CORBA::Internal::RepIdOf <CORBA::Internal::Decls <CORBA::TypeCode>::BadKind>::id,
 	CORBA::Internal::RepIdOf <CORBA::TypeCode>::id };
 
-NIRVANA_OLF_SECTION_N (2)
 const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>
-CORBA::Internal::Decls <CORBA::TypeCode>::_tc_Bounds = {
+NIRVANA_OLF_SECTION_N (2, CORBA::Internal::Decls <CORBA::TypeCode>::_tc_Bounds) = {
 	::Nirvana::OLF_IMPORT_INTERFACE,
 	CORBA::Internal::RepIdOf <CORBA::Internal::Decls <CORBA::TypeCode>::Bounds>::id,
 	CORBA::Internal::RepIdOf <CORBA::TypeCode>::id };

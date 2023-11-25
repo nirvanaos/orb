@@ -4,8 +4,7 @@
 namespace CORBA {
 namespace Internal {
 
-NIRVANA_OLF_SECTION
-extern const Nirvana::ImportInterfaceT <ObjectFactory> g_object_factory = {
+extern const Nirvana::ImportInterfaceT <ObjectFactory> NIRVANA_OLF_SECTION (g_object_factory) = {
 	Nirvana::OLF_IMPORT_INTERFACE,
 	"CORBA/Internal/g_object_factory",
 	CORBA::Internal::RepIdOf <ObjectFactory>::id
