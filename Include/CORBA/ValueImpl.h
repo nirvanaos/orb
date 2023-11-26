@@ -53,7 +53,7 @@ protected:
 };
 
 /// Default (stateless) value implementation.
-/// 
+///
 /// \tparam S Servant class implementing operations.
 /// \tparam I Value interface.
 template <class S, class I>
@@ -62,7 +62,7 @@ class ValueImpl :
 {};
 
 /// Value state data.
-/// 
+///
 /// \tparam I Value interface.
 template <class I> class ValueData;
 
@@ -106,7 +106,7 @@ public:
 };
 
 /// Truncatable value
-/// 
+///
 /// \typeparam tc Base type code.
 template <Nirvana::ImportInterfaceT <TypeCode>* tc>
 class ValueTruncatable
@@ -114,7 +114,7 @@ class ValueTruncatable
 public:
 	static Interface* __truncatable_base (Bridge <ValueBase>*, Interface*)
 	{
-		return interface_duplicate (&TypeCode::_ptr_type (*tc));
+		return interface_duplicate (&I_ptr <TypeCode> (*tc));
 	}
 };
 
@@ -128,7 +128,7 @@ public:
 };
 
 /// Concrete value with factory.
-/// 
+///
 /// \tparam I Value interface.
 template <class I>
 class ValueBaseFactory
@@ -146,7 +146,7 @@ public:
 };
 
 /// Concrete value with marshaling.
-/// 
+///
 /// \tparam S Servant class implementing operations. Must derive from this mix-in.
 template <class S>
 class ValueBaseMarshal
