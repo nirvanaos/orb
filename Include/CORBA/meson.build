@@ -1,9 +1,18 @@
-orb_idl = []
+orb_idl_no_ami = files (
+	'AMI.idl'
+	)
 
-orb_idl += idl.process('AMI.idl', extra_args: '-no_ami')
-
-orb_idl += idl.process(
+orb_idl_hdr_only = files (
 	'Context.idl',
+	'DynamicServant.idl',
+	'IORequest.idl',
+	'NVList.idl',
+	'ObjectFactory.idl',
+	'RefCnt.idl',
+	'Request.idl'
+	)
+
+orb_idl = files (
 	'CORBA_Stream.idl',
 	'CosEventChannelAdmin.idl',
 	'CosEventComm.idl',
@@ -20,25 +29,16 @@ orb_idl += idl.process(
 	'Current.idl',
 	'DomainManager.idl',
 	'Dynamic.idl',
-	'DynamicServant.idl',
 	'FT.idl',
 	'InterfaceRepository.idl',
 	'IOP.idl',
-	'IORequest.idl',
 	'Messaging.idl',
 	'NirvanaDGC.idl',
-	'NVList.idl',
 	'ORB.idl',
 	'Policy.idl',
 	'Pollable.idl',
 	'PortableServer.idl',
-	'RefCnt.idl',
-	'Request.idl',
 	'TCKind.idl',
 	'TimeBase.idl',
 	'TypeCode.idl'
 	)
-
-orb_idl += idl.process(
-	'ObjectFactory.idl',
-	extra_args: '-no_server')
