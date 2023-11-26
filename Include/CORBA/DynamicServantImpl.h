@@ -28,6 +28,8 @@
 #pragma once
 
 #include "ServantImpl.h"
+#include "ImplementationPseudo.h"
+#include "ImplementationPseudoStatic.h"
 #include "DynamicServant_s.h"
 #include "LifeCycleNone.h"
 

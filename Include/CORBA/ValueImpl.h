@@ -30,6 +30,7 @@
 #include "ServantImpl.h"
 #include "ValueBase.h"
 #include "servant_reference.h"
+#include "IORequestClient.h"
 
 namespace CORBA {
 namespace Internal {
