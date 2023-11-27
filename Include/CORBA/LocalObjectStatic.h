@@ -95,6 +95,7 @@ protected:
 private:
 	static LocalObject::_ptr_type core_object () noexcept
 	{
+		assert (export_struct_.core_object);
 		return static_cast <LocalObject*> (export_struct_.core_object);
 	}
 

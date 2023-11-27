@@ -117,6 +117,7 @@ protected:
 private:
 	static PortableServer::Servant servant_base () noexcept
 	{
+		assert (export_struct_.core_object);
 		return static_cast <PortableServer::ServantBase*> (export_struct_.core_object);
 	}
 

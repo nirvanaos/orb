@@ -219,6 +219,7 @@ public:
 
 	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env) noexcept
 	{
+		assert (_factory.imp.itf);
 		return interface_duplicate (_factory.imp.itf);
 	}
 
