@@ -1,4 +1,5 @@
 /Include/CORBA/ObjectFactory.h
+/Include/CORBA/ObjectFactory_s.h
 /Include/CORBA/TCKind.h
 /Include/CORBA/TCKind_s.h
 /Source/TCKind.cpp
@@ -47,6 +48,7 @@
 /Include/CORBA/Context_s.h
 /Include/CORBA/NVList.h
 /Include/CORBA/NVList_s.h
+/Source/NVList.cpp
 /Include/CORBA/DomainManager.h
 /Include/CORBA/DomainManager_s.h
 /Source/DomainManager.cpp
