@@ -6,7 +6,6 @@ orb_idl_hdr_only = files (
 	'Context.idl',
 	'DynamicServant.idl',
 	'IORequest.idl',
-	'NVList.idl',
 	'ObjectFactory.idl',
 	'RefCnt.idl',
 	'Request.idl'
@@ -34,6 +33,7 @@ orb_idl = files (
 	'IOP.idl',
 	'Messaging.idl',
 	'NirvanaDGC.idl',
+	'NVList.idl',
 	'ORB.idl',
 	'Policy.idl',
 	'Pollable.idl',
