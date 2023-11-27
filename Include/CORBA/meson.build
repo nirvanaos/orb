@@ -42,3 +42,5 @@ orb_idl = files (
 	'TimeBase.idl',
 	'TypeCode.idl'
 	)
+
+subdir('Proxy')
