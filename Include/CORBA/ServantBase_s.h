@@ -29,6 +29,7 @@
 
 #include "ServantBase.h"
 #include "Type_interface.h"
+#include "PortableServer.h"
 
 namespace CORBA {
 namespace Internal {

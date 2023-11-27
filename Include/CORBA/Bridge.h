@@ -35,6 +35,9 @@
 namespace CORBA {
 namespace Internal {
 
+// Use inline anonimous namespace to avoid linker errors.
+inline namespace {
+
 /// Bind repository id to a type.
 /// \tparam T Type
 template <typename T>
@@ -44,9 +47,11 @@ struct RepIdOf
 	static const Char id [];
 };
 
+}
+
 /// The ABI for a particular interface.
 /// A "bridge" between the client and servant sides.
-/// 
+///
 /// \tparam I An interface.
 template <class I>
 class Bridge :

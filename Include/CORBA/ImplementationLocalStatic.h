@@ -54,7 +54,7 @@ public:
 
 	static typename Type <Primary>::VRet _this ()
 	{
-		return InterfaceStatic <S, LocalObject>::_get_proxy ().downcast <Primary> ();
+		return InterfaceStatic <S, LocalObject>::_get_proxy ().template downcast <Primary> ();
 	}
 };
 

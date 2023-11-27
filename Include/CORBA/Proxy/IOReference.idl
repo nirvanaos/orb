@@ -27,6 +27,9 @@
 #define CORBA_IOREFERENCE_IDL_
 
 module CORBA {
+
+abstract valuetype Pollable;
+
 module Internal {
 
 pseudo interface IORequest;
