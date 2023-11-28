@@ -95,17 +95,16 @@ protected:
 private:
 	static LocalObject::_ptr_type core_object () noexcept
 	{
-		assert (export_struct_.core_object);
 		return static_cast <LocalObject*> (export_struct_.core_object);
 	}
 
 public:
 	// We can't use `static const` here, because it causes the redundant optimization in CLang.
-	static NIRVANA_STATIC_IMPORT ::Nirvana::ExportLocal NIRVANA_OLF_SECTION (export_struct_);
+	static NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT ::Nirvana::ExportLocal export_struct_;
 };
 
-template <class S> NIRVANA_STATIC_IMPORT
-::Nirvana::ExportLocal NIRVANA_OLF_SECTION (InterfaceStatic <S, LocalObject>::export_struct_) {
+template <class S> NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT
+::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{
 	::Nirvana::OLF_EXPORT_LOCAL, ::Nirvana::StaticId <S>::static_id_,
 	NIRVANA_STATIC_BRIDGE (LocalObject, S) };
 

@@ -35,7 +35,7 @@
 namespace CORBA {
 namespace Internal {
 
-// Use inline anonimous namespace to avoid linker errors.
+// Use inline anonimous namespace to avoid linker errors "duplicated symbol".
 inline namespace {
 
 /// Bind repository id to a type.

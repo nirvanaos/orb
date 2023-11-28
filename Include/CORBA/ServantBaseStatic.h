@@ -117,17 +117,16 @@ protected:
 private:
 	static PortableServer::Servant servant_base () noexcept
 	{
-		assert (export_struct_.core_object);
 		return static_cast <PortableServer::ServantBase*> (export_struct_.core_object);
 	}
 
 public:
 	// We can't use `static const` here, because it causes the redundant optimization in CLang.
-	static NIRVANA_STATIC_IMPORT ::Nirvana::ExportObject NIRVANA_OLF_SECTION (export_struct_);
+	NIRVANA_OLF_SECTION static NIRVANA_STATIC_IMPORT::Nirvana::ExportObject export_struct_;
 };
 
-template <class S> NIRVANA_STATIC_IMPORT
-::Nirvana::ExportObject NIRVANA_OLF_SECTION (InterfaceStatic <S, PortableServer::ServantBase>::export_struct_) {
+template <class S> NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT
+::Nirvana::ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_{
 	::Nirvana::OLF_EXPORT_OBJECT, ::Nirvana::StaticId <S>::static_id_,
 	NIRVANA_STATIC_BRIDGE (PortableServer::ServantBase, S) };
 
