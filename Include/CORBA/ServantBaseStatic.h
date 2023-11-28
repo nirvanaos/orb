@@ -125,7 +125,7 @@ public:
 	NIRVANA_OLF_SECTION static NIRVANA_STATIC_IMPORT::Nirvana::ExportObject export_struct_;
 };
 
-template <class S> NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT
+template <class S> NIRVANA_OLF_SECTION NIRVANA_SELECTANY NIRVANA_STATIC_IMPORT
 ::Nirvana::ExportObject InterfaceStatic <S, PortableServer::ServantBase>::export_struct_{
 	::Nirvana::OLF_EXPORT_OBJECT, ::Nirvana::StaticId <S>::static_id_,
 	NIRVANA_STATIC_BRIDGE (PortableServer::ServantBase, S) };

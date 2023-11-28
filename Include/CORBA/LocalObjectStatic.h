@@ -103,7 +103,7 @@ public:
 	static NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT ::Nirvana::ExportLocal export_struct_;
 };
 
-template <class S> NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT
+template <class S> NIRVANA_OLF_SECTION NIRVANA_SELECTANY NIRVANA_STATIC_IMPORT
 ::Nirvana::ExportLocal InterfaceStatic <S, LocalObject>::export_struct_{
 	::Nirvana::OLF_EXPORT_LOCAL, ::Nirvana::StaticId <S>::static_id_,
 	NIRVANA_STATIC_BRIDGE (LocalObject, S) };

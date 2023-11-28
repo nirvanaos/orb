@@ -316,7 +316,7 @@ private:
 };
 
 template <class VB, typename T>
-NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT ::Nirvana::ImportInterfaceT <ValueFactoryBase>
+NIRVANA_OLF_SECTION NIRVANA_SELECTANY NIRVANA_STATIC_IMPORT ::Nirvana::ImportInterfaceT <ValueFactoryBase>
 ValueBoxImpl <VB, T>::_factory{ ::Nirvana::OLF_IMPORT_INTERFACE,
 RepIdOf <VB>::id, RepIdOf <ValueFactoryBase>::id };
 

@@ -26,20 +26,20 @@
 #include <CORBA/CORBA.h>
 #include <Nirvana/OLF.h>
 
-NIRVANA_OLF_SECTION_N (0)
+NIRVANA_OLF_SECTION_OPT
 const Nirvana::ImportInterfaceT <CORBA::TypeCode>
 CORBA::_tc_TCKind = { Nirvana::OLF_IMPORT_INTERFACE,
 	CORBA::Internal::RepIdOf <CORBA::TCKind>::id,
 	CORBA::Internal::RepIdOf <CORBA::TypeCode>::id };
 
-NIRVANA_OLF_SECTION_N (1)
+NIRVANA_OLF_SECTION_OPT
 const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>
 CORBA::Internal::Decls <CORBA::TypeCode>::_tc_BadKind = {
 	Nirvana::OLF_IMPORT_INTERFACE,
 	CORBA::Internal::RepIdOf <CORBA::Internal::Decls <CORBA::TypeCode>::BadKind>::id,
 	CORBA::Internal::RepIdOf <CORBA::TypeCode>::id };
 
-NIRVANA_OLF_SECTION_N (2)
+NIRVANA_OLF_SECTION_OPT
 const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode>
 CORBA::Internal::Decls <CORBA::TypeCode>::_tc_Bounds = {
 	::Nirvana::OLF_IMPORT_INTERFACE,
