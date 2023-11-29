@@ -120,8 +120,9 @@ private:
 		return static_cast <PortableServer::ServantBase*> (export_struct_.core_object);
 	}
 
-private:
-	NIRVANA_OLF_SECTION static NIRVANA_STATIC_IMPORT ::Nirvana::ExportObject export_struct_;
+public:
+	// We can't use `static const` here, because it causes the redundant optimization in CLang.
+	NIRVANA_OLF_SECTION static NIRVANA_STATIC_IMPORT::Nirvana::ExportObject export_struct_;
 };
 
 template <class S> NIRVANA_OLF_SECTION NIRVANA_SELECTANY NIRVANA_STATIC_IMPORT

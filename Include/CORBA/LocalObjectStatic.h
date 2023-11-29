@@ -98,7 +98,8 @@ private:
 		return static_cast <LocalObject*> (export_struct_.core_object);
 	}
 
-private:
+public:
+	// We can't use `static const` here, because it causes the redundant optimization in CLang.
 	static NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT ::Nirvana::ExportLocal export_struct_;
 };
 
