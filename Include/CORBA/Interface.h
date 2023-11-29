@@ -57,7 +57,7 @@ public:
 		void (*release) (Interface*);
 	};
 
-	Interface (const EPV& epv) noexcept :
+	constexpr Interface (const EPV& epv) noexcept :
 		_epv_ref (epv)
 	{}
 

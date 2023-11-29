@@ -73,8 +73,8 @@ public:
 		typedef Bridge <Base>* (*Func) (Bridge <I>*, const ABI <String>* base_id, Interface* environment);
 	};
 
-protected:
-	Bridge (const EPV& epv) noexcept :
+public:
+	constexpr Bridge (const EPV& epv) noexcept :
 		Interface (epv.header)
 	{
 #ifdef NIRVANA_C11
@@ -88,8 +88,8 @@ template <class I>
 class BridgeVal :
 	public Bridge <I>
 {
-protected:
-	BridgeVal (const typename Bridge <I>::EPV& epv) noexcept :
+public:
+	constexpr BridgeVal (const typename Bridge <I>::EPV& epv) noexcept :
 		Bridge <I> (epv)
 	{}
 };

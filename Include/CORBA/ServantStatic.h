@@ -73,16 +73,16 @@ public:
 
 	static Bridge <I>* _bridge () noexcept
 	{
-		return reinterpret_cast <Bridge <I>*> (&bridge_);
+		return const_cast <Bridge <I>*> (&bridge_);
 	}
 
-	static const typename Bridge <I>::EPV* bridge_;
+	static const Bridge <I> bridge_;
 };
 
-#define NIRVANA_STATIC_BRIDGE(I, ...) reinterpret_cast <::CORBA::Internal::Bridge <I>*> (&::CORBA::Internal::InterfaceStaticBase <__VA_ARGS__, I>::bridge_)
+#define NIRVANA_STATIC_BRIDGE(I, ...) const_cast <::CORBA::Internal::Bridge <I>*> (&::CORBA::Internal::InterfaceStaticBase <__VA_ARGS__, I>::bridge_)
 
 template <class S, class I>
-const typename Bridge <I>::EPV* InterfaceStaticBase <S, I>::bridge_ = &InterfaceStaticBase <S, I>::epv_;
+const Bridge <I> InterfaceStaticBase <S, I>::bridge_ (InterfaceStaticBase <S, I>::epv_);
 
 template <class S, class I>
 class InterfaceStatic :
