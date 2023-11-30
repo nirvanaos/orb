@@ -66,23 +66,23 @@ class InterfaceStaticBase :
 	public Skeleton <S, I>
 {
 public:
-	operator Bridge <I>& () const noexcept
+	constexpr operator Bridge <I>& () const noexcept
 	{
 		return *_bridge ();
 	}
 
-	static Bridge <I>* _bridge () noexcept
+	constexpr static Bridge <I>* _bridge () noexcept
 	{
 		return const_cast <Bridge <I>*> (&bridge_);
 	}
 
-	static const Bridge <I> bridge_;
+	static constexpr Bridge <I> bridge_{ Skeleton <S, I>::epv_ };
 };
 
-#define NIRVANA_STATIC_BRIDGE(I, ...) const_cast <::CORBA::Internal::Bridge <I>*> (&::CORBA::Internal::InterfaceStaticBase <__VA_ARGS__, I>::bridge_)
+#define NIRVANA_STATIC_BRIDGE(I, ...) ::CORBA::Internal::InterfaceStaticBase <__VA_ARGS__, I>::_bridge ()
 
-template <class S, class I>
-const Bridge <I> InterfaceStaticBase <S, I>::bridge_ (InterfaceStaticBase <S, I>::epv_);
+//template <class S, class I>
+//const Bridge <I> InterfaceStaticBase <S, I>::bridge_ (InterfaceStaticBase <S, I>::epv_);
 
 template <class S, class I>
 class InterfaceStatic :
