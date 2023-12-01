@@ -111,7 +111,7 @@ public:
 
 	static ULong member_count () noexcept
 	{
-		return countof (members_);
+		return (ULong)countof (members_);
 	}
 
 	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env)

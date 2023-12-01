@@ -68,7 +68,7 @@ const InterfaceEntry InterfaceFinder <S, Primary, I...>::itable_ [] = {
 template <class S, class Primary, class ... I>
 inline Interface* InterfaceFinder <S, Primary, I...>::find (S& servant, String_in id) noexcept
 {
-	return InterfaceEntry::find (itable_, itable_ + countof (itable_), &servant, id);
+	return InterfaceEntry::find (itable_, itable_ + 1 + sizeof ... (I), &servant, id);
 }
 
 template <class Primary, class ... I>

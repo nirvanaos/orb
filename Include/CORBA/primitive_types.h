@@ -33,6 +33,16 @@
 #include "float_types.h"
 #include <stdint.h>
 
+#ifndef countof
+
+template <typename T, size_t N>
+constexpr size_t countof (T const (&) [N]) noexcept
+{
+  return N;
+}
+
+#endif
+
 namespace CORBA {
 
 // Primitive types
