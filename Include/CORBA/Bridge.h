@@ -77,9 +77,7 @@ public:
 	constexpr Bridge (const EPV& epv) noexcept :
 		Interface (epv.header)
 	{
-#ifdef NIRVANA_C11
 		static_assert (offsetof(EPV, header) == 0, "header must be at the beginning of EPV.");
-#endif
 	}
 };
 

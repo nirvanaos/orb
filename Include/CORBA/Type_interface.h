@@ -41,11 +41,7 @@ class TypeCode;
 
 namespace Internal {
 
-#ifdef NIRVANA_C11
 template <class I> using I_in = I_ptr <I>;
-#else
-#define I_in I_ptr
-#endif
 
 //! I_inout helper class for interface
 template <class I>

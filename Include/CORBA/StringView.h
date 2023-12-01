@@ -102,7 +102,6 @@ public:
 		ABI::allocated (0);
 	}
 
-#ifdef NIRVANA_C11
 	template <size_t cc>
 	StringView (C const (&s) [cc])
 	{
@@ -120,9 +119,6 @@ public:
 
 	template <typename S, typename = typename std::enable_if <std::is_convertible <S, const C*>::value && !std::is_array <S>::value>::type>
 	StringView (S s);
-#else
-	StringView (const C* p);
-#endif
 
 	template <class A, typename = typename std::enable_if <!std::is_same <A, std::allocator <C> >::value>::type>
 	StringView (const std::basic_string <C, std::char_traits <C>, A>&);
@@ -180,8 +176,6 @@ private:
 	}
 };
 
-#ifdef NIRVANA_C11
-
 template <typename C, ULong bound>
 template <typename S, typename>
 StringView <C, bound>::StringView (S s)
@@ -197,25 +191,6 @@ StringView <C, bound>::StringView (S s)
 	} else
 		ABI::reset ();
 }
-
-#else
-
-template <typename C, ULong bound>
-template <typename S, typename>
-StringView <C, bound>::StringView (const C* p)
-{
-	size_t cc;
-	if (p && (cc = _length (p))) {
-		if (bound && cc > bound)
-			Nirvana::throw_BAD_PARAM ();
-		ABI::large_pointer (const_cast <C*> (p));
-		ABI::large_size (cc);
-		ABI::allocated (0);
-	} else
-		ABI::reset ();
-}
-
-#endif
 
 template <typename C, ULong bound>
 StringView <C, bound>::StringView (const C* p, size_t cc)

@@ -191,13 +191,9 @@ public:
 		Base (b, e)
 	{}
 
-#ifdef NIRVANA_C11
-
 	BoundedStringT (std::initializer_list <C> ilist) :
 		Base (ilist)
 	{}
-
-#endif
 
 #ifdef NIRVANA_C17
 	typedef std::basic_string_view <C, std::char_traits <C> > __sv_type;

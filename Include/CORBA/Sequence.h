@@ -169,9 +169,6 @@ public:
 		Base (count)
 	{}
 
-#ifndef NIRVANA_C11
-	explicit
-#endif
 	BoundedSequence (size_t count, const T& v) :
 		Base (count, v)
 	{}
@@ -184,20 +181,15 @@ public:
 		Base (std::move (src))
 	{}
 
-	template <class InputIterator
-#ifdef NIRVANA_C11
-		, typename = ::Nirvana::_RequireInputIter <InputIterator>
-#endif
+	template <class InputIterator, typename = ::Nirvana::_RequireInputIter <InputIterator>
 	>
 	BoundedSequence (InputIterator b, InputIterator e) :
 		Base (b, e)
 	{}
 
-#ifdef NIRVANA_C11
 	BoundedSequence (std::initializer_list <T> ilist) :
 		Base (ilist)
 	{}
-#endif
 };
 
 template <class T, ULong bound>
