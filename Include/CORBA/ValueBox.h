@@ -84,12 +84,12 @@ protected:
 };
 
 /// Value box client part.
-/// 
+///
 /// \tparam T Boxed type.
-/// 
+///
 /// The boxed value always follow immediately to ValueBoxBridge
 /// (with possible alignment).
-/// 
+///
 /// The memory layout:
 ///
 /// +----------------------------+
@@ -159,11 +159,11 @@ protected:
 	}
 
 protected:
-	std::aligned_storage_t <sizeof (BoxedType), alignof (BoxedType)> value_;
+	typename std::aligned_storage <sizeof (BoxedType), alignof (BoxedType)>::type value_;
 };
 
 /// Value box implementation
-/// 
+///
 /// \tparam VB Value box type, derived from this class.
 /// \tparam T Boxed type.
 template <class VB, typename T>
@@ -333,9 +333,9 @@ const ValueBoxBridge::EPV ValueBoxImpl <VB, T>::epv_ = {
 };
 
 /// The value box class.
-/// 
+///
 /// Adds derived ValueBase client API to the value box implementation.
-/// 
+///
 /// \tparam VB Value box type, derived from this class.
 /// \tparam T Boxed type.
 template <class VB, typename T>

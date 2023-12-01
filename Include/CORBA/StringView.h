@@ -56,7 +56,7 @@ size_t string_len (const WChar* s)
 }
 
 /// Used as input parameter for string types.
-/// 
+///
 /// \typeparam C Character type.
 /// \typeparam bound String bound.
 template <typename C, ULong bound = 0>
@@ -124,7 +124,7 @@ public:
 	StringView (const C* p);
 #endif
 
-	template <class A, typename = std::enable_if_t <!std::is_same <A, std::allocator <C> >::value> >
+	template <class A, typename = typename std::enable_if <!std::is_same <A, std::allocator <C> >::value>::type>
 	StringView (const std::basic_string <C, std::char_traits <C>, A>&);
 
 	StringView (const C* p, size_t cc);

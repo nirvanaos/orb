@@ -34,7 +34,7 @@ namespace CORBA {
 namespace Internal {
 
 /// Data type passed by reference.
-/// 
+///
 /// \tparam T The variable type.
 /// \tparam TABI The ABI type.
 template <typename T, typename TABI = T>
@@ -69,7 +69,7 @@ struct TypeByRefBase
 		const Var& ref_;
 	};
 
-	typedef std::conditional_t <std::is_same <Var, ABI>::value, const Var&, C_in_ref> C_in;
+	typedef typename std::conditional <std::is_same <Var, ABI>::value, const Var&, C_in_ref>::type C_in;
 
 	// Servant-side methods
 
@@ -105,7 +105,7 @@ struct TypeByRefBase
 };
 
 /// Data type passed by reference, without check.
-/// 
+///
 /// \tparam T The variable type.
 /// \tparam TABI The ABI type.
 template <typename T, typename TABI = T>
@@ -135,7 +135,7 @@ struct TypeByRef : TypeByRefBase <T, TABI>, TypeNoCheck <T, TABI>
 };
 
 /// Data type passed by reference, with check.
-/// 
+///
 /// \tparam T The variable type.
 /// \tparam TABI The ABI type.
 template <typename T, typename TABI = T>

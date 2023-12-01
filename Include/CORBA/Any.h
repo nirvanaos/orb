@@ -97,7 +97,7 @@ public:
 	void construct (Internal::I_ptr <TypeCode> tc);
 
 	// special helper types needed for boolean, octet, char, wchar
-	
+
 	struct from_boolean
 	{
 		from_boolean (Boolean b) : val (b)
@@ -187,7 +187,7 @@ public:
 	Boolean operator >>= (to_char) const;
 	Boolean operator >>= (to_wchar) const;
 	Boolean operator >>= (to_octet) const;
-	
+
 	void copy_from (Internal::I_ptr <TypeCode> tc, const void* val);
 	void move_from (Internal::I_ptr <TypeCode> tc, void* val);
 
@@ -245,7 +245,7 @@ private:
 			val (const_cast <const char*& > (s)), bound (b)
 		{}
 	};
-	
+
 	// For the implementation see in the CoreImport library
 	Boolean operator >>= (to_string) const;
 
@@ -263,7 +263,7 @@ private:
 			val (const_cast <const WChar*&> (s)), bound (b)
 		{}
 	};
-	
+
 	// For the implementation see in the CoreImport library
 	Boolean operator >>= (to_wstring) const;
 
@@ -328,20 +328,20 @@ typedef Internal::T_var <Any> Any_var;
 #endif
 
 template <typename T> inline
-std::enable_if_t <!std::is_base_of <Exception, T>::value, void>
+typename std::enable_if <!std::is_base_of <Exception, T>::value, void>::type
 operator <<= (Any& a, const T& v)
 {
 	a.copy_from (Internal::Type <T>::type_code (), &v);
 }
 template <typename T> inline
-std::enable_if_t <!std::is_base_of <Exception, T>::value, void>
+typename std::enable_if <!std::is_base_of <Exception, T>::value, void>::type
 operator <<= (Any& a, T& v)
 {
 	operator <<= (a, (const T&)v);
 }
 template <typename T> inline
-std::enable_if_t <!std::is_base_of <Exception,
-	typename std::remove_reference <T>::type>::value, void>
+typename std::enable_if <!std::is_base_of <Exception,
+	typename std::remove_reference <T>::type>::value, void>::type
 operator <<= (Any& a, T&& v)
 {
 	a.move_from (Internal::Type <typename std::remove_reference <T>::type>::type_code (), &v);
@@ -365,7 +365,7 @@ Boolean operator >>= (const Any& a, const T*& pv)
 }
 
 template <typename T> inline
-std::enable_if_t <!std::is_pointer <T>::value, Boolean>
+typename std::enable_if <!std::is_pointer <T>::value, Boolean>::type
 operator >>= (const Any& a, T& v)
 {
 	const T* pv = nullptr;

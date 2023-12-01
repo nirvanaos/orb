@@ -38,15 +38,15 @@ namespace Internal {
 
 /// Fixed-length data types.
 /// Passed by value if sizeof (T) <= 2 * sizeof (size_t).
-/// 
+///
 /// \tparam T The variable type.
 /// \tparam chk `true` if the variable has check ().
 /// \tparam TABI The ABI type.
 template <typename T, bool chk, typename TABI = T>
-struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t),
-	std::conditional_t <chk, TypeByValCheck <T, TABI>, TypeByVal <T, TABI> >,
-	std::conditional_t <chk, TypeByRefCheck <T, TABI>, TypeByRef <T, TABI> >
->
+struct TypeFixLen : std::conditional <sizeof (T) <= 2 * sizeof (size_t),
+	typename std::conditional <chk, TypeByValCheck <T, TABI>, TypeByVal <T, TABI> >::type,
+	typename std::conditional <chk, TypeByRefCheck <T, TABI>, TypeByRef <T, TABI> >::type
+>::type
 {
 	static const bool is_var_len = false;
 
@@ -65,7 +65,7 @@ struct TypeFixLen : std::conditional_t <sizeof (T) <= 2 * sizeof (size_t),
 	{
 		Type <T>::marshal_in_a (src, count, rq);
 	}
-	
+
 	inline static void unmarshal (IORequest_ptr rq, T& dst);
 	inline static void unmarshal_a (IORequest_ptr rq, size_t count, T* dst);
 };
