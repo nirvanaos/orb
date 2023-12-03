@@ -1,4 +1,4 @@
-lib_src += files(
+orb_src = files(
 	'AMI.cpp',
 	'Any.cpp',
 	'CORBA_Stream.cpp',
