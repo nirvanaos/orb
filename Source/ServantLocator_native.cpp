@@ -24,7 +24,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "pch.h"
+#include "../../pch/pch.h"
 #include <Nirvana/native.h>
 #include <CORBA/ServantLocator_native.h>
 

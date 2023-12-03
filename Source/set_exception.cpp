@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "pch.h"
+#include "../../pch/pch.h"
 #include <CORBA/set_exception.h>
 #include <CORBA/exceptions.h>
 #include <CORBA/Environment_c.h>
