@@ -58,7 +58,7 @@ public:
 
 	/// Zero init skipped for performance
 	I_ptr_base () noexcept
-#ifdef _DEBUG
+#ifndef NDEBUG
 		: p_ ((I*)UNINITIALIZED_PTR)
 #endif
 	{}

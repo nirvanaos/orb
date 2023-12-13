@@ -76,7 +76,7 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 
 			// We assume that IORequest implementation provide consistent output.
 			// So we check it in the debug configuration only.
-#ifdef _DEBUG
+#ifndef NDEBUG
 			check_ABI (abi);
 #endif
 
@@ -87,7 +87,7 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 				} while (end != ++p);
 			}
 
-#ifdef _DEBUG
+#ifndef NDEBUG
 			if (Type <T>::has_check) {
 				try {
 					T_ABI* p = (T_ABI*)abi.ptr, * end = p + abi.size;
