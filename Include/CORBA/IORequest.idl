@@ -234,11 +234,11 @@ pseudo interface IORequest
   ///@{
   /// Callee operations.
 
-  /// End of input data marshaling.
+  /// End of data unmarshaling.
   /// 
-  /// Called by proxy when all input data was successfully unmarshaled.
+  /// Called by proxy when all input or return data was successfully unmarshaled.
   /// Marshaling resources may be released.
-  /// If not all input data was unmarshalled, may throw the MARSHAL exception.
+  /// If not all data was unmarshalled, may throw the MARSHAL exception.
   void unmarshal_end ();
 
   /// Return exception to caller.
