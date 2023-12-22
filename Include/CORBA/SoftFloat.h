@@ -28,6 +28,7 @@
 #define NIRVANA_ORB_SOFTFLOAT_H_
 #pragma once
 
+#include <stddef.h>
 #include <iosfwd>
 
 namespace CORBA {
