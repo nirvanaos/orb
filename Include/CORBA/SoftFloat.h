@@ -28,8 +28,16 @@
 #define NIRVANA_ORB_SOFTFLOAT_H_
 #pragma once
 
+#include <Nirvana/NirvanaBase.h>
 #include <stddef.h>
-#include <iosfwd>
+
+NIRVANA_STD_BEGIN
+template <class> struct char_traits;
+template <class, class> class basic_istream;
+template <class, class> class basic_ostream;
+typedef basic_istream <char, char_traits <char> > istream;
+typedef basic_ostream <char, char_traits <char> > ostream;
+NIRVANA_STD_END
 
 namespace CORBA {
 namespace Internal {
