@@ -70,6 +70,12 @@ struct TypeFixLen : std::conditional <sizeof (T) <= 2 * sizeof (size_t),
 	inline static void unmarshal_a (IORequest_ptr rq, size_t count, T* dst);
 };
 
+template <typename T, bool chk, typename TABI>
+const size_t TypeFixLen <T, chk, TABI>::CDR_align;
+
+template <typename T, bool chk, typename TABI>
+const size_t TypeFixLen <T, chk, TABI>::CDR_size;
+
 }
 }
 

@@ -104,6 +104,12 @@ struct TypeByRefBase
 	static const size_t CDR_align = alignof (TABI);
 };
 
+template <typename T, typename TABI>
+const size_t TypeByRefBase <T, TABI>::CDR_size;
+
+template <typename T, typename TABI>
+const size_t TypeByRefBase <T, TABI>::CDR_align;
+
 /// Data type passed by reference, without check.
 ///
 /// \tparam T The variable type.
