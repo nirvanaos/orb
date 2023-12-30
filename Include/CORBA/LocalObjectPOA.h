@@ -31,7 +31,7 @@
 #include "LocalObjectLink.h"
 #include "LocalObject_s.h"
 
-#ifdef _MSC_BUILD
+#ifdef _MSC_VER
 #pragma warning (disable:4250)
 #endif
 
