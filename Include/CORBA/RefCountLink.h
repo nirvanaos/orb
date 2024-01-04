@@ -46,8 +46,12 @@ class RefCountLink :
 public:
 #else
 protected:
-	template <class T1, class ... Args>
-	friend CORBA::servant_reference <T1> CORBA::make_reference (Args ... args);
+	template <class T, class ... Args>
+	friend CORBA::servant_reference <T> CORBA::make_reference (Args ... args);
+
+	template <class T, class ... Args>
+	friend CORBA::Internal::I_ref <typename T::PrimaryInterface> CORBA::make_pseudo (Args ... args);
+
 	template <class> friend class CORBA::servant_reference;
 	template <class> friend class LifeCycleRefCnt;
 	template <class, class> friend class Skeleton;
