@@ -96,8 +96,7 @@ TEST_F (TestORB, Array)
 }
 
 class Functor :
-	public Internal::Servant <Functor, ::Nirvana::Legacy::Runnable>,
-	public Internal::LifeCycleStatic
+	public Internal::Servant <Functor, ::Nirvana::Legacy::Runnable>
 {
 public:
 	Functor (const std::function <void ()>& f) :
@@ -119,8 +118,7 @@ TEST_F (TestORB, Runnable)
 
 	int a = 1, b = 2, c = 0;
 
-	Functor functor ([a, b, &c]() { c = a + b; });
-	::Nirvana::Legacy::Runnable::_ptr_type r = functor._get_ptr ();
+	::Nirvana::Legacy::Runnable::_ptr_type r = CORBA::make_reference <Functor> ([a, b, &c]() { c = a + b; });
 	r->run ();
 	EXPECT_EQ (c, a + b);
 }

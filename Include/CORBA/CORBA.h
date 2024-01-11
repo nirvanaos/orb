@@ -56,6 +56,7 @@
 #include "String_compat.h"
 #include "Messaging.h"
 #include "ExceptionHolder.h"
+#include "FindInterface.h"
 
 namespace Nirvana {
 
