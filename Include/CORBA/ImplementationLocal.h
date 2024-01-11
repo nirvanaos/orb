@@ -51,7 +51,7 @@ class ImplementationLocal :
 public:
 	typedef Primary PrimaryInterface;
 
-	Interface* _query_interface (const String& id)
+	Interface* _query_interface (const String& id) noexcept
 	{
 		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);
 	}

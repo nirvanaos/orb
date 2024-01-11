@@ -42,7 +42,8 @@ template <>
 class NIRVANA_NOVTABLE ServantPOA <ValueBase> :
 	public ServantTraitsPOA,
 	public LifeCycleRefCnt <ServantPOA <ValueBase> >,
-	public ValueImpl <ServantPOA <ValueBase>, ValueBase>
+	public ValueImplBase <ServantPOA <ValueBase>, ValueBase>,
+	public ValueBaseCopy <ServantPOA <ValueBase> >
 {
 public:
 	virtual I_ref <ValueBase> _copy_value () = 0;
