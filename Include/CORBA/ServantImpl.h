@@ -53,9 +53,6 @@ template <class S, class I> class Skeleton;
 //! \tparam I Primary interface.
 template <class S, class I> class Servant;
 
-/// Aggregated implementation
-template <class S, class I> class Aggregated;
-
 //! Standard (dynamic) servant traits.
 //! \tparam S Servant class, derived from this.
 template <class S>
