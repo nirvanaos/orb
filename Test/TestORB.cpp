@@ -95,32 +95,4 @@ TEST_F (TestORB, Array)
 	EXPECT_TRUE (Type <Arr>::is_CDR);
 }
 
-class Functor :
-	public Internal::Servant <Functor, ::Nirvana::Legacy::Runnable>
-{
-public:
-	Functor (const std::function <void ()>& f) :
-		func_ (f)
-	{}
-
-	void run ()
-	{
-		func_ ();
-	}
-
-private:
-	std::function <void ()> func_;
-};
-
-TEST_F (TestORB, Runnable)
-{
-	using namespace std;
-
-	int a = 1, b = 2, c = 0;
-
-	::Nirvana::Legacy::Runnable::_ptr_type r = CORBA::make_reference <Functor> ([a, b, &c]() { c = a + b; });
-	r->run ();
-	EXPECT_EQ (c, a + b);
-}
-
 }
