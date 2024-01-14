@@ -172,8 +172,6 @@ class ValueBoxImpl :
 	public RefCountBase <VB>,
 	public LifeCycleRefCnt <VB>,
 	public Skeleton <VB, ValueBase>,
-	public ValueBaseCopy <VB>,
-	public ValueBaseMarshal <VB>,
 	public ValueNonTruncatable
 {
 	typedef ValueBoxClient <T> Base;
@@ -214,7 +212,15 @@ public:
 		return _ptr_type (nullptr);
 	}
 
-	// We can't use `static const` here, because it causes the redundant optimization in CLang.
+	Type <ValueBase>::VRet _copy_value () const
+	{
+#ifndef LEGACY_CORBA_CPP
+		return make_reference <VB> (std::ref (static_cast <const VB&> (*this)));
+#else
+		return new VB (static_cast <const VB&> (*this));
+#endif
+	}
+
 	NIRVANA_OLF_SECTION static NIRVANA_STATIC_IMPORT ::Nirvana::ImportInterfaceT <ValueFactoryBase> _factory;
 
 	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env) noexcept
@@ -238,6 +244,8 @@ public:
 			return &static_cast <ValueBoxBridge&> (*this);
 		return nullptr;
 	}
+
+	using ValueNonTruncatable::__truncatable_base;
 
 	static ThisClass& _implementation (Bridge <ValueBase>* bridge)
 	{

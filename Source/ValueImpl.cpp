@@ -28,28 +28,28 @@
 namespace CORBA {
 namespace Internal {
 
-Interface* ValueBaseNoCopy::__copy_value (Bridge <ValueBase>*, Interface*)
-{
-	return nullptr;
-}
-
 Interface* ValueNonTruncatable::__truncatable_base (Bridge <ValueBase>*, Interface*)
 {
 	return nullptr;
 }
 
-Interface* ValueBaseNoFactory::__factory (Bridge <ValueBase>*, Interface*)
+Interface* ValueAbstract::__copy_value (Bridge <ValueBase>*, Interface*)
 {
 	return nullptr;
 }
 
-void ValueBaseNoFactory::__marshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
+Interface* ValueAbstract::__factory (Bridge <ValueBase>*, Interface*)
+{
+	return nullptr;
+}
+
+void ValueAbstract::__marshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
 	Internal::Interface* _env)
 {
 	Internal::set_NO_IMPLEMENT (_env);
 }
 
-void ValueBaseNoFactory::__unmarshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
+void ValueAbstract::__unmarshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
 	Internal::Interface* _env)
 {
 	Internal::set_NO_IMPLEMENT (_env);

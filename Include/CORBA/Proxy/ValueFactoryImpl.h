@@ -54,12 +54,6 @@ public:
 		return itf;
 	}
 
-	// ValueFactoryBase
-	static Interface* factory_base () noexcept
-	{
-		return ValueBaseFactory <I>::_factory_base ();
-	}
-
 };
 
 template <class I>
@@ -76,12 +70,6 @@ public:
 	static Interface* _query_interface (String_in id)
 	{
 		return FindInterface <ValueFactoryBase, TypeCode>::find (*(ValueBoxFactory <I>*)nullptr, id);
-	}
-
-	// ValueFactoryBase
-	static Interface* factory_base () noexcept
-	{
-		return interface_duplicate (InterfaceStaticBase <ValueBoxFactory <I>, ValueFactoryBase>::_bridge ());
 	}
 
 	static Interface* _query_factory (String_in id) noexcept

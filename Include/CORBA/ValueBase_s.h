@@ -42,16 +42,16 @@ public:
 	static const typename Bridge <ValueBase>::EPV epv_;
 
 protected:
-	static Interface* __query_valuetype (Bridge <ValueBase>* _b, Type <String>::ABI_in id, Interface* _env)
+	static Interface* __copy_value (Bridge <ValueBase>* _b, Interface* _env)
 	{
 		try {
-			return Type <Interface>::VT_ret (S::_implementation (_b)._query_valuetype (Type <String>::in (id)));
+			return Type <ValueBase>::ret (S::_implementation (_b)._copy_value ());
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
 			set_unknown_exception (_env);
 		}
-		return Type <Interface>::VT_ret ();
+		return Type <ValueBase>::ret ();
 	}
 
 	static ULong _v_refcount_value (Bridge <ValueBase>* _b, Interface* _env)
@@ -66,6 +66,63 @@ protected:
 		return 0;
 	}
 
+	static void __marshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
+	{
+		try {
+			S::_implementation (_b)._marshal (Type <IORequest>::in (rq));
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+	}
+
+	static void __unmarshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
+	{
+		try {
+			S::_implementation (_b)._unmarshal (Type <IORequest>::in (rq));
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+	}
+
+	static Interface* __query_valuetype (Bridge <ValueBase>* _b, Type <String>::ABI_in id, Interface* _env)
+	{
+		try {
+			return Type <Interface>::VT_ret (S::_implementation (_b)._query_valuetype (Type <String>::in (id)));
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return Type <Interface>::VT_ret ();
+	}
+
+	static Interface* __truncatable_base (Bridge <ValueBase>* _b, Interface* _env)
+	{
+		try {
+			return Type <TypeCode>::ret (S::_implementation (_b)._truncatable_base ());
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return Type <TypeCode>::ret ();
+	}
+
+	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env) noexcept
+	{
+		try {
+			return Type <ValueFactoryBase>::ret (S::_implementation (_b)._factory ());
+		} catch (Exception& e) {
+			set_exception (_env, e);
+		} catch (...) {
+			set_unknown_exception (_env);
+		}
+		return Type <TypeCode>::ret ();
+	}
 };
 
 template <class S>

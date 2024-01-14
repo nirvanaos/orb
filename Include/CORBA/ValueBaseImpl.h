@@ -37,6 +37,10 @@ namespace Internal {
 
 //! Implementation of ValueBase.
 //! \tparam S Servant class implementing operations.
+//! 
+//! Unlike the ValueImpl <S, PortableServer::ServantBase>, this class
+//! does not implement reference counting. Reference counting is added
+//! by the IDL compiler to servant class.
 template <class S>
 class ValueImpl <S, ValueBase> :
 	public LifeCycleRefCnt <S>,

@@ -28,7 +28,7 @@
 #pragma once
 
 #include "ServantImpl.h"
-#include "ValueBase.h"
+#include "ValueBaseImpl.h"
 #include "servant_reference.h"
 #include "IORequestClient.h"
 
@@ -67,38 +67,6 @@ class ValueImpl :
 /// \tparam I Value interface.
 template <class I> class ValueData;
 
-class ValueBaseNoCopy
-{
-public:
-	static Interface* __copy_value (Bridge <ValueBase>*, Interface*);
-};
-
-template <class S>
-class ValueBaseCopy
-{
-public:
-	static Interface* __copy_value (Bridge <ValueBase>* _b, Interface* _env)
-	{
-		try {
-			return Type <ValueBase>::ret (S::_implementation (_b)._copy_value ());
-		} catch (Exception& e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
-		return Type <ValueBase>::ret ();
-	}
-
-	Type <ValueBase>::VRet _copy_value () const
-	{
-#ifndef LEGACY_CORBA_CPP
-		return make_reference <S> (std::ref (static_cast <const S&> (*this)));
-#else
-		return new S (static_cast <const S&> (*this));
-#endif
-	}
-};
-
 /// Non truncatable value
 class ValueNonTruncatable
 {
@@ -119,62 +87,72 @@ public:
 	}
 };
 
-/// Abstract value without factory
-class ValueBaseNoFactory
+/// Abstract value mix-in
+class ValueAbstract : public ValueNonTruncatable
 {
 public:
-	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env);
-	static void __marshal (Bridge <ValueBase>*, Interface*, Interface* _env);
-	static void __unmarshal (Bridge <ValueBase>*, Interface*, Interface* _env);
+	static Interface* __copy_value (Bridge <ValueBase>*, Interface*);
+	static Interface* __factory (Bridge <ValueBase>*, Interface*);
+	static void __marshal (Bridge <ValueBase>*, Interface*, Interface*);
+	static void __unmarshal (Bridge <ValueBase>*, Interface*, Interface*);
 };
 
-/// Concrete value with factory.
-///
-/// \tparam I Value interface.
+/// Abstract value base
+template <class S>
+class ValueBaseAbstract :
+	public ValueImpl <S, ValueBase>,
+	public ValueAbstract
+{
+public:
+	using ValueAbstract::__copy_value;
+	using ValueAbstract::__factory;
+	using ValueAbstract::__marshal;
+	using ValueAbstract::__unmarshal;
+	using ValueAbstract::__truncatable_base;
+};
+
 template <class I>
 class ValueBaseFactory
 {
 public:
-	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env) noexcept
-	{
-		return _factory_base ();
-	}
-
-	static Interface* _factory_base () noexcept
+	static Interface* __factory (Bridge <ValueBase>*, Interface*) noexcept
 	{
 		return interface_duplicate (query_creator_interface <I> (RepIdOf <ValueFactoryBase>::id));
 	}
 };
 
-/// Concrete value with marshaling.
-///
-/// \tparam S Servant class implementing operations. Must derive from this mix-in.
-template <class S>
-class ValueBaseMarshal
+template <Nirvana::ImportInterfaceT <TypeCode>* truncatable_base>
+using TruncatableBase = typename std::conditional <!truncatable_base, ValueNonTruncatable, ValueTruncatable <truncatable_base> >::type;
+
+/// Concrete value base
+template <class Base, class S, class I, Nirvana::ImportInterfaceT <TypeCode>* truncatable_base>
+class ValueConcrete :
+	public Base,
+	public TruncatableBase <truncatable_base>,
+	public ValueBaseFactory <I>
 {
 public:
-	static void __marshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
+	using TruncatableBase <truncatable_base>::__truncatable_base;
+	using ValueBaseFactory <I>::__factory;
+
+	Type <ValueBase>::VRet _copy_value () const
 	{
-		try {
-			S::_implementation (_b)._marshal (Type <IORequest>::in (rq));
-		} catch (Exception& e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
+#ifndef LEGACY_CORBA_CPP
+		return make_reference <S> (std::ref (static_cast <const S&> (*this)));
+#else
+		return new S (static_cast <const S&> (*this));
+#endif
 	}
 
-	static void __unmarshal (Bridge <ValueBase>* _b, Interface* rq, Interface* _env)
-	{
-		try {
-			S::_implementation (_b)._unmarshal (Type <IORequest>::in (rq));
-		} catch (Exception& e) {
-			set_exception (_env, e);
-		} catch (...) {
-			set_unknown_exception (_env);
-		}
-	}
 };
+
+/// Concrete value base
+template <class S, class I, Nirvana::ImportInterfaceT <TypeCode>* truncatable_base = nullptr>
+using ValueBaseConcrete = ValueConcrete <ValueImpl <S, ValueBase>, S, I, truncatable_base>;
+
+/// Value base with interface support
+template <class S, class I, Nirvana::ImportInterfaceT <TypeCode>* truncatable_base = nullptr>
+using ValueBaseSupports = ValueConcrete <ValueImplBase <S, ValueBase>, S, I, truncatable_base>;
 
 }
 }
