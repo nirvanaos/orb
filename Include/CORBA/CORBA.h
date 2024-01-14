@@ -41,7 +41,6 @@
 #include "ServantBase.h"
 #include "LocalObject.h"
 #include "ValueBaseImpl.h"
-//#include "ValueBasePOA.h"
 #include "AbstractBaseImpl.h"
 #include "AbstractBasePOA.h"
 #include "PseudoBase.h"
@@ -57,6 +56,7 @@
 #include "Messaging.h"
 #include "ExceptionHolder.h"
 #include "FindInterface.h"
+#include "DefaultValueRefCountBase.h"
 
 namespace Nirvana {
 

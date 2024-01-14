@@ -183,8 +183,7 @@ void Client <T, ValueBase>::_remove_ref ()
 {
 	Environment _env;
 	Bridge <ValueBase>& _b (T::_get_bridge (_env));
-	(_b._epv ().header.release) (&_b, &_env);
-	_env.check ();
+	(_b._epv ().header.release) (&_b);
 }
 
 #endif
@@ -210,6 +209,22 @@ public:
 		return val;
 	}
 };
+
+#ifdef LEGACY_CORBA_CPP
+
+inline void add_ref (ValueBase::_ptr_type vb)
+{
+	if (vb)
+		vb->_add_ref ();
+}
+
+inline void remove_ref (ValueBase::_ptr_type vb)
+{
+	if (vb)
+		vb->_remove_ref ();
+}
+
+#endif
 
 namespace Internal {
 

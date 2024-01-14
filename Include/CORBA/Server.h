@@ -45,6 +45,7 @@
 #include "ValueImpl.h"
 #include "ValueCreator.h"
 #include "AMI_s.h"
+#include "ValueRefCountBase.h"
 
 #ifdef LEGACY_CORBA_CPP
 #include "Servant_var.h"

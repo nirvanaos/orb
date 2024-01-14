@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,21 +24,15 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../../pch/pch.h"
-#include <CORBA/LocalObjectPOA.h>
+#ifndef NIRVANA_ORB_VALUEREFCOUNTBASE_H_
+#define NIRVANA_ORB_VALUEREFCOUNTBASE_H_
+#pragma once
 
-namespace CORBA {
-namespace Internal {
+namespace PortableServer {
 
-ULong ServantPOA <LocalObject>::_refcount_value ()
-{
-	return LocalObjectLink::_refcount_value ();
-}
-
-Boolean ServantPOA <LocalObject>::_is_a (String_in type_id)
-{
-	return LocalObjectLink::core_object_->_is_a (type_id);
-}
+class ValueRefCountBase
+{};
 
 }
-}
+
+#endif

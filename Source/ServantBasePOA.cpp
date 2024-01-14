@@ -24,7 +24,7 @@
 *  popov.nirvana@gmail.com
 */
 #include "../../pch/pch.h"
-#include <CORBA/Server.h>
+#include <CORBA/ServantBasePOA.h>
 
 namespace CORBA {
 namespace Internal {
@@ -32,6 +32,16 @@ namespace Internal {
 ServantPOA <PortableServer::ServantBase>::ServantPOA () :
 	ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_)
 {}
+
+ULong ServantPOA <PortableServer::ServantBase>::_refcount_value ()
+{
+	return ServantBaseLink::_refcount_value ();
+}
+
+Boolean ServantPOA <PortableServer::ServantBase>::_is_a (String_in type_id)
+{
+	return ServantBaseLink::_is_a (type_id);
+}
 
 }
 }

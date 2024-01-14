@@ -24,19 +24,19 @@
 *  popov.nirvana@gmail.com
 */
 #include "../../pch/pch.h"
-#include <CORBA/LocalObjectPOA.h>
+#include <CORBA/ValueBasePOA.h>
 
 namespace CORBA {
 namespace Internal {
 
-ULong ServantPOA <LocalObject>::_refcount_value ()
+void ServantPOA <ValueBase>::_marshal (I_ptr <IORequest> rq) const
 {
-	return LocalObjectLink::_refcount_value ();
+	throw NO_IMPLEMENT ();
 }
 
-Boolean ServantPOA <LocalObject>::_is_a (String_in type_id)
+void ServantPOA <ValueBase>::_unmarshal (I_ptr <IORequest> rq)
 {
-	return LocalObjectLink::core_object_->_is_a (type_id);
+	throw NO_IMPLEMENT ();
 }
 
 }

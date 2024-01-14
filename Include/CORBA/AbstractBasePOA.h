@@ -70,6 +70,9 @@ protected:
 	virtual void _add_ref () = 0;
 	virtual void _remove_ref () = 0;
 
+public:
+	virtual ULong _refcount_value () = 0;
+
 protected:
 	ServantPOA ()
 	{}

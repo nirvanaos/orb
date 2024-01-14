@@ -98,10 +98,7 @@ protected:
 	}
 
 public:
-	virtual ULong _refcount_value () override
-	{
-		return LocalObjectLink::_refcount_value ();
-	}
+	virtual ULong _refcount_value () override;
 
 protected:
 	ServantPOA () :

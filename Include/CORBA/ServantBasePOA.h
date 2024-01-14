@@ -47,7 +47,7 @@ class NIRVANA_NOVTABLE ServantPOA <PortableServer::ServantBase> :
 	public ServantMemory
 {
 public:
-	virtual Interface* _query_interface (const String& id) = 0;
+	virtual Interface* _query_interface (const String& id) noexcept = 0;
 
 	// ServantBase operations
 
@@ -67,10 +67,7 @@ public:
 		return ServantBaseLink::_get_interface ();
 	}
 
-	virtual Boolean _is_a (String_in type_id)
-	{
-		return ServantBaseLink::_is_a (type_id);
-	}
+	virtual Boolean _is_a (String_in type_id);
 
 	virtual Boolean _non_existent ()
 	{
@@ -83,7 +80,6 @@ protected:
 	template <class> friend class CORBA::servant_reference;
 #endif
 	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
-	friend class Skeleton <ServantPOA <LocalObject>, LocalObject>;
 
 	virtual void _add_ref ()
 	{
@@ -96,10 +92,7 @@ protected:
 	}
 
 public:
-	virtual ULong _refcount_value ()
-	{
-		return ServantBaseLink::_refcount_value ();
-	}
+	virtual ULong _refcount_value () override;
 
 protected:
 	virtual void _delete_object () noexcept
