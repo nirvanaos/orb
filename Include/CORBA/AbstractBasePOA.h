@@ -44,12 +44,12 @@ class NIRVANA_NOVTABLE ServantPOA <AbstractBase> :
 	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>
 {
 public:
-	I_ref <Object> _to_object () noexcept
+	Type <Object>::VRet _to_object () noexcept
 	{
 		return nullptr;
 	}
 
-	virtual I_ref <ValueBase> _to_value () noexcept
+	virtual Type <ValueBase>::VRet _to_value () noexcept
 	{
 		return nullptr;
 	}

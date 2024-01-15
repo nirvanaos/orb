@@ -64,6 +64,14 @@ protected:
 	virtual ~ServantPOA ()
 	{}
 
+	virtual Type <ValueBase>::VRet _to_value () noexcept override
+	{
+#ifndef LEGACY_CORBA_CPP
+		return this;
+#else
+		return ValueBase::_duplicate (this);
+#endif
+	}
 };
 
 }

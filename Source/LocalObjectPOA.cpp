@@ -29,6 +29,10 @@
 namespace CORBA {
 namespace Internal {
 
+ServantPOA <LocalObject>::ServantPOA () :
+	LocalObjectLink (Skeleton <ServantPOA <LocalObject>, LocalObject>::epv_)
+{}
+
 ULong ServantPOA <LocalObject>::_refcount_value ()
 {
 	return LocalObjectLink::_refcount_value ();

@@ -103,6 +103,10 @@ protected:
 protected:
 	ServantPOA ();
 
+	ServantPOA (const ServantPOA&) :
+		ServantPOA ()
+	{}
+
 	virtual ~ServantPOA ()
 	{}
 

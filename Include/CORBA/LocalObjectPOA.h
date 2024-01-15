@@ -101,8 +101,10 @@ public:
 	virtual ULong _refcount_value () override;
 
 protected:
-	ServantPOA () :
-		LocalObjectLink (Skeleton <ServantPOA <LocalObject>, LocalObject>::epv_)
+	ServantPOA ();
+
+	ServantPOA (const ServantPOA&) :
+		ServantPOA ()
 	{}
 
 	virtual Type <Interface>::VRet _get_proxy () override

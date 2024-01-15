@@ -37,9 +37,15 @@ class NIRVANA_NOVTABLE DefaultValueRefCountBase :
 	public virtual Internal::ServantPOA <ValueBase>,
 	public Internal::RefCountBase <DefaultValueRefCountBase>
 {
-private:
 	typedef Internal::RefCountBase <DefaultValueRefCountBase> Base;
 
+public:
+
+#ifndef LEGACY_CORBA_CPP
+protected:
+	template <class> friend class LifeCycleRefCnt;
+	template <class> friend class CORBA::servant_reference;
+#endif
 	virtual void _add_ref () override
 	{
 		Base::_add_ref ();
@@ -50,6 +56,7 @@ private:
 		Base::_remove_ref ();
 	}
 
+public:
 	virtual ULong _refcount_value () override
 	{
 		return Base::_refcount_value ();
