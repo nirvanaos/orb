@@ -225,7 +225,7 @@ public:
 
 	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env) noexcept
 	{
-		return interface_duplicate (_factory.imp.itf);
+		return _factory.imp.itf;
 	}
 
 	void _marshal (IORequest_ptr rq) const

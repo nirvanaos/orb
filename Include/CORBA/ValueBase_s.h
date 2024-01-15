@@ -103,7 +103,7 @@ protected:
 	static Interface* __truncatable_base (Bridge <ValueBase>* _b, Interface* _env)
 	{
 		try {
-			return Type <TypeCode>::ret (S::_implementation (_b)._truncatable_base ());
+			return Type <TypeCode>::VT_ret (S::_implementation (_b)._truncatable_base ());
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
@@ -115,7 +115,7 @@ protected:
 	static Interface* __factory (Bridge <ValueBase>* _b, Interface* _env) noexcept
 	{
 		try {
-			return Type <ValueFactoryBase>::ret (S::_implementation (_b)._factory ());
+			return Type <ValueFactoryBase>::VT_ret (S::_implementation (_b)._factory ());
 		} catch (Exception& e) {
 			set_exception (_env, e);
 		} catch (...) {
