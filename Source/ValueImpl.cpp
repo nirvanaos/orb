@@ -43,16 +43,14 @@ Interface* ValueAbstract::__factory (Bridge <ValueBase>*, Interface*)
 	return nullptr;
 }
 
-void ValueAbstract::__marshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
-	Internal::Interface* _env)
+void ValueAbstract::__marshal (Bridge <ValueBase>*, Interface*, Interface* _env)
 {
-	Internal::set_NO_IMPLEMENT (_env);
+	set_MARSHAL (_env, MAKE_OMG_MINOR (1)); // Unable to locate value factory.
 }
 
-void ValueAbstract::__unmarshal (Internal::Bridge <ValueBase>*, Internal::Interface*,
-	Internal::Interface* _env)
+void ValueAbstract::__unmarshal (Bridge <ValueBase>*, Interface*, Interface* _env)
 {
-	Internal::set_NO_IMPLEMENT (_env);
+	set_MARSHAL (_env, MAKE_OMG_MINOR (1)); // Unable to locate value factory.
 }
 
 }

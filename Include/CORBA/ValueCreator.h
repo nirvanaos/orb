@@ -48,54 +48,53 @@ public:
 
 template <class Impl>
 class ValueCreatorNoFactory :
-	public InterfaceStaticBase <ValueCreatorNoFactory <Impl>, ValueFactoryBase>,
-	public ServantTraitsStatic <ValueCreatorNoFactory <Impl> >,
-	public LifeCycleStatic,
+	public ImplementationPseudoStatic <ValueCreatorNoFactory <Impl>, ValueFactoryBase>,
 	public ValueCreatorBase <Impl>
 {
 public:
-	static Interface* _query_factory (String_in id) noexcept
+	
+	static I_ptr <Interface> _query_factory (String_in id) noexcept
 	{
 		return nullptr;
 	}
 
-	static Interface* _query_interface (String_in id)
-	{
-		if (RepId::compatible (RepIdOf <ValueFactoryBase>::id, id))
-			return InterfaceStaticBase <ValueCreatorNoFactory <Impl>, ValueFactoryBase>::_bridge ();
-		return _query_factory (id);
-	}
-
 };
+
+#if defined (_MSC_VER) && !defined (__clang__)
+#pragma warning (push)
+#pragma warning (disable: 4584)
+#endif
 
 template <class S, class Factory>
 class ValueCreatorImpl :
-	public InterfaceStaticBase <S, ValueFactoryBase>,
-	public InterfaceStaticBase <S, Factory>,
-	public ServantTraitsStatic <S>,
-	public LifeCycleStatic
+	public ImplementationPseudoStatic <S, ValueFactoryBase>,
+	public InterfaceStaticBase <S, Factory>
 {
 public:
-	static Interface* _query_factory (String_in id)
+	static I_ptr <Interface> _query_factory (String_in id)
 	{
 		if (RepId::compatible (RepIdOf <Factory>::id, id))
 			return InterfaceStaticBase <S, Factory>::_bridge ();
 		return nullptr;
 	}
 
-	static Interface* _query_interface (String_in id)
-	{
-		if (RepId::compatible (RepIdOf <ValueFactoryBase>::id, id))
-			return InterfaceStaticBase <S, ValueFactoryBase>::_bridge ();
-		return _query_factory (id);
-	}
 };
 
+#if defined (_MSC_VER) && !defined (__clang__)
+#pragma warning (pop)
+#endif
+
+/// This function returns ValueFactoryBase for the specific value type.
+/// 
+/// \typeparam I Value type interface
+/// \returns Pointer to ValueFactoryBase without the incrementing reference counter.
+template <class I>
+CORBA::ValueFactoryBase::_ptr_type get_factory () noexcept;
+
 }
 }
 
-#define NIRVANA_VALUETYPE_IMPL(V, Impl) template <>\
-CORBA::Internal::Interface* CORBA::Internal::query_creator_interface <V> (String_in id)\
-{ return ValueCreator <Impl, V>::_query_interface (id); }
+#define NIRVANA_VALUETYPE_IMPL(V, Impl) template <> CORBA::ValueFactoryBase::_ptr_type CORBA::Internal::get_factory <V> () noexcept {\
+	return CORBA::Internal::ValueCreator <Impl, V>::_get_ptr (); }
 
 #endif

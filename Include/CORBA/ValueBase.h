@@ -102,11 +102,11 @@ public:
 
 	/// If the value is truncatable, returns the type code of the truncatable base.
 	/// Otherwise returns nil reference.
-	I_ref <TypeCode> _truncatable_base ();
+	I_ptr <TypeCode> _truncatable_base ();
 
 	/// Returns factory interface for concrete value.
 	/// For abstract vaalue returns nil reference.
-	I_ref <ValueFactoryBase> _factory ();
+	I_ptr <ValueFactoryBase> _factory ();
 };
 
 template <class T>
@@ -148,21 +148,21 @@ I_ptr <Interface> Client <T, ValueBase>::_query_valuetype (String_in type_id)
 }
 
 template <class T>
-I_ref <TypeCode> Client <T, ValueBase>::_truncatable_base ()
+I_ptr <TypeCode> Client <T, ValueBase>::_truncatable_base ()
 {
 	Environment _env;
 	Bridge <ValueBase>& _b (T::_get_bridge (_env));
-	I_ret <TypeCode> _ret = (_b._epv ().epv.truncatable_base) (&_b, &_env);
+	I_VT_ret <TypeCode> _ret = (_b._epv ().epv.truncatable_base) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
 
 template <class T>
-I_ref <ValueFactoryBase> Client <T, ValueBase>::_factory ()
+I_ptr <ValueFactoryBase> Client <T, ValueBase>::_factory ()
 {
 	Environment _env;
 	Bridge <ValueBase>& _b (T::_get_bridge (_env));
-	I_ret <ValueFactoryBase> _ret = (_b._epv ().epv.factory) (&_b, &_env);
+	I_VT_ret <ValueFactoryBase> _ret = (_b._epv ().epv.factory) (&_b, &_env);
 	_env.check ();
 	return _ret;
 }
@@ -240,9 +240,6 @@ public:
 		return nullptr;
 	}
 };
-
-template <class I>
-Interface* query_creator_interface (String_in id);
 
 }
 }

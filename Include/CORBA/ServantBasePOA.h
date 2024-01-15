@@ -47,7 +47,7 @@ class NIRVANA_NOVTABLE ServantPOA <PortableServer::ServantBase> :
 	public ServantMemory
 {
 public:
-	virtual Interface* _query_interface (const String& id) noexcept = 0;
+	virtual I_ptr <Interface> _query_interface (const String& id) = 0;
 
 	// ServantBase operations
 
@@ -81,12 +81,12 @@ protected:
 #endif
 	friend class Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>;
 
-	virtual void _add_ref ()
+	virtual void _add_ref () override
 	{
 		ServantBaseLink::_add_ref ();
 	}
 
-	virtual void _remove_ref ()
+	virtual void _remove_ref () override
 	{
 		ServantBaseLink::_remove_ref ();
 	}

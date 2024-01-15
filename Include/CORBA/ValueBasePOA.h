@@ -53,14 +53,9 @@ public:
 
 	virtual void _marshal (I_ptr <IORequest> rq) const;
 	virtual void _unmarshal (I_ptr <IORequest> rq);
-	virtual Interface* _query_valuetype (const String& id) noexcept = 0;
-
-	virtual Type <TypeCode>::VRet _truncatable_base () const noexcept
-	{
-		return nullptr;
-	}
-
-	virtual Type <ValueFactoryBase>::VRet _factory () const noexcept = 0;
+	virtual Interface::_ptr_type _query_valuetype (const String& id) = 0;
+	virtual TypeCode::_ptr_type _truncatable_base () const noexcept;
+	virtual ValueFactoryBase::_ptr_type _factory () const;
 
 protected:
 	ServantPOA ()
@@ -68,6 +63,7 @@ protected:
 
 	virtual ~ServantPOA ()
 	{}
+
 };
 
 }

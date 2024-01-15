@@ -50,7 +50,7 @@ class ImplementationStatic :
 public:
 	typedef Primary PrimaryInterface;
 
-	static Interface* _query_interface (const String& id) noexcept
+	static I_ptr <Interface> _query_interface (const String& id)
 	{
 		return FindInterface <Primary, Bases...>::find (*(S*)0, id);
 	}

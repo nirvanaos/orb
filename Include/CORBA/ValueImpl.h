@@ -83,7 +83,7 @@ class ValueTruncatable
 public:
 	static Interface* __truncatable_base (Bridge <ValueBase>*, Interface*)
 	{
-		return interface_duplicate (&I_ptr <TypeCode> (*tc));
+		return &I_ptr <TypeCode> (*tc);
 	}
 };
 
@@ -111,29 +111,21 @@ public:
 	using ValueAbstract::__truncatable_base;
 };
 
-template <class I>
-class ValueBaseFactory
-{
-public:
-	static Interface* __factory (Bridge <ValueBase>*, Interface*) noexcept
-	{
-		return interface_duplicate (query_creator_interface <I> (RepIdOf <ValueFactoryBase>::id));
-	}
-};
-
 template <Nirvana::ImportInterfaceT <TypeCode>* truncatable_base>
-using TruncatableBase = typename std::conditional <!truncatable_base, ValueNonTruncatable, ValueTruncatable <truncatable_base> >::type;
+using TruncatableBase = typename std::conditional <truncatable_base == nullptr,
+	ValueNonTruncatable, ValueTruncatable <truncatable_base> >::type;
+
+template <class I>
+I_ptr <CORBA::ValueFactoryBase> get_factory () noexcept;
 
 /// Concrete value base
 template <class Base, class S, class I, Nirvana::ImportInterfaceT <TypeCode>* truncatable_base>
 class ValueConcrete :
 	public Base,
-	public TruncatableBase <truncatable_base>,
-	public ValueBaseFactory <I>
+	public TruncatableBase <truncatable_base>
 {
 public:
 	using TruncatableBase <truncatable_base>::__truncatable_base;
-	using ValueBaseFactory <I>::__factory;
 
 	Type <ValueBase>::VRet _copy_value () const
 	{
@@ -144,6 +136,10 @@ public:
 #endif
 	}
 
+	static I_ptr <ValueFactoryBase> _factory () noexcept
+	{
+		return get_factory <I> ();
+	}
 };
 
 /// Concrete value base

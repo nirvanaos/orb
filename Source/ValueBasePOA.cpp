@@ -31,12 +31,22 @@ namespace Internal {
 
 void ServantPOA <ValueBase>::_marshal (I_ptr <IORequest> rq) const
 {
-	throw NO_IMPLEMENT ();
+	throw MARSHAL (MAKE_OMG_MINOR (1)); // Unable to locate value factory.
 }
 
 void ServantPOA <ValueBase>::_unmarshal (I_ptr <IORequest> rq)
 {
-	throw NO_IMPLEMENT ();
+	throw MARSHAL (MAKE_OMG_MINOR (1)); // Unable to locate value factory.
+}
+
+TypeCode::_ptr_type ServantPOA <ValueBase>::_truncatable_base () const noexcept
+{
+	return nullptr;
+}
+
+ValueFactoryBase::_ptr_type ServantPOA <ValueBase>::_factory () const
+{
+	return nullptr;
 }
 
 }

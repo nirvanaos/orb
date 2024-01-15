@@ -238,7 +238,7 @@ public:
 		Type <T>::unmarshal (rq, this->_value ());
 	}
 
-	Interface* _query_valuetype (String_in id) noexcept
+	I_ptr <Interface> _query_valuetype (String_in id) noexcept
 	{
 		if (id.empty () || RepId::compatible (RepIdOf <VB>::id, id))
 			return &static_cast <ValueBoxBridge&> (*this);

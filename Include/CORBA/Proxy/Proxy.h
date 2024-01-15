@@ -60,7 +60,7 @@ public:
 	using ServantTraitsStatic <S>::_implementation;
 
 	// PseudoBase
-	static Interface* _query_interface (String_in id)
+	static I_ptr <Interface> _query_interface (String_in id)
 	{
 		return FindInterface <ProxyFactory, TypeCode>::find (*(S*)nullptr, id);
 	}

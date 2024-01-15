@@ -53,7 +53,7 @@ class Implementation :
 public:
 	typedef Primary PrimaryInterface;
 
-	Interface* _query_interface (String_in id) noexcept
+	I_ptr <Interface> _query_interface (String_in id)
 	{
 		return FindInterface <Primary, Bases...>::find (static_cast <S&> (*this), id);
 	}

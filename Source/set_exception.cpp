@@ -29,7 +29,7 @@
 #include <CORBA/Environment_c.h>
 #include <CORBA/system_exceptions.h>
 
-#define DEFINE_FUNCTION(e) void set_##e (Interface* env) noexcept { set_exception (env, SystemException::EC_##e, RepIdOf<e>::id, nullptr);}
+#define DEFINE_FUNCTION(e) void set_##e (Interface* env, uint32_t minor) noexcept { e ex (minor); set_exception (env, ex); }
 
 namespace CORBA {
 namespace Internal {

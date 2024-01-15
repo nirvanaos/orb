@@ -46,9 +46,12 @@ public:
 	using ServantTraitsStatic <ValueFactoryImpl <I> >::_implementation;
 
 	// PseudoBase
-	static Interface* _query_interface (String_in id)
+	static I_ptr <Interface> _query_interface (String_in id)
 	{
-		Interface* itf = query_creator_interface <I> (id);
+		I_ptr <ValueFactoryBase> fb = get_factory <I> ();
+		if (RepId::compatible (RepIdOf <ValueFactoryBase>::id, id))
+			return fb;
+		I_ptr <Interface> itf = fb->_query_factory (id);
 		if (!itf && RepId::compatible (RepIdOf <TypeCode>::id, id))
 			itf = InterfaceStaticBase <TypeCodeValue <I>, TypeCode>::_bridge ();
 		return itf;
@@ -67,12 +70,12 @@ public:
 	using ServantTraitsStatic <ValueBoxFactory <I> >::_implementation;
 
 	// PseudoBase
-	static Interface* _query_interface (String_in id)
+	static I_ptr <Interface> _query_interface (String_in id)
 	{
 		return FindInterface <ValueFactoryBase, TypeCode>::find (*(ValueBoxFactory <I>*)nullptr, id);
 	}
 
-	static Interface* _query_factory (String_in id) noexcept
+	static I_ptr <Interface> _query_factory (String_in id) noexcept
 	{
 		return nullptr;
 	}

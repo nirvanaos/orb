@@ -40,7 +40,7 @@ struct InterfaceEntry
 	Interface* (*cast) (void* servant);
 
 	static Interface* find (const InterfaceEntry* begin, const InterfaceEntry* end,
-		void* servant, String_in id) noexcept;
+		void* servant, String_in id);
 };
 
 template <class S, class Primary, class ... I>
@@ -53,7 +53,7 @@ class InterfaceFinder
 	}
 
 public:
-	static Interface* find (S& servant, String_in id) noexcept;
+	static Interface* find (S& servant, String_in id);
 
 private:
 	static const InterfaceEntry itable_ [];
@@ -66,7 +66,7 @@ const InterfaceEntry InterfaceFinder <S, Primary, I...>::itable_ [] = {
 };
 
 template <class S, class Primary, class ... I>
-inline Interface* InterfaceFinder <S, Primary, I...>::find (S& servant, String_in id) noexcept
+inline Interface* InterfaceFinder <S, Primary, I...>::find (S& servant, String_in id)
 {
 	return InterfaceEntry::find (itable_, itable_ + 1 + sizeof ... (I), &servant, id);
 }
@@ -76,7 +76,7 @@ class FindInterface
 {
 public:
 	template <class S>
-	static Interface* find (S& servant, String_in id) noexcept
+	static Interface* find (S& servant, String_in id)
 	{
 		return InterfaceFinder <S, Primary, I...>::find (servant, id);
 	}
