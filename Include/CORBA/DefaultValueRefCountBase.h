@@ -28,13 +28,13 @@
 #define NIRVANA_ORB_DEFAULTVALUEREFCOUNTBASE_H_
 #pragma once
 
-#include "ValueBasePOA.h"
+#include "AbstractBasePOA.h"
 #include "RefCountBase.h"
 
 namespace CORBA {
 
 class NIRVANA_NOVTABLE DefaultValueRefCountBase :
-	public virtual Internal::ServantPOA <ValueBase>,
+	public virtual Internal::ServantPOA <AbstractBase>,
 	public Internal::RefCountBase <DefaultValueRefCountBase>
 {
 	typedef Internal::RefCountBase <DefaultValueRefCountBase> Base;

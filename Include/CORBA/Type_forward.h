@@ -185,4 +185,9 @@ inline bool uncaught_exception () noexcept
 }
 }
 
+namespace IDL {
+/// IDL traits
+template <class> struct traits;
+}
+
 #endif

@@ -35,6 +35,7 @@
 #include "Any.h"
 #include "EnvironmentEx.h"
 #include "core_objects.h"
+#include "ServantPOA.h"
 
 // IDL generated headers
 #include "AMI.h"

@@ -33,6 +33,7 @@
 #include "ValueFactoryBase.h"
 #include "ValueBase_s.h"
 #include "LifeCycleRefCnt.h"
+#include "TypeCode.h"
 
 namespace CORBA {
 

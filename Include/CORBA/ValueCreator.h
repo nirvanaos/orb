@@ -29,19 +29,75 @@
 
 #include "ImplementationPseudoStatic.h"
 #include "ValueFactoryBase.h"
+#include "ValueImpl.h"
+#include <type_traits>
+#include <utility>
 
 namespace CORBA {
 namespace Internal {
 
 template <class S, class I> class ValueCreator;
 
+template <class T>
+class ImplCopy final : public T
+{
+public:
+	template <class ... Args>
+	ImplCopy (Args ... args) :
+		T (std::forward <Args> (args)...)
+	{}
+
+private:
+	virtual Type <ValueBase>::VRet _copy_value () const override
+	{
+		return ::CORBA::Internal::copy_value (*this);
+	}
+};
+
+template <class T>
+class ImplRefCnt final :
+	public T,
+	public DefaultValueRefCountBase
+{
+public:
+	template <class ... Args>
+	ImplRefCnt (Args ... args) :
+		T (std::forward <Args> (args)...)
+	{}
+
+};
+
+template <class T>
+class ImplRefCntCopy final :
+	public T,
+	public DefaultValueRefCountBase
+{
+public:
+	template <class ... Args>
+	ImplRefCntCopy (Args ... args) :
+		T (std::forward <Args> (args)...)
+	{}
+
+private:
+	virtual Type <ValueBase>::VRet _copy_value () const override
+	{
+		return ::CORBA::Internal::copy_value (*this);
+	}
+};
+
 template <class Impl>
 class ValueCreatorBase
 {
 public:
+	using ImplType = typename std::conditional <std::is_base_of <ServantPOA <AbstractBase>, Impl>::value,
+		typename std::conditional <IDL::traits <typename Impl::PrimaryInterface>::is_abstract::value,
+		typename std::conditional <std::is_abstract <Impl>::value, ImplRefCnt <Impl>, Impl>::type,
+		typename std::conditional <std::is_abstract <Impl>::value, ImplRefCntCopy <Impl>, ImplCopy <Impl> >::type>::type,
+		Impl>::type;
+
 	static I_ref <ValueBase> create_for_unmarshal ()
 	{
-		return make_reference <Impl> ();
+		return make_reference <ImplType> ();
 	}
 
 };
