@@ -42,6 +42,7 @@
 #include "LocalObject.h"
 #include "ValueBaseImpl.h"
 #include "ValueBasePOA.h"
+#include "ValueStatic.h"
 #include "AbstractBaseImpl.h"
 #include "AbstractBasePOA.h"
 #include "PseudoBase.h"

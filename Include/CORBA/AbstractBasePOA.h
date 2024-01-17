@@ -36,7 +36,6 @@ namespace CORBA {
 namespace Internal {
 
 /// POA implementation of AbstractBase
-/// Only value types derive this class.
 template <>
 class NIRVANA_NOVTABLE ServantPOA <AbstractBase> :
 	public ServantTraitsPOA,
@@ -44,11 +43,15 @@ class NIRVANA_NOVTABLE ServantPOA <AbstractBase> :
 	public InterfaceImplBase <ServantPOA <AbstractBase>, AbstractBase>
 {
 public:
+	/// This method is called only for value types.
+	/// The core proxy manager uses it's own implementation of AbstractBase.
 	Type <Object>::VRet _to_object () noexcept
 	{
 		return nullptr;
 	}
 
+	/// Returns nil by default.
+	/// Overridden in value types.
 	virtual Type <ValueBase>::VRet _to_value () noexcept
 	{
 		return nullptr;
@@ -64,8 +67,8 @@ public:
 
 #ifndef LEGACY_CORBA_CPP
 protected:
-#endif
 	template <class> friend class LifeCycleRefCnt;
+#endif
 
 	virtual void _add_ref () = 0;
 	virtual void _remove_ref () = 0;

@@ -46,7 +46,17 @@ class ValueImpl <S, ValueBase> :
 	public LifeCycleRefCnt <S>,
 	public ServantTraits <S>,
 	public ValueImplBase <S, ValueBase>
-{};
+{
+public:
+	Type <ValueBase>::VRet _to_value () noexcept
+	{
+#ifndef LEGACY_CORBA_CPP
+		return this;
+#else
+		return ValueBase::_duplicate (this);
+#endif
+	}
+};
 
 }
 }

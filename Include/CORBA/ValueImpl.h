@@ -129,7 +129,7 @@ Type <ValueBase>::VRet copy_value (const S& src)
 }
 
 /// Concrete value base
-template <class Base, class S, class I, Nirvana::ImportInterfaceT <TypeCode>* truncatable_base>
+template <class Base, class S, class Primary, Nirvana::ImportInterfaceT <TypeCode>* truncatable_base>
 class ValueConcrete :
 	public Base,
 	public TruncatableBase <truncatable_base>
@@ -144,17 +144,17 @@ public:
 
 	static I_ptr <ValueFactoryBase> _factory () noexcept
 	{
-		return get_factory <I> ();
+		return get_factory <Primary> ();
 	}
 };
 
 /// Concrete value base
-template <class S, class I, Nirvana::ImportInterfaceT <TypeCode>* truncatable_base = nullptr>
-using ValueBaseConcrete = ValueConcrete <ValueImpl <S, ValueBase>, S, I, truncatable_base>;
+template <class S, class Primary, Nirvana::ImportInterfaceT <TypeCode>* truncatable_base = nullptr>
+using ValueBaseConcrete = ValueConcrete <ValueImpl <S, ValueBase>, S, Primary, truncatable_base>;
 
-/// Value base with interface support
-template <class S, class I, Nirvana::ImportInterfaceT <TypeCode>* truncatable_base = nullptr>
-using ValueBaseSupports = ValueConcrete <ValueImplBase <S, ValueBase>, S, I, truncatable_base>;
+/// Value base with concrete interface support
+template <class S, class Primary, Nirvana::ImportInterfaceT <TypeCode>* truncatable_base = nullptr>
+using ValueBaseSupports = ValueConcrete <ValueImplBase <S, ValueBase>, S, Primary, truncatable_base>;
 
 }
 }

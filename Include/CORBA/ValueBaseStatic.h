@@ -1,4 +1,3 @@
-/// \file AbstractBaseImpl.h
 /*
 * Nirvana IDL support library.
 *
@@ -24,38 +23,38 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_ABSTRACTBASEIMPL_H_
-#define NIRVANA_ORB_ABSTRACTBASEIMPL_H_
+#ifndef NIRVANA_ORB_VALUEBASESTATIC_H_
+#define NIRVANA_ORB_VALUEBASESTATIC_H_
 #pragma once
 
-#include "AbstractBase_s.h"
+#include "ServantStatic.h"
+#include "LifeCycleStatic.h"
+#include "ValueBase_s.h"
+#include "ValueImpl.h"
 
 namespace CORBA {
 namespace Internal {
 
-/// AbstractBase dynamic implementation.
-/// Used in value types only.
 template <class S>
-class InterfaceImpl <S, AbstractBase> :
-	public InterfaceImplBase <S, AbstractBase>
+class InterfaceStatic <S, ValueBase> :
+	public InterfaceStaticBase <S, ValueBase>,
+	public ValueAbstract
 {
 public:
-	static Type <Object>::VRet _to_object () noexcept
+	using ValueAbstract::__copy_value;
+	using ValueAbstract::__factory;
+	using ValueAbstract::__marshal;
+	using ValueAbstract::__unmarshal;
+	using ValueAbstract::__truncatable_base;
+
+	// For AbstractBase
+	static Type <ValueBase>::VRet _to_value () noexcept
 	{
-		return nullptr;
-	}
-/*
-	Type <ValueBase>::VRet _to_value () noexcept
-	{
-		return I_ptr <ValueBase> (&static_cast <ValueBase&> (static_cast <Bridge <ValueBase>&> (static_cast <S&> (*this))));
-	}
-	*/
-	Bridge <AbstractBase>* _get_abstract_base (Type <String>::ABI_in iid,
-		Interface* env) noexcept
-	{
-		if (!RepId::compatible (RepIdOf <AbstractBase>::id, Type <String>::in (iid)))
-			set_INV_OBJREF (env);
-		return this;
+#ifndef LEGACY_CORBA_CPP
+		return InterfaceStaticBase <S, ValueBase>::_bridge ();
+#else
+		return ValueBase::_duplicate (InterfaceStaticBase <S, ValueBase>::_bridge ());
+#endif
 	}
 
 };
@@ -64,3 +63,4 @@ public:
 }
 
 #endif
+
