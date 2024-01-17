@@ -259,7 +259,7 @@ public:
 
 	template <class I>
 	I_ptr (const I_ptr <I>& src) :
-		Base (src.p_)
+		Base (&src)
 	{}
 
 	I_ptr (const I_ref <Interface>& src) noexcept :

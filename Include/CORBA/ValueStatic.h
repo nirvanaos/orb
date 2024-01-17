@@ -30,6 +30,7 @@
 #include "ValueBaseStatic.h"
 #include "AbstractBaseStatic.h"
 #include "FindInterface.h"
+#include <Nirvana/OLF.h>
 
 namespace CORBA {
 namespace Internal {
@@ -49,6 +50,10 @@ public:
 	{
 		return FindInterface <Primary, Bases...>::find (*(S*)0, id);
 	}
+
+	NIRVANA_OLF_SECTION static constexpr Nirvana::ExportInterface export_struct_ {
+	::Nirvana::OLF_EXPORT_INTERFACE, ::Nirvana::StaticId <S>::static_id_,
+	NIRVANA_STATIC_BRIDGE (ValueBase, S) };
 };
 
 template <class S, class Primary, class ... Bases>

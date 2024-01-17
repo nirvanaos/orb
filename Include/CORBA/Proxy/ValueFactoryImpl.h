@@ -59,20 +59,20 @@ public:
 
 };
 
-template <class I>
+template <class VB>
 class ValueBoxFactory :
-	public TypeCodeValueBox <I>,
-	public InterfaceStaticBase <ValueBoxFactory <I>, PseudoBase>,
-	public InterfaceStaticBase <ValueBoxFactory <I>, ValueFactoryBase>,
-	public ServantTraitsStatic <ValueBoxFactory <I> >
+	public TypeCodeValueBox <VB>,
+	public InterfaceStaticBase <ValueBoxFactory <VB>, PseudoBase>,
+	public InterfaceStaticBase <ValueBoxFactory <VB>, ValueFactoryBase>,
+	public ServantTraitsStatic <ValueBoxFactory <VB> >
 {
 public:
-	using ServantTraitsStatic <ValueBoxFactory <I> >::_implementation;
+	using ServantTraitsStatic <ValueBoxFactory <VB> >::_implementation;
 
 	// PseudoBase
 	static I_ptr <Interface> _query_interface (String_in id)
 	{
-		return FindInterface <ValueFactoryBase, TypeCode>::find (*(ValueBoxFactory <I>*)nullptr, id);
+		return FindInterface <ValueFactoryBase, TypeCode>::find (*(ValueBoxFactory <VB>*)nullptr, id);
 	}
 
 	static I_ptr <Interface> _query_factory (String_in id) noexcept
@@ -80,21 +80,10 @@ public:
 		return nullptr;
 	}
 
-#ifdef LEGACY_CORBA_CPP
-
-	static ValueBase_ptr create_for_unmarshal ()
+	static Type <ValueBase>::VRet create_for_unmarshal ()
 	{
-		return new I;
+		return create_value <VB> ();
 	}
-
-#else
-
-	static ValueBase::_ref_type create_for_unmarshal ()
-	{
-		return make_reference <I> ();
-	}
-
-#endif
 
 };
 

@@ -118,14 +118,28 @@ using TruncatableBase = typename std::conditional <truncatable_base == nullptr,
 template <class I>
 I_ptr <CORBA::ValueFactoryBase> get_factory () noexcept;
 
+#ifndef LEGACY_CORBA_CPP
+
+template <class S, class ... Args> inline
+servant_reference <S> create_value (Args ... args)
+{
+	return make_reference <S> (std::forward <Args> (args)...);
+}
+
+#else
+
+template <class S, class ... Args> inline
+S* create_value (Args ... args)
+{
+	return new S (std::forward <Args> (args)...);
+}
+
+#endif
+
 template <class S> inline
 Type <ValueBase>::VRet copy_value (const S& src)
 {
-#ifndef LEGACY_CORBA_CPP
-	return make_reference <S> (std::ref (src));
-#else
-	return new S (src);
-#endif
+	return create_value <S> (std::ref (src));
 }
 
 /// Concrete value base

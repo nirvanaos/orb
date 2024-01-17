@@ -403,8 +403,7 @@ struct TypeItfMarshalable :
 	TypeItfCommon <I>,
 	MarshalHelper <I, I_ref <I> >
 {
-	// By default, for interfaces, in and out parameters marshalled in the same manner.
-	// But this method is overridden for value types.
+	// For interfaces, in and out parameters marshalled in the same manner.
 	static void marshal_out (I_ref <I>& src, IORequest_ptr rq)
 	{
 		Type <I>::marshal_in (src, rq);

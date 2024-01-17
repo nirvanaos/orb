@@ -95,9 +95,9 @@ public:
 		typename std::conditional <std::is_abstract <Impl>::value, ImplRefCntCopy <Impl>, ImplCopy <Impl> >::type>::type,
 		Impl>::type;
 
-	static I_ref <ValueBase> create_for_unmarshal ()
+	static Type <ValueBase>::VRet create_for_unmarshal ()
 	{
-		return make_reference <ImplType> ();
+		return create_value <ImplType> ();
 	}
 
 };

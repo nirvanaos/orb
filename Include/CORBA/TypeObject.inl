@@ -37,7 +37,7 @@ namespace Internal {
 template <class I> inline
 void TypeObject <I>::marshal_in (I_ptr <I> src, IORequest_ptr rq)
 {
-	rq->marshal_interface (&src);
+	rq->marshal_interface (src);
 }
 
 template <class I> inline
