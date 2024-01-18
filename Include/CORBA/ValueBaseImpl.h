@@ -30,6 +30,7 @@
 
 #include "ValueImpl.h"
 #include "LifeCycleRefCnt.h"
+#include "ValueFactoryBase.h"
 #include "ValueBase_s.h"
 
 namespace CORBA {
