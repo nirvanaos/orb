@@ -104,10 +104,6 @@ struct InterfaceMetadata
 /// native InterfaceMetadataPtr;
 typedef const InterfaceMetadata* InterfaceMetadataPtr;
 
-template <>
-struct Type <InterfaceMetadataPtr> : TypeByVal <InterfaceMetadataPtr>
-{};
-
 template <class I>
 struct MetadataOf
 {

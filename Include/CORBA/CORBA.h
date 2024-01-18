@@ -60,7 +60,6 @@
 #include "FindInterface.h"
 #include "DefaultValueRefCountBase.h"
 #include "ValueFactoryImpl.h"
-#include "Proxy/InterfaceMetadata.h"
 
 namespace Nirvana {
 
