@@ -38,7 +38,8 @@ class TypeCodeUnion :
 	public TypeCodeStatic <TypeCodeUnion <U>,
 		TypeCodeWithId <TCKind::tk_union, U>, TypeCodeOps <U> >,
 	public TypeCodeMembers <U>,
-	public TypeCodeName <U>
+	public TypeCodeName <U>,
+	public TypeCodeORB
 {
 	typedef TypeCodeStatic <TypeCodeUnion <U>,
 		TypeCodeWithId <TCKind::tk_union, U>, TypeCodeOps <U> > Base;
@@ -50,6 +51,9 @@ public:
 	using Members::_s_member_count;
 	using Members::_s_member_name;
 	using Members::_s_member_type;
+	using TypeCodeORB::_s_equal;
+	using TypeCodeORB::_s_equivalent;
+	using TypeCodeORB::_s_get_compact_typecode;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{

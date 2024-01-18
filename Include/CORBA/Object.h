@@ -38,11 +38,11 @@
 #include "ServantPOA.h"
 
 // IDL generated headers
-#include "AMI.h"
+//#include "AMI.h"
 #include "IORequest.h"
 #include "Context.h"
-#include "Request.h"
-#include "Policy.h"
+//#include "Request.h"
+//#include "Policy.h"
 
 // ServantBase
 #include "ServantBase.h"
@@ -203,7 +203,7 @@ I_ref
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	Type <Policy>::C_ret _ret ((_b._epv ().epv.get_client_policy) (&_b, type, &_env));
+	I_ret <Policy> _ret ((_b._epv ().epv.get_client_policy) (&_b, type, &_env));
 	_env.check ();
 	return _ret;
 }
@@ -213,7 +213,7 @@ PolicyList Client <T, Object>::_get_policy_overrides (Type <PolicyTypeSeq>::C_in
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	Type <PolicyList>::C_ret _ret ((_b._epv ().epv.get_policy_overrides) (&_b, &types, &_env));
+	I_ref <PolicyList> _ret ((_b._epv ().epv.get_policy_overrides) (&_b, &types, &_env));
 	_env.check ();
 	return _ret;
 }

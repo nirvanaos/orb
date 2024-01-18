@@ -147,94 +147,120 @@ TypeCodeBase::EqResult TypeCodeBase::equivalent_ (TCKind tk, String_in id, ULong
 	return eq;
 }
 
-Type <String>::ABI_ret TypeCodeBase::_s_id (Bridge <TypeCode>* _b, Interface* _env)
+Type <String>::ABI_ret TypeCodeBase::_s_id (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return Type <String>::ret ();
 }
 
-Type <String>::ABI_ret TypeCodeBase::_s_name (Bridge <TypeCode>* _b, Interface* _env)
+Type <String>::ABI_ret TypeCodeBase::_s_name (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return Type <String>::ret ();
 }
 
-ULong TypeCodeBase::_s_member_count (Bridge <TypeCode>* _b, Interface* _env)
+Interface* TypeCodeBase::_s_get_compact_typecode (Bridge <CORBA::TypeCode>* _b, Interface* _env) noexcept
+{
+	// The get_compact_typecode operation strips out all optional name and member
+	// name fields, but it leaves all alias typecodes intact.
+	// By default, we don't strip names, just return this type code.
+	return _b;
+}
+
+ULong TypeCodeBase::_s_member_count (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return 0;
 }
 
-Type <String>::ABI_ret TypeCodeBase::_s_member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+Type <String>::ABI_ret TypeCodeBase::_s_member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return Type <String>::ret ();
 }
 
-Interface* TypeCodeBase::_s_member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+Interface* TypeCodeBase::_s_member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return nullptr;
 }
 
-Type <Any>::ABI_ret TypeCodeBase::_s_member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+Type <Any>::ABI_ret TypeCodeBase::_s_member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return Type <Any>::ret ();
 }
 
-Interface* TypeCodeBase::_s_discriminator_type (Bridge <TypeCode>* _b, Interface* _env)
+Interface* TypeCodeBase::_s_discriminator_type (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return nullptr;
 }
 
-Long TypeCodeBase::_s_default_index (Bridge <TypeCode>* _b, Interface* _env)
+Long TypeCodeBase::_s_default_index (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return 0;
 }
 
-ULong TypeCodeBase::_s_length (Bridge <TypeCode>* _b, Interface* _env)
+ULong TypeCodeBase::_s_length (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return 0;
 }
 
-Interface* TypeCodeBase::_s_content_type (Bridge <TypeCode>* _b, Interface* _env)
+Interface* TypeCodeBase::_s_content_type (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return nullptr;
 }
 
-UShort TypeCodeBase::_s_fixed_digits (Bridge <TypeCode>* _b, Interface* _env)
+UShort TypeCodeBase::_s_fixed_digits (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return 0;
 }
 
-Short TypeCodeBase::_s_fixed_scale (Bridge <TypeCode>* _b, Interface* _env)
+Short TypeCodeBase::_s_fixed_scale (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return 0;
 }
 
-Visibility TypeCodeBase::_s_member_visibility (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+Visibility TypeCodeBase::_s_member_visibility (Bridge <TypeCode>* _b, ULong index, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return 0;
 }
 
-ValueModifier TypeCodeBase::_s_type_modifier (Bridge <TypeCode>* _b, Interface* _env)
+ValueModifier TypeCodeBase::_s_type_modifier (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return 0;
 }
 
-Interface* TypeCodeBase::_s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
+Interface* TypeCodeBase::_s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	set_BadKind (_env);
 	return nullptr;
+}
+
+Type <CORBA::Boolean>::ABI_ret TypeCodeORB::_s_equal (Bridge <CORBA::TypeCode>* _b, Interface* tc, Interface* _env) noexcept
+{
+	Bridge <ORB>* orb = g_ORB.operator -> ();
+	return (orb->_epv ().epv.tc_equal) (orb, _b, tc, _env);
+}
+
+Type <CORBA::Boolean>::ABI_ret TypeCodeORB::_s_equivalent (Bridge <CORBA::TypeCode>* _b, Interface* tc, Interface* _env) noexcept
+{
+	Bridge <ORB>* orb = g_ORB.operator -> ();
+	return (orb->_epv ().epv.tc_equivalent) (orb, _b, tc, _env);
+}
+
+Interface* TypeCodeORB::_s_get_compact_typecode (Bridge <CORBA::TypeCode>* _b, Interface* _env) noexcept
+{
+	Bridge <ORB>* orb = g_ORB.operator -> ();
+	return (orb->_epv ().epv.get_compact_typecode) (orb, _b, _env);
 }
 
 }

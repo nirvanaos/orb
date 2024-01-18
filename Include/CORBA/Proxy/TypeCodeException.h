@@ -37,35 +37,26 @@ template <class E, bool members = false>
 class TypeCodeException :
 	public TypeCodeStatic <TypeCodeException <E, members>,
 		TypeCodeWithId <TCKind::tk_except, E>, TypeCodeOps <typename E::_Data> >,
+	public TypeCodeORB,
 	public TypeCodeMembersOptional <E, members>
 {
 	typedef TypeCodeStatic <TypeCodeException <E, members>,
 		TypeCodeWithId <TCKind::tk_except, E>, TypeCodeOps <typename E::_Data> > Base;
 	typedef TypeCodeMembersOptional <E, members> Members;
+
 public:
 	using Members::_s_member_count;
 	using Members::_s_member_name;
 	using Members::_s_member_type;
+	using TypeCodeORB::_s_equal;
+	using TypeCodeORB::_s_equivalent;
+	using TypeCodeORB::_s_get_compact_typecode;
 
 	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return const_string_ret_p (E::__name ());
 	}
 
-	static Boolean equal (I_ptr <TypeCode> other) noexcept
-	{
-		return g_ORB->tc_equal (Base::_get_ptr (), other);
-	}
-
-	static Boolean equivalent (I_ptr <TypeCode> other) noexcept
-	{
-		return g_ORB->tc_equivalent (Base::_get_ptr (), other);
-	}
-
-	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
-	{
-		return g_ORB->get_compact_typecode (Base::_get_ptr ());
-	}
 };
 
 }

@@ -34,6 +34,13 @@ namespace Internal {
 
 template <class I> class TypeCodeValue;
 
+struct StateMember
+{
+	const Char* name;
+	const GetTypeCode type;
+	Visibility visibility;
+};
+
 template <class T>
 class TypeCodeStateMembers
 {
@@ -134,9 +141,10 @@ using TypeCodeStateMembersOptional = typename std::conditional <members,
 template <class I, ValueModifier vm, bool members, GetTypeCode base = nullptr>
 class TypeCodeValueConcrete :
 	public TypeCodeStatic <TypeCodeValue <I>,
-	TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> >,
+		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> >,
 	public TypeCodeName <I>,
-	public TypeCodeStateMembersOptional <I, members>
+	public TypeCodeStateMembersOptional <I, members>,
+	public TypeCodeORB
 {
 	typedef TypeCodeStatic <TypeCodeValue <I>,
 		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> > Base;
@@ -149,21 +157,9 @@ public:
 	using Members::_s_member_name;
 	using Members::_s_member_type;
 	using Members::_s_member_visibility;
-
-	static Boolean equal (I_ptr <TypeCode> other)
-	{
-		return g_ORB->tc_equal (Base::_get_ptr (), other);
-	}
-
-	static Boolean equivalent (I_ptr <TypeCode> other)
-	{
-		return g_ORB->tc_equivalent (Base::_get_ptr (), other);
-	}
-
-	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
-	{
-		return g_ORB->get_compact_typecode (Base::_get_ptr ());
-	}
+	using TypeCodeORB::_s_equal;
+	using TypeCodeORB::_s_equivalent;
+	using TypeCodeORB::_s_get_compact_typecode;
 
 	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env)
 	{

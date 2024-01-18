@@ -58,31 +58,25 @@ Type <String>::ABI_ret const_string_ret_p (const Char* s) noexcept
 
 struct Parameter;
 
-struct StateMember
-{
-	const Char* name;
-	const GetTypeCode type;
-	Visibility visibility;
-};
-
 class TypeCodeBase
 {
 public:
-	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env);
-	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env);
-	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env);
-	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env);
-	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env);
-	static Type <Any>::ABI_ret _s_member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env);
-	static Interface* _s_discriminator_type (Bridge <TypeCode>* _b, Interface* _env);
-	static Long _s_default_index (Bridge <TypeCode>* _b, Interface* _env);
-	static ULong _s_length (Bridge <TypeCode>* _b, Interface* _env);
-	static Interface* _s_content_type (Bridge <TypeCode>* _b, Interface* _env);
-	static UShort _s_fixed_digits (Bridge <TypeCode>* _b, Interface* _env);
-	static Short _s_fixed_scale (Bridge <TypeCode>* _b, Interface* _env);
-	static Visibility _s_member_visibility (Bridge <TypeCode>* _b, ULong index, Interface* _env);
-	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env);
-	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env);
+	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env) noexcept;
+	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env) noexcept;
+	static Interface* _s_get_compact_typecode (Bridge <CORBA::TypeCode>* _b, Interface* _env) noexcept;
+	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) noexcept;
+	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index, Interface* _env) noexcept;
+	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index, Interface* _env) noexcept;
+	static Type <Any>::ABI_ret _s_member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env) noexcept;
+	static Interface* _s_discriminator_type (Bridge <TypeCode>* _b, Interface* _env) noexcept;
+	static Long _s_default_index (Bridge <TypeCode>* _b, Interface* _env) noexcept;
+	static ULong _s_length (Bridge <TypeCode>* _b, Interface* _env) noexcept;
+	static Interface* _s_content_type (Bridge <TypeCode>* _b, Interface* _env) noexcept;
+	static UShort _s_fixed_digits (Bridge <TypeCode>* _b, Interface* _env) noexcept;
+	static Short _s_fixed_scale (Bridge <TypeCode>* _b, Interface* _env) noexcept;
+	static Visibility _s_member_visibility (Bridge <TypeCode>* _b, ULong index, Interface* _env) noexcept;
+	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env) noexcept;
+	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env) noexcept;
 
 	static I_ptr <TypeCode> dereference_alias (I_ptr <TypeCode> tc);
 
@@ -132,6 +126,15 @@ protected:
 	static EqResult equivalent_ (TCKind tk, String_in id, ULong member_cnt,
 		I_ptr <TypeCode> other);
 
+};
+
+// TypeCode implementation with delegating some operations to ORB.
+class TypeCodeORB
+{
+public:
+	static Type <CORBA::Boolean>::ABI_ret _s_equal (Bridge <CORBA::TypeCode>* _b, Interface* tc, Interface* _env) noexcept;
+	static Type <CORBA::Boolean>::ABI_ret _s_equivalent (Bridge <CORBA::TypeCode>* _b, Interface* tc, Interface* _env) noexcept;
+	static Interface* _s_get_compact_typecode (Bridge <CORBA::TypeCode>* _b, Interface* _env) noexcept;
 };
 
 template <TCKind tk>
@@ -201,6 +204,7 @@ public:
 	using Impl::_s_kind;
 	using Impl::_s_id;
 	using Impl::_s_name;
+	using Impl::_s_get_compact_typecode;
 	using Impl::_s_member_count;
 	using Impl::_s_member_name;
 	using Impl::_s_member_type;
@@ -220,13 +224,6 @@ public:
 	using Ops::_s_n_align;
 	using Ops::_s_n_is_CDR;
 
-	// The get_compact_typecode operation strips out all optional name and member
-	// name fields, but it leaves all alias typecodes intact.
-	I_ref <TypeCode> get_compact_typecode () noexcept
-	{
-		// By default, we don't strip names, just return this type code.
-		return I_ptr <TypeCode> (&static_cast <TypeCode&> (static_cast <Bridge <TypeCode>&> (static_cast <S&> (*this))));
-	}
 };
 
 template <class S, class Impl, class Ops>

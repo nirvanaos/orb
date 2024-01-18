@@ -38,7 +38,8 @@ class TypeCodeStruct :
 	public TypeCodeStatic <TypeCodeStruct <S>,
 		TypeCodeWithId <TCKind::tk_struct, S>, TypeCodeOps <S> >,
 	public TypeCodeMembers <S>,
-	public TypeCodeName <S>
+	public TypeCodeName <S>,
+	public TypeCodeORB
 {
 	typedef TypeCodeStatic <TypeCodeStruct <S>,
 		TypeCodeWithId <TCKind::tk_struct, S>, TypeCodeOps <S> > Base;
@@ -48,21 +49,9 @@ public:
 	using Members::_s_member_count;
 	using Members::_s_member_name;
 	using Members::_s_member_type;
-
-	static Boolean equal (I_ptr <TypeCode> other)
-	{
-		return g_ORB->tc_equal (Base::_get_ptr (), other);
-	}
-
-	static Boolean equivalent (I_ptr <TypeCode> other)
-	{
-		return g_ORB->tc_equivalent (Base::_get_ptr (), other);
-	}
-
-	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
-	{
-		return g_ORB->get_compact_typecode (Base::_get_ptr ());
-	}
+	using TypeCodeORB::_s_equal;
+	using TypeCodeORB::_s_equivalent;
+	using TypeCodeORB::_s_get_compact_typecode;
 
 };
 
