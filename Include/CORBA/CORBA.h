@@ -59,6 +59,7 @@
 #include "ExceptionHolder.h"
 #include "FindInterface.h"
 #include "DefaultValueRefCountBase.h"
+#include "ValueFactoryImpl.h"
 
 namespace Nirvana {
 

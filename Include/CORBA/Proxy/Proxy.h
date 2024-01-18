@@ -39,10 +39,10 @@
 #include "TypeCodeStruct.h"
 #include "TypeCodeUnion.h"
 #include "TypeCodeInterface.h"
-#include "TypeCodeValue.h"
+#include "TypeCodeValueAbstract.h"
 #include "TypeCodeValueBox.h"
 #include "TypeCodeNative.h"
-#include "ValueFactoryImpl.h"
+#include "ValueBoxFactory.h"
 #include "PollerBase.h"
 
 namespace CORBA {

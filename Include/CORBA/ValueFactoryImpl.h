@@ -28,10 +28,9 @@
 #define NIRVANA_ORB_VALUEFACTORYIMPL_H_
 #pragma once
 
-#include "../ServantStatic.h"
-#include "../ValueFactoryBase_s.h"
+#include "ServantStatic.h"
+#include "ValueFactoryBase_s.h"
 #include "TypeCodeValue.h"
-#include "TypeCodeValueBox.h"
 
 namespace CORBA {
 namespace Internal {
@@ -55,34 +54,6 @@ public:
 		if (!itf && RepId::compatible (RepIdOf <TypeCode>::id, id))
 			itf = InterfaceStaticBase <TypeCodeValue <I>, TypeCode>::_bridge ();
 		return itf;
-	}
-
-};
-
-template <class VB>
-class ValueBoxFactory :
-	public TypeCodeValueBox <VB>,
-	public InterfaceStaticBase <ValueBoxFactory <VB>, PseudoBase>,
-	public InterfaceStaticBase <ValueBoxFactory <VB>, ValueFactoryBase>,
-	public ServantTraitsStatic <ValueBoxFactory <VB> >
-{
-public:
-	using ServantTraitsStatic <ValueBoxFactory <VB> >::_implementation;
-
-	// PseudoBase
-	static I_ptr <Interface> _query_interface (String_in id)
-	{
-		return FindInterface <ValueFactoryBase, TypeCode>::find (*(ValueBoxFactory <VB>*)nullptr, id);
-	}
-
-	static I_ptr <Interface> _query_factory (String_in id) noexcept
-	{
-		return nullptr;
-	}
-
-	static Type <ValueBase>::VRet create_for_unmarshal ()
-	{
-		return create_value <VB> ();
 	}
 
 };

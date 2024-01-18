@@ -150,7 +150,8 @@ CORBA::ValueFactoryBase::_ptr_type get_factory () noexcept;
 }
 }
 
-#define NIRVANA_VALUETYPE_IMPL(V, Impl) template <> CORBA::ValueFactoryBase::_ptr_type CORBA::Internal::get_factory <V> () noexcept {\
-	return CORBA::Internal::ValueCreator <Impl, V>::_get_ptr (); }
+#define NIRVANA_VALUETYPE_IMPL(uname, V, Impl) template <> CORBA::ValueFactoryBase::_ptr_type CORBA::Internal::get_factory <V> () noexcept {\
+	return CORBA::Internal::ValueCreator <Impl, V>::_get_ptr (); }\
+	NIRVANA_EXPORT (uname, CORBA::Internal::RepIdOf <V>::id, CORBA::Internal::PseudoBase, CORBA::Internal::ValueFactoryImpl <V>)
 
 #endif

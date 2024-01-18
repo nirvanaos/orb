@@ -27,78 +27,12 @@
 #ifndef NIRVANA_ORB_TYPECODEVALUE_H_
 #define NIRVANA_ORB_TYPECODEVALUE_H_
 
-#include "../TypeCodeImpl.h"
+#include "TypeCodeImpl.h"
 
 namespace CORBA {
 namespace Internal {
 
 template <class I> class TypeCodeValue;
-
-template <class I>
-class TypeCodeValueAbstract :
-	public TypeCodeStatic <TypeCodeValue <I>,
-	TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> >,
-	public TypeCodeName <I>
-{
-	typedef TypeCodeStatic <TypeCodeValue <I>,
-		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> > Base;
-public:
-	typedef TypeCodeName <I> Name;
-	using Name::_s_name;
-
-	static Boolean equal (I_ptr <TypeCode> other)
-	{
-		return g_ORB->tc_equal (Base::_get_ptr (), other);
-	}
-
-	static Boolean equivalent (I_ptr <TypeCode> other)
-	{
-		return g_ORB->tc_equivalent (Base::_get_ptr (), other);
-	}
-
-	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
-	{
-		return g_ORB->get_compact_typecode (Base::_get_ptr ());
-	}
-
-	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) noexcept
-	{
-		return 0;
-	}
-
-	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env) noexcept
-	{
-		set_Bounds (_env);
-		return Type <String>::ret ();
-	}
-
-	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env) noexcept
-	{
-		set_Bounds (_env);
-		return nullptr;
-	}
-
-	static Visibility _s_member_visibility (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env) noexcept
-	{
-		set_Bounds (_env);
-		return 0;
-	}
-
-	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env)
-		noexcept
-	{
-		return VM_ABSTRACT;
-	}
-
-	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
-		noexcept
-	{
-		return nullptr;
-	}
-};
 
 template <class T>
 class TypeCodeStateMembers
