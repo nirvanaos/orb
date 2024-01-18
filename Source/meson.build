@@ -27,4 +27,5 @@ orb_src = files(
 	'Type_fixed.cpp',
 	'TypeCodeImpl.cpp',
 	'UnknownUserException.cpp',
+	'ValueBasePOA.cpp',
 	'ValueImpl.cpp')
