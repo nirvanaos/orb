@@ -30,22 +30,12 @@
 
 #include "Object_c.h"
 #include "TypeObject.h"
-#include "TypeAlias.h"
-#include "UserException.h"
-#include "Any.h"
-#include "EnvironmentEx.h"
+#include "Environment.h"
 #include "core_objects.h"
-#include "ServantPOA.h"
 
-// IDL generated headers
-//#include "AMI.h"
-#include "IORequest.h"
-#include "Context.h"
-//#include "Request.h"
-//#include "Policy.h"
-
-// ServantBase
-#include "ServantBase.h"
+namespace PortableServer {
+class ServantBase;
+}
 
 namespace CORBA {
 
