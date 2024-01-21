@@ -25,8 +25,6 @@
 *  popov.nirvana@gmail.com
 */
 #include "../../pch/pch.h"
-#include <Nirvana/native.h>
-#include <CORBA/ServantLocator_native.h>
 
 namespace CORBA {
 namespace Internal {

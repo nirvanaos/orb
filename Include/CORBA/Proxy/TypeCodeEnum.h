@@ -42,9 +42,13 @@ class TypeCodeEnum :
 {
 	typedef TypeCodeStatic <TypeCodeEnum <E>, TypeCodeWithId <TCKind::tk_enum, E>,
 		TypeCodeOps <E> > Base;
+
+	typedef ServantStatic <TypeCodeEnum <E>, TypeCode> Servant;
+
 public:
 	using TypeCodeMemberCount <Type <E>::count_>::_s_member_count;
 	using TypeCodeName <E>::_s_name;
+	using Servant::_s_get_compact_typecode;
 
 	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
 		Interface* _env)
