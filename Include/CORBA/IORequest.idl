@@ -176,22 +176,24 @@ pseudo interface IORequest
   /// \param itf The interface derived from Object or LocalObject.
   void marshal_interface (in _Interface itf);
 
-  /// Unmarshal interface.
+  /// Unmarshal interface (Object).
   /// 
   /// \param rep_id The interface repository id.
+  /// \param [out] itf The interface.
   /// 
-  /// \returns Interface.
-  _Interface unmarshal_interface (in string interface_id);
+  void unmarshal_interface (in string interface_id, out _Interface itf);
 
   /// Marshal TypeCode.
   /// 
   /// \param tc TypeCode.
+  /// 
   void marshal_type_code (in TypeCode tc);
 
   /// Unmarshal TypeCode.
   /// 
-  /// \returns TypeCode.
-  TypeCode unmarshal_type_code ();
+  /// \param [out] TypeCode.
+  /// 
+  void unmarshal_type_code (out TypeCode tc);
 
   /// Marshal value type.
   /// 
@@ -201,21 +203,22 @@ pseudo interface IORequest
   /// Unmarshal value type.
   /// 
   /// \param rep_id The value type repository id.
+  /// \param [out] val The value interface.
   /// 
-  /// \returns Value type interface.
-  _Interface unmarshal_value (in string interface_id);
+  void unmarshal_value (in string interface_id, out _Interface val);
 
   /// Marshal abstract interface.
   /// 
   /// \param itf The interface derived from AbstractBase.
+  /// 
   void marshal_abstract (in _Interface itf);
 
   /// Unmarshal abstract interface.
   /// 
   /// \param rep_id The interface repository id.
+  /// \param [out] itf The interface.
   /// 
-  /// \returns Interface.
-  _Interface unmarshal_abstract (in string interface_id);
+  void unmarshal_abstract (in string interface_id, out _Interface itf);
 
   ///@}
 

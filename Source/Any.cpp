@@ -56,7 +56,8 @@ void Type <Any>::marshal_out (Any& src, IORequest_ptr rq)
 
 void Type <Any>::unmarshal (IORequest_ptr rq, Any& dst)
 {
-	I_ref <TypeCode> tc = rq->unmarshal_type_code ();
+	I_ref <TypeCode> tc;
+	rq->unmarshal_type_code (tc);
 	unmarshal (tc, rq, dst);
 }
 

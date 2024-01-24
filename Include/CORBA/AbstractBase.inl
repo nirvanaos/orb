@@ -44,7 +44,7 @@ template <class I> inline
 void TypeAbstractInterface <I>::unmarshal (IORequest_ptr rq, I_ref <I>& dst)
 {
 	// I may be not completely defined so we use reinterpret_cast
-	reinterpret_cast <I_ref <Interface>&> (dst) = rq->unmarshal_abstract (RepIdOf <I>::id);
+	rq->unmarshal_abstract (RepIdOf <I>::id, reinterpret_cast <I_ref <Interface>&> (dst));
 }
 
 }

@@ -43,7 +43,7 @@ void TypeItf <TypeCode>::marshal_in (I_ptr <TypeCode> src, IORequest_ptr rq)
 inline
 void TypeItf <TypeCode>::unmarshal (IORequest_ptr rq, I_ref <TypeCode>& dst)
 {
-	dst = rq->unmarshal_type_code ();
+	rq->unmarshal_type_code (dst);
 }
 
 }

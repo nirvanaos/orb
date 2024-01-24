@@ -80,13 +80,13 @@ public:
 	}
 
 private:
-	I_ref <ValueBase> create_for_unmarshal ();
+	Type <ValueBase>::VRet create_for_unmarshal ();
 	friend class CORBA::Core::RequestGIOP;
 	friend class CORBA::Core::RequestLocalBase;
 };
 
 template <class T>
-I_ref <ValueBase> Client <T, ValueFactoryBase>::create_for_unmarshal ()
+Type <ValueBase>::VRet Client <T, ValueFactoryBase>::create_for_unmarshal ()
 {
 	Environment _env;
 	Bridge <ValueFactoryBase>& _b (T::_get_bridge (_env));
