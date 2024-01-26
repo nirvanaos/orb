@@ -134,31 +134,19 @@ struct StaticId
 
 }
 
-template <class S> struct PrimaryInterface;
-
 }
 }
 
-namespace Nirvana {
+#if defined (_MSC_VER) && !defined (__clang__)
 
-template <class S, class I = typename CORBA::Internal::PrimaryInterface <S>::Itf>
-class Static
-{
-public:
-	static CORBA::Internal::I_ptr <I> ptr () noexcept
-	{
-		assert (import_.itf);
-		return (I*)import_.itf;
-	}
+#define NIRVANA_EXPORT_OBJECT(uname, Impl)\
+extern "C" NIRVANA_STATIC_IMPORT void* uname = &Impl::export_struct_;\
+__pragma(comment (linker, "/include:" C_NAME_PREFIX #uname))
 
-private:
-	NIRVANA_OLF_SECTION static NIRVANA_STATIC_IMPORT ImportInterface import_;
-};
+#else
 
-template <class S, class I>
-NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT ImportInterface Static <S, I>::import_{ OLF_IMPORT_OBJECT,
-CORBA::Internal::StaticId <S>::id, CORBA::Internal::RepIdOf <I>::id };
+#define NIRVANA_EXPORT_OBJECT(uname, Impl) NIRVANA_STATIC_IMPORT void* __attribute__ ((used)) uname = &Impl::export_struct_;
 
-}
+#endif
 
 #endif
