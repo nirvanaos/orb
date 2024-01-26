@@ -38,13 +38,14 @@
 namespace CORBA {
 namespace Internal {
 
-//! \class ImplementationPseudoStatic
-//!
-//! \brief Static implementation of a pseudo interface.
-//!
-//! \tparam S Servant class implementing operations.
-//! \tparam Primary Primary interface.
-
+/// \brief Static implementation of a pseudo object.
+///
+/// Pseudo interfaces can't inherit or be inherited.
+/// Intended for internal purposes. Usually, programmer does not use pseudo interfaces.
+/// Use abstract value types instead.
+/// 
+/// \tparam S Servant class implementing operations.
+/// \tparam Primary Primary interface.
 template <class S, class Primary>
 class ImplementationPseudoStatic :
 	public InterfaceStaticBase <S, Primary>,

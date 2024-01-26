@@ -43,7 +43,6 @@ public:
 
 #ifndef LEGACY_CORBA_CPP
 protected:
-	template <class> friend class LifeCycleRefCnt;
 	template <class> friend class CORBA::servant_reference;
 #endif
 	virtual void _add_ref () override

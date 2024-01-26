@@ -38,15 +38,17 @@
 namespace CORBA {
 namespace Internal {
 
-//! \class ImplementationPseudo
-//!
-//! \brief An implementation of a pseudo object (like proxy).
-//!
-//! You also have to derive your servant from some life cycle implementation,
-//! usually `LifeCycleServant`.
-//!
-//! \tparam S Servant class implementing operations.
-//! \tparam Primary Primary interface.
+/// \brief An implementation of a pseudo object.
+/// 
+/// Pseudo interfaces can't inherit or be inherited.
+/// Intended for internal purposes. Usually, programmer does not use pseudo interfaces.
+/// Use abstract value types instead.
+///
+/// You also have to derive your servant from some life cycle implementation,
+/// usually `LifeCycleRefCnt <S>` and `RefCountBase <S>`.
+///
+/// \tparam S Servant class implementing operations.
+/// \tparam Primary Primary interface.
 
 template <class S, class Primary>
 class ImplementationPseudo :
