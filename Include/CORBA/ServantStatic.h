@@ -30,6 +30,7 @@
 
 #include "ServantImpl.h"
 #include "I_ptr.h"
+#include <Nirvana/ImportInterface.h>
 
 namespace CORBA {
 namespace Internal {
@@ -122,8 +123,42 @@ public:
 	static void __delete_object (Interface* _b, Interface* _env) noexcept;
 };
 
+// Use inline anonimous namespace to avoid linker errors "duplicated symbol".
+inline namespace {
+
+template <class S>
+struct StaticId
+{
+	static const char id [];
+};
+
 }
+
+template <class S> struct PrimaryInterface;
+
+}
+}
+
+namespace Nirvana {
+
+template <class S, class I = typename CORBA::Internal::PrimaryInterface <S>::Itf>
+class Static
+{
+public:
+	static CORBA::Internal::I_ptr <I> ptr () noexcept
+	{
+		assert (import_.itf);
+		return (I*)import_.itf;
+	}
+
+private:
+	NIRVANA_OLF_SECTION static NIRVANA_STATIC_IMPORT ImportInterface import_;
+};
+
+template <class S, class I>
+NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT ImportInterface Static <S, I>::import_{ OLF_IMPORT_OBJECT,
+CORBA::Internal::StaticId <S>::id, CORBA::Internal::RepIdOf <I>::id };
+
 }
 
 #endif
-

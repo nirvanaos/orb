@@ -38,6 +38,8 @@ namespace Internal {
 template <class S>
 class InterfaceStatic <S, ValueBase> :
 	public InterfaceStaticBase <S, ValueBase>,
+	public LifeCycleStatic,
+	public ServantStaticDummy,
 	public ValueAbstract
 {
 public:

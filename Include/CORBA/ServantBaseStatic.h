@@ -122,7 +122,7 @@ private:
 
 public:
 	NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT static constexpr Nirvana::ExportObject export_struct_{
-	::Nirvana::OLF_EXPORT_OBJECT, ::Nirvana::StaticId <S>::static_id_,
+	::Nirvana::OLF_EXPORT_OBJECT, StaticId <S>::id,
 	NIRVANA_STATIC_BRIDGE (PortableServer::ServantBase, S) };
 };
 

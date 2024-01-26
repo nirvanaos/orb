@@ -30,6 +30,7 @@
 #include "ValueBaseStatic.h"
 #include "AbstractBaseStatic.h"
 #include "FindInterface.h"
+#include <Nirvana/OLF.h>
 
 namespace CORBA {
 namespace Internal {
@@ -38,7 +39,6 @@ template <class S, class Primary, class ... Bases>
 class ValueStatic :
 	public InterfaceStatic <S, ValueBase>,
 	public ServantTraitsStatic <S>,
-	public LifeCycleStatic,
 	public InterfaceStatic <S, Bases>...,
 	public InterfaceStatic <S, Primary>
 {
@@ -76,5 +76,7 @@ public:
 
 }
 }
+
+#define NIRVANA_EXPORT_VALUE(uname, Impl) NIRVANA_EXPORT (uname, CORBA::Internal::StaticId <Impl>::id, CORBA::ValueBase, Impl)
 
 #endif
