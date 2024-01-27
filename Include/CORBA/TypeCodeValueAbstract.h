@@ -36,17 +36,32 @@ template <class I>
 class TypeCodeValueAbstract :
 	public TypeCodeStatic <TypeCodeValueAbstract <I>,
 		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> >,
-	public TypeCodeName <I>,
-	public TypeCodeORB
+	public TypeCodeName <I>
 {
 	typedef TypeCodeStatic <TypeCodeValueAbstract <I>,
 		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> > Base;
+
+	typedef ServantStatic <TypeCodeValueAbstract <I>, TypeCode> Servant;
+
 public:
-	typedef TypeCodeName <I> Name;
-	using Name::_s_name;
-	using TypeCodeORB::_s_equal;
-	using TypeCodeORB::_s_equivalent;
-	using TypeCodeORB::_s_get_compact_typecode;
+	using TypeCodeName <I>::_s_name;
+	using Servant::_s_get_compact_typecode;
+
+	static Boolean equal (I_ptr <TypeCode> other)
+	{
+		return (Base::_bridge () == &other) ||
+			TypeCodeBase::equal (TCKind::tk_value, Base::RepositoryType::id, TypeCodeName <I>::name_, other);
+	}
+
+	static Boolean equivalent (I_ptr <TypeCode> other)
+	{
+		return (Base::_bridge () == &other) || Base::equivalent (other);
+	}
+
+	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
+	{
+		return g_ORB->create_value_tc (Base::RepositoryType::id, IDL::String (), VM_ABSTRACT, nullptr, ValueMemberSeq ());
+	}
 
 	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{

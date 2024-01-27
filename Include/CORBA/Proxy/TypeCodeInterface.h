@@ -37,20 +37,24 @@ class TypeCodeInterface :
 	public TypeCodeStatic <TypeCodeInterface <I>, TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> >,
 	public TypeCodeName <I>
 {
-	typedef TypeCodeStatic <TypeCodeInterface <I>, TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> > Base;
+	typedef TypeCodeStatic <TypeCodeInterface <I>,
+		TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> > Base;
+
+	typedef ServantStatic <TypeCodeInterface <I>, TypeCode> Servant;
+
 public:
 	using TypeCodeName <I>::_s_name;
+	using Servant::_s_get_compact_typecode;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return Base::_bridge () == &other ||
+		return (Base::_bridge () == &other) ||
 			TypeCodeBase::equal (Type <I>::tc_kind, Base::RepositoryType::id, TypeCodeName <I>::name_, other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return Base::_bridge () == &other ||
-			Base::equivalent (other);
+		return (Base::_bridge () == &other) || Base::equivalent (other);
 	}
 
 	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
