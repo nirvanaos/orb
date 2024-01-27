@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_TYPECODETYPEDEF_H_
 #define NIRVANA_ORB_TYPECODETYPEDEF_H_
 
-#include "TypeAlias.h"
+#include "Alias.h"
 #include "TypeCodeImpl.h"
 
 namespace CORBA {

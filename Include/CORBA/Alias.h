@@ -24,8 +24,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPEALIAS_H_
-#define NIRVANA_ORB_TYPEALIAS_H_
+#ifndef NIRVANA_ORB_ALIAS_H_
+#define NIRVANA_ORB_ALIAS_H_
 
 #include "I_ptr.h"
 

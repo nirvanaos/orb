@@ -39,7 +39,6 @@
 #include "TypeCodeStruct.h"
 #include "TypeCodeUnion.h"
 #include "TypeCodeInterface.h"
-#include "TypeCodeValueAbstract.h"
 #include "TypeCodeValueBox.h"
 #include "TypeCodeNative.h"
 #include "ValueBoxFactory.h"

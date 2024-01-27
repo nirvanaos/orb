@@ -49,6 +49,7 @@
 #include "ValueFactoryBase.h"
 #include "Union.h"
 #include "TypeCodeValue.h"
+#include "TypeCodeValueAbstract.h"
 #include "ExceptionHolder.h"
 #include "TypeCodeTypeDef.h"
 #include "TypeCodeString.h"

@@ -24,32 +24,31 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPE_H_
-#define NIRVANA_ORB_TYPE_H_
-#pragma once
+#ifndef NIRVANA_ORB_STATICTC_H_
+#define NIRVANA_ORB_STATICTC_H_
 
-#include "TypeFixLen.inl"
-#include "TypeVarLen.inl"
-#include "TypePrimitive.inl"
-#include "TypeEnum.inl"
-#include "Type_interface.inl"
-#include "TypeObject.inl"
-#include "ValueBase.inl"
-#include "ValueBox.h"
-#include "AbstractBase.inl"
-#include "StaticTC.h"
-#include "Alias.h"
+#include "I_ptr.h"
 
 namespace CORBA {
+
+class TypeCode;
+
 namespace Internal {
 
-/// The `void` type.
-template <>
-struct Type <void>
+struct StaticTC
 {
-	static I_ptr <TypeCode> type_code ()
+	Bridge <TypeCode>* ptc;
+
+	operator I_ptr <TypeCode> () const
 	{
-		return _tc_void;
+		assert (ptc);
+		return reinterpret_cast <TypeCode*> (ptc);
+	}
+
+	TypeCode* operator -> () const
+	{
+		assert (ptc);
+		return reinterpret_cast <TypeCode*> (ptc);
 	}
 };
 
