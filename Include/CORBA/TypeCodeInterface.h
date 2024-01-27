@@ -27,7 +27,7 @@
 #ifndef NIRVANA_ORB_TYPECODEINTERFACE_H_
 #define NIRVANA_ORB_TYPECODEINTERFACE_H_
 
-#include "../TypeCodeImpl.h"
+#include "TypeCodeImpl.h"
 
 namespace CORBA {
 namespace Internal {

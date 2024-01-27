@@ -38,7 +38,6 @@
 #include "TypeCodeEnum.h"
 #include "TypeCodeStruct.h"
 #include "TypeCodeUnion.h"
-#include "TypeCodeInterface.h"
 #include "TypeCodeValueBox.h"
 #include "TypeCodeNative.h"
 #include "ValueBoxFactory.h"
@@ -47,23 +46,11 @@
 namespace CORBA {
 namespace Internal {
 
-/// Proxy factory implements PseudoBase, ProxyFactory and TypeCode interfaces.
+/// Proxy factory base.
 template <class S, class I>
-class ProxyFactoryBase :
-	public TypeCodeInterface <I>,
-	public InterfaceStaticBase <S, PseudoBase>,
-	public InterfaceStaticBase <S, ProxyFactory>,
-	public ServantTraitsStatic <S>
+class ProxyFactoryBase : public ServantStatic <S, ProxyFactory>
 {
 public:
-	using ServantTraitsStatic <S>::_implementation;
-
-	// PseudoBase
-	static I_ptr <Interface> _query_interface (String_in id)
-	{
-		return FindInterface <ProxyFactory, TypeCode>::find (*(S*)nullptr, id);
-	}
-
 	// ProxyFactory
 
 	static InterfaceMetadataPtr _s__get_metadata (Bridge <ProxyFactory>* obj,

@@ -35,6 +35,7 @@ class TypeCode;
 
 namespace Internal {
 
+/// Static local implementation of TypeCode without import/export
 struct StaticTC
 {
 	Bridge <TypeCode>* ptc;

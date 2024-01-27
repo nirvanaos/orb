@@ -61,6 +61,7 @@
 #include "ServantLocator_native.h"
 #include "ValueFactoryImpl.h"
 #include "TypeCodeValueAbstract.h"
+#include "TypeCodeInterface.h"
 #include "Messaging.h"
 
 namespace Nirvana {
