@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_VALUEBASE_S_H_
 #pragma once
 
-#include "ValueBase.h"
+#include "ValueFactoryBase.h"
 
 namespace CORBA {
 namespace Internal {

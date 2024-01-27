@@ -138,7 +138,7 @@ I_ref
 <Request> Client <T, Object>::_request (String_in operation)
 {
 	I_ref <Request> rq;
-	_create_request (Context::_nil (), operation, NVList::_nil (), NamedValue::_nil (), rq, 0);
+	_create_request (nullptr, operation, nullptr, nullptr, rq, 0);
 	return rq;
 }
 
@@ -203,7 +203,7 @@ PolicyList Client <T, Object>::_get_policy_overrides (Type <PolicyTypeSeq>::C_in
 {
 	Environment _env;
 	Bridge <Object>& _b (T::_get_bridge (_env));
-	I_ref <PolicyList> _ret ((_b._epv ().epv.get_policy_overrides) (&_b, &types, &_env));
+	Type <PolicyList>::C_ret _ret ((_b._epv ().epv.get_policy_overrides) (&_b, &types, &_env));
 	_env.check ();
 	return _ret;
 }

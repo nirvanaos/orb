@@ -183,6 +183,9 @@ public:
 	}
 };
 
+// Use inline anonimous namespace to avoid linker errors "duplicated symbol".
+inline namespace {
+
 template <class T>
 class TypeCodeName
 {
@@ -195,6 +198,8 @@ public:
 protected:
 	static const Char name_ [];
 };
+
+}
 
 template <class S, class Impl, class Ops>
 class TypeCodeImplBase :
