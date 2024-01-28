@@ -105,3 +105,6 @@
 /Include/CORBA/CosTypedEventComm.h
 /Include/CORBA/CosTypedEventComm_s.h
 /Source/CosTypedEventComm.cpp
+/Include/CORBA/CORBA_types_s.h
+/Include/CORBA/CORBA_types.h
+/Source/CORBA_types.cpp

@@ -1,0 +1,12 @@
+// Commonly used CORBA types
+#ifndef CORBA_TYPES_IDL_
+#define CORBA_TYPES_IDL_
+
+module CORBA {
+
+typedef sequence <string> StringSeq;
+enum ParameterMode { PARAM_IN, PARAM_OUT, PARAM_INOUT };
+
+};
+
+#endif

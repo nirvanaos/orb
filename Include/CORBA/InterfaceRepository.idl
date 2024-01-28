@@ -4,6 +4,8 @@
 #ifndef CORBA_INTERFACEREPOSITORY_IDL_
 #define CORBA_INTERFACEREPOSITORY_IDL_
 
+#include "CORBA_types.idl"
+
 module CORBA {
 
 typeprefix CORBA "omg.org";
@@ -22,7 +24,6 @@ typedef short Visibility;
 typedef string RepositoryId;
 typedef string Identifier;
 typedef string ScopedName;
-typedef sequence <string> StringSeq;
 
 enum DefinitionKind
 {
@@ -441,7 +442,6 @@ interface ExtAttributeDef : AttributeDef
 	ExtAttributeDescription describe_attribute ();
 };
 enum OperationMode { OP_NORMAL, OP_ONEWAY };
-enum ParameterMode { PARAM_IN, PARAM_OUT, PARAM_INOUT };
 struct ParameterDescription
 {
 	Identifier                      name;

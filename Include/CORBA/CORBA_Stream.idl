@@ -1,6 +1,9 @@
 // File: CORBA_Stream.idl
 // CORBA 3.0, Chapter 5
 
+#ifndef CORBA_STREAM_IDL_
+#define CORBA_STREAM_IDL_
+
 module CORBA {
 
 typeprefix CORBA "omg.org";
@@ -195,3 +198,5 @@ abstract valuetype DataInputStream{
 };
 
 };
+
+#endif

@@ -4,7 +4,7 @@
 #ifndef DYNAMIC_IDL_
 #define DYNAMIC_IDL_
 
-#include "InterfaceRepository.idl"
+#include "CORBA_types.idl"
 
 module Dynamic {
 
