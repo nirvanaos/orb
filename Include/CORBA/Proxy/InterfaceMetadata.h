@@ -64,14 +64,29 @@ typedef Nirvana::ImportInterfaceT <TypeCode> TypeCodeImport;
 /// Operation metadata.
 struct Operation
 {
-	const Char* name; ///< The operation name.
-	CountedArray <Parameter> input; ///< in and inout parameters.
-	CountedArray <Parameter> output; ///< out and inout parameters.
-	CountedArray <const TypeCodeImport*> user_exceptions; ///< User exception type codes
-	CountedArray <const Char*> context; ///< Context
-	GetTypeCode return_type; ///< Operation return type. `nullptr` for `void` operations.
-	RequestProc invoke; ///< Invoke request procedure.
-	uint16_t flags; ///< Operation flags.
+	/// The operation name. `nullptr` for local objects.
+	const Char* name;
+
+	/// in and inout parameters. Empty for local objects.
+	CountedArray <Parameter> input;
+
+	/// out and inout parameters. Empty for local objects.
+	CountedArray <Parameter> output;
+
+	/// User exception type codes. Empty for local objects.
+	CountedArray <const TypeCodeImport*> user_exceptions;
+
+	/// Context
+	CountedArray <const Char*> context;
+
+	/// Operation return type. `nullptr` for `void` operations and local objects.
+	GetTypeCode return_type;
+
+	/// Invoke request procedure.
+	RequestProc invoke;
+
+	/// Operation flags.
+	uint16_t flags;
 
 	/// Operation receives one or more parameters with complex unmarshaling:
 	/// object refrence, value type, type code or any.
@@ -94,10 +109,19 @@ struct InterfaceMetadata
 	/// The interface flags.
 	uint16_t flags;
 
-	/// Local interface with stateless servant.
-	static const uint16_t FLAG_LOCAL_STATELESS = 1;
+	/// Local interface.
+	static const uint16_t FLAG_LOCAL = 1;
 
+	/// Stateless servant.
+	static const uint16_t FLAG_STATELESS = 2;
+
+	/// Local stateless servant.
+	static const uint16_t FLAG_LOCAL_STATELESS = FLAG_LOCAL | FLAG_STATELESS;
+
+	/// AMI poller repository id.
 	const Char* poller_id;
+
+	/// AMI handler repository id.
 	const Char* handler_id;
 };
 
