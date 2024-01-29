@@ -1,7 +1,6 @@
 #include <CORBA/CORBA.h>
 #include <gtest/gtest.h>
 #include <Mock/TestMock.h>
-#include <Nirvana/Legacy/Runnable_s.h>
 #include <functional>
 
 using namespace CORBA;
