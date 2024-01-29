@@ -73,6 +73,23 @@ struct TypeEnum : TypeByValCheck <T, ABI_enum>
 	{
 		Type <ABI>::byteswap ((ABI&)v);
 	}
+
+	class C_VT_ret
+	{
+	public:
+		C_VT_ret (ABI_enum abi) :
+			abi_ (abi)
+		{}
+
+		operator T () noexcept
+		{
+			Type <T>::check (abi_);
+			return static_cast <T> (abi_);
+		}
+
+	protected:
+		ABI_enum abi_;
+	};
 };
 
 }
