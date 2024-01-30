@@ -134,16 +134,16 @@ public:
 	}
 };
 
-template <class T, bool members>
-using TypeCodeStateMembersOptional = typename std::conditional <members,
+template <class T, bool has_members>
+using TypeCodeStateMembersOptional = typename std::conditional <has_members,
 	TypeCodeStateMembers <T>, TypeCodeStateMembersEmpty>::type;
 
-template <class I, ValueModifier vm, bool members, GetTypeCode base = nullptr>
+template <class I, ValueModifier vm, bool has_members, GetTypeCode base = nullptr>
 class TypeCodeValueConcrete :
 	public TypeCodeStatic <TypeCodeValue <I>,
 		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> >,
 	public TypeCodeName <I>,
-	public TypeCodeStateMembersOptional <I, members>,
+	public TypeCodeStateMembersOptional <I, has_members>,
 	public TypeCodeORB
 {
 	typedef TypeCodeStatic <TypeCodeValue <I>,
@@ -152,7 +152,7 @@ public:
 	typedef TypeCodeName <I> Name;
 	using Name::_s_name;
 
-	typedef TypeCodeStateMembersOptional <I, members> Members;
+	typedef TypeCodeStateMembersOptional <I, has_members> Members;
 	using Members::_s_member_count;
 	using Members::_s_member_name;
 	using Members::_s_member_type;
