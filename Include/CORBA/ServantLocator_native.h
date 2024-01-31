@@ -41,7 +41,6 @@ template <>
 struct NativeDecls <PortableServer::ServantLocator>
 {
 	typedef void* Cookie;
-	static const Nirvana::ImportInterfaceT <TypeCode>& _tc_Cookie;
 };
 
 }

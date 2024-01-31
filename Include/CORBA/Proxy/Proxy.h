@@ -39,7 +39,6 @@
 #include "TypeCodeStruct.h"
 #include "TypeCodeUnion.h"
 #include "TypeCodeValueBox.h"
-#include "TypeCodeNative.h"
 #include "ValueBoxFactory.h"
 #include "PollerBase.h"
 
