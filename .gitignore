@@ -110,3 +110,4 @@
 /Source/CORBA_types.cpp
 /Include/CORBA/SFloat_s.h
 /Include/CORBA/SFloat.h
+/Source/SFloat.cpp

@@ -39,17 +39,17 @@ pseudo interface SFloat16
 		unsigned long long u1;
 	};
 
-	void from_float (in NativeFloat x, out IEEE f);
-	void from_double (in NativeDouble x, out IEEE f);
-	void from_long_double (in NativeLongDouble x, out IEEE f);
+//	void from_float (in NativeFloat x, out IEEE f);
+//	void from_double (in NativeDouble x, out IEEE f);
+//	void from_long_double (in NativeLongDouble x, out IEEE f);
 	void from_long (in long x, out IEEE f);
 	void from_unsigned_long (in unsigned long x, out IEEE f);
 	void from_long_long (in long long x, out IEEE f);
 	void from_unsigned_long_long (in unsigned long long x, out IEEE f);
 
-	void to_float (in IEEE f, out NativeFloat x);
-	void to_double (in IEEE f, out NativeDouble x);
-	void to_long_double (in IEEE f, out NativeLongDouble x);
+//	void to_float (in IEEE f, out NativeFloat x);
+//	void to_double (in IEEE f, out NativeDouble x);
+//	void to_long_double (in IEEE f, out NativeLongDouble x);
 	void to_long (in IEEE f, out long x);
 	void to_long_long (in IEEE f, out long long x);
 
