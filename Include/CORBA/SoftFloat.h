@@ -29,7 +29,6 @@
 #pragma once
 
 #include <Nirvana/NirvanaBase.h>
-#include <stddef.h>
 
 NIRVANA_STD_BEGIN
 template <class> struct char_traits;
@@ -45,30 +44,37 @@ namespace Internal {
 ///  Software floating point support.
 template <size_t size> class SoftFloat;
 
+typedef uint32_t FloatIEEE4;
+typedef uint64_t FloatIEEE8;
+
+struct FloatIEEE16
+{
+	uint64_t bits [2];
+};
+
 template <> class SoftFloat <4>
 {
 public:
 	// Constructors
-	SoftFloat () {}
-	SoftFloat (const SoftFloat& val) = default;
+	SoftFloat () :
+		bits_ (0)
+	{}
+
+	SoftFloat (const SoftFloat& val) noexcept = default;
 
 	SoftFloat (float val);
-	SoftFloat (double val);
-	SoftFloat (long double val);
-	SoftFloat (long val);
-	SoftFloat (unsigned long val);
-	SoftFloat (long long val);
-	SoftFloat (unsigned long long val);
+	SoftFloat (const int32_t& val);
+	SoftFloat (const uint32_t& val);
+	SoftFloat (const int64_t& val);
+	SoftFloat (const uint64_t& val);
 
 	// Conversions
 	operator float () const;
-	operator double () const;
-	operator long double () const;
-	operator long () const;
-	operator long long () const;
+	operator int32_t () const;
+	operator int64_t () const;
 
 	// Operators
-	SoftFloat& operator = (const SoftFloat& val) = default;
+	SoftFloat& operator = (const SoftFloat& val) noexcept = default;
 	SoftFloat& operator += (const SoftFloat& val);
 	SoftFloat& operator -= (const SoftFloat& val);
 	SoftFloat& operator *= (const SoftFloat& val);
@@ -79,36 +85,42 @@ public:
 	SoftFloat operator -- (int);
 	SoftFloat operator + () const;
 	SoftFloat operator - () const;
-	bool operator! () const;
+
+	bool operator! () const noexcept
+	{
+		return !bits_;
+	}
 
 private:
-	uint32_t d_;
+	FloatIEEE4 bits_;
 };
 
 template <> class SoftFloat <8>
 {
 public:
 	// Constructors
-	SoftFloat () {}
-	SoftFloat (const SoftFloat& val) = default;
+	SoftFloat () :
+		bits_ (0)
+	{}
+
+	SoftFloat (const SoftFloat& val) noexcept = default;
 
 	SoftFloat (float val);
 	SoftFloat (double val);
-	SoftFloat (long double val);
-	SoftFloat (long val);
-	SoftFloat (unsigned long val);
-	SoftFloat (long long val);
-	SoftFloat (unsigned long long val);
+	SoftFloat (const int32_t& val);
+	SoftFloat (const uint32_t& val);
+	SoftFloat (const int64_t& val);
+	SoftFloat (const uint64_t& val);
 
 	// Conversions
 	operator float () const;
 	operator double () const;
-	operator long double () const;
-	operator long () const;
-	operator long long () const;
+	operator int32_t () const;
+	operator int64_t () const;
 
 	// Operators
-	SoftFloat& operator = (const SoftFloat& val);
+	SoftFloat& operator = (const SoftFloat& val) noexcept = default;
+
 	SoftFloat& operator += (const SoftFloat& val);
 	SoftFloat& operator -= (const SoftFloat& val);
 	SoftFloat& operator *= (const SoftFloat& val);
@@ -119,33 +131,39 @@ public:
 	SoftFloat operator -- (int);
 	SoftFloat operator + () const;
 	SoftFloat operator - () const;
-	bool operator! () const;
+
+	bool operator! () const noexcept
+	{
+		return !bits_;
+	}
 
 private:
-	uint64_t d_;
+	FloatIEEE8 bits_;
 };
 
 template <> class SoftFloat <16>
 {
 public:
 	// Constructors
-	SoftFloat () {}
-	SoftFloat (const SoftFloat& val) = default;
+	SoftFloat () :
+		bits_{ 0, 0 }
+	{}
 
-	SoftFloat (float val);
-	SoftFloat (double val);
-	SoftFloat (long double val);
-	SoftFloat (long val);
-	SoftFloat (unsigned long val);
-	SoftFloat (long long val);
-	SoftFloat (unsigned long long val);
+	SoftFloat (const SoftFloat& val) noexcept = default;
+	SoftFloat (const float& val);
+	SoftFloat (const double& val);
+	SoftFloat (const long double& val);
+	SoftFloat (const int32_t& val);
+	SoftFloat (const uint32_t& val);
+	SoftFloat (const int64_t& val);
+	SoftFloat (const uint64_t& val);
 
 	// Conversions
 	operator float () const;
 	operator double () const;
 	operator long double () const;
-	operator long () const;
-	operator long long () const;
+	operator int32_t () const;
+	operator int64_t () const;
 
 	// Operators
 	SoftFloat& operator = (const SoftFloat& val) = default;
@@ -159,10 +177,14 @@ public:
 	SoftFloat operator -- (int);
 	SoftFloat operator + () const;
 	SoftFloat operator - () const;
-	bool operator! () const;
+
+	bool operator! () const noexcept
+	{
+		return 0 == bits_.bits [0] && 0 == bits_.bits [1];
+	}
 
 private:
-	uint64_t d_ [2];
+	FloatIEEE16 bits_;
 };
 
 template <size_t size>

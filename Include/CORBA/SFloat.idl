@@ -31,32 +31,30 @@ native NativeFloat;
 native NativeDouble;
 native NativeLongDouble;
 
+native FloatIEEE4;
+native FloatIEEE8;
+native FloatIEEE16;
+
 pseudo interface SFloat16
 {
-	struct IEEE
-	{
-		unsigned long long u0;
-		unsigned long long u1;
-	};
+	void from_double (in NativeDouble x, out FloatIEEE16 f);
+	void from_long_double (in NativeLongDouble x, out FloatIEEE16 f);
+	void from_long (in long x, out FloatIEEE16 f);
+	void from_unsigned_long (in unsigned long x, out FloatIEEE16 f);
+	void from_long_long (in long long x, out FloatIEEE16 f);
+	void from_unsigned_long_long (in unsigned long long x, out FloatIEEE16 f);
 
-//	void from_float (in NativeFloat x, out IEEE f);
-//	void from_double (in NativeDouble x, out IEEE f);
-//	void from_long_double (in NativeLongDouble x, out IEEE f);
-	void from_long (in long x, out IEEE f);
-	void from_unsigned_long (in unsigned long x, out IEEE f);
-	void from_long_long (in long long x, out IEEE f);
-	void from_unsigned_long_long (in unsigned long long x, out IEEE f);
+	void to_double (in FloatIEEE16 f, out NativeDouble x);
+	void to_long_double (in FloatIEEE16 f, out NativeLongDouble x);
+	void to_long (in FloatIEEE16 f, out long x);
+	void to_long_long (in FloatIEEE16 f, out long long x);
 
-//	void to_float (in IEEE f, out NativeFloat x);
-//	void to_double (in IEEE f, out NativeDouble x);
-//	void to_long_double (in IEEE f, out NativeLongDouble x);
-	void to_long (in IEEE f, out long x);
-	void to_long_long (in IEEE f, out long long x);
+	void plus (in FloatIEEE16 x, in FloatIEEE16 y, out FloatIEEE16 f);
+	void minus (in FloatIEEE16 x, in FloatIEEE16 y, out FloatIEEE16 f);
+	void mul (in FloatIEEE16 x, in FloatIEEE16 y, out FloatIEEE16 f);
+	void div (in FloatIEEE16 x, in FloatIEEE16 y, out FloatIEEE16 f);
 
-	void plus (in IEEE x, in IEEE y, out IEEE f);
-	void minus (in IEEE x, in IEEE y, out IEEE f);
-	void mul (in IEEE x, in IEEE y, out IEEE f);
-	void div (in IEEE x, in IEEE y, out IEEE f);
+	short compare (in FloatIEEE16 x, in FloatIEEE16 y);
 };
 
 const SFloat16 g_sfloat16;
