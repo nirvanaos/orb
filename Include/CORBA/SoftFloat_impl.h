@@ -50,9 +50,13 @@ template <size_t size, size_t align>
 struct Type <FloatBits <size, align> > : public TypeFixLen <FloatBits <size, align>, false>
 {};
 
-template <>
-struct Type <FloatIEEE16> : public TypeFixLen <FloatIEEE16, false>
+template <size_t size>
+struct Type <FloatIEEE <size> > : public TypeFixLen <FloatIEEE <size>, false>
 {};
+
+typedef FloatIEEE <4> FloatIEEE4;
+typedef FloatIEEE <8> FloatIEEE8;
+typedef FloatIEEE <16> FloatIEEE16;
 
 }
 }
@@ -61,6 +65,102 @@ struct Type <FloatIEEE16> : public TypeFixLen <FloatIEEE16, false>
 
 namespace CORBA {
 namespace Internal {
+
+// 64 bit
+
+inline
+SoftFloat <8>::SoftFloat (const double& val)
+{
+	g_sfloat8->from_double (reinterpret_cast <const NativeDouble&> (val), bits_);
+}
+
+inline
+SoftFloat <8>::SoftFloat (const int32_t& val)
+{
+	if (val == 0)
+		bits_.zero ();
+	else
+		g_sfloat8->from_long (val, bits_);
+}
+
+inline
+SoftFloat <8>::SoftFloat (const uint32_t& val)
+{
+	if (val == 0)
+		bits_.zero ();
+	else
+		g_sfloat8->from_unsigned_long (val, bits_);
+}
+
+inline
+SoftFloat <8>::SoftFloat (const int64_t& val)
+{
+	if (val == 0)
+		bits_.zero ();
+	else
+		g_sfloat8->from_long_long (val, bits_);
+}
+
+inline
+SoftFloat <8>::SoftFloat (const uint64_t& val)
+{
+	if (val == 0)
+		bits_.zero ();
+	else
+		g_sfloat8->from_unsigned_long_long (val, bits_);
+}
+
+inline
+SoftFloat <8>::operator double () const
+{
+	double ret;
+	g_sfloat8->to_double (bits_, reinterpret_cast <NativeDouble&> (ret));
+	return ret;
+}
+
+inline
+SoftFloat <8>::operator int32_t () const
+{
+	return g_sfloat8->to_long (bits_);
+}
+
+inline
+SoftFloat <8>::operator int64_t () const
+{
+	return g_sfloat8->to_long_long (bits_);
+}
+
+inline
+SoftFloat <8>& SoftFloat <8>::operator += (const SoftFloat& rhs)
+{
+	g_sfloat8->sum (bits_, rhs.bits_);
+}
+
+inline
+SoftFloat <8>& SoftFloat <8>::operator -= (const SoftFloat& rhs)
+{
+	g_sfloat8->sub (bits_, rhs.bits_);
+}
+
+inline
+SoftFloat <8>& SoftFloat <8>::operator *= (const SoftFloat& rhs)
+{
+	g_sfloat8->mul (bits_, rhs.bits_);
+}
+
+inline
+SoftFloat <8>& SoftFloat <8>::operator /= (const SoftFloat& rhs)
+{
+	g_sfloat8->div (bits_, rhs.bits_);
+}
+
+inline
+int SoftFloat <8>::compare (const SoftFloat& rhs) const
+{
+	return g_sfloat8->compare (bits_, rhs.bits_);
+}
+
+// 128 bit
 
 inline
 SoftFloat <16>::SoftFloat (const long double& val)
@@ -77,33 +177,37 @@ SoftFloat <16>::SoftFloat (const long double& val)
 inline
 SoftFloat <16>::SoftFloat (const int32_t& val)
 {
-	g_sfloat16->from_long (val, bits_);
+	if (val == 0)
+		bits_.zero ();
+	else
+		g_sfloat16->from_long (val, bits_);
 }
 
 inline
 SoftFloat <16>::SoftFloat (const uint32_t& val)
 {
-	g_sfloat16->from_unsigned_long (val, bits_);
+	if (val == 0)
+		bits_.zero ();
+	else
+		g_sfloat16->from_unsigned_long (val, bits_);
 }
 
 inline
 SoftFloat <16>::SoftFloat (const int64_t& val)
 {
-	g_sfloat16->from_long_long (val, bits_);
+	if (val == 0)
+		bits_.zero ();
+	else
+		g_sfloat16->from_long_long (val, bits_);
 }
 
 inline
 SoftFloat <16>::SoftFloat (const uint64_t& val)
 {
-	g_sfloat16->from_unsigned_long_long (val, bits_);
-}
-
-inline
-SoftFloat <16>::operator double () const
-{
-	double ret;
-	g_sfloat16->to_double (bits_, reinterpret_cast <NativeDouble&> (ret));
-	return ret;
+	if (val == 0)
+		bits_.zero ();
+	else
+		g_sfloat16->from_unsigned_long_long (val, bits_);
 }
 
 inline
@@ -125,17 +229,43 @@ SoftFloat <16>::operator long double () const
 inline
 SoftFloat <16>::operator int32_t () const
 {
-	int32_t ret;
-	g_sfloat16->to_long (bits_, ret);
-	return ret;
+	return g_sfloat16->to_long (bits_);
 }
 
 inline
 SoftFloat <16>::operator int64_t () const
 {
-	int64_t ret;
-	g_sfloat16->to_long_long (bits_, ret);
-	return ret;
+	return g_sfloat16->to_long_long (bits_);
+}
+
+inline
+SoftFloat <16>& SoftFloat <16>::operator += (const SoftFloat <16>& rhs)
+{
+	g_sfloat16->sum (bits_, rhs.bits_);
+}
+
+inline
+SoftFloat <16>& SoftFloat <16>::operator -= (const SoftFloat <16>& rhs)
+{
+	g_sfloat16->sub (bits_, rhs.bits_);
+}
+
+inline
+SoftFloat <16>& SoftFloat <16>::operator *= (const SoftFloat <16>& rhs)
+{
+	g_sfloat16->mul (bits_, rhs.bits_);
+}
+
+inline
+SoftFloat <16>& SoftFloat <16>::operator /= (const SoftFloat <16>& rhs)
+{
+	g_sfloat16->div (bits_, rhs.bits_);
+}
+
+inline
+int SoftFloat <16>::compare (const SoftFloat <16>& rhs) const
+{
+	return g_sfloat16->compare (bits_, rhs.bits_);
 }
 
 }

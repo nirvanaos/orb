@@ -24,6 +24,13 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
+
+module Nirvana{
+
+native Int;
+
+};
+
 module CORBA{
 module Internal {
 
@@ -34,6 +41,46 @@ native NativeLongDouble;
 native FloatIEEE4;
 native FloatIEEE8;
 native FloatIEEE16;
+
+pseudo interface SFloat4
+{
+	void from_float (in NativeFloat x, out FloatIEEE4 f);
+	void from_long (in long x, out FloatIEEE4 f);
+	void from_unsigned_long (in unsigned long x, out FloatIEEE4 f);
+	void from_long_long (in long long x, out FloatIEEE4 f);
+	void from_unsigned_long_long (in unsigned long long x, out FloatIEEE4 f);
+
+	void to_float (in FloatIEEE4 f, out NativeFloat x);
+	long to_long (in FloatIEEE4 f);
+	long long to_long_long (in FloatIEEE4 f);
+
+	void sum (inout FloatIEEE4 x, in FloatIEEE4 y);
+	void sub (inout FloatIEEE4 x, in FloatIEEE4 y);
+	void mul (inout FloatIEEE4 x, in FloatIEEE4 y);
+	void div (inout FloatIEEE4 x, in FloatIEEE4 y);
+
+	short compare (in FloatIEEE4 x, in FloatIEEE4 y);
+};
+
+pseudo interface SFloat8
+{
+	void from_double (in NativeDouble x, out FloatIEEE8 f);
+	void from_long (in long x, out FloatIEEE8 f);
+	void from_unsigned_long (in unsigned long x, out FloatIEEE8 f);
+	void from_long_long (in long long x, out FloatIEEE8 f);
+	void from_unsigned_long_long (in unsigned long long x, out FloatIEEE8 f);
+
+	void to_double (in FloatIEEE8 f, out NativeDouble x);
+	long to_long (in FloatIEEE8 f);
+	long long to_long_long (in FloatIEEE8 f);
+
+	void sum (inout FloatIEEE8 x, in FloatIEEE8 y);
+	void sub (inout FloatIEEE8 x, in FloatIEEE8 y);
+	void mul (inout FloatIEEE8 x, in FloatIEEE8 y);
+	void div (inout FloatIEEE8 x, in FloatIEEE8 y);
+
+	short compare (in FloatIEEE8 x, in FloatIEEE8 y);
+};
 
 pseudo interface SFloat16
 {
@@ -46,17 +93,19 @@ pseudo interface SFloat16
 
 	void to_double (in FloatIEEE16 f, out NativeDouble x);
 	void to_long_double (in FloatIEEE16 f, out NativeLongDouble x);
-	void to_long (in FloatIEEE16 f, out long x);
-	void to_long_long (in FloatIEEE16 f, out long long x);
+	long to_long (in FloatIEEE16 f);
+	long long to_long_long (in FloatIEEE16 f);
 
-	void plus (in FloatIEEE16 x, in FloatIEEE16 y, out FloatIEEE16 f);
-	void minus (in FloatIEEE16 x, in FloatIEEE16 y, out FloatIEEE16 f);
-	void mul (in FloatIEEE16 x, in FloatIEEE16 y, out FloatIEEE16 f);
-	void div (in FloatIEEE16 x, in FloatIEEE16 y, out FloatIEEE16 f);
+	void sum (inout FloatIEEE16 x, in FloatIEEE16 y);
+	void sub (inout FloatIEEE16 x, in FloatIEEE16 y);
+	void mul (inout FloatIEEE16 x, in FloatIEEE16 y);
+	void div (inout FloatIEEE16 x, in FloatIEEE16 y);
 
-	short compare (in FloatIEEE16 x, in FloatIEEE16 y);
+	Nirvana::Int compare (in FloatIEEE16 x, in FloatIEEE16 y);
 };
 
+const SFloat4 g_sfloat4;
+const SFloat8 g_sfloat8;
 const SFloat16 g_sfloat16;
 
 };
