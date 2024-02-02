@@ -1,4 +1,3 @@
-/// \file
 /*
 * Nirvana runtime library.
 *
@@ -36,78 +35,81 @@ native FloatIEEE4;
 native FloatIEEE8;
 native FloatIEEE16;
 
+// SoftFloat exception flags.
+typedef unsigned short SFloatExc;
+
 pseudo interface SFloat4
 {
 	typedef FloatIEEE4 FloatIEEE;
 
-	void from_float (in NativeFloat x, out FloatIEEE f);
-	void from_long (in long x, out FloatIEEE f);
-	void from_unsigned_long (in unsigned long x, out FloatIEEE f);
-	void from_long_long (in long long x, out FloatIEEE f);
-	void from_unsigned_long_long (in unsigned long long x, out FloatIEEE f);
+	SFloatExc from_float (in NativeFloat x, out FloatIEEE f);
+	SFloatExc from_long (in long x, out FloatIEEE f);
+	SFloatExc from_unsigned_long (in unsigned long x, out FloatIEEE f);
+	SFloatExc from_long_long (in long long x, out FloatIEEE f);
+	SFloatExc from_unsigned_long_long (in unsigned long long x, out FloatIEEE f);
 
-	void to_float (in FloatIEEE f, out NativeFloat x);
-	long to_long (in FloatIEEE f);
-	long long to_long_long (in FloatIEEE f);
+	SFloatExc to_float (in FloatIEEE f, out NativeFloat x);
+	SFloatExc to_long (in FloatIEEE f, out long x);
+	SFloatExc to_long_long (in FloatIEEE f, out long long x);
 
-	void add (inout FloatIEEE x, in FloatIEEE y);
-	void sub (inout FloatIEEE x, in FloatIEEE y);
-	void mul (inout FloatIEEE x, in FloatIEEE y);
-	void div (inout FloatIEEE x, in FloatIEEE y);
+	SFloatExc add (inout FloatIEEE x, in FloatIEEE y);
+	SFloatExc sub (inout FloatIEEE x, in FloatIEEE y);
+	SFloatExc mul (inout FloatIEEE x, in FloatIEEE y);
+	SFloatExc div (inout FloatIEEE x, in FloatIEEE y);
 
-	boolean eq (in FloatIEEE x, in FloatIEEE y);
-	boolean le (in FloatIEEE x, in FloatIEEE y);
-	boolean lt (in FloatIEEE x, in FloatIEEE y);
+	SFloatExc eq (in FloatIEEE x, in FloatIEEE y, out boolean res);
+	SFloatExc le (in FloatIEEE x, in FloatIEEE y, out boolean res);
+	SFloatExc lt (in FloatIEEE x, in FloatIEEE y, out boolean res);
 };
 
 pseudo interface SFloat8
 {
 	typedef FloatIEEE8 FloatIEEE;
 
-	void from_double (in NativeDouble x, out FloatIEEE f);
-	void from_long (in long x, out FloatIEEE f);
-	void from_unsigned_long (in unsigned long x, out FloatIEEE f);
-	void from_long_long (in long long x, out FloatIEEE f);
-	void from_unsigned_long_long (in unsigned long long x, out FloatIEEE f);
+	SFloatExc from_double (in NativeDouble x, out FloatIEEE f);
+	SFloatExc from_long (in long x, out FloatIEEE f);
+	SFloatExc from_unsigned_long (in unsigned long x, out FloatIEEE f);
+	SFloatExc from_long_long (in long long x, out FloatIEEE f);
+	SFloatExc from_unsigned_long_long (in unsigned long long x, out FloatIEEE f);
 
-	void to_double (in FloatIEEE f, out NativeDouble x);
-	long to_long (in FloatIEEE f);
-	long long to_long_long (in FloatIEEE f);
+	SFloatExc to_double (in FloatIEEE f, out NativeDouble x);
+	SFloatExc to_long (in FloatIEEE f, out long x);
+	SFloatExc to_long_long (in FloatIEEE f, out long long x);
 
-	void add (inout FloatIEEE x, in FloatIEEE y);
-	void sub (inout FloatIEEE x, in FloatIEEE y);
-	void mul (inout FloatIEEE x, in FloatIEEE y);
-	void div (inout FloatIEEE x, in FloatIEEE y);
+	SFloatExc add (inout FloatIEEE x, in FloatIEEE y);
+	SFloatExc sub (inout FloatIEEE x, in FloatIEEE y);
+	SFloatExc mul (inout FloatIEEE x, in FloatIEEE y);
+	SFloatExc div (inout FloatIEEE x, in FloatIEEE y);
 
-	boolean eq (in FloatIEEE x, in FloatIEEE y);
-	boolean le (in FloatIEEE x, in FloatIEEE y);
-	boolean lt (in FloatIEEE x, in FloatIEEE y);
+	SFloatExc eq (in FloatIEEE x, in FloatIEEE y, out boolean res);
+	SFloatExc le (in FloatIEEE x, in FloatIEEE y, out boolean res);
+	SFloatExc lt (in FloatIEEE x, in FloatIEEE y, out boolean res);
 };
 
 pseudo interface SFloat16
 {
 	typedef FloatIEEE16 FloatIEEE;
 
-	void from_double (in NativeDouble x, out FloatIEEE f);
-	void from_long_double (in NativeLongDouble x, out FloatIEEE f);
-	void from_long (in long x, out FloatIEEE f);
-	void from_unsigned_long (in unsigned long x, out FloatIEEE f);
-	void from_long_long (in long long x, out FloatIEEE f);
-	void from_unsigned_long_long (in unsigned long long x, out FloatIEEE f);
+	SFloatExc from_double (in NativeDouble x, out FloatIEEE f);
+	SFloatExc from_long_double (in NativeLongDouble x, out FloatIEEE f);
+	SFloatExc from_long (in long x, out FloatIEEE f);
+	SFloatExc from_unsigned_long (in unsigned long x, out FloatIEEE f);
+	SFloatExc from_long_long (in long long x, out FloatIEEE f);
+	SFloatExc from_unsigned_long_long (in unsigned long long x, out FloatIEEE f);
 
-	void to_double (in FloatIEEE f, out NativeDouble x);
-	void to_long_double (in FloatIEEE f, out NativeLongDouble x);
-	long to_long (in FloatIEEE f);
-	long long to_long_long (in FloatIEEE f);
+	SFloatExc to_double (in FloatIEEE f, out NativeDouble x);
+	SFloatExc to_long_double (in FloatIEEE f, out NativeLongDouble x);
+	SFloatExc to_long (in FloatIEEE f, out long x);
+	SFloatExc to_long_long (in FloatIEEE f, out long long x);
 
-	void add (inout FloatIEEE x, in FloatIEEE y);
-	void sub (inout FloatIEEE x, in FloatIEEE y);
-	void mul (inout FloatIEEE x, in FloatIEEE y);
-	void div (inout FloatIEEE x, in FloatIEEE y);
+	SFloatExc add (inout FloatIEEE x, in FloatIEEE y);
+	SFloatExc sub (inout FloatIEEE x, in FloatIEEE y);
+	SFloatExc mul (inout FloatIEEE x, in FloatIEEE y);
+	SFloatExc div (inout FloatIEEE x, in FloatIEEE y);
 
-	boolean eq (in FloatIEEE x, in FloatIEEE y);
-	boolean le (in FloatIEEE x, in FloatIEEE y);
-	boolean lt (in FloatIEEE x, in FloatIEEE y);
+	SFloatExc eq (in FloatIEEE x, in FloatIEEE y, out boolean res);
+	SFloatExc le (in FloatIEEE x, in FloatIEEE y, out boolean res);
+	SFloatExc lt (in FloatIEEE x, in FloatIEEE y, out boolean res);
 };
 
 const SFloat4 g_sfloat4;

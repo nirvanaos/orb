@@ -66,111 +66,130 @@ typedef FloatIEEE <16> FloatIEEE16;
 namespace CORBA {
 namespace Internal {
 
+void set_softfloat_exception_flags (unsigned f);
+
 // 32 bit
 
 inline
 SoftFloat <4>::SoftFloat (const float& val)
 {
-	g_sfloat4->from_float (reinterpret_cast <const NativeFloat&> (val), bits_);
+	set_softfloat_exception_flags (g_sfloat4->from_float (reinterpret_cast <const NativeFloat&> (val), bits_));
 }
 
 inline
 SoftFloat <4>::SoftFloat (const int32_t& val)
 {
-	if (val == 0)
+	if (val == 0) {
 		bits_.zero ();
-	else
-		g_sfloat4->from_long (val, bits_);
+		set_softfloat_exception_flags (0);
+	} else
+		set_softfloat_exception_flags (g_sfloat4->from_long (val, bits_));
 }
 
 inline
 SoftFloat <4>::SoftFloat (const uint32_t& val)
 {
-	if (val == 0)
+	if (val == 0) {
 		bits_.zero ();
-	else
-		g_sfloat4->from_unsigned_long (val, bits_);
+		set_softfloat_exception_flags (0);
+	} else
+		set_softfloat_exception_flags (g_sfloat4->from_unsigned_long (val, bits_));
 }
 
 inline
 SoftFloat <4>::SoftFloat (const int64_t& val)
 {
-	if (val == 0)
+	if (val == 0) {
 		bits_.zero ();
-	else
-		g_sfloat4->from_long_long (val, bits_);
+		set_softfloat_exception_flags (0);
+	} else
+		set_softfloat_exception_flags (g_sfloat4->from_long_long (val, bits_));
 }
 
 inline
 SoftFloat <4>::SoftFloat (const uint64_t& val)
 {
-	if (val == 0)
+	if (val == 0) {
 		bits_.zero ();
-	else
-		g_sfloat4->from_unsigned_long_long (val, bits_);
+		set_softfloat_exception_flags (0);
+	} else
+		set_softfloat_exception_flags (g_sfloat4->from_unsigned_long_long (val, bits_));
 }
 
 inline
 SoftFloat <4>::operator float () const
 {
 	float ret;
-	g_sfloat4->to_float (bits_, reinterpret_cast <NativeFloat&> (ret));
+	set_softfloat_exception_flags (g_sfloat4->to_float (bits_, reinterpret_cast <NativeFloat&> (ret)));
 	return ret;
 }
 
 inline
 SoftFloat <4>::operator int32_t () const
 {
-	return g_sfloat4->to_long (bits_);
+	int32_t ret;
+	set_softfloat_exception_flags (g_sfloat4->to_long (bits_, ret));
+	return ret;
 }
 
 inline
 SoftFloat <4>::operator int64_t () const
 {
-	return g_sfloat4->to_long_long (bits_);
+	int64_t ret;
+	set_softfloat_exception_flags (g_sfloat4->to_long_long (bits_, ret));
+	return ret;
 }
 
 inline
 SoftFloat <4>& SoftFloat <4>::operator += (const SoftFloat& rhs)
 {
-	g_sfloat4->add (bits_, rhs.bits_);
+	set_softfloat_exception_flags (g_sfloat4->add (bits_, rhs.bits_));
+	return *this;
 }
 
 inline
 SoftFloat <4>& SoftFloat <4>::operator -= (const SoftFloat& rhs)
 {
-	g_sfloat4->sub (bits_, rhs.bits_);
+	set_softfloat_exception_flags (g_sfloat4->sub (bits_, rhs.bits_));
+	return *this;
 }
 
 inline
 SoftFloat <4>& SoftFloat <4>::operator *= (const SoftFloat& rhs)
 {
-	g_sfloat4->mul (bits_, rhs.bits_);
+	set_softfloat_exception_flags (g_sfloat4->mul (bits_, rhs.bits_));
+	return *this;
 }
 
 inline
 SoftFloat <4>& SoftFloat <4>::operator /= (const SoftFloat& rhs)
 {
-	g_sfloat4->div (bits_, rhs.bits_);
+	set_softfloat_exception_flags (g_sfloat4->div (bits_, rhs.bits_));
+	return *this;
 }
-
 
 inline
 bool SoftFloat <4>::eq (const SoftFloat& rhs) const
 {
-	return g_sfloat4->eq (bits_, rhs.bits_);
+	bool ret;
+	set_softfloat_exception_flags (g_sfloat4->eq (bits_, rhs.bits_, ret));
+	return ret;
 }
 
 inline
 bool SoftFloat <4>::le (const SoftFloat& rhs) const
 {
-	return g_sfloat4->le (bits_, rhs.bits_);
+	bool ret;
+	set_softfloat_exception_flags (g_sfloat4->le (bits_, rhs.bits_, ret));
+	return ret;
 }
 
 inline
 bool SoftFloat <4>::lt (const SoftFloat& rhs) const
 {
-	return g_sfloat4->lt (bits_, rhs.bits_);
+	bool ret;
+	set_softfloat_exception_flags (g_sfloat4->lt (bits_, rhs.bits_, ret));
+	return ret;
 }
 
 // 64 bit
@@ -178,106 +197,124 @@ bool SoftFloat <4>::lt (const SoftFloat& rhs) const
 inline
 SoftFloat <8>::SoftFloat (const double& val)
 {
-	g_sfloat8->from_double (reinterpret_cast <const NativeDouble&> (val), bits_);
+	set_softfloat_exception_flags (g_sfloat8->from_double (reinterpret_cast <const NativeDouble&> (val), bits_));
 }
 
 inline
 SoftFloat <8>::SoftFloat (const int32_t& val)
 {
-	if (val == 0)
+	if (val == 0) {
 		bits_.zero ();
-	else
-		g_sfloat8->from_long (val, bits_);
+		set_softfloat_exception_flags (0);
+	} else
+		set_softfloat_exception_flags (g_sfloat8->from_long (val, bits_));
 }
 
 inline
 SoftFloat <8>::SoftFloat (const uint32_t& val)
 {
-	if (val == 0)
+	if (val == 0) {
 		bits_.zero ();
-	else
-		g_sfloat8->from_unsigned_long (val, bits_);
+		set_softfloat_exception_flags (0);
+	} else
+		set_softfloat_exception_flags (g_sfloat8->from_unsigned_long (val, bits_));
 }
 
 inline
 SoftFloat <8>::SoftFloat (const int64_t& val)
 {
-	if (val == 0)
+	if (val == 0) {
 		bits_.zero ();
-	else
-		g_sfloat8->from_long_long (val, bits_);
+		set_softfloat_exception_flags (0);
+	} else
+		set_softfloat_exception_flags (g_sfloat8->from_long_long (val, bits_));
 }
 
 inline
 SoftFloat <8>::SoftFloat (const uint64_t& val)
 {
-	if (val == 0)
+	if (val == 0) {
 		bits_.zero ();
-	else
-		g_sfloat8->from_unsigned_long_long (val, bits_);
+		set_softfloat_exception_flags (0);
+	} else
+		set_softfloat_exception_flags (g_sfloat8->from_unsigned_long_long (val, bits_));
 }
 
 inline
 SoftFloat <8>::operator double () const
 {
 	double ret;
-	g_sfloat8->to_double (bits_, reinterpret_cast <NativeDouble&> (ret));
+	set_softfloat_exception_flags (g_sfloat8->to_double (bits_, reinterpret_cast <NativeDouble&> (ret)));
 	return ret;
 }
 
 inline
 SoftFloat <8>::operator int32_t () const
 {
-	return g_sfloat8->to_long (bits_);
+	int32_t ret;
+	set_softfloat_exception_flags (g_sfloat8->to_long (bits_, ret));
+	return ret;
 }
 
 inline
 SoftFloat <8>::operator int64_t () const
 {
-	return g_sfloat8->to_long_long (bits_);
+	int64_t ret;
+	set_softfloat_exception_flags (g_sfloat8->to_long_long (bits_, ret));
+	return ret;
 }
 
 inline
 SoftFloat <8>& SoftFloat <8>::operator += (const SoftFloat& rhs)
 {
-	g_sfloat8->add (bits_, rhs.bits_);
+	set_softfloat_exception_flags (g_sfloat8->add (bits_, rhs.bits_));
+	return *this;
 }
 
 inline
 SoftFloat <8>& SoftFloat <8>::operator -= (const SoftFloat& rhs)
 {
-	g_sfloat8->sub (bits_, rhs.bits_);
+	set_softfloat_exception_flags (g_sfloat8->sub (bits_, rhs.bits_));
+	return *this;
 }
 
 inline
 SoftFloat <8>& SoftFloat <8>::operator *= (const SoftFloat& rhs)
 {
-	g_sfloat8->mul (bits_, rhs.bits_);
+	set_softfloat_exception_flags (g_sfloat8->mul (bits_, rhs.bits_));
+	return *this;
 }
 
 inline
 SoftFloat <8>& SoftFloat <8>::operator /= (const SoftFloat& rhs)
 {
-	g_sfloat8->div (bits_, rhs.bits_);
+	set_softfloat_exception_flags (g_sfloat8->div (bits_, rhs.bits_));
+	return *this;
 }
 
 
 inline
 bool SoftFloat <8>::eq (const SoftFloat& rhs) const
 {
-	return g_sfloat8->eq (bits_, rhs.bits_);
+	bool ret;
+	set_softfloat_exception_flags (g_sfloat8->eq (bits_, rhs.bits_, ret));
+	return ret;
 }
 
 inline
 bool SoftFloat <8>::le (const SoftFloat& rhs) const
 {
-	return g_sfloat8->le (bits_, rhs.bits_);
+	bool ret;
+	set_softfloat_exception_flags (g_sfloat8->le (bits_, rhs.bits_, ret));
+	return ret;
 }
 
 inline
 bool SoftFloat <8>::lt (const SoftFloat& rhs) const
 {
-	return g_sfloat8->lt (bits_, rhs.bits_);
+	bool ret;
+	set_softfloat_exception_flags (g_sfloat8->lt (bits_, rhs.bits_, ret));
+	return ret;
 }
 
 // 128 bit
@@ -286,118 +323,130 @@ inline
 SoftFloat <16>::SoftFloat (const long double& val)
 {
 	if (sizeof (long double) == sizeof (NativeLongDouble))
-		g_sfloat16->from_long_double (reinterpret_cast <const NativeLongDouble&> (val), bits_);
+		set_softfloat_exception_flags (g_sfloat16->from_long_double (reinterpret_cast <const NativeLongDouble&> (val), bits_));
 	else {
 		// MSVC
 		static_assert (sizeof (long double) == sizeof (double), "sizeof (long double) == sizeof (double)");
-		g_sfloat16->from_double (reinterpret_cast <const NativeDouble&> (val), bits_);
+		set_softfloat_exception_flags (g_sfloat16->from_double (reinterpret_cast <const NativeDouble&> (val), bits_));
 	}
 }
 
 inline
 SoftFloat <16>::SoftFloat (const int32_t& val)
 {
-	if (val == 0)
+	if (val == 0) {
 		bits_.zero ();
-	else
-		g_sfloat16->from_long (val, bits_);
+		set_softfloat_exception_flags (0);
+	} else
+		set_softfloat_exception_flags (g_sfloat16->from_long (val, bits_));
 }
 
 inline
 SoftFloat <16>::SoftFloat (const uint32_t& val)
 {
-	if (val == 0)
+	if (val == 0) {
 		bits_.zero ();
-	else
-		g_sfloat16->from_unsigned_long (val, bits_);
+		set_softfloat_exception_flags (0);
+	} else
+		set_softfloat_exception_flags (g_sfloat16->from_unsigned_long (val, bits_));
 }
 
 inline
 SoftFloat <16>::SoftFloat (const int64_t& val)
 {
-	if (val == 0)
+	if (val == 0) {
 		bits_.zero ();
-	else
-		g_sfloat16->from_long_long (val, bits_);
+		set_softfloat_exception_flags (0);
+	} else
+		set_softfloat_exception_flags (g_sfloat16->from_long_long (val, bits_));
 }
 
 inline
 SoftFloat <16>::SoftFloat (const uint64_t& val)
 {
-	if (val == 0)
+	if (val == 0) {
 		bits_.zero ();
-	else
-		g_sfloat16->from_unsigned_long_long (val, bits_);
+		set_softfloat_exception_flags (0);
+	} else
+		set_softfloat_exception_flags (g_sfloat16->from_unsigned_long_long (val, bits_));
 }
 
 inline
 SoftFloat <16>::operator long double () const
 {
+	long double ret;
 	if (sizeof (long double) == sizeof (NativeLongDouble)) {
-		long double ret;
-		g_sfloat16->to_long_double (bits_, reinterpret_cast <NativeLongDouble&> (ret));
-		return ret;
+		set_softfloat_exception_flags (g_sfloat16->to_long_double (bits_, reinterpret_cast <NativeLongDouble&> (ret)));
 	} else {
 		// MSVC
 		static_assert (sizeof (long double) == sizeof (double), "sizeof (long double) == sizeof (double)");
-		double ret;
-		g_sfloat16->to_double (bits_, reinterpret_cast <NativeDouble&> (ret));
-		return ret;
+		set_softfloat_exception_flags (g_sfloat16->to_double (bits_, reinterpret_cast <NativeDouble&> (ret)));
 	}
+	return ret;
 }
 
 inline
 SoftFloat <16>::operator int32_t () const
 {
-	return g_sfloat16->to_long (bits_);
+	int32_t ret;
+	set_softfloat_exception_flags (g_sfloat16->to_long (bits_, ret));
+	return ret;
 }
 
 inline
 SoftFloat <16>::operator int64_t () const
 {
-	return g_sfloat16->to_long_long (bits_);
+	int64_t ret;
+	set_softfloat_exception_flags (g_sfloat16->to_long_long (bits_, ret));
+	return ret;
 }
 
 inline
 SoftFloat <16>& SoftFloat <16>::operator += (const SoftFloat& rhs)
 {
-	g_sfloat16->add (bits_, rhs.bits_);
+	set_softfloat_exception_flags (g_sfloat16->add (bits_, rhs.bits_));
 }
 
 inline
 SoftFloat <16>& SoftFloat <16>::operator -= (const SoftFloat& rhs)
 {
-	g_sfloat16->sub (bits_, rhs.bits_);
+	set_softfloat_exception_flags (g_sfloat16->sub (bits_, rhs.bits_));
 }
 
 inline
 SoftFloat <16>& SoftFloat <16>::operator *= (const SoftFloat& rhs)
 {
-	g_sfloat16->mul (bits_, rhs.bits_);
+	set_softfloat_exception_flags (g_sfloat16->mul (bits_, rhs.bits_));
 }
 
 inline
 SoftFloat <16>& SoftFloat <16>::operator /= (const SoftFloat& rhs)
 {
-	g_sfloat16->div (bits_, rhs.bits_);
+	set_softfloat_exception_flags (g_sfloat16->div (bits_, rhs.bits_));
 }
 
 inline
 bool SoftFloat <16>::eq (const SoftFloat& rhs) const
 {
-	return g_sfloat16->eq (bits_, rhs.bits_);
+	bool ret;
+	set_softfloat_exception_flags (g_sfloat16->eq (bits_, rhs.bits_, ret));
+	return ret;
 }
 
 inline
 bool SoftFloat <16>::le (const SoftFloat& rhs) const
 {
-	return g_sfloat16->le (bits_, rhs.bits_);
+	bool ret;
+	set_softfloat_exception_flags (g_sfloat16->le (bits_, rhs.bits_, ret));
+	return ret;
 }
 
 inline
 bool SoftFloat <16>::lt (const SoftFloat& rhs) const
 {
-	return g_sfloat16->lt (bits_, rhs.bits_);
+	bool ret;
+	set_softfloat_exception_flags (g_sfloat16->lt (bits_, rhs.bits_, ret));
+	return ret;
 }
 
 }
