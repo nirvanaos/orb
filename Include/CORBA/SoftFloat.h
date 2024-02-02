@@ -97,13 +97,6 @@ struct alignas (size <= 8 ? size : 8) FloatIEEE
 		return ret;
 	}
 
-	bool equal (const FloatIEEE& rhs) const noexcept
-	{
-		if (is_zero ())
-			return rhs.is_zero ();
-		else
-			return std::equal (bits, bits + WORD_CNT, rhs.bits);
-	}
 };
 
 /// Software IEEE 754 floating point type implementation class template.
@@ -163,12 +156,9 @@ public:
 
 	// Comparation
 
-	inline int compare (const SoftFloat& rhs) const;
-
-	bool equal (const SoftFloat& rhs) const noexcept
-	{
-		return bits_.equal (rhs.bits_);
-	}
+	inline bool eq (const SoftFloat& rhs) const;
+	inline bool le (const SoftFloat& rhs) const;
+	inline bool lt (const SoftFloat& rhs) const;
 
 private:
 	SoftFloat (const FloatIEEE <4>& bits) noexcept :
@@ -252,12 +242,11 @@ public:
 	}
 
 	// Comparation
-	inline int compare (const SoftFloat& rhs) const;
 
-	bool equal (const SoftFloat& rhs) const noexcept
-	{
-		return bits_.equal (rhs.bits_);
-	}
+	inline bool eq (const SoftFloat& rhs) const;
+	inline bool le (const SoftFloat& rhs) const;
+	inline bool lt (const SoftFloat& rhs) const;
+
 
 private:
 	SoftFloat (const FloatIEEE <8>& bits) noexcept :
@@ -311,12 +300,10 @@ public:
 	}
 
 	// Comparation
-	inline int compare (const SoftFloat& rhs) const;
 
-	bool equal (const SoftFloat& rhs) const noexcept
-	{
-		return bits_.equal (rhs.bits_);
-	}
+	inline bool eq (const SoftFloat& rhs) const;
+	inline bool le (const SoftFloat& rhs) const;
+	inline bool lt (const SoftFloat& rhs) const;
 
 private:
 	SoftFloat (const FloatIEEE <16>& bits) noexcept :
@@ -377,37 +364,37 @@ SoftFloat <size> operator / (const SoftFloat <size>& val1, const SoftFloat <size
 template <size_t size> inline
 bool operator > (const SoftFloat <size>& val1, const SoftFloat <size>& val2)
 {
-	return val1.compare (val2) > 0;
+	return !val1.le (val2);
 }
 
 template <size_t size> inline
 bool operator < (const SoftFloat <size>& val1, const SoftFloat <size>& val2)
 {
-	return val1.compare (val2) < 0;
+	return val1.lt (val2);
 }
 
 template <size_t size> inline
 bool operator >= (const SoftFloat <size>& val1, const SoftFloat <size>& val2)
 {
-	return val1.compare (val2) >= 0;
+	return !val1.lt (val2);
 }
 
 template <size_t size> inline
 bool operator <= (const SoftFloat <size>& val1, const SoftFloat <size>& val2)
 {
-	return val1.compare (val2) <= 0;
+	return val1.le (val2);
 }
 
 template <size_t size> inline
-bool operator == (const SoftFloat <size>& val1, const SoftFloat <size>& val2) noexcept
+bool operator == (const SoftFloat <size>& val1, const SoftFloat <size>& val2)
 {
-	return val1.equal (val2);
+	return val1.eq (val2);
 }
 
 template <size_t size> inline
-bool operator != (const SoftFloat <size>& val1, const SoftFloat <size>& val2) noexcept
+bool operator != (const SoftFloat <size>& val1, const SoftFloat <size>& val2)
 {
-	return !val1.equal (val2);
+	return !val1.eq (val2);
 }
 
 }

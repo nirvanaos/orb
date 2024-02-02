@@ -25,13 +25,7 @@
 *  popov.nirvana@gmail.com
 */
 
-module Nirvana{
-
-native Int;
-
-};
-
-module CORBA{
+module CORBA {
 module Internal {
 
 native NativeFloat;
@@ -44,64 +38,76 @@ native FloatIEEE16;
 
 pseudo interface SFloat4
 {
-	void from_float (in NativeFloat x, out FloatIEEE4 f);
-	void from_long (in long x, out FloatIEEE4 f);
-	void from_unsigned_long (in unsigned long x, out FloatIEEE4 f);
-	void from_long_long (in long long x, out FloatIEEE4 f);
-	void from_unsigned_long_long (in unsigned long long x, out FloatIEEE4 f);
+	typedef FloatIEEE4 FloatIEEE;
 
-	void to_float (in FloatIEEE4 f, out NativeFloat x);
-	long to_long (in FloatIEEE4 f);
-	long long to_long_long (in FloatIEEE4 f);
+	void from_float (in NativeFloat x, out FloatIEEE f);
+	void from_long (in long x, out FloatIEEE f);
+	void from_unsigned_long (in unsigned long x, out FloatIEEE f);
+	void from_long_long (in long long x, out FloatIEEE f);
+	void from_unsigned_long_long (in unsigned long long x, out FloatIEEE f);
 
-	void sum (inout FloatIEEE4 x, in FloatIEEE4 y);
-	void sub (inout FloatIEEE4 x, in FloatIEEE4 y);
-	void mul (inout FloatIEEE4 x, in FloatIEEE4 y);
-	void div (inout FloatIEEE4 x, in FloatIEEE4 y);
+	void to_float (in FloatIEEE f, out NativeFloat x);
+	long to_long (in FloatIEEE f);
+	long long to_long_long (in FloatIEEE f);
 
-	short compare (in FloatIEEE4 x, in FloatIEEE4 y);
+	void add (inout FloatIEEE x, in FloatIEEE y);
+	void sub (inout FloatIEEE x, in FloatIEEE y);
+	void mul (inout FloatIEEE x, in FloatIEEE y);
+	void div (inout FloatIEEE x, in FloatIEEE y);
+
+	boolean eq (in FloatIEEE x, in FloatIEEE y);
+	boolean le (in FloatIEEE x, in FloatIEEE y);
+	boolean lt (in FloatIEEE x, in FloatIEEE y);
 };
 
 pseudo interface SFloat8
 {
-	void from_double (in NativeDouble x, out FloatIEEE8 f);
-	void from_long (in long x, out FloatIEEE8 f);
-	void from_unsigned_long (in unsigned long x, out FloatIEEE8 f);
-	void from_long_long (in long long x, out FloatIEEE8 f);
-	void from_unsigned_long_long (in unsigned long long x, out FloatIEEE8 f);
+	typedef FloatIEEE8 FloatIEEE;
 
-	void to_double (in FloatIEEE8 f, out NativeDouble x);
-	long to_long (in FloatIEEE8 f);
-	long long to_long_long (in FloatIEEE8 f);
+	void from_double (in NativeDouble x, out FloatIEEE f);
+	void from_long (in long x, out FloatIEEE f);
+	void from_unsigned_long (in unsigned long x, out FloatIEEE f);
+	void from_long_long (in long long x, out FloatIEEE f);
+	void from_unsigned_long_long (in unsigned long long x, out FloatIEEE f);
 
-	void sum (inout FloatIEEE8 x, in FloatIEEE8 y);
-	void sub (inout FloatIEEE8 x, in FloatIEEE8 y);
-	void mul (inout FloatIEEE8 x, in FloatIEEE8 y);
-	void div (inout FloatIEEE8 x, in FloatIEEE8 y);
+	void to_double (in FloatIEEE f, out NativeDouble x);
+	long to_long (in FloatIEEE f);
+	long long to_long_long (in FloatIEEE f);
 
-	short compare (in FloatIEEE8 x, in FloatIEEE8 y);
+	void add (inout FloatIEEE x, in FloatIEEE y);
+	void sub (inout FloatIEEE x, in FloatIEEE y);
+	void mul (inout FloatIEEE x, in FloatIEEE y);
+	void div (inout FloatIEEE x, in FloatIEEE y);
+
+	boolean eq (in FloatIEEE x, in FloatIEEE y);
+	boolean le (in FloatIEEE x, in FloatIEEE y);
+	boolean lt (in FloatIEEE x, in FloatIEEE y);
 };
 
 pseudo interface SFloat16
 {
-	void from_double (in NativeDouble x, out FloatIEEE16 f);
-	void from_long_double (in NativeLongDouble x, out FloatIEEE16 f);
-	void from_long (in long x, out FloatIEEE16 f);
-	void from_unsigned_long (in unsigned long x, out FloatIEEE16 f);
-	void from_long_long (in long long x, out FloatIEEE16 f);
-	void from_unsigned_long_long (in unsigned long long x, out FloatIEEE16 f);
+	typedef FloatIEEE16 FloatIEEE;
 
-	void to_double (in FloatIEEE16 f, out NativeDouble x);
-	void to_long_double (in FloatIEEE16 f, out NativeLongDouble x);
-	long to_long (in FloatIEEE16 f);
-	long long to_long_long (in FloatIEEE16 f);
+	void from_double (in NativeDouble x, out FloatIEEE f);
+	void from_long_double (in NativeLongDouble x, out FloatIEEE f);
+	void from_long (in long x, out FloatIEEE f);
+	void from_unsigned_long (in unsigned long x, out FloatIEEE f);
+	void from_long_long (in long long x, out FloatIEEE f);
+	void from_unsigned_long_long (in unsigned long long x, out FloatIEEE f);
 
-	void sum (inout FloatIEEE16 x, in FloatIEEE16 y);
-	void sub (inout FloatIEEE16 x, in FloatIEEE16 y);
-	void mul (inout FloatIEEE16 x, in FloatIEEE16 y);
-	void div (inout FloatIEEE16 x, in FloatIEEE16 y);
+	void to_double (in FloatIEEE f, out NativeDouble x);
+	void to_long_double (in FloatIEEE f, out NativeLongDouble x);
+	long to_long (in FloatIEEE f);
+	long long to_long_long (in FloatIEEE f);
 
-	Nirvana::Int compare (in FloatIEEE16 x, in FloatIEEE16 y);
+	void add (inout FloatIEEE x, in FloatIEEE y);
+	void sub (inout FloatIEEE x, in FloatIEEE y);
+	void mul (inout FloatIEEE x, in FloatIEEE y);
+	void div (inout FloatIEEE x, in FloatIEEE y);
+
+	boolean eq (in FloatIEEE x, in FloatIEEE y);
+	boolean le (in FloatIEEE x, in FloatIEEE y);
+	boolean lt (in FloatIEEE x, in FloatIEEE y);
 };
 
 const SFloat4 g_sfloat4;

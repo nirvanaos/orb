@@ -77,6 +77,10 @@ public:
 }
 }
 
+#if !defined (NIRVANA_PROCESS) && !defined (NIRVANA_SINGLETON)
+
 #define NIRVANA_EXPORT_VALUE(uname, Impl) NIRVANA_EXPORT (uname, CORBA::Internal::StaticId <Impl>::id, CORBA::ValueBase, Impl)
+
+#endif
 
 #endif
