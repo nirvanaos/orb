@@ -320,6 +320,12 @@ bool SoftFloat <8>::lt (const SoftFloat& rhs) const
 // 128 bit
 
 inline
+SoftFloat <16>::SoftFloat (const double& val)
+{
+	set_softfloat_exception_flags (g_sfloat16->from_double (reinterpret_cast <const NativeDouble&> (val), bits_));
+}
+
+inline
 SoftFloat <16>::SoftFloat (const long double& val)
 {
 	if (sizeof (long double) == sizeof (NativeLongDouble))
@@ -405,24 +411,28 @@ inline
 SoftFloat <16>& SoftFloat <16>::operator += (const SoftFloat& rhs)
 {
 	set_softfloat_exception_flags (g_sfloat16->add (bits_, rhs.bits_));
+	return *this;
 }
 
 inline
 SoftFloat <16>& SoftFloat <16>::operator -= (const SoftFloat& rhs)
 {
 	set_softfloat_exception_flags (g_sfloat16->sub (bits_, rhs.bits_));
+	return *this;
 }
 
 inline
 SoftFloat <16>& SoftFloat <16>::operator *= (const SoftFloat& rhs)
 {
 	set_softfloat_exception_flags (g_sfloat16->mul (bits_, rhs.bits_));
+	return *this;
 }
 
 inline
 SoftFloat <16>& SoftFloat <16>::operator /= (const SoftFloat& rhs)
 {
 	set_softfloat_exception_flags (g_sfloat16->div (bits_, rhs.bits_));
+	return *this;
 }
 
 inline

@@ -50,7 +50,7 @@ namespace Internal {
 template <size_t size>
 struct alignas (size <= 8 ? size : 8) FloatIEEE
 {
-	typedef uint32_t Word;
+	typedef unsigned int Word;
 	static const size_t WORD_CNT = size / sizeof (Word);
 	Word bits [WORD_CNT];
 
@@ -66,28 +66,23 @@ struct alignas (size <= 8 ? size : 8) FloatIEEE
 	Word get_bits () const noexcept
 	{
 		if (i == SIGN_INDEX)
-			return bits [i] & ~SIGN;
+			return (bits [i] & ~SIGN) | get_bits <i - 1> ();
 		else
-			return bits [i];
+			return bits [i] | get_bits <i - 1> ();
+	}
+
+	template <>
+	Word get_bits <0> () const noexcept
+	{
+		if (0 == SIGN_INDEX)
+			return bits [0] & ~SIGN;
+		else
+			return bits [0];
 	}
 
 	bool is_zero () const noexcept
 	{
-		Word mask = get_bits <0> ();
-		if (WORD_CNT > 1) {
-			mask |= get_bits <1> ();
-			if (WORD_CNT > 2) {
-				mask |= get_bits <2> ();
-				mask |= get_bits <3> ();
-				if (WORD_CNT > 4) {
-					mask |= get_bits <4> ();
-					mask |= get_bits <5> ();
-					mask |= get_bits <6> ();
-					mask |= get_bits <7> ();
-				}
-			}
-		}
-		return mask == 0;
+		return get_bits <WORD_CNT - 1> () == 0;
 	}
 
 	FloatIEEE negate () const noexcept
@@ -115,8 +110,7 @@ public:
 		bits_.zero ();
 	}
 
-	SoftFloat (const SoftFloat& val) noexcept = default;
-
+	inline SoftFloat (const SoftFloat& val) noexcept = default;
 	inline SoftFloat (const NativeType& val);
 	inline SoftFloat (const int32_t& val);
 	inline SoftFloat (const uint32_t& val);
@@ -181,8 +175,7 @@ public:
 		bits_.zero ();
 	}
 
-	SoftFloat (const SoftFloat& val) noexcept = default;
-
+	inline SoftFloat (const SoftFloat& val) noexcept = default;
 	inline SoftFloat (const NativeType& val);
 	inline SoftFloat (const int32_t& val);
 	inline SoftFloat (const uint32_t& val);
@@ -269,7 +262,8 @@ public:
 		bits_.zero ();
 	}
 
-	SoftFloat (const SoftFloat& val) noexcept = default;
+	inline SoftFloat (const SoftFloat& val) noexcept = default;
+	inline SoftFloat (const double& val);
 	inline SoftFloat (const NativeType& val);
 	inline SoftFloat (const int32_t& val);
 	inline SoftFloat (const uint32_t& val);
@@ -317,7 +311,7 @@ private:
 template <size_t size> inline
 std::istream& operator >> (std::istream& is, SoftFloat <size>& val)
 {
-	typename SoftFloat <size>::NativeType nt;
+	typename SoftFloat <size>::NativeType nt = 0;
 	is >> nt;
 	val = SoftFloat <size> (nt);
 	return is;
@@ -331,6 +325,22 @@ std::ostream& operator << (std::ostream& os, const SoftFloat <size>& val)
 
 template <size_t size> inline
 SoftFloat <size> operator + (const SoftFloat <size>& val1, const SoftFloat <size>& val2)
+{
+	SoftFloat <size> res (val1);
+	res += val2;
+	return res;
+}
+
+template <size_t size> inline
+SoftFloat <size> operator + (const SoftFloat <size>& val1, const typename SoftFloat <size>::NativeType& val2)
+{
+	SoftFloat <size> res (val1);
+	res += val2;
+	return res;
+}
+
+template <size_t size> inline
+SoftFloat <size> operator + (const typename SoftFloat <size>::NativeType& val1, const SoftFloat <size>& val2)
 {
 	SoftFloat <size> res (val1);
 	res += val2;
@@ -392,11 +402,36 @@ bool operator == (const SoftFloat <size>& val1, const SoftFloat <size>& val2)
 }
 
 template <size_t size> inline
+bool operator == (const SoftFloat <size>& val1, const typename SoftFloat <size>::NativeType& val2)
+{
+	return val1.eq (SoftFloat <size> (val2));
+}
+
+template <size_t size> inline
+bool operator == (const typename SoftFloat <size>::NativeType& val1, const SoftFloat <size>& val2)
+{
+	return SoftFloat <size> (val1).eq (val2);
+}
+
+template <size_t size> inline
 bool operator != (const SoftFloat <size>& val1, const SoftFloat <size>& val2)
 {
-	return !val1.eq (val2);
+	return !operator == (val1, val2);
+}
+
+template <size_t size> inline
+bool operator != (const SoftFloat <size>& val1, const typename SoftFloat <size>::NativeType& val2)
+{
+	return !operator == (val1, val2);
+}
+
+template <size_t size> inline
+bool operator != (const typename SoftFloat <size>::NativeType& val1, const SoftFloat <size>& val2)
+{
+	return !operator == (val1, val2);
 }
 
 }
 }
+
 #endif

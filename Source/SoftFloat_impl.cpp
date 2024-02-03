@@ -38,22 +38,15 @@ enum {
 	softfloat_flag_invalid = 16
 };
 
+static_assert (softfloat_flag_inexact == FE_INEXACT, "FE_INEXACT");
+static_assert (softfloat_flag_underflow == FE_UNDERFLOW, "FE_UNDERFLOW");
+static_assert (softfloat_flag_overflow == FE_OVERFLOW, "FE_OVERFLOW");
+static_assert (softfloat_flag_infinite == FE_DIVBYZERO, "FE_DIVBYZERO");
+static_assert (softfloat_flag_invalid == FE_INVALID, "FE_INVALID");
+
 void set_softfloat_exception_flags (unsigned f)
 {
-	fexcept_t excepts = 0;
-	if (f) {
-		if (f & softfloat_flag_inexact)
-			excepts |= FE_INEXACT;
-		if (f & softfloat_flag_underflow)
-			excepts |= FE_UNDERFLOW;
-		if (f & softfloat_flag_overflow)
-			excepts |= FE_OVERFLOW;
-		if (f & softfloat_flag_infinite)
-			excepts |= FE_DIVBYZERO;
-		if (f & softfloat_flag_invalid)
-			excepts |= FE_INVALID;
-	}
-	fesetexceptflag (&excepts, FE_ALL_EXCEPT);
+	feraiseexcept (f);
 }
 
 }
