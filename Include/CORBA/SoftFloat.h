@@ -285,8 +285,16 @@ public:
 	inline SoftFloat operator ++ (int);
 	inline SoftFloat& operator -- ();
 	inline SoftFloat operator -- (int);
-	inline SoftFloat operator + () const;
-	inline SoftFloat operator - () const;
+
+	inline const SoftFloat& operator + () const noexcept
+	{
+		return *this;
+	}
+
+	inline SoftFloat operator - () const noexcept
+	{
+		return SoftFloat (bits_.negate ());
+	}
 
 	bool operator! () const noexcept
 	{
