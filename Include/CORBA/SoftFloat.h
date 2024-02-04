@@ -92,6 +92,25 @@ struct alignas (size <= 8 ? size : 8) FloatIEEE
 		return ret;
 	}
 
+	FloatIEEE copy_sign (const FloatIEEE& sign) const noexcept
+	{
+		FloatIEEE ret = *this;
+		ret.bits [SIGN_INDEX] = (ret.bits [SIGN_INDEX] & (~SIGN)) | (sign.bits [SIGN_INDEX] & SIGN);
+		return ret;
+	}
+
+	Word sign_bit () const noexcept
+	{
+		return bits [SIGN_INDEX] & SIGN;
+	}
+
+	FloatIEEE abs () const noexcept
+	{
+		FloatIEEE ret = *this;
+		if (bits [SIGN_INDEX] & SIGN)
+			ret.bits [SIGN_INDEX] &= ~SIGN;
+		return ret;
+	}
 };
 
 /// Software IEEE 754 floating point type implementation class template.
@@ -153,6 +172,23 @@ public:
 	inline bool eq (const SoftFloat& rhs) const;
 	inline bool le (const SoftFloat& rhs) const;
 	inline bool lt (const SoftFloat& rhs) const;
+
+	// Sign operations
+
+	SoftFloat copy_sign (const SoftFloat& sign) const noexcept
+	{
+		return SoftFloat (bits_.copy_sign (sign.bits_));
+	}
+
+	bool sign_bit () const noexcept
+	{
+		return bits_.sign_bit () != 0;
+	}
+
+	SoftFloat abs () const noexcept
+	{
+		return SoftFloat (bits_.abs ());
+	}
 
 private:
 	SoftFloat (const FloatIEEE <4>& bits) noexcept :
@@ -240,6 +276,22 @@ public:
 	inline bool le (const SoftFloat& rhs) const;
 	inline bool lt (const SoftFloat& rhs) const;
 
+	// Sign operations
+
+	SoftFloat copy_sign (const SoftFloat& sign) const noexcept
+	{
+		return SoftFloat (bits_.copy_sign (sign.bits_));
+	}
+
+	bool sign_bit () const noexcept
+	{
+		return bits_.sign_bit () != 0;
+	}
+
+	SoftFloat abs () const noexcept
+	{
+		return SoftFloat (bits_.abs ());
+	}
 
 private:
 	SoftFloat (const FloatIEEE <8>& bits) noexcept :
@@ -306,6 +358,23 @@ public:
 	inline bool eq (const SoftFloat& rhs) const;
 	inline bool le (const SoftFloat& rhs) const;
 	inline bool lt (const SoftFloat& rhs) const;
+
+	// Sign operations
+
+	SoftFloat copy_sign (const SoftFloat& sign) const noexcept
+	{
+		return SoftFloat (bits_.copy_sign (sign.bits_));
+	}
+
+	bool sign_bit () const noexcept
+	{
+		return bits_.sign_bit () != 0;
+	}
+
+	SoftFloat abs () const noexcept
+	{
+		return SoftFloat (bits_.abs ());
+	}
 
 private:
 	SoftFloat (const FloatIEEE <16>& bits) noexcept :
@@ -440,6 +509,28 @@ bool operator != (const typename SoftFloat <size>::NativeType& val1, const SoftF
 }
 
 }
+}
+
+namespace std {
+
+template <size_t size> inline
+CORBA::Internal::SoftFloat <size> copysign (const CORBA::Internal::SoftFloat <size>& x, const CORBA::Internal::SoftFloat <size>& y)
+{
+	return x.copy_sign (y);
+}
+
+template <size_t size> inline
+CORBA::Internal::SoftFloat <size> abs (const CORBA::Internal::SoftFloat <size>& arg)
+{
+	return arg.abs ();
+}
+
+template <size_t size> inline
+bool signbit (const CORBA::Internal::SoftFloat <size>& arg)
+{
+	return arg.sign_bit ();
+}
+
 }
 
 #endif
