@@ -63,6 +63,7 @@
 #include "TypeCodeValueAbstract.h"
 #include "TypeCodeInterface.h"
 #include "SoftFloat_impl.h"
+#include "DomainManager.h"
 #include "Messaging.h"
 
 namespace Nirvana {
