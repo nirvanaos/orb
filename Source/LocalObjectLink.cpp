@@ -35,7 +35,7 @@ void LocalObjectLink::_create_proxy ()
 	// If proxy creation is in progress, the least significant bit is set.
 	LocalObject::_ptr_type obj = core_object_;
 	if (!obj || ((uintptr_t)&obj & 1))
-		g_object_factory->create_local_object (this, &core_object_);
+		g_object_factory->create_local_object (this, &core_object_, nullptr);
 }
 
 }

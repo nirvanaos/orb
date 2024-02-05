@@ -72,13 +72,15 @@ pseudo interface ObjectFactory
 	/// 
 	/// \param impl The servant ServantBase implementation pointer.
 	/// \param ref Pointer to core ServantBase reference.
-	void create_servant (in PortableServer::Servant impl, in Nirvana::Pointer ref);
+	/// \param comp Optional reference to the parent component.
+	void create_servant (in PortableServer::Servant impl, in Nirvana::Pointer ref, in Object comp);
 
 	/// \brief Create core LocalObject object.
 	/// 
 	/// \param impl The servant LocalObject implementation pointer.
 	/// \param ref Pointer to core LocalObject reference.
-	void create_local_object (in LocalObject impl, in Nirvana::Pointer ref);
+	/// \param comp Optional reference to the parent component.
+	void create_local_object (in LocalObject impl, in Nirvana::Pointer ref, in Object comp);
 
 	/// \brief Stateless servant creation frame.
 	struct StatelessCreationFrame
