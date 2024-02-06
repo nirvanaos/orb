@@ -101,9 +101,6 @@ public:
 
 	static void set_marshal_local (Interface* env);
 
-	static void _final_construct () noexcept
-	{}
-
 protected:
 	ProxyRoot (Object::_ptr_type obj, AbstractBase::_ptr_type ab, IOReference::_ptr_type proxy_manager, UShort interface_idx) :
 		object_ (obj),

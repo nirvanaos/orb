@@ -78,9 +78,6 @@ public:
 		return core_object ()->_refcount_value ();
 	}
 
-	static void _final_construct () noexcept
-	{}
-
 protected:
 	LocalObjectLink (const Bridge <LocalObject>::EPV& epv) :
 		BridgeVal <LocalObject> (epv)

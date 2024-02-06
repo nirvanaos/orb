@@ -40,7 +40,7 @@ namespace Internal {
 
 // POA implementation of PortableServer::ServantBase
 template <>
-class ServantPOA <PortableServer::ServantBase> :
+class NIRVANA_NOVTABLE ServantPOA <PortableServer::ServantBase> :
 	public ServantBaseLink,
 	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>,
 	public virtual ServantPOA <AbstractBase>,
@@ -99,11 +99,6 @@ protected:
 
 public:
 	virtual ULong _refcount_value () override;
-
-	void _final_construct ()
-	{
-		_create_proxy ();
-	}
 
 protected:
 	virtual void _delete_object () noexcept

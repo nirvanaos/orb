@@ -43,11 +43,24 @@ inline bool is_free_sync_context ()
 	return Internal::g_object_factory->is_free_sync_context ();
 }
 
-/// Create stateless servant
+/// \brief Create stateless servant.
+/// 
+/// Stateless servant lives in the free synchronization context.
+/// So operations may be called in parallel, without a synchronization.
+/// Stateless servant must not change it's state during the all life cycle.
+/// Usually such servant resides in the read-only memory, so any change of the
+/// object variables will cause access violation exception.
+/// 
+/// Note that destructor also have read-only access to object and can not change
+/// object variables during the object destruction. Generally it means that we can not
+/// use portable (virtual) implementation, because it changes vtable pointers during
+/// the object destruction,
 /// 
 /// \tparam T A servant type.
+/// \tparam Args Constructor parameter types.
 /// \param args Servant constructor parameters.
 /// \returns Servant reference.
+/// 
 template <class T, class ... Args>
 servant_reference <T> make_stateless (Args ... args)
 {
@@ -61,8 +74,6 @@ servant_reference <T> make_stateless (Args ... args)
 	try {
 		// Create servant
 		T* tmp_serv = new (&tmp) T (std::forward <Args> (args)...);
-
-		tmp_serv->_final_construct ();
 
 		// Move servant to the stateless memory and return reference to it.
 		return servant_reference <T> ((T*)Internal::g_object_factory->stateless_end (true), false);

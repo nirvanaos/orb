@@ -105,11 +105,6 @@ protected:
 public:
 	virtual ULong _refcount_value () override;
 
-	void _final_construct ()
-	{
-		_create_proxy ();
-	}
-
 protected:
 	ServantPOA ();
 

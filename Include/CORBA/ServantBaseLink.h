@@ -105,9 +105,6 @@ public:
 		return core_object ()->_refcount_value ();
 	}
 
-	static void _final_construct () noexcept
-	{}
-
 protected:
 	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv) :
 		BridgeVal <PortableServer::ServantBase> (epv)
