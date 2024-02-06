@@ -44,9 +44,9 @@ namespace Internal {
 
 template <class S, class Primary, class ... Bases>
 class ImplementationLocal :
-	public ValueImpl <S, LocalObject>,
 	public InterfaceImpl <S, Bases>...,
-	public InterfaceImpl <S, Primary>
+	public InterfaceImpl <S, Primary>,
+	public ValueImpl <S, LocalObject>
 {
 public:
 	typedef Primary PrimaryInterface;
@@ -62,7 +62,8 @@ public:
 	}
 
 protected:
-	ImplementationLocal ()
+	ImplementationLocal (Object::_ptr_type comp) :
+		ValueImpl <S, LocalObject> (comp)
 	{}
 };
 

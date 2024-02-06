@@ -40,10 +40,9 @@ class LocalObjectLink :
 	public BridgeVal <LocalObject>
 {
 public:
-	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) noexcept
+	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) const noexcept
 	{
-		_create_proxy ();
-		return get_object_from_core (I_ptr <LocalObject> (core_object_), iid, env);
+		return get_object_from_core (core_object (), iid, env);
 	}
 
 	// Object operations
@@ -65,24 +64,22 @@ protected:
 
 	void _add_ref ()
 	{
-		_create_proxy ();
-		core_object_->_add_ref ();
+		core_object ()->_add_ref ();
 	}
 
 	void _remove_ref ()
 	{
-		_create_proxy ();
-		core_object_->_remove_ref ();
+		core_object ()->_remove_ref ();
 	}
 
 public:
 	ULong _refcount_value ()
 	{
-		_create_proxy ();
-		return core_object_->_refcount_value ();
+		return core_object ()->_refcount_value ();
 	}
 
-	void _create_proxy ();
+	static void _final_construct () noexcept
+	{}
 
 protected:
 	LocalObjectLink (const Bridge <LocalObject>::EPV& epv) :
@@ -95,14 +92,22 @@ protected:
 		return *this; // Do nothing
 	}
 
+	void _create_proxy (Object::_ptr_type comp);
+
 	Type <Interface>::VRet _get_proxy ()
 	{
-		_create_proxy ();
 #ifdef LEGACY_CORBA_CPP
-		return interface_duplicate (&get_proxy (I_ptr <LocalObject> (core_object_)));
+		return interface_duplicate (&get_proxy (I_ptr <LocalObject> (core_object ())));
 #else
-		return get_proxy (I_ptr <LocalObject> (core_object_));
+		return get_proxy (I_ptr <LocalObject> (core_object ()));
 #endif
+	}
+
+protected:
+	LocalObject::_ptr_type core_object () const noexcept
+	{
+		assert (core_object_);
+		return core_object_;
 	}
 
 protected:

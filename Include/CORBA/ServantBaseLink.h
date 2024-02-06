@@ -54,20 +54,17 @@ public:
 #endif
 		<PortableServer::POA> _default_POA ()
 	{
-		_create_proxy ();
-		return core_object_->_default_POA ();
+		return core_object ()->_default_POA ();
 	}
 
 	Type <InterfaceDef>::VRet _get_interface ()
 	{
-		_create_proxy ();
-		return core_object_->_get_interface ();
+		return core_object ()->_get_interface ();
 	}
 
 	Boolean _is_a (String_in type_id)
 	{
-		_create_proxy ();
-		return core_object_->_is_a (type_id);
+		return core_object ()->_is_a (type_id);
 	}
 
 	Boolean _non_existent () const noexcept
@@ -79,8 +76,7 @@ public:
 
 	PortableServer::Servant _core_servant ()
 	{
-		_create_proxy ();
-		return core_object_;
+		return core_object ();
 	}
 
 	// Reference counter
@@ -95,24 +91,22 @@ protected:
 
 	void _add_ref ()
 	{
-		_create_proxy ();
-		core_object_->_add_ref ();
+		core_object ()->_add_ref ();
 	}
 
 	void _remove_ref ()
 	{
-		_create_proxy ();
-		core_object_->_remove_ref ();
+		core_object ()->_remove_ref ();
 	}
 
 public:
 	ULong _refcount_value ()
 	{
-		_create_proxy ();
-		return core_object_->_refcount_value ();
+		return core_object ()->_refcount_value ();
 	}
 
-	void _create_proxy ();
+	static void _final_construct () noexcept
+	{}
 
 protected:
 	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv) :
@@ -125,17 +119,25 @@ protected:
 		return *this; // Do nothing
 	}
 
+	void _create_proxy (Object::_ptr_type comp);
+
 	Type <Interface>::VRet _get_proxy ()
 	{
-		_create_proxy ();
 #ifdef LEGACY_CORBA_CPP
-		return interface_duplicate (&get_proxy (PortableServer::Servant (core_object_)));
+		return interface_duplicate (&get_proxy (PortableServer::Servant (core_object ())));
 #else
-		return get_proxy (PortableServer::Servant (core_object_));
+		return get_proxy (PortableServer::Servant (core_object ()));
 #endif
 	}
 
-protected:
+private:
+	I_ptr <PortableServer::ServantBase> core_object () const noexcept
+	{
+		assert (core_object_);
+		return core_object_;
+	}
+
+private:
 	I_ref <PortableServer::ServantBase> core_object_;
 };
 

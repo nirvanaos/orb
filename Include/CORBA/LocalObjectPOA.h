@@ -63,6 +63,7 @@ public:
 
 	virtual Type <InterfaceDef>::VRet _get_interface () override
 	{
+		_create_proxy ();
 		return LocalObjectLink::core_object_->_get_interface ();
 	}
 
@@ -72,6 +73,8 @@ public:
 	{
 		return false;
 	}
+
+	virtual Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) override;
 
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__non_existent;
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__add_ref;
@@ -89,16 +92,23 @@ protected:
 
 	virtual void _add_ref () override
 	{
+		_create_proxy ();
 		LocalObjectLink::_add_ref ();
 	}
 
 	virtual void _remove_ref () override
 	{
+		_create_proxy ();
 		LocalObjectLink::_remove_ref ();
 	}
 
 public:
 	virtual ULong _refcount_value () override;
+
+	void _final_construct ()
+	{
+		_create_proxy ();
+	}
 
 protected:
 	ServantPOA ();
@@ -107,8 +117,16 @@ protected:
 		ServantPOA ()
 	{}
 
+	void _create_proxy ();
+
+	void _create_proxy (Object::_ptr_type comp)
+	{
+		LocalObjectLink::_create_proxy (comp);
+	}
+
 	virtual Type <Interface>::VRet _get_proxy () override
 	{
+		_create_proxy ();
 		return LocalObjectLink::_get_proxy ();
 	}
 

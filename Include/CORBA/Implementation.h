@@ -46,9 +46,9 @@ namespace Internal {
 
 template <class S, class Primary, class ... Bases>
 class Implementation :
-	public ValueImpl <S, PortableServer::ServantBase>,
 	public InterfaceImpl <S, Bases>...,
-	public InterfaceImpl <S, Primary>
+	public InterfaceImpl <S, Primary>,
+	public ValueImpl <S, PortableServer::ServantBase>
 {
 public:
 	typedef Primary PrimaryInterface;
@@ -64,7 +64,8 @@ public:
 	}
 
 protected:
-	Implementation ()
+	Implementation (Object::_ptr_type comp) :
+		ValueImpl <S, PortableServer::ServantBase> (comp)
 	{}
 };
 

@@ -31,13 +31,9 @@ using namespace PortableServer;
 namespace CORBA {
 namespace Internal {
 
-void ServantBaseLink::_create_proxy ()
+void ServantBaseLink::_create_proxy (Object::_ptr_type comp)
 {
-	// Check that proxy is not yet created.
-	// If proxy creation is in progress, the least significant bit is set.
-	ServantBase::_ptr_type obj = core_object_;
-	if (!obj || ((uintptr_t)&obj & 1))
-		g_object_factory->create_servant (this, &core_object_, nullptr);
+	g_object_factory->create_servant (this, &core_object_, comp);
 }
 
 }

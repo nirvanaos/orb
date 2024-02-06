@@ -40,7 +40,7 @@ namespace Internal {
 
 // POA implementation of PortableServer::ServantBase
 template <>
-class NIRVANA_NOVTABLE ServantPOA <PortableServer::ServantBase> :
+class ServantPOA <PortableServer::ServantBase> :
 	public ServantBaseLink,
 	public Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>,
 	public virtual ServantPOA <AbstractBase>,
@@ -59,11 +59,13 @@ public:
 #endif
 		<PortableServer::POA> _default_POA ()
 	{
+		_create_proxy ();
 		return ServantBaseLink::_default_POA ();
 	}
 
 	virtual Type <InterfaceDef>::VRet _get_interface ()
 	{
+		_create_proxy ();
 		return ServantBaseLink::_get_interface ();
 	}
 
@@ -74,6 +76,8 @@ public:
 		return false;
 	}
 
+	virtual Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env);
+
 #ifndef LEGACY_CORBA_CPP
 protected:
 	template <class> friend class LifeCycleRefCnt;
@@ -83,16 +87,23 @@ protected:
 
 	virtual void _add_ref () override
 	{
+		_create_proxy ();
 		ServantBaseLink::_add_ref ();
 	}
 
 	virtual void _remove_ref () override
 	{
+		_create_proxy ();
 		ServantBaseLink::_remove_ref ();
 	}
 
 public:
 	virtual ULong _refcount_value () override;
+
+	void _final_construct ()
+	{
+		_create_proxy ();
+	}
 
 protected:
 	virtual void _delete_object () noexcept
@@ -110,8 +121,16 @@ protected:
 	virtual ~ServantPOA ()
 	{}
 
+	void _create_proxy ();
+
+	void _create_proxy (Object::_ptr_type comp)
+	{
+		ServantBaseLink::_create_proxy (comp);
+	}
+
 	virtual Type <Interface>::VRet _get_proxy ()
 	{
+		_create_proxy ();
 		return ServantBaseLink::_get_proxy ();
 	}
 

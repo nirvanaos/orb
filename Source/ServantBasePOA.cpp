@@ -33,14 +33,34 @@ ServantPOA <PortableServer::ServantBase>::ServantPOA () :
 	ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_)
 {}
 
+void ServantPOA <PortableServer::ServantBase>::_create_proxy ()
+{
+	// Check that proxy is not yet created.
+	// If proxy creation is in progress, the least significant bit is set.
+	void*& obj = reinterpret_cast <void*&> (ServantBaseLink::core_object_);
+	if (!obj)
+		obj = (void*)(uintptr_t)1; // Set for interlocked construction
+	else if (((uintptr_t)(void*)obj & 1) == 0)
+		return; // Construction finished
+
+	ServantBaseLink::_create_proxy (nullptr);
+}
+
 ULong ServantPOA <PortableServer::ServantBase>::_refcount_value ()
 {
+	_create_proxy ();
 	return ServantBaseLink::_refcount_value ();
 }
 
 Boolean ServantPOA <PortableServer::ServantBase>::_is_a (String_in type_id)
 {
+	_create_proxy ();
 	return ServantBaseLink::_is_a (type_id);
+}
+
+Bridge <Object>* ServantPOA <PortableServer::ServantBase>::_get_object (Type <String>::ABI_in iid, Interface* env)
+{
+	NIRVANA_UNREACHABLE_CODE ();
 }
 
 }

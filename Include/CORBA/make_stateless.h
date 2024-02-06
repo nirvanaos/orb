@@ -62,8 +62,7 @@ servant_reference <T> make_stateless (Args ... args)
 		// Create servant
 		T* tmp_serv = new (&tmp) T (std::forward <Args> (args)...);
 
-		// Create proxy
-		tmp_serv->_create_proxy ();
+		tmp_serv->_final_construct ();
 
 		// Move servant to the stateless memory and return reference to it.
 		return servant_reference <T> ((T*)Internal::g_object_factory->stateless_end (true), false);

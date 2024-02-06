@@ -60,13 +60,17 @@ public:
 	}
 
 protected:
-	ValueImpl () :
+	ValueImpl (Object::_ptr_type comp) :
 		LocalObjectLink (Skeleton <S, LocalObject>::epv_)
-	{}
+	{
+		_create_proxy (comp);
+	}
 
 	ValueImpl (const ValueImpl&) :
-		ValueImpl ()
-	{}
+		LocalObjectLink (Skeleton <S, LocalObject>::epv_)
+	{
+		_create_proxy (nullptr);
+	}
 
 	ValueImpl& operator = (const ValueImpl&) noexcept
 	{
