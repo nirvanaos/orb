@@ -68,9 +68,10 @@ servant_reference <T> make_stateless (Args ... args)
 	typename std::aligned_storage <sizeof (T), alignof (T)>::type tmp;
 
 	// Create StatelessCreationFrame and register it with ObjectFactory
-	Internal::ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (T), 0, nullptr);
+	Internal::ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (T), 0, nullptr, nullptr, nullptr);
 	Internal::g_object_factory->stateless_begin (scb);
 
+	T* tmp_serv = nullptr;
 	try {
 		// Create servant
 		T* tmp_serv = new (&tmp) T (std::forward <Args> (args)...);
@@ -78,6 +79,10 @@ servant_reference <T> make_stateless (Args ... args)
 		// Move servant to the stateless memory and return reference to it.
 		return servant_reference <T> ((T*)Internal::g_object_factory->stateless_end (true), false);
 	} catch (...) {
+		// Destroy servant
+		if (tmp_serv)
+			tmp_serv->~T ();
+		
 		// Inform ObjectFactory that servant creation was failed
 		Internal::g_object_factory->stateless_end (false);
 		throw;

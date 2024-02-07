@@ -86,9 +86,11 @@ pseudo interface ObjectFactory
 	struct StatelessCreationFrame
 	{
 		Nirvana::ConstPointer tmp; ///< Pointer to the temporary object storage in stack.
-		Nirvana::Size size; ///< Size of the object.
-		Nirvana::PtrDiff offset; ///< Used internally.
-		Nirvana::Pointer next;
+		Nirvana::Size size;        ///< Size of the object.
+		Nirvana::PtrDiff offset;   ///< Used internally.
+		Nirvana::Pointer next;     ///< Used internally.
+		Nirvana::Pointer memory;   ///< Used internally.
+		Nirvana::Pointer proxy;    ///< Used internally.
 	};
 
 	/// \brief Start creation of a stateless servant.
