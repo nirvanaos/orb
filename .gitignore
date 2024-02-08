@@ -79,3 +79,6 @@
 /Include/CORBA/SFloat_s.h
 /Include/CORBA/SFloat.h
 /IDL/
+/Include/CORBA/ccm/*.h
+/Include/CORBA/Components_s.h
+/Include/CORBA/Components.h

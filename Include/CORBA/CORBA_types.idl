@@ -4,6 +4,7 @@
 
 module CORBA {
 
+typedef sequence <octet> OctetSeq;
 typedef sequence <string> StringSeq;
 enum ParameterMode { PARAM_IN, PARAM_OUT, PARAM_INOUT };
 
