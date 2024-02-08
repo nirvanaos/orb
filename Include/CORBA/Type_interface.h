@@ -178,7 +178,9 @@ public:
 
 	operator I_ref <I> ()
 	{
-		I_ref <I> ret (static_cast <I*> (Interface::_check (p_, RepIdOf <I>::id))); // No add reference
+		// I may be not completely defined here, so we use reinterpret_cast.
+		// Internal::Interface is always the top base of any interface bridge.
+		I_ref <I> ret (reinterpret_cast <I*> (Interface::_check (p_, RepIdOf <I>::id))); // No add reference
 		p_ = nullptr;
 		return ret;
 	}
@@ -187,7 +189,9 @@ public:
 
 	operator I_ptr <I> ()
 	{
-		I_ptr <I> ret (static_cast <I*> (Interface::_check (p_, RepIdOf <I>::id))); // No add reference
+		// I may be not completely defined here, so we use reinterpret_cast.
+		// Internal::Interface is always the top base of any interface bridge.
+		I_ptr <I> ret (reinterpret_cast <I*> (Interface::_check (p_, RepIdOf <I>::id))); // No add reference
 		p_ = nullptr;
 		return ret;
 	}
@@ -208,7 +212,9 @@ public:
 
 	operator I_ptr <I> ()
 	{
-		return I_ptr <I> (static_cast <I*> (Interface::_check (p_, RepIdOf <I>::id)));
+		// I may be not completely defined here, so we use reinterpret_cast.
+		// Internal::Interface is always the top base of any interface bridge.
+		return I_ptr <I> (reinterpret_cast <I*> (Interface::_check (p_, RepIdOf <I>::id)));
 	}
 
 private:
@@ -243,13 +249,6 @@ public:
 	operator I_ptr <Interface> ()
 	{
 		I_ptr <Interface> ret = p_;
-		p_ = nullptr;
-		return ret;
-	}
-
-	operator I_var <Interface> ()
-	{
-		I_var <Interface> ret = p_;
 		p_ = nullptr;
 		return ret;
 	}
@@ -328,7 +327,7 @@ struct TypeItfBase
 
 	static Interface* ret (I_ref <I>&& var) noexcept
 	{
-		Interface* p = var.p_;
+		Interface* p = &I_ptr <I> (var.p_);
 		var.p_ = nullptr;
 		return p;
 	}
