@@ -1,6 +1,5 @@
 /// \file CORBA.h
 /// The main header.
-
 /*
 * Nirvana IDL support library.
 *
@@ -65,6 +64,8 @@
 #include "SoftFloat_impl.h"
 #include "DomainManager.h"
 #include "Messaging.h"
+#include "ValueCreator.h"
+#include "CCMObjectImpl.h"
 
 namespace Nirvana {
 

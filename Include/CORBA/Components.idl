@@ -1,6 +1,9 @@
 #if !defined (CCM_COMPONENTS_IDL)
 #define CCM_COMPONENTS_IDL
 
+#define CCM_LW
+#define CCM_NOEVENT
+
 //#include "ccm/CCM_Events.idl"
 //#include "ccm/CCM_KeylessCCMHome.idl"
 //#include "ccm/CCM_Home.idl"
