@@ -28,130 +28,12 @@
 #define NIRVANA_ORB_CCMOBJECTIMPL_H_
 #pragma once
 
-#include "Components_s.h"
+#include "ccm/CCM_Object.h"
 
 namespace CORBA {
 namespace Internal {
 
-class ReceptacleBase
-{
-protected:
-	void connect (I_ptr <Interface> p);
-	void disconnect (I_ref <Interface>& conn);
-	void get_connection (I_ref <Interface>& conn) const noexcept;
-
-	I_ptr <Interface> connection () const noexcept
-	{
-		return connection_;
-	}
-
-private:
-	I_ref <Interface> connection_;
-};
-
-template <class I>
-class Receptacle : private ReceptacleBase
-{
-public:
-	void connect (I_ptr <I> p)
-	{
-		ReceptacleBase::connect (p);
-	}
-
-	typename Type <I>::VRet disconnect ()
-	{
-#ifndef LEGACY_CORBA_CPP
-		I_ref <I> ret;
-		ReceptacleBase::disconnect (reinterpret_cast <I_ref <Interface>&> (ret));
-		return ret;
-#else
-		I_var <I> ret;
-		ReceptacleBase::disconnect (reinterpret_cast <I_ref <Interface>&> (ret));
-		return ret._retn ();
-#endif
-	}
-
-	typename Type <I>::VRet get_connection () const noexcept
-	{
-#ifndef LEGACY_CORBA_CPP
-		I_ref <I> ret;
-		ReceptacleBase::get_connection (reinterpret_cast <I_ref <Interface>&> (ret));
-		return ret;
-#else
-		I_var <I> ret;
-		ReceptacleBase::get_connection (reinterpret_cast <I_ref <Interface>&> (ret));
-		return ret._retn ();
-#endif
-	}
-
-	operator I_ptr <I> () const noexcept
-	{
-		return reinterpret_cast <I*> (&ReceptacleBase::connection ());
-	}
-};
-
-class ConnectionBase
-{
-public:
-	ConnectionBase (I_ptr <Interface> p, size_t idx);
-
-private:
-	I_ref <Interface> objref_;
-	I_ref <Components::Cookie> ck_;
-};
-
-typedef IDL::Sequence <ConnectionBase> ConnectionsBase;
-
-class ReceptaclesBase
-{
-public:
-	void get_connections (ConnectionsBase& connections) const;
-
-protected:
-	void connect (I_ptr <Interface> p, I_ref <Components::Cookie>& ck);
-	void disconnect (I_ptr <Components::Cookie> ck, I_ref <Interface>& cxn);
-
-protected:
-	std::vector <I_ref <Interface> > connections_;
-};
-
-template <class I>
-class Receptacles : public ReceptaclesBase
-{
-public:
-	Type <Components::Cookie>::VRet connect (I_ptr <I> p)
-	{
-#ifndef LEGACY_CORBA_CPP
-		I_ref <Components::Cookie> ret;
-		ReceptaclesBase::connect (p, ret);
-		return ret;
-#else
-		I_var <Components::Cookie> ret;
-		ReceptaclesBase::connect (p, ret);
-		return ret._retn ();
-#endif
-	}
-
-	typename Type <I>::VRet disconnect (I_ptr <Components::Cookie> ck)
-	{
-#ifndef LEGACY_CORBA_CPP
-		I_ref <I> ret;
-		ReceptaclesBase::disconnect (ck, reinterpret_cast <I_ref <Interface>&> (ret));
-		return ret;
-#else
-		I_var <I> ret;
-		ReceptaclesBase::disconnect (ck, reinterpret_cast <I_ref <Interface>&> (ret));
-		return ret._retn ();
-#endif
-	}
-
-	operator const std::vector <I_ref <I> >& () const noexcept
-	{
-		return reinterpret_cast <const std::vector <I_ref <I> >&> (connections_);
-	}
-};
-
-class CCMObjectImplBase
+class CCM_ObjectBase
 {
 public:
 	static Type <Components::CCMHome>::VRet get_ccm_home () noexcept
@@ -162,7 +44,10 @@ public:
 	static void configuration_complete () noexcept
 	{}
 
-	static void remove ();
+	static void remove ()
+	{
+		throw Components::RemoveFailure ();
+	}
 
 	static Type <CORBA::Object>::VRet provide_facet (const Components::FeatureName&)
 	{
@@ -184,29 +69,15 @@ private:
 
 };
 
-template <class S, class I> class CCMObjectImpl;
+template <class S>
+class InterfaceImpl <S, Components::CCMObject> :
+	public InterfaceImplBase <S, Components::CCMObject>,
+	public CCM_ObjectBase
+{};
 
-template <class I>
-class NIRVANA_NOVTABLE CCMObjectImplPOA : 
-	public virtual ServantPOA <Components::CCMObject>,
-	public CCMObjectImpl <CCMObjectImplPOA <I>, I>
-{
-	typedef CCMObjectImpl <CCMObjectImplPOA <I>, I> CCMObjImpl;
+template <class I> class CCM_ObjectConnections;
 
-public:
-	virtual Type < ::Components::CCMHome>::VRet get_ccm_home ()
-	{
-		return nullptr;
-	}
-
-	virtual void configuration_complete ()
-	{}
-
-	virtual void remove ();
-	virtual Type <CORBA::Object>::VRet provide_facet (const Type < ::Components::FeatureName>::Var& name) = 0;
-	virtual Type < ::Components::Cookie>::VRet connect (const Type < ::Components::FeatureName>::Var& name, Type <CORBA::Object>::ConstRef connection) = 0;
-	virtual Type <CORBA::Object>::VRet disconnect (const Type < ::Components::FeatureName>::Var& name, Type < ::Components::Cookie>::ConstRef ck) = 0;
-};
+template <class S, class I> class CCM_ObjectFeatures;
 
 }
 }

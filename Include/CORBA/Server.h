@@ -43,6 +43,7 @@
 #include "make_pseudo.h"
 #include "AMI_s.h"
 #include "ValueRefCountBase.h"
+#include "Receptacle.h"
 #include "CCMObjectImpl.h"
 
 #ifdef LEGACY_CORBA_CPP
