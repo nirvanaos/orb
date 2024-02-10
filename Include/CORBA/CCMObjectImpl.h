@@ -33,68 +33,123 @@
 namespace CORBA {
 namespace Internal {
 
+class ReceptacleBase
+{
+protected:
+	void connect (I_ptr <Interface> p);
+	void disconnect (I_ref <Interface>& conn);
+	void get_connection (I_ref <Interface>& conn) const noexcept;
+
+	I_ptr <Interface> connection () const noexcept
+	{
+		return connection_;
+	}
+
+private:
+	I_ref <Interface> connection_;
+};
+
+template <class I>
+class Receptacle : private ReceptacleBase
+{
+public:
+	void connect (I_ptr <I> p)
+	{
+		ReceptacleBase::connect (p);
+	}
+
+	typename Type <I>::VRet disconnect ()
+	{
+#ifndef LEGACY_CORBA_CPP
+		I_ref <I> ret;
+		ReceptacleBase::disconnect (reinterpret_cast <I_ref <Interface>&> (ret));
+		return ret;
+#else
+		I_var <I> ret;
+		ReceptacleBase::disconnect (reinterpret_cast <I_ref <Interface>&> (ret));
+		return ret._retn ();
+#endif
+	}
+
+	typename Type <I>::VRet get_connection () const noexcept
+	{
+#ifndef LEGACY_CORBA_CPP
+		I_ref <I> ret;
+		ReceptacleBase::get_connection (reinterpret_cast <I_ref <Interface>&> (ret));
+		return ret;
+#else
+		I_var <I> ret;
+		ReceptacleBase::get_connection (reinterpret_cast <I_ref <Interface>&> (ret));
+		return ret._retn ();
+#endif
+	}
+
+	operator I_ptr <I> () const noexcept
+	{
+		return reinterpret_cast <I*> (&ReceptacleBase::connection ());
+	}
+};
+
 class ConnectionBase
 {
 public:
-	I_ptr <Components::Cookie> ck () const noexcept
-	{
-		return ck_;
-	}
+	ConnectionBase (I_ptr <Interface> p, size_t idx);
 
 private:
 	I_ref <Interface> objref_;
 	I_ref <Components::Cookie> ck_;
 };
 
-class ConnectionsBase
-{
-private:
-	IDL::Sequence <ConnectionBase> connections_;
-};
-
-template <class I>
-class Connection : public ConnectionBase
-{
-public:
-	I_ptr <I> objref () const noexcept;
-};
-
-template <class I>
-class Connections
-{
-public:
-private:
-	IDL::Sequence <Connection <I> > connections_;
-};
+typedef IDL::Sequence <ConnectionBase> ConnectionsBase;
 
 class ReceptaclesBase
 {
+public:
+	void get_connections (ConnectionsBase& connections) const;
+
 protected:
-	Components::Cookie::_ptr_type connect (I_ptr <Interface> p);
-	ConnectionsBase get_connections () const;
+	void connect (I_ptr <Interface> p, I_ref <Components::Cookie>& ck);
+	void disconnect (I_ptr <Components::Cookie> ck, I_ref <Interface>& cxn);
 
 protected:
 	std::vector <I_ref <Interface> > connections_;
 };
 
 template <class I>
-class Receptacles : private ReceptaclesBase
+class Receptacles : public ReceptaclesBase
 {
 public:
-	Type <Components::Cookie>::VRet connect (I_ptr <I> p);
-	typename Type <I>::VRet disconnect (I_ptr <Components::Cookie> ck);
-	Connections <I> get_connections () const;
-};
+	Type <Components::Cookie>::VRet connect (I_ptr <I> p)
+	{
+#ifndef LEGACY_CORBA_CPP
+		I_ref <Components::Cookie> ret;
+		ReceptaclesBase::connect (p, ret);
+		return ret;
+#else
+		I_var <Components::Cookie> ret;
+		ReceptaclesBase::connect (p, ret);
+		return ret._retn ();
+#endif
+	}
 
-class ReceptacleBase
-{
-private:
-	I_ref <Interface> connection_;
-};
+	typename Type <I>::VRet disconnect (I_ptr <Components::Cookie> ck)
+	{
+#ifndef LEGACY_CORBA_CPP
+		I_ref <I> ret;
+		ReceptaclesBase::disconnect (ck, reinterpret_cast <I_ref <Interface>&> (ret));
+		return ret;
+#else
+		I_var <I> ret;
+		ReceptaclesBase::disconnect (ck, reinterpret_cast <I_ref <Interface>&> (ret));
+		return ret._retn ();
+#endif
+	}
 
-template <class I>
-class Receptacle : public ReceptacleBase
-{};
+	operator const std::vector <I_ref <I> >& () const noexcept
+	{
+		return reinterpret_cast <const std::vector <I_ref <I> >&> (connections_);
+	}
+};
 
 class CCMObjectImplBase
 {

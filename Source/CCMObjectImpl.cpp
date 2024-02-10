@@ -30,6 +30,25 @@
 namespace CORBA {
 namespace Internal {
 
+void ReceptacleBase::connect (I_ptr <Interface> p)
+{
+	if (connection_)
+		throw Components::AlreadyConnected ();
+	connection_ = p;
+}
+
+void ReceptacleBase::disconnect (I_ref <Interface>& conn)
+{
+	if (!connection_)
+		throw Components::NoConnection ();
+	conn = std::move (connection_);
+}
+
+void ReceptacleBase::get_connection (I_ref <Interface>& conn) const noexcept
+{
+	conn = connection_;
+}
+
 class CCMCookie : public IDL::traits <Components::Cookie>::Servant <CCMCookie>
 {
 	typedef IDL::traits <Components::Cookie>::Servant <CCMCookie> Base;
@@ -47,16 +66,60 @@ public:
 	}
 };
 
+inline
 Components::Cookie::_ref_type index2cookie (size_t i)
 {
 	return make_reference <CCMCookie> (i);
 }
 
+inline
 size_t cookie2index (Components::Cookie::_ptr_type cookie)
 {
 	if (!cookie)
-		throw Components::CookieRequired ();
+		throw Components::InvalidConnection ();
 	return static_cast <const CCMCookie*> (static_cast <Bridge <Components::Cookie>*> (&cookie))->index ();
+}
+
+inline
+ConnectionBase::ConnectionBase (I_ptr <Interface> p, size_t idx) :
+	objref_ (p),
+	ck_ (index2cookie (idx))
+{}
+
+void ReceptaclesBase::get_connections (ConnectionsBase& connections) const
+{
+	for (size_t i = 0, cnt = connections_.size (); i < cnt; ++i) {
+		I_ptr <Interface> c = connections_ [i];
+		if (c)
+			connections.emplace_back (c, i);
+	}
+}
+
+void ReceptaclesBase::connect (I_ptr <Interface> p, I_ref <Components::Cookie>& ck)
+{
+	size_t i = 0;;
+	for (size_t cnt = connections_.size (); i < cnt; ++i) {
+		if (!connections_ [i])
+			break;
+	}
+	if (i >= connections_.size ())
+		connections_.emplace_back (p);
+	else
+		connections_ [i] = p;
+	ck = index2cookie (i);
+}
+
+void ReceptaclesBase::disconnect (I_ptr <Components::Cookie> ck, I_ref <Interface>& cxn)
+{
+	size_t i = cookie2index (ck);
+	if (i >= connections_.size () || !connections_ [i])
+		throw Components::InvalidConnection ();
+	cxn = std::move (connections_ [i]);
+	if (i == connections_.size () - 1) {
+		do {
+			connections_.pop_back ();
+		} while (!(connections_.empty () || connections_.back ()));
+	}
 }
 
 }
