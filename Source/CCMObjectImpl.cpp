@@ -24,11 +24,20 @@
 *  popov.nirvana@gmail.com
 */
 #include "../../pch/pch.h"
-#include <CORBA/CCMObjectImpl.h>
-#include <CORBA/ccm/CCM_Cookie_s.h>
+#include <CORBA/Server.h>
 
 namespace CORBA {
 namespace Internal {
+
+void CCMObjectImplBase::remove ()
+{
+	throw Components::RemoveFailure ();
+}
+
+NIRVANA_NORETURN void CCMObjectImplBase::throw_InvalidName ()
+{
+	throw Components::InvalidName ();
+}
 
 void ReceptacleBase::connect (I_ptr <Interface> p)
 {
