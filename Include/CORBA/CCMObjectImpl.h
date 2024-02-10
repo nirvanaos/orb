@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_CCMOBJECTIMPL_H_
 #pragma once
 
-#include "Components.h"
+#include "Components_s.h"
 
 namespace CORBA {
 namespace Internal {
@@ -167,23 +167,37 @@ public:
 		throw Components::RemoveFailure ();
 	}
 
-	Type <CORBA::Object>::VRet provide_facet (const Components::FeatureName&)
+	static Type <CORBA::Object>::VRet provide_facet (const Components::FeatureName&)
 	{
 		throw Components::InvalidName ();
 	}
 
-	Type <Components::Cookie>::VRet connect (const Components::FeatureName&, Object::_ptr_type)
+	static Type <Components::Cookie>::VRet connect (const Components::FeatureName&, Object::_ptr_type)
 	{
 		throw Components::InvalidName ();
 	}
 
-	Type <CORBA::Object>::VRet disconnect (const Components::FeatureName&, Components::Cookie::_ptr_type)
+	static Type <CORBA::Object>::VRet disconnect (const Components::FeatureName&, Components::Cookie::_ptr_type)
 	{
 		throw Components::InvalidName ();
 	}
 };
 
 template <class S, class I> class CCMObjectImpl;
+
+template <class I>
+class NIRVANA_NOVTABLE CCMObjectImplPOA : 
+	public virtual ServantPOA <Components::CCMObject>,
+	public CCMObjectImpl <CCMObjectImplPOA <I>, I>
+{
+public:
+	virtual Type < ::Components::CCMHome>::VRet get_ccm_home () = 0;
+	virtual void configuration_complete () = 0;
+	virtual void remove () = 0;
+	virtual Type <CORBA::Object>::VRet provide_facet (const Type < ::Components::FeatureName>::Var& name) = 0;
+	virtual Type < ::Components::Cookie>::VRet connect (const Type < ::Components::FeatureName>::Var& name, Type <CORBA::Object>::ConstRef connection) = 0;
+	virtual Type <CORBA::Object>::VRet disconnect (const Type < ::Components::FeatureName>::Var& name, Type < ::Components::Cookie>::ConstRef ck) = 0;
+};
 
 }
 }

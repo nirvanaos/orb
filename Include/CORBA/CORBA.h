@@ -65,7 +65,6 @@
 #include "DomainManager.h"
 #include "Messaging.h"
 #include "ValueCreator.h"
-#include "CCMObjectImpl.h"
 
 namespace Nirvana {
 
