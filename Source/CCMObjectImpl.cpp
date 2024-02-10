@@ -49,11 +49,18 @@ void ReceptacleBase::get_connection (I_ref <Interface>& conn) const noexcept
 	conn = connection_;
 }
 
+NIRVANA_IMPORT (cookie_factory, RepIdOf <Components::Cookie>::id, ValueFactoryBase)
+
 class CCMCookie : public IDL::traits <Components::Cookie>::Servant <CCMCookie>
 {
 	typedef IDL::traits <Components::Cookie>::Servant <CCMCookie> Base;
 
 public:
+	static Interface* __factory (Bridge <ValueBase>*, Interface*) noexcept
+	{
+		return interface_duplicate (cookie_factory.imp.itf);
+	}
+
 	CCMCookie (size_t i) :
 		Base (CORBA::OctetSeq ((const Octet*)&i, (const Octet*)(&i + 1)))
 	{}
