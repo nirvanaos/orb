@@ -258,12 +258,17 @@ public:
 	{}
 
 	template <class I>
-	I_ptr (const I_ptr <I>& src) :
+	I_ptr (const I_ptr <I>& src) noexcept :
 		Base (&src)
 	{}
 
 	I_ptr (const I_ref <Interface>& src) noexcept :
 		Base (src)
+	{}
+
+	template <class I>
+	I_ptr (const I_ref <I>& src) noexcept :
+		Base (I_ptr <I> (src))
 	{}
 
 	I_ptr& operator = (const I_ptr& src) noexcept

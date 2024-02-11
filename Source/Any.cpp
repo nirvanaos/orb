@@ -26,7 +26,6 @@
 #include "../../pch/pch.h"
 
 namespace CORBA {
-
 namespace Internal {
 
 void Type <Any>::check (const ABI& any)

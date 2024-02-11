@@ -65,6 +65,7 @@
 #include "DomainManager.h"
 #include "Messaging.h"
 #include "ValueCreator.h"
+#include "2base.h"
 
 namespace Nirvana {
 

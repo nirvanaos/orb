@@ -33,6 +33,45 @@
 namespace CORBA {
 namespace Internal {
 
+NIRVANA_NORETURN void throw_InvalidName ();
+
+class CCM_ReceptaclesBase
+{
+public:
+	static Type <Components::Cookie>::VRet connect (const Components::FeatureName&, Object::_ptr_type)
+	{
+		throw_InvalidName ();
+	}
+
+	static Type <CORBA::Object>::VRet disconnect (const Components::FeatureName&, Components::Cookie::_ptr_type)
+	{
+		throw_InvalidName ();
+	}
+
+};
+
+template <class S>
+class InterfaceImpl <S, Components::Receptacles> :
+	public InterfaceImplBase <S, Components::Receptacles>,
+	public CCM_ReceptaclesBase
+{};
+
+class CCM_NavigationBase
+{
+public:
+	static Type <CORBA::Object>::VRet provide_facet (const Type < ::Components::FeatureName>::Var& name)
+	{
+		throw_InvalidName ();
+	}
+
+};
+
+template <class S>
+class InterfaceImpl <S, Components::Navigation> :
+	public InterfaceImplBase <S, Components::Navigation>,
+	public CCM_NavigationBase
+{};
+
 class CCM_ObjectBase
 {
 public:
@@ -48,24 +87,6 @@ public:
 	{
 		throw Components::RemoveFailure ();
 	}
-
-	static Type <CORBA::Object>::VRet provide_facet (const Components::FeatureName&)
-	{
-		throw_InvalidName ();
-	}
-
-	static Type <Components::Cookie>::VRet connect (const Components::FeatureName&, Object::_ptr_type)
-	{
-		throw_InvalidName ();
-	}
-
-	static Type <CORBA::Object>::VRet disconnect (const Components::FeatureName&, Components::Cookie::_ptr_type)
-	{
-		throw_InvalidName ();
-	}
-
-private:
-	NIRVANA_NORETURN static void throw_InvalidName ();
 
 };
 

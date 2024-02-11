@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,16 +24,22 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../../pch/pch.h"
-#include <CORBA/CCMObjectImpl.h>
+#ifndef NIRVANA_ORB_2BASE_H_
+#define NIRVANA_ORB_2BASE_H_
+#pragma once
+
+#include "Object.h"
+#include "ValueBase.h"
+#include "AbstractBase.h"
 
 namespace CORBA {
 namespace Internal {
 
-NIRVANA_NORETURN void throw_InvalidName ()
-{
-	throw Components::InvalidName ();
-}
+Object::_ptr_type interface2object (Interface::_ptr_type itf);
+ValueBase::_ptr_type value_type2base (Interface::_ptr_type val);
+AbstractBase::_ptr_type abstract_interface2base (Interface::_ptr_type itf);
 
 }
 }
+
+#endif
