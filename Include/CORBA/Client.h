@@ -85,15 +85,11 @@ public:
 	}
 
 private:
-	friend class I_ptr <Interface>;
-	friend class I_ref <Interface>;
-	friend class I_ref_base <I>;
-
 	static I* _unsafe_cast (Interface* itf) noexcept
 	{
-		assert (!itf || RepId::compatible (itf->_epv ().interface_id, RepIdOf <I>::id));
-		return static_cast <I*> (itf);
+		return I_ptr <Interface> (itf).template downcast <I> ();
 	}
+
 };
 
 /// Obtain pointer to bridge from primary interface.

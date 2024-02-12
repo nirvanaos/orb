@@ -393,7 +393,7 @@ public:
 	template <class I>
 	I_ref <I> downcast () noexcept
 	{
-		I_ref <I> ret (I::_unsafe_cast (p_));
+		I_ref <I> ret (I_ptr <Interface> (p_).template downcast <I> ());
 		p_ = nullptr;
 		return ret;
 	}

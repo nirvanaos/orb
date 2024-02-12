@@ -29,6 +29,7 @@
 #pragma once
 
 #include "Bridge.h"
+#include "RepId.h"
 
 namespace CORBA {
 
@@ -284,9 +285,13 @@ public:
 	}
 
 	template <class I>
-	I_ptr <I> downcast () noexcept
+	I* downcast () const noexcept
 	{
-		return I::_unsafe_cast (p_);
+		assert (!p_ || RepId::compatible (p_->_epv ().interface_id, RepIdOf <I>::id));
+
+		// Interface `I` may be not completely defined, use reinterpret_cast.
+		// Using reinterpret_cast is safe here because the Interface is top base.
+		return reinterpret_cast <I*> (p_);
 	}
 
 };

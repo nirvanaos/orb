@@ -166,7 +166,7 @@ public:
 	template <class I>
 	I_ptr <I> _query_interface ()
 	{
-		return static_cast <I*> (&_query_interface (RepIdOf <I>::id));
+		return _query_interface (RepIdOf <I>::id).template downcast <I> ();
 	}
 
 	/// Obtain servant from object.
