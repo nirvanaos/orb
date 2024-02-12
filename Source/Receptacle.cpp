@@ -32,6 +32,8 @@ namespace Internal {
 
 void ReceptacleSimplexBase::connect (I_ptr <Interface> p)
 {
+	if (!p)
+		throw Components::InvalidConnection ();
 	if (connection_)
 		throw Components::AlreadyConnected ();
 	connection_ = p;
@@ -104,6 +106,9 @@ void ReceptacleMultiplexBase::get_connections (Connections& connections) const
 
 void ReceptacleMultiplexBase::connect (I_ptr <Interface> p, I_ref <Components::Cookie>& ck)
 {
+	if (!p)
+		throw Components::InvalidConnection ();
+
 	size_t i = 0;;
 	for (size_t cnt = connections_.size (); i < cnt; ++i) {
 		if (!connections_ [i])

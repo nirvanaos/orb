@@ -405,6 +405,12 @@ protected:
 	I_ref (Interface* p) :
 		Base (p)
 	{}
+
+	template <class I>
+	static Interface* wide (I* p) noexcept
+	{
+		return static_cast <Interface*> (p);
+	}
 };
 
 template <class I> inline

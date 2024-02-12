@@ -88,6 +88,25 @@ public:
 		throw Components::RemoveFailure ();
 	}
 
+#ifndef LEGACY_CORBA_CPP
+
+	template <class I>
+	static Object::_ref_type _itf_to_object (I_ref <I> ref)
+	{
+		return interface2object (ref);
+	}
+
+#else
+
+	template <class I>
+	static Object_ptr _itf_to_object (I_ptr <I> p)
+	{
+		I_var <I> ref (p);
+		return Object::_duplicate (interface2object (ref));
+	}
+
+#endif
+
 };
 
 template <class S>
