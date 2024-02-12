@@ -3,7 +3,7 @@
 
 namespace CORBA {
 
-#define IMPORT_TC(E) const Nirvana::ImportInterfaceT <TypeCode> _tc_##E = { Nirvana::OLF_IMPORT_INTERFACE };
+#define IMPORT_TC(E) NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_##E = { Nirvana::OLF_IMPORT_INTERFACE };
 
 SYSTEM_EXCEPTIONS (IMPORT_TC)
 

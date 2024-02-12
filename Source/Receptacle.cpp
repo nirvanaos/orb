@@ -58,7 +58,7 @@ class CCMCookie : public IDL::traits <Components::Cookie>::Servant <CCMCookie>
 public:
 	static Interface* __factory (Bridge <ValueBase>*, Interface*) noexcept
 	{
-		return interface_duplicate (cookie_factory.imp.itf);
+		return interface_duplicate (&cookie_factory.operator I_ptr <ValueFactoryBase> ());
 	}
 
 	CCMCookie (size_t i) :

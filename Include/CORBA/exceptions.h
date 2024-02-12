@@ -31,7 +31,7 @@
 #include <Nirvana/ImportInterface.h>
 
 #define DECLARE_SYSTEM_EXCEPTION(E) \
-extern const ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_##E;\
+extern NIRVANA_STATIC_IMPORT ::Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_##E;\
 class E : public SystemException {\
 NIRVANA_EXCEPTION_DCL(E)\
 E () {}\

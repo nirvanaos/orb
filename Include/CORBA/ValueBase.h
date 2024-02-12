@@ -105,7 +105,7 @@ public:
 	I_ptr <TypeCode> _truncatable_base ();
 
 	/// Returns factory interface for concrete value.
-	/// For abstract vaalue returns nil reference.
+	/// For abstract value returns nil reference.
 	I_ptr <ValueFactoryBase> _factory ();
 };
 

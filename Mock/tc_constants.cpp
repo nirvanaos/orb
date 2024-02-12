@@ -1,6 +1,6 @@
 #include <CORBA/CORBA.h>
 
-#define IMPORT_TC(tc) const Nirvana::ImportInterfaceT <TypeCode> tc = { Nirvana::OLF_IMPORT_INTERFACE };
+#define IMPORT_TC(tc) NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> tc = { Nirvana::OLF_IMPORT_INTERFACE };
 
 namespace CORBA {
 

@@ -44,7 +44,7 @@ enum CompletionStatus : Internal::ABI_enum
 	COMPLETED_MAYBE
 };
 
-extern const ::Nirvana::ImportInterfaceT <TypeCode> _tc_CompletionStatus;
+extern NIRVANA_STATIC_IMPORT::Nirvana::ImportInterfaceT <TypeCode> _tc_CompletionStatus;
 
 namespace Internal {
 
