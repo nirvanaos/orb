@@ -45,6 +45,7 @@
 #include "ValueRefCountBase.h"
 #include "Receptacle.h"
 #include "CCMObjectImpl.h"
+#include "Facet.h"
 
 #ifdef LEGACY_CORBA_CPP
 #include "Servant_var.h"

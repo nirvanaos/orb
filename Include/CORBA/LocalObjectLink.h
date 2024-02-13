@@ -30,10 +30,9 @@
 #include "local_core.h"
 
 namespace CORBA {
-
-template <class> class servant_reference;
-
 namespace Internal {
+
+template <class, class> class Facet;
 
 /// \brief Root base of the LocalObject implementations.
 /// 
@@ -56,9 +55,10 @@ public:
 protected:
 	template <class> friend class LifeCycleRefCnt;
 	template <class> friend class CORBA::servant_reference;
-#endif
 	template <class, class> friend class Skeleton;
 	template <class> friend class ServantPOA;
+#endif
+	template <class, class> friend class Facet;
 
 	void _add_ref ()
 	{
@@ -110,9 +110,9 @@ protected:
 	Type <Interface>::VRet _get_proxy ()
 	{
 #ifdef LEGACY_CORBA_CPP
-		return interface_duplicate (&get_proxy (I_ptr <LocalObject> (core_object ())));
+		return interface_duplicate (&get_proxy (core_object ()));
 #else
-		return get_proxy (I_ptr <LocalObject> (core_object ()));
+		return get_proxy (core_object ());
 #endif
 	}
 

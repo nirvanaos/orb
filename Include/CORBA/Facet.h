@@ -28,24 +28,18 @@
 #define NIRVANA_ORB_FACET_H_
 
 #include "ServantBaseLink.h"
+#include "LocalObjectLink.h"
 
 namespace CORBA {
+namespace Internal {
 
-/// \brief Facet servant. Nirvana extension for implementation of the Corba Component Model.
-/// Used as child member of component servant class.
-/// 
-/// \tparam Base Facet interface servant base, like servant_traits <...>::base_type.
-template <class Base>
+template <class Base, class Parent>
 class Facet : public Base
 {
 public:
-	/// \brief Constructor.
-	/// 
-	/// Called in the parent component servant constructor.
-	/// 
-	/// \param parent Parent servant.
-	/// 
-	Facet (Internal::ServantBaseLink& parent) :
+	typedef Parent ParentServant;
+
+	Facet (ParentServant& parent) :
 		Base (parent._object ()),
 		parent_ (parent)
 	{}
@@ -69,9 +63,27 @@ protected:
 	}
 
 private:
-	Internal::ServantBaseLink& parent_;
+	ParentServant& parent_;
 
 };
+
+}
+
+/// \brief Facet servant. Nirvana extension for implementation of the Corba Component Model.
+/// Used as child member of component interface servant class.
+/// 
+/// \tparam Base Facet interface servant base, like servant_traits <...>::base_type.
+/// 
+template <class Servant>
+using Facet = Internal::Facet <Servant, Internal::ServantBaseLink>;
+
+/// \brief Facet servant. Nirvana extension for implementation of the Corba Component Model.
+/// Used as child member of component local interface servant class.
+/// 
+/// \tparam Base Facet interface servant base, like servant_traits <...>::base_type.
+/// 
+template <class Servant>
+using FacetLocal = Internal::Facet <Servant, Internal::LocalObjectLink>;
 
 }
 

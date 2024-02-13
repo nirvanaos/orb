@@ -38,9 +38,10 @@ class POA;
 namespace CORBA {
 
 template <class> class servant_reference;
-template <class Servant> class Facet;
 
 namespace Internal {
+
+template <class, class> class Facet;
 
 /// \brief Root base of the ServantBase implementations.
 /// 
@@ -93,7 +94,7 @@ protected:
 	template <class, class> friend class Skeleton;
 	template <class> friend class ServantPOA;
 #endif
-	template <class> friend class CORBA::Facet;
+	template <class, class> friend class Facet;
 
 	void _add_ref ()
 	{
@@ -139,9 +140,9 @@ protected:
 	Type <Interface>::VRet _get_proxy ()
 	{
 #ifdef LEGACY_CORBA_CPP
-		return interface_duplicate (&get_proxy (PortableServer::Servant (core_object ())));
+		return interface_duplicate (&get_proxy (core_object ()));
 #else
-		return get_proxy (PortableServer::Servant (core_object ()));
+		return get_proxy (core_object ());
 #endif
 	}
 

@@ -41,16 +41,16 @@ public:
 	template <class I>
 	static Bridge <I>* _duplicate (Bridge <I>* itf)
 	{
-		if (itf)
-			S::_implementation (itf)._add_ref ();
+		assert (itf);
+		S::_implementation (itf)._add_ref ();
 		return itf;
 	}
 
 	template <class I>
 	static void _release (Bridge <I>* itf)
 	{
-		if (itf)
-			S::_implementation (itf)._remove_ref ();
+		assert (itf);
+		S::_implementation (itf)._remove_ref ();
 	}
 };
 
