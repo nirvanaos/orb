@@ -68,8 +68,10 @@ servant_reference <T> make_stateless (Args ... args)
 	typename std::aligned_storage <sizeof (T), alignof (T)>::type tmp;
 
 	// Create StatelessCreationFrame and register it with ObjectFactory
-	Internal::ObjectFactory::StatelessCreationFrame scb (&tmp, sizeof (T), 0, nullptr, nullptr, nullptr);
-	Internal::g_object_factory->stateless_begin (scb);
+	Internal::ObjectFactory::StatelessCreationFrame scf;
+	scf.tmp (&tmp);
+	scf.size (sizeof (T));
+	Internal::g_object_factory->stateless_begin (scf);
 
 	T* tmp_serv = nullptr;
 	try {

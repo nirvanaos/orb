@@ -90,7 +90,7 @@ pseudo interface ObjectFactory
 		Nirvana::PtrDiff offset;   ///< Used internally.
 		Nirvana::Pointer next;     ///< Used internally.
 		Nirvana::Pointer memory;   ///< Used internally.
-		Nirvana::Pointer proxy;    ///< Used internally.
+		sequence <Nirvana::Pointer> proxies; ///< Used internally.
 	};
 
 	/// \brief Start creation of a stateless servant.
