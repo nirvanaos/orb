@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -41,7 +42,10 @@ template <class Servant> class Facet;
 
 namespace Internal {
 
-//! \brief Implements delegate to the core ServantBase implementation.
+/// \brief Root base of the ServantBase implementations.
+/// 
+/// Provides interaction between the servant and core proxy object.
+/// 
 class ServantBaseLink :
 	public BridgeVal <PortableServer::ServantBase>
 {
@@ -73,14 +77,12 @@ public:
 		return false;
 	}
 
-	// Nirvana extensions
+	// Nirvana extension
 
 	PortableServer::Servant _core_servant ()
 	{
 		return core_object ();
 	}
-
-	Object::_ptr_type _get_object ();
 
 	// Reference counter
 
@@ -90,8 +92,8 @@ protected:
 	template <class> friend class CORBA::servant_reference;
 	template <class, class> friend class Skeleton;
 	template <class> friend class ServantPOA;
-	template <class> friend class Facet;
 #endif
+	template <class> friend class CORBA::Facet;
 
 	void _add_ref ()
 	{
@@ -108,6 +110,18 @@ public:
 	{
 		return core_object ()->_refcount_value ();
 	}
+
+protected:
+	/// \brief Obtain `Object` interface pointer.
+	/// 
+	/// \returns `Object` interface from proxy.
+	/// 
+	/// Unlike the `_this()` method, `_object()` does not increment reference counter.
+	/// It is intended for use inside servant implementation code only,
+	/// for example, as parent CCM component reference for the facet creation.
+	/// Outside the servant implementation code, `_this()` must be used instead.
+	/// 
+	Object::_ptr_type _object ();
 
 protected:
 	ServantBaseLink (const Bridge <PortableServer::ServantBase>::EPV& epv) :

@@ -36,7 +36,7 @@ void ServantBaseLink::_create_proxy (Object::_ptr_type comp)
 	g_object_factory->create_servant (this, &core_object_, comp);
 }
 
-Object::_ptr_type ServantBaseLink::_get_object ()
+Object::_ptr_type ServantBaseLink::_object ()
 {
 	if (!core_object_)
 		_create_proxy (nullptr);

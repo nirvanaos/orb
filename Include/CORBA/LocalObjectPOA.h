@@ -106,6 +106,21 @@ public:
 	virtual ULong _refcount_value () override;
 
 protected:
+	/// \brief Obtain `Object` interface pointer.
+	/// 
+	/// \returns `Object` interface from proxy.
+	/// 
+	/// Unlike the `_this()` method, `_object()` does not increment reference counter.
+	/// It is intended for use inside servant implementation code only,
+	/// for example, as parent CCM component reference for the facet creation.
+	/// Outside the servant implementation code, `_this()` must be used instead.
+	/// 
+	Object::_ptr_type _object ()
+	{
+		return LocalObjectLink::_object ();
+	}
+
+protected:
 	ServantPOA ();
 
 	ServantPOA (const ServantPOA&) :

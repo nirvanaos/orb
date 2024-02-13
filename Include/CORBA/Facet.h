@@ -46,7 +46,7 @@ public:
 	/// \param parent Parent servant.
 	/// 
 	Facet (Internal::ServantBaseLink& parent) :
-		Base (parent._get_object ()),
+		Base (parent._object ()),
 		parent_ (parent)
 	{}
 

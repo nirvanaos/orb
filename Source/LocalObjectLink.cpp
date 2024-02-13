@@ -34,5 +34,18 @@ void LocalObjectLink::_create_proxy (Object::_ptr_type comp)
 	g_object_factory->create_local_object (this, &core_object_, comp);
 }
 
+Object::_ptr_type LocalObjectLink::_object ()
+{
+	if (!core_object_)
+		_create_proxy (nullptr);
+
+	Environment env;
+	Object::_ptr_type ret (static_cast <Object*> (_get_object (&Type <IDL::String>::C_in (RepIdOf <Object>::id), &env)));
+	env.check ();
+	if (!ret)
+		throw MARSHAL ();
+	return ret;
+}
+
 }
 }

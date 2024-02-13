@@ -35,16 +35,14 @@ template <class> class servant_reference;
 
 namespace Internal {
 
-//! \brief Implements delegate to the core LocalObject implementation.
+/// \brief Root base of the LocalObject implementations.
+/// 
+/// Provides interaction between the servant and core proxy object.
+/// 
 class LocalObjectLink :
 	public BridgeVal <LocalObject>
 {
 public:
-	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) const noexcept
-	{
-		return get_object_from_core (core_object (), iid, env);
-	}
-
 	// Object operations
 
 	Boolean _non_existent () const
@@ -76,6 +74,24 @@ public:
 	ULong _refcount_value ()
 	{
 		return core_object ()->_refcount_value ();
+	}
+
+protected:
+	/// \brief Obtain `Object` interface pointer.
+	/// 
+	/// \returns `Object` interface from proxy.
+	/// 
+	/// Unlike the `_this()` method, `_object()` does not increment reference counter.
+	/// It is intended for use inside servant implementation code only,
+	/// for example, as parent CCM component reference for the facet creation.
+	/// Outside the servant implementation code, `_this()` must be used instead.
+	/// 
+	Object::_ptr_type _object ();
+
+public:
+	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) const noexcept
+	{
+		return get_object_from_core (core_object (), iid, env);
 	}
 
 protected:
