@@ -38,7 +38,7 @@ Interface::_ptr_type get_proxy (LocalObject::_ptr_type core_object)
 {
 	Interface::_ptr_type proxy = Object::_ptr_type (core_object)->_query_interface (nullptr);
 	if (!proxy)
-		::Nirvana::throw_MARSHAL ();
+		throw MARSHAL ();
 	return proxy;
 }
 

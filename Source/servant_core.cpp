@@ -32,7 +32,7 @@ Interface::_ptr_type get_proxy (PortableServer::Servant core_object)
 {
 	Interface::_ptr_type proxy = core_object->_query_interface (nullptr);
 	if (!proxy)
-		::Nirvana::throw_MARSHAL ();
+		throw MARSHAL ();
 	return proxy;
 }
 

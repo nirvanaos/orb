@@ -37,6 +37,7 @@ class POA;
 namespace CORBA {
 
 template <class> class servant_reference;
+template <class Servant> class Facet;
 
 namespace Internal {
 
@@ -72,12 +73,14 @@ public:
 		return false;
 	}
 
-	// Our extensions
+	// Nirvana extensions
 
 	PortableServer::Servant _core_servant ()
 	{
 		return core_object ();
 	}
+
+	Object::_ptr_type _get_object ();
 
 	// Reference counter
 
@@ -85,9 +88,10 @@ public:
 protected:
 	template <class> friend class LifeCycleRefCnt;
 	template <class> friend class CORBA::servant_reference;
-#endif
 	template <class, class> friend class Skeleton;
 	template <class> friend class ServantPOA;
+	template <class> friend class Facet;
+#endif
 
 	void _add_ref ()
 	{
