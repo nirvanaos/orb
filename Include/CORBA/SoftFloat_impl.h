@@ -31,6 +31,7 @@
 #include "SoftFloat.h"
 #include "TypeFixLen.h"
 #include <Nirvana/platform.h>
+#include <fenv.h>
 
 namespace CORBA {
 namespace Internal {
@@ -66,7 +67,7 @@ typedef FloatIEEE <16> FloatIEEE16;
 namespace CORBA {
 namespace Internal {
 
-void set_softfloat_exception_flags (unsigned f);
+void set_softfloat_exception_flags (unsigned f) noexcept;
 
 // 32 bit
 
@@ -457,6 +458,26 @@ bool SoftFloat <16>::lt (const SoftFloat& rhs) const
 	bool ret;
 	set_softfloat_exception_flags (g_sfloat16->lt (bits_, rhs.bits_, ret));
 	return ret;
+}
+
+// Berkley SoftFloat exception flags
+enum {
+	softfloat_flag_inexact = 1,
+	softfloat_flag_underflow = 2,
+	softfloat_flag_overflow = 4,
+	softfloat_flag_infinite = 8,
+	softfloat_flag_invalid = 16
+};
+
+static_assert (softfloat_flag_inexact == FE_INEXACT, "FE_INEXACT");
+static_assert (softfloat_flag_underflow == FE_UNDERFLOW, "FE_UNDERFLOW");
+static_assert (softfloat_flag_overflow == FE_OVERFLOW, "FE_OVERFLOW");
+static_assert (softfloat_flag_infinite == FE_DIVBYZERO, "FE_DIVBYZERO");
+static_assert (softfloat_flag_invalid == FE_INVALID, "FE_INVALID");
+
+inline void set_softfloat_exception_flags (unsigned f) noexcept
+{
+	feraiseexcept (f);
 }
 
 }
