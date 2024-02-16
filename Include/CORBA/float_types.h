@@ -28,6 +28,10 @@
 #define NIRVANA_ORB_FLOAT_TYPES_H_
 #pragma once
 
+#ifdef _MSC_VER
+#include <math.h>
+#endif
+
 #include "SoftFloat.h"
 #include <limits>
 #include <type_traits>
