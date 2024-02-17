@@ -60,18 +60,18 @@ protected:
 #endif
 	template <class, class> friend class Facet;
 
-	void _add_ref ()
+	void _add_ref () const
 	{
 		core_object ()->_add_ref ();
 	}
 
-	void _remove_ref ()
+	void _remove_ref () const
 	{
 		core_object ()->_remove_ref ();
 	}
 
 public:
-	ULong _refcount_value ()
+	ULong _refcount_value () const
 	{
 		return core_object ()->_refcount_value ();
 	}

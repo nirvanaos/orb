@@ -57,18 +57,18 @@ protected:
 	template <class, class> friend class Skeleton;
 #endif
 
-	void _add_ref () noexcept
+	void _add_ref () const
 	{
 		core_object_->add_ref ();
 	}
 
-	void _remove_ref () noexcept
+	void _remove_ref () const
 	{
 		core_object_->remove_ref ();
 	}
 
 public:
-	ULong _refcount_value () const noexcept
+	ULong _refcount_value () const
 	{
 		return core_object_->refcount_value ();
 	}
