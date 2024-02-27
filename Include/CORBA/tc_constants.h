@@ -27,31 +27,31 @@
 #define NIRVANA_ORB_TC_CONSTANTS_H_
 #pragma once
 
-#include <Nirvana/ImportInterface.h>
+#include "StaticTC.h"
 
 namespace CORBA {
 
 #define _tc_null TypeCode::_nil ()
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_void;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_short;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_long;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_longlong;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_ushort;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_ulong;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_ulonglong;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_float;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_double;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_longdouble;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_boolean;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_char;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_wchar;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_octet;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_any;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_string;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_wstring;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_Object;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_TypeCode;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <TypeCode> _tc_ValueBase;
+extern const Internal::StaticTC _tc_void;
+extern const Internal::StaticTC _tc_short;
+extern const Internal::StaticTC _tc_long;
+extern const Internal::StaticTC _tc_longlong;
+extern const Internal::StaticTC _tc_ushort;
+extern const Internal::StaticTC _tc_ulong;
+extern const Internal::StaticTC _tc_ulonglong;
+extern const Internal::StaticTC _tc_float;
+extern const Internal::StaticTC _tc_double;
+extern const Internal::StaticTC _tc_longdouble;
+extern const Internal::StaticTC _tc_boolean;
+extern const Internal::StaticTC _tc_char;
+extern const Internal::StaticTC _tc_wchar;
+extern const Internal::StaticTC _tc_octet;
+extern const Internal::StaticTC _tc_any;
+extern const Internal::StaticTC _tc_string;
+extern const Internal::StaticTC _tc_wstring;
+extern const Internal::StaticTC _tc_Object;
+extern const Internal::StaticTC _tc_TypeCode;
+extern const Internal::StaticTC _tc_ValueBase;
 
 }
 
