@@ -89,7 +89,4 @@
 NIRVANA_EXCEPTIONS (M)\
 CORBA_EXCEPTIONS (M)
 
-#define MAKE_MINOR(vmcid, c) ((vmcid << 12) | (c))
-#define MAKE_OMG_MINOR(c) (MAKE_MINOR (0x4F4D0, (c)))
-
 #endif

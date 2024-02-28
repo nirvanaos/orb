@@ -66,6 +66,7 @@
 #include "Messaging.h"
 #include "ValueCreator.h"
 #include "2base.h"
+#include "SystemException_impl.h"
 
 namespace Nirvana {
 

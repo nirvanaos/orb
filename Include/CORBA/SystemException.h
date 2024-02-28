@@ -29,11 +29,11 @@
 #pragma once
 
 #include "Exception.h"
+#include "StringView.h"
 #include "system_exceptions.h"
-#include "TypeEnum.h"
-#include "TypeFixLen.h"
-#include <Nirvana/ImportInterface.h>
-#include <Nirvana/bitutils.h>
+
+#define MAKE_MINOR(vmcid, c) ((vmcid << 12) | (c))
+#define MAKE_OMG_MINOR(c) (MAKE_MINOR (0x4F4D0, (c)))
 
 namespace CORBA {
 
@@ -43,25 +43,6 @@ enum CompletionStatus : Internal::ABI_enum
 	COMPLETED_NO,
 	COMPLETED_MAYBE
 };
-
-extern NIRVANA_STATIC_IMPORT::Nirvana::ImportInterfaceT <TypeCode> _tc_CompletionStatus;
-
-namespace Internal {
-
-template <>
-const Char RepIdOf <CompletionStatus>::id [] = CORBA_REPOSITORY_ID ("CompletionStatus");
-
-template <>
-struct Type <CompletionStatus> :
-	public TypeEnum <CompletionStatus, CompletionStatus::COMPLETED_MAYBE>
-{
-	static I_ptr <TypeCode> type_code ()
-	{
-		return _tc_CompletionStatus;
-	}
-};
-
-}
 
 class NIRVANA_NOVTABLE SystemException : public Exception
 {
@@ -177,22 +158,6 @@ private:
 
 	static const ExceptionEntry exception_entries_ [KNOWN_SYSTEM_EXCEPTIONS];
 };
-
-namespace Internal {
-
-template <>
-struct Type <SystemException::_Data> : TypeFixLen <SystemException::_Data, false> // Do not check system exception data
-{
-	static const bool is_CDR = true;
-
-	static void byteswap (Var& v) noexcept
-	{
-		v.minor = Nirvana::byteswap (v.minor);
-		v.completed = (CompletionStatus)Nirvana::byteswap ((ABI_enum)v.completed);
-	}
-};
-
-}
 
 }
 
