@@ -167,17 +167,17 @@ class TypeCodeWithId :
 public:
 	typedef RepIdOf <T> RepositoryType;
 
-	static Boolean equal (I_ptr <TypeCode> other) noexcept
+	static Boolean equal (I_ptr <TypeCode> other)
 	{
 		return TypeCodeBase::equal (tk, RepositoryType::id, other);
 	}
 
-	static Boolean equivalent (I_ptr <TypeCode> other) noexcept
+	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
 		return TypeCodeBase::equivalent (tk, RepositoryType::id, other);
 	}
 
-	static ABI <String> _s_id (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env)
 	{
 		return const_string_ret (RepositoryType::id);
 	}
