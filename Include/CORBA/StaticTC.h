@@ -56,4 +56,6 @@ struct StaticTC
 }
 }
 
+#define NIRVANA_STATIC_TC(Impl) { NIRVANA_STATIC_BRIDGE (::CORBA::TypeCode, ::CORBA::Internal::Impl) }
+
 #endif
