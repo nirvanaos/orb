@@ -49,6 +49,9 @@ extern NIRVANA_STATIC_IMPORT::Nirvana::ImportInterfaceT <TypeCode> _tc_Completio
 namespace Internal {
 
 template <>
+const Char RepIdOf <CompletionStatus>::id [] = CORBA_REPOSITORY_ID ("CompletionStatus");
+
+template <>
 struct Type <CompletionStatus> :
 	public TypeEnum <CompletionStatus, CompletionStatus::COMPLETED_MAYBE>
 {

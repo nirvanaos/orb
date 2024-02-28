@@ -100,4 +100,7 @@ void* SystemException::__data () noexcept
 	return &data_;
 }
 
+NIRVANA_OLF_SECTION_OPT extern NIRVANA_STATIC_IMPORT::Nirvana::ImportInterfaceT <TypeCode>
+_tc_CompletionStatus = { ::Nirvana::OLF_IMPORT_INTERFACE, RepIdOf <CompletionStatus>::id, RepIdOf <TypeCode>::id };
+
 }
