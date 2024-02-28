@@ -27,9 +27,13 @@
 #define NIRVANA_ORB_TC_CONSTANTS_H_
 #pragma once
 
-#include "StaticTC.h"
-
 namespace CORBA {
+
+namespace Internal {
+
+struct StaticTC;
+
+}
 
 #define _tc_null TypeCode::_nil ()
 extern const Internal::StaticTC _tc_void;

@@ -51,8 +51,7 @@ class TC_TypeCode : public TypeCodeStatic <TC_TypeCode,
 
 }
 
-#define TC_IMPL(t, ...) NIRVANA_SELECTANY extern const Internal::StaticTC _tc_##t =\
-{ NIRVANA_STATIC_BRIDGE (TypeCode, Internal::__VA_ARGS__)}
+#define TC_IMPL(t, ...) extern NIRVANA_STATIC_TC (_tc_##t, __VA_ARGS__)
 
 #define TC_IMPL_SCALAR(T, t) TC_IMPL (t, TypeCodeScalar <T, TCKind::tk_##t>)
 

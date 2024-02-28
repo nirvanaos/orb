@@ -38,24 +38,25 @@ namespace Internal {
 /// Static local implementation of TypeCode without import/export
 struct StaticTC
 {
-	Bridge <TypeCode>* ptc;
+	const Bridge <TypeCode>::EPV* bridge;
 
-	operator I_ptr <TypeCode> () const
+	TypeCode* operator -> () const noexcept
 	{
-		assert (ptc);
-		return reinterpret_cast <TypeCode*> (ptc);
+		assert (bridge);
+		return (TypeCode*)&bridge;
 	}
 
-	TypeCode* operator -> () const
+	operator I_ptr <TypeCode> () const noexcept
 	{
-		assert (ptc);
-		return reinterpret_cast <TypeCode*> (ptc);
+		assert (bridge);
+		return (TypeCode*)&bridge;
 	}
 };
 
 }
 }
 
-#define NIRVANA_STATIC_TC(Impl) { NIRVANA_STATIC_BRIDGE (::CORBA::TypeCode, ::CORBA::Internal::Impl) }
+#define NIRVANA_STATIC_TC(name, ...) NIRVANA_SELECTANY const constexpr ::CORBA::Internal::StaticTC \
+name {&::CORBA::Internal::InterfaceStaticBase < ::CORBA::Internal::__VA_ARGS__, ::CORBA::TypeCode>::epv_}
 
 #endif
