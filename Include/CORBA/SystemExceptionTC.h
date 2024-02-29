@@ -1,3 +1,4 @@
+/// \file
 /*
 * Nirvana IDL support library.
 *
@@ -23,12 +24,39 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../../pch/pch.h"
+#ifndef NIRVANA_ORB_SYSTEMEXCEPTIONTC_H_
+#define NIRVANA_ORB_SYSTEMEXCEPTIONTC_H_
+#pragma once
+
+#include "I_ptr.h"
 
 namespace CORBA {
 
-NIRVANA_EXCEPTION_DEF (CORBA::, UnknownUserException);
+class TypeCode;
 
-NIRVANA_IMPORT (_tc_UnknownUserException, Internal::RepIdOf <UnknownUserException>::id, TypeCode)
+namespace Internal {
+
+struct SystemExceptionTC
+{
+	const Bridge <TypeCode>::EPV* bridge;
+	const Char* id;
+	const Char* name;
+
+	TypeCode* operator -> () const noexcept
+	{
+		assert (bridge);
+		return (TypeCode*)&bridge;
+	}
+
+	operator I_ptr <TypeCode> () const noexcept
+	{
+		assert (bridge);
+		return (TypeCode*)&bridge;
+	}
+};
 
 }
+}
+
+
+#endif
