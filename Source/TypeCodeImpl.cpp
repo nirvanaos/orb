@@ -164,7 +164,7 @@ Interface* TypeCodeBase::_s_get_compact_typecode (Bridge <CORBA::TypeCode>* _b, 
 	// The get_compact_typecode operation strips out all optional name and member
 	// name fields, but it leaves all alias typecodes intact.
 	// By default, we don't strip names, just return this type code.
-	return _b;
+	return _b->_epv ().header.duplicate (_b, _env);
 }
 
 ULong TypeCodeBase::_s_member_count (Bridge <TypeCode>* _b, Interface* _env) noexcept

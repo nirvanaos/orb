@@ -120,7 +120,6 @@ bool TypeCodeUnion <U>::labels_equal (I_ptr <TypeCode> other)
 	return true;
 }
 
-
 }
 }
 
