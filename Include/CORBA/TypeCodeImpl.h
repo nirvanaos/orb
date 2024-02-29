@@ -32,6 +32,7 @@
 #include "ImplementationPseudoStatic.h"
 #include "TypeCode_s.h"
 #include "TypeCodeOps.h"
+#include "StaticIdNameTC.h"
 
 namespace CORBA {
 namespace Internal {
@@ -296,6 +297,29 @@ public:
 	{
 		return member_count_;
 	}
+};
+
+class TypeCodeStaticIdName
+{
+public:
+	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env);
+	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env);
+};
+
+class TypeCodeValueAbstractBase
+{
+public:
+	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) noexcept;
+	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
+		Interface* _env) noexcept;
+	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index,
+		Interface* _env) noexcept;
+	static Visibility _s_member_visibility (Bridge <TypeCode>* _b, ULong index,
+		Interface* _env) noexcept;
+	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env)
+		noexcept;
+	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
+		noexcept;
 };
 
 }

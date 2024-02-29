@@ -25,7 +25,7 @@
 *  popov.nirvana@gmail.com
 */
 #ifndef NIRVANA_ORB_SYSTEMEXCEPTIONTC_H_
-#define NIRVANA_ORB_SYSTEMEXCEPTIONTC_H_
+#define NIRVANA_ORB_STATICIDNAMETC_H_
 #pragma once
 
 #include "I_ptr.h"
@@ -36,7 +36,7 @@ class TypeCode;
 
 namespace Internal {
 
-struct SystemExceptionTC
+struct StaticIdNameTC
 {
 	const Bridge <TypeCode>::EPV* bridge;
 	const Char* id;

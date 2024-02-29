@@ -263,5 +263,53 @@ Interface* TypeCodeORB::_s_get_compact_typecode (Bridge <CORBA::TypeCode>* _b, I
 	return (orb->_epv ().epv.get_compact_typecode) (orb, _b, _env);
 }
 
+Type <String>::ABI_ret TypeCodeStaticIdName::_s_id (Bridge <TypeCode>* _b, Interface* _env)
+{
+	return const_string_ret_p (((const StaticIdNameTC*)_b)->id);
+}
+
+Type <String>::ABI_ret TypeCodeStaticIdName::_s_name (Bridge <TypeCode>* _b, Interface* _env)
+{
+	return const_string_ret_p (((const StaticIdNameTC*)_b)->name);
+}
+
+ULong TypeCodeValueAbstractBase::_s_member_count (Bridge <TypeCode>* _b, Interface* _env) noexcept
+{
+	return 0;
+}
+
+Type <String>::ABI_ret TypeCodeValueAbstractBase::_s_member_name (Bridge <TypeCode>* _b, ULong index,
+	Interface* _env) noexcept
+{
+	set_Bounds (_env);
+	return Type <String>::ret ();
+}
+
+Interface* TypeCodeValueAbstractBase::_s_member_type (Bridge <TypeCode>* _b, ULong index,
+	Interface* _env) noexcept
+{
+	set_Bounds (_env);
+	return nullptr;
+}
+
+Visibility TypeCodeValueAbstractBase::_s_member_visibility (Bridge <TypeCode>* _b, ULong index,
+	Interface* _env) noexcept
+{
+	set_Bounds (_env);
+	return 0;
+}
+
+ValueModifier TypeCodeValueAbstractBase::_s_type_modifier (Bridge <TypeCode>* _b, Interface* _env)
+noexcept
+{
+	return VM_ABSTRACT;
+}
+
+Interface* TypeCodeValueAbstractBase::_s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
+noexcept
+{
+	return nullptr;
+}
+
 }
 }

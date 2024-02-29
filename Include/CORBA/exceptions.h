@@ -28,10 +28,10 @@
 #pragma once
 
 #include "SystemException.h"
-#include "SystemExceptionTC.h"
+#include "StaticIdNameTC.h"
 
 #define DECLARE_SYSTEM_EXCEPTION(E) \
-extern const Internal::SystemExceptionTC _tc_##E;\
+extern const Internal::StaticIdNameTC _tc_##E;\
 class E : public SystemException {\
 NIRVANA_EXCEPTION_DCL(E)\
 E () {}\

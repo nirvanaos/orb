@@ -45,32 +45,9 @@ class TypeCodeInterface :
 
 public:
 	using TypeCodeName <I>::_s_name;
-	using Servant::_s_equal;
-	using Servant::_s_equivalent;
+	using TypeCodeORB::_s_equal;
+	using TypeCodeORB::_s_equivalent;
 	using TypeCodeORB::_s_get_compact_typecode;
-
-	static Boolean equal (I_ptr <TypeCode> other)
-	{
-		return (Base::_bridge () == &other) ||
-			TypeCodeBase::equal (Type <I>::tc_kind, Base::RepositoryType::id, TypeCodeName <I>::name_, other);
-	}
-
-	static Boolean equivalent (I_ptr <TypeCode> other)
-	{
-		return (Base::_bridge () == &other) || Base::equivalent (other);
-	}
-
-	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
-	{
-		switch (Type <I>::tc_kind) {
-			case TCKind::tk_abstract_interface:
-				return g_ORB->create_abstract_interface_tc (Base::RepositoryType::id, IDL::String ());
-			case TCKind::tk_local_interface:
-				return g_ORB->create_local_interface_tc (Base::RepositoryType::id, IDL::String ());
-			default:
-				return g_ORB->create_interface_tc (Base::RepositoryType::id, IDL::String ());
-		}
-	}
 };
 
 }

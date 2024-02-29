@@ -24,7 +24,6 @@
 *  popov.nirvana@gmail.com
 */
 #include "../../pch/pch.h"
-#include <CORBA/SystemExceptionTC.h>
 #include <CORBA/Proxy/TypeCodeException.h>
 #include <CORBA/system_exceptions.h>
 
@@ -41,7 +40,8 @@ const Parameter TypeCodeMembers <SystemException>::members_ [] = {
 class TypeCodeSystemException :
 	public TypeCodeStatic <TypeCodeSystemException, TypeCodeTK <TCKind::tk_except>, TypeCodeOps <SystemException::_Data> >,
 	public TypeCodeMembers <SystemException>,
-	public TypeCodeORB
+	public TypeCodeORB,
+	public TypeCodeStaticIdName
 {
 public:
 	using TypeCodeORB::_s_get_compact_typecode;
@@ -50,21 +50,13 @@ public:
 	using TypeCodeMembers <SystemException>::_s_member_count;
 	using TypeCodeMembers <SystemException>::_s_member_name;
 	using TypeCodeMembers <SystemException>::_s_member_type;
-
-	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env)
-	{
-		return const_string_ret_p (((const SystemExceptionTC*)_b)->id);
-	}
-
-	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env)
-	{
-		return const_string_ret_p (((const SystemExceptionTC*)_b)->name);
-	}
+	using TypeCodeStaticIdName::_s_id;
+	using TypeCodeStaticIdName::_s_name;
 };
 
 }
 
-#define TC_EXCEPTION(E) extern NIRVANA_SELECTANY const constexpr Internal::SystemExceptionTC _tc_##E \
+#define TC_EXCEPTION(E) extern NIRVANA_SELECTANY const constexpr Internal::StaticIdNameTC _tc_##E \
 {&Internal::TypeCodeSystemException::epv_, Internal::RepIdOf <E>::id, #E};
 
 SYSTEM_EXCEPTIONS (TC_EXCEPTION)

@@ -37,7 +37,8 @@ class TypeCodeValueAbstract :
 	public TypeCodeStatic <TypeCodeValueAbstract <I>,
 		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> >,
 	public TypeCodeName <I>,
-	public TypeCodeORB
+	public TypeCodeORB,
+	public TypeCodeValueAbstractBase
 {
 	typedef TypeCodeStatic <TypeCodeValueAbstract <I>,
 		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> > Base;
@@ -46,63 +47,15 @@ class TypeCodeValueAbstract :
 
 public:
 	using TypeCodeName <I>::_s_name;
-	using Servant::_s_equal;
-	using Servant::_s_equivalent;
+	using TypeCodeORB::_s_equal;
+	using TypeCodeORB::_s_equivalent;
 	using TypeCodeORB::_s_get_compact_typecode;
-
-	static Boolean equal (I_ptr <TypeCode> other)
-	{
-		return (Base::_bridge () == &other) ||
-			TypeCodeBase::equal (TCKind::tk_value, Base::RepositoryType::id, TypeCodeName <I>::name_, other);
-	}
-
-	static Boolean equivalent (I_ptr <TypeCode> other)
-	{
-		return (Base::_bridge () == &other) || Base::equivalent (other);
-	}
-
-	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
-	{
-		return g_ORB->create_value_tc (Base::RepositoryType::id, IDL::String (), VM_ABSTRACT, nullptr, ValueMemberSeq ());
-	}
-
-	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) noexcept
-	{
-		return 0;
-	}
-
-	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env) noexcept
-	{
-		set_Bounds (_env);
-		return Type <String>::ret ();
-	}
-
-	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env) noexcept
-	{
-		set_Bounds (_env);
-		return nullptr;
-	}
-
-	static Visibility _s_member_visibility (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env) noexcept
-	{
-		set_Bounds (_env);
-		return 0;
-	}
-
-	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env)
-		noexcept
-	{
-		return VM_ABSTRACT;
-	}
-
-	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
-		noexcept
-	{
-		return nullptr;
-	}
+	using TypeCodeValueAbstractBase::_s_member_count;
+	using TypeCodeValueAbstractBase::_s_member_name;
+	using TypeCodeValueAbstractBase::_s_member_type;
+	using TypeCodeValueAbstractBase::_s_member_visibility;
+	using TypeCodeValueAbstractBase::_s_type_modifier;
+	using TypeCodeValueAbstractBase::_s_concrete_base_type;
 };
 
 }
