@@ -36,9 +36,6 @@ class TypeCodeScalar : public TypeCodeStatic <TypeCodeScalar <T, tk>,
 	TypeCodeTK <tk>, TypeCodeOps <T> > {};
 
 template <>
-const Char TypeCodeName <Object>::name_ [] = "Object";
-
-template <>
 class TypeCodeValue <ValueBase> : public TypeCodeValueConcrete <ValueBase, VM_NONE, false, nullptr>
 {};
 
@@ -51,7 +48,7 @@ class TC_TypeCode : public TypeCodeStatic <TC_TypeCode,
 
 }
 
-#define TC_IMPL(t, ...) extern NIRVANA_STATIC_TC (_tc_##t, __VA_ARGS__)
+#define TC_IMPL(t, ...) extern NIRVANA_SELECTANY const constexpr ::CORBA::Internal::StaticTC _tc_##t { &Internal::__VA_ARGS__::epv_ }
 
 #define TC_IMPL_SCALAR(T, t) TC_IMPL (t, TypeCodeScalar <T, TCKind::tk_##t>)
 
@@ -74,7 +71,8 @@ TC_IMPL_SCALAR (Any, any);
 TC_IMPL (string, TypeCodeString <Internal::String, 0>);
 TC_IMPL (wstring, TypeCodeString <Internal::WString, 0>);
 
-TC_IMPL (Object, TypeCodeInterface <Object>);
+NIRVANA_STATIC_TC (_tc_Object, TypeCodeInterface <Object>, Internal::RepIdOf <Object>::id, "Object");
+
 TC_IMPL (ValueBase, TypeCodeValue <ValueBase>);
 
 TC_IMPL (TypeCode, TC_TypeCode);

@@ -53,9 +53,10 @@ extern const Internal::StaticTC _tc_octet;
 extern const Internal::StaticTC _tc_any;
 extern const Internal::StaticTC _tc_string;
 extern const Internal::StaticTC _tc_wstring;
-extern const Internal::StaticTC _tc_Object;
 extern const Internal::StaticTC _tc_TypeCode;
 extern const Internal::StaticTC _tc_ValueBase;
+
+extern const Internal::StaticIdNameTC _tc_Object;
 
 }
 

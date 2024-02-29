@@ -35,18 +35,12 @@ namespace Internal {
 template <class I>
 class TypeCodeValueAbstract :
 	public TypeCodeStatic <TypeCodeValueAbstract <I>,
-		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> >,
-	public TypeCodeName <I>,
+		TypeCodeTK <TCKind::tk_value>, TypeCodeOps <I> >,
 	public TypeCodeORB,
-	public TypeCodeValueAbstractBase
+	public TypeCodeValueAbstractBase,
+	public TypeCodeStaticIdName
 {
-	typedef TypeCodeStatic <TypeCodeValueAbstract <I>,
-		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> > Base;
-
-	typedef ServantStatic <TypeCodeValueAbstract <I>, TypeCode> Servant;
-
 public:
-	using TypeCodeName <I>::_s_name;
 	using TypeCodeORB::_s_equal;
 	using TypeCodeORB::_s_equivalent;
 	using TypeCodeORB::_s_get_compact_typecode;
@@ -56,6 +50,8 @@ public:
 	using TypeCodeValueAbstractBase::_s_member_visibility;
 	using TypeCodeValueAbstractBase::_s_type_modifier;
 	using TypeCodeValueAbstractBase::_s_concrete_base_type;
+	using TypeCodeStaticIdName::_s_id;
+	using TypeCodeStaticIdName::_s_name;
 };
 
 }

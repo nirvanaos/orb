@@ -33,16 +33,16 @@
 namespace CORBA {
 namespace Internal {
 
-template <class E, bool members = false>
+template <class E>
 class TypeCodeException :
-	public TypeCodeStatic <TypeCodeException <E, members>,
+	public TypeCodeStatic <TypeCodeException <E>,
 		TypeCodeWithId <TCKind::tk_except, E>, TypeCodeOps <typename E::_Data> >,
 	public TypeCodeORB,
-	public TypeCodeMembersOptional <E, members>
+	public TypeCodeMembers <E>
 {
-	typedef TypeCodeStatic <TypeCodeException <E, members>,
+	typedef TypeCodeStatic <TypeCodeException <E>,
 		TypeCodeWithId <TCKind::tk_except, E>, TypeCodeOps <typename E::_Data> > Base;
-	typedef TypeCodeMembersOptional <E, members> Members;
+	typedef TypeCodeMembers <E> Members;
 
 public:
 	using Members::_s_member_count;

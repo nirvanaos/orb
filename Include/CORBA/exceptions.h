@@ -33,7 +33,7 @@
 #define DECLARE_SYSTEM_EXCEPTION(E) \
 extern const Internal::StaticIdNameTC _tc_##E;\
 class E : public SystemException {\
-NIRVANA_EXCEPTION_DCL(E)\
+NIRVANA_EXCEPTION_DCL_BASE(E)\
 E () {}\
 E (ULong minor, CompletionStatus status = COMPLETED_NO) : SystemException (minor, status) {}\
 virtual Code __code () const noexcept { return EC_##E; }};

@@ -24,7 +24,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_SYSTEMEXCEPTIONTC_H_
+#ifndef NIRVANA_ORB_STATICIDNAMETC_H_
 #define NIRVANA_ORB_STATICIDNAMETC_H_
 #pragma once
 
@@ -58,5 +58,7 @@ struct StaticIdNameTC
 }
 }
 
+#define NIRVANA_STATIC_TC(tc, Impl, id, name) NIRVANA_SELECTANY const constexpr ::CORBA::Internal::StaticIdNameTC \
+tc {&::CORBA::Internal::Impl::epv_, id, name}
 
 #endif

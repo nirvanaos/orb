@@ -24,17 +24,16 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_TYPECODEINTERFACE_H_
-#define NIRVANA_ORB_TYPECODEINTERFACE_H_
+#ifndef NIRVANA_ORB_TYPECODEEXCEPTIONEMPTY_H_
+#define NIRVANA_ORB_TYPECODEEXCEPTIONEMPTY_H_
 
 #include "TypeCodeImpl.h"
 
 namespace CORBA {
 namespace Internal {
 
-template <class I>
-class TypeCodeInterface :
-	public TypeCodeStatic <TypeCodeInterface <I>, TypeCodeTK <Type <I>::tc_kind>, TypeCodeOps <I> >,
+class TypeCodeExceptionEmpty :
+	public TypeCodeStatic <TypeCodeExceptionEmpty, TypeCodeTK <TCKind::tk_except>, TypeCodeOps <void> >,
 	public TypeCodeORB,
 	public TypeCodeStaticIdName
 {
@@ -50,3 +49,4 @@ public:
 }
 
 #endif
+

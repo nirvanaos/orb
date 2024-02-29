@@ -59,8 +59,6 @@ struct Parameter
 	const GetTypeCode type;
 };
 
-typedef Nirvana::ImportInterfaceT <TypeCode> TypeCodeImport;
-
 /// Operation metadata.
 struct Operation
 {
@@ -74,7 +72,7 @@ struct Operation
 	CountedArray <Parameter> output;
 
 	/// User exception type codes. Empty for local objects.
-	CountedArray <const TypeCodeImport*> user_exceptions;
+	CountedArray <GetTypeCode> user_exceptions;
 
 	/// Context
 	CountedArray <const Char*> context;

@@ -56,7 +56,4 @@ struct StaticTC
 }
 }
 
-#define NIRVANA_STATIC_TC(name, ...) NIRVANA_SELECTANY const constexpr ::CORBA::Internal::StaticTC \
-name {&::CORBA::Internal::InterfaceStaticBase < ::CORBA::Internal::__VA_ARGS__, ::CORBA::TypeCode>::epv_}
-
 #endif

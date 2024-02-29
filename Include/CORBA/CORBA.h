@@ -61,6 +61,7 @@
 #include "ValueFactoryImpl.h"
 #include "TypeCodeValueAbstract.h"
 #include "TypeCodeInterface.h"
+#include "TypeCodeExceptionEmpty.h"
 #include "SoftFloat_impl.h"
 #include "DomainManager.h"
 #include "Messaging.h"

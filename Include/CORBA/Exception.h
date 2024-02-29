@@ -98,7 +98,7 @@ extern void set_unknown_exception (Interface* environment) noexcept;
 }
 } // namespace CORBA
 
-#define NIRVANA_EXCEPTION_DCL(E) public:\
+#define NIRVANA_EXCEPTION_DCL_BASE(E) public:\
 virtual void _raise () const { throw *this; }\
 virtual const char* _rep_id () const noexcept;\
 virtual const char* _name () const noexcept { return __name (); }\

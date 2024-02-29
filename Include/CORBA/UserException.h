@@ -66,10 +66,14 @@ protected:
 
 }
 
+#define NIRVANA_EXCEPTION_DCL(E) NIRVANA_EXCEPTION_DCL_BASE (E)\
+static ::CORBA::Internal::I_ptr <::CORBA::TypeCode> _type_code () noexcept;
+
 #define NIRVANA_EXCEPTION_DEF(Parent, E) const Parent E* Parent E::_downcast (const ::CORBA::Exception* ep) noexcept {\
 return (ep && ::CORBA::Internal::RepId::compatible (ep->_rep_id (), ::CORBA::Internal::RepIdOf <Parent E>::id))\
 ? &static_cast <const Parent E&> (*ep) : nullptr; }\
 const char* Parent E::_rep_id () const noexcept { return ::CORBA::Internal::RepIdOf <Parent E>::id; }\
-GNU_OPTNONE ::CORBA::Internal::I_ptr <::CORBA::TypeCode> Parent E::__type_code () const noexcept { return Parent _tc_##E; }
+::CORBA::Internal::I_ptr <::CORBA::TypeCode> Parent E::_type_code () noexcept { return Parent _tc_##E; }\
+GNU_OPTNONE ::CORBA::Internal::I_ptr <::CORBA::TypeCode> Parent E::__type_code () const noexcept { return _type_code (); }
 
 #endif
