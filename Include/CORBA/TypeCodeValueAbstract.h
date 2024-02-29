@@ -36,7 +36,8 @@ template <class I>
 class TypeCodeValueAbstract :
 	public TypeCodeStatic <TypeCodeValueAbstract <I>,
 		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> >,
-	public TypeCodeName <I>
+	public TypeCodeName <I>,
+	public TypeCodeORB
 {
 	typedef TypeCodeStatic <TypeCodeValueAbstract <I>,
 		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> > Base;
@@ -45,7 +46,9 @@ class TypeCodeValueAbstract :
 
 public:
 	using TypeCodeName <I>::_s_name;
-	using Servant::_s_get_compact_typecode;
+	using Servant::_s_equal;
+	using Servant::_s_equivalent;
+	using TypeCodeORB::_s_get_compact_typecode;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{

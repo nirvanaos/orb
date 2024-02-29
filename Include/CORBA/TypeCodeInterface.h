@@ -35,7 +35,8 @@ namespace Internal {
 template <class I>
 class TypeCodeInterface :
 	public TypeCodeStatic <TypeCodeInterface <I>, TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> >,
-	public TypeCodeName <I>
+	public TypeCodeName <I>,
+	public TypeCodeORB
 {
 	typedef TypeCodeStatic <TypeCodeInterface <I>,
 		TypeCodeWithId <Type <I>::tc_kind, I>, TypeCodeOps <I> > Base;
@@ -44,7 +45,9 @@ class TypeCodeInterface :
 
 public:
 	using TypeCodeName <I>::_s_name;
-	using Servant::_s_get_compact_typecode;
+	using Servant::_s_equal;
+	using Servant::_s_equivalent;
+	using TypeCodeORB::_s_get_compact_typecode;
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
