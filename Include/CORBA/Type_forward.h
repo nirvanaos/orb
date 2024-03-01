@@ -27,22 +27,8 @@
 #define NIRVANA_ORB_TYPE_FORWARD_H_
 #pragma once
 
-#include "ABI.h"
-#include "I_ptr.h"
-
-namespace std {
-#ifdef NIRVANA_C17
-  int uncaught_exceptions () noexcept;
-#else
-  bool uncaught_exception () noexcept;
-#endif
-}
-
 namespace CORBA {
 namespace Internal {
-
-class IORequest;
-typedef I_ptr <IORequest> IORequest_ptr;
 
 /** For each structure, union or enum data type T, IDL compiler generates `CORBA::Internal::Type <T>` structure.
     This structure defines how the parameters are passed between client and server.
@@ -169,18 +155,6 @@ template <> struct Type <T>
 ~~~
 */
 template <class T> struct Type;
-
-// Helper functions.
-extern void check_pointer (const void* p);
-
-inline bool uncaught_exception () noexcept
-{
-#ifdef NIRVANA_C17
-  return std::uncaught_exceptions () != 0;
-#else
-  return std::uncaught_exception ();
-#endif
-}
 
 }
 }

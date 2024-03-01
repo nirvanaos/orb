@@ -29,10 +29,37 @@
 #pragma once
 
 #include "Type_forward.h"
+#include "ABI.h"
+#include "I_ptr.h"
 #include <utility>
+
+namespace std {
+#ifdef NIRVANA_C17
+int uncaught_exceptions () noexcept;
+#else
+bool uncaught_exception () noexcept;
+#endif
+}
 
 namespace CORBA {
 namespace Internal {
+
+// Helper functions.
+
+extern void check_pointer (const void* p);
+
+inline bool uncaught_exception () noexcept
+{
+#ifdef NIRVANA_C17
+	return std::uncaught_exceptions () != 0;
+#else
+	return std::uncaught_exception ();
+#endif
+}
+
+// Forward definitions for interoperable request
+class IORequest;
+typedef I_ptr <IORequest> IORequest_ptr;
 
 /// Type that does not have check()
 /// 
