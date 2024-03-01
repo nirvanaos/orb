@@ -160,8 +160,15 @@ template <class T> struct Type;
 }
 
 namespace IDL {
-/// IDL traits
+
+/// Nirvana IDL type
+template <class T>
+using Type = CORBA::Internal::Type <T>;
+
+
+/// Standard IDL traits
 template <class> struct traits;
+
 }
 
 #endif
