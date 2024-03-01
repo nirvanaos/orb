@@ -467,6 +467,21 @@ struct Type <I_var <I> > : public Type <I>
 
 #endif
 
+/// \brief Default base for interface IDL::traits<>
+/// 
+/// \typeparam I interface.
+/// 
+template <class I>
+struct TraitsInterface
+{
+	using value_type = typename TypeItfBase <I>::Var;
+	using ref_type = value_type;
+	using ptr_type = I_ptr <I>;
+	using in_type = ptr_type;
+	using out_type = ref_type&;
+	using inout_type = ref_type&;
+};
+
 }
 }
 

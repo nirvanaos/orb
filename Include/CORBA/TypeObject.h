@@ -71,4 +71,15 @@ struct Type <LocalObject> : TypeLocalObject <LocalObject>
 }
 }
 
+namespace IDL {
+
+template <>
+struct traits <CORBA::Object> : CORBA::Internal::TraitsInterface <CORBA::Object>
+{
+	using is_abstract = std::false_type;
+	using is_local = std::false_type;
+};
+
+}
+
 #endif

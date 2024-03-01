@@ -425,4 +425,12 @@ Boolean operator >>= (const Any&, SystemException&);
 
 }
 
+namespace IDL {
+
+template <>
+struct traits <CORBA::Any> : CORBA::Internal::Traits <CORBA::Any>
+{};
+
+}
+
 #endif

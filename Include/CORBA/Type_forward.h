@@ -156,6 +156,19 @@ template <> struct Type <T>
 */
 template <class T> struct Type;
 
+/// \brief Default base for IDL::traits<>
+/// 
+/// \typeparam T Type.
+/// 
+template <class T>
+struct Traits
+{
+  using value_type = T;
+  using in_type = const T&;
+  using out_type = T&;
+  using inout_type = T&;
+};
+
 }
 }
 

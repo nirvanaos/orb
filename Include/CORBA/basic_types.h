@@ -33,10 +33,11 @@
 #include "tc_constants.h"
 #include "StaticTC.h"
 
-#define NIRVANA_BASIC_TYPE(T, tc) namespace Internal { template <> struct Type <T> : TypePrimitive <T> {\
-static I_ptr <TypeCode> type_code () { return tc; } }; }
+#define NIRVANA_BASIC_TYPE(T, tc) template <> struct Type <T> : TypePrimitive <T> {\
+static I_ptr <TypeCode> type_code () { return tc; } };
 
 namespace CORBA {
+namespace Internal {
 
 NIRVANA_BASIC_TYPE (Boolean, _tc_boolean)
 NIRVANA_BASIC_TYPE (Char, _tc_char)
@@ -53,8 +54,34 @@ NIRVANA_BASIC_TYPE (Double, _tc_double)
 NIRVANA_BASIC_TYPE (LongDouble, _tc_longdouble)
 
 }
+}
 
 #undef NIRVANA_BASIC_TYPE
-#undef NIRVANA_TYPE_OUT
+#define NIRVANA_BASIC_TYPE(T) template <> struct traits <CORBA::T> {\
+	using value_type = CORBA::T;\
+	using in_type = CORBA::T;\
+	using out_type = CORBA::T&;\
+	using inout_type = CORBA::T&;\
+};
+
+namespace IDL {
+
+NIRVANA_BASIC_TYPE (Boolean)
+NIRVANA_BASIC_TYPE (Char)
+NIRVANA_BASIC_TYPE (WChar)
+NIRVANA_BASIC_TYPE (Octet)
+NIRVANA_BASIC_TYPE (Short)
+NIRVANA_BASIC_TYPE (UShort)
+NIRVANA_BASIC_TYPE (Long)
+NIRVANA_BASIC_TYPE (LongLong)
+NIRVANA_BASIC_TYPE (ULong)
+NIRVANA_BASIC_TYPE (ULongLong)
+NIRVANA_BASIC_TYPE (Float)
+NIRVANA_BASIC_TYPE (Double)
+NIRVANA_BASIC_TYPE (LongDouble)
+
+}
+
+#undef NIRVANA_BASIC_TYPE
 
 #endif
