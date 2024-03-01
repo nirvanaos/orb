@@ -58,7 +58,7 @@ struct StaticIdNameTC
 }
 }
 
-#define NIRVANA_STATIC_TC(tc, Impl, id, name) NIRVANA_SELECTANY const constexpr ::CORBA::Internal::StaticIdNameTC \
+#define NIRVANA_STATIC_TC(tc, Impl, id, name) NIRVANA_SELECTANY const ::CORBA::Internal::StaticIdNameTC \
 tc {&::CORBA::Internal::Impl::epv_, id, name}
 
 #endif

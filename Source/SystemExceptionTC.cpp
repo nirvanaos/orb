@@ -56,7 +56,7 @@ public:
 
 }
 
-#define TC_EXCEPTION(E) extern NIRVANA_SELECTANY const constexpr Internal::StaticIdNameTC _tc_##E \
+#define TC_EXCEPTION(E) extern NIRVANA_SELECTANY const Internal::StaticIdNameTC _tc_##E \
 {&Internal::TypeCodeSystemException::epv_, Internal::RepIdOf <E>::id, #E};
 
 SYSTEM_EXCEPTIONS (TC_EXCEPTION)

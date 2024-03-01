@@ -48,7 +48,7 @@ class TC_TypeCode : public TypeCodeStatic <TC_TypeCode,
 
 }
 
-#define TC_IMPL(t, ...) extern NIRVANA_SELECTANY const constexpr ::CORBA::Internal::StaticTC _tc_##t { &Internal::__VA_ARGS__::epv_ }
+#define TC_IMPL(t, ...) extern NIRVANA_SELECTANY const ::CORBA::Internal::StaticTC _tc_##t { &Internal::__VA_ARGS__::epv_ }
 
 #define TC_IMPL_SCALAR(T, t) TC_IMPL (t, TypeCodeScalar <T, TCKind::tk_##t>)
 
