@@ -81,4 +81,16 @@ struct Type <IDL::Fixed <digits, scale> > :
 }
 }
 
+namespace IDL {
+
+template <uint16_t _digits, int16_t _scale>
+struct traits <IDL::Fixed <_digits, _scale> > :
+	public CORBA::Internal::Traits <IDL::Fixed <_digits, _scale> >
+{
+	using digits = std::integral_constant <uint16_t, _digits>;
+	using scale = std::integral_constant <int16_t, _scale>;
+};
+
+}
+
 #endif

@@ -282,16 +282,18 @@ template <typename T, uint32_t bound>
 using BoundedSequence = CORBA::Internal::BoundedSequence <T, bound>;
 
 template <typename T>
-struct traits <CORBA::Internal::Sequence <T> >
+struct traits <CORBA::Internal::Sequence <T> > :
+	CORBA::Internal::Traits <CORBA::Internal::Sequence <T> >
 {
-	using element_traits = IDL::traits <T>;
+	using element_traits = traits <T>;
 	using is_bounded = std::false_type;
 };
 
 template <typename T, uint32_t _bound>
-struct traits <CORBA::Internal::BoundedSequence <T, _bound> >
+struct traits <CORBA::Internal::BoundedSequence <T, _bound> > :
+	CORBA::Internal::Traits <CORBA::Internal::BoundedSequence <T, _bound> >
 {
-	using element_traits = IDL::traits <T>;
+	using element_traits = traits <T>;
 	using is_bounded = std::true_type;
 	using bound = std::integral_constant <uint32_t, _bound>;
 };

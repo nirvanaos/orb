@@ -246,4 +246,12 @@ inline void release (Servant& ptr)
 
 }
 
+namespace IDL {
+
+template <>
+struct traits <PortableServer::ServantBase> : CORBA::Internal::TraitsInterface <CORBA::AbstractBase>
+{};
+
+}
+
 #endif

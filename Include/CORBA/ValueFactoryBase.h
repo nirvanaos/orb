@@ -136,4 +136,12 @@ public:
 }
 }
 
+namespace IDL {
+
+template <>
+struct traits <CORBA::ValueFactoryBase> : CORBA::Internal::TraitsInterface <CORBA::ValueFactoryBase>
+{};
+
+}
+
 #endif

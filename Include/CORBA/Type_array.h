@@ -47,6 +47,7 @@ struct ArrayTraits
 {
   typedef T ElType;
   static const size_t size = 1;
+	static const uint32_t dimensions = 0;
 };
 
 template <class T, size_t bound>
@@ -54,6 +55,7 @@ struct ArrayTraits <std::array <T, bound> >
 {
   typedef typename ArrayTraits <T>::ElType ElType;
   static const size_t size = ArrayTraits <T>::size * bound;
+	static const uint32_t dimensions = ArrayTraits <T>::dimensions + 1;
 };
 
 template <class T, size_t bound>
@@ -75,6 +77,7 @@ struct Type <std::array <T, bound> > :
 	typedef typename Type <ET>::Var ET_Var;
 
 	static const size_t total_size = ArrayTraits <Var>::size;
+	static const uint32_t dimensions = ArrayTraits <Var>::dimensions;
 	static const bool is_CDR = Type <ET>::is_CDR;
 	static const bool has_check = Type <ET>::has_check;
 	static const size_t CDR_align = Type <ET>::CDR_align;
@@ -132,6 +135,17 @@ struct Type <std::array <T, bound> > :
 };
 
 }
+}
+
+namespace IDL {
+
+template <class T, size_t bound>
+struct traits <std::array <T, bound> > : CORBA::Internal::Traits <std::array <T, bound> >
+{
+	using element_traits = traits <T>;
+	using dimensions = std::integral_constant <uint32_t, Type <std::array <T, bound> >::dimensions>;
+};
+
 }
 
 #endif

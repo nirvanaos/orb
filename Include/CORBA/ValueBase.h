@@ -244,4 +244,12 @@ public:
 }
 }
 
+namespace IDL {
+
+template <>
+struct traits <CORBA::ValueBase> : CORBA::Internal::TraitsInterface <CORBA::ValueBase>
+{};
+
+}
+
 #endif

@@ -301,16 +301,18 @@ template <uint32_t bound>
 using BoundedWString = CORBA::Internal::BoundedStringT <CORBA::WChar, bound>;
 
 template <typename C>
-struct traits <CORBA::Internal::StringT <C> >
+struct traits <CORBA::Internal::StringT <C> > :
+	CORBA::Internal::Traits <CORBA::Internal::StringT <C> >
 {
-	using element_traits = IDL::traits <C>;
+	using element_traits = traits <C>;
 	using is_bounded = std::false_type;
 };
 
 template <typename C, uint32_t _bound>
-struct traits <CORBA::Internal::BoundedStringT <C, _bound> >
+struct traits <CORBA::Internal::BoundedStringT <C, _bound> > :
+	CORBA::Internal::Traits <CORBA::Internal::BoundedStringT <C, _bound> >
 {
-	using element_traits = IDL::traits <C>;
+	using element_traits = traits <C>;
 	using is_bounded = std::true_type;
 	using bound = std::integral_constant <uint32_t, _bound>;
 };

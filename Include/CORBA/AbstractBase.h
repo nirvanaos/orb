@@ -207,4 +207,12 @@ struct TypeAbstractInterface : TypeItfMarshalable <I>
 }
 }
 
+namespace IDL {
+
+template <>
+struct traits <CORBA::AbstractBase> : CORBA::Internal::TraitsInterface <CORBA::AbstractBase>
+{};
+
+}
+
 #endif
