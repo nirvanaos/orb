@@ -142,7 +142,7 @@ namespace IDL {
 template <class T, size_t bound>
 struct traits <std::array <T, bound> > : CORBA::Internal::Traits <std::array <T, bound> >
 {
-	using element_traits = traits <T>;
+	using element_traits = traits <typename Type <std::array <T, bound> >::ET>;
 	using dimensions = std::integral_constant <uint32_t, Type <std::array <T, bound> >::dimensions>;
 };
 
