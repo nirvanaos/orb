@@ -2,6 +2,6 @@
 
 namespace CORBA {
 
-NIRVANA_IMPORT (g_ORB, "CORBA/g_ORB", ORB)
+NIRVANA_IMPORT (orb, "CORBA/orb", ORB)
 
 }

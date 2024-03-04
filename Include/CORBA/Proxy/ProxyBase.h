@@ -47,7 +47,7 @@ class ProxyRoot : public DynamicExport
 public:
 	void operator delete (void* p, size_t size)
 	{
-		g_object_factory->memory_release (p, size);
+		object_factory->memory_release (p, size);
 	}
 
 	void* operator new (size_t, void* p) noexcept

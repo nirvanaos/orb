@@ -67,7 +67,7 @@ public:
 		if (&content == &I_ptr <TypeCode> (compact))
 			return I_ptr <TypeCode> (Base::_get_ptr ());
 		else
-			return g_ORB->create_array_tc (bound, compact);
+			return orb->create_array_tc (bound, compact);
 	}
 };
 

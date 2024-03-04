@@ -53,12 +53,12 @@ protected:
 
 	void* operator new (size_t size)
 	{
-		return g_object_factory->memory_allocate (size);
+		return object_factory->memory_allocate (size);
 	}
 
 	void operator delete (void* p, size_t size)
 	{
-		g_object_factory->memory_release (p, size);
+		object_factory->memory_release (p, size);
 	}
 
 public:

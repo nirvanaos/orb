@@ -35,7 +35,7 @@ namespace CORBA {
 
 void Any::operator <<= (from_fixed ff)
 {
-	TypeCode::_ref_type tc = g_ORB->create_fixed_tc (ff.digits, ff.scale);
+	TypeCode::_ref_type tc = orb->create_fixed_tc (ff.digits, ff.scale);
 	void* p = prepare (tc);
 	g_dec_calc->to_BCD (ff.val, ff.digits, ff.scale, (Octet*)p);
 	set_type (tc);
@@ -62,7 +62,7 @@ void Any::operator <<= (from_string fs)
 {
 	TypeCode::_ref_type tc;
 	if (fs.bound)
-		tc = g_ORB->create_string_tc (fs.bound);
+		tc = orb->create_string_tc (fs.bound);
 	else
 		tc = _tc_string;
 	Internal::String_var <Char> sv;
@@ -77,7 +77,7 @@ void Any::operator <<= (from_wstring fs)
 {
 	TypeCode::_ref_type tc;
 	if (fs.bound)
-		tc = g_ORB->create_wstring_tc (fs.bound);
+		tc = orb->create_wstring_tc (fs.bound);
 	else
 		tc = _tc_wstring;
 	Internal::String_var <WChar> sv;

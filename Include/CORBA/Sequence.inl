@@ -95,7 +95,7 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 						Type <T>::check (*p);
 					} while (end != ++p);
 				} catch (...) {
-					Nirvana::g_memory->release (abi.ptr, abi.allocated);
+					Nirvana::memory->release (abi.ptr, abi.allocated);
 					throw;
 				}
 			}

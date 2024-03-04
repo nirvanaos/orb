@@ -61,7 +61,7 @@ public:
 
 	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
 	{
-		return g_ORB->create_value_box_tc (Base::RepositoryType::id, IDL::String (), content ());
+		return orb->create_value_box_tc (Base::RepositoryType::id, IDL::String (), content ());
 	}
 
 private:

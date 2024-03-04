@@ -251,7 +251,7 @@ I_ref
 #endif
 <ORB> Client <T, Object>::_get_ORB () noexcept
 {
-	return I_ptr <ORB> (g_ORB);
+	return I_ptr <ORB> (orb);
 }
 
 template <class T>

@@ -134,7 +134,7 @@ void String_var <C>::adopt (C* s)
 		size_t cc = std::char_traits <C>::length (s);
 		Base::large_pointer (s);
 		Base::large_size (cc);
-		size_t au = Nirvana::g_memory->query (s, Nirvana::Memory::QueryParam::ALLOCATION_UNIT);
+		size_t au = Nirvana::memory->query (s, Nirvana::Memory::QueryParam::ALLOCATION_UNIT);
 		Base::allocated (Nirvana::round_up ((cc + 1) * sizeof (C), au));
 	} else
 		Base::reset ();

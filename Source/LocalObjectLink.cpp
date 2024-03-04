@@ -31,7 +31,7 @@ namespace Internal {
 
 void LocalObjectLink::_create_proxy (Object::_ptr_type comp)
 {
-	g_object_factory->create_local_object (this, &core_object_, comp);
+	object_factory->create_local_object (this, &core_object_, comp);
 }
 
 Object::_ptr_type LocalObjectLink::_object ()

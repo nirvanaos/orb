@@ -38,12 +38,12 @@ class DynamicExport
 protected:
 	DynamicExport ()
 	{
-		interface_duplicate (Nirvana::g_module.imp.itf);
+		interface_duplicate (Nirvana::module.imp.itf);
 	}
 
 	~DynamicExport ()
 	{
-		interface_release (Nirvana::g_module.imp.itf);
+		interface_release (Nirvana::module.imp.itf);
 	}
 };
 

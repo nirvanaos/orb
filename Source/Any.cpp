@@ -88,7 +88,7 @@ void Any::clear ()
 		interface_release (&tc);
 	}
 	if (large)
-		::Nirvana::g_memory->release (large_pointer (), large_size ());
+		::Nirvana::memory->release (large_pointer (), large_size ());
 	reset ();
 }
 
@@ -101,7 +101,7 @@ void* Any::prepare (I_ptr <TypeCode> tc)
 		if (size <= SMALL_CAPACITY)
 			dst = small_pointer ();
 		else {
-			dst = ::Nirvana::g_memory->allocate (0, size, 0);
+			dst = ::Nirvana::memory->allocate (0, size, 0);
 			large_pointer (dst, size);
 		}
 	}

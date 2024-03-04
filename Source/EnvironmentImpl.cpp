@@ -34,7 +34,7 @@ void EnvironmentBase::exception_free () noexcept
 		((Exception*)&data_)->~Exception ();
 	} else if (data_.ptr) {
 		data_.ptr->~Exception ();
-		::Nirvana::g_memory->release (data_.ptr, data_.size);
+		::Nirvana::memory->release (data_.ptr, data_.size);
 	}
 	data_.is_small = 0;
 	data_.ptr = nullptr;
@@ -141,11 +141,11 @@ bool EnvironmentBase::set (const ExceptionEntry& ee) noexcept
 		if (size <= sizeof (data_))
 			ee.construct (&data_);
 		else {
-			Exception* p = (Exception*)::Nirvana::g_memory->allocate (nullptr, size, 0);
+			Exception* p = (Exception*)::Nirvana::memory->allocate (nullptr, size, 0);
 			try {
 				ee.construct (p);
 			} catch (...) {
-				::Nirvana::g_memory->release (p, size);
+				::Nirvana::memory->release (p, size);
 				throw;
 			}
 			data_.ptr = (Exception*)p;

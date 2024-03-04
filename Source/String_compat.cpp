@@ -37,14 +37,14 @@ public:
 	static C* allocate (uint32_t len) noexcept
 	{
 		size_t cb = ((size_t)len + 1) * sizeof (C);
-		return (C*)g_memory->allocate (0, cb, Memory::EXACTLY);
+		return (C*)memory->allocate (0, cb, Memory::EXACTLY);
 	}
 
 	static C* dup (const C* s) noexcept
 	{
 		if (s) {
 			size_t cb = (std::char_traits <C>::length (s) + 1) * sizeof (C);
-			return (C*)g_memory->copy (0, (C*)s, cb, Memory::EXACTLY);
+			return (C*)memory->copy (0, (C*)s, cb, Memory::EXACTLY);
 		} else
 			return nullptr;
 	}
@@ -52,7 +52,7 @@ public:
 	static void free (C* s) noexcept
 	{
 		if (s)
-			g_memory->release (s, (std::char_traits <C>::length (s) + 1) * sizeof (C));
+			memory->release (s, (std::char_traits <C>::length (s) + 1) * sizeof (C));
 	}
 };
 

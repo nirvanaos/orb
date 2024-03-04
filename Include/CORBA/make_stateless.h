@@ -40,7 +40,7 @@ namespace CORBA {
 /// Detect if we are in the free sync context.
 inline bool is_free_sync_context ()
 {
-	return Internal::g_object_factory->is_free_sync_context ();
+	return Internal::object_factory->is_free_sync_context ();
 }
 
 /// \brief Create stateless servant.
@@ -71,7 +71,7 @@ servant_reference <T> make_stateless (Args ... args)
 	Internal::ObjectFactory::StatelessCreationFrame scf;
 	scf.tmp (&tmp);
 	scf.size (sizeof (T));
-	Internal::g_object_factory->stateless_begin (scf);
+	Internal::object_factory->stateless_begin (scf);
 
 	T* tmp_serv = nullptr;
 	try {
@@ -79,14 +79,14 @@ servant_reference <T> make_stateless (Args ... args)
 		T* tmp_serv = new (&tmp) T (std::forward <Args> (args)...);
 
 		// Move servant to the stateless memory and return reference to it.
-		return servant_reference <T> ((T*)Internal::g_object_factory->stateless_end (true), false);
+		return servant_reference <T> ((T*)Internal::object_factory->stateless_end (true), false);
 	} catch (...) {
 		// Destroy servant
 		if (tmp_serv)
 			tmp_serv->~T ();
 		
 		// Inform ObjectFactory that servant creation was failed
-		Internal::g_object_factory->stateless_end (false);
+		Internal::object_factory->stateless_end (false);
 		throw;
 	}
 }

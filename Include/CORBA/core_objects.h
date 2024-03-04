@@ -32,14 +32,14 @@
 namespace CORBA {
 
 class ORB;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <ORB> g_ORB;
+extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <ORB> orb;
 
 #ifndef NIRVANA_PROCESS
 
 namespace Internal {
 
 class ObjectFactory;
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <ObjectFactory> g_object_factory;
+extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <ObjectFactory> object_factory;
 
 }
 
