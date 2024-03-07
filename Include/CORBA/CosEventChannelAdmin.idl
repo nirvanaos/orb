@@ -14,28 +14,26 @@ exception TypeError {};
 
 interface ProxyPushConsumer : CosEventComm::PushConsumer
 {
-  void connect_push_supplier (in CosEventComm::PushSupplier push_supplier) raises (AlreadyConnected);
+  void connect_push_supplier (in CosEventComm::PushSupplier push_supplier)
+    raises (AlreadyConnected);
 };
 
 interface ProxyPullSupplier : CosEventComm::PullSupplier
 {
-  void connect_pull_consumer (in CosEventComm::
-                              PullConsumer pull_consumer)
-       raises (AlreadyConnected);
+  void connect_pull_consumer (in CosEventComm::PullConsumer pull_consumer)
+    raises (AlreadyConnected);
 };
 
 interface ProxyPullConsumer : CosEventComm::PullConsumer
 {
-  void connect_pull_supplier (in CosEventComm::
-                              PullSupplier pull_supplier)
-       raises (AlreadyConnected, TypeError);
+  void connect_pull_supplier (in CosEventComm::PullSupplier pull_supplier)
+    raises (AlreadyConnected, TypeError);
 };
 
 interface ProxyPushSupplier : CosEventComm::PushSupplier
 {
-  void connect_push_consumer (in CosEventComm::
-                              PushConsumer push_consumer)
-       raises (AlreadyConnected, TypeError);
+  void connect_push_consumer (in CosEventComm::PushConsumer push_consumer)
+    raises (AlreadyConnected, TypeError);
 };
 
 interface ConsumerAdmin
