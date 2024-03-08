@@ -333,12 +333,14 @@ operator <<= (Any& a, const T& v)
 {
 	a.copy_from (Internal::Type <T>::type_code (), &v);
 }
+
 template <typename T> inline
 typename std::enable_if <!std::is_base_of <Exception, T>::value, void>::type
 operator <<= (Any& a, T& v)
 {
 	operator <<= (a, (const T&)v);
 }
+
 template <typename T> inline
 typename std::enable_if <!std::is_base_of <Exception,
 	typename std::remove_reference <T>::type>::value, void>::type
@@ -346,6 +348,7 @@ operator <<= (Any& a, T&& v)
 {
 	a.move_from (Internal::Type <typename std::remove_reference <T>::type>::type_code (), &v);
 }
+
 #ifdef LEGACY_CORBA_CPP
 template <typename T> inline
 void operator <<= (Any& a, T* v)
@@ -381,16 +384,19 @@ void operator <<= (Any& dst, const Any& src)
 {
 	dst = src;
 }
+
 inline
 void operator <<= (Any& dst, Any& src)
 {
 	operator <<= (dst, (const Any&)src);
 }
+
 inline
 void operator <<= (Any& dst, Any&& src)
 {
 	dst = std::move (src);
 }
+
 #ifdef LEGACY_CORBA_CPP
 inline
 void operator <<= (Any& dst, Any* src)
@@ -400,12 +406,15 @@ void operator <<= (Any& dst, Any* src)
 #endif
 
 void operator <<= (Any&, const Exception&);
+
 inline
 void operator <<= (Any& a, Exception& e)
 {
 	operator <<= (a, (const Exception&)e);
 }
+
 void operator <<= (Any&, Exception&&);
+
 #ifdef LEGACY_CORBA_CPP
 inline
 void operator <<= (Any& a, Exception* pe)
