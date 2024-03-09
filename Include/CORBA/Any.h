@@ -368,6 +368,17 @@ Boolean operator >>= (const Any& a, const T*& pv)
 }
 
 template <typename T> inline
+typename std::enable_if <!std::is_const <T>::value, Boolean>::type
+operator >>= (Any& a, T*& pv)
+{
+	if (Internal::Type <T>::type_code ()->equivalent (a.type ())) {
+		pv = reinterpret_cast <T*>(a.data ());
+		return true;
+	}
+	return false;
+}
+
+template <typename T> inline
 typename std::enable_if <!std::is_pointer <T>::value, Boolean>::type
 operator >>= (const Any& a, T& v)
 {
