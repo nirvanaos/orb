@@ -57,17 +57,17 @@ public:
 
 	static Boolean equal (I_ptr <TypeCode> other)
 	{
-		return orb->tc_equal (Base::_get_ptr (), other);
+		return orb_impl->tc_equal (Base::_get_ptr (), other);
 	}
 
 	static Boolean equivalent (I_ptr <TypeCode> other)
 	{
-		return orb->tc_equivalent (Base::_get_ptr (), other);
+		return orb_impl->tc_equivalent (Base::_get_ptr (), other);
 	}
 
 	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
 	{
-		return orb->get_compact_typecode (Base::_get_ptr ());
+		return orb_impl->get_compact_typecode (Base::_get_ptr ());
 	}
 
 	static Type <Any>::ABI_ret _s_member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env)

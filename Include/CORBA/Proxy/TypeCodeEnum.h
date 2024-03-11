@@ -76,7 +76,7 @@ public:
 
 	static Type <CORBA::TypeCode>::VRet get_compact_typecode ()
 	{
-		return orb->create_enum_tc (RepIdOf <E>::id, IDL::String (), EnumMemberSeq (Type <E>::count_));
+		return orb_impl->create_enum_tc (RepIdOf <E>::id, IDL::String (), EnumMemberSeq (Type <E>::count_));
 	}
 
 private:

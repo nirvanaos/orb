@@ -31,13 +31,13 @@ namespace Internal {
 RefCountLink::RefCountLink (const Bridge <DynamicServant>::EPV& epv) :
 	DynamicServantBridge (epv)
 {
-	core_object_ = orb->create_ref_cnt (_dynamic_servant ());
+	core_object_ = orb_impl->create_ref_cnt (_dynamic_servant ());
 }
 
 RefCountLink::RefCountLink (const RefCountLink& src) :
 	DynamicServantBridge (src)
 {
-	core_object_ = orb->create_ref_cnt (_dynamic_servant ());
+	core_object_ = orb_impl->create_ref_cnt (_dynamic_servant ());
 }
 
 }

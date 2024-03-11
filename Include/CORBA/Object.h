@@ -31,13 +31,14 @@
 #include "Object_c.h"
 #include "TypeObject.h"
 #include "Environment.h"
-#include "core_objects.h"
 
 namespace PortableServer {
 class ServantBase;
 }
 
 namespace CORBA {
+
+extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <ORB> orb_impl;
 
 #ifdef LEGACY_CORBA_CPP
 typedef Internal::I_ptr <Object> Object_ptr;
@@ -251,7 +252,7 @@ I_ref
 #endif
 <ORB> Client <T, Object>::_get_ORB () noexcept
 {
-	return I_ptr <ORB> (orb);
+	return I_ptr <ORB> (orb_impl);
 }
 
 template <class T>

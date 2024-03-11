@@ -247,19 +247,19 @@ Interface* TypeCodeBase::_s_concrete_base_type (Bridge <TypeCode>* _b, Interface
 
 Type <CORBA::Boolean>::ABI_ret TypeCodeORB::_s_equal (Bridge <CORBA::TypeCode>* _b, Interface* tc, Interface* _env) noexcept
 {
-	Bridge <ORB>* br_orb = orb.operator -> ();
+	Bridge <ORB>* br_orb = orb_impl.operator -> ();
 	return (br_orb->_epv ().epv.tc_equal) (br_orb, _b, tc, _env);
 }
 
 Type <CORBA::Boolean>::ABI_ret TypeCodeORB::_s_equivalent (Bridge <CORBA::TypeCode>* _b, Interface* tc, Interface* _env) noexcept
 {
-	Bridge <ORB>* br_orb = orb.operator -> ();
+	Bridge <ORB>* br_orb = orb_impl.operator -> ();
 	return (br_orb->_epv ().epv.tc_equivalent) (br_orb, _b, tc, _env);
 }
 
 Interface* TypeCodeORB::_s_get_compact_typecode (Bridge <CORBA::TypeCode>* _b, Interface* _env) noexcept
 {
-	Bridge <ORB>* br_orb = orb.operator -> ();
+	Bridge <ORB>* br_orb = orb_impl.operator -> ();
 	return (br_orb->_epv ().epv.get_compact_typecode) (br_orb, _b, _env);
 }
 
