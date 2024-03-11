@@ -141,7 +141,6 @@ public:
 		UShort scale;
 	};
 
-	// For the implementation see in the CoreImport library
 	void operator <<= (from_fixed);
 
 	struct to_fixed
@@ -154,7 +153,6 @@ public:
 		UShort scale;
 	};
 
-	// For the implementation see in the CoreImport library
 	Boolean operator >>= (to_fixed) const;
 
 	// special helper types needed for boolean, octet, char, wchar
@@ -212,7 +210,6 @@ private:
 		Boolean nocopy;
 	};
 
-	// For the implementation see in the CoreImport library
 	void operator <<= (from_string);
 
 	struct from_wstring
@@ -229,7 +226,6 @@ private:
 		Boolean nocopy;
 	};
 
-	// For the implementation see in the CoreImport library
 	void operator <<= (from_wstring);
 
 	struct to_string
@@ -246,7 +242,6 @@ private:
 		{}
 	};
 
-	// For the implementation see in the CoreImport library
 	Boolean operator >>= (to_string) const;
 
 	struct to_wstring
@@ -264,7 +259,6 @@ private:
 		{}
 	};
 
-	// For the implementation see in the CoreImport library
 	Boolean operator >>= (to_wstring) const;
 
 private:

@@ -24,6 +24,7 @@
 *  popov.nirvana@gmail.com
 */
 #include "../../pch/pch.h"
+#include <Nirvana/DecCalc.h>
 
 namespace CORBA {
 namespace Internal {
@@ -150,6 +151,11 @@ void Any::type (I_ptr <TypeCode> alias)
 
 static_assert (Internal::ABI <Any>::SMALL_CAPACITY >= sizeof (SystemException::_Data), "Any data must fit SystemException::_Data.");
 
+void Any::construct (Internal::I_ptr <TypeCode> tc)
+{
+	tc->n_construct (prepare (tc));
+}
+
 void* Any::data ()
 {
 	assert (type ());
@@ -266,9 +272,83 @@ Boolean operator >>= (const Any& any, SystemException& se)
 	return false;
 }
 
-void Any::construct (Internal::I_ptr <TypeCode> tc)
+void Any::operator <<= (from_fixed ff)
 {
-	tc->n_construct (prepare (tc));
+	TypeCode::_ref_type tc = orb->create_fixed_tc (ff.digits, ff.scale);
+	void* p = prepare (tc);
+	Nirvana::dec_calc->to_BCD (ff.val, ff.digits, ff.scale, (Octet*)p);
+	set_type (tc);
+}
+
+Boolean Any::operator >>= (to_fixed tf) const
+{
+	if (type () && type ()->kind () == TCKind::tk_fixed) {
+		UShort digits = type ()->fixed_digits ();
+		Short scale = type ()->fixed_scale ();
+		if (digits - scale <= tf.digits - tf.scale) {
+			Nirvana::DecCalc::Number n;
+			Nirvana::dec_calc->from_BCD (n, digits, scale, (const Octet*)data ());
+			if (scale > tf.scale)
+				Nirvana::dec_calc->round (n, tf.scale);
+			tf.val = reinterpret_cast <const Fixed&> (n);
+			return true;
+		}
+	}
+	return false;
+}
+
+void Any::operator <<= (from_string fs)
+{
+	TypeCode::_ref_type tc;
+	if (fs.bound)
+		tc = orb->create_string_tc (fs.bound);
+	else
+		tc = _tc_string;
+	Internal::String_var <Char> sv;
+	if (fs.nocopy)
+		sv = fs.val; // Adopt string
+	else
+		sv = (const Char*)fs.val;
+	move_from (tc, &sv);
+}
+
+void Any::operator <<= (from_wstring fs)
+{
+	TypeCode::_ref_type tc;
+	if (fs.bound)
+		tc = orb->create_wstring_tc (fs.bound);
+	else
+		tc = _tc_wstring;
+	Internal::String_var <WChar> sv;
+	if (fs.nocopy)
+		sv = fs.val; // Adopt string
+	else
+		sv = (const WChar*)fs.val;
+	move_from (tc, &sv);
+}
+
+Boolean Any::operator >>= (to_string ts) const
+{
+	if (type ()->kind () == TCKind::tk_string) {
+		const Internal::String& s = *(const Internal::String*)data ();
+		if (!ts.bound || s.length () <= (size_t)ts.bound) {
+			ts.val = s.c_str ();
+			return true;
+		}
+	}
+	return false;
+}
+
+Boolean Any::operator >>= (to_wstring ts) const
+{
+	if (type ()->kind () == TCKind::tk_wstring) {
+		const Internal::WString& s = *(const Internal::WString*)data ();
+		if (!ts.bound || s.length () <= (size_t)ts.bound) {
+			ts.val = s.c_str ();
+			return true;
+		}
+	}
+	return false;
 }
 
 }
