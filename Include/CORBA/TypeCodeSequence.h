@@ -68,7 +68,7 @@ public:
 		if (&content == &I_ptr <TypeCode> (compact))
 			return I_ptr <TypeCode> (Base::_get_ptr ());
 		else
-			return orb_impl->create_sequence_tc (bound, compact);
+			return the_orb->create_sequence_tc (bound, compact);
 	}
 };
 

@@ -32,7 +32,7 @@
 namespace CORBA {
 
 //class ORB;
-//extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <ORB> orb_impl;
+//extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <ORB> the_orb;
 
 }
 

@@ -38,7 +38,7 @@ class ServantBase;
 
 namespace CORBA {
 
-extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <ORB> orb_impl;
+extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <ORB> the_orb;
 
 #ifdef LEGACY_CORBA_CPP
 typedef Internal::I_ptr <Object> Object_ptr;
@@ -252,7 +252,7 @@ I_ref
 #endif
 <ORB> Client <T, Object>::_get_ORB () noexcept
 {
-	return I_ptr <ORB> (orb_impl);
+	return I_ptr <ORB> (the_orb);
 }
 
 template <class T>

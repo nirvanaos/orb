@@ -51,13 +51,13 @@ protected:
 
 	void* operator new (size_t size)
 	{
-		return Nirvana::memory->allocate (nullptr, size, 0);
+		return Nirvana::the_memory->allocate (nullptr, size, 0);
 	}
 
 public:
 	void operator delete (void* p, size_t size)
 	{
-		Nirvana::memory->release (p, size);
+		Nirvana::the_memory->release (p, size);
 	}
 
 protected:

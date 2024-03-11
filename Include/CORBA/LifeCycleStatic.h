@@ -38,14 +38,14 @@ public:
 	template <class I>
 	static Interface* __duplicate (Interface* itf, Interface* env) noexcept
 	{
-		(Nirvana::module.imp.itf->_epv ().duplicate) (Nirvana::module.imp.itf, env);
+		(Nirvana::the_module.imp.itf->_epv ().duplicate) (Nirvana::the_module.imp.itf, env);
 		return itf;
 	}
 
 	template <class I>
 	static void __release (Interface*) noexcept
 	{
-		(Nirvana::module.imp.itf->_epv ().release) (Nirvana::module.imp.itf);
+		(Nirvana::the_module.imp.itf->_epv ().release) (Nirvana::the_module.imp.itf);
 	}
 };
 

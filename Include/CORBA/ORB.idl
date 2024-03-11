@@ -296,7 +296,7 @@ pseudo interface ORB
   ///@}
 };
 
-const ORB orb_impl;
+const ORB the_orb;
 
 };
 
