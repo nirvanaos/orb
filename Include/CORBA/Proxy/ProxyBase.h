@@ -28,12 +28,12 @@
 
 #include "ProxyHolder.h"
 #include "ProxyBaseInterface.h"
-#include "../ServantImpl.h"
-#include "../ObjectFactoryInc.h"
-#include "../LifeCycleRefCnt.h"
 #include "IOReference.h"
 #include "OperationIndex.h"
 #include "RqProcWrapper.h"
+#include "../ServantImpl.h"
+#include "../LifeCycleRefCnt.h"
+#include "../ObjectFactory.h"
 
 namespace CORBA {
 namespace Internal {
