@@ -69,10 +69,13 @@ template <> struct Type <T>
   ///
   /// is_CDR = `true` for all fixed-length data types, except for:
   /// - union
-  /// - char
   /// - wchar
-  /// - A struct or union that contains a member whose type is not CDR
+  /// - A struct that contains a member whose type is not CDR
   static const bool is_CDR;
+
+  /// Size of data in Common Data Representation.
+  /// CDR_size <= sizeof (T).
+  static const size_t CDR_size;
 
   // Types for passing parameters via interface ABI
   typedef const ABI* ABI_in;
