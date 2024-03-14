@@ -146,15 +146,8 @@ pseudo interface IORequest
   ///@{
   /// Marshal/unmarshal character data.
 
-  void marshal_char (in Nirvana::Size count, in ConstCharPtr data);
-  void unmarshal_char (in Nirvana::Size count, in CharPtr data);
-
   void marshal_string (inout string s, in boolean move);
   void unmarshal_string (inout string s);
-
-  typedef sequence <char> CharSeq;
-  void marshal_char_seq (inout CharSeq s, in boolean move);
-  void unmarshal_char_seq (inout CharSeq s);
 
   void marshal_wchar (in Nirvana::Size count, in ConstWCharPtr data);
   void unmarshal_wchar (in Nirvana::Size count, in WCharPtr data);

@@ -113,24 +113,6 @@ void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 }
 
 template <> inline
-void Type <Sequence <Char> >::marshal_in (const Var& src, IORequest_ptr rq)
-{
-	rq->marshal_char_seq (const_cast <Var&> (src), false);
-}
-
-template <> inline
-void Type <Sequence <Char> >::marshal_out (Var& src, IORequest_ptr rq)
-{
-	rq->marshal_char_seq (const_cast <Var&> (src), true);
-}
-
-template <> inline
-void Type <Sequence <Char> >::unmarshal (IORequest_ptr rq, Var& dst)
-{
-	rq->unmarshal_char_seq (dst);
-}
-
-template <> inline
 void Type <Sequence <WChar> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
 	rq->marshal_wchar_seq (const_cast <Var&> (src), false);
