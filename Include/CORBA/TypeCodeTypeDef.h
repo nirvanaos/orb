@@ -69,28 +69,16 @@ public:
 			content ()->equivalent (other);
 	}
 
-	static size_t _s_n_CDR_size (Bridge <TypeCode>*, Interface* _env)
+	static size_t _s_n_size (Bridge <TypeCode>*, Interface* _env)
 	{
 		Bridge <TypeCode>* b = content_bridge ();
-		return (b->_epv ().epv.n_CDR_size) (b, _env);
-	}
-
-	static size_t _s_n_aligned_size (Bridge <TypeCode>*, Interface* _env)
-	{
-		Bridge <TypeCode>* b = content_bridge ();
-		return (b->_epv ().epv.n_aligned_size) (b, _env);
+		return (b->_epv ().epv.n_size) (b, _env);
 	}
 
 	static size_t _s_n_align (Bridge <TypeCode>*, Interface* _env)
 	{
 		Bridge <TypeCode>* b = content_bridge ();
 		return (b->_epv ().epv.n_align) (b, _env);
-	}
-
-	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>*, Interface* _env)
-	{
-		Bridge <TypeCode>* b = content_bridge ();
-		return (b->_epv ().epv.n_is_CDR) (b, _env);
 	}
 
 	static void _s_n_construct (Bridge <TypeCode>*, void* p, Interface* _env)
@@ -138,12 +126,6 @@ public:
 	{
 		Bridge <TypeCode>* b = content_bridge ();
 		(b->_epv ().epv.n_unmarshal) (b, call, size, dst, _env);
-	}
-
-	static void _s_n_byteswap (Bridge <TypeCode>*, void* p, size_t size, Interface* _env)
-	{
-		Bridge <TypeCode>* b = content_bridge ();
-		(b->_epv ().epv.n_byteswap) (b, p, size, _env);
 	}
 
 private:

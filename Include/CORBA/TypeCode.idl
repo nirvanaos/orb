@@ -96,31 +96,59 @@ pseudo interface TypeCode
 	/// NOTE: For exceptions, all methods below are related to the exception data, not the exception itself.
 
 	/// Size of the object.
-	Nirvana::Size n_aligned_size ();
-	Nirvana::Size n_CDR_size ();
+	Nirvana::Size n_size ();
 
-	/// CDR alignment of the object.
+	/// Alignment of the object.
 	Nirvana::Size n_align ();
 
-	/// Is type meets CORBA CDR
-	boolean n_is_CDR ();
-
 	/// Call the default constructor.
+	/// 
+	/// \param p Target memory place.
 	void n_construct (in Nirvana::Pointer p);
 
 	/// Destroy the object.
+	/// 
+	/// \param p Pointer to object.
+	/// 
 	void n_destruct (in Nirvana::Pointer p);
 
 	/// Call copy constructor.
+	/// 
+	/// \param dst Target memory place.
+	/// \param src Source object.
+	/// 
 	void n_copy (in Nirvana::Pointer dst, in Nirvana::ConstPointer src);
 
 	/// Call move constructor. Fallbacks to copy constructor if no move constructor exists.
+	/// 
+	/// \param dst Target memory place.
+	/// \param src Source object.
+	/// 
 	void n_move (in Nirvana::Pointer dst, in Nirvana::Pointer src);
 
+	/// Marshal input.
+	/// 
+	/// \param src Pointer to the array of objects.
+	/// \param count Count of objects to marshal.
+	/// \param iorq Interoperable request.
+	/// 
 	void n_marshal_in (in Nirvana::ConstPointer src, in Nirvana::Size count, in Internal::IORequest iorq);
+
+	/// Marshal output.
+	/// 
+	/// \param src Pointer to the array of objects.
+	/// \param count Count of objects to marshal.
+	/// \param iorq Interoperable request.
+	/// 
 	void n_marshal_out (in Nirvana::Pointer src, in Nirvana::Size count, in Internal::IORequest iorq);
+
+	/// Unmarshal.
+	/// 
+	/// \param iorq Interoperable request.
+	/// \param count Count of objects to unmarshal.
+	/// \param src Pointer to the array of objects.
+	/// 
 	void n_unmarshal (in Internal::IORequest iorq, in Nirvana::Size count, in Nirvana::Pointer dst);
-	void n_byteswap (in Nirvana::Pointer src, in Nirvana::Size count);
 
 	///@}
 };

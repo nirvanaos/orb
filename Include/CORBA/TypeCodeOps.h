@@ -41,24 +41,14 @@ public:
 	typedef typename std::conditional <std::is_same <T, Boolean>::value,
 		Type <Boolean>::ABI, typename Type <T>::Var>::type Var;
 
-	static size_t _s_n_aligned_size (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_size (Bridge <TypeCode>*, Interface*)
 	{
 		return sizeof (Var);
 	}
 
-	static size_t _s_n_CDR_size (Bridge <TypeCode>*, Interface*)
-	{
-		return Type <T>::CDR_size;
-	}
-
 	static size_t _s_n_align (Bridge <TypeCode>*, Interface*)
 	{
-		return Type <T>::CDR_align;
-	}
-
-	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>*, Interface*)
-	{
-		return Type <T>::is_CDR;
+		return alignof (Var);
 	}
 
 	static void n_construct (void* p)
@@ -109,15 +99,6 @@ public:
 		Type <T>::unmarshal_a (rq, count, reinterpret_cast <Var*> (dst));
 	}
 
-	static void n_byteswap (void* p, size_t count)
-	{
-		if (Type <T>::is_CDR) {
-			check_pointer (p);
-			for (Var* pv = (Var*)p, *end = pv + count; pv != end; ++pv)
-				Type <T>::byteswap (*pv);
-		}
-	}
-
 private:
 	static void check (const void* p, size_t count);
 };
@@ -136,12 +117,7 @@ class TypeCodeOps <void>
 public:
 	typedef void Valtype;
 
-	static size_t _s_n_aligned_size (Bridge <TypeCode>*, Interface*)
-	{
-		return 0;
-	}
-
-	static size_t _s_n_CDR_size (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_size (Bridge <TypeCode>*, Interface*)
 	{
 		return 0;
 	}
@@ -149,11 +125,6 @@ public:
 	static size_t _s_n_align (Bridge <TypeCode>*, Interface*)
 	{
 		return 1;
-	}
-
-	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>*, Interface*)
-	{
-		return true;
 	}
 
 	static void _s_n_construct (Bridge <TypeCode>*, void*, Interface*)
@@ -178,9 +149,6 @@ public:
 
 	static void _s_n_unmarshal (Bridge <TypeCode>*, Interface*, size_t,
 		void*, Interface*)
-	{}
-
-	static void _s_n_byteswap (Bridge <TypeCode>*, void*, size_t, Interface*)
 	{}
 };
 

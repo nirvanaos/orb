@@ -38,12 +38,7 @@ template <size_t size>
 class FixedOps
 {
 public:
-	static size_t _s_n_aligned_size (Bridge <TypeCode>*, Interface*)
-	{
-		return size;
-	}
-
-	static size_t _s_n_CDR_size (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_size (Bridge <TypeCode>*, Interface*)
 	{
 		return size;
 	}
@@ -51,11 +46,6 @@ public:
 	static size_t _s_n_align (Bridge <TypeCode>*, Interface*)
 	{
 		return 1;
-	}
-
-	static Type <Boolean>::ABI_ret _s_n_is_CDR (Bridge <TypeCode>*, Interface*)
-	{
-		return true;
 	}
 
 	static void n_construct (void* p)
@@ -90,9 +80,6 @@ public:
 			BCD_check (p, size);
 		}
 	}
-
-	static void _s_n_byteswap (Bridge <TypeCode>*, void*, size_t, Interface*)
-	{}
 };
 
 template <size_t size>
@@ -149,7 +136,6 @@ public:
 	}
 
 	using Ops::_s_n_destruct;
-	using Ops::_s_n_byteswap;
 };
 
 template <uint16_t digits, int16_t scale> inline
