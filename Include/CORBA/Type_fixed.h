@@ -41,6 +41,7 @@ struct Type <IDL::Fixed <digits, scale> > :
 	public TypeByRefCheck <IDL::Fixed <digits, scale> >
 {
 	static const bool is_CDR = true;
+	static const bool is_CDR_seq = true;
 	static const bool has_check = true;
 	static const bool is_var_len = false;
 

@@ -47,6 +47,7 @@ struct TypeVarLen :
 {
 	static const bool is_var_len = true;
 	static const bool is_CDR = false;
+	static const bool is_CDR_seq = false;
 	static const bool has_check = true;
 
 	typedef TypeByRef <T, TABI> Base;

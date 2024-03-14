@@ -65,13 +65,12 @@ template <> struct Type <T>
   /// Variable-length types have non-trivial constructor and destructor.
   static const bool is_var_len;
 
-  /// `true` if the data type meets the CORBA Common Data Representation.
-  ///
-  /// is_CDR = `true` for all fixed-length data types, except for:
-  /// - union
-  /// - wchar
-  /// - A struct that contains a member whose type is not CDR
+  /// `true` if the data type meets the CORBA Common Data Representation for any alignment.
   static const bool is_CDR;
+
+  /// `true` if the data type meets the CORBA Common Data Representation in sequence
+  /// (start alignment is 4).
+  static const bool is_CDR_seq;
 
   /// Size of data in Common Data Representation.
   /// CDR_size <= sizeof (T).

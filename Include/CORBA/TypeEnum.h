@@ -51,6 +51,7 @@ struct TypeEnum : TypeByValCheck <T, ABI_enum>
 	typedef typename Base::ABI_ret ABI_ret;
 
 	static const bool is_CDR = true;
+	static const bool is_CDR_seq = true;
 
 	static void check (ABI val)
 	{

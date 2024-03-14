@@ -40,8 +40,9 @@ struct MarshalHelper
 	static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq);
 	static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq);
 	static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst);
-	
-	static void byteswap (Var& v)
+
+	/// Empty void byteswap (Var& v) to avoid compilation errors.
+	static void byteswap (Var& v) noexcept
 	{}
 };
 

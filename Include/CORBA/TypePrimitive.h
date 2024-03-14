@@ -98,6 +98,7 @@ struct TypePrimitive :
 	public TypeFixLen <T, false>
 {
 	static const bool is_CDR = true;
+	static const bool is_CDR_seq = true;
 	static const bool is_var_len = false;
 
 	static void byteswap (T& v) noexcept
@@ -110,7 +111,8 @@ template <>
 struct TypePrimitive <Char> :
 	public TypeByValCheck <Char>
 {
-	static const bool is_CDR = false;
+	static const bool is_CDR = true;
+	static const bool is_CDR_seq = true;
 
 	static void check (const Char& c)
 	{
@@ -133,6 +135,7 @@ struct TypePrimitive <WChar> :
 	public TypeByVal <WChar>
 {
 	static const bool is_CDR = false;
+	static const bool is_CDR_seq = false;
 
 	inline static void marshal_in (const WChar& src, IORequest_ptr rq);
 	inline static void marshal_in_a (const WChar* src, size_t count, IORequest_ptr rq);
@@ -154,6 +157,7 @@ struct TypePrimitive <Boolean> :
 	public TypeByVal <Boolean, Octet>
 {
 	static const bool is_CDR = true;
+	static const bool is_CDR_seq = true;
 
 	class C_inout
 	{

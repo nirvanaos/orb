@@ -58,6 +58,7 @@ struct Type <SystemException::_Data> : TypeFixLen <SystemException::_Data,
 	false // Do not check system exception data
 > {
 	static const bool is_CDR = true;
+	static const bool is_CDR_seq = true;
 
 	static void byteswap (Var& v) noexcept
 	{

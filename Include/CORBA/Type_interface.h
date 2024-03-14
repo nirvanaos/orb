@@ -273,6 +273,7 @@ template <class I>
 struct TypeItfBase
 {
 	static const bool is_CDR = false;
+	static const bool is_CDR_seq = false;
 	static const bool is_var_len = true;
 	static const size_t CDR_size = sizeof (void*);
 	static const size_t CDR_align = alignof (void*);

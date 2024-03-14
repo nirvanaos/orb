@@ -38,7 +38,7 @@ template <typename T>
 void Type <Sequence <T> >::marshal_in (const Var& src, IORequest_ptr rq)
 {
 	typedef typename Type <T>::ABI T_ABI;
-	if (Type <T>::is_CDR) {
+	if (Type <T>::is_CDR_seq) {
 		size_t zero = 0;
 		rq->marshal_seq (Type <T>::CDR_align, sizeof (T_ABI), Type <T>::CDR_size, src.size (),
 			(void*)src.data (), zero);
@@ -52,7 +52,7 @@ template <typename T>
 void Type <Sequence <T> >::marshal_out (Var& src, IORequest_ptr rq)
 {
 	typedef typename Type <T>::ABI T_ABI;
-	if (Type <T>::is_CDR) {
+	if (Type <T>::is_CDR_seq) {
 		rq->marshal_seq (Type <T>::CDR_align, sizeof (T_ABI), Type <T>::CDR_size, src.size (),
 			src.data (), static_cast <ABI&> (src).allocated);
 		if (!static_cast <ABI&> (src).allocated)
@@ -67,7 +67,7 @@ template <typename T>
 void Type <Sequence <T> >::unmarshal (IORequest_ptr rq, Var& dst)
 {
 	typedef typename Type <T>::ABI T_ABI;
-	if (Type <T>::is_CDR) {
+	if (Type <T>::is_CDR_seq) {
 		ABI& abi = (ABI&)dst;
 		bool swap_bytes = rq->unmarshal_seq (Type <T>::CDR_align, sizeof (T_ABI), Type <T>::CDR_size,
 			abi.size, (void*&)abi.ptr, abi.allocated);
