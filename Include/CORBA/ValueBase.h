@@ -87,8 +87,8 @@ public:
 
 	Type <ValueBase>::VRet _copy_value ();
 	ULong _refcount_value ();
-	void _marshal (I_ptr <IORequest> rq);
-	void _unmarshal (I_ptr <IORequest> rq);
+	void _marshal (IORequest_ptr rq);
+	void _unmarshal (IORequest_ptr rq);
 
 	/// This method does not increment reference counter
 	I_ptr <Interface> _query_valuetype (String_in type_id);
@@ -120,7 +120,7 @@ Type <ValueBase>::VRet Client <T, ValueBase>::_copy_value ()
 }
 
 template <class T>
-void Client <T, ValueBase>::_marshal (I_ptr <IORequest> rq)
+void Client <T, ValueBase>::_marshal (IORequest_ptr rq)
 {
 	Environment _env;
 	Bridge <ValueBase>& _b (T::_get_bridge (_env));
@@ -129,7 +129,7 @@ void Client <T, ValueBase>::_marshal (I_ptr <IORequest> rq)
 }
 
 template <class T>
-void Client <T, ValueBase>::_unmarshal (I_ptr <IORequest> rq)
+void Client <T, ValueBase>::_unmarshal (IORequest_ptr rq)
 {
 	Environment _env;
 	Bridge <ValueBase>& _b (T::_get_bridge (_env));
