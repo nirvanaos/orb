@@ -85,9 +85,20 @@ public:
 	void _remove_ref ();
 #endif
 
+	/// Used to make a deep copy of the valuetype instance. The copy has no connections with
+	/// the original instance and has a lifetime independent of that of the original.
 	Type <ValueBase>::VRet _copy_value ();
+	
+	/// Returns the value of the reference count for the valuetype instance on which it is
+	/// invoked.
 	ULong _refcount_value ();
+
+	/// Marshal value data to the interoperable request.
+	/// This operation may not issue inter-domain calls.
 	void _marshal (IORequest_ptr rq);
+
+	/// Unmarshal value data from the interoperable request.
+	/// This operation may issue inter-domain calls.
 	void _unmarshal (IORequest_ptr rq);
 
 	/// This method does not increment reference counter
