@@ -66,6 +66,12 @@ public:
 		return static_cast <S&> (*bridge);
 	}
 
+	template <class I>
+	static const S& _implementation (const Bridge <I>* bridge)
+	{
+		return S::_implementation (const_cast <Bridge <I>*> (bridge));
+	}
+
 	template <class Base, class Derived>
 	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id,
 		Interface* env) noexcept

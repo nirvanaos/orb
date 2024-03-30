@@ -52,6 +52,12 @@ protected:
 	{
 		return *this;
 	}
+
+	const Bridge <I>& _get_bridge (Environment&) const noexcept
+	{
+		return *this;
+	}
+
 };
 
 //! Primary interface client implementation.
@@ -114,6 +120,12 @@ protected:
 			::Nirvana::throw_INV_OBJREF ();
 		return *ret;
 	}
+
+	const Bridge <Base>& _get_bridge (Environment& env) const
+	{
+		return const_cast <ClientBaseNoPtr <Primary, Base>&> (*this)._get_bridge (env);
+	}
+
 };
 
 /// Add conversion to I_ptr <Base>

@@ -44,6 +44,13 @@ public:
 		check_pointer (bridge, Skeleton <ServantPOA <I>, I>::epv_.header);
 		return static_cast <ServantPOA <I>&> (*bridge);
 	}
+
+	template <class I>
+	static const ServantPOA <I>& _implementation (const Bridge <I>* bridge)
+	{
+		return _implementation (const_cast <Bridge <I>*> (bridge));
+	}
+
 };
 
 }
