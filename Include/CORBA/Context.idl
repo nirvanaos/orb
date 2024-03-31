@@ -10,31 +10,122 @@ module CORBA {
 
 typeprefix CORBA "omg.org";
 
+/// A Context object represents a collection of property values.
+/// 
+/// Context objects may be connected into hierarchies; properties defined in child Context objects
+/// lower in the hierarchy override properties in parent Context objects higher in the hierarchy.
+/// 
 pseudo interface _Context
 {
-  void set_one_value (
-    in Identifier  prop_name,	// property name to add
-    in string	        value		// property value to add
-  );
-  void set_values (
-    in NVList	values		        // property values to be changed
-  );
-  void get_values (
-    in Identifier 	start_scope,    // search scope
-    in Flags	        op_flags,  	// operation flags
-    in Identifier 	prop_name,	// name of property(s) to retrieve
-    out NVList	values	   	// requested property(s)
-  );
-  void delete_values (
-    in Identifier	prop_name	// name of property(s) to delete
-  );
-  void create_child (
-    in Identifier	ctx_name,	 // name of context object
-    out _Context 	child_ctx	 // newly created context object
-  );
-  void delete (
-    in Flags	        del_flags	 // flags controlling deletion
-  );
+  /// This operation sets a single context object property. 
+  /// If prop_name is the empty string or contains the character '*', the
+  /// operation raises BAD_PARAM with minor code 35.
+  /// 
+  /// \param prop_name Property name to add.
+  /// \param value Property value to add.
+  /// 
+  void set_one_value (in Identifier prop_name, in string value);
+
+  /// This operation sets one or more property values in its context object. If a property name
+  /// appears more than once in the `NVList`, the value with higher index (later in the list)
+  /// overwrites the value with lower index.
+  /// 
+  /// The flags field of each passed `NVList` element must be zero.A non - zero flag in any of the
+  /// `NVList` elements raises `INV_FLAGS`.
+  /// 
+  /// The property name of each `NVList` element must be a non - empty string not containing the
+  /// character '*'. Otherwise the operation raises `BAD_PARAM` with minor code 35.
+  /// 
+  /// The value of each property of the passed `NVList` must be a (possibly empty) unbounded string.
+  /// Property values other than unbounded strings raise `BAD_TYPECODE` with minor code 3.
+  /// 
+  /// \param values Property values to be changed.
+  void set_values (in NVList values);
+
+  /// This operation returns an NVList with those properties that match the \p prop_name parameter.
+  /// 
+  /// \param start_scope Search scope.
+  /// 
+  /// The \p start_scope parameter controls the context object level at which to initiate the
+  /// search for the specified properties as follows:
+  ///   - The \p start_scope parameter specifies the name of the context object in which the search
+  ///     for properties is to start.
+  /// 
+  ///   - If the context object on which `get_values` is invoked has a name equal to \p start_scope,
+  ///     that context object becomes the starting context object for the search.
+  /// 
+  ///   - If \p start_scope is "" the context object on which get_values is invoked becomes the
+  ///     starting context object for the search.
+  /// 
+  ///       - If the context object on which get_values is invoked does not have a name equal to
+  ///         \p start_scope (and \p start_scope is not ""), the parent context object is retrieved
+  ///         and its name compared to start_scope; this process repeats until either a starting
+  ///         context object whose name equals start_scope is found, or the search terminates
+  ///         because it runs out of parent objects.
+  /// 
+  ///         The name of the root context object created by `get_default_context` is "RootContext".
+  ///         If no starting context object can be found, the operation raises `BAD_CONTEXT` with
+  ///         minor code 1.
+  /// 
+  ///       - Once a starting context object is found, `get_values` searches for properties in the
+  ///         matching context object.
+  /// 
+  ///       - If \p op_flags is `CORBA::CTX_RESTRICT_SCOPE`, `get_values` searches only the
+  ///         starting context object for properties that match prop_name. (The value of
+  ///         CTX_RESTRICT_SCOPE is 15.)
+  /// 
+  ///   - If \p op_flags is zero, `get_values` searches the starting context and its parent
+  ///     contexts for properties that match \p prop_name. The property values that are returned
+  ///     are taken from the first context object in which they are found, so properties in child
+  ///     contexts override the values of properties in parent contexts.
+  /// 
+  /// \param op_flags Operation flags.
+  /// 
+  /// \param prop_name Name of property(s) to retrieve.
+  /// 
+  /// \param [out] values Requested property(s).
+  void get_values (in Identifier start_scope, in Flags op_flags, in Identifier prop_name,
+    out NVList values);
+
+  /// This operation deletes the properties that match \p prop_name.
+  /// 
+  /// \param prop_name Name of property(s) to delete.
+  /// 
+  ///   \p prop_name may have a trailing '*' character, in which case all properties whose name
+  ///   matches the specified prefix are deleted.
+  /// 
+  ///   If no property name matches \p prop_name, the operation raises `BAD_CONTEXT` with minor
+  ///   code 2.
+  void delete_values (in Identifier prop_name);
+
+  /// This operation creates an empty child context object. The child context has the name
+  /// \p ctx_name.
+  /// 
+  /// \param ctx_name Name of context object.
+  /// 
+  ///   ctx_name may not be the empty string or "RootContext"; otherwise, the operation raises
+  ///   `BAD_PARAM` with minor code 37. Calling create_child more than once with the same name
+  ///    on the same parent context is legal and results in the creation of a new, empty child
+  ///    context for each call.
+  /// 
+  /// \param child_ctx Newly created context object.
+  void create_child (in Identifier ctx_name, out _Context child_ctx);
+
+  /// This operation deletes the context object on which it is invoked:
+  /// 
+  /// \param del_flags Flags controlling deletion.
+  /// 
+  ///   - If del_flags is zero, the context object is deleted only if it has no child contexts;
+  ///     otherwise, if del_flags is zero and the context object has child contexts, the operation
+  ///     raises `BAD_PARAM` with minor code 38.
+  /// 
+  ///   - If del_flags is `CORBA::CTX_DELETE_DESCENDANTS`, the context object on which delete is
+  ///     invoked is destroyed, together with (recursively) its child contexts.
+  ///     The value of CTX_DELETE_DESCENDANTS is 1.
+  /// 
+  ///   If del_flags has a value other than zero or `CTX_DELETE_DESCENDANTS`,
+  ///   the operation raises `INV_FLAGS`.
+  void delete (in Flags del_flags);
 };
 
 };
