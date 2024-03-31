@@ -9,14 +9,11 @@
 
 #pragma prefix "omg.org"
 #include "TimeBase.idl"
-#include "IOP.idl"
 #include "Policy.idl"
 
 module FT {
 
-#ifndef _PRE_3_0_COMPILER_
 typeprefix FT "omg.org";
-#endif // _PRE_3_0_COMPILER_
 
 // Specification for Transport Heartbeats
 const CORBA::PolicyType HEARTBEAT_POLICY = 48;

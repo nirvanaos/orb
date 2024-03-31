@@ -103,7 +103,8 @@ abstract valuetype Poller : CORBA::Pollable
 	attribute ReplyHandler associated_handler;
 	readonly attribute boolean is_from_poller;
 
-	CORBA::Internal::IORequest get_reply (in unsigned long timeout,
+	// Nirvana extension
+	CORBA::Internal::IORequest n_get_reply (in unsigned long timeout,
 		in OperationIndex op) raises (CORBA::WrongTransaction);
 };
 

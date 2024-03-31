@@ -64,7 +64,7 @@ public:
 	template <class ... Ex>
 	IORequest::_ref_type _get_reply (uint32_t timeout, UShort op_idx) const
 	{
-		IORequest::_ref_type rq = aggregate_.itf ()->get_reply (timeout, _make_op_idx (op_idx));
+		IORequest::_ref_type rq = aggregate_.itf ()->n_get_reply (timeout, _make_op_idx (op_idx));
 		check_request (rq, ExceptionSet <Ex...>::entries (), sizeof... (Ex));
 		return rq;
 	}

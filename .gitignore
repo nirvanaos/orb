@@ -24,8 +24,6 @@
 /Include/CORBA/Policy_s.h
 /Include/CORBA/Dynamic.h
 /Include/CORBA/Dynamic_s.h
-/Include/CORBA/IOP.h
-/Include/CORBA/IOP_s.h
 /Include/CORBA/Messaging.h
 /Include/CORBA/Messaging_s.h
 /Include/CORBA/Pollable.h
