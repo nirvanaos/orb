@@ -112,9 +112,9 @@ pseudo interface SFloat16
 	SFloatExc lt (in FloatIEEE x, in FloatIEEE y, out boolean res);
 };
 
-const SFloat4 g_sfloat4;
-const SFloat8 g_sfloat8;
-const SFloat16 g_sfloat16;
+const SFloat4 sfloat_4;
+const SFloat8 sfloat_8;
+const SFloat16 sfloat_16;
 
 };
 };

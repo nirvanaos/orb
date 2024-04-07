@@ -38,16 +38,16 @@ namespace CORBA {
 namespace Internal {
 
 template <typename C>
-size_t string_len (const C* s);
+size_t string_len (const C* s) noexcept;
 
 template <> inline
-size_t string_len (const Char* s)
+size_t string_len (const Char* s) noexcept
 {
 	return strlen (s);
 }
 
 template <> inline
-size_t string_len (const WChar* s)
+size_t string_len (const WChar* s) noexcept
 {
 	const WChar* p = s;
 	while (*p)
@@ -69,36 +69,20 @@ class StringView : private ABI <StringT <C> >
 public:
 	StringView (const StringView& s) noexcept
 	{
-		size_t size;
-		const C* p;
-		if (s.is_large ()) {
-			size = s.large_size ();
-			p = s.large_pointer ();
-		} else {
-			size = s.small_size ();
-			p = s.small_pointer ();
-		}
-		ABI::large_pointer (const_cast <C*> (p));
-		ABI::large_size (size);
+		PS ps (s);
+		ABI::large_pointer (const_cast <C*> (ps.p));
+		ABI::large_size (ps.size);
 		ABI::allocated (0);
 	}
 
 	template <ULong bound1>
 	StringView (const StringView <C, bound1>& s)
 	{
-		size_t size;
-		const C* p;
-		if (s.is_large ()) {
-			size = s.large_size ();
-			p = s.large_pointer ();
-		} else {
-			size = s.small_size ();
-			p = s.small_pointer ();
-		}
-		if (bound && (!bound1 || bound1 > bound) && size > bound)
+		PS ps (s);
+		if (bound && (!bound1 || bound1 > bound) && ps.size > bound)
 			Nirvana::throw_BAD_PARAM ();
-		ABI::large_pointer (const_cast <C*> (p));
-		ABI::large_size (size);
+		ABI::large_pointer (const_cast <C*> (ps.p));
+		ABI::large_size (ps.size);
 		ABI::allocated (0);
 	}
 
@@ -165,6 +149,12 @@ public:
 		return ABI::size ();
 	}
 
+	bool operator == (const StringView& rhs) const noexcept
+	{
+		PS ps (*this), psr (rhs);
+		return ps.size == psr.size && std::equal (ps.p, ps.p + ps.size, psr.p);
+	}
+
 protected:
 	StringView ()
 	{}
@@ -174,6 +164,24 @@ private:
 	{
 		return string_len (s);
 	}
+
+	struct PS
+	{
+		const C* p;
+		size_t size;
+
+		PS (const StringView& s)
+		{
+			if (s.is_large ()) {
+				size = s.large_size ();
+				p = s.large_pointer ();
+			} else {
+				size = s.small_size ();
+				p = s.small_pointer ();
+			}
+		}
+	};
+
 };
 
 template <typename C, ULong bound>
