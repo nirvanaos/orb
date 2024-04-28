@@ -62,6 +62,9 @@ public:
 	}
 
 protected:
+	ImplementationLocal ()
+	{}
+
 	ImplementationLocal (Object::_ptr_type comp) :
 		ValueImpl <S, LocalObject> (comp)
 	{}

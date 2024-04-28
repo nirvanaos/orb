@@ -63,11 +63,13 @@ public:
 
 	virtual Type <InterfaceDef>::VRet _get_interface () override
 	{
-		_create_proxy ();
 		return LocalObjectLink::core_object_->_get_interface ();
 	}
 
-	virtual Boolean _is_a (String_in type_id) override;
+	virtual Boolean _is_a (String_in type_id) override
+	{
+		return LocalObjectLink::core_object_->_is_a (type_id);
+	}
 	
 	virtual Boolean _non_existent () override
 	{
@@ -92,18 +94,19 @@ protected:
 
 	virtual void _add_ref () override
 	{
-		_create_proxy ();
 		LocalObjectLink::_add_ref ();
 	}
 
 	virtual void _remove_ref () override
 	{
-		_create_proxy ();
 		LocalObjectLink::_remove_ref ();
 	}
 
 public:
-	virtual ULong _refcount_value () override;
+	virtual ULong _refcount_value () override
+	{
+		return LocalObjectLink::_refcount_value ();
+	}
 
 protected:
 	/// \brief Obtain `Object` interface pointer.
@@ -127,19 +130,18 @@ protected:
 		ServantPOA ()
 	{}
 
-	void _create_proxy ();
+	virtual ~ServantPOA ()
+	{}
+
+	virtual Type <Interface>::VRet _get_proxy () override
+	{
+		return LocalObjectLink::_get_proxy ();
+	}
 
 	void _create_proxy (Object::_ptr_type comp)
 	{
 		LocalObjectLink::_create_proxy (comp);
 	}
-
-	virtual Type <Interface>::VRet _get_proxy () override
-	{
-		_create_proxy ();
-		return LocalObjectLink::_get_proxy ();
-	}
-
 };
 
 }

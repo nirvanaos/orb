@@ -60,17 +60,19 @@ public:
 	}
 
 protected:
-	ValueImpl (Object::_ptr_type comp) :
+	ValueImpl () :
 		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_)
+	{}
+
+	ValueImpl (Object::_ptr_type comp) :
+		ValueImpl ()
 	{
 		_create_proxy (comp);
 	}
 
 	ValueImpl (const ValueImpl&) :
-		ServantBaseLink (Skeleton <S, PortableServer::ServantBase>::epv_)
-	{
-		_create_proxy (nullptr);
-	}
+		ValueImpl ()
+	{}
 
 	ValueImpl& operator = (const ValueImpl&) noexcept
 	{

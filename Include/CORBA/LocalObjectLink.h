@@ -60,18 +60,18 @@ protected:
 #endif
 	template <class, class> friend class Facet;
 
-	void _add_ref () const
+	void _add_ref ()
 	{
 		core_object ()->_add_ref ();
 	}
 
-	void _remove_ref () const
+	void _remove_ref ()
 	{
 		core_object ()->_remove_ref ();
 	}
 
 public:
-	ULong _refcount_value () const
+	ULong _refcount_value ()
 	{
 		return core_object ()->_refcount_value ();
 	}
@@ -89,7 +89,7 @@ protected:
 	Object::_ptr_type _object ();
 
 public:
-	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) const noexcept
+	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env)
 	{
 		return get_object_from_core (core_object (), iid, env);
 	}
@@ -100,6 +100,7 @@ protected:
 	{}
 
 	LocalObjectLink (const LocalObjectLink&) = delete;
+
 	LocalObjectLink& operator = (const LocalObjectLink&)
 	{
 		return *this; // Do nothing
@@ -117,11 +118,7 @@ protected:
 	}
 
 protected:
-	LocalObject::_ptr_type core_object () const noexcept
-	{
-		assert (core_object_);
-		return core_object_;
-	}
+	LocalObject::_ptr_type core_object ();
 
 protected:
 	I_ref <LocalObject> core_object_;

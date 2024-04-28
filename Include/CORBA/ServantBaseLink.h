@@ -96,18 +96,18 @@ protected:
 #endif
 	template <class, class> friend class Facet;
 
-	void _add_ref () const
+	void _add_ref ()
 	{
 		core_object ()->_add_ref ();
 	}
 
-	void _remove_ref () const
+	void _remove_ref ()
 	{
 		core_object ()->_remove_ref ();
 	}
 
 public:
-	ULong _refcount_value () const
+	ULong _refcount_value ()
 	{
 		return core_object ()->_refcount_value ();
 	}
@@ -130,6 +130,7 @@ protected:
 	{}
 
 	ServantBaseLink (const ServantBaseLink&) = delete;
+
 	ServantBaseLink& operator = (const ServantBaseLink&)
 	{
 		return *this; // Do nothing
@@ -147,11 +148,7 @@ protected:
 	}
 
 private:
-	I_ptr <PortableServer::ServantBase> core_object () const noexcept
-	{
-		assert (core_object_);
-		return core_object_;
-	}
+	I_ptr <PortableServer::ServantBase> core_object ();
 
 private:
 	I_ref <PortableServer::ServantBase> core_object_;

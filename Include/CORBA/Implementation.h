@@ -64,6 +64,9 @@ public:
 	}
 
 protected:
+	Implementation ()
+	{}
+
 	Implementation (Object::_ptr_type comp) :
 		ValueImpl <S, PortableServer::ServantBase> (comp)
 	{}

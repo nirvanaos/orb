@@ -59,17 +59,18 @@ public:
 #endif
 		<PortableServer::POA> _default_POA ()
 	{
-		_create_proxy ();
 		return ServantBaseLink::_default_POA ();
 	}
 
 	virtual Type <InterfaceDef>::VRet _get_interface ()
 	{
-		_create_proxy ();
 		return ServantBaseLink::_get_interface ();
 	}
 
-	virtual Boolean _is_a (String_in type_id);
+	virtual Boolean _is_a (String_in type_id)
+	{
+		return ServantBaseLink::_is_a (type_id);
+	}
 
 	virtual Boolean _non_existent ()
 	{
@@ -87,18 +88,19 @@ protected:
 
 	virtual void _add_ref () override
 	{
-		_create_proxy ();
 		ServantBaseLink::_add_ref ();
 	}
 
 	virtual void _remove_ref () override
 	{
-		_create_proxy ();
 		ServantBaseLink::_remove_ref ();
 	}
 
 public:
-	virtual ULong _refcount_value () override;
+	virtual ULong _refcount_value () override
+	{
+		return ServantBaseLink::_refcount_value ();
+	}
 
 protected:
 	virtual void _delete_object () noexcept
@@ -116,16 +118,8 @@ protected:
 	virtual ~ServantPOA ()
 	{}
 
-	void _create_proxy ();
-
-	void _create_proxy (Object::_ptr_type comp)
-	{
-		ServantBaseLink::_create_proxy (comp);
-	}
-
 	virtual Type <Interface>::VRet _get_proxy ()
 	{
-		_create_proxy ();
 		return ServantBaseLink::_get_proxy ();
 	}
 
