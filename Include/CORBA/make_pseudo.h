@@ -32,7 +32,7 @@
 namespace CORBA {
 
 template <class S, class ... Args>
-Internal::I_ref <typename S::PrimaryInterface> make_pseudo (Args ... args)
+Internal::I_ref <typename S::PrimaryInterface> make_pseudo (Args&& ... args)
 {
 	typedef typename S::PrimaryInterface I;
 	return Internal::I_ref <I> (static_cast <I*> (&(new S (std::forward <Args> (args)...))->_get_ptr ()));

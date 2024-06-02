@@ -39,10 +39,10 @@ template <class T>
 class servant_reference;
 
 template <class T, class ... Args>
-servant_reference <T> make_reference (Args ...);
+servant_reference <T> make_reference (Args&& ...);
 
 template <class T, class ... Args>
-servant_reference <T> make_stateless (Args ...);
+servant_reference <T> make_stateless (Args&& ...);
 
 /// Servant reference.
 /// 
@@ -242,10 +242,10 @@ private:
 	}
 
 	template <class T1, class ... Args> friend
-	servant_reference <T1> make_reference (Args ... args);
+	servant_reference <T1> make_reference (Args&& ... args);
 
 	template <class T1, class ... Args> friend
-	servant_reference <T1> make_stateless (Args ... args);
+	servant_reference <T1> make_stateless (Args&& ... args);
 
 protected:
 	T* p_;
@@ -296,7 +296,7 @@ private:
 /// \param ...args Servant constructor parameters.
 /// \returns Servant reference.
 template <class T, class ... Args> inline
-servant_reference <T> make_reference (Args ... args)
+servant_reference <T> make_reference (Args&& ... args)
 {
 	return servant_reference <T> (new T (std::forward <Args> (args)...), false);
 }

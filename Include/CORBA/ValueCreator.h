@@ -43,7 +43,7 @@ class ImplCopy final : public T
 {
 public:
 	template <class ... Args>
-	ImplCopy (Args ... args) :
+	ImplCopy (Args&& ... args) :
 		T (std::forward <Args> (args)...)
 	{}
 
@@ -61,7 +61,7 @@ class ImplRefCnt final :
 {
 public:
 	template <class ... Args>
-	ImplRefCnt (Args ... args) :
+	ImplRefCnt (Args&& ... args) :
 		T (std::forward <Args> (args)...)
 	{}
 
@@ -74,7 +74,7 @@ class ImplRefCntCopy final :
 {
 public:
 	template <class ... Args>
-	ImplRefCntCopy (Args ... args) :
+	ImplRefCntCopy (Args&& ... args) :
 		T (std::forward <Args> (args)...)
 	{}
 

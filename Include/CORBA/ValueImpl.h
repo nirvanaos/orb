@@ -121,7 +121,7 @@ I_ptr <CORBA::ValueFactoryBase> get_factory () noexcept;
 #ifndef LEGACY_CORBA_CPP
 
 template <class S, class ... Args> inline
-servant_reference <S> create_value (Args ... args)
+servant_reference <S> create_value (Args&& ... args)
 {
 	return make_reference <S> (std::forward <Args> (args)...);
 }
@@ -129,7 +129,7 @@ servant_reference <S> create_value (Args ... args)
 #else
 
 template <class S, class ... Args> inline
-S* create_value (Args ... args)
+S* create_value (Args&& ... args)
 {
 	return new S (std::forward <Args> (args)...);
 }

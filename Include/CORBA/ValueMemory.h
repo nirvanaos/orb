@@ -34,7 +34,7 @@ namespace CORBA {
 
 template <class> class servant_reference;
 template <class T, class ... Args>
-servant_reference <T> make_reference (Args ... args);
+servant_reference <T> make_reference (Args&& ... args);
 
 namespace Internal {
 
@@ -46,7 +46,7 @@ public:
 #else
 protected:
 	template <class T1, class ... Args>
-	friend CORBA::servant_reference <T1> CORBA::make_reference (Args ... args);
+	friend CORBA::servant_reference <T1> CORBA::make_reference (Args&& ... args);
 #endif
 
 	void* operator new (size_t size)

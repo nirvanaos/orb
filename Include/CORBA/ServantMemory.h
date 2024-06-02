@@ -38,7 +38,7 @@ namespace CORBA {
 
 template <class> class servant_reference;
 template <class T, class ... Args>
-servant_reference <T> make_reference (Args ... args);
+servant_reference <T> make_reference (Args&& ... args);
 
 namespace Internal {
 
@@ -49,7 +49,7 @@ class ServantMemory : public DynamicExport
 public:
 #else
 	template <class T, class ... Args>
-	friend CORBA::servant_reference <T> CORBA::make_reference (Args ... args);
+	friend CORBA::servant_reference <T> CORBA::make_reference (Args&& ... args);
 protected:
 #endif
 

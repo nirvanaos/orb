@@ -62,7 +62,7 @@ inline bool is_free_sync_context ()
 /// \returns Servant reference.
 /// 
 template <class T, class ... Args>
-servant_reference <T> make_stateless (Args ... args)
+servant_reference <T> make_stateless (Args&& ... args)
 {
 	// Allocate temporary space for servant in stack
 	typename std::aligned_storage <sizeof (T), alignof (T)>::type tmp;

@@ -158,7 +158,7 @@ protected:
 }
 
 template <class S, class ... Args>
-Internal::I_ref <typename S::PrimaryInterface> make_pseudo (Args ... args);
+Internal::I_ref <typename S::PrimaryInterface> make_pseudo (Args&& ... args);
 
 namespace Internal {
 
@@ -300,7 +300,7 @@ protected:
 	friend class I_ret <I>;
 
 	template <class S, class ... Args> friend
-	I_ref <typename S::PrimaryInterface> CORBA::make_pseudo (Args ... args);
+	I_ref <typename S::PrimaryInterface> CORBA::make_pseudo (Args&& ... args);
 
 	// No add reference
 	I_ref (I* p) :
