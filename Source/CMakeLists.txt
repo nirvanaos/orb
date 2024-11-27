@@ -1,3 +1,35 @@
 target_sources(nirvana PRIVATE
 	2base.cpp
+	Any.cpp
+	CCMObjectImpl.cpp
+	EnvironmentImpl.cpp
+	Exception.cpp
+	ExceptionHolder.cpp
+	FindInterface.cpp
+	Interface.cpp
+	LifeCycleNone.cpp
+	local_core.cpp
+	LocalObjectLink.cpp
+	LocalObjectPOA.cpp
+	NoDefaultPOA.cpp
+	PollerBase.cpp
+	Receptacle.cpp
+	RefCountLink.cpp
+	RepId.cpp
+	RqProcWrapper.cpp
+	servant_core.cpp
+	ServantBaseLink.cpp
+	ServantBasePOA.cpp
+	ServantImpl.cpp
+	ServantStatic.cpp
+	set_exception.cpp
+	String_compat.cpp
+	SystemException.cpp
+	SystemExceptionTC.cpp
+	tc_constants.cpp
+	Type_fixed.cpp
+	TypeCodeImpl.cpp
+	UnknownUserException.cpp
+	ValueBasePOA.cpp
+	ValueImpl.cpp
 )
