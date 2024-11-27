@@ -24,6 +24,7 @@ target_sources(nirvana PRIVATE
 	ServantStatic.cpp
 	set_exception.cpp
 	String_compat.cpp
+	SoftFloat_impl.cpp
 	SystemException.cpp
 	SystemExceptionTC.cpp
 	tc_constants.cpp

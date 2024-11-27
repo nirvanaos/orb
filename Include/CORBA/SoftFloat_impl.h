@@ -31,7 +31,6 @@
 #include "SoftFloat.h"
 #include "TypeFixLen.h"
 #include <Nirvana/platform.h>
-#include <fenv.h>
 
 namespace CORBA {
 namespace Internal {
@@ -333,7 +332,7 @@ SoftFloat <16>::SoftFloat (const long double& val)
 		set_softfloat_exception_flags (sfloat_16->from_long_double (reinterpret_cast <const NativeLongDouble&> (val), bits_));
 	else {
 		// MSVC
-		static_assert (sizeof (long double) == sizeof (double), "sizeof (long double) == sizeof (double)");
+		assert (sizeof (long double) == sizeof (double));
 		set_softfloat_exception_flags (sfloat_16->from_double (reinterpret_cast <const NativeDouble&> (val), bits_));
 	}
 }
@@ -386,7 +385,7 @@ SoftFloat <16>::operator long double () const
 		set_softfloat_exception_flags (sfloat_16->to_long_double (bits_, reinterpret_cast <NativeLongDouble&> (ret)));
 	} else {
 		// MSVC
-		static_assert (sizeof (long double) == sizeof (double), "sizeof (long double) == sizeof (double)");
+		assert (sizeof (long double) == sizeof (double));
 		set_softfloat_exception_flags (sfloat_16->to_double (bits_, reinterpret_cast <NativeDouble&> (ret)));
 	}
 	return ret;
@@ -468,17 +467,6 @@ enum {
 	softfloat_flag_infinite = 8,
 	softfloat_flag_invalid = 16
 };
-
-static_assert (softfloat_flag_inexact == FE_INEXACT, "FE_INEXACT");
-static_assert (softfloat_flag_underflow == FE_UNDERFLOW, "FE_UNDERFLOW");
-static_assert (softfloat_flag_overflow == FE_OVERFLOW, "FE_OVERFLOW");
-static_assert (softfloat_flag_infinite == FE_DIVBYZERO, "FE_DIVBYZERO");
-static_assert (softfloat_flag_invalid == FE_INVALID, "FE_INVALID");
-
-inline void set_softfloat_exception_flags (unsigned f) noexcept
-{
-	feraiseexcept (f);
-}
 
 }
 }
