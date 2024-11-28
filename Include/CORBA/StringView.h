@@ -109,7 +109,7 @@ public:
 
 	StringView (const C* p, size_t cc);
 
-	StringView (nullptr_t)
+	StringView (std::nullptr_t)
 	{
 		ABI::reset ();
 	}

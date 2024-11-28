@@ -50,7 +50,7 @@ public:
 		p_ (nullptr)
 	{}
 
-	I_ref_base (nullptr_t) noexcept :
+	I_ref_base (std::nullptr_t) noexcept :
 		p_ (nullptr)
 	{}
 
@@ -89,7 +89,7 @@ public:
 		return *this;
 	}
 
-	I_ref_base& operator = (nullptr_t) noexcept
+	I_ref_base& operator = (std::nullptr_t) noexcept
 	{
 		release (p_);
 		p_ = nullptr;
@@ -172,7 +172,7 @@ public:
 	I_ref () noexcept
 	{}
 
-	I_ref (nullptr_t) noexcept :
+	I_ref (std::nullptr_t) noexcept :
 		Base (nullptr)
 	{}
 
@@ -266,7 +266,7 @@ public:
 		return *this;
 	}
 
-	I_ref& operator = (nullptr_t) noexcept
+	I_ref& operator = (std::nullptr_t) noexcept
 	{
 		Base::operator = (nullptr);
 		return *this;
@@ -323,7 +323,7 @@ public:
 	I_ref () noexcept
 	{}
 
-	I_ref (nullptr_t) noexcept :
+	I_ref (std::nullptr_t) noexcept :
 		Base (nullptr)
 	{}
 
@@ -384,7 +384,7 @@ public:
 		return *this;
 	}
 
-	I_ref& operator = (nullptr_t) noexcept
+	I_ref& operator = (std::nullptr_t) noexcept
 	{
 		Base::operator = (nullptr);
 		return *this;

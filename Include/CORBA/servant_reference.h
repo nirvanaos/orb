@@ -58,7 +58,7 @@ public:
 		p_ (nullptr)
 	{}
 
-	servant_reference (nullptr_t) noexcept :
+	servant_reference (std::nullptr_t) noexcept :
 		p_ (nullptr)
 	{}
 
@@ -102,7 +102,7 @@ public:
 		release ();
 	}
 
-	servant_reference& operator = (nullptr_t)
+	servant_reference& operator = (std::nullptr_t)
 	{
 		reset (nullptr);
 		return *this;
@@ -233,7 +233,7 @@ private:
 		}
 	}
 
-	void reset (nullptr_t)
+	void reset (std::nullptr_t)
 	{
 		if (p_) {
 			p_->_remove_ref ();

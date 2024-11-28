@@ -144,7 +144,7 @@ public:
 		return *this;
 	}
 
-	I_var& operator = (nullptr_t) noexcept
+	I_var& operator = (std::nullptr_t) noexcept
 	{
 		Base::operator = (nullptr);
 		return *this;
