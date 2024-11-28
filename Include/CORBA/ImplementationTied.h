@@ -157,7 +157,7 @@ public:
 	}
 
 	template <>
-	Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, Type <String>::ABI_in id,
+	static Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, Type <String>::ABI_in id,
 		Interface* env) noexcept
 	{
 		return BaseImpl::_implementation (derived)._get_object (id, env);
