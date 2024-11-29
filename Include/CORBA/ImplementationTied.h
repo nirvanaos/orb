@@ -156,7 +156,7 @@ public:
 		return nullptr;
 	}
 
-	template <>
+	//template <>
 	static Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, Type <String>::ABI_in id,
 		Interface* env) noexcept
 	{

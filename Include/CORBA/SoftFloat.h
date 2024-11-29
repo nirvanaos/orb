@@ -62,27 +62,20 @@ struct alignas (size <= 8 ? size : 8) FloatIEEE
 		std::fill_n (bits, WORD_CNT, 0);
 	}
 
-	template <size_t i>
-	Word get_bits () const noexcept
+	// Compiler should unroll the recursion
+	NIRVANA_CONSTEXPR20 Word get_bits (size_t i) const noexcept
 	{
+		Word ret = bits [i];
 		if (i == SIGN_INDEX)
-			return (bits [i] & ~SIGN) | get_bits <i - 1> ();
-		else
-			return bits [i] | get_bits <i - 1> ();
-	}
-
-	template <>
-	Word get_bits <0> () const noexcept
-	{
-		if (0 == SIGN_INDEX)
-			return bits [0] & ~SIGN;
-		else
-			return bits [0];
+			ret &= ~SIGN;
+		if (i > 0)
+			ret |= get_bits (i - 1);
+		return ret;
 	}
 
 	bool is_zero () const noexcept
 	{
-		return get_bits <WORD_CNT - 1> () == 0;
+		return get_bits (WORD_CNT - 1) == 0;
 	}
 
 	FloatIEEE negate () const noexcept
