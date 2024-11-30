@@ -27,8 +27,6 @@
 #define NIRVANA_ORB_MAKE_STATELESS_H_
 #pragma once
 
-#include "core_objects.h"
-
 #ifndef NIRVANA_PROCESS
 
 #include "ObjectFactoryInc.h"

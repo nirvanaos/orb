@@ -36,5 +36,13 @@ Interface::_ptr_type get_proxy (PortableServer::Servant core_object)
 	return proxy;
 }
 
+Bridge <Object>* get_object_from_core (PortableServer::Servant core_object,
+	Type <String>::ABI_in iid, Interface* env) noexcept
+{
+	return static_cast <Bridge <Object>*> (
+		core_object->_epv ().epv.query_interface (
+			static_cast <Bridge <PortableServer::ServantBase>*> (&core_object), iid, env));
+}
+
 }
 }

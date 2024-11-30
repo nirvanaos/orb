@@ -112,6 +112,11 @@ public:
 		return core_object ()->_refcount_value ();
 	}
 
+	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) noexcept
+	{
+		return get_object_from_core (core_object (), iid, env);
+	}
+
 protected:
 	/// \brief Obtain `Object` interface pointer.
 	/// 

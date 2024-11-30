@@ -86,36 +86,58 @@ public:
 #endif
 		<PortableServer::POA> _default_POA ()
 	{
-		return servant_base ()->_default_POA ();
+		return core_object ()->_default_POA ();
 	}
 
 	static Type <InterfaceDef>::VRet _get_interface ()
 	{
-		return servant_base ()->_get_interface ();
+		return core_object ()->_get_interface ();
 	}
 
 	static Boolean _is_a (const String& type_id)
 	{
-		return servant_base ()->_is_a (type_id);
+		return core_object ()->_is_a (type_id);
 	}
 
 	static PortableServer::Servant _core_servant ()
 	{
-		return servant_base ();
+		return core_object ();
+	}
+
+	static Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) noexcept
+	{
+		return get_object_from_core (core_object (), iid, env);
 	}
 
 protected:
+	/// \brief Obtain `Object` interface pointer.
+	/// 
+	/// \returns `Object` interface from proxy.
+	/// 
+	/// Unlike the `_this()` method, `_object()` does not increment reference counter.
+	/// It is intended for use inside servant implementation code only.
+	/// 
+	static Object::_ptr_type _object ()
+	{
+		Environment env;
+		Object::_ptr_type ret (static_cast <Object*> (_get_object (&Type <IDL::String>::C_in (RepIdOf <Object>::id), &env)));
+		env.check ();
+		if (!ret)
+			throw MARSHAL ();
+		return ret;
+	}
+
 	static Type <Interface>::VRet _get_proxy ()
 	{
 #ifdef LEGACY_CORBA_CPP
-		return interface_duplicate (&get_proxy (servant_base ()));
+		return interface_duplicate (&get_proxy (core_object ()));
 #else
-		return get_proxy (servant_base ());
+		return get_proxy (core_object ());
 #endif
 	}
 
 private:
-	static PortableServer::Servant servant_base () noexcept
+	static PortableServer::Servant core_object () noexcept
 	{
 		return static_cast <PortableServer::ServantBase*> (export_struct_.core_object);
 	}

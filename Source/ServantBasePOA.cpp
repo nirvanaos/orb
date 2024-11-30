@@ -33,9 +33,9 @@ ServantPOA <PortableServer::ServantBase>::ServantPOA () :
 	ServantBaseLink (Skeleton <ServantPOA <PortableServer::ServantBase>, PortableServer::ServantBase>::epv_)
 {}
 
-Bridge <Object>* ServantPOA <PortableServer::ServantBase>::_get_object (Type <String>::ABI_in iid, Interface* env)
+Bridge <Object>* ServantPOA <PortableServer::ServantBase>::_get_object (Type <String>::ABI_in iid, Interface* env) noexcept
 {
-	NIRVANA_UNREACHABLE_CODE ();
+	return ServantBaseLink::_get_object (iid, env);
 }
 
 }

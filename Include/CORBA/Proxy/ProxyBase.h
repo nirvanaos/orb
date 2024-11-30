@@ -134,13 +134,6 @@ public:
 		return static_cast <ProxyBaseInterface <Base>&> (Proxy <I>::_implementation (derived)).get_bridge (id, env);
 	}
 
-	// Override dummy implementation of ServantTraits::_wide_object.
-	template <class Derived>
-	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, Type <String>::ABI_in id, Interface* env)
-	{
-		return Proxy <I>::_implementation (derived)._get_object (id, env);
-	}
-
 protected:
 	ProxyBase (Object::_ptr_type obj, AbstractBase::_ptr_type ab,
 		IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant) :

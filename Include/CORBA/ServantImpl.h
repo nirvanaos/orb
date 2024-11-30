@@ -94,15 +94,6 @@ public:
 	static Bridge <Object>* _wide_object (Bridge <Derived>* derived, Type <String>::ABI_in id,
 		Interface* env) noexcept
 	{
-		// It really needed only for local object, see below.
-		assert (false);
-		return nullptr;
-	}
-
-	template <>
-	static Bridge <Object>* _wide_object (Bridge <LocalObject>* derived, Type <String>::ABI_in id,
-		Interface* env) noexcept
-	{
 		return S::_implementation (derived)._get_object (id, env);
 	}
 

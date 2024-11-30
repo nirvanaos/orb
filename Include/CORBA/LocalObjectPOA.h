@@ -76,7 +76,7 @@ public:
 		return false;
 	}
 
-	virtual Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) override;
+	virtual Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) noexcept override;
 
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__non_existent;
 	using Skeleton <ServantPOA <LocalObject>, LocalObject>::__add_ref;

@@ -76,6 +76,11 @@ public:
 		return core_object ()->_refcount_value ();
 	}
 
+	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) noexcept
+	{
+		return get_object_from_core (core_object (), iid, env);
+	}
+
 protected:
 	/// \brief Obtain `Object` interface pointer.
 	/// 
@@ -87,12 +92,6 @@ protected:
 	/// Outside the servant implementation code, `_this()` must be used instead.
 	/// 
 	Object::_ptr_type _object ();
-
-public:
-	Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env)
-	{
-		return get_object_from_core (core_object (), iid, env);
-	}
 
 protected:
 	LocalObjectLink (const Bridge <LocalObject>::EPV& epv) :

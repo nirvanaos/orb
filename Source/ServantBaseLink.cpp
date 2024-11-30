@@ -53,10 +53,12 @@ I_ptr <PortableServer::ServantBase> ServantBaseLink::core_object ()
 
 Object::_ptr_type ServantBaseLink::_object ()
 {
-	Interface::_ptr_type proxy = core_object ()->_query_interface (RepIdOf <Object>::id);
-	if (!proxy)
+	Environment env;
+	Object::_ptr_type ret (static_cast <Object*> (_get_object (&Type <IDL::String>::C_in (RepIdOf <Object>::id), &env)));
+	env.check ();
+	if (!ret)
 		throw MARSHAL ();
-	return proxy.template downcast <Object> ();
+	return ret;
 }
 
 }

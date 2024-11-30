@@ -83,6 +83,23 @@ public:
 	}
 
 protected:
+	/// \brief Obtain `Object` interface pointer.
+	/// 
+	/// \returns `Object` interface from proxy.
+	/// 
+	/// Unlike the `_this()` method, `_object()` does not increment reference counter.
+	/// It is intended for use inside servant implementation code only.
+	/// 
+	static Object::_ptr_type _object ()
+	{
+		Environment env;
+		Object::_ptr_type ret (static_cast <Object*> (_get_object (&Type <IDL::String>::C_in (RepIdOf <Object>::id), &env)));
+		env.check ();
+		if (!ret)
+			throw MARSHAL ();
+		return ret;
+	}
+
 	static Type <Interface>::VRet _get_proxy ()
 	{
 #ifdef LEGACY_CORBA_CPP

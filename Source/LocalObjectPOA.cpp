@@ -33,7 +33,7 @@ ServantPOA <LocalObject>::ServantPOA () :
 	LocalObjectLink (Skeleton <ServantPOA <LocalObject>, LocalObject>::epv_)
 {}
 
-Bridge <Object>* ServantPOA <LocalObject>::_get_object (Type <String>::ABI_in iid, Interface* env)
+Bridge <Object>* ServantPOA <LocalObject>::_get_object (Type <String>::ABI_in iid, Interface* env) noexcept
 {
 	return LocalObjectLink::_get_object (iid, env);
 }

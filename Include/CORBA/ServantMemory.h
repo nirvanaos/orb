@@ -29,7 +29,6 @@
 
 #ifndef NIRVANA_PROCESS
 
-#include "core_objects.h"
 #include "Client.h"
 #include "ObjectFactoryInc.h"
 #include "DynamicExport.h"

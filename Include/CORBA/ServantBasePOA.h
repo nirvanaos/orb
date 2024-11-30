@@ -77,7 +77,7 @@ public:
 		return false;
 	}
 
-	virtual Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env);
+	virtual Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) noexcept;
 
 #ifndef LEGACY_CORBA_CPP
 protected:
