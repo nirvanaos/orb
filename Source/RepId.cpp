@@ -25,6 +25,7 @@
 */
 #include "../../pch/pch.h"
 #include <algorithm>
+#include <limits>
 
 namespace CORBA {
 namespace Internal {
@@ -107,11 +108,11 @@ uint_least16_t RepId::strtou16 (const Char* ver, const Char*& end)
 	uint_least16_t n = 0;
 	for (Char c; (c = *ver); ++ver) {
 		if ('0' <= c && c <= '9') {
-			if (n > USHRT_MAX / 10)
+			if (n > std::numeric_limits <uint16_t>::max () / 10)
 				throw BAD_PARAM (MAKE_OMG_MINOR (16)); // Bad RepositoryId argument in TypeCode operation.
 			n *= 10;
 			uint_least16_t d = c - '0';
-			if (d > USHRT_MAX - n)
+			if (d > std::numeric_limits <uint16_t>::max () - n)
 				throw BAD_PARAM (MAKE_OMG_MINOR (16)); // Bad RepositoryId argument in TypeCode operation.
 			n += d;
 		} else
