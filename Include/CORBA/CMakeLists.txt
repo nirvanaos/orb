@@ -7,6 +7,7 @@ set(idl_files
 	CosEventComm.idl
 	CosLwLogAdministrator.idl
 	CosLwLogConsumer.idl
+	CosLwLogProducer.idl
 	CosLwLogService.idl
 	CosLwLogStatus.idl
 	CosNaming.idl
@@ -52,7 +53,8 @@ set(idl_files_no_ami
 	IORequest.idl
 )
 
-idl_target(orb_generated_no_ami IDL_FILES ${idl_files_no_ami} OPTIONS -no_ami)
-idl_target(orb_generated IDL_FILES ${idl_files})
-
-add_dependencies(nirvana orb_generated orb_generated_no_ami)
+idl_generate(OUT_VAR src_no_ami IDL_FILES ${idl_files_no_ami} OPTIONS -no_ami)
+idl_generate(OUT_VAR src nirvana IDL_FILES ${idl_files})
+target_sources(nirvana PRIVATE ${src} ${src_no_ami})
+add_custom_target(orb_gen DEPENDS ${src} ${src_no_ami})
+add_dependencies(nirvana orb_gen)
