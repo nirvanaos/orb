@@ -50,6 +50,12 @@ struct ArrayTraits
 	static const uint32_t dimensions = 0;
 };
 
+template <class T>
+const size_t ArrayTraits <T>::size;
+
+template <class T>
+const uint32_t ArrayTraits <T>::dimensions;
+
 template <class T, size_t bound>
 struct ArrayTraits <std::array <T, bound> >
 {
@@ -57,6 +63,12 @@ struct ArrayTraits <std::array <T, bound> >
   static const size_t size = ArrayTraits <T>::size * bound;
 	static const uint32_t dimensions = ArrayTraits <T>::dimensions + 1;
 };
+
+template <class T, size_t bound>
+const size_t ArrayTraits <std::array <T, bound> >::size;
+
+template <class T, size_t bound>
+const uint32_t ArrayTraits <std::array <T, bound> >::dimensions;
 
 template <class T, size_t bound>
 using TypeArrayBase = typename std::conditional <Type <typename ArrayTraits <T>::ElType>::is_var_len,
@@ -133,6 +145,24 @@ struct Type <std::array <T, bound> > :
 		} while (p != end);
 	}
 };
+
+template <class T, size_t bound>
+const size_t Type <std::array <T, bound> >::total_size;
+
+template <class T, size_t bound>
+const uint32_t Type <std::array <T, bound> >::dimensions;
+
+template <class T, size_t bound>
+const bool Type <std::array <T, bound> >::is_CDR;
+
+template <class T, size_t bound>
+const bool Type <std::array <T, bound> >::has_check;
+
+template <class T, size_t bound>
+const size_t Type <std::array <T, bound> >::CDR_align;
+
+template <class T, size_t bound>
+const size_t Type <std::array <T, bound> >::CDR_size;
 
 }
 }
