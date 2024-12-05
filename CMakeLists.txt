@@ -1,3 +1,6 @@
 add_subdirectory(Include/CORBA)
 add_subdirectory(Source)
-add_subdirectory(Test)
+
+if(BUILD_TESTING)
+	add_subdirectory(Test)
+endif()
