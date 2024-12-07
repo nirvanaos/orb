@@ -70,7 +70,7 @@ struct TypeFixLen : std::conditional <sizeof (T) <= 2 * sizeof (size_t),
 	inline static void unmarshal_a (IORequest_ptr rq, size_t count, T* dst);
 
 	/// Empty void byteswap () to avoid compilation errors.
-	static void byteswap (T& v) noexcept
+	static void byteswap (T&) noexcept
 	{}
 };
 

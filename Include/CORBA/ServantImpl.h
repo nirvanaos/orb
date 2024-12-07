@@ -73,8 +73,8 @@ public:
 	}
 
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Derived>* derived, Type <String>::ABI_in id,
-		Interface* env) noexcept
+	static Bridge <Base>* _wide (Bridge <Derived>*, Type <String>::ABI_in,
+		Interface*) noexcept
 	{
 		// It really needed only for value types.
 		assert (false);

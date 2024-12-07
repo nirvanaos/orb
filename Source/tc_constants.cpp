@@ -71,7 +71,7 @@ TC_IMPL_SCALAR (Any, any);
 TC_IMPL (string, TypeCodeString <Internal::String, 0>);
 TC_IMPL (wstring, TypeCodeString <Internal::WString, 0>);
 
-NIRVANA_STATIC_TC (_tc_Object, TypeCodeInterface <Object>, Internal::RepIdOf <Object>::id, "Object");
+extern NIRVANA_STATIC_TC (_tc_Object, TypeCodeInterface <Object>, Internal::RepIdOf <Object>::id, "Object");
 
 TC_IMPL (ValueBase, TypeCodeValue <ValueBase>);
 

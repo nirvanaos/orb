@@ -64,22 +64,22 @@ size_t string_size (CORBA::Internal::String_in string_in)
 
 TEST_F (TestORB, String_in)
 {
-	EXPECT_EQ (string_size ("test"), 4);
+	EXPECT_EQ (string_size ("test"), 4u);
 	{
 		std::string test = "test";
 		EXPECT_EQ (string_size (test), test.size ());
 	}
 	{
 		const char test [] = "test";
-		EXPECT_EQ (string_size (test), 4);
+		EXPECT_EQ (string_size (test), 4u);
 	}
 	{
 		char test [32] = "test";
-		EXPECT_EQ (string_size (test), 4);
+		EXPECT_EQ (string_size (test), 4u);
 	}
 	{
 		const char test [32] = "test"; // Strange case
-		EXPECT_EQ (string_size (test), 31);
+		EXPECT_EQ (string_size (test), 31u);
 	}
 }
 
@@ -88,9 +88,9 @@ TEST_F (TestORB, Array)
 	using namespace CORBA::Internal;
 
 	typedef std::array <std::array <int, 3>, 4> Arr;
-	EXPECT_EQ (ArrayTraits <Arr>::size, 3 * 4);
+	EXPECT_EQ (ArrayTraits <Arr>::size, 3u * 4u);
 
-	EXPECT_EQ (Type <Arr>::total_size, 3 * 4);
+	EXPECT_EQ (Type <Arr>::total_size, 3u * 4u);
 	EXPECT_TRUE (Type <Arr>::is_CDR);
 }
 
