@@ -50,9 +50,9 @@ namespace CORBA {
 typedef bool Boolean;
 typedef char Char;
 
-// wchar_t in Nirvana always has 2-byte size and UCS-2 encoded.
-static_assert (sizeof (wchar_t) == 2, "sizeof (wchar_t) == 2");
-typedef wchar_t WChar;
+// WChar in Nirvana always has 2-byte size and UCS-2 encoded.
+//static_assert (sizeof (wchar_t) == 2, "sizeof (wchar_t) == 2");
+typedef std::conditional <sizeof (wchar_t) == 2, wchar_t, char16_t>::type WChar;
 
 typedef uint8_t Octet;
 typedef int16_t Short;
