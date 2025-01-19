@@ -51,7 +51,7 @@ public:
 	static void n_construct (void* p)
 	{
 		check_pointer (p);
-		Nirvana::BCD_zero ((Octet*)p, size);
+		Nirvana::DecimalBase::BCD_zero ((Octet*)p, size);
 	}
 
 	static void _s_n_destruct (Bridge <TypeCode>*, void* p, Interface*)
