@@ -50,6 +50,14 @@ public:
 		return FindInterface <Primary, Bases...>::find (*(S*)0, id);
 	}
 
+	//! \brief Gets the pointer.
+	//!   Works like _this() method but doesn't increment the reference counter.
+	//!
+	//! \return The primary interface pointer.
+	static Primary* _get_ptr () noexcept
+	{
+		return static_cast <Primary*> (InterfaceStaticBase <S, Primary>::_bridge ());
+	}
 };
 
 template <class S, class Primary, class ... Bases>
