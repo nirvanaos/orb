@@ -56,10 +56,7 @@ public:
 		src.reset ();
 	}
 
-	~Any ()
-	{
-		clear ();
-	}
+	~Any ();
 
 	Any& operator = (const Any& src)
 	{
@@ -85,9 +82,9 @@ public:
 
 	void type (Internal::I_ptr <TypeCode> alias);
 
-	void* data ();
+	void* data () noexcept;
 
-	const void* data () const
+	const void* data () const noexcept
 	{
 		return const_cast <Any&> (*this).data ();
 	}

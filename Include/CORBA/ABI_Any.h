@@ -58,50 +58,50 @@ struct ABI <Any>
 
 	static const size_t SMALL_CAPACITY = sizeof (data);
 
-	void reset ()
+	void reset () noexcept
 	{
 		type_code = 0;
 	}
 
-	TypeCode* type () const
+	TypeCode* type () const noexcept
 	{
 		return reinterpret_cast <TypeCode*> (type_code & ~1);
 	}
 
-	void type (void* tc)
+	void type (void* tc) noexcept
 	{
 		assert (((uintptr_t)tc & 1) == 0);
 		type_code = reinterpret_cast <uintptr_t> (tc) | (type_code & 1);
 	}
 
-	bool is_large () const
+	bool is_large () const noexcept
 	{
 		return (type_code & 1) != 0;
 	}
 
-	const void* small_pointer () const
+	const void* small_pointer () const noexcept
 	{
 		return &data;
 	}
 
-	void* small_pointer ()
+	void* small_pointer () noexcept
 	{
 		return &data;
 	}
 
-	void* large_pointer () const
+	void* large_pointer () const noexcept
 	{
 		return data.p;
 	}
 
-	void large_pointer (void* p, size_t size)
+	void large_pointer (void* p, size_t size) noexcept
 	{
 		data.p = p;
 		data.size = size;
 		type_code |= 1;
 	}
 
-	size_t large_size () const
+	size_t large_size () const noexcept
 	{
 		return data.size;
 	}

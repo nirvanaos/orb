@@ -58,8 +58,9 @@ void Type <Sequence <T> >::marshal_out (Var& src, IORequest_ptr rq)
 		if (!static_cast <ABI&> (src).allocated)
 			static_cast <ABI&> (src).reset ();
 	} else {
-		if (rq->marshal_seq_begin (src.size ()))
-			Type <T>::marshal_out_a (src.data (), src.size (), rq);
+		size_t size = src.size ();
+		if (rq->marshal_seq_begin (size) && size)
+			Type <T>::marshal_out_a (src.data (), size, rq);
 	}
 }
 

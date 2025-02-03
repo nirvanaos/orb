@@ -66,8 +66,8 @@ void Type <Any>::unmarshal (I_ptr <TypeCode> tc, IORequest_ptr rq, Any& dst)
 	if (tc && tc->kind () != TCKind::tk_void) {
 		void* p = dst.prepare (tc);
 		tc->n_construct (p);
-		tc->n_unmarshal (rq, 1, p);
 		dst.set_type (tc);
+		tc->n_unmarshal (rq, 1, p);
 	}
 }
 
@@ -75,11 +75,21 @@ void Type <Any>::unmarshal (I_ptr <TypeCode> tc, IORequest_ptr rq, Any& dst)
 
 using namespace Internal;
 
+Any::~Any ()
+{
+	try {
+		clear ();
+	} catch (...) {
+		// TODO: Log
+		assert (false);
+	}
+}
+
 void Any::clear ()
 {
 	I_ptr <TypeCode> tc = type ();
-	bool large = is_large ();
 	if (tc) {
+		bool large = is_large ();
 		void* p;
 		if (large)
 			p = large_pointer ();
@@ -87,10 +97,10 @@ void Any::clear ()
 			p = small_pointer ();
 		tc->n_destruct (p);
 		interface_release (&tc);
+		reset ();
+		if (large)
+			::Nirvana::the_memory->release (p, large_size ());
 	}
-	if (large)
-		::Nirvana::the_memory->release (large_pointer (), large_size ());
-	reset ();
 }
 
 void* Any::prepare (I_ptr <TypeCode> tc)
@@ -156,7 +166,7 @@ void Any::construct (Internal::I_ptr <TypeCode> tc)
 	tc->n_construct (prepare (tc));
 }
 
-void* Any::data ()
+void* Any::data () noexcept
 {
 	assert (type ());
 	if (is_large ())

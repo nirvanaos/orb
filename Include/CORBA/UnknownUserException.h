@@ -48,24 +48,27 @@ public:
 
 	Any& exception ()
 	{
-		return _exception;
+		return exception_;
 	}
 
 	UnknownUserException ()
 	{}
 
 	explicit UnknownUserException (Any&& exc) :
-		_exception (std::move (exc))
+		exception_ (std::move (exc))
+	{}
+
+	~UnknownUserException ()
 	{}
 
 private:
 	virtual void* __data () noexcept
 	{
-		return &_exception;
+		return &exception_;
 	}
 
 private:
-	Any _exception;
+	Any exception_;
 };
 
 namespace Internal {

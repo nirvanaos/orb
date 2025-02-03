@@ -89,7 +89,7 @@ public:
 	template <size_t cc>
 	StringView (C const (&s) [cc])
 	{
-		if (bound && cc - 1 > bound)
+		if (s [cc - 1] || (bound&& cc - 1 > bound))
 			Nirvana::throw_BAD_PARAM ();
 		ABI::large_pointer (const_cast <C*> (s));
 		ABI::large_size (cc - 1);
@@ -204,7 +204,7 @@ template <typename C, ULong bound>
 StringView <C, bound>::StringView (const C* p, size_t cc)
 {
 	if (p && cc) {
-		if (bound && cc > bound)
+		if (p [cc] || (bound && cc > bound))
 			Nirvana::throw_BAD_PARAM ();
 		ABI::large_pointer (const_cast <C*> (p));
 		ABI::large_size (cc);
