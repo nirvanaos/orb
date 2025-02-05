@@ -59,7 +59,7 @@ public:
 	{}
 
 	// For make_stateless()
-	static void _create_proxy () noexcept
+	static void _final_construct () noexcept
 	{}
 
 	Bridge <Object>* _get_object (Type <String>::ABI_in id, Interface* env) const noexcept

@@ -81,6 +81,11 @@ public:
 		return get_object_from_core (core_object (), iid, env);
 	}
 
+	void _final_construct ()
+	{
+		core_object ();
+	}
+
 protected:
 	/// \brief Obtain `Object` interface pointer.
 	/// 

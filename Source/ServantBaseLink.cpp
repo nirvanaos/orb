@@ -47,6 +47,7 @@ I_ptr <PortableServer::ServantBase> ServantBaseLink::core_object ()
 	else if (((uintptr_t)(void*)obj & 1) == 0)
 		return core_object_; // Construction finished
 
+	// Finalize proxy creation
 	object_factory->create_servant (this, &core_object_, nullptr);
 	return core_object_;
 }

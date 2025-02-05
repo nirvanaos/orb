@@ -45,7 +45,7 @@ inline bool is_free_sync_context ()
 /// 
 /// Stateless servant lives in the free synchronization context.
 /// So operations may be called in parallel, without a synchronization.
-/// Stateless servant must not change it's state during the all life cycle.
+/// Stateless servant must not change it's state during the whole life cycle.
 /// Usually such servant resides in the read-only memory, so any change of the
 /// object variables will cause access violation exception.
 /// 
@@ -75,6 +75,9 @@ servant_reference <T> make_stateless (Args&& ... args)
 	try {
 		// Create servant
 		T* tmp_serv = new (&tmp) T (std::forward <Args> (args)...);
+
+		// Ensure servant creation complete
+		tmp_serv->_final_construct ();
 
 		// Move servant to the stateless memory and return reference to it.
 		return servant_reference <T> ((T*)Internal::object_factory->stateless_end (true), false);
