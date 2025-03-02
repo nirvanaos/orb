@@ -43,6 +43,11 @@ public:
 	using TypeCodeORB::_s_get_compact_typecode;
 	using TypeCodeStaticIdName::_s_id;
 	using TypeCodeStaticIdName::_s_name;
+
+	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) noexcept
+	{
+		return 0;
+	}
 };
 
 }
