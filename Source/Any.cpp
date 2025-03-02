@@ -242,7 +242,7 @@ Boolean Any::operator >>= (to_octet to) const
 void operator <<= (Any& any, const Exception& e)
 {
 	TypeCode::_ptr_type tc = e.__type_code ();
-	if (tc->equal (_tc_UnknownUserException))
+	if (&tc == _tc_UnknownUserException.imp.itf)
 		any = *(const Any*)e.__data ();
 	else
 		any.copy_from (tc, e.__data ());
@@ -251,7 +251,7 @@ void operator <<= (Any& any, const Exception& e)
 void operator <<= (Any& any, Exception&& e)
 {
 	TypeCode::_ptr_type tc = e.__type_code ();
-	if (tc->equal (_tc_UnknownUserException))
+	if (&tc == _tc_UnknownUserException.imp.itf)
 		any = std::move (*(Any*)e.__data ());
 	else
 		any.move_from (tc, e.__data ());
