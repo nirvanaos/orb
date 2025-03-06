@@ -47,6 +47,7 @@
 #include "PseudoBase.h"
 #include "ValueFactoryBase.h"
 #include "Union.h"
+#include "TraitsServantPseudo.h"
 #include "TypeCodeValue.h"
 #include "ExceptionHolder.h"
 #include "TypeCodeTypeDef.h"

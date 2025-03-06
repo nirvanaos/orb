@@ -1,5 +1,4 @@
 /// \file
-/// CORBA server main header
 /*
 * Nirvana IDL support library.
 *
@@ -25,31 +24,27 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_SERVER_H_
-#define NIRVANA_ORB_SERVER_H_
+#ifndef NIRVANA_ORB_TRAITSSERVANT_H_
+#define NIRVANA_ORB_TRAITSSERVANT_H_
 #pragma once
 
-#include "CORBA.h"
-#include "Implementation.h"
-#include "ImplementationStatic.h"
-#include "ImplementationLocal.h"
-#include "ImplementationLocalStatic.h"
+#include "TraitsServantPseudo.h"
+#include "ServantPOA.h"
 #include "ImplementationTied.h"
-#include "ServantBasePOA.h"
-#include "LocalObjectPOA.h"
-#include "PseudoBase_s.h"
-#include "ValueFactoryBase_s.h"
-#include "make_stateless.h"
-#include "make_pseudo.h"
-#include "TraitsServant.h"
-#include "AMI_s.h"
-#include "ValueRefCountBase.h"
-#include "Receptacle.h"
-#include "CCMObjectImpl.h"
-#include "Facet.h"
 
-#ifdef LEGACY_CORBA_CPP
-#include "Servant_var.h"
-#endif
+namespace CORBA {
+namespace Internal {
+
+template <class I>
+struct TraitsServant : TraitsServantPseudo <I>
+{
+	typedef ServantPOA <I> base_type;
+
+	template <class S>
+	using tie_type = ServantTied <S, I>;
+};
+
+}
+}
 
 #endif
