@@ -129,6 +129,9 @@ class InterfaceImpl :
 {};
 
 }
+
+template <class> struct servant_traits;
+
 }
 
 #endif

@@ -50,8 +50,6 @@ struct TraitsServantPseudo
 
 }
 
-template <class> struct servant_traits;
-
 }
 
 #endif
