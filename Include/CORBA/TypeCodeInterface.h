@@ -32,9 +32,9 @@
 namespace CORBA {
 namespace Internal {
 
-template <class I>
+template <class Itf>
 class TypeCodeInterface :
-	public TypeCodeStatic <TypeCodeInterface <I>, TypeCodeTK <Type <I>::tc_kind>, TypeCodeOps <I> >,
+	public TypeCodeStatic <TypeCodeInterface <Itf>, TypeCodeTK <Type <Itf>::tc_kind>, TypeCodeOps <Itf> >,
 	public TypeCodeORB,
 	public TypeCodeStaticIdName
 {

@@ -35,24 +35,24 @@
 namespace CORBA {
 namespace Internal {
 
-template <class I>
+template <class Itf>
 class ValueFactoryImpl :
-	public TypeCodeValue <I>,
-	public InterfaceStaticBase <ValueFactoryImpl <I>, PseudoBase>,
-	public ServantTraitsStatic <ValueFactoryImpl <I> >
+	public TypeCodeValue <Itf>,
+	public InterfaceStaticBase <ValueFactoryImpl <Itf>, PseudoBase>,
+	public ServantTraitsStatic <ValueFactoryImpl <Itf> >
 {
 public:
-	using ServantTraitsStatic <ValueFactoryImpl <I> >::_implementation;
+	using ServantTraitsStatic <ValueFactoryImpl <Itf> >::_implementation;
 
 	// PseudoBase
 	static I_ptr <Interface> _query_interface (String_in id)
 	{
-		I_ptr <ValueFactoryBase> fb = get_factory <I> ();
+		I_ptr <ValueFactoryBase> fb = get_factory <Itf> ();
 		if (RepId::compatible (RepIdOf <ValueFactoryBase>::id, id))
 			return fb;
 		I_ptr <Interface> itf = fb->_query_factory (id);
 		if (!itf && RepId::compatible (RepIdOf <TypeCode>::id, id))
-			itf = InterfaceStaticBase <TypeCodeValue <I>, TypeCode>::_bridge ();
+			itf = InterfaceStaticBase <TypeCodeValue <Itf>, TypeCode>::_bridge ();
 		return itf;
 	}
 

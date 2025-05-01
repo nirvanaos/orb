@@ -41,14 +41,14 @@ class TypeCode;
 
 namespace Internal {
 
-template <class I> using I_in = I_ptr <I>;
+template <class Itf> using I_in = I_ptr <Itf>;
 
 //! I_inout helper class for interface
-template <class I>
+template <class Itf>
 class I_inout
 {
 public:
-	I_inout (I_ref <I>& var) :
+	I_inout (I_ref <Itf>& var) :
 		ref_ (reinterpret_cast <Interface*&> (var.p_))
 	{}
 
@@ -61,7 +61,7 @@ public:
 
 protected:
 	/// Using I_ptr as inout parameter is error prone and prohibited.
-	I_inout (I_ptr <I>& p) :
+	I_inout (I_ptr <Itf>& p) :
 		ref_ (reinterpret_cast <Interface*&> (p.p_))
 	{}
 
@@ -70,12 +70,12 @@ protected:
 };
 
 // Outline for compact code
-template <class I>
-I_inout <I>::~I_inout () noexcept (false)
+template <class Itf>
+I_inout <Itf>::~I_inout () noexcept (false)
 {
 	bool ex = uncaught_exception ();
 	try {
-		Interface::_check (ref_, RepIdOf <I>::id);
+		Interface::_check (ref_, RepIdOf <Itf>::id);
 	} catch (...) {
 		interface_release (ref_);
 		ref_ = 0;
@@ -111,20 +111,20 @@ protected:
  };
 
 //! I_out helper class for interface
-template <class I>
-class I_out : public I_inout <I>
+template <class Itf>
+class I_out : public I_inout <Itf>
 {
 public:
 #ifdef LEGACY_CORBA_CPP
-	I_out (I_ptr <I>& p) :
-		I_inout <I> (p)
+	I_out (I_ptr <Itf>& p) :
+		I_inout <Itf> (p)
 	{
 		this->ref_ = 0;
 	}
 #endif
 
-	I_out (I_ref <I>& var) :
-		I_inout <I> (var)
+	I_out (I_ref <Itf>& var) :
+		I_inout <Itf> (var)
 	{
 		interface_release (this->ref_);
 		this->ref_ = 0;
@@ -146,22 +146,22 @@ public:
 
 #ifdef LEGACY_CORBA_CPP
 
-template <class I> inline
-I_inout <I> I_var <I>::inout ()
+template <class Itf> inline
+I_inout <Itf> I_var <Itf>::inout ()
 {
-	return I_inout <I> (*this);
+	return I_inout <Itf> (*this);
 }
 
-template <class I> inline
-I_out <I> I_var <I>::out ()
+template <class Itf> inline
+I_out <Itf> I_var <Itf>::out ()
 {
-	return I_out <I> (*this);
+	return I_out <Itf> (*this);
 }
 
 #endif
 
 //! I_ret helper class for interface
-template <class I>
+template <class Itf>
 class I_ret
 {
 public:
@@ -176,22 +176,22 @@ public:
 
 #ifndef LEGACY_CORBA_CPP
 
-	operator I_ref <I> ()
+	operator I_ref <Itf> ()
 	{
-		// I may be not completely defined here, so we use reinterpret_cast.
+		// Itf may be not completely defined here, so we use reinterpret_cast.
 		// Internal::Interface is always the top base of any interface bridge.
-		I_ref <I> ret (reinterpret_cast <I*> (Interface::_check (p_, RepIdOf <I>::id))); // No add reference
+		I_ref <Itf> ret (reinterpret_cast <Itf*> (Interface::_check (p_, RepIdOf <Itf>::id))); // No add reference
 		p_ = nullptr;
 		return ret;
 	}
 
 #else
 
-	operator I_ptr <I> ()
+	operator I_ptr <Itf> ()
 	{
-		// I may be not completely defined here, so we use reinterpret_cast.
+		// Itf may be not completely defined here, so we use reinterpret_cast.
 		// Internal::Interface is always the top base of any interface bridge.
-		I_ptr <I> ret (reinterpret_cast <I*> (Interface::_check (p_, RepIdOf <I>::id))); // No add reference
+		I_ptr <Itf> ret (reinterpret_cast <Itf*> (Interface::_check (p_, RepIdOf <Itf>::id))); // No add reference
 		p_ = nullptr;
 		return ret;
 	}
@@ -202,7 +202,7 @@ private:
 	Interface* p_;
 };
 
-template <class I>
+template <class Itf>
 class I_VT_ret
 {
 public:
@@ -210,11 +210,11 @@ public:
 		p_ (p)
 	{}
 
-	operator I_ptr <I> ()
+	operator I_ptr <Itf> ()
 	{
-		// I may be not completely defined here, so we use reinterpret_cast.
+		// Itf may be not completely defined here, so we use reinterpret_cast.
 		// Internal::Interface is always the top base of any interface bridge.
-		return I_ptr <I> (reinterpret_cast <I*> (Interface::_check (p_, RepIdOf <I>::id)));
+		return I_ptr <Itf> (reinterpret_cast <Itf*> (Interface::_check (p_, RepIdOf <Itf>::id)));
 	}
 
 private:
@@ -269,7 +269,7 @@ public:
 	{}
 };
 
-template <class I>
+template <class Itf>
 struct TypeItfBase
 {
 	static const bool is_CDR = false;
@@ -285,50 +285,50 @@ struct TypeItfBase
 	typedef Interface* ABI_ret;
 	typedef Interface* ABI_VT_ret;
 
-	typedef I_ptr <I> C_ptr;
+	typedef I_ptr <Itf> C_ptr;
 #ifdef LEGACY_CORBA_CPP
-	typedef I_var <I> Var;
-	typedef I_ptr <I> VRet;
+	typedef I_var <Itf> Var;
+	typedef I_ptr <Itf> VRet;
 #else
-	typedef I_ref <I> Var;
+	typedef I_ref <Itf> Var;
 	typedef Var VRet;
 #endif
-	typedef I_in <I> C_in;
-	typedef I_out <I> C_out;
-	typedef I_inout <I> C_inout;
-	typedef I_ret <I> C_ret;
-	typedef I_VT_ret <I> C_VT_ret;
+	typedef I_in <Itf> C_in;
+	typedef I_out <Itf> C_out;
+	typedef I_inout <Itf> C_inout;
+	typedef I_ret <Itf> C_ret;
+	typedef I_VT_ret <Itf> C_VT_ret;
 
 #ifdef LEGACY_CORBA_CPP
 
-	static Interface* ret (const I_ptr <I>& ptr)
+	static Interface* ret (const I_ptr <Itf>& ptr)
 	{
 		return &ptr;
 	}
 
-	static I_var <I>& out (ABI_out p)
+	static I_var <Itf>& out (ABI_out p)
 	{
 		check_pointer (p);
 		if (*p)
 			::Nirvana::throw_BAD_PARAM ();
-		return reinterpret_cast <I_var <I>&> (*p);
+		return reinterpret_cast <I_var <Itf>&> (*p);
 	}
 
 #else
 
-	static I_ref <I>& out (ABI_out p)
+	static I_ref <Itf>& out (ABI_out p)
 	{
 		check_pointer (p);
 		if (*p)
 			::Nirvana::throw_BAD_PARAM ();
-		return reinterpret_cast <I_ref <I>&> (*p);
+		return reinterpret_cast <I_ref <Itf>&> (*p);
 	}
 
 #endif
 
-	static Interface* ret (I_ref <I>&& var) noexcept
+	static Interface* ret (I_ref <Itf>&& var) noexcept
 	{
-		Interface* p = &I_ptr <I> (var.p_);
+		Interface* p = &I_ptr <Itf> (var.p_);
 		var.p_ = nullptr;
 		return p;
 	}
@@ -338,7 +338,7 @@ struct TypeItfBase
 		return nullptr;
 	}
 
-	static Interface* VT_ret (const I_ptr <I>& ptr) noexcept
+	static Interface* VT_ret (const I_ptr <Itf>& ptr) noexcept
 	{
 		return &ptr;
 	}
@@ -349,64 +349,64 @@ struct TypeItfBase
 	}
 
 	NIRVANA_DEPRECATED ("Valuetupe implementation for state members must return I_ptr, not I_ref")
-	static void VT_ret (I_ref <I>&);
+	static void VT_ret (I_ref <Itf>&);
 
-	typedef I_ptr <I> ConstRef;
+	typedef I_ptr <Itf> ConstRef;
 };
 
-template <class I>
-struct TypeItfCommon : TypeItfBase <I>
+template <class Itf>
+struct TypeItfCommon : TypeItfBase <Itf>
 {
-	typedef TypeItfBase <I> Base;
+	typedef TypeItfBase <Itf> Base;
 	typedef typename Base::ABI_in ABI_in;
 	typedef typename Base::ABI_out ABI_out;
 
 	static const bool has_check = true;
 
-	static I* check (Interface* p)
+	static Itf* check (Interface* p)
 	{
-		return reinterpret_cast <I*> (Interface::_check (p, RepIdOf <I>::id));
+		return reinterpret_cast <Itf*> (Interface::_check (p, RepIdOf <Itf>::id));
 	}
 
-	static I_ptr <I> in (ABI_in p)
+	static I_ptr <Itf> in (ABI_in p)
 	{
 		return check (p);
 	}
 
 #ifdef LEGACY_CORBA_CPP
 
-	static I_var <I>& inout (ABI_out p)
+	static I_var <Itf>& inout (ABI_out p)
 	{
 		check_pointer (p);
 		check (*p);
-		return reinterpret_cast <I_var <I>&> (*p);
+		return reinterpret_cast <I_var <Itf>&> (*p);
 	}
 
 #else
 
-	static I_ref <I>& inout (ABI_out p)
+	static I_ref <Itf>& inout (ABI_out p)
 	{
 		check_pointer (p);
 		check (*p);
-		return reinterpret_cast <I_ref <I>&> (*p);
+		return reinterpret_cast <I_ref <Itf>&> (*p);
 	}
 
 #endif
 };
 
-template <class I>
-struct TypeItf : TypeItfCommon <I>
+template <class Itf>
+struct TypeItf : TypeItfCommon <Itf>
 {};
 
-template <class I>
+template <class Itf>
 struct TypeItfMarshalable :
-	TypeItfCommon <I>,
-	MarshalHelper <I, I_ref <I> >
+	TypeItfCommon <Itf>,
+	MarshalHelper <Itf, I_ref <Itf> >
 {
 	// For interfaces, in and out parameters marshalled in the same manner.
-	static void marshal_out (I_ref <I>& src, IORequest_ptr rq)
+	static void marshal_out (I_ref <Itf>& src, IORequest_ptr rq)
 	{
-		Type <I>::marshal_in (src, rq);
+		Type <Itf>::marshal_in (src, rq);
 	}
 };
 
@@ -456,14 +456,14 @@ struct Type <Interface> : TypeItf <Interface>
 
 #ifndef LEGACY_CORBA_CPP
 
-template <class I>
-struct Type <I_ref <I> > : public Type <I>
+template <class Itf>
+struct Type <I_ref <Itf> > : public Type <Itf>
 {};
 
 #else
 
-template <class I>
-struct Type <I_var <I> > : public Type <I>
+template <class Itf>
+struct Type <I_var <Itf> > : public Type <Itf>
 {};
 
 #endif

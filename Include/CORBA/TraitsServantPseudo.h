@@ -36,16 +36,16 @@ namespace Internal {
 
 /// \brief Base for CORBA::servant_traits <> generated for pseudo interfaces by the IDL compiler.
 /// 
-/// \typeparam I interface.
+/// \typeparam Itf interface.
 /// 
-template <class I>
+template <class Itf>
 struct TraitsServantPseudo
 {
 	template <class S>
-	using Servant = Servant <S, I>;
+	using Servant = Servant <S, Itf>;
 
 	template <class S>
-	using ServantStatic = ServantStatic <S, I>;
+	using ServantStatic = ServantStatic <S, Itf>;
 };
 
 }

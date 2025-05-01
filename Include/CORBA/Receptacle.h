@@ -49,44 +49,44 @@ private:
 	I_ref <Interface> connection_;
 };
 
-template <class I>
+template <class Itf>
 class ReceptacleSimplex : private ReceptacleSimplexBase
 {
 public:
-	void connect (I_ptr <I> p)
+	void connect (I_ptr <Itf> p)
 	{
 		ReceptacleSimplexBase::connect (p);
 	}
 
-	typename Type <I>::VRet disconnect ()
+	typename Type <Itf>::VRet disconnect ()
 	{
 #ifndef LEGACY_CORBA_CPP
-		I_ref <I> ret;
+		I_ref <Itf> ret;
 		ReceptacleSimplexBase::disconnect (reinterpret_cast <I_ref <Interface>&> (ret));
 		return ret;
 #else
-		I_var <I> ret;
+		I_var <Itf> ret;
 		ReceptacleSimplexBase::disconnect (reinterpret_cast <I_ref <Interface>&> (ret));
 		return ret._retn ();
 #endif
 	}
 
-	typename Type <I>::VRet get_connection () const noexcept
+	typename Type <Itf>::VRet get_connection () const noexcept
 	{
 #ifndef LEGACY_CORBA_CPP
-		I_ref <I> ret;
+		I_ref <Itf> ret;
 		ReceptacleSimplexBase::get_connection (reinterpret_cast <I_ref <Interface>&> (ret));
 		return ret;
 #else
-		I_var <I> ret;
+		I_var <Itf> ret;
 		ReceptacleSimplexBase::get_connection (reinterpret_cast <I_ref <Interface>&> (ret));
 		return ret._retn ();
 #endif
 	}
 
-	operator I_ptr <I> () const noexcept
+	operator I_ptr <Itf> () const noexcept
 	{
-		return reinterpret_cast <I*> (&ReceptacleSimplexBase::connection ());
+		return reinterpret_cast <Itf*> (&ReceptacleSimplexBase::connection ());
 	}
 };
 
@@ -115,11 +115,11 @@ protected:
 	std::vector <I_ref <Interface> > connections_;
 };
 
-template <class I>
+template <class Itf>
 class ReceptacleMultiplex : public ReceptacleMultiplexBase
 {
 public:
-	Type <Components::Cookie>::VRet connect (I_ptr <I> p)
+	Type <Components::Cookie>::VRet connect (I_ptr <Itf> p)
 	{
 #ifndef LEGACY_CORBA_CPP
 		I_ref <Components::Cookie> ret;
@@ -132,22 +132,22 @@ public:
 #endif
 	}
 
-	typename Type <I>::VRet disconnect (I_ptr <Components::Cookie> ck)
+	typename Type <Itf>::VRet disconnect (I_ptr <Components::Cookie> ck)
 	{
 #ifndef LEGACY_CORBA_CPP
-		I_ref <I> ret;
+		I_ref <Itf> ret;
 		ReceptacleMultiplexBase::disconnect (ck, reinterpret_cast <I_ref <Interface>&> (ret));
 		return ret;
 #else
-		I_var <I> ret;
+		I_var <Itf> ret;
 		ReceptacleMultiplexBase::disconnect (ck, reinterpret_cast <I_ref <Interface>&> (ret));
 		return ret._retn ();
 #endif
 	}
 
-	operator const std::vector <I_ref <I> >& () const noexcept
+	operator const std::vector <I_ref <Itf> >& () const noexcept
 	{
-		return reinterpret_cast <const std::vector <I_ref <I> >&> (connections_);
+		return reinterpret_cast <const std::vector <I_ref <Itf> >&> (connections_);
 	}
 };
 

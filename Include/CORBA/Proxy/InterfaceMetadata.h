@@ -126,7 +126,7 @@ struct InterfaceMetadata
 /// native InterfaceMetadataPtr;
 typedef const InterfaceMetadata* InterfaceMetadataPtr;
 
-template <class I>
+template <class Itf>
 struct MetadataOf
 {
 	static const InterfaceMetadata metadata_;

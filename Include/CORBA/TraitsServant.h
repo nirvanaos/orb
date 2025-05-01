@@ -37,15 +37,15 @@ namespace Internal {
 
 /// \brief Base for CORBA::servant_traits <> generated for interfaces by the IDL compiler.
 /// 
-/// \typeparam I interface.
+/// \typeparam Itf interface.
 /// 
-template <class I>
-struct TraitsServant : TraitsServantPseudo <I>
+template <class Itf>
+struct TraitsServant : TraitsServantPseudo <Itf>
 {
-	typedef ServantPOA <I> base_type;
+	typedef ServantPOA <Itf> base_type;
 
 	template <class S>
-	using tie_type = ServantTied <S, I>;
+	using tie_type = ServantTied <S, Itf>;
 };
 
 }

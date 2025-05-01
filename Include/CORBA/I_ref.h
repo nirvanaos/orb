@@ -34,17 +34,17 @@
 namespace CORBA {
 namespace Internal {
 
-template <class I> class I_ref;
+template <class Itf> class I_ref;
 template <> class I_ref <Interface>;
 
-template <class I>
+template <class Itf>
 struct TypeItfBase;
 
-template <class I>
+template <class Itf>
 class I_ref_base
 {
 public:
-	typedef I ItfType;
+	typedef Itf ItfType;
 
 	I_ref_base () noexcept :
 		p_ (nullptr)
@@ -64,7 +64,7 @@ public:
 		src.p_ = nullptr;
 	}
 
-	I_ref_base (const I_ptr_base <I>& p) :
+	I_ref_base (const I_ptr_base <Itf>& p) :
 		p_ (duplicate (p.p_))
 	{}
 
@@ -96,7 +96,7 @@ public:
 		return *this;
 	}
 
-	I* operator -> () const
+	Itf* operator -> () const
 	{
 		if (!p_)
 			::Nirvana::throw_INV_OBJREF ();
@@ -115,31 +115,31 @@ public:
 
 	void swap (I_ref_base& other) noexcept
 	{
-		I* tmp = p_;
+		Itf* tmp = p_;
 		p_ = other.p_;
 		other.p_ = tmp;
 	}
 
 protected:
-	I_ref_base (I* p) :
+	I_ref_base (Itf* p) :
 		p_ (p)
 	{}
 
-	void reset (I* p)
+	void reset (Itf* p)
 	{
 		if (p_ != p) {
-			I* tmp = p_;
+			Itf* tmp = p_;
 			p_ = duplicate (p);
 			release (tmp);
 		}
 	}
 
-	static I* duplicate (I* p)
+	static Itf* duplicate (Itf* p)
 	{
-		return reinterpret_cast <I*> (interface_duplicate (reinterpret_cast <Interface*> (p)));
+		return reinterpret_cast <Itf*> (interface_duplicate (reinterpret_cast <Interface*> (p)));
 	}
 
-	static void release (I* p) noexcept
+	static void release (Itf* p) noexcept
 	{
 		// Interface may be not completely defined, so use reinterpret_cast.
 		interface_release (reinterpret_cast <Interface*> (p));
@@ -149,10 +149,10 @@ protected:
 	template <class I1> friend class I_ptr_base;
 	template <class I1> friend class I_ptr;
 	template <class I1> friend class I_ref;
-	friend class I_inout <I>;
-	friend struct TypeItfBase <I>;
+	friend class I_inout <Itf>;
+	friend struct TypeItfBase <Itf>;
 
-	I* p_;
+	Itf* p_;
 };
 
 }
@@ -163,10 +163,10 @@ Internal::I_ref <typename S::PrimaryInterface> make_pseudo (Args&& ... args);
 namespace Internal {
 
 /// An interface reference smart pointer.
-template <class I>
-class I_ref : public I_ref_base <I>
+template <class Itf>
+class I_ref : public I_ref_base <Itf>
 {
-	typedef I_ref_base <I> Base;
+	typedef I_ref_base <Itf> Base;
 
 public:
 	I_ref () noexcept
@@ -196,7 +196,7 @@ public:
 		src = nullptr;
 	}
 
-	I_ref (const I_ptr <I>& p) :
+	I_ref (const I_ptr <Itf>& p) :
 		Base (p)
 	{}
 
@@ -205,23 +205,23 @@ public:
 		Base (Base::duplicate (wide (p.p_)))
 	{}
 
-	I_ref (BridgeVal <I>* p) :
-		I_ref (I_ptr <I> (p))
+	I_ref (BridgeVal <Itf>* p) :
+		I_ref (I_ptr <Itf> (p))
 	{}
 
 	template <class VB, typename T>
 	I_ref (ValueBox <VB, T>* p) noexcept :
-		I_ref (I_ptr <I> (*p))
+		I_ref (I_ptr <Itf> (*p))
 	{}
 
 	template <class S>
 	I_ref (const servant_reference <S>& sr) noexcept :
-		Base (I_ptr <I> (sr))
+		Base (I_ptr <Itf> (sr))
 	{}
 
 	template <class S>
 	I_ref (servant_reference <S>&& sr) noexcept :
-		Base (I_ptr <I> (sr).p_)
+		Base (I_ptr <Itf> (sr).p_)
 	{
 		sr.p_ = nullptr;
 	}
@@ -253,7 +253,7 @@ public:
 		return *this;
 	}
 
-	I_ref& operator = (const I_ptr <I>& p)
+	I_ref& operator = (const I_ptr <Itf>& p)
 	{
 		Base::operator = (p);
 		return *this;
@@ -272,21 +272,21 @@ public:
 		return *this;
 	}
 
-	I_ref& operator = (BridgeVal <I>* p) noexcept
+	I_ref& operator = (BridgeVal <Itf>* p) noexcept
 	{
-		return operator = (I_ptr <I> (p));
+		return operator = (I_ptr <Itf> (p));
 	}
 
 	template <class VB, typename T>
 	I_ref& operator = (ValueBox <VB, T>* p) noexcept
 	{
-		return operator = (I_ptr <I> (p));
+		return operator = (I_ptr <Itf> (p));
 	}
 
 	template <class S>
 	I_ref& operator = (const servant_reference <S>& sr) noexcept
 	{
-		return operator = (I_ptr <I> (sr));
+		return operator = (I_ptr <Itf> (sr));
 	}
 
 	template <class S>
@@ -297,20 +297,20 @@ public:
 
 protected:
 	friend class I_ref <Interface>;
-	friend class I_ret <I>;
+	friend class I_ret <Itf>;
 
 	template <class S, class ... Args> friend
 	I_ref <typename S::PrimaryInterface> CORBA::make_pseudo (Args&& ... args);
 
 	// No add reference
-	I_ref (I* p) :
+	I_ref (Itf* p) :
 		Base (p)
 	{}
 
 	template <class I1>
-	static I* wide (I1* p)
+	static Itf* wide (I1* p)
 	{
-		return p ? static_cast <I*> (&static_cast <I_ptr <I> > (*p)) : nullptr;
+		return p ? static_cast <Itf*> (&static_cast <I_ptr <Itf> > (*p)) : nullptr;
 	}
 };
 
@@ -331,8 +331,8 @@ public:
 		Base (src)
 	{}
 
-	template <class I>
-	I_ref (const I_ref <I>& src) :
+	template <class Itf>
+	I_ref (const I_ref <Itf>& src) :
 		Base (Base::duplicate (src.p_))
 	{}
 
@@ -340,8 +340,8 @@ public:
 		Base (std::move (src))
 	{}
 
-	template <class I>
-	I_ref (I_ref <I>&& src) noexcept :
+	template <class Itf>
+	I_ref (I_ref <Itf>&& src) noexcept :
 		Base (src.p_)
 	{
 		src.p_ = nullptr;
@@ -351,8 +351,8 @@ public:
 		Base (p)
 	{}
 
-	template <class I>
-	I_ref (const I_ptr <I>& p) :
+	template <class Itf>
+	I_ref (const I_ptr <Itf>& p) :
 		Base (Base::duplicate (&p))
 	{}
 
@@ -362,8 +362,8 @@ public:
 		return *this;
 	}
 
-	template <class I>
-	I_ref& operator = (const I_ref <I>& src)
+	template <class Itf>
+	I_ref& operator = (const I_ref <Itf>& src)
 	{
 		reset (src.p_);
 		return *this;
@@ -375,8 +375,8 @@ public:
 		return *this;
 	}
 
-	template <class I>
-	I_ref& operator = (I_ref <I>&& src) noexcept
+	template <class Itf>
+	I_ref& operator = (I_ref <Itf>&& src) noexcept
 	{
 		release (p_);
 		p_ = src.p_;
@@ -390,10 +390,10 @@ public:
 		return *this;
 	}
 
-	template <class I>
-	I_ref <I> downcast () noexcept
+	template <class Itf>
+	I_ref <Itf> downcast () noexcept
 	{
-		I_ref <I> ret (I_ptr <Interface> (p_).template downcast <I> ());
+		I_ref <Itf> ret (I_ptr <Interface> (p_).template downcast <Itf> ());
 		p_ = nullptr;
 		return ret;
 	}
@@ -406,28 +406,28 @@ protected:
 		Base (p)
 	{}
 
-	template <class I>
-	static Interface* wide (I* p) noexcept
+	template <class Itf>
+	static Interface* wide (Itf* p) noexcept
 	{
 		return static_cast <Interface*> (p);
 	}
 };
 
-template <class I> inline
-I_ptr_base <I>::I_ptr_base (const I_ref <I>& src) noexcept :
+template <class Itf> inline
+I_ptr_base <Itf>::I_ptr_base (const I_ref <Itf>& src) noexcept :
 	p_ (src.p_)
 {}
 
-template <class I> inline
-void I_ptr_base <I>::move_from (I_ref <I>& src) noexcept
+template <class Itf> inline
+void I_ptr_base <Itf>::move_from (I_ref <Itf>& src) noexcept
 {
 	p_ = src.p_;
 	src.p_ = nullptr;
 }
 
-template <class I>
+template <class Itf>
 template <class I1> inline
-I_ptr <I>::I_ptr (const I_ref <I1>& src) :
+I_ptr <Itf>::I_ptr (const I_ref <I1>& src) :
 	Base (wide (src.p_))
 {}
 

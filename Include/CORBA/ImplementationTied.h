@@ -39,11 +39,11 @@ class POA;
 namespace CORBA {
 namespace Internal {
 
-template <class T, class I>
+template <class T, class Itf>
 class ServantTied :
-	public Servant <ServantTied <T, I>, I>
+	public Servant <ServantTied <T, Itf>, Itf>
 {
-	typedef Servant <ServantTied <T, I>, I> BaseImpl;
+	typedef Servant <ServantTied <T, Itf>, Itf> BaseImpl;
 public:
 	ServantTied (T& t) :
 		ptr_ (&t),
@@ -114,19 +114,19 @@ public:
 		return !ptr_;
 	}
 
-	static ServantTied <T, I>& _implementation (Bridge <AbstractBase>* itf)
+	static ServantTied <T, Itf>& _implementation (Bridge <AbstractBase>* itf)
 		noexcept
 	{
 		return BaseImpl::_implementation (itf);
 	}
 
-	static ServantTied <T, I>& _implementation (Bridge <PortableServer::ServantBase>* itf)
+	static ServantTied <T, Itf>& _implementation (Bridge <PortableServer::ServantBase>* itf)
 		noexcept
 	{
 		return BaseImpl::_implementation (itf);
 	}
 
-	static ServantTied <T, I>& _implementation (Bridge <LocalObject>* itf)
+	static ServantTied <T, Itf>& _implementation (Bridge <LocalObject>* itf)
 		noexcept
 	{
 		return BaseImpl::_implementation (itf);

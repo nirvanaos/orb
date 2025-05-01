@@ -36,7 +36,7 @@
 namespace CORBA {
 
 namespace Internal {
-template <class I> class I_ptr;
+template <class Itf> class I_ptr;
 class Interface;
 }
 

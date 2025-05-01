@@ -38,7 +38,7 @@
 namespace CORBA {
 namespace Internal {
 
-template <class I> class Proxy;
+template <class Itf> class Proxy;
 
 class ProxyRoot : public DynamicExport
 {
@@ -116,22 +116,22 @@ private:
 	UShort interface_idx_;
 };
 
-template <class I, class ... Bases>
+template <class Itf, class ... Bases>
 class ProxyBase :
-	public InterfaceImplBase <Proxy <I>, I>,
-	public ProxyHolderImpl <Proxy <I> >,
+	public InterfaceImplBase <Proxy <Itf>, Itf>,
+	public ProxyHolderImpl <Proxy <Itf> >,
 	public ProxyRoot,
 	public ProxyBaseInterface <Bases>...,
-	public ServantTraits <Proxy <I> >,
-	public LifeCycleRefCnt <Proxy <I> >,
-	public RqProcWrapper <I>
+	public ServantTraits <Proxy <Itf> >,
+	public LifeCycleRefCnt <Proxy <Itf> >,
+	public RqProcWrapper <Itf>
 {
 public:
 	// Wide interface
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <I>* derived, Type <String>::ABI_in id, Interface* env)
+	static Bridge <Base>* _wide (Bridge <Itf>* derived, Type <String>::ABI_in id, Interface* env)
 	{
-		return static_cast <ProxyBaseInterface <Base>&> (Proxy <I>::_implementation (derived)).get_bridge (id, env);
+		return static_cast <ProxyBaseInterface <Base>&> (Proxy <Itf>::_implementation (derived)).get_bridge (id, env);
 	}
 
 protected:
@@ -142,25 +142,25 @@ protected:
 	{}
 };
 
-template <class I, class ... Bases>
-class ProxyBaseStateless : public ProxyBase <I, Bases...>
+template <class Itf, class ... Bases>
+class ProxyBaseStateless : public ProxyBase <Itf, Bases...>
 {
-	typedef ProxyBase <I, Bases...> Base;
+	typedef ProxyBase <Itf, Bases...> Base;
 
 protected:
 	ProxyBaseStateless (Object::_ptr_type obj, AbstractBase::_ptr_type ab,
 		IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant) :
 		Base (obj, ab, proxy_manager, interface_idx, servant),
-		servant_ (reinterpret_cast <I*&> (servant))
+		servant_ (reinterpret_cast <Itf*&> (servant))
 	{}
 
-	I* servant () const noexcept
+	Itf* servant () const noexcept
 	{
 		return servant_;
 	}
 
 private:
-	I*& servant_;
+	Itf*& servant_;
 };
 
 }

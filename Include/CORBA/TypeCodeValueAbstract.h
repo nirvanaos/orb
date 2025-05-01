@@ -32,10 +32,10 @@
 namespace CORBA {
 namespace Internal {
 
-template <class I>
+template <class Itf>
 class TypeCodeValueAbstract :
-	public TypeCodeStatic <TypeCodeValueAbstract <I>,
-		TypeCodeTK <TCKind::tk_value>, TypeCodeOps <I> >,
+	public TypeCodeStatic <TypeCodeValueAbstract <Itf>,
+		TypeCodeTK <TCKind::tk_value>, TypeCodeOps <Itf> >,
 	public TypeCodeORB,
 	public TypeCodeValueAbstractBase,
 	public TypeCodeStaticIdName

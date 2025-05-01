@@ -36,7 +36,7 @@
 namespace CORBA {
 namespace Internal {
 
-template <class S, class I> class ValueCreator;
+template <class S, class Itf> class ValueCreator;
 
 template <class T>
 class ImplCopy final : public T
@@ -142,9 +142,9 @@ public:
 
 /// This function returns ValueFactoryBase for the specific value type.
 /// 
-/// \typeparam I Value type interface
+/// \typeparam Itf Value type interface
 /// \returns Pointer to ValueFactoryBase without the incrementing reference counter.
-template <class I>
+template <class Itf>
 CORBA::ValueFactoryBase::_ptr_type get_factory () noexcept;
 
 }

@@ -32,17 +32,17 @@
 namespace CORBA {
 namespace Internal {
 
-template <class I>
+template <class Itf>
 class TypeCodeValueBox : 
-	public TypeCodeStatic <TypeCodeValueBox <I>,
-	TypeCodeWithId <TCKind::tk_value_box, I>, TypeCodeOps <I> >,
-	public TypeCodeName <I>,
-	public TypeCodeContentType <typename I::BoxedType>
+	public TypeCodeStatic <TypeCodeValueBox <Itf>,
+	TypeCodeWithId <TCKind::tk_value_box, Itf>, TypeCodeOps <Itf> >,
+	public TypeCodeName <Itf>,
+	public TypeCodeContentType <typename Itf::BoxedType>
 {
-	typedef TypeCodeStatic <TypeCodeValueBox <I>,
-		TypeCodeWithId <TCKind::tk_value_box, I>, TypeCodeOps <I> > Base;
-	typedef TypeCodeContentType <typename I::BoxedType> Content;
-	typedef TypeCodeName <I> Name;
+	typedef TypeCodeStatic <TypeCodeValueBox <Itf>,
+		TypeCodeWithId <TCKind::tk_value_box, Itf>, TypeCodeOps <Itf> > Base;
+	typedef TypeCodeContentType <typename Itf::BoxedType> Content;
+	typedef TypeCodeName <Itf> Name;
 public:
 	using Name::_s_name;
 	using Content::_s_content_type;

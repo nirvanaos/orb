@@ -38,11 +38,11 @@ template <class S>
 class LifeCycleDynamic
 {
 public:
-	template <class I>
+	template <class Itf>
 	static Interface* __duplicate (Interface* itf, Interface* env) noexcept
 	{
 		try {
-			return S::_duplicate (static_cast <Bridge <I>*> (itf));
+			return S::_duplicate (static_cast <Bridge <Itf>*> (itf));
 		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
@@ -51,11 +51,11 @@ public:
 		return nullptr;
 	}
 
-	template <class I>
+	template <class Itf>
 	static void __release (Interface* itf) noexcept
 	{
 		try {
-			S::_release (static_cast <Bridge <I>*> (itf));
+			S::_release (static_cast <Bridge <Itf>*> (itf));
 		} catch (...) {
 		}
 	}

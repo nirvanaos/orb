@@ -35,10 +35,10 @@
 namespace CORBA {
 namespace Internal {
 
-template <class I> class I_ptr;
-template <class I> class I_ref;
+template <class Itf> class I_ptr;
+template <class Itf> class I_ref;
 #ifdef LEGACY_CORBA_CPP
-template <class I> class I_var;
+template <class Itf> class I_var;
 #endif
 class Interface;
 template <> class I_ptr <Interface>;

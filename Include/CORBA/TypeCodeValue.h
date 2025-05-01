@@ -32,7 +32,7 @@
 namespace CORBA {
 namespace Internal {
 
-template <class I> class TypeCodeValue;
+template <class Itf> class TypeCodeValue;
 
 struct StateMember
 {
@@ -138,21 +138,21 @@ template <class T, bool has_members>
 using TypeCodeStateMembersOptional = typename std::conditional <has_members,
 	TypeCodeStateMembers <T>, TypeCodeStateMembersEmpty>::type;
 
-template <class I, ValueModifier vm, bool has_members, GetTypeCode base = nullptr>
+template <class Itf, ValueModifier vm, bool has_members, GetTypeCode base = nullptr>
 class TypeCodeValueConcrete :
-	public TypeCodeStatic <TypeCodeValue <I>,
-		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> >,
-	public TypeCodeName <I>,
-	public TypeCodeStateMembersOptional <I, has_members>,
+	public TypeCodeStatic <TypeCodeValue <Itf>,
+		TypeCodeWithId <TCKind::tk_value, Itf>, TypeCodeOps <Itf> >,
+	public TypeCodeName <Itf>,
+	public TypeCodeStateMembersOptional <Itf, has_members>,
 	public TypeCodeORB
 {
-	typedef TypeCodeStatic <TypeCodeValue <I>,
-		TypeCodeWithId <TCKind::tk_value, I>, TypeCodeOps <I> > Base;
+	typedef TypeCodeStatic <TypeCodeValue <Itf>,
+		TypeCodeWithId <TCKind::tk_value, Itf>, TypeCodeOps <Itf> > Base;
 public:
-	typedef TypeCodeName <I> Name;
+	typedef TypeCodeName <Itf> Name;
 	using Name::_s_name;
 
-	typedef TypeCodeStateMembersOptional <I, has_members> Members;
+	typedef TypeCodeStateMembersOptional <Itf, has_members> Members;
 	using Members::_s_member_count;
 	using Members::_s_member_name;
 	using Members::_s_member_type;

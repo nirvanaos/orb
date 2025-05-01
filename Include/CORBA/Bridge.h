@@ -52,8 +52,8 @@ struct RepIdOf
 /// The ABI for a particular interface.
 /// A "bridge" between the client and servant sides.
 ///
-/// \tparam I An interface.
-template <class I>
+/// \tparam Itf An interface.
+template <class Itf>
 class Bridge :
 	public Interface
 {
@@ -70,7 +70,7 @@ public:
 	template <class Base>
 	struct Wide
 	{
-		typedef Bridge <Base>* (*Func) (Bridge <I>*, const ABI <String>* base_id, Interface* environment);
+		typedef Bridge <Base>* (*Func) (Bridge <Itf>*, const ABI <String>* base_id, Interface* environment);
 	};
 
 public:
@@ -82,31 +82,31 @@ public:
 };
 
 /// The bridge for value types.
-template <class I>
+template <class Itf>
 class BridgeVal :
-	public Bridge <I>
+	public Bridge <Itf>
 {
 public:
-	constexpr BridgeVal (const typename Bridge <I>::EPV& epv) noexcept :
-		Bridge <I> (epv)
+	constexpr BridgeVal (const typename Bridge <Itf>::EPV& epv) noexcept :
+		Bridge <Itf> (epv)
 	{}
 };
 
 /// The entry-point vector for AMI
-/// \tparam I Interface class.
-template <class I> struct AMI_EPV;
+/// \tparam Itf Interface class.
+template <class Itf> struct AMI_EPV;
 
-template <class S, class I> class AMI_Skeleton;
+template <class S, class Itf> class AMI_Skeleton;
 
-template <class S, class I>
+template <class S, class Itf>
 class AMI_Servant
 {
 public:
-	static const AMI_EPV <I>* const ami_epv_;
+	static const AMI_EPV <Itf>* const ami_epv_;
 };
 
-template <class S, class I>
-const AMI_EPV <I>* const AMI_Servant <S, I>::ami_epv_ = nullptr;
+template <class S, class Itf>
+const AMI_EPV <Itf>* const AMI_Servant <S, Itf>::ami_epv_ = nullptr;
 
 }
 }
@@ -114,7 +114,7 @@ const AMI_EPV <I>* const AMI_Servant <S, I>::ami_epv_ = nullptr;
 #define NIRVANA_BASE_ENTRY(type, name) MyBridge::Wide <type>::Func name;\
 operator const MyBridge::Wide < type>::Func () const { return name; }
 
-#define NIRVANA_BRIDGE_BEGIN(I) template <> struct Bridge < I>::EPV { typedef Bridge <I> MyBridge; Interface::EPV header; struct {
+#define NIRVANA_BRIDGE_BEGIN(Itf) template <> struct Bridge < Itf>::EPV { typedef Bridge <Itf> MyBridge; Interface::EPV header; struct {
 #define NIRVANA_BRIDGE_EPV } base; struct {
 #define NIRVANA_BRIDGE_END() } epv;};
 
@@ -123,12 +123,12 @@ operator const MyBridge::Wide < type>::Func () const { return name; }
 #define CORBA_INTERNAL_REPOSITORY_ID(t) "IDL:CORBA/Internal/" t ":1.0"
 #define PORTABLESERVER_REPOSITORY_ID(t) "IDL:omg.org/PortableServer/" t ":1.0"
 
-#define NIRVANA_AMI_BEGIN(I) template <> struct AMI_EPV < I> {
+#define NIRVANA_AMI_BEGIN(Itf) template <> struct AMI_EPV < Itf> {
 #define NIRVANA_AMI_END() };
 
-#define NIRVANA_BRIDGE_AMI_EPV(I) } base; struct { const AMI_EPV <I>* epv; } ami; struct {
-#define NIRVANA_BRIDGE_AMI_INIT(S, I) AMI_Servant <S, I>::ami_epv_
+#define NIRVANA_BRIDGE_AMI_EPV(Itf) } base; struct { const AMI_EPV <Itf>* epv; } ami; struct {
+#define NIRVANA_BRIDGE_AMI_INIT(S, Itf) AMI_Servant <S, Itf>::ami_epv_
 
-#define NIRVANA_IMPLEMENT_AMI(S, I) template <> const AMI_EPV <I>* const AMI_Servant <S, I>::ami_epv_ = &AMI_Skeleton <S, I>::epv_;
+#define NIRVANA_IMPLEMENT_AMI(S, Itf) template <> const AMI_EPV <Itf>* const AMI_Servant <S, Itf>::ami_epv_ = &AMI_Skeleton <S, Itf>::epv_;
 
 #endif

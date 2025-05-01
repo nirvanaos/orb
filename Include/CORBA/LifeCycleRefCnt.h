@@ -38,16 +38,16 @@ class LifeCycleRefCnt :
 	public LifeCycleDynamic <S>
 {
 public:
-	template <class I>
-	static Bridge <I>* _duplicate (Bridge <I>* itf)
+	template <class Itf>
+	static Bridge <Itf>* _duplicate (Bridge <Itf>* itf)
 	{
 		assert (itf);
 		S::_implementation (itf)._add_ref ();
 		return itf;
 	}
 
-	template <class I>
-	static void _release (Bridge <I>* itf)
+	template <class Itf>
+	static void _release (Bridge <Itf>* itf)
 	{
 		assert (itf);
 		S::_implementation (itf)._remove_ref ();

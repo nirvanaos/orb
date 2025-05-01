@@ -46,7 +46,7 @@ namespace CORBA {
 namespace Internal {
 
 /// Proxy factory base.
-template <class S, class I>
+template <class S, class Itf>
 class ProxyFactoryBase : public ServantStatic <S, ProxyFactory>
 {
 public:
@@ -55,7 +55,7 @@ public:
 	static InterfaceMetadataPtr _s__get_metadata (Bridge <ProxyFactory>* obj,
 		Interface* env)
 	{
-		return &MetadataOf <I>::metadata_;
+		return &MetadataOf <Itf>::metadata_;
 	}
 
 };
@@ -70,19 +70,19 @@ public:
 	}
 };
 
-template <class I, class PollerI = void>
+template <class Itf, class PollerI = void>
 class ProxyFactoryImpl :
-	public ProxyFactoryBase <ProxyFactoryImpl <I, PollerI>, I>
+	public ProxyFactoryBase <ProxyFactoryImpl <Itf, PollerI>, Itf>
 {
 public:
 	static Interface* create_proxy (Object::_ptr_type obj, AbstractBase::_ptr_type ab,
 		IOReference::_ptr_type proxy_manager, UShort interface_idx, Interface*& servant,
 		Interface::_ref_type& holder)
 	{
-		typedef Proxy <I> ProxyClass;
+		typedef Proxy <Itf> ProxyClass;
 		servant_reference <ProxyClass> proxy = make_stateless <ProxyClass> (obj, ab, proxy_manager,
 			interface_idx, std::ref (servant));
-		Bridge <I>* ret = proxy;
+		Bridge <Itf>* ret = proxy;
 		reinterpret_cast <I_ref <ProxyHolder>&> (holder) = std::move (proxy);
 		return ret;
 	}

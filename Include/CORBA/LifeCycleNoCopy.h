@@ -37,7 +37,7 @@ class LifeCycleNoCopy
 {
 public:
 	// Reference duplication is not allowed
-	template <class I>
+	template <class Itf>
 	static Interface* __duplicate (Interface* itf, Interface* env)
 	{
 		set_NO_IMPLEMENT (env);
@@ -45,10 +45,10 @@ public:
 	}
 
 	// Called from the servant destructor for dynamic objects.
-	template <class I>
+	template <class Itf>
 	static void __release (Interface* itf)
 	{
-		S& srv = S::_implementation (static_cast <Bridge <I>*> (itf));
+		S& srv = S::_implementation (static_cast <Bridge <Itf>*> (itf));
 		delete& srv;
 	}
 

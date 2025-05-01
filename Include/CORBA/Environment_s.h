@@ -32,7 +32,7 @@
 namespace CORBA {
 namespace Internal {
 
-template <class S, class I> class Skeleton;
+template <class S, class Itf> class Skeleton;
 
 template <class S>
 class Skeleton <S, ::CORBA::Environment>

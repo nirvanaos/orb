@@ -37,15 +37,15 @@ namespace Internal {
 
 /// Standard valuetype implementation.
 /// \tparam S Servant class implementing operations. Must derive from this mix-in.
-/// \tparam I Value interface.
-template <class S, class I>
+/// \tparam Itf Value interface.
+template <class S, class Itf>
 class ValueImplBase :
-	public BridgeVal <I>,
-	public Skeleton <S, I>
+	public BridgeVal <Itf>,
+	public Skeleton <S, Itf>
 {
 protected:
 	ValueImplBase () :
-		BridgeVal <I> (Skeleton <S, I>::epv_)
+		BridgeVal <Itf> (Skeleton <S, Itf>::epv_)
 	{}
 
 	ValueImplBase (const ValueImplBase&) :
@@ -56,16 +56,16 @@ protected:
 /// Default (stateless) value implementation.
 ///
 /// \tparam S Servant class implementing operations.
-/// \tparam I Value interface.
-template <class S, class I>
+/// \tparam Itf Value interface.
+template <class S, class Itf>
 class ValueImpl :
-	public ValueImplBase <S, I>
+	public ValueImplBase <S, Itf>
 {};
 
 /// Value state data.
 ///
-/// \tparam I Value interface.
-template <class I> class ValueData;
+/// \tparam Itf Value interface.
+template <class Itf> class ValueData;
 
 /// Non truncatable value
 class ValueNonTruncatable
@@ -115,7 +115,7 @@ template <Nirvana::ImportInterfaceT <TypeCode>* truncatable_base>
 using TruncatableBase = typename std::conditional <truncatable_base == nullptr,
 	ValueNonTruncatable, ValueTruncatable <truncatable_base> >::type;
 
-template <class I>
+template <class Itf>
 I_ptr <CORBA::ValueFactoryBase> get_factory () noexcept;
 
 #ifndef LEGACY_CORBA_CPP

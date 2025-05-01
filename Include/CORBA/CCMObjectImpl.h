@@ -90,18 +90,18 @@ public:
 
 #ifndef LEGACY_CORBA_CPP
 
-	template <class I>
-	static Object::_ref_type _itf_to_object (I_ref <I> ref)
+	template <class Itf>
+	static Object::_ref_type _itf_to_object (I_ref <Itf> ref)
 	{
 		return interface2object (ref);
 	}
 
 #else
 
-	template <class I>
-	static Object_ptr _itf_to_object (I_ptr <I> p)
+	template <class Itf>
+	static Object_ptr _itf_to_object (I_ptr <Itf> p)
 	{
-		I_var <I> ref (p);
+		I_var <Itf> ref (p);
 		return Object::_duplicate (interface2object (ref));
 	}
 
@@ -115,9 +115,9 @@ class InterfaceImpl <S, Components::CCMObject> :
 	public CCM_ObjectBase
 {};
 
-template <class I> class CCM_ObjectConnections;
+template <class Itf> class CCM_ObjectConnections;
 
-template <class S, class I> class CCM_ObjectFeatures;
+template <class S, class Itf> class CCM_ObjectFeatures;
 
 }
 }

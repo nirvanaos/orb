@@ -34,17 +34,17 @@
 namespace CORBA {
 namespace Internal {
 
-template <class I> inline
-void TypeObject <I>::marshal_in (I_ptr <I> src, IORequest_ptr rq)
+template <class Itf> inline
+void TypeObject <Itf>::marshal_in (I_ptr <Itf> src, IORequest_ptr rq)
 {
 	rq->marshal_interface (src);
 }
 
-template <class I> inline
-void TypeObject <I>::unmarshal (IORequest_ptr rq, I_ref <I>& dst)
+template <class Itf> inline
+void TypeObject <Itf>::unmarshal (IORequest_ptr rq, I_ref <Itf>& dst)
 {
-	// I may be not completely defined so we use reinterpret_cast
-	rq->unmarshal_interface (RepIdOf <I>::id, reinterpret_cast <I_ref <Interface>&> (dst));
+	// Itf may be not completely defined so we use reinterpret_cast
+	rq->unmarshal_interface (RepIdOf <Itf>::id, reinterpret_cast <I_ref <Interface>&> (dst));
 }
 
 }

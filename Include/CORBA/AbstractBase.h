@@ -195,13 +195,13 @@ public:
 #endif
 };
 
-template <class I>
-struct TypeAbstractInterface : TypeItfMarshalable <I>
+template <class Itf>
+struct TypeAbstractInterface : TypeItfMarshalable <Itf>
 {
 	static const TCKind tc_kind = TCKind::tk_abstract_interface;
 
-	static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
-	static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
+	static void marshal_in (I_ptr <Itf> src, IORequest_ptr rq);
+	static void unmarshal (IORequest_ptr rq, I_ref <Itf>& dst);
 };
 
 }

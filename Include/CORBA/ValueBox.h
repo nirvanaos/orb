@@ -350,8 +350,8 @@ template <class VB, typename T>
 class ValueBox : public Client <ValueBoxImpl <VB, T>, ValueBase>
 {};
 
-template <class I>
-using TypeValueBox = TypeValue <I>;
+template <class Itf>
+using TypeValueBox = TypeValue <Itf>;
 
 }
 }

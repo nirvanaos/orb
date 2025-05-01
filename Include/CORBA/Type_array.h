@@ -34,7 +34,7 @@
 #include <Nirvana/array_bool.h>
 
 // Note that reference types are mapped to interface types.
-// So Type <I_ref <I> > provide the same traits as Type <I>.
+// So Type <I_ref <Itf> > provide the same traits as Type <Itf>.
 
 namespace CORBA {
 

@@ -35,25 +35,25 @@
 namespace CORBA {
 namespace Internal {
 
-template <class T, class I> class Client;
+template <class T, class Itf> class Client;
 
-template <class I> struct NativeDecls
+template <class Itf> struct NativeDecls
 {};
 
-template <class I> struct Decls : NativeDecls <I>
+template <class Itf> struct Decls : NativeDecls <Itf>
 {};
 
-template <class I>
+template <class Itf>
 class ClientBridge :
-	public Bridge <I>
+	public Bridge <Itf>
 {
 protected:
-	Bridge <I>& _get_bridge (Environment&) noexcept
+	Bridge <Itf>& _get_bridge (Environment&) noexcept
 	{
 		return *this;
 	}
 
-	const Bridge <I>& _get_bridge (Environment&) const noexcept
+	const Bridge <Itf>& _get_bridge (Environment&) const noexcept
 	{
 		return *this;
 	}
@@ -61,15 +61,15 @@ protected:
 };
 
 //! Primary interface client implementation.
-template <class I>
+template <class Itf>
 class ClientInterfacePrimary :
-	public Client <ClientBridge <I>, I>
+	public Client <ClientBridge <Itf>, Itf>
 {
 public:
-	typedef I_ptr <I> _ptr_type;
+	typedef I_ptr <Itf> _ptr_type;
 
 #ifdef LEGACY_CORBA_CPP
-	typedef I_var <I> _var_type;
+	typedef I_var <Itf> _var_type;
 	typedef _var_type& _out_type;
 
 	NIRVANA_NODISCARD static _ptr_type _duplicate (_ptr_type obj)
@@ -77,7 +77,7 @@ public:
 		return _unsafe_cast (interface_duplicate (&obj));
 	}
 #else
-	typedef I_ref <I> _ref_type;
+	typedef I_ref <Itf> _ref_type;
 #endif
 
 	static _ptr_type _nil () noexcept
@@ -87,13 +87,13 @@ public:
 
 	static _ptr_type _check (Interface* bridge)
 	{
-		return _unsafe_cast (Interface::_check (bridge, RepIdOf <I>::id));
+		return _unsafe_cast (Interface::_check (bridge, RepIdOf <Itf>::id));
 	}
 
 private:
-	static I* _unsafe_cast (Interface* itf) noexcept
+	static Itf* _unsafe_cast (Interface* itf) noexcept
 	{
-		return I_ptr <Interface> (itf).template downcast <I> ();
+		return I_ptr <Interface> (itf).template downcast <Itf> ();
 	}
 
 };
@@ -142,9 +142,9 @@ public:
 
 /// Base interface client implementation.
 /// Has specializations for Object and ValueBase.
-template <class Primary, class I>
+template <class Primary, class Itf>
 class ClientInterfaceBase :
-	public Client <ClientBase <Primary, I>, I>
+	public Client <ClientBase <Primary, Itf>, Itf>
 {};
 
 /// Base for client interface.
@@ -155,9 +155,9 @@ class ClientInterface :
 {};
 
 /// Support interface client implementation.
-template <class Primary, class I>
+template <class Primary, class Itf>
 class ClientInterfaceSupport :
-	public Client <ClientBaseNoPtr <Primary, I>, I>
+	public Client <ClientBaseNoPtr <Primary, Itf>, Itf>
 {};
 
 template <class Primary, class ... Intfs>
@@ -165,8 +165,8 @@ class ClientSupports :
 	public ClientInterfaceSupport <Primary, Intfs>...
 {};
 
-template <class I> inline
-const AMI_EPV <I>& AMI_epv (Bridge <I>& bridge)
+template <class Itf> inline
+const AMI_EPV <Itf>& AMI_epv (Bridge <Itf>& bridge)
 {
 	assert (bridge._epv ().ami.epv);
 	return *bridge._epv ().ami.epv;

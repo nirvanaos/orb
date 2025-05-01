@@ -65,18 +65,18 @@ void construct (T& v, T&& src) noexcept
 
 #ifndef LEGACY_CORBA_CPP
 
-template <class I>
-void construct (I_ref <I> v, I_ptr <I> src)
+template <class Itf>
+void construct (I_ref <Itf> v, I_ptr <Itf> src)
 {
-	::new (&v) I_ref <I> (src);
+	::new (&v) I_ref <Itf> (src);
 }
 
 #else
 
-template <class I>
-void construct (I_var <I> v, I_ptr <I> src)
+template <class Itf>
+void construct (I_var <Itf> v, I_ptr <Itf> src)
 {
-	::new (&v) I_var <I> (src);
+	::new (&v) I_var <Itf> (src);
 }
 
 #endif

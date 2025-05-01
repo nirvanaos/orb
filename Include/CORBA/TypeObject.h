@@ -40,13 +40,13 @@ class LocalObject;
 
 namespace Internal {
 
-template <class I>
-struct TypeObject : TypeItfMarshalable <I>
+template <class Itf>
+struct TypeObject : TypeItfMarshalable <Itf>
 {
 	static const TCKind tc_kind = TCKind::tk_objref;
 
-	inline static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
-	inline static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
+	inline static void marshal_in (I_ptr <Itf> src, IORequest_ptr rq);
+	inline static void unmarshal (IORequest_ptr rq, I_ref <Itf>& dst);
 };
 
 template <>
@@ -58,8 +58,8 @@ struct Type <Object> : TypeObject <Object>
 	}
 };
 
-template <class I>
-struct TypeLocalObject : TypeObject <I>
+template <class Itf>
+struct TypeLocalObject : TypeObject <Itf>
 {
 	static const TCKind tc_kind = TCKind::tk_local_interface;
 };

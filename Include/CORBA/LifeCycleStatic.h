@@ -35,14 +35,14 @@ namespace Internal {
 class LifeCycleStatic
 {
 public:
-	template <class I>
+	template <class Itf>
 	static Interface* __duplicate (Interface* itf, Interface* env) noexcept
 	{
 		(Nirvana::the_module.imp.itf->_epv ().duplicate) (Nirvana::the_module.imp.itf, env);
 		return itf;
 	}
 
-	template <class I>
+	template <class Itf>
 	static void __release (Interface*) noexcept
 	{
 		(Nirvana::the_module.imp.itf->_epv ().release) (Nirvana::the_module.imp.itf);

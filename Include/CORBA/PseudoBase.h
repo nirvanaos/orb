@@ -62,10 +62,10 @@ public:
 	I_ptr <Interface> _query_interface (String_in type_id);
 
 	/// This method does not increment reference counter
-	template <class I>
-	I_ptr <I> _query_interface ()
+	template <class Itf>
+	I_ptr <Itf> _query_interface ()
 	{
-		return _query_interface (RepIdOf <I>::id).template downcast <I> ();
+		return _query_interface (RepIdOf <Itf>::id).template downcast <Itf> ();
 	}
 };
 

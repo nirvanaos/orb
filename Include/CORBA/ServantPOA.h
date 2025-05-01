@@ -32,23 +32,23 @@
 namespace CORBA {
 namespace Internal {
 
-template <class I> class ServantPOA;
+template <class Itf> class ServantPOA;
 
 class ServantTraitsPOA :
 	public ServantTraits <ServantTraitsPOA>
 {
 public:
-	template <class I>
-	static ServantPOA <I>& _implementation (Bridge <I>* bridge)
+	template <class Itf>
+	static ServantPOA <Itf>& _implementation (Bridge <Itf>* bridge)
 	{
-		check_pointer (bridge, Skeleton <ServantPOA <I>, I>::epv_.header);
-		return static_cast <ServantPOA <I>&> (*bridge);
+		check_pointer (bridge, Skeleton <ServantPOA <Itf>, Itf>::epv_.header);
+		return static_cast <ServantPOA <Itf>&> (*bridge);
 	}
 
-	template <class I>
-	static const ServantPOA <I>& _implementation (const Bridge <I>* bridge)
+	template <class Itf>
+	static const ServantPOA <Itf>& _implementation (const Bridge <Itf>* bridge)
 	{
-		return _implementation (const_cast <Bridge <I>*> (bridge));
+		return _implementation (const_cast <Bridge <Itf>*> (bridge));
 	}
 
 };

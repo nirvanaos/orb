@@ -46,12 +46,12 @@ extern void check_pointer (const Interface* obj, const Interface::EPV& epv);
 extern void check_pointer_noexcept (const Interface* obj, const Interface::EPV& epv,
 	Interface* env) noexcept;
 
-template <class S, class I> class Skeleton;
+template <class S, class Itf> class Skeleton;
 
 //! Standard servant mix-in.
 //! \tparam S Servant class implementing operations. Must derive from this mix-in.
-//! \tparam I Primary interface.
-template <class S, class I> class Servant;
+//! \tparam Itf Primary interface.
+template <class S, class Itf> class Servant;
 
 //! Standard (dynamic) servant traits.
 //! \tparam S Servant class, derived from this.
@@ -59,17 +59,17 @@ template <class S>
 class ServantTraits
 {
 public:
-	template <class I>
-	static S& _implementation (Bridge <I>* bridge)
+	template <class Itf>
+	static S& _implementation (Bridge <Itf>* bridge)
 	{
-		check_pointer (bridge, Skeleton <S, I>::epv_.header);
+		check_pointer (bridge, Skeleton <S, Itf>::epv_.header);
 		return static_cast <S&> (*bridge);
 	}
 
-	template <class I>
-	static const S& _implementation (const Bridge <I>* bridge)
+	template <class Itf>
+	static const S& _implementation (const Bridge <Itf>* bridge)
 	{
-		return S::_implementation (const_cast <Bridge <I>*> (bridge));
+		return S::_implementation (const_cast <Bridge <Itf>*> (bridge));
 	}
 
 	template <class Base, class Derived>
@@ -107,15 +107,15 @@ public:
 
 //! Standard interface implementation.
 //! \tparam S Servant class implementing operations. Must derive from this mix-in.
-//! \tparam I Interface.
-template <class S, class I>
+//! \tparam Itf Interface.
+template <class S, class Itf>
 class InterfaceImplBase :
-	public Bridge <I>,
-	public Skeleton <S, I>
+	public Bridge <Itf>,
+	public Skeleton <S, Itf>
 {
 protected:
 	InterfaceImplBase () :
-		Bridge <I> (Skeleton <S, I>::epv_)
+		Bridge <Itf> (Skeleton <S, Itf>::epv_)
 	{}
 
 	InterfaceImplBase (const InterfaceImplBase&) :
@@ -123,9 +123,9 @@ protected:
 	{}
 };
 
-template <class S, class I>
+template <class S, class Itf>
 class InterfaceImpl :
-	public InterfaceImplBase <S, I>
+	public InterfaceImplBase <S, Itf>
 {};
 
 }

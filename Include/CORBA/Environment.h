@@ -37,14 +37,14 @@ class Environment :
 	public EnvironmentImpl <Environment>
 {
 public:
-	template <class I>
+	template <class Itf>
 	static Interface* __duplicate (Interface*, Interface* env) noexcept
 	{
 		set_NO_IMPLEMENT (env);
 		return 0;
 	}
 
-	template <class I>
+	template <class Itf>
 	static void __release (Interface*) noexcept
 	{}
 

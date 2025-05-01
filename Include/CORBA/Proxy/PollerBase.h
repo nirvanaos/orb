@@ -37,7 +37,7 @@
 namespace CORBA {
 namespace Internal {
 
-template <class I> class Poller;
+template <class Itf> class Poller;
 
 class PollerRoot : public ValueMemory
 {
@@ -88,14 +88,14 @@ private:
 	UShort interface_idx_;
 };
 
-template <class I, class ... Bases>
+template <class Itf, class ... Bases>
 class PollerBase :
-	public InterfaceImplBase <Poller <I>, I>,
-	public ProxyHolderImpl <Poller <I> >,
+	public InterfaceImplBase <Poller <Itf>, Itf>,
+	public ProxyHolderImpl <Poller <Itf> >,
 	public PollerRoot,
 	public ProxyBaseInterface <Bases>...,
-	public ServantTraits <Poller <I> >,
-	public LifeCycleRefCnt <Poller <I> >
+	public ServantTraits <Poller <Itf> >,
+	public LifeCycleRefCnt <Poller <Itf> >
 {
 public:
 	// Wide interface
@@ -120,28 +120,28 @@ private:
 		Interface* env) noexcept
 	{
 		base = static_cast <ProxyBaseInterface <Base>&> (
-			Poller <I>::_implementation (derived)).get_bridge (id, env);
+			Poller <Itf>::_implementation (derived)).get_bridge (id, env);
 	}
 
-	static void _wide_val (Bridge <I>* derived, Bridge <::Messaging::Poller>*& base, Type <String>::ABI_in id,
+	static void _wide_val (Bridge <Itf>* derived, Bridge <::Messaging::Poller>*& base, Type <String>::ABI_in id,
 		Interface* env) noexcept
 	{
 		base = static_cast <PollerRoot&> (
-			Poller <I>::_implementation (derived)).messaging_poller (id, env);
+			Poller <Itf>::_implementation (derived)).messaging_poller (id, env);
 	}
 
-	static void _wide_val (Bridge <I>* derived, Bridge <::CORBA::Pollable>*& base, Type <String>::ABI_in id,
+	static void _wide_val (Bridge <Itf>* derived, Bridge <::CORBA::Pollable>*& base, Type <String>::ABI_in id,
 		Interface* env) noexcept
 	{
 		base = static_cast <PollerRoot&> (
-			ServantTraits <Poller <I> >::_implementation (derived)).pollable (id, env);
+			ServantTraits <Poller <Itf> >::_implementation (derived)).pollable (id, env);
 	}
 
-	static void _wide_val (Bridge <I>* derived, Bridge <::CORBA::ValueBase>*& base, Type <String>::ABI_in id,
+	static void _wide_val (Bridge <Itf>* derived, Bridge <::CORBA::ValueBase>*& base, Type <String>::ABI_in id,
 		Interface* env) noexcept
 	{
 		base = static_cast <PollerRoot&> (
-			ServantTraits <Poller <I> >::_implementation (derived)).value_base (id, env);
+			ServantTraits <Poller <Itf> >::_implementation (derived)).value_base (id, env);
 	}
 
 };

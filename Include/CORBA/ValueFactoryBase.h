@@ -73,10 +73,10 @@ public:
 	I_ptr <Interface> _query_factory (String_in type_id);
 
 	/// This method does not increment reference counter
-	template <class I>
-	I_ptr <I> _query_factory ()
+	template <class Itf>
+	I_ptr <Itf> _query_factory ()
 	{
-		return static_cast <I*> (&_query_factory (RepIdOf <I>::id));
+		return static_cast <Itf*> (&_query_factory (RepIdOf <Itf>::id));
 	}
 
 private:

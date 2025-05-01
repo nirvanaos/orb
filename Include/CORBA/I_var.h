@@ -30,13 +30,13 @@
 namespace CORBA {
 namespace Internal {
 
-template <class I> class I_out;
+template <class Itf> class I_out;
 
 /// Helper class to support legacy interface smart pointer.
-template <class I>
-class I_var : public I_ref <I>
+template <class Itf>
+class I_var : public I_ref <Itf>
 {
-	typedef I_ref <I> Base;
+	typedef I_ref <Itf> Base;
 
 public:
 	I_var () noexcept
@@ -44,20 +44,20 @@ public:
 
 	// No add reference on construct
 
-	I_var (I* p) noexcept :
+	I_var (Itf* p) noexcept :
 		Base (p)
 	{}
 
-	I_var (BridgeVal <I>* p) :
-		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
+	I_var (BridgeVal <Itf>* p) :
+		Base (static_cast <Itf*> (static_cast <Bridge <Itf>*> (p)))
 	{}
 
 	template <class VB, typename T>
 	I_var (ValueBox <VB, T>* p) noexcept :
-		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
+		Base (static_cast <Itf*> (static_cast <Bridge <Itf>*> (p)))
 	{}
 
-	I_var (const I_ptr <I>& p) noexcept :
+	I_var (const I_ptr <Itf>& p) noexcept :
 		Base (p.p_)
 	{}
 
@@ -66,7 +66,7 @@ public:
 		Base (Base::wide (p.p_))
 	{}
 
-	I_var (const I_ref <I>& src) :
+	I_var (const I_ref <Itf>& src) :
 		Base (src)
 	{}
 
@@ -80,7 +80,7 @@ public:
 	template <class I1>
 	I_var (const I_var <I1>& src) = delete;
 
-	I_var (I_ref <I>&& src) noexcept :
+	I_var (I_ref <Itf>&& src) noexcept :
 		Base (std::move (src))
 	{}
 
@@ -95,18 +95,18 @@ public:
 	I_var (const I_var <I1>&& src) = delete;
 
 	// No add reference
-	I_var& operator = (I* p) noexcept
+	I_var& operator = (Itf* p) noexcept
 	{
 		// Even if p == p_ we must release p_.
 		// So we don't compare pointers.
-		I* tmp = Base::p_;
+		Itf* tmp = Base::p_;
 		Base::p_ = p;
 		interface_release (tmp);
 		return *this;
 	}
 
 	// No add reference
-	I_var& operator = (const I_ptr <I>& p) noexcept
+	I_var& operator = (const I_ptr <Itf>& p) noexcept
 	{
 		return operator = (p.p_);
 	}
@@ -119,16 +119,16 @@ public:
 	}
 
 	// No add reference
-	I_var& operator = (BridgeVal <I>* p) noexcept
+	I_var& operator = (BridgeVal <Itf>* p) noexcept
 	{
-		return operator = (Base (static_cast <I*> (static_cast <Bridge <I>*> (p))));
+		return operator = (Base (static_cast <Itf*> (static_cast <Bridge <Itf>*> (p))));
 	}
 
 	// No add reference
 	template <class VB, typename T>
 	I_var& operator = (ValueBox <VB, T>* p) noexcept
 	{
-		return operator = (Base (static_cast <I*> (static_cast <Bridge <I>*> (p))));
+		return operator = (Base (static_cast <Itf*> (static_cast <Bridge <Itf>*> (p))));
 	}
 
 	// Add reference
@@ -150,17 +150,17 @@ public:
 		return *this;
 	}
 
-	inline I_inout <I> inout ();
-	inline I_out <I> out ();
+	inline I_inout <Itf> inout ();
+	inline I_out <Itf> out ();
 
-	I_ptr <I> in () const
+	I_ptr <Itf> in () const
 	{
 		return Base::p_;
 	}
 
-	I_ptr <I> _retn () noexcept
+	I_ptr <Itf> _retn () noexcept
 	{
-		I_ptr <I> p (Base::p_);
+		I_ptr <Itf> p (Base::p_);
 		Base::p_ = nullptr;
 		return p;
 	}

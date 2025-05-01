@@ -38,33 +38,33 @@ class servant_reference;
 
 namespace Internal {
 
-template <class I> class I_ptr;
-template <class I> class I_ref_base;
-template <class I> class I_ref;
-template <class I> class I_var;
-template <class I> class I_inout;
-template <class I> class I_ret;
-template <class I> class ClientInterfacePrimary;
+template <class Itf> class I_ptr;
+template <class Itf> class I_ref_base;
+template <class Itf> class I_ref;
+template <class Itf> class I_var;
+template <class Itf> class I_inout;
+template <class Itf> class I_ret;
+template <class Itf> class ClientInterfacePrimary;
 template <class VB, typename T> class ValueBox;
 
 #ifndef NDEBUG
 const uintptr_t UNINITIALIZED_PTR = 1;
 #endif
 
-template <class I>
+template <class Itf>
 class I_ptr_base
 {
 public:
-	typedef I ItfType;
+	typedef Itf ItfType;
 
 	/// Zero init skipped for performance
 	I_ptr_base () noexcept
 #ifndef NDEBUG
-		: p_ ((I*)UNINITIALIZED_PTR)
+		: p_ ((Itf*)UNINITIALIZED_PTR)
 #endif
 	{}
 
-	I_ptr_base (I* p) noexcept :
+	I_ptr_base (Itf* p) noexcept :
 		p_ (p)
 	{}
 
@@ -76,7 +76,7 @@ public:
 		p_ (src.p_)
 	{}
 
-	I_ptr_base (const I_ref <I>& src) noexcept;
+	I_ptr_base (const I_ref <Itf>& src) noexcept;
 
 	I_ptr_base& operator = (const I_ptr_base& src) noexcept
 	{
@@ -84,7 +84,7 @@ public:
 		return *this;
 	}
 
-	I* operator -> () const
+	Itf* operator -> () const
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)p_);
 		if (!p_)
@@ -105,34 +105,34 @@ public:
 	}
 
 protected:
-	void move_from (I_ref <I>& src) noexcept;
+	void move_from (I_ref <Itf>& src) noexcept;
 
 protected:
-	friend class I_ref_base <I>;
+	friend class I_ref_base <Itf>;
 	template <class I1> friend class I_var;
 	template <class I1> friend class I_ref;
-	friend class I_inout <I>;
-	friend class I_ret <I>;
+	friend class I_inout <Itf>;
+	friend class I_ret <Itf>;
 	template <class I1> friend class I_ptr;
 
 #ifdef LEGACY_CORBA_CPP
-	friend class I_var <I>;
+	friend class I_var <Itf>;
 #endif
 
-	I* p_;
+	Itf* p_;
 };
 
 //! Interface pointer template.
-template <class I>
-class I_ptr : public I_ptr_base <I>
+template <class Itf>
+class I_ptr : public I_ptr_base <Itf>
 {
-	typedef I_ptr_base <I> Base;
+	typedef I_ptr_base <Itf> Base;
 
 public:
 	I_ptr () noexcept
 	{}
 
-	I_ptr (I* p) noexcept :
+	I_ptr (Itf* p) noexcept :
 		Base (p)
 	{}
 
@@ -149,7 +149,7 @@ public:
 		Base (wide (src.p_))
 	{}
 
-	I_ptr (const I_ref <I>& src) noexcept :
+	I_ptr (const I_ref <Itf>& src) noexcept :
 		Base (src)
 	{}
 
@@ -162,20 +162,20 @@ public:
 	///    I_ref <Object> func ();
 	///    Object_ptr obj = func ();
 	NIRVANA_DEPRECATED ("Potentially unsafe conversion from reference to pointer")
-	I_ptr (I_ref <I>&& src) noexcept
+	I_ptr (I_ref <Itf>&& src) noexcept
 	{
 		this->move_from (src);
 	}
 
 #endif
 
-	I_ptr (BridgeVal <I>* p) noexcept :
-		Base (static_cast <I*> (static_cast <Bridge <I>*> (p)))
+	I_ptr (BridgeVal <Itf>* p) noexcept :
+		Base (static_cast <Itf*> (static_cast <Bridge <Itf>*> (p)))
 	{}
 
 	template <class VB, typename T>
 	I_ptr (ValueBox <VB, T>* p) noexcept :
-		I_ptr (static_cast <I_ptr <I> > (*p))
+		I_ptr (static_cast <I_ptr <Itf> > (*p))
 	{}
 
 	template <class S>
@@ -202,7 +202,7 @@ public:
 		return *this;
 	}
 
-	I_ptr& operator = (BridgeVal <I>* p) noexcept
+	I_ptr& operator = (BridgeVal <Itf>* p) noexcept
 	{
 		return operator = (I_ptr (p));
 	}
@@ -216,22 +216,22 @@ public:
 	template <class S>
 	I_ptr& operator = (const servant_reference <S>& sr) noexcept
 	{
-		return operator = (static_cast <BridgeVal <I>*> (static_cast <S*> (sr)));
+		return operator = (static_cast <BridgeVal <Itf>*> (static_cast <S*> (sr)));
 	}
 
 	Interface* operator & () const noexcept
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
-		// I may be not completely defined so we use reinterpret_cast
+		// Itf may be not completely defined so we use reinterpret_cast
 		return reinterpret_cast <Interface*> (this->p_);
 	}
 
 private:
 	// Calls EPV function to obtain pointer to the base interface.
 	template <class I1>
-	static I* wide (I1* p)
+	static Itf* wide (I1* p)
 	{
-		return p ? static_cast <I*> (&static_cast <I_ptr <I> > (*p)) : nullptr;
+		return p ? static_cast <Itf*> (&static_cast <I_ptr <Itf> > (*p)) : nullptr;
 	}
 };
 
@@ -258,8 +258,8 @@ public:
 		Base (src)
 	{}
 
-	template <class I>
-	I_ptr (const I_ptr <I>& src) noexcept :
+	template <class Itf>
+	I_ptr (const I_ptr <Itf>& src) noexcept :
 		Base (&src)
 	{}
 
@@ -267,9 +267,9 @@ public:
 		Base (src)
 	{}
 
-	template <class I>
-	I_ptr (const I_ref <I>& src) noexcept :
-		Base (I_ptr <I> (src))
+	template <class Itf>
+	I_ptr (const I_ref <Itf>& src) noexcept :
+		Base (I_ptr <Itf> (src))
 	{}
 
 	I_ptr& operator = (const I_ptr& src) noexcept
@@ -284,14 +284,14 @@ public:
 		return this->p_;
 	}
 
-	template <class I>
-	I* downcast () const noexcept
+	template <class Itf>
+	Itf* downcast () const noexcept
 	{
-		assert (!p_ || RepId::compatible (p_->_epv ().interface_id, RepIdOf <I>::id));
+		assert (!p_ || RepId::compatible (p_->_epv ().interface_id, RepIdOf <Itf>::id));
 
-		// Interface `I` may be not completely defined, use reinterpret_cast.
+		// Interface `Itf` may be not completely defined, use reinterpret_cast.
 		// Using reinterpret_cast is safe here because the Interface is top base.
-		return reinterpret_cast <I*> (p_);
+		return reinterpret_cast <Itf*> (p_);
 	}
 
 };
@@ -306,8 +306,8 @@ inline I_ptr <Interface> Interface::_nil () noexcept
 #ifdef LEGACY_CORBA_CPP
 
 /// CORBA::release
-template <class I> inline
-void release (const Internal::I_ptr <I>& ptr)
+template <class Itf> inline
+void release (const Internal::I_ptr <Itf>& ptr)
 {
 	Internal::interface_release (&ptr);
 }
@@ -315,15 +315,15 @@ void release (const Internal::I_ptr <I>& ptr)
 #endif
 
 /// CORBA::is_nil()
-template <class I> inline
-bool is_nil (const Internal::I_ptr <I>& ptr)
+template <class Itf> inline
+bool is_nil (const Internal::I_ptr <Itf>& ptr)
 {
 	return !ptr;
 }
 
 /// CORBA::is_nil()
-template <class I> inline
-bool is_nil (const Internal::I_ref <I>& ptr)
+template <class Itf> inline
+bool is_nil (const Internal::I_ref <Itf>& ptr)
 {
 	return !ptr;
 }

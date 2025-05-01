@@ -48,11 +48,11 @@ namespace Internal {
 
 // ValueBase
 
-template <class I>
-struct TypeValue : TypeItfMarshalable <I>
+template <class Itf>
+struct TypeValue : TypeItfMarshalable <Itf>
 {
-	inline static void marshal_in (I_ptr <I> src, IORequest_ptr rq);
-	inline static void unmarshal (IORequest_ptr rq, I_ref <I>& dst);
+	inline static void marshal_in (I_ptr <Itf> src, IORequest_ptr rq);
+	inline static void unmarshal (IORequest_ptr rq, I_ref <Itf>& dst);
 };
 
 template <>
@@ -105,10 +105,10 @@ public:
 	I_ptr <Interface> _query_valuetype (String_in type_id);
 
 	/// This method does not increment reference counter
-	template <class I>
-	I_ptr <I> _query_valuetype ()
+	template <class Itf>
+	I_ptr <Itf> _query_valuetype ()
 	{
-		return _query_valuetype (RepIdOf <I>::id).template downcast <I> ();
+		return _query_valuetype (RepIdOf <Itf>::id).template downcast <Itf> ();
 	}
 
 	/// If the value is truncatable, returns the type code of the truncatable base.

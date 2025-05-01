@@ -43,7 +43,7 @@ struct InterfaceEntry
 		void* servant, String_in id);
 };
 
-template <class S, class Primary, class ... I>
+template <class S, class Primary, class ... Itf>
 class InterfaceFinder
 {
 	template <class Itf>
@@ -59,26 +59,26 @@ private:
 	static const InterfaceEntry itable_ [];
 };
 
-template <class S, class Primary, class ... I>
-const InterfaceEntry InterfaceFinder <S, Primary, I...>::itable_ [] = {
+template <class S, class Primary, class ... Itf>
+const InterfaceEntry InterfaceFinder <S, Primary, Itf...>::itable_ [] = {
 	{ RepIdOf <Primary>::id, countof (RepIdOf <Primary>::id) - 1, cast <Primary> },
-	{ RepIdOf <I>::id, countof (RepIdOf <I>::id) - 1, cast <I> }...
+	{ RepIdOf <Itf>::id, countof (RepIdOf <Itf>::id) - 1, cast <Itf> }...
 };
 
-template <class S, class Primary, class ... I>
-inline Interface* InterfaceFinder <S, Primary, I...>::find (S& servant, String_in id)
+template <class S, class Primary, class ... Itf>
+inline Interface* InterfaceFinder <S, Primary, Itf...>::find (S& servant, String_in id)
 {
-	return InterfaceEntry::find (itable_, itable_ + 1 + sizeof ... (I), &servant, id);
+	return InterfaceEntry::find (itable_, itable_ + 1 + sizeof ... (Itf), &servant, id);
 }
 
-template <class Primary, class ... I>
+template <class Primary, class ... Itf>
 class FindInterface
 {
 public:
 	template <class S>
 	static Interface* find (S& servant, String_in id)
 	{
-		return InterfaceFinder <S, Primary, I...>::find (servant, id);
+		return InterfaceFinder <S, Primary, Itf...>::find (servant, id);
 	}
 };
 

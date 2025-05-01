@@ -35,7 +35,7 @@
 namespace CORBA {
 namespace Internal {
 
-template <class S, class I> class ServantStatic;
+template <class S, class Itf> class ServantStatic;
 
 //! Static servant traits
 template <class S>
@@ -43,8 +43,8 @@ class ServantTraitsStatic :
 	public ServantTraits <S>
 {
 public:
-	template <class I>
-	static S& _implementation (Bridge <I>* bridge) noexcept
+	template <class Itf>
+	static S& _implementation (Bridge <Itf>* bridge) noexcept
 	{
 		return *(S*)nullptr;
 	}
@@ -55,39 +55,39 @@ class ServantTraitsStaticEx :
 	public ServantTraits <S>
 {
 public:
-	template <class I>
-	static S _implementation (Bridge <I>* bridge)
+	template <class Itf>
+	static S _implementation (Bridge <Itf>* bridge)
 	{
 		return S ();
 	}
 };
 
-template <class S, class I>
+template <class S, class Itf>
 class InterfaceStaticBase :
-	public Skeleton <S, I>
+	public Skeleton <S, Itf>
 {
 public:
-	constexpr operator Bridge <I>& () const noexcept
+	constexpr operator Bridge <Itf>& () const noexcept
 	{
 		return *_bridge ();
 	}
 
-	constexpr static Bridge <I>* _bridge () noexcept
+	constexpr static Bridge <Itf>* _bridge () noexcept
 	{
-		return const_cast <Bridge <I>*> (&bridge_);
+		return const_cast <Bridge <Itf>*> (&bridge_);
 	}
 
-	static constexpr Bridge <I> bridge_{ Skeleton <S, I>::epv_ };
+	static constexpr Bridge <Itf> bridge_{ Skeleton <S, Itf>::epv_ };
 };
 
-#define NIRVANA_STATIC_BRIDGE(I, ...) ::CORBA::Internal::InterfaceStaticBase <__VA_ARGS__, I>::_bridge ()
+#define NIRVANA_STATIC_BRIDGE(Itf, ...) ::CORBA::Internal::InterfaceStaticBase <__VA_ARGS__, Itf>::_bridge ()
 
-//template <class S, class I>
-//const Bridge <I> InterfaceStaticBase <S, I>::bridge_ (InterfaceStaticBase <S, I>::epv_);
+//template <class S, class Itf>
+//const Bridge <Itf> InterfaceStaticBase <S, Itf>::bridge_ (InterfaceStaticBase <S, Itf>::epv_);
 
-template <class S, class I>
+template <class S, class Itf>
 class InterfaceStatic :
-	public InterfaceStaticBase <S, I>
+	public InterfaceStaticBase <S, Itf>
 {};
 
 class ServantStaticDummy

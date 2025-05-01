@@ -32,11 +32,11 @@ namespace CORBA {
 namespace Internal {
 
 // Link to interface in other proxy object
-template <class I>
+template <class Itf>
 class ProxyLink
 {
 public:
-	ProxyLink (I_ptr <I> p) :
+	ProxyLink (I_ptr <Itf> p) :
 		itf_ (p)
 	{
 		if (!p)
@@ -44,35 +44,35 @@ public:
 		id_len_ = strlen (itf_->_epv ().header.interface_id);
 	}
 
-	Bridge <I>* get_bridge (Type <String>::ABI_in id, Interface* env) const noexcept
+	Bridge <Itf>* get_bridge (Type <String>::ABI_in id, Interface* env) const noexcept
 	{
 		if (!RepId::compatible (itf_->_epv ().header.interface_id, id_len_, Type <String>::in (id)))
 			set_INV_OBJREF (env);
-		return static_cast <Bridge <I>*> (&itf_);
+		return static_cast <Bridge <Itf>*> (&itf_);
 	}
 
-	I_ptr <I> itf () const noexcept
+	I_ptr <Itf> itf () const noexcept
 	{
 		return itf_;
 	}
 
 private:
-	I_ptr <I> itf_;
+	I_ptr <Itf> itf_;
 	size_t id_len_;
 };
 
-template <class I>
-class ProxyBaseInterface : public ProxyLink <I>
+template <class Itf>
+class ProxyBaseInterface : public ProxyLink <Itf>
 {
-	typedef ProxyLink <I> Base;
+	typedef ProxyLink <Itf> Base;
 
 protected:
 	ProxyBaseInterface (Object::_ptr_type obj) :
-		Base (obj->_query_interface <I> ())
+		Base (obj->_query_interface <Itf> ())
 	{}
 
 	ProxyBaseInterface (ValueBase::_ptr_type vb) :
-		Base (vb->_query_valuetype <I> ())
+		Base (vb->_query_valuetype <Itf> ())
 	{}
 };
 
