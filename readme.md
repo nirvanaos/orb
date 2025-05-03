@@ -23,11 +23,6 @@ The main header for servers is *Include/CORBA/Server.h*
 
 Namespace `PortableServer` contains definitions compliant to the CORBA C++ mapping specification.
 
-## How to build
-This repository is a submodule and does not contain any project files.
-It is included as a Git submodule in a Nirvana library project.
-To build the library under Visual C++ use *nirvanaos/library.vc* repository.
-
 ## Does not implemented yet
 * DII/DSI
 * DynAny
