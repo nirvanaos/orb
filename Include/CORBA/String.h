@@ -30,7 +30,7 @@
 
 #include "StringView.h"
 #include "TypeVarLen.h"
-#include <Nirvana/is_valid_utf8.h>
+#include <Nirvana/utf8.h>
 
 namespace CORBA {
 
