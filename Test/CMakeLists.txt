@@ -5,6 +5,7 @@ target_link_libraries(test-orb PRIVATE
 	googletest-nirvana
 	nirvana
 	mockimport
+	crtl
 )
 
 add_custom_command(TARGET test-orb POST_BUILD
