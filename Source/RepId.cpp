@@ -62,8 +62,10 @@ RepId::CheckResult RepId::check (const Char* cur, size_t cur_l, const Char* req,
 
 	const size_t IDL_len = countof (IDL_) - 1;
 
-	if (is_type (cur, IDL_, IDL_len)) {
-		if (is_type (req, IDL_, IDL_len)) {
+	bool type_cur = is_type (cur, IDL_, IDL_len);
+	bool type_req = is_type (req, IDL_, IDL_len);
+	if (type_cur) {
+		if (type_req) {
 			const Char* cur_name = cur + IDL_len + 1;
 			const Char* cur_end = cur + cur_l;
 			const Char* cur_minor = minor_version (version (cur_name, cur_end), cur_end);
@@ -74,7 +76,8 @@ RepId::CheckResult RepId::check (const Char* cur, size_t cur_l, const Char* req,
 				return minor_number (cur_minor) >= minor_number (req_minor) ? COMPATIBLE : INCOMPATIBLE_VERSION;
 		}
 		return OTHER_INTERFACE;
-	}
+	} else if (type_req)
+		return OTHER_INTERFACE;
 	return (cur_l == req_l && std::equal (cur, cur + cur_l, req)) ? COMPATIBLE : OTHER_INTERFACE;
 }
 
