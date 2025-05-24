@@ -97,6 +97,13 @@ public:
 	static int lex_compare (const Char* lhs, const Char* lhs_end, const Char* rhs, const Char* rhs_end);
 
 private:
+	enum class Type
+	{
+		unknown,
+		idl
+	};
+
+	static Type get_type (const Char* id);
 	static bool is_type (const Char* id, const Char* prefix, size_t prefix_l);
 	static const Char* minor_version (const Char* ver, const Char* end);
 	static uint_least16_t minor_number (const Char* minor_version);
