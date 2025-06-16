@@ -122,35 +122,35 @@ public:
 		bits_.zero ();
 	}
 
-	inline SoftFloat (const SoftFloat& val) noexcept = default;
-	inline SoftFloat (const NativeType& val);
-	inline SoftFloat (const int32_t& val);
-	inline SoftFloat (const uint32_t& val);
-	inline SoftFloat (const int64_t& val);
-	inline SoftFloat (const uint64_t& val);
+	SoftFloat (const SoftFloat& val) noexcept = default;
+	SoftFloat (const NativeType& val);
+	SoftFloat (const int32_t& val);
+	SoftFloat (const uint32_t& val);
+	SoftFloat (const int64_t& val);
+	SoftFloat (const uint64_t& val);
 
 	// Conversions
-	inline operator NativeType () const;
-	inline operator int32_t () const;
-	inline operator int64_t () const;
+	operator NativeType () const;
+	operator int32_t () const;
+	operator int64_t () const;
 
 	// Operators
-	inline SoftFloat& operator = (const SoftFloat& val) noexcept = default;
-	inline SoftFloat& operator += (const SoftFloat& val);
-	inline SoftFloat& operator -= (const SoftFloat& val);
-	inline SoftFloat& operator *= (const SoftFloat& val);
-	inline SoftFloat& operator /= (const SoftFloat& val);
-	inline SoftFloat& operator ++ ();
-	inline SoftFloat operator ++ (int);
-	inline SoftFloat& operator -- ();
-	inline SoftFloat operator -- (int);
+	SoftFloat& operator = (const SoftFloat& val) noexcept = default;
+	SoftFloat& operator += (const SoftFloat& val);
+	SoftFloat& operator -= (const SoftFloat& val);
+	SoftFloat& operator *= (const SoftFloat& val);
+	SoftFloat& operator /= (const SoftFloat& val);
+	SoftFloat& operator ++ ();
+	SoftFloat operator ++ (int);
+	SoftFloat& operator -- ();
+	SoftFloat operator -- (int);
 
-	inline SoftFloat operator + () const noexcept
+	SoftFloat operator + () const noexcept
 	{
 		return *this;
 	}
 
-	inline SoftFloat operator - () const noexcept
+	SoftFloat operator - () const noexcept
 	{
 		return SoftFloat (bits_.negate ());
 	}
@@ -162,9 +162,9 @@ public:
 
 	// Comparation
 
-	inline bool eq (const SoftFloat& rhs) const;
-	inline bool le (const SoftFloat& rhs) const;
-	inline bool lt (const SoftFloat& rhs) const;
+	bool eq (const SoftFloat& rhs) const;
+	bool le (const SoftFloat& rhs) const;
+	bool lt (const SoftFloat& rhs) const;
 
 	// Sign operations
 
@@ -204,56 +204,56 @@ public:
 		bits_.zero ();
 	}
 
-	inline SoftFloat (const SoftFloat& val) noexcept = default;
-	inline SoftFloat (const NativeType& val);
-	inline SoftFloat (const int32_t& val);
-	inline SoftFloat (const uint32_t& val);
-	inline SoftFloat (const int64_t& val);
-	inline SoftFloat (const uint64_t& val);
+	SoftFloat (const SoftFloat& val) noexcept = default;
+	SoftFloat (const NativeType& val);
+	SoftFloat (const int32_t& val);
+	SoftFloat (const uint32_t& val);
+	SoftFloat (const int64_t& val);
+	SoftFloat (const uint64_t& val);
 
 	// Conversions
-	inline operator NativeType () const;
-	inline operator int32_t () const;
-	inline operator int64_t () const;
+	operator NativeType () const;
+	operator int32_t () const;
+	operator int64_t () const;
 
 	// Operators
 	SoftFloat& operator = (const SoftFloat& val) noexcept = default;
 
-	inline SoftFloat& operator += (const SoftFloat& rhs);
-	inline SoftFloat& operator -= (const SoftFloat& rhs);
-	inline SoftFloat& operator *= (const SoftFloat& rhs);
-	inline SoftFloat& operator /= (const SoftFloat& rhs);
+	SoftFloat& operator += (const SoftFloat& rhs);
+	SoftFloat& operator -= (const SoftFloat& rhs);
+	SoftFloat& operator *= (const SoftFloat& rhs);
+	SoftFloat& operator /= (const SoftFloat& rhs);
 
-	inline SoftFloat& operator ++ ()
+	SoftFloat& operator ++ ()
 	{
 		return operator += (SoftFloat ((uint32_t)1));
 	}
 
-	inline SoftFloat operator ++ (int)
+	SoftFloat operator ++ (int)
 	{
 		SoftFloat tmp (*this);
 		operator += (SoftFloat ((uint32_t)1));
 		return tmp;
 	}
 
-	inline SoftFloat& operator -- ()
+	SoftFloat& operator -- ()
 	{
 		return operator -= (SoftFloat ((uint32_t)1));
 	}
 
-	inline SoftFloat operator -- (int)
+	SoftFloat operator -- (int)
 	{
 		SoftFloat tmp (*this);
 		operator -= (SoftFloat ((uint32_t)1));
 		return tmp;
 	}
 
-	inline const SoftFloat& operator + () const noexcept
+	const SoftFloat& operator + () const noexcept
 	{
 		return *this;
 	}
 
-	inline SoftFloat operator - () const noexcept
+	SoftFloat operator - () const noexcept
 	{
 		return SoftFloat (bits_.negate ());
 	}
@@ -265,9 +265,9 @@ public:
 
 	// Comparation
 
-	inline bool eq (const SoftFloat& rhs) const;
-	inline bool le (const SoftFloat& rhs) const;
-	inline bool lt (const SoftFloat& rhs) const;
+	bool eq (const SoftFloat& rhs) const;
+	bool le (const SoftFloat& rhs) const;
+	bool lt (const SoftFloat& rhs) const;
 
 	// Sign operations
 
@@ -307,36 +307,36 @@ public:
 		bits_.zero ();
 	}
 
-	inline SoftFloat (const SoftFloat& val) noexcept = default;
-	inline SoftFloat (const double& val);
-	inline SoftFloat (const NativeType& val);
-	inline SoftFloat (const int32_t& val);
-	inline SoftFloat (const uint32_t& val);
-	inline SoftFloat (const int64_t& val);
-	inline SoftFloat (const uint64_t& val);
+	SoftFloat (const SoftFloat& val) noexcept = default;
+	SoftFloat (const double& val);
+	SoftFloat (const NativeType& val);
+	SoftFloat (const int32_t& val);
+	SoftFloat (const uint32_t& val);
+	SoftFloat (const int64_t& val);
+	SoftFloat (const uint64_t& val);
 
 	// Conversions
-	inline operator NativeType () const;
-	inline operator int32_t () const;
-	inline operator int64_t () const;
+	operator NativeType () const;
+	operator int32_t () const;
+	operator int64_t () const;
 
 	// Operators
-	inline SoftFloat& operator = (const SoftFloat& val) = default;
-	inline SoftFloat& operator += (const SoftFloat& rhs);
-	inline SoftFloat& operator -= (const SoftFloat& rhs);
-	inline SoftFloat& operator *= (const SoftFloat& rhs);
-	inline SoftFloat& operator /= (const SoftFloat& rhs);
-	inline SoftFloat& operator ++ ();
-	inline SoftFloat operator ++ (int);
-	inline SoftFloat& operator -- ();
-	inline SoftFloat operator -- (int);
+	SoftFloat& operator = (const SoftFloat& val) = default;
+	SoftFloat& operator += (const SoftFloat& rhs);
+	SoftFloat& operator -= (const SoftFloat& rhs);
+	SoftFloat& operator *= (const SoftFloat& rhs);
+	SoftFloat& operator /= (const SoftFloat& rhs);
+	SoftFloat& operator ++ ();
+	SoftFloat operator ++ (int);
+	SoftFloat& operator -- ();
+	SoftFloat operator -- (int);
 
-	inline const SoftFloat& operator + () const noexcept
+	const SoftFloat& operator + () const noexcept
 	{
 		return *this;
 	}
 
-	inline SoftFloat operator - () const noexcept
+	SoftFloat operator - () const noexcept
 	{
 		return SoftFloat (bits_.negate ());
 	}
@@ -348,9 +348,9 @@ public:
 
 	// Comparation
 
-	inline bool eq (const SoftFloat& rhs) const;
-	inline bool le (const SoftFloat& rhs) const;
-	inline bool lt (const SoftFloat& rhs) const;
+	bool eq (const SoftFloat& rhs) const;
+	bool le (const SoftFloat& rhs) const;
+	bool lt (const SoftFloat& rhs) const;
 
 	// Sign operations
 

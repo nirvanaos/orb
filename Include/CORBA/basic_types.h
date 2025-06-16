@@ -31,7 +31,6 @@
 
 #include "TypePrimitive.h"
 #include "tc_constants.h"
-#include "StaticTC.h"
 
 #define NIRVANA_BASIC_TYPE(T, tc) template <> struct Type <T> : TypePrimitive <T> {\
 static I_ptr <TypeCode> type_code () { return tc; } };

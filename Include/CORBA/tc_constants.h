@@ -27,6 +27,9 @@
 #define NIRVANA_ORB_TC_CONSTANTS_H_
 #pragma once
 
+#include "StaticTC.h"
+#include "StaticIdNameTC.h"
+
 namespace CORBA {
 
 namespace Internal {
