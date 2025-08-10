@@ -29,7 +29,6 @@
 #define NIRVANA_ORB_SOFTFLOAT_H_
 #pragma once
 
-#include <Nirvana/NirvanaBase.h>
 #include <Nirvana/bitutils.h>
 #include <algorithm>
 
