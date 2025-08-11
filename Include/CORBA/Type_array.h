@@ -45,9 +45,19 @@ namespace Internal {
 template <class T>
 struct ArrayTraits
 {
-  typedef T ElType;
+  typedef typename std::array <T, 1>::value_type ElType;
   static const size_t size = 1;
 	static const uint32_t dimensions = 0;
+
+	static ElType* first_element (ElType& el)
+	{
+		return &el;
+	}
+
+	static const ElType* first_element (const ElType& el)
+	{
+		return &el;
+	}
 };
 
 template <class T>
@@ -62,6 +72,16 @@ struct ArrayTraits <std::array <T, bound> >
   typedef typename ArrayTraits <T>::ElType ElType;
   static const size_t size = ArrayTraits <T>::size * bound;
 	static const uint32_t dimensions = ArrayTraits <T>::dimensions + 1;
+
+	static ElType* first_element (std::array <T, bound>& ar)
+	{
+		return ArrayTraits <T>::first_element (ar.front ());
+	}
+
+	static const ElType* first_element (const std::array <T, bound>& ar)
+	{
+		return ArrayTraits <T>::first_element (ar.front ());
+	}
 };
 
 template <class T, size_t bound>
@@ -98,7 +118,7 @@ struct Type <std::array <T, bound> > :
 	static void check (const ABI& abi)
 	{
 		if (has_check) {
-			const ET_ABI* p = reinterpret_cast <const ET_ABI*> (abi.data ()), * end = p + total_size;
+			const ET_ABI* p = reinterpret_cast <const ET_ABI*> (ArrayTraits <Var>::first_element (abi)), * end = p + total_size;
 			do {
 				Type <ET>::check (*(p++));
 			} while (p != end);
@@ -109,37 +129,37 @@ struct Type <std::array <T, bound> > :
 
 	static void marshal_in_a (const Var* src, size_t count, IORequest_ptr rq)
 	{
-		Type <ET>::marshal_in_a (reinterpret_cast <const ET_Var*> (src->data ()), total_size * count, rq);
+		Type <ET>::marshal_in_a (ArrayTraits <Var>::first_element (*src), total_size * count, rq);
 	}
 
 	static void marshal_in (const Var& src, IORequest_ptr rq)
 	{
-		Type <ET>::marshal_in_a (reinterpret_cast <const ET_Var*> (src.data ()), total_size, rq);
+		Type <ET>::marshal_in_a (ArrayTraits <Var>::first_element (src), total_size, rq);
 	}
 
 	static void marshal_out_a (Var* src, size_t count, IORequest_ptr rq)
 	{
-		Type <ET>::marshal_out_a (reinterpret_cast <ET_Var*> (src->data ()), total_size * count, rq);
+		Type <ET>::marshal_out_a (ArrayTraits <Var>::first_element (*src), total_size * count, rq);
 	}
 
 	static void marshal_out (Var& src, IORequest_ptr rq)
 	{
-		Type <ET>::marshal_out_a (reinterpret_cast <ET_Var*> (src.data ()), total_size, rq);
+		Type <ET>::marshal_out_a (ArrayTraits <Var>::first_element (src), total_size, rq);
 	}
 
 	static void unmarshal_a (IORequest_ptr rq, size_t count, Var* dst)
 	{
-		Type <ET>::unmarshal_a (rq, total_size * count, reinterpret_cast <ET_Var*> (dst->data ()));
+		Type <ET>::unmarshal_a (rq, total_size * count, ArrayTraits <Var>::first_element (*dst));
 	}
 
 	static void unmarshal (IORequest_ptr rq, Var& dst)
 	{
-		Type <ET>::unmarshal_a (rq, total_size, reinterpret_cast <ET_Var*> (dst.data ()));
+		Type <ET>::unmarshal_a (rq, total_size, ArrayTraits <Var>::first_element (dst));
 	}
 
 	static void byteswap (Var& var)
 	{
-		ET_Var* p = reinterpret_cast <ET_Var*> (var.data ()), *end = p + total_size;
+		ET_Var* p = ArrayTraits <Var>::first_element (var), *end = p + total_size;
 		do {
 			Type <ET>::byteswap (*(p++));
 		} while (p != end);
