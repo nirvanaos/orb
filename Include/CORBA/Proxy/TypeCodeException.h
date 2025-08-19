@@ -52,7 +52,7 @@ public:
 	using TypeCodeORB::_s_equivalent;
 	using TypeCodeORB::_s_get_compact_typecode;
 
-	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return const_string_ret_p (E::__name ());
 	}

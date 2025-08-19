@@ -155,7 +155,7 @@ public:
 		return TypeCodeBase::equivalent (tk_, other);
 	}
 
-	static Type <TCKind>::ABI_ret _s_kind (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <TCKind>::ABI_ret _s_kind (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return (ABI_enum)tk_;
 	}
@@ -178,7 +178,7 @@ public:
 		return TypeCodeBase::equivalent (tk, RepositoryType::id, other);
 	}
 
-	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return const_string_ret (RepositoryType::id);
 	}
@@ -191,7 +191,7 @@ template <class T>
 class TypeCodeName
 {
 public:
-	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return const_string_ret (name_);
 	}
@@ -259,7 +259,7 @@ template <ULong bound = 0>
 class TypeCodeLength
 {
 public:
-	static ULong _s_length (Bridge <TypeCode>* _b, Interface* _env)
+	static ULong _s_length (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return bound;
 	}
@@ -270,7 +270,7 @@ template <class Content>
 class TypeCodeContentType
 {
 public:
-	static Interface* _s_content_type (Bridge <TypeCode>* _b, Interface* _env)
+	static Interface* _s_content_type (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		Interface* tc = &ptr ();
 		return (tc->_epv ().duplicate) (tc, _env);
@@ -290,7 +290,7 @@ class TypeCodeMemberCount
 public:
 	static const ULong member_count_ = member_count;
 
-	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env)
+	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return member_count_;
 	}
@@ -299,8 +299,8 @@ public:
 class TypeCodeStaticIdName
 {
 public:
-	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env);
-	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env);
+	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env) noexcept;
+	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env) noexcept;
 };
 
 class TypeCodeValueAbstractBase

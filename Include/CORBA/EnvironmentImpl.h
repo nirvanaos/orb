@@ -102,7 +102,7 @@ private:
 			size_t size;
 		};
 
-		void reset ()
+		void reset () noexcept
 		{
 			is_small = 0;
 			ptr = 0;
@@ -117,7 +117,7 @@ class EnvironmentImpl :
 	public EnvironmentBase
 {
 protected:
-	EnvironmentImpl ()
+	EnvironmentImpl () noexcept
 	{}
 };
 

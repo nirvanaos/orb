@@ -41,12 +41,12 @@ public:
 	typedef typename std::conditional <std::is_same <T, Boolean>::value,
 		Type <Boolean>::ABI, typename Type <T>::Var>::type Var;
 
-	static size_t _s_n_size (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_size (Bridge <TypeCode>*, Interface*) noexcept
 	{
 		return sizeof (Var);
 	}
 
-	static size_t _s_n_align (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_align (Bridge <TypeCode>*, Interface*) noexcept
 	{
 		return alignof (Var);
 	}
@@ -117,38 +117,38 @@ class TypeCodeOps <void>
 public:
 	typedef void Valtype;
 
-	static size_t _s_n_size (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_size (Bridge <TypeCode>*, Interface*) noexcept
 	{
 		return 0;
 	}
 
-	static size_t _s_n_align (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_align (Bridge <TypeCode>*, Interface*) noexcept
 	{
 		return 1;
 	}
 
-	static void _s_n_construct (Bridge <TypeCode>*, void*, Interface*)
+	static void _s_n_construct (Bridge <TypeCode>*, void*, Interface*) noexcept
 	{}
 
-	static void _s_n_destruct (Bridge <TypeCode>*, void*, Interface*)
+	static void _s_n_destruct (Bridge <TypeCode>*, void*, Interface*) noexcept
 	{}
 
-	static void _s_n_copy (Bridge <TypeCode>*, void*, const void*, Interface*)
+	static void _s_n_copy (Bridge <TypeCode>*, void*, const void*, Interface*) noexcept
 	{}
 
-	static void _s_n_move (Bridge <TypeCode>*, void*, void*, Interface*)
+	static void _s_n_move (Bridge <TypeCode>*, void*, void*, Interface*) noexcept
 	{}
 
 	static void _s_n_marshal_in (Bridge <TypeCode>*, const void*, size_t,
-		Interface*, Interface*)
+		Interface*, Interface*) noexcept
 	{}
 
 	static void _s_n_marshal_out (Bridge <TypeCode>*, void*, size_t,
-		Interface*, Interface*)
+		Interface*, Interface*) noexcept
 	{}
 
 	static void _s_n_unmarshal (Bridge <TypeCode>*, Interface*, size_t,
-		void*, Interface*)
+		void*, Interface*) noexcept
 	{}
 };
 

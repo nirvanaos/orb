@@ -53,8 +53,8 @@ public:
 	struct EPV
 	{
 		const Char* interface_id;
-		Interface* (*duplicate) (Interface* obj, Interface* environment);
-		void (*release) (Interface*);
+		Interface* (*duplicate) (Interface* obj, Interface* environment) noexcept;
+		void (*release) (Interface*) noexcept;
 	};
 
 	constexpr Interface (const EPV& epv) noexcept :

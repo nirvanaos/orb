@@ -54,7 +54,7 @@ public:
 	}
 
 	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>*_b, ULong index,
-		Interface * _env)
+		Interface * _env) noexcept
 	{
 		if (index >= countof (members_)) {
 			set_Bounds (_env);
@@ -64,7 +64,7 @@ public:
 	}
 
 	static Interface* _s_member_type (Bridge <TypeCode>*_b, ULong index,
-		Interface * _env)
+		Interface * _env) noexcept
 	{
 		if (index >= countof (members_)) {
 			set_Bounds (_env);
@@ -96,14 +96,14 @@ public:
 	}
 
 	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env)
+		Interface* _env) noexcept
 	{
 		set_Bounds (_env);
 		return Type <String>::ret ();
 	}
 
 	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env)
+		Interface* _env) noexcept
 	{
 		set_Bounds (_env);
 		return nullptr;

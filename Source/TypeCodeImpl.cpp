@@ -263,12 +263,12 @@ Interface* TypeCodeORB::_s_get_compact_typecode (Bridge <CORBA::TypeCode>* _b, I
 	return (br_orb->_epv ().epv.get_compact_typecode) (br_orb, _b, _env);
 }
 
-Type <String>::ABI_ret TypeCodeStaticIdName::_s_id (Bridge <TypeCode>* _b, Interface* _env)
+Type <String>::ABI_ret TypeCodeStaticIdName::_s_id (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	return const_string_ret_p (((const StaticIdNameTC*)_b)->id);
 }
 
-Type <String>::ABI_ret TypeCodeStaticIdName::_s_name (Bridge <TypeCode>* _b, Interface* _env)
+Type <String>::ABI_ret TypeCodeStaticIdName::_s_name (Bridge <TypeCode>* _b, Interface* _env) noexcept
 {
 	return const_string_ret_p (((const StaticIdNameTC*)_b)->name);
 }

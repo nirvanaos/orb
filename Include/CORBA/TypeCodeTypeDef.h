@@ -45,12 +45,12 @@ class TypeCodeTypeDef :
 		TypeCodeOps <void> > Base;
 
 public:
-	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _s_id (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return const_string_ret_p (ref->id);
 	}
 
-	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env)
+	static Type <String>::ABI_ret _s_name (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return const_string_ret_p (ref->name);
 	}
@@ -69,60 +69,60 @@ public:
 			content ()->equivalent (other);
 	}
 
-	static size_t _s_n_size (Bridge <TypeCode>*, Interface* _env)
+	static size_t _s_n_size (Bridge <TypeCode>*, Interface* _env) noexcept
 	{
 		Bridge <TypeCode>* b = content_bridge ();
 		return (b->_epv ().epv.n_size) (b, _env);
 	}
 
-	static size_t _s_n_align (Bridge <TypeCode>*, Interface* _env)
+	static size_t _s_n_align (Bridge <TypeCode>*, Interface* _env) noexcept
 	{
 		Bridge <TypeCode>* b = content_bridge ();
 		return (b->_epv ().epv.n_align) (b, _env);
 	}
 
-	static void _s_n_construct (Bridge <TypeCode>*, void* p, Interface* _env)
+	static void _s_n_construct (Bridge <TypeCode>*, void* p, Interface* _env) noexcept
 	{
 		Bridge <TypeCode>* b = content_bridge ();
 		(b->_epv ().epv.n_construct) (b, p, _env);
 	}
 
-	static void _s_n_destruct (Bridge <TypeCode>*, void* p, Interface* _env)
+	static void _s_n_destruct (Bridge <TypeCode>*, void* p, Interface* _env) noexcept
 	{
 		Bridge <TypeCode>* b = content_bridge ();
 		(b->_epv ().epv.n_destruct) (b, p, _env);
 	}
 
 	static void _s_n_copy (Bridge <TypeCode>*, void* dst, const void* src,
-		Interface* _env)
+		Interface* _env) noexcept
 	{
 		Bridge <TypeCode>* b = content_bridge ();
 		(b->_epv ().epv.n_copy) (b, dst, src, _env);
 	}
 
 	static void _s_n_move (Bridge <TypeCode>*, void* dst, void* src,
-		Interface* _env)
+		Interface* _env) noexcept
 	{
 		Bridge <TypeCode>* b = content_bridge ();
 		(b->_epv ().epv.n_move) (b, dst, src, _env);
 	}
 
 	static void _s_n_marshal_in (Bridge <TypeCode>*, const void* src, size_t size,
-		Interface* call, Interface* _env)
+		Interface* call, Interface* _env) noexcept
 	{
 		Bridge <TypeCode>* b = content_bridge ();
 		(b->_epv ().epv.n_marshal_in) (b, src, size, call, _env);
 	}
 
 	static void _s_n_marshal_out (Bridge <TypeCode>*, void* src, size_t size,
-		Interface* call, Interface* _env)
+		Interface* call, Interface* _env) noexcept
 	{
 		Bridge <TypeCode>* b = content_bridge ();
 		(b->_epv ().epv.n_marshal_out) (b, src, size, call, _env);
 	}
 
 	static void _s_n_unmarshal (Bridge <TypeCode>*, Interface* call, size_t size,
-		void* dst, Interface* _env)
+		void* dst, Interface* _env) noexcept
 	{
 		Bridge <TypeCode>* b = content_bridge ();
 		(b->_epv ().epv.n_unmarshal) (b, call, size, dst, _env);

@@ -61,7 +61,7 @@ public:
 	}
 
 	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env)
+		Interface* _env) noexcept
 	{
 		if (index >= member_count ()) {
 			set_Bounds (_env);
@@ -71,7 +71,7 @@ public:
 	}
 
 	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env)
+		Interface* _env) noexcept
 	{
 		if (index >= member_count ()) {
 			set_Bounds (_env);
@@ -113,21 +113,21 @@ public:
 	}
 
 	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env)
+		Interface* _env) noexcept
 	{
 		set_Bounds (_env);
 		return Type <String>::ret ();
 	}
 
 	static Interface* _s_member_type (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env)
+		Interface* _env) noexcept
 	{
 		set_Bounds (_env);
 		return nullptr;
 	}
 
 	static Visibility _s_member_visibility (Bridge <TypeCode>*, ULong index,
-		Interface* _env)
+		Interface* _env) noexcept
 	{
 		set_Bounds (_env);
 		return 0;
@@ -161,12 +161,12 @@ public:
 	using TypeCodeORB::_s_equivalent;
 	using TypeCodeORB::_s_get_compact_typecode;
 
-	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env)
+	static ValueModifier _s_type_modifier (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return vm;
 	}
 
-	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env)
+	static Interface* _s_concrete_base_type (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		if (base == nullptr)
 			return nullptr;

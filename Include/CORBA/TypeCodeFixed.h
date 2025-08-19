@@ -38,12 +38,12 @@ template <size_t size>
 class FixedOps
 {
 public:
-	static size_t _s_n_size (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_size (Bridge <TypeCode>*, Interface*) noexcept
 	{
 		return size;
 	}
 
-	static size_t _s_n_align (Bridge <TypeCode>*, Interface*)
+	static size_t _s_n_align (Bridge <TypeCode>*, Interface*) noexcept
 	{
 		return 1;
 	}
@@ -54,7 +54,7 @@ public:
 		Nirvana::DecimalBase::BCD_zero ((Octet*)p, size);
 	}
 
-	static void _s_n_destruct (Bridge <TypeCode>*, void* p, Interface*)
+	static void _s_n_destruct (Bridge <TypeCode>*, void* p, Interface*) noexcept
 	{}
 
 	static void n_copy (void* dst, const void* src);
@@ -112,12 +112,12 @@ class TypeCodeFixed :
 	typedef FixedOps <sizeof (IDL::FixedBCD <digits, scale>)> Ops;
 
 public:
-	static UShort _s_fixed_digits (Bridge <TypeCode>* _b, Interface* _env)
+	static UShort _s_fixed_digits (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return digits;
 	}
 
-	static Short _s_fixed_scale (Bridge <TypeCode>* _b, Interface* _env)
+	static Short _s_fixed_scale (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return scale;
 	}

@@ -114,11 +114,11 @@ class InterfaceImplBase :
 	public Skeleton <S, Itf>
 {
 protected:
-	InterfaceImplBase () :
+	InterfaceImplBase () noexcept :
 		Bridge <Itf> (Skeleton <S, Itf>::epv_)
 	{}
 
-	InterfaceImplBase (const InterfaceImplBase&) :
+	InterfaceImplBase (const InterfaceImplBase&) noexcept :
 		InterfaceImplBase ()
 	{}
 };

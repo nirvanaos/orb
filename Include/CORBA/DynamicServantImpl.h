@@ -68,7 +68,7 @@ class DynamicServantSkel :
 	private LifeCycleNone
 {
 private:
-	static void _s_delete_object (Bridge <DynamicServant>* _b, Interface* _env)
+	static void _s_delete_object (Bridge <DynamicServant>* _b, Interface* _env) noexcept
 	{
 		try {
 			check_pointer (_b, epv_.header);

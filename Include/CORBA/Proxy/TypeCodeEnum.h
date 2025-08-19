@@ -51,7 +51,7 @@ public:
 	using Servant::_s_get_compact_typecode;
 
 	static Type <String>::ABI_ret _s_member_name (Bridge <TypeCode>* _b, ULong index,
-		Interface* _env)
+		Interface* _env) noexcept
 	{
 		if (index >= Type <E>::count_) {
 			set_Bounds (_env);
