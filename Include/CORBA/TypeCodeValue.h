@@ -55,7 +55,7 @@ public:
 		return (ULong)countof (members_);
 	}
 
-	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env)
+	static ULong _s_member_count (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return member_count ();
 	}
@@ -83,7 +83,7 @@ public:
 	}
 
 	static Visibility _s_member_visibility (Bridge <TypeCode>*, ULong index,
-		Interface* _env)
+		Interface* _env) noexcept
 	{
 		if (index >= member_count ()) {
 			set_Bounds (_env);

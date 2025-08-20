@@ -70,7 +70,7 @@ public:
 	template <class Base>
 	struct Wide
 	{
-		typedef Bridge <Base>* (*Func) (Bridge <Itf>*, const ABI <String>* base_id, Interface* environment) noexcept;
+		using Func = Bridge <Base>* (*) (Bridge <Itf>*, const ABI <String>* base_id, Interface* environment) noexcept;
 	};
 
 public:
