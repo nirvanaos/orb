@@ -70,7 +70,7 @@ public:
 		return the_orb->get_compact_typecode (Base::_get_ptr ());
 	}
 
-	static Type <Any>::ABI_ret _s_member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env)
+	static Type <Any>::ABI_ret _s_member_label (Bridge <TypeCode>* _b, ULong index, Interface* _env) noexcept
 	{
 		if (index >= countof (labels_)) {
 			set_Bounds (_env);
