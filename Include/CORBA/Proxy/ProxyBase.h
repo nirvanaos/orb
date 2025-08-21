@@ -129,7 +129,7 @@ class ProxyBase :
 public:
 	// Wide interface
 	template <class Base, class Derived>
-	static Bridge <Base>* _wide (Bridge <Itf>* derived, Type <String>::ABI_in id, Interface* env)
+	static Bridge <Base>* _wide (Bridge <Itf>* derived, Type <String>::ABI_in id, Interface* env) noexcept
 	{
 		return static_cast <ProxyBaseInterface <Base>&> (Proxy <Itf>::_implementation (derived)).get_bridge (id, env);
 	}

@@ -38,7 +38,7 @@ class LifeCycleNoCopy
 public:
 	// Reference duplication is not allowed
 	template <class Itf>
-	static Interface* __duplicate (Interface* itf, Interface* env)
+	static Interface* __duplicate (Interface* itf, Interface* env) noexcept
 	{
 		set_NO_IMPLEMENT (env);
 		return nullptr;
@@ -46,7 +46,7 @@ public:
 
 	// Called from the servant destructor for dynamic objects.
 	template <class Itf>
-	static void __release (Interface* itf)
+	static void __release (Interface* itf) noexcept
 	{
 		S& srv = S::_implementation (static_cast <Bridge <Itf>*> (itf));
 		delete& srv;

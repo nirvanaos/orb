@@ -107,7 +107,8 @@ protected:
 	Bridge <Base>* _get_bridge_ptr (Environment& env)
 	{
 		Primary& t = static_cast <Primary&> (*this);
-		typename Bridge <Primary>:: template Wide <Base>::Func func = t._epv ().base;
+		NIRVANA_WIDE_FUNC (Bridge <Primary>, Base, func);
+		t._epv ().base.get_entry (func);
 		Bridge <Base>* ret = (func)(&t, &StringView <Char> (RepIdOf <Base>::id), &env);
 		env.check ();
 		return ret;

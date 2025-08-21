@@ -85,13 +85,13 @@ public:
 		return Type <Any>::ret (std::move (ret));
 	}
 
-	static Interface* _s_discriminator_type (Bridge <TypeCode>* _b, Interface* _env)
+	static Interface* _s_discriminator_type (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		Interface* tc = &discriminator_tc_ptr ();
 		return (tc->_epv ().duplicate) (tc, _env);
 	}
 
-	static Long _s_default_index (Bridge <TypeCode>* _b, Interface* _env)
+	static Long _s_default_index (Bridge <TypeCode>* _b, Interface* _env) noexcept
 	{
 		return Type <U>::default_index_;
 	}

@@ -53,7 +53,7 @@ public:
 	// ProxyFactory
 
 	static InterfaceMetadataPtr _s__get_metadata (Bridge <ProxyFactory>* obj,
-		Interface* env)
+		Interface* env) noexcept
 	{
 		return &MetadataOf <Itf>::metadata_;
 	}

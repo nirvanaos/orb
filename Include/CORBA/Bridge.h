@@ -66,13 +66,6 @@ public:
 		return (const EPV&)Interface::_epv ();
 	}
 
-	/// Helper for widening to a base interface
-	template <class Base>
-	struct Wide
-	{
-		using Func = Bridge <Base>* (*) (Bridge <Itf>*, const ABI <String>* base_id, Interface* environment) noexcept;
-	};
-
 public:
 	constexpr Bridge (const EPV& epv) noexcept :
 		Interface (epv.header)
@@ -111,8 +104,13 @@ const AMI_EPV <Itf>* const AMI_Servant <S, Itf>::ami_epv_ = nullptr;
 }
 }
 
-#define NIRVANA_BASE_ENTRY(type, name) MyBridge::Wide <type>::Func name;\
-operator const MyBridge::Wide < type>::Func () const { return name; }
+// Function for widening to a base interface.
+// Bridge <Base>* (*) (Bridge <Derived>*, const ABI <String>* base_id, Interface* environment) noexcept;
+// Exception specification in typedefs is not allowed prior to C++17 so we use macro.
+#define NIRVANA_WIDE_FUNC(Br, Base, name) Bridge <Base>* (*name) (Br*, const ABI <String>*, Interface*) noexcept
+
+#define NIRVANA_BASE_ENTRY(Base, name) NIRVANA_WIDE_FUNC (MyBridge, Base, name);\
+void get_entry (NIRVANA_WIDE_FUNC (MyBridge, Base, &f)) const noexcept { f = name; }
 
 #define NIRVANA_BRIDGE_BEGIN(Itf) template <> struct Bridge < Itf>::EPV { typedef Bridge <Itf> MyBridge; Interface::EPV header; struct {
 #define NIRVANA_BRIDGE_EPV } base; struct {
