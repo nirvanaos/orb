@@ -59,6 +59,12 @@ public:
 	{
 		return InterfaceStatic <S, PortableServer::ServantBase>::_get_proxy ().template downcast <Primary> ();
 	}
+
+	/// \returns The Bridge pointer for export.
+	constexpr static Bridge <PortableServer::ServantBase>* _bridge () noexcept
+	{
+		return InterfaceStatic <S, PortableServer::ServantBase>::_bridge ();
+	}
 };
 
 }

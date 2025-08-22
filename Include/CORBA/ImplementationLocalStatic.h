@@ -56,6 +56,12 @@ public:
 	{
 		return InterfaceStatic <S, LocalObject>::_get_proxy ().template downcast <Primary> ();
 	}
+
+	/// \returns The Bridge pointer for export.
+	constexpr static Bridge <LocalObject>* _bridge () noexcept
+	{
+		return InterfaceStatic <S, LocalObject>::_bridge ();
+	}
 };
 
 }

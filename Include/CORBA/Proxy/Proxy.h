@@ -112,4 +112,7 @@ public:
 }
 }
 
+#define NIRVANA_EXPORT_PROXY(uname, Itf, ...) NIRVANA_EXPORT_STATIC (uname, CORBA::Internal::RepIdOf <Itf>::id,\
+	CORBA::Internal::ProxyFactoryImpl <Itf, __VA_ARGS__>)
+
 #endif

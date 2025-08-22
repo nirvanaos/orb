@@ -67,7 +67,7 @@ class InterfaceStaticBase :
 	public Skeleton <S, Itf>
 {
 public:
-	constexpr operator Bridge <Itf>& () const noexcept
+	constexpr operator Bridge <Itf>& () const noexcept // For FindInterface
 	{
 		return *_bridge ();
 	}
@@ -77,6 +77,7 @@ public:
 		return const_cast <Bridge <Itf>*> (&bridge_);
 	}
 
+private:
 	static constexpr Bridge <Itf> bridge_{ Skeleton <S, Itf>::epv_ };
 };
 
