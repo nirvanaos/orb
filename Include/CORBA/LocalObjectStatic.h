@@ -63,7 +63,6 @@ public:
 
 //! Static implementation of LocalObject
 //! \tparam S Servant class.
-//! \tparam Primary Primary interface.
 template <class S>
 class InterfaceStatic <S, LocalObject> :
 	public InterfaceStaticBase <S, LocalObject>,
