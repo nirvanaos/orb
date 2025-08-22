@@ -58,9 +58,19 @@ class ImplementationPseudo :
 public:
 	typedef Primary PrimaryInterface;
 
-	I_ptr <Primary> _get_ptr () noexcept
+	/// \brief Gets the pointer.
+	///   Works like _this() method but doesn't increment the reference counter.
+	///
+	/// \return The primary interface pointer.
+	constexpr I_ptr <Primary> _get_ptr () noexcept
 	{
-		return I_ptr <Primary> (&static_cast <Primary&> (static_cast <Bridge <Primary>&> (*this)));
+		return I_ptr <Primary> (static_cast <Primary*> (_bridge ()));
+	}
+
+	/// \returns The bridge pointer.
+	constexpr Bridge <Primary>* _bridge () noexcept
+	{
+		return static_cast <Bridge <Primary>*> (this);
 	}
 
 protected:

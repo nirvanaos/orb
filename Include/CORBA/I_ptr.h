@@ -219,7 +219,7 @@ public:
 		return operator = (static_cast <BridgeVal <Itf>*> (static_cast <S*> (sr)));
 	}
 
-	Interface* operator & () const noexcept
+	constexpr Interface* operator & () const noexcept
 	{
 		assert (UNINITIALIZED_PTR != (uintptr_t)this->p_);
 		// Itf may be not completely defined so we use reinterpret_cast

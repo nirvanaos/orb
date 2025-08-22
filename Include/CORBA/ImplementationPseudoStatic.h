@@ -55,13 +55,19 @@ class ImplementationPseudoStatic :
 public:
 	typedef Primary PrimaryInterface;
 
-	//! \brief Gets the pointer.
-	//!   Works like _this() method but doesn't increment the reference counter.
-	//!
-	//! \return The primary interface pointer.
-	static Primary* _get_ptr () noexcept
+	/// \brief Gets the pointer.
+	///   Works like _this() method but doesn't increment the reference counter.
+	///
+	/// \return The primary interface pointer.
+	constexpr static Primary* _get_ptr () noexcept
 	{
-		return static_cast <Primary*> (InterfaceStaticBase <S, Primary>::_bridge ());
+		return static_cast <Primary*> (_bridge ());
+	}
+
+	/// \returns The bridge pointer.
+	constexpr static Bridge <Primary>* _bridge () noexcept
+	{
+		return InterfaceStaticBase <S, Primary>::_bridge ();
 	}
 };
 
