@@ -58,6 +58,12 @@ public:
 	{
 		return static_cast <Primary*> (InterfaceStaticBase <S, Primary>::_bridge ());
 	}
+
+	/// \returns The Bridge pointer for export.
+	constexpr static Bridge <ValueBase>* _bridge () noexcept
+	{
+		return InterfaceStatic <S, ValueBase>::_bridge ();
+	}
 };
 
 template <class S, class Primary, class ... Bases>
@@ -87,7 +93,7 @@ public:
 
 #if !defined (NIRVANA_PROCESS) && !defined (NIRVANA_SINGLETON)
 
-#define NIRVANA_EXPORT_VALUE(uname, Impl) NIRVANA_EXPORT (uname, CORBA::Internal::StaticId <Impl>::id, CORBA::ValueBase, Impl)
+#define NIRVANA_EXPORT_VALUE(uname, Impl) NIRVANA_EXPORT_STATIC (uname, CORBA::Internal::StaticId <Impl>::id, Impl)
 
 #endif
 

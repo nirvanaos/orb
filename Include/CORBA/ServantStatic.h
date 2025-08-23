@@ -67,7 +67,7 @@ class InterfaceStaticBase :
 	public Skeleton <S, Itf>
 {
 public:
-	constexpr operator Bridge <Itf>& () const noexcept
+	constexpr operator Bridge <Itf>& () const noexcept // For FindInterface
 	{
 		return *_bridge ();
 	}
@@ -77,13 +77,9 @@ public:
 		return const_cast <Bridge <Itf>*> (&bridge_);
 	}
 
+private:
 	static constexpr Bridge <Itf> bridge_{ Skeleton <S, Itf>::epv_ };
 };
-
-#define NIRVANA_STATIC_BRIDGE(Itf, ...) ::CORBA::Internal::InterfaceStaticBase <__VA_ARGS__, Itf>::_bridge ()
-
-//template <class S, class Itf>
-//const Bridge <Itf> InterfaceStaticBase <S, Itf>::bridge_ (InterfaceStaticBase <S, Itf>::epv_);
 
 template <class S, class Itf>
 class InterfaceStatic :

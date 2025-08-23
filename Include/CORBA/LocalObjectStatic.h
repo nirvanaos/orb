@@ -116,8 +116,7 @@ private:
 
 public:
 	NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT static constexpr ::Nirvana::ExportObject export_struct_{
-	::Nirvana::OLF_EXPORT_LOCAL, StaticId <S>::id,
-	NIRVANA_STATIC_BRIDGE (LocalObject, S) };
+	::Nirvana::OLF_EXPORT_LOCAL, StaticId <S>::id, InterfaceStaticBase <S, LocalObject>::_bridge () };
 };
 
 }

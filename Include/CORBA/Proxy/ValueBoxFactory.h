@@ -61,9 +61,16 @@ public:
 		return create_value <VB> ();
 	}
 
+	constexpr static Bridge <PseudoBase>* _bridge () noexcept
+	{
+		return InterfaceStaticBase <ValueBoxFactory <VB>, PseudoBase>::_bridge ();
+	}
 };
 
 }
 }
+
+#define NIRVANA_EXPORT_VB_FACTORY(uname, V) NIRVANA_EXPORT_STATIC (uname, CORBA::Internal::RepIdOf <V>::id,\
+	CORBA::Internal::ValueBoxFactory <V>)
 
 #endif

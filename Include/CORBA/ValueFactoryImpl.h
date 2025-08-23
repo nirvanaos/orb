@@ -56,6 +56,10 @@ public:
 		return itf;
 	}
 
+	constexpr static Bridge <PseudoBase>* _bridge () noexcept
+	{
+		return InterfaceStaticBase <ValueFactoryImpl <Itf>, PseudoBase>::_bridge ();
+	}
 };
 
 }
