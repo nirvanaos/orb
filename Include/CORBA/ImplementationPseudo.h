@@ -67,10 +67,10 @@ public:
 		return I_ptr <Primary> (static_cast <Primary*> (_bridge ()));
 	}
 
-	/// \returns The Bridge pointer for export.
+	/// \returns The Bridge pointer.
 	constexpr Bridge <Primary>* _bridge () noexcept
 	{
-		return static_cast <Bridge <Primary>*> (this);
+		return this;
 	}
 
 protected:
