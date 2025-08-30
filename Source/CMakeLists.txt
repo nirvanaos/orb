@@ -13,6 +13,7 @@ target_sources(nirvana PRIVATE
 	LocalObjectPOA.cpp
 	NoDefaultPOA.cpp
 	PollerBase.cpp
+  ProxyBase.cpp
 	Receptacle.cpp
 	RefCountLink.cpp
 	RepId.cpp
