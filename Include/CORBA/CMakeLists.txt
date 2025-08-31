@@ -1,4 +1,4 @@
-set(idl_files
+set (idl_files
 	Components.idl
 	Context.idl
 	CORBA_Stream.idl
@@ -48,13 +48,12 @@ set(idl_files
 	ccm/CCM_Receptacle.idl
 )
 
-set(idl_files_no_ami
+set (idl_files_no_ami
 	AMI.idl
 	IORequest.idl
 )
 
-idl_generate(OUT_VAR src_no_ami IDL_FILES ${idl_files_no_ami} OPTIONS -no_ami)
-idl_generate(OUT_VAR src nirvana IDL_FILES ${idl_files})
-target_sources(nirvana PRIVATE ${src} ${src_no_ami})
-add_custom_target(orb_gen DEPENDS ${src} ${src_no_ami})
-add_dependencies(nirvana orb_gen)
+idl_generate (OUT_VAR src_no_ami IDL_FILES ${idl_files_no_ami} OPTIONS -no_ami)
+idl_generate (OUT_VAR src IDL_FILES ${idl_files})
+add_custom_target (corba_idl DEPENDS ${src} ${src_no_ami})
+target_sources (nirvana PRIVATE ${src} ${src_no_ami})

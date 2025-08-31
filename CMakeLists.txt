@@ -1,6 +1,11 @@
-add_subdirectory(Include/CORBA)
-add_subdirectory(Source)
+add_subdirectory (Include/CORBA)
 
-if(BUILD_TESTING)
-	add_subdirectory(Test)
-endif()
+if (NIRVANA_BUILD)
+
+add_subdirectory (Source)
+
+if (BUILD_TESTING)
+	add_subdirectory (Test)
+endif ()
+
+endif ()
