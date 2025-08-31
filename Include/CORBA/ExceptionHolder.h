@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_EXCEPTIONHOLDER_H_
 #pragma once
 
-#include "AMI.h"
+#include <CORBA/AMI.h>
 #include "ExceptionSet.h"
 #include "ExceptionList.h"
 

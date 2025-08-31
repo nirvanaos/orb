@@ -33,7 +33,7 @@
 #include "Type_interface.h"
 #include "String.h"
 #include "basic_types.h"
-#include "TCKind.h"
+#include <CORBA/TCKind.h>
 
 namespace CORBA {
 namespace Internal {

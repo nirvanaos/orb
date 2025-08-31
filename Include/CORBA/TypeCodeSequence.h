@@ -29,7 +29,7 @@
 
 #include "TypeCodeImpl.h"
 #include "Sequence.inl"
-#include "ORB.h"
+#include <CORBA/ORB.h>
 
 namespace CORBA {
 namespace Internal {

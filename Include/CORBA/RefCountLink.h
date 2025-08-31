@@ -30,7 +30,7 @@
 
 #include "ValueMemory.h"
 #include "DynamicServantImpl.h"
-#include "RefCnt.h"
+#include <CORBA/RefCnt.h>
 
 namespace CORBA {
 namespace Internal {

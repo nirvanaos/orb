@@ -31,7 +31,7 @@
 #include "../ServantImpl.h"
 #include "../LifeCycleRefCnt.h"
 #include "../ExceptionSet.h"
-#include "IOReference.h"
+#include <CORBA/Proxy/IOReference.h>
 #include "OperationIndex.h"
 
 namespace CORBA {

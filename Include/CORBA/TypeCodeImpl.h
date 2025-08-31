@@ -30,7 +30,7 @@
 
 #include "ImplementationPseudo.h"
 #include "ImplementationPseudoStatic.h"
-#include "TypeCode_s.h"
+#include <CORBA/TypeCode_s.h>
 #include "TypeCodeOps.h"
 #include "StaticIdNameTC.h"
 

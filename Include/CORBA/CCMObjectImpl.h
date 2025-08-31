@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_CCMOBJECTIMPL_H_
 #pragma once
 
-#include "ccm/CCM_Object.h"
+#include <CORBA/ccm/CCM_Object.h>
 
 namespace CORBA {
 namespace Internal {

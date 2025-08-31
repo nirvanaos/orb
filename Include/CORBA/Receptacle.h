@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_RECEPTACLE_H_
 #pragma once
 
-#include "ccm/CCM_Receptacle.h"
+#include <CORBA/ccm/CCM_Receptacle.h>
 
 namespace CORBA {
 namespace Internal {

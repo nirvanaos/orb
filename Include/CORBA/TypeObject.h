@@ -29,8 +29,8 @@
 #pragma once
 
 #include "Type_interface.h"
-#include "IORequest.h"
-#include "TCKind.h"
+#include <CORBA/IORequest.h>
+#include <CORBA/TCKind.h>
 #include "tc_constants.h"
 
 namespace CORBA {

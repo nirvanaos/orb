@@ -42,7 +42,7 @@
 #include "make_stateless.h"
 #include "make_pseudo.h"
 #include "TraitsServant.h"
-#include "AMI_s.h"
+#include <CORBA/AMI_s.h>
 #include "ValueRefCountBase.h"
 #include "Receptacle.h"
 #include "CCMObjectImpl.h"

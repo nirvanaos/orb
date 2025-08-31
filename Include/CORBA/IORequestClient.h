@@ -34,6 +34,6 @@
 #include "ValueBase.h"
 #include "EnvironmentEx.h"
 #include <Nirvana/native.h>
-#include "IORequest.h"
+#include <CORBA/IORequest.h>
 
 #endif

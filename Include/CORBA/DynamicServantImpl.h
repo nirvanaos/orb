@@ -31,7 +31,7 @@
 #include "ImplementationPseudo.h"
 #include "ImplementationPseudoStatic.h"
 #include "TraitsServantPseudo.h"
-#include "DynamicServant_s.h"
+#include <CORBA/DynamicServant_s.h>
 #include "LifeCycleNone.h"
 
 namespace CORBA {

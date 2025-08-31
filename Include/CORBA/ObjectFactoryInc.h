@@ -31,7 +31,7 @@
 
 #include "LocalObject.h"
 #include "ServantBase.h"
-#include "ObjectFactory.h"
+#include <CORBA/ObjectFactory.h>
 
 #endif
 

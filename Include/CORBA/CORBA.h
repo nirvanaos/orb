@@ -64,8 +64,8 @@
 #include "TypeCodeInterface.h"
 #include "TypeCodeExceptionEmpty.h"
 #include "SoftFloat_impl.h"
-#include "DomainManager.h"
-#include "Messaging.h"
+#include <CORBA/DomainManager.h>
+#include <CORBA/Messaging.h>
 #include "ValueCreator.h"
 #include "2base.h"
 #include "SystemException_impl.h"
