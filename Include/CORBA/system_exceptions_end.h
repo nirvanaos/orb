@@ -1,5 +1,5 @@
 /// \file
-/// Static set exception to environment.
+/// Undefine system exceptions macros.
 /*
 * Nirvana IDL support library.
 *
@@ -25,25 +25,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_SET_EXCEPTION_H_
-#define NIRVANA_ORB_SET_EXCEPTION_H_
-#pragma once
 
-#include "Bridge.h"
-#include "system_exceptions.h"
+#undef CORBA_EXCEPTIONS
+#undef NIRVANA_EXCEPTIONS
+#undef SYSTEM_EXCEPTIONS
 
-#define DECLARE_FUNCTION(e) void set_##e (Interface* env, uint32_t minor = 0) noexcept;
-
-namespace CORBA {
-namespace Internal {
-
-SYSTEM_EXCEPTIONS (DECLARE_FUNCTION)
-
-}
-}
-
-#undef DECLARE_FUNCTION
-
-#include "system_exceptions_end.h"
-
-#endif

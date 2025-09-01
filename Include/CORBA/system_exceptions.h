@@ -26,9 +26,6 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#ifndef NIRVANA_ORB_SYSTEM_EXCEPTIONS_H_
-#define NIRVANA_ORB_SYSTEM_EXCEPTIONS_H_
-#pragma once
 
 /// CORBA system exceptions.
 /// Must be lexicographically ordered.
@@ -89,4 +86,3 @@
 NIRVANA_EXCEPTIONS (M)\
 CORBA_EXCEPTIONS (M)
 
-#endif

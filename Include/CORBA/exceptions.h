@@ -30,6 +30,8 @@
 #include "SystemException.h"
 #include "StaticIdNameTC.h"
 
+#include "system_exceptions.h"
+
 #define DECLARE_SYSTEM_EXCEPTION(E) \
 extern const Internal::StaticIdNameTC _tc_##E;\
 class E : public SystemException {\
@@ -54,5 +56,7 @@ NIRVANA_EXCEPTIONS (DECLARE_NIRVANA_EXCEPTION)
 #undef DECLARE_SYSTEM_EXCEPTION
 #undef DECLARE_CORBA_EXCEPTION
 #undef DECLARE_NIRVANA_EXCEPTION
+
+#include "system_exceptions_end.h"
 
 #endif

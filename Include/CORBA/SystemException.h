@@ -161,4 +161,6 @@ private:
 
 }
 
+#include "system_exceptions_end.h"
+
 #endif
