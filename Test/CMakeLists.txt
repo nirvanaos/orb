@@ -9,7 +9,7 @@ target_link_libraries (test-orb PRIVATE
 )
 
 add_custom_command (TARGET test-orb POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:test-orb> $<TARGET_FILE_DIR:test-orb>
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:test-orb> $<TARGET_FILE_DIR:test-orb>
   COMMAND_EXPAND_LISTS
 )
 
