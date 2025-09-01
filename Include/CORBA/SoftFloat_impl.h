@@ -43,7 +43,7 @@ struct alignas (align) FloatBits
 
 typedef FloatBits <sizeof (float), alignof (float)> NativeFloat;
 typedef FloatBits <sizeof (double), alignof (double)> NativeDouble;
-typedef std::conditional <Nirvana::PLATFORM == Nirvana::PLATFORM_I386 || Nirvana::PLATFORM == Nirvana::PLATFORM_X64, FloatBits <10, 8>,
+typedef std::conditional <Nirvana::PLATFORM == Nirvana::PLATFORM_X86 || Nirvana::PLATFORM == Nirvana::PLATFORM_X64, FloatBits <10, 8>,
 	FloatBits <sizeof (long double), alignof (long double)> >::type NativeLongDouble;
 
 template <size_t size, size_t align>
