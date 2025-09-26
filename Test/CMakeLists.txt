@@ -13,5 +13,5 @@ add_custom_command (TARGET test-orb POST_BUILD
   COMMAND_EXPAND_LISTS
 )
 
-#include (GoogleTest)
-#gtest_discover_tests (test-orb WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+include (GoogleTest)
+gtest_discover_tests (test-orb WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
