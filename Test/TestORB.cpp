@@ -1,6 +1,6 @@
 #include <CORBA/CORBA.h>
 #include <gtest/gtest.h>
-#include <TestMock.h>
+#include <Mock/Test.h>
 #include <functional>
 
 using namespace CORBA;
@@ -23,7 +23,7 @@ bool must_not_compile3 (const Test::I3_var p1, const Test::I3_var p2)
 */
 namespace TestORB {
 
-class TestORB : public Nirvana::Test::TestMock
+class TestORB : public Nirvana::Mock::Test
 {
 public:
 };
