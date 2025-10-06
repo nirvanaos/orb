@@ -29,6 +29,8 @@
 #pragma once
 
 #include <Nirvana/NirvanaBase.h>
+#include <Nirvana/bitutils.h>
+#include <CORBA/primitive_types.h>
 #include "ABI.h"
 #include <assert.h>
 #include <stddef.h>

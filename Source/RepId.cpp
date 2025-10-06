@@ -23,7 +23,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../../pch/pch.h"
+#include <CORBA/RepId.h>
+#include <Nirvana/basic_string.h>
 #include <algorithm>
 #include <limits>
 

@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../../pch/pch.h"
+#include <CORBA/Type_fixed.h>
 
 namespace CORBA {
 namespace Internal {

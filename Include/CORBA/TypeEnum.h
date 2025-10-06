@@ -30,6 +30,7 @@
 
 #include <Nirvana/throw_exception.h>
 #include "TypeByVal.h"
+#include "SystemException.h"
 
 namespace CORBA {
 namespace Internal {

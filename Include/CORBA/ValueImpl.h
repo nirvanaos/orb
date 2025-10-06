@@ -28,7 +28,6 @@
 #pragma once
 
 #include "ServantImpl.h"
-#include "ValueBaseImpl.h"
 #include "servant_reference.h"
 #include "IORequestClient.h"
 

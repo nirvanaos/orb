@@ -61,7 +61,13 @@ public:
 		return nullptr;
 	}
 
-	virtual Type <InterfaceDef>::VRet _get_interface () override
+	virtual
+#ifdef LEGACY_CORBA_CPP
+		I_ptr
+#else
+		I_ref
+#endif
+		<InterfaceDef> _get_interface () override
 	{
 		return LocalObjectLink::core_object_->_get_interface ();
 	}

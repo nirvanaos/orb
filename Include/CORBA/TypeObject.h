@@ -29,7 +29,7 @@
 #pragma once
 
 #include "Type_interface.h"
-#include <CORBA/IORequest.h>
+#include "IORequestClient.h"
 #include <CORBA/TCKind.h>
 #include "tc_constants.h"
 

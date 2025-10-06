@@ -23,7 +23,7 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../../pch/pch.h"
+#include <CORBA/SoftFloat.h>
 #include <CORBA/Server.h>
 #include <CORBA/SFloat.h>
 #include <fenv.h>

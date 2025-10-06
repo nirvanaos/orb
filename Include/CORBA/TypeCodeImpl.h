@@ -28,8 +28,16 @@
 #define NIRVANA_ORB_TYPECODEIMPL_H_
 #pragma once
 
+#include "Client.h"
 #include "ImplementationPseudo.h"
 #include "ImplementationPseudoStatic.h"
+#include "TypeEnum.inl"
+#include "TraitsInterface.h"
+#include "TraitsServantPseudo.h"
+#include "Alias.h"
+#include "UserException.h"
+#include "basic_types.h"
+#include "Any.h"
 #include <CORBA/TypeCode_s.h>
 #include "TypeCodeOps.h"
 #include "StaticIdNameTC.h"

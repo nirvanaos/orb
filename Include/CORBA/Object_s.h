@@ -44,13 +44,13 @@ protected:
 	static Interface* __get_interface (Bridge <Object>* obj, Interface* env)
 	{
 		try {
-			return Type <InterfaceDef>::ret (S::_implementation (obj)._get_interface ());
+			return TypeItf <InterfaceDef>::ret (S::_implementation (obj)._get_interface ());
 		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return Type <InterfaceDef>::ret ();
+		return TypeItf <InterfaceDef>::ret ();
 	}
 
 	static Type <Boolean>::ABI_ret __is_a (Bridge <Object>* obj, Type <String>::ABI_in type_id, Interface* env)

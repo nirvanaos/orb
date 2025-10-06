@@ -63,7 +63,12 @@ public:
 		return core_object ()->_default_POA ();
 	}
 
-	Type <InterfaceDef>::VRet _get_interface ()
+#ifdef LEGACY_CORBA_CPP
+	I_ptr
+#else
+	I_ref
+#endif
+		<InterfaceDef> _get_interface ()
 	{
 		return core_object ()->_get_interface ();
 	}

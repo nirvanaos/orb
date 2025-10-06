@@ -23,8 +23,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../../pch/pch.h"
 #include <CORBA/Proxy/RqProcWrapper.h>
+#include <CORBA/IORequestClient.h>
 
 namespace CORBA {
 namespace Internal {

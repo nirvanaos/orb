@@ -23,7 +23,10 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../../pch/pch.h"
+#include <CORBA/Exception.h>
+#include <CORBA/RepId.h>
+#include <CORBA/Interface.h>
+#include <CORBA/Environment.h>
 #include <stdexcept>
 
 namespace CORBA {

@@ -23,7 +23,6 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../../pch/pch.h"
 #include <CORBA/Receptacle.h>
 #include <CORBA/ccm/CCM_Cookie_s.h>
 

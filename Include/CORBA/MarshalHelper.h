@@ -28,7 +28,7 @@
 #define NIRVANA_ORB_MARSHALHELPER_H_
 #pragma once
 
-#include "Type_forward.h"
+#include "TypeBase.h"
 
 namespace CORBA {
 namespace Internal {

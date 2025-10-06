@@ -23,9 +23,10 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../../pch/pch.h"
-#include <CORBA/system_exceptions.h>
+#include <CORBA/SystemException.h>
+#include <CORBA/CORBA.h>
 #include <algorithm>
+#include <CORBA/system_exceptions.h>
 
 namespace CORBA {
 

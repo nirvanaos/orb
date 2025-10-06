@@ -23,10 +23,8 @@
 * Send comments and/or bug reports to:
 *  popov.nirvana@gmail.com
 */
-#include "../../pch/pch.h"
-#include <CORBA/TypeCodeString.h>
-#include <CORBA/TypeCodeValue.h>
-#include <CORBA/TypeCodeInterface.h>
+#include <CORBA/tc_constants.h>
+#include <CORBA/CORBA.h>
 
 namespace CORBA {
 namespace Internal {

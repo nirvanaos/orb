@@ -62,7 +62,13 @@ public:
 		return ServantBaseLink::_default_POA ();
 	}
 
-	virtual Type <InterfaceDef>::VRet _get_interface ()
+	virtual
+#ifdef LEGACY_CORBA_CPP
+		I_ptr
+#else
+		I_ref
+#endif
+	 	<InterfaceDef> _get_interface ()
 	{
 		return ServantBaseLink::_get_interface ();
 	}

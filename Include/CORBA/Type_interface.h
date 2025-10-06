@@ -301,7 +301,7 @@ struct TypeItfBase
 
 #ifdef LEGACY_CORBA_CPP
 
-	static Interface* ret (const I_ptr <Itf>& ptr)
+	static Interface* ret (const I_ptr <Itf>& ptr) noexcept
 	{
 		return &ptr;
 	}
@@ -316,6 +316,13 @@ struct TypeItfBase
 
 #else
 
+	static Interface* ret (I_ref <Itf>&& var) noexcept
+	{
+		Interface* p = &I_ptr <Itf> (var.p_);
+		var.p_ = nullptr;
+		return p;
+	}
+
 	static I_ref <Itf>& out (ABI_out p)
 	{
 		check_pointer (p);
@@ -325,13 +332,6 @@ struct TypeItfBase
 	}
 
 #endif
-
-	static Interface* ret (I_ref <Itf>&& var) noexcept
-	{
-		Interface* p = &I_ptr <Itf> (var.p_);
-		var.p_ = nullptr;
-		return p;
-	}
 
 	static Interface* ret () noexcept
 	{

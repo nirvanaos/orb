@@ -29,6 +29,8 @@
 
 #include "ServantBase.h"
 #include "Type_interface.h"
+#include "ServantLocator_native.h"
+#include "Alias.h"
 #include <CORBA/PortableServer.h>
 
 namespace CORBA {
@@ -52,19 +54,19 @@ protected:
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return 0;
+		return Type <PortableServer::POA>::ret ();
 	}
 
 	static Interface* __get_interface (Bridge <PortableServer::ServantBase>* obj, Interface* env)
 	{
 		try {
-			return Type <InterfaceDef>::ret (S::_implementation (obj)._get_interface ());
+			return TypeItf <InterfaceDef>::ret (S::_implementation (obj)._get_interface ());
 		} catch (Exception& e) {
 			set_exception (env, e);
 		} catch (...) {
 			set_unknown_exception (env);
 		}
-		return 0;
+		return TypeItf <InterfaceDef>::ret ();
 	}
 
 	static Type <Boolean>::ABI_ret __is_a (Bridge <PortableServer::ServantBase>* obj, Type <String>::ABI_in type_id, Interface* env)

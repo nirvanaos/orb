@@ -28,9 +28,14 @@
 #define NIRVANA_ORB_EXCEPTIONHOLDER_H_
 #pragma once
 
-#include <CORBA/AMI.h>
+#include "TypeObject.inl"
+#include "ServantPOA.h"
+#include "Alias.h"
 #include "ExceptionSet.h"
 #include "ExceptionList.h"
+#include "ValueImpl.h"
+#include "TypeCodeValue.h"
+#include <CORBA/AMI.h>
 
 namespace CORBA {
 namespace Internal {

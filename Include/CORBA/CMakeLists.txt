@@ -27,7 +27,6 @@ set (idl_files
 	ORB.idl
 	Policy.idl
 	Pollable.idl
-	PortableServer.idl
 	RefCnt.idl
 	Request.idl
 	SFloat.idl
@@ -51,6 +50,7 @@ set (idl_files
 set (idl_files_no_ami
 	AMI.idl
 	IORequest.idl
+	PortableServer.idl
 )
 
 idl_generate (OUT_VAR src_no_ami IDL_FILES ${idl_files_no_ami} OPTIONS -no_ami)
