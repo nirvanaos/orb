@@ -19,6 +19,7 @@ set (idl_files
 	DomainManager.idl
 	Dynamic.idl
 	DynamicServant.idl
+	FT.idl
 	InterfaceRepository.idl
 	Messaging.idl
 	NirvanaDGC.idl
