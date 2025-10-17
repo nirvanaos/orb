@@ -28,7 +28,11 @@
 #define NIRVANA_ORB_CCMOBJECTIMPL_H_
 #pragma once
 
-#include "CORBA.h"
+#include "TypeObject.inl"
+#include "ServantPOA.h"
+#include "Alias.h"
+#include "TypeCodeValue.h"
+#include <CORBA/AMI.h>
 #include <CORBA/ccm/CCM_Object.h>
 
 namespace CORBA {

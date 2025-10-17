@@ -24,6 +24,7 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/UnknownUserException.h>
+#include <CORBA/CORBA.h>
 
 namespace CORBA {
 

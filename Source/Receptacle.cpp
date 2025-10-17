@@ -24,6 +24,7 @@
 *  popov.nirvana@gmail.com
 */
 #include <CORBA/Receptacle.h>
+#include <CORBA/CORBA.h>
 #include <CORBA/ccm/CCM_Cookie_s.h>
 
 namespace CORBA {
