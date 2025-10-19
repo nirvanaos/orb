@@ -30,8 +30,8 @@
 #include "../Server.h"
 #include <Nirvana/OLF.h>
 #include "InterfaceMetadata.h"
-#include "ProxyFactory_s.h"
-#include "IOReference.h"
+#include <CORBA/Proxy/ProxyFactory_s.h>
+#include <CORBA/Proxy/IOReference.h>
 #include "../IORequestClient.h"
 #include "ProxyBase.h"
 #include "TypeCodeException.h"
