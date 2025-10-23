@@ -5,6 +5,7 @@
 #include "TimeBase.idl"
 
 module CosTime {
+typeprefix CosTime "omg.org";
 
 exception TimeUnavailable {};
 

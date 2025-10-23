@@ -6,6 +6,7 @@
 #include "CosEventComm.idl"
 
 module CosTimerEvent {
+typeprefix CosTimerEvent "omg.org";
 
 enum TimeType
 {
