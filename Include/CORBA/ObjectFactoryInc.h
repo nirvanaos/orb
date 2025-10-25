@@ -27,12 +27,8 @@
 #define NIRVANA_ORB_OBJECTFACTORYINC_H_
 #pragma once
 
-#ifndef NIRVANA_PROCESS
-
 #include "LocalObject.h"
 #include "ServantBase.h"
 #include <CORBA/ObjectFactory.h>
-
-#endif
 
 #endif

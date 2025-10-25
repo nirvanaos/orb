@@ -27,8 +27,6 @@
 #define NIRVANA_ORB_SERVANTMEMORY_H_
 #pragma once
 
-#ifndef NIRVANA_PROCESS
-
 #include "Client.h"
 #include "ObjectFactoryInc.h"
 #include "DynamicExport.h"
@@ -81,7 +79,5 @@ protected:
 
 }
 }
-
-#endif
 
 #endif
