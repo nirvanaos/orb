@@ -35,6 +35,8 @@
 
 namespace CORBA {
 
+class UserException;
+
 class Any : private Internal::ABI <Any>
 {
 	typedef Internal::ABI <Any> ABI;
