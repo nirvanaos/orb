@@ -435,6 +435,34 @@ Boolean operator >>= (const Any& src, Any& dst)
 
 Boolean operator >>= (const Any&, SystemException&);
 
+template <typename T> inline
+typename std::enable_if <std::is_base_of <UserException,
+	typename std::remove_reference <T>::type>::value, bool>::type
+	operator >>= (const Any& a, T& v)
+{
+	if (T::_type_code ()->equivalent (a.type ())) {
+		typedef typename T::_Data Data;
+		*reinterpret_cast <Data*> (static_cast <UserException&> (v).__data ())
+			= *reinterpret_cast <const Data*> (a.data ());
+		return true;
+	}
+	return false;
+}
+
+template <typename T> inline
+typename std::enable_if <std::is_base_of <UserException,
+	typename std::remove_reference <T>::type>::value, bool>::type
+	operator >>= (Any&& a, T& v)
+{
+	if (T::_type_code ()->equivalent (a.type ())) {
+		typedef typename T::_Data Data;
+		*reinterpret_cast <Data*> (static_cast <UserException&> (v).__data ())
+			= std::move (*reinterpret_cast <const Data*> (a.data ()));
+		return true;
+	}
+	return false;
+}
+
 }
 
 namespace IDL {
