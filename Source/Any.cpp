@@ -151,6 +151,25 @@ void Any::move_from (I_ptr <TypeCode> tc, void* val)
 	set_type (tc);
 }
 
+Boolean Any::copy_to (I_ptr <TypeCode> tc, void* dst) const
+{
+	if (tc->equivalent (type ())) {
+		tc->n_copy (dst, data ());
+		return true;
+	}
+	return false;
+}
+
+Boolean Any::move_to (I_ptr <TypeCode> tc, void* dst)
+{
+	if (tc->equivalent (type ())) {
+		tc->n_move (dst, data ());
+		clear ();
+		return true;
+	}
+	return false;
+}
+
 void Any::type (I_ptr <TypeCode> alias)
 {
 	I_ptr <TypeCode> tc = type ();
@@ -240,57 +259,6 @@ Boolean Any::operator >>= (to_octet to) const
 		return false;
 }
 
-void operator <<= (Any& any, const Exception& e)
-{
-	TypeCode::_ptr_type tc = e.__type_code ();
-	if (&tc == _tc_UnknownUserException.imp.itf)
-		any = *(const Any*)e.__data ();
-	else
-		any.copy_from (tc, e.__data ());
-}
-
-void operator <<= (Any& any, Exception&& e)
-{
-	TypeCode::_ptr_type tc = e.__type_code ();
-	if (&tc == _tc_UnknownUserException.imp.itf)
-		any = std::move (*(Any*)e.__data ());
-	else
-		any.move_from (tc, e.__data ());
-}
-
-bool Any::is_system_exception () const noexcept
-{
-	I_ptr <TypeCode> tc = type ();
-	if (tc && tc->kind () == TCKind::tk_except) {
-		std::string id = tc->id ();
-		const Char standard_prefix [] = "IDL:omg.org/CORBA/";
-		const Char nirvana_prefix [] = "IDL:CORBA/";
-		return
-			!strncmp (standard_prefix, id.c_str (), countof (standard_prefix) - 1)
-			||
-			!strncmp (nirvana_prefix, id.c_str (), countof (nirvana_prefix) - 1);
-	}
-	return false;
-}
-
-Boolean operator >>= (const Any& any, SystemException& se)
-{
-	if (any.is_system_exception ()) {
-		I_ptr <TypeCode> tc = any.type ();
-		std::string id = tc->id ();
-		const Internal::ExceptionEntry* ee = SystemException::_get_exception_entry (id, Exception::EC_SYSTEM_EXCEPTION);
-		if (ee) {
-			(ee->construct) (&se);
-			const SystemException::_Data& data = *(const SystemException::_Data*)any.data ();
-			se.completed (data.completed);
-			se.minor (data.minor);
-		} else
-			new (&se) UNKNOWN (MAKE_OMG_MINOR (2)); // Non-standard System Exception not supported.
-		return true;
-	}
-	return false;
-}
-
 void Any::operator <<= (from_fixed ff)
 {
 	TypeCode::_ref_type tc = the_orb->create_fixed_tc (ff.digits, ff.scale);
@@ -366,6 +334,83 @@ Boolean Any::operator >>= (to_wstring ts) const
 			ts.val = s.c_str ();
 			return true;
 		}
+	}
+	return false;
+}
+
+void operator <<= (Any& any, const Exception& e)
+{
+	TypeCode::_ptr_type tc = e.__type_code ();
+	if (tc->equivalent (_tc_UnknownUserException))
+		any = *(const Any*)e.__data ();
+	else
+		any.copy_from (tc, e.__data ());
+}
+
+void operator <<= (Any& any, Exception&& e)
+{
+	TypeCode::_ptr_type tc = e.__type_code ();
+	if (tc->equivalent (_tc_UnknownUserException))
+		any = std::move (*(Any*)e.__data ());
+	else
+		any.move_from (tc, e.__data ());
+}
+
+Boolean operator >>= (const Any& any, Exception& e)
+{
+	I_ptr <TypeCode> tca = any.type ();
+	if (tca) {
+		TypeCode::_ptr_type tce = e.__type_code ();
+		if (tce->equivalent (_tc_UnknownUserException)) {
+			if (tca->kind () == TCKind::tk_except) {
+				*(Any*)e.__data () = any;
+				return true;
+			}
+		} else if (tca->equivalent (tce)) {
+			tce->n_copy (e.__data (), any.data ());
+			return true;
+		}
+	}
+	return false;
+}
+
+Boolean operator >>= (Any&& any, Exception& e)
+{
+	I_ptr <TypeCode> tca = any.type ();
+	if (tca) {
+		TypeCode::_ptr_type tce = e.__type_code ();
+		if (tce->equivalent (_tc_UnknownUserException)) {
+			if (tca->kind () == TCKind::tk_except) {
+				*(Any*)e.__data () = std::move (any);
+				return true;
+			}
+		} else if (tca->equivalent (tce)) {
+			tce->n_move (e.__data (), any.data ());
+			any.clear ();
+			return true;
+		}
+	}
+	return false;
+}
+
+const Internal::ExceptionEntry* Any::get_system_exception_entry () const
+{
+	I_ptr <TypeCode> tc = type ();
+	if (tc)
+		return SystemException::_get_exception_entry (tc->id (), Exception::EC_SYSTEM_EXCEPTION);
+	else
+		return nullptr;
+}
+
+Boolean operator >>= (const Any& any, SystemException& se)
+{
+	const Internal::ExceptionEntry* ee = any.get_system_exception_entry ();
+	if (ee) {
+		(ee->construct) (&se);
+		const SystemException::_Data& data = *reinterpret_cast <const SystemException::_Data*> (any.data ());
+		se.completed (data.completed);
+		se.minor (data.minor);
+		return true;
 	}
 	return false;
 }

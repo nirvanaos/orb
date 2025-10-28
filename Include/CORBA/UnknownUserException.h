@@ -34,7 +34,7 @@ namespace CORBA {
 
 extern NIRVANA_STATIC_IMPORT Nirvana::ImportInterfaceT <::CORBA::TypeCode> _tc_UnknownUserException;
 
-class UnknownUserException : public UserException
+class UnknownUserException final : public UserException
 {
 	virtual Code __code () const noexcept
 	{

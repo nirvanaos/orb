@@ -35,11 +35,29 @@
 
 namespace CORBA {
 
-class UserException;
+class Any;
+
+template <typename T>
+typename std::enable_if <!std::is_base_of <Exception, T>::value, void>::type
+operator <<= (Any& a, const T& v);
+
+template <typename T>
+typename std::enable_if <!std::is_base_of <Exception,
+	typename std::remove_reference <T>::type>::value, void>::type
+	operator <<= (Any& a, T&& v);
+
+template <typename T>
+typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
+	Boolean>::type operator >>= (const Any& a, T& v);
+
+template <typename T>
+typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
+	Boolean>::type operator >>= (Any&& a, T& v);
 
 class Any : private Internal::ABI <Any>
 {
 	typedef Internal::ABI <Any> ABI;
+
 public:
 	Any ()
 	{
@@ -185,10 +203,10 @@ public:
 	Boolean operator >>= (to_wchar) const;
 	Boolean operator >>= (to_octet) const;
 
-	void copy_from (Internal::I_ptr <TypeCode> tc, const void* val);
-	void move_from (Internal::I_ptr <TypeCode> tc, void* val);
-
-	bool is_system_exception () const noexcept;
+	bool is_system_exception () const
+	{
+		return get_system_exception_entry () != nullptr;
+	}
 
 #ifndef LEGACY_CORBA_CPP
 private:
@@ -262,10 +280,36 @@ private:
 
 private:
 	friend struct Internal::Type <Any>;
+	friend Boolean operator >>= (const Any&, SystemException&);
+	
+	template <typename T> friend
+	typename std::enable_if <!std::is_base_of <Exception, T>::value, void>::type
+		operator <<= (Any& a, const T& v);
+
+	template <typename T> friend
+	typename std::enable_if <!std::is_base_of <Exception,
+		typename std::remove_reference <T>::type>::value, void>::type
+		operator <<= (Any& a, T&& v);
+
+	template <typename T> friend
+	typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
+		Boolean>::type operator >>= (const Any& a, T& v);
+
+	template <typename T> friend
+	typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
+		Boolean>::type operator >>= (Any&& a, T& v);
+
+	friend void operator <<= (Any& any, const Exception& e);
+	friend void operator <<= (Any& any, Exception&& e);
 
 	void copy_from (const Any& src);
+	void copy_from (Internal::I_ptr <TypeCode> tc, const void* val);
+	void move_from (Internal::I_ptr <TypeCode> tc, void* val);
+	Boolean copy_to (Internal::I_ptr <TypeCode> tc, void* dst) const;
+	Boolean move_to (Internal::I_ptr <TypeCode> tc, void* dst);
 	void* prepare (Internal::I_ptr <TypeCode> tc);
 	void set_type (Internal::I_ptr <TypeCode> tc);
+	const Internal::ExceptionEntry* get_system_exception_entry () const;
 
 	// these functions are private and not implemented
 	// hiding these causes compile-time errors for
@@ -320,21 +364,14 @@ struct Type <Any> : public TypeVarLen <Any>
 typedef Internal::T_var <Any> Any_var;
 #endif
 
-template <typename T> inline
+template <typename T>
 typename std::enable_if <!std::is_base_of <Exception, T>::value, void>::type
 operator <<= (Any& a, const T& v)
 {
 	a.copy_from (Internal::Type <T>::type_code (), &v);
 }
 
-template <typename T> inline
-typename std::enable_if <!std::is_base_of <Exception, T>::value, void>::type
-operator <<= (Any& a, T& v)
-{
-	operator <<= (a, (const T&)v);
-}
-
-template <typename T> inline
+template <typename T>
 typename std::enable_if <!std::is_base_of <Exception,
 	typename std::remove_reference <T>::type>::value, void>::type
 operator <<= (Any& a, T&& v)
@@ -343,14 +380,14 @@ operator <<= (Any& a, T&& v)
 }
 
 #ifdef LEGACY_CORBA_CPP
-template <typename T> inline
+template <typename T>
 void operator <<= (Any& a, T* v)
 {
 	a <<= std::move (*v);
 }
 #endif
 
-template <typename T> inline
+template <typename T>
 typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
 	Boolean>::type operator >>= (Any& a, T*& pv)
 {
@@ -361,7 +398,7 @@ typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer 
 	return false;
 }
 
-template <typename T> inline
+template <typename T>
 typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
 	Boolean>::type operator >>= (const Any& a, const T*& pv)
 {
@@ -372,28 +409,24 @@ typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer 
 	return false;
 }
 
-template <typename T> inline
+template <typename T>
 typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
 	Boolean>::type operator >>= (const Any& a, T& v)
 {
-	const T* pv = nullptr;
-	if (a >>= pv) {
-		v = *pv;
-		return true;
-	}
-	return false;
+	return a.copy_to (Internal::Type <T>::type_code (), &v);
+}
+
+template <typename T>
+typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
+	Boolean>::type operator >>= (Any&& a, T& v)
+{
+	return a.move_to (Internal::Type <T>::type_code (), &v);
 }
 
 inline
 void operator <<= (Any& dst, const Any& src)
 {
 	dst = src;
-}
-
-inline
-void operator <<= (Any& dst, Any& src)
-{
-	operator <<= (dst, (const Any&)src);
 }
 
 inline
@@ -410,14 +443,14 @@ void operator <<= (Any& dst, Any* src)
 }
 #endif
 
-void operator <<= (Any&, const Exception&);
-
 inline
-void operator <<= (Any& a, Exception& e)
+Boolean operator >>= (const Any& src, Any& dst)
 {
-	operator <<= (a, (const Exception&)e);
+	dst = src;
+	return true;
 }
 
+void operator <<= (Any&, const Exception&);
 void operator <<= (Any&, Exception&&);
 
 #ifdef LEGACY_CORBA_CPP
@@ -428,42 +461,10 @@ void operator <<= (Any& a, Exception* pe)
 }
 #endif
 
-inline
-Boolean operator >>= (const Any& src, Any& dst)
-{
-	dst = src;
-	return true;
-}
+Boolean operator >>= (const Any&, Exception&);
+Boolean operator >>= (Any&&, Exception&);
 
 Boolean operator >>= (const Any&, SystemException&);
-
-template <typename T> inline
-typename std::enable_if <std::is_base_of <UserException,
-	typename std::remove_reference <T>::type>::value, bool>::type
-	operator >>= (const Any& a, T& v)
-{
-	if (T::_type_code ()->equivalent (a.type ())) {
-		typedef typename T::_Data Data;
-		*reinterpret_cast <Data*> (static_cast <UserException&> (v).__data ())
-			= *reinterpret_cast <const Data*> (a.data ());
-		return true;
-	}
-	return false;
-}
-
-template <typename T> inline
-typename std::enable_if <std::is_base_of <UserException,
-	typename std::remove_reference <T>::type>::value, bool>::type
-	operator >>= (Any&& a, T& v)
-{
-	if (T::_type_code ()->equivalent (a.type ())) {
-		typedef typename T::_Data Data;
-		*reinterpret_cast <Data*> (static_cast <UserException&> (v).__data ())
-			= std::move (*reinterpret_cast <const Data*> (a.data ()));
-		return true;
-	}
-	return false;
-}
 
 }
 
