@@ -35,25 +35,6 @@
 
 namespace CORBA {
 
-class Any;
-
-template <typename T>
-typename std::enable_if <!std::is_base_of <Exception, T>::value, void>::type
-operator <<= (Any& a, const T& v);
-
-template <typename T>
-typename std::enable_if <!std::is_base_of <Exception,
-	typename std::remove_reference <T>::type>::value, void>::type
-	operator <<= (Any& a, T&& v);
-
-template <typename T>
-typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
-	Boolean>::type operator >>= (const Any& a, T& v);
-
-template <typename T>
-typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
-	Boolean>::type operator >>= (Any&& a, T& v);
-
 class Any : private Internal::ABI <Any>
 {
 	typedef Internal::ABI <Any> ABI;
@@ -175,27 +156,27 @@ public:
 	// special helper types needed for boolean, octet, char, wchar
 	struct to_boolean
 	{
-		to_boolean (Boolean &b) : ref (b)
+		to_boolean (Boolean& b) : ref (b)
 		{}
-		Boolean &ref;
+		Boolean& ref;
 	};
 	struct to_char
 	{
-		to_char (Char &c) : ref (c)
+		to_char (Char& c) : ref (c)
 		{}
-		Char &ref;
+		Char& ref;
 	};
 	struct to_wchar
 	{
-		to_wchar (WChar &wc) : ref (wc)
+		to_wchar (WChar& wc) : ref (wc)
 		{}
-		WChar &ref;
+		WChar& ref;
 	};
 	struct to_octet
 	{
-		to_octet (Octet &o) : ref (o)
+		to_octet (Octet& o) : ref (o)
 		{}
-		Octet &ref;
+		Octet& ref;
 	};
 
 	Boolean operator >>= (to_boolean) const;
@@ -206,6 +187,36 @@ public:
 	bool is_system_exception () const
 	{
 		return get_system_exception_entry () != nullptr;
+	}
+
+	template <typename T>
+	void copy_from (const T& v)
+	{
+		copy_from (Internal::Type <T>::type_code (), &v);
+	}
+
+	template <typename T>
+	void move_from (T& v)
+	{
+		move_from (Internal::Type <T>::type_code (), &v);
+	}
+
+	template <typename T>
+	void move_from (const T& v)
+	{
+		copy_from (Internal::Type <T>::type_code (), &v);
+	}
+
+	template <typename T>
+	Boolean copy_to (T& v) const
+	{
+		return copy_to (Internal::Type <T>::type_code (), &v);
+	}
+
+	template <typename T>
+	Boolean move_to (T& v)
+	{
+		return move_to (Internal::Type <T>::type_code (), &v);
 	}
 
 #ifndef LEGACY_CORBA_CPP
@@ -222,7 +233,7 @@ private:
 			val (const_cast<char*>(s)), bound (b),
 			nocopy (0)
 		{}
-		char *val;
+		char* val;
 		ULong bound;
 		Boolean nocopy;
 	};
@@ -238,7 +249,7 @@ private:
 			val (const_cast<WChar*>(s)), bound (b),
 			nocopy (0)
 		{}
-		WChar *val;
+		WChar* val;
 		ULong bound;
 		Boolean nocopy;
 	};
@@ -247,15 +258,15 @@ private:
 
 	struct to_string
 	{
-		to_string (const char *&s, ULong b) :
+		to_string (const char*& s, ULong b) :
 			val (s), bound (b)
 		{}
-		const char *&val;
+		const char*& val;
 		ULong bound;
 
 		NIRVANA_DEPRECATED ("This constructor is deprecated")
-		to_string (char *&s, ULong b) :
-			val (const_cast <const char*& > (s)), bound (b)
+			to_string (char*& s, ULong b) :
+			val (const_cast <const char*&> (s)), bound (b)
 		{}
 	};
 
@@ -263,15 +274,15 @@ private:
 
 	struct to_wstring
 	{
-		to_wstring (const WChar *&s, ULong b)
+		to_wstring (const WChar*& s, ULong b)
 			: val (s), bound (b)
 		{}
-		const WChar *&val;
+		const WChar*& val;
 		ULong bound;
 
 		// the following constructor is deprecated
 		NIRVANA_DEPRECATED ("This constructor is deprecated")
-		to_wstring (WChar *&s, ULong b) :
+			to_wstring (WChar*& s, ULong b) :
 			val (const_cast <const WChar*&> (s)), bound (b)
 		{}
 	};
@@ -281,32 +292,14 @@ private:
 private:
 	friend struct Internal::Type <Any>;
 	friend Boolean operator >>= (const Any&, SystemException&);
-	
-	template <typename T> friend
-	typename std::enable_if <!std::is_base_of <Exception, T>::value, void>::type
-		operator <<= (Any& a, const T& v);
-
-	template <typename T> friend
-	typename std::enable_if <!std::is_base_of <Exception,
-		typename std::remove_reference <T>::type>::value, void>::type
-		operator <<= (Any& a, T&& v);
-
-	template <typename T> friend
-	typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
-		Boolean>::type operator >>= (const Any& a, T& v);
-
-	template <typename T> friend
-	typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
-		Boolean>::type operator >>= (Any&& a, T& v);
-
 	friend void operator <<= (Any& any, const Exception& e);
 	friend void operator <<= (Any& any, Exception&& e);
 
-	void copy_from (const Any& src);
 	void copy_from (Internal::I_ptr <TypeCode> tc, const void* val);
 	void move_from (Internal::I_ptr <TypeCode> tc, void* val);
 	Boolean copy_to (Internal::I_ptr <TypeCode> tc, void* dst) const;
 	Boolean move_to (Internal::I_ptr <TypeCode> tc, void* dst);
+	void copy_from (const Any& src);
 	void* prepare (Internal::I_ptr <TypeCode> tc);
 	void set_type (Internal::I_ptr <TypeCode> tc);
 	const Internal::ExceptionEntry* get_system_exception_entry () const;
@@ -315,7 +308,7 @@ private:
 	// hiding these causes compile-time errors for
 	// unsigned char
 	void operator <<= (unsigned char);
-	Boolean operator >>= (unsigned char &) const;
+	Boolean operator >>= (unsigned char&) const;
 };
 
 namespace Internal {
@@ -365,34 +358,31 @@ typedef Internal::T_var <Any> Any_var;
 #endif
 
 template <typename T>
-typename std::enable_if <!std::is_base_of <Exception, T>::value, void>::type
-operator <<= (Any& a, const T& v)
+typename std::enable_if <std::is_standard_layout <typename std::remove_reference <T>::type>::value,
+	void>::type operator <<= (Any& a, T&& v)
 {
-	a.copy_from (Internal::Type <T>::type_code (), &v);
-}
-
-template <typename T>
-typename std::enable_if <!std::is_base_of <Exception,
-	typename std::remove_reference <T>::type>::value, void>::type
-operator <<= (Any& a, T&& v)
-{
-	a.move_from (Internal::Type <typename std::remove_reference <T>::type>::type_code (), &v);
+	if (std::is_rvalue_reference <T&&>::value)
+		a.move_from (v);
+	else
+		a.copy_from (v);
 }
 
 #ifdef LEGACY_CORBA_CPP
+
 template <typename T>
 void operator <<= (Any& a, T* v)
 {
 	a <<= std::move (*v);
 }
+
 #endif
 
 template <typename T>
 typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
 	Boolean>::type operator >>= (Any& a, T*& pv)
 {
-	if (Internal::Type <typename std::remove_const <T>::type>::type_code ()->equivalent (a.type ())) {
-		pv = reinterpret_cast <T*>(a.data ());
+	if (Internal::Type <typename std::remove_cv <T>::type>::type_code ()->equivalent (a.type ())) {
+		pv = reinterpret_cast <T*> (a.data ());
 		return true;
 	}
 	return false;
@@ -402,8 +392,8 @@ template <typename T>
 typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
 	Boolean>::type operator >>= (const Any& a, const T*& pv)
 {
-	if (Internal::Type <T>::type_code ()->equivalent (a.type ())) {
-		pv = reinterpret_cast <const T*>(a.data ());
+	if (Internal::Type <typename std::remove_cv <T>::type>::type_code ()->equivalent (a.type ())) {
+		pv = reinterpret_cast <const T*> (a.data ());
 		return true;
 	}
 	return false;
@@ -413,14 +403,14 @@ template <typename T>
 typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
 	Boolean>::type operator >>= (const Any& a, T& v)
 {
-	return a.copy_to (Internal::Type <T>::type_code (), &v);
+	return a.copy_to (v);
 }
 
 template <typename T>
 typename std::enable_if <std::is_standard_layout <T>::value && !std::is_pointer <T>::value,
 	Boolean>::type operator >>= (Any&& a, T& v)
 {
-	return a.move_to (Internal::Type <T>::type_code (), &v);
+	return a.move_to (v);
 }
 
 inline
