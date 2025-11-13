@@ -1,4 +1,4 @@
-target_sources(nirvana PRIVATE
+target_sources(Nirvana PRIVATE
 	2base.cpp
 	Any.cpp
 	CCMObjectImpl.cpp
