@@ -55,6 +55,6 @@ set (idl_files_no_ami
 )
 
 idl_generate (OUT_VAR src_no_ami IDL_FILES ${idl_files_no_ami} OPTIONS -no_ami)
-idl_generate (OUT_VAR src IDL_FILES ${idl_files})
+idl_generate (OUT_VAR src IDL_FILES ${idl_files} OPTIONS -DCCM_LW -DCCM_NOEVENT)
 add_custom_target (corba_idl DEPENDS ${src} ${src_no_ami})
 target_sources (Nirvana PRIVATE ${src} ${src_no_ami})
