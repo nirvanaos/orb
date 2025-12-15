@@ -28,11 +28,11 @@
 #pragma once
 
 #include <Nirvana/NirvanaBase.h>
-#include <Nirvana/OLF.h>
+#include "ServantStatic.h"
+#include "ExportObject.h"
+#include "LifeCycleStatic.h"
 #include "LocalObject_s.h"
 #include "local_core.h"
-#include "ServantStatic.h"
-#include "LifeCycleStatic.h"
 
 namespace CORBA {
 namespace Internal {
@@ -65,10 +65,11 @@ public:
 //! \tparam S Servant class.
 template <class S>
 class InterfaceStatic <S, LocalObject> :
+	public LifeCycleStatic,
+	public LocalObjectStaticDummy,
 	public InterfaceStaticBase <S, LocalObject>,
 	public ServantTraitsStatic <S>,
-	public LifeCycleStatic,
-	public LocalObjectStaticDummy
+	public ExportObject <S>
 {
 public:
 	using LocalObjectStaticDummy::__add_ref;
@@ -79,6 +80,13 @@ public:
 	static Bridge <Object>* _get_object (Type <String>::ABI_in iid, Interface* env) noexcept
 	{
 		return get_object_from_core (core_object (), iid, env);
+	}
+
+	static const Nirvana::OLF_Command _export_command = Nirvana::OLF_EXPORT_LOCAL;
+
+	constexpr static Interface* _export_bridge () noexcept
+	{
+		return InterfaceStaticBase <S, LocalObject>::_bridge ();
 	}
 
 protected:
@@ -111,12 +119,12 @@ protected:
 private:
 	static LocalObject::_ptr_type core_object () noexcept
 	{
-		return static_cast <LocalObject*> (export_struct_.core_object);
+#if defined (_MSC_VER) && !defined (__clang__)
+#pragma comment (linker, "/include:" __FUNCDNAME__)
+#endif
+		return static_cast <LocalObject*> (ExportObject <S>::export_struct_.core_object);
 	}
 
-public:
-	NIRVANA_OLF_SECTION NIRVANA_STATIC_IMPORT static constexpr ::Nirvana::ExportObject export_struct_{
-	::Nirvana::OLF_EXPORT_LOCAL, StaticId <S>::id, InterfaceStaticBase <S, LocalObject>::_bridge () };
 };
 
 }

@@ -29,8 +29,7 @@
 #pragma once
 
 #include "ServantImpl.h"
-#include "I_ptr.h"
-#include <Nirvana/ImportInterface.h>
+#include "Bridge.h"
 
 namespace CORBA {
 namespace Internal {
@@ -132,17 +131,5 @@ struct StaticId
 
 }
 }
-
-#if defined (_MSC_VER) && !defined (__clang__)
-
-#define NIRVANA_EXPORT_OBJECT(uname, Impl)\
-extern "C" NIRVANA_STATIC_IMPORT void* uname = &Impl::export_struct_;\
-__pragma(comment (linker, "/include:" C_NAME_PREFIX #uname))
-
-#else
-
-#define NIRVANA_EXPORT_OBJECT(uname, Impl) NIRVANA_STATIC_IMPORT void* __attribute__ ((used)) uname = &Impl::export_struct_;
-
-#endif
 
 #endif
