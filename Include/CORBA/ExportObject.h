@@ -36,7 +36,7 @@ template <class S>
 class ExportObject
 {
 public:
-	static const NIRVANA_STATIC_IMPORT Nirvana::ExportObject export_struct_;
+	static NIRVANA_STATIC_IMPORT Nirvana::ExportObject export_struct_;
 };
 
 }
