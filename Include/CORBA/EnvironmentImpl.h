@@ -51,7 +51,15 @@ public:
 		exception_free ();
 	}
 
-	Exception* exception () const noexcept
+	const Exception* exception () const noexcept
+	{
+		if (data_.is_small)
+			return (const Exception*)(&data_);
+		else
+			return data_.ptr;
+	}
+
+	Exception* exception () noexcept
 	{
 		if (data_.is_small)
 			return (Exception*)(&data_);

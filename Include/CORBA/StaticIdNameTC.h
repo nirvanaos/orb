@@ -45,13 +45,13 @@ struct StaticIdNameTC
 	TypeCode* operator -> () const noexcept
 	{
 		assert (bridge);
-		return (TypeCode*)&bridge;
+		return const_cast <TypeCode*> (reinterpret_cast <const TypeCode*>(&bridge));
 	}
 
 	operator I_ptr <TypeCode> () const noexcept
 	{
 		assert (bridge);
-		return (TypeCode*)&bridge;
+		return const_cast <TypeCode*> (reinterpret_cast <const TypeCode*>(&bridge));
 	}
 };
 
