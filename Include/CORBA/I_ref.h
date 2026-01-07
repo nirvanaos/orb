@@ -46,28 +46,34 @@ class I_ref_base
 public:
 	typedef Itf ItfType;
 
+	NIRVANA_CONSTEXPR20
 	I_ref_base () noexcept :
 		p_ (nullptr)
 	{}
 
+	NIRVANA_CONSTEXPR20
 	I_ref_base (std::nullptr_t) noexcept :
 		p_ (nullptr)
 	{}
 
+	NIRVANA_CONSTEXPR20
 	I_ref_base (const I_ref_base& src) :
 		p_ (duplicate (src.p_))
 	{}
 
+	NIRVANA_CONSTEXPR20
 	I_ref_base (I_ref_base&& src) noexcept :
 		p_ (src.p_)
 	{
 		src.p_ = nullptr;
 	}
 
+	NIRVANA_CONSTEXPR20
 	I_ref_base (const I_ptr_base <Itf>& p) :
 		p_ (duplicate (p.p_))
 	{}
 
+	NIRVANA_CONSTEXPR20
 	~I_ref_base () noexcept
 	{
 		release (p_);
@@ -169,57 +175,63 @@ class I_ref : public I_ref_base <Itf>
 	typedef I_ref_base <Itf> Base;
 
 public:
+	NIRVANA_CONSTEXPR20
 	I_ref () noexcept
 	{}
 
+	NIRVANA_CONSTEXPR20
 	I_ref (std::nullptr_t) noexcept :
 		Base (nullptr)
 	{}
 
+	NIRVANA_CONSTEXPR20
 	I_ref (const I_ref& src) :
 		Base (src)
 	{}
 
-	template <class I1>
+	template <class I1> NIRVANA_CONSTEXPR20
 	I_ref (const I_ref <I1>& src) :
 		Base (Base::duplicate (wide (src.p_)))
 	{}
 
+	NIRVANA_CONSTEXPR20
 	I_ref (I_ref&& src) noexcept :
 		Base (std::move (src))
 	{}
 
-	template <class I1>
+	template <class I1> NIRVANA_CONSTEXPR20
 	I_ref (I_ref <I1>&& src) noexcept :
 		Base (Base::duplicate (wide (src.p_)))
 	{
 		src = nullptr;
 	}
 
+	NIRVANA_CONSTEXPR20
 	I_ref (const I_ptr <Itf>& p) :
 		Base (p)
 	{}
 
-	template <class I1>
+	template <class I1> NIRVANA_CONSTEXPR20
 	I_ref (const I_ptr <I1>& p) :
 		Base (Base::duplicate (wide (p.p_)))
 	{}
 
+	NIRVANA_CONSTEXPR20
 	I_ref (BridgeVal <Itf>* p) :
 		I_ref (I_ptr <Itf> (p))
 	{}
 
-	template <class VB, typename T>
+	template <class VB, typename T> NIRVANA_CONSTEXPR20
 	I_ref (ValueBox <VB, T>* p) noexcept :
 		I_ref (I_ptr <Itf> (*p))
 	{}
 
-	template <class S>
+	template <class S> NIRVANA_CONSTEXPR20
 	I_ref (const servant_reference <S>& sr) noexcept :
 		Base (I_ptr <Itf> (sr))
 	{}
 
-	template <class S>
+	template <class S> NIRVANA_CONSTEXPR20
 	I_ref (servant_reference <S>&& sr) noexcept :
 		Base (I_ptr <Itf> (sr).p_)
 	{
